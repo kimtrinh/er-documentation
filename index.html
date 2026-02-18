@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ER Rule-Out Dotphrases</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',system-ui,sans-serif;background:#0f172a;color:#e2e8f0;min-height:100vh}
+  header{background:linear-gradient(135deg,#1e293b,#0f172a);border-bottom:1px solid #1e3a5f;padding:20px 24px}
+  .header-inner{max-width:860px;margin:0 auto}
+  .logo{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+  .logo h1{font-size:20px;font-weight:700;color:#f1f5f9}
+  .subtitle{font-size:13px;color:#64748b;margin-left:32px;margin-bottom:16px}
+  #search{width:100%;padding:12px 16px;background:#1e293b;border:1px solid #334155;border-radius:10px;color:#f1f5f9;font-size:15px;outline:none;transition:border-color .2s}
+  #search:focus{border-color:#3b82f6}
+  #search::placeholder{color:#475569}
+  nav{background:#0f172a;border-bottom:1px solid #1e293b;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .tabs{max-width:860px;margin:0 auto;display:flex;gap:4px;padding:8px 24px}
+  .tab{padding:6px 14px;border-radius:20px;border:none;cursor:pointer;font-size:13px;font-weight:500;white-space:nowrap;background:#1e293b;color:#94a3b8;transition:all .2s}
+  .tab.active{background:#3b82f6;color:#fff}
+  main{max-width:860px;margin:0 auto;padding:16px 24px 60px}
+  .card{background:#1e293b;border:1px solid #334155;border-radius:12px;margin-bottom:12px;overflow:hidden;transition:border-color .2s}
+  .card:hover{border-color:#3b82f6}
+  .card-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid #334155;gap:8px;flex-wrap:wrap}
+  .card-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .dotphrase{background:#0f172a;color:#38bdf8;padding:3px 10px;border-radius:6px;font-size:13px;font-weight:700;border:1px solid #1e3a5f;font-family:monospace}
+  .condition{font-weight:600;font-size:14px;color:#f1f5f9}
+  .category-tag{font-size:11px;background:#0f172a;color:#64748b;padding:2px 8px;border-radius:20px;border:1px solid #1e293b}
+  .copy-btn{padding:6px 14px;border-radius:8px;border:none;cursor:pointer;font-size:12px;font-weight:600;background:#3b82f6;color:#fff;transition:background .2s;white-space:nowrap;flex-shrink:0}
+  .copy-btn.copied{background:#16a34a}
+  .card-body{padding:12px 16px;font-size:13px;line-height:1.75;color:#cbd5e1}
+  .empty{text-align:center;color:#475569;margin-top:60px;font-size:15px}
+  @media(max-width:600px){
+    .card-header{flex-direction:column;align-items:flex-start}
+    .copy-btn{width:100%}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <span style="font-size:22px">🏥</span>
+      <h1>ER Rule-Out Dotphrases</h1>
+    </div>
+    <p class="subtitle">Type a dotphrase or condition → click Copy to paste into your note</p>
+    <input id="search" type="text" placeholder="Search: nosah, PE, meningitis, ectopic..." oninput="render()"/>
+  </div>
+</header>
+
+<nav>
+  <div class="tabs" id="tabs"></div>
+</nav>
+
+<main id="main"></main>
+
+<script>
+const phrases = [
+  // CHEST PAIN
+  {dot:"nope",cond:"PE Rule-Out",cat:"Chest Pain",text:"Patient with very low risk of pulmonary embolism with combination of low-likelihood by clinical gestalt and the PE rule-out criteria (age <50, pulse <100, oxygen saturation >94%, no unilateral leg swelling, no hemoptysis, no recent surgery or trauma, no prior PE or DVT, and no hormone use)."},
+  {dot:"nodissection",cond:"Aortic Dissection Rule-Out",cat:"Chest Pain",text:"Aortic dissection considered and felt to be low probability. Patient does not have high-risk features including: no hypertension history, no Marfan or connective tissue disorder, no prior aortic valve or aortic surgery, no abrupt onset tearing or ripping chest/back/abdominal pain, no pulse or blood pressure differential, no focal neurological deficit, no widened mediastinum on imaging. Pain character, onset, and clinical presentation are not consistent with aortic dissection."},
+  {dot:"noacs",cond:"ACS Rule-Out",cat:"Chest Pain",text:"Acute coronary syndrome evaluated and felt to be low probability at this time. Serial troponins negative and non-trending. EKG without ST changes, new LBBB, or dynamic T-wave changes. Symptoms not consistent with typical anginal pattern. HEART score calculated and reflects low risk for major adverse cardiac event."},
+  {dot:"nopneumo",cond:"Pneumothorax Rule-Out",cat:"Chest Pain",text:"Pneumothorax considered. Chest radiograph reviewed without evidence of pleural line, tracheal deviation, or asymmetric lung markings. Breath sounds symmetric bilaterally. Clinical presentation not consistent with pneumothorax."},
+  {dot:"notamponade",cond:"Cardiac Tamponade Rule-Out",cat:"Chest Pain",text:"Cardiac tamponade considered. No Beck's triad (hypotension, jugular venous distension, muffled heart sounds) present. Bedside ultrasound performed without evidence of pericardial effusion or right heart collapse. Clinical presentation not consistent with tamponade physiology."},
+  // HEADACHE
+  {dot:"nosah",cond:"SAH Rule-Out",cat:"Headache",text:"Subarachnoid hemorrhage considered and felt to be low probability. Headache does not meet Ottawa SAH Rule criteria: onset was not instantaneous or within 1 second, patient is under 40, headache is not described as 'worst of life,' patient did not lose consciousness, and neck stiffness is absent. Non-contrast CT head reviewed and interpreted as negative for intracranial hemorrhage or subarachnoid blood. Lumbar puncture considered; given low pre-test probability, patient counseled and shared decision-making documented."},
+  {dot:"nomeningitis",cond:"Meningitis/Encephalitis Rule-Out",cat:"Headache",text:"Bacterial meningitis and encephalitis considered and felt to be low probability. Patient is afebrile, alert, and oriented. No neck stiffness, no Kernig's or Brudzinski's signs elicited. No petechial or purpuric rash. No photophobia, phonophobia, or altered mental status. Clinical presentation not consistent with CNS infection. CT head reviewed prior to LP consideration without contraindication to lumbar puncture if indicated."},
+  {dot:"nostroke",cond:"Stroke Rule-Out",cat:"Headache",text:"Ischemic stroke and hemorrhagic stroke considered. Non-contrast CT head reviewed without evidence of acute intracranial pathology. Last known well established. Full neurological examination performed including cranial nerves, motor, sensory, cerebellar, and gait — no focal deficits identified. NIHSS score 0. Symptoms not consistent with cortical or subcortical stroke syndrome. Neurology consulted as appropriate."},
+  {dot:"nohypertensiveemergency",cond:"Hypertensive Emergency Rule-Out",cat:"Headache",text:"Hypertensive emergency considered. No evidence of end-organ damage including no papilledema, no altered mental status, no acute chest pain, no shortness of breath, no hematuria, and no focal neurological deficit. Creatinine, urinalysis, and EKG without evidence of acute end-organ involvement. Blood pressure elevated but consistent with hypertensive urgency without emergency features."},
+  {dot:"nocvt",cond:"Cerebral Venous Thrombosis Rule-Out",cat:"Headache",text:"Cerebral venous thrombosis considered. Patient without high-risk features including no hypercoagulable state, no oral contraceptive use, no postpartum state, no recent head/neck infection, no papilledema, no progressive or positional headache pattern. No focal neurological deficits on examination. Imaging obtained as clinically indicated."},
+  // ABDOMINAL
+  {dot:"noaaa",cond:"AAA / Aortic Emergency Rule-Out",cat:"Abdominal Pain",text:"Ruptured or symptomatic abdominal aortic aneurysm considered. Patient hemodynamically stable. No pulsatile abdominal mass palpated. No back or flank pain radiation concerning for aortic pathology. Bedside ultrasound performed with adequate visualization of the aorta; diameter within normal limits without evidence of aneurysm. Clinical presentation not consistent with aortic emergency."},
+  {dot:"noectopic",cond:"Ectopic Pregnancy Rule-Out",cat:"Abdominal Pain",text:"Ectopic pregnancy considered. Urine pregnancy test negative, effectively ruling out ectopic pregnancy at this time. [If positive: Quantitative beta-hCG obtained. Pelvic ultrasound reviewed with intrauterine pregnancy confirmed / no intrauterine pregnancy visualized. OB/GYN consulted. Patient counseled on ectopic pregnancy precautions and return instructions.]"},
+  {dot:"noappendix",cond:"Appendicitis Rule-Out",cat:"Abdominal Pain",text:"Appendicitis considered. Alvarado/MANTRELS score calculated as low risk. Pain is not localized to the right lower quadrant, no rebound tenderness or guarding, no Rovsing's, psoas, or obturator signs. WBC without significant leukocytosis. CT abdomen/pelvis with contrast reviewed and interpreted without evidence of appendiceal wall thickening, periappendiceal fat stranding, or appendicolith. Clinical presentation and imaging not consistent with acute appendicitis."},
+  {dot:"nomesischemia",cond:"Mesenteric Ischemia Rule-Out",cat:"Abdominal Pain",text:"Mesenteric ischemia considered given pain out of proportion to physical examination. Patient without high-risk features including no atrial fibrillation, no hypercoagulable state, no recent aortic surgery, no peripheral vascular disease. Abdomen soft without peritoneal signs. Lactate within normal limits. CT angiography of the abdomen/pelvis obtained as clinically indicated."},
+  {dot:"nosbo",cond:"Small Bowel Obstruction Rule-Out",cat:"Abdominal Pain",text:"Small bowel obstruction considered. No prior abdominal surgery or known hernia. Abdomen soft, non-distended, bowel sounds present. No emesis. Plain abdominal radiographs reviewed without air-fluid levels, dilated bowel loops, or absence of rectal gas. Clinical presentation not consistent with bowel obstruction."},
+  // NEURO
+  {dot:"nonci",cond:"Intracranial Injury Rule-Out (Head Trauma)",cat:"Neuro",text:"Intracranial injury evaluated. Canadian CT Head Rule and/or PECARN criteria applied. Patient GCS 15, no loss of consciousness, no amnesia to the event, no vomiting, no signs of basilar skull fracture, no dangerous mechanism. CT head not indicated by validated criteria. Patient observed without deterioration. Concussion precautions and return instructions provided."},
+  {dot:"noseizure",cond:"Seizure Work-Up Documented",cat:"Neuro",text:"Seizure evaluated. This appears to represent a provoked/unprovoked first-time seizure. Patient returned to neurological baseline. Blood glucose, electrolytes, renal function reviewed and within normal limits. Toxicology considered. CT head reviewed without acute intracranial pathology. Neurology notified. Patient counseled on driving restrictions per state law, seizure precautions, and return instructions. Outpatient EEG and neurology follow-up arranged."},
+  {dot:"nogbs",cond:"Guillain-Barré Rule-Out",cat:"Neuro",text:"Guillain-Barré syndrome considered given ascending weakness. However, symptoms are not progressive, reflexes are intact, no preceding gastroenteritis or recent viral illness. Cranial nerves intact. Respiratory function assessed — no dyspnea, no use of accessory muscles, vital capacity within normal limits. Clinical presentation does not meet criteria for GBS at this time; neurology consulted for further evaluation."},
+  // OB
+  {dot:"noeclampsia",cond:"Preeclampsia/Eclampsia Rule-Out",cat:"OB",text:"Preeclampsia and eclampsia considered. Blood pressure reviewed and within acceptable range for gestational age. Patient without severe features: no persistent headache, no visual changes, no right upper quadrant or epigastric pain, no shortness of breath, no altered mental status. Urinalysis without significant proteinuria. Labs including CBC, CMP, LFTs, and uric acid reviewed. OB notified and consulted. Fetal heart tones confirmed."},
+  {dot:"nohellp",cond:"HELLP Syndrome Rule-Out",cat:"OB",text:"HELLP syndrome considered in this pregnant patient with abdominal pain. Labs reviewed: hemoglobin stable without evidence of microangiopathic hemolytic anemia, platelet count within normal limits, liver transaminases not elevated, LDH within normal range. Clinical presentation not consistent with HELLP syndrome. OB consulted."},
+  {dot:"noabruption",cond:"Placental Abruption Rule-Out",cat:"OB",text:"Placental abruption considered. No significant vaginal bleeding, no uterine tenderness or rigidity, no contractions, no fetal heart rate abnormalities on monitoring. No trauma history. Ultrasound reviewed without retroplacental hematoma or abnormal placental appearance. OB notified and at bedside. Fetal monitoring reassuring."},
+  // PEDS
+  {dot:"nointussusception",cond:"Intussusception Rule-Out",cat:"Peds",text:"Intussusception considered in this pediatric patient with intermittent abdominal pain. No episodic colicky pain with pain-free intervals, no drawing up of legs, no current currant jelly stool, no sausage-shaped abdominal mass palpated. Abdomen soft and non-tender at time of examination. Bedside ultrasound performed without target sign or tubular mass identified. Clinical presentation not consistent with intussusception."},
+  {dot:"novolvulus",cond:"Malrotation/Volvulus Rule-Out",cat:"Peds",text:"Malrotation with volvulus considered in this pediatric patient with bilious vomiting. Patient hemodynamically stable. Abdomen soft without peritoneal signs. Upper GI series or CT obtained to evaluate duodenal-jejunal junction position. Pediatric surgery notified. Clinical presentation and imaging reviewed in context of this life-threatening diagnosis."},
+  {dot:"noepiglottitis",cond:"Epiglottitis Rule-Out",cat:"Peds",text:"Epiglottitis considered. Patient without classic triad of drooling, dysphagia, and distress. No tripod positioning. Voice not muffled. No stridor at rest. Patient able to handle secretions. Lateral neck radiograph reviewed without thumbprint sign or pre-epiglottic swelling. Direct visualization deferred to maintain airway safety. ENT/anesthesia and pediatrics notified as appropriate."},
+  {dot:"nonat",cond:"Non-Accidental Trauma Screen",cat:"Peds",text:"Non-accidental trauma considered given mechanism, age of patient, or pattern of injury. History reviewed for consistency with developmental age and injury pattern. Physical examination performed with careful attention to bruising in non-ambulatory areas, patterned injuries, retinal hemorrhage, and FEN status. Skeletal survey ordered as clinically appropriate. Social work, child life, and child protective services notified per institutional protocol. Mandatory reporting obligations fulfilled."},
+  // OTHER
+  {dot:"nosepsis",cond:"Sepsis Screening",cat:"Other",text:"Sepsis screening performed. Patient meets/does not meet SIRS criteria. qSOFA score calculated. Infectious source evaluated. Lactate obtained. Blood cultures drawn prior to antibiotic administration. IV access established, IV fluids initiated as appropriate. Antibiotics administered within 1 hour of sepsis recognition per Surviving Sepsis Campaign guidelines. Source control measures initiated. Patient reassessed at regular intervals with documentation of response to resuscitation."},
+  {dot:"notorsion",cond:"Testicular Torsion Rule-Out",cat:"Other",text:"Testicular torsion considered given acute onset scrotal pain. TWIST score calculated. Testicle lies in normal transverse/longitudinal axis. No high-riding testicle. Cremasteric reflex present bilaterally. Scrotal Doppler ultrasound obtained demonstrating normal blood flow bilaterally. Urology notified. Patient counseled on return precautions given time-sensitive nature of this diagnosis."},
+  {dot:"nosea",cond:"Spinal Epidural Abscess Rule-Out",cat:"Other",text:"Spinal epidural abscess considered in this patient with back pain. Patient without classic triad of fever, spinal tenderness, and neurological deficit. No IV drug use, no recent spinal procedure, no immunocompromised state, no bacteremia. Neurological examination intact with no motor deficit, no bowel or bladder dysfunction, no saddle anesthesia. MRI spine with and without contrast obtained/ordered as clinically indicated. Neurosurgery notified."},
+  {dot:"nonecfasc",cond:"Necrotizing Fasciitis Rule-Out",cat:"Other",text:"Necrotizing fasciitis considered given soft tissue infection. LRINEC score calculated. No crepitus palpated, no skin necrosis, no wooden-hard induration beyond the area of erythema, no pain out of proportion to examination. No subcutaneous gas on imaging. WBC, CRP, sodium, creatinine, glucose reviewed. Patient without septic physiology. Wound re-examined after IV antibiotics. Surgery consulted for operative evaluation as clinically indicated."},
+  {dot:"noco",cond:"Carbon Monoxide Poisoning Rule-Out",cat:"Other",text:"Carbon monoxide poisoning considered given clinical presentation. History reviewed for CO exposure risk: no gas appliances, no enclosed space, no house fire, no generator or vehicle exhaust exposure. Multiple household members without similar symptoms. Carboxyhemoglobin level obtained and within normal limits. Pulse oximetry unreliable for CO — co-oximetry used. Clinical presentation not consistent with CO toxicity."}
+];
+
+const cats = ["All", ...Array.from(new Set(phrases.map(p => p.cat)))];
+let activeCategory = "All";
+
+// Build tabs
+const tabsEl = document.getElementById("tabs");
+cats.forEach(cat => {
+  const btn = document.createElement("button");
+  btn.className = "tab" + (cat === "All" ? " active" : "");
+  btn.textContent = cat;
+  btn.onclick = () => {
+    activeCategory = cat;
+    document.querySelectorAll(".tab").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    render();
+  };
+  tabsEl.appendChild(btn);
+});
+
+function render() {
+  const q = document.getElementById("search").value.toLowerCase();
+  const main = document.getElementById("main");
+  const filtered = phrases.filter(p => {
+    const matchSearch = !q || p.dot.includes(q) || p.cond.toLowerCase().includes(q) || p.cat.toLowerCase().includes(q) || p.text.toLowerCase().includes(q);
+    const matchCat = activeCategory === "All" || p.cat === activeCategory;
+    return matchSearch && matchCat;
+  });
+
+  if (filtered.length === 0) {
+    main.innerHTML = '<p class="empty">No dotphrases found. Try a different search.</p>';
+    return;
+  }
+
+  main.innerHTML = filtered.map((p, i) => `
+    <div class="card">
+      <div class="card-header">
+        <div class="card-meta">
+          <span class="dotphrase">.${p.dot}</span>
+          <span class="condition">${p.cond}</span>
+          <span class="category-tag">${p.cat}</span>
+        </div>
+        <button class="copy-btn" id="btn-${i}" onclick="copyText(${i}, '${p.dot}')">Copy</button>
+      </div>
+      <p class="card-body" id="text-${i}">${p.text}</p>
+    </div>
+  `).join("");
+}
+
+function copyText(i, dot) {
+  const filtered = phrases.filter(p => {
+    const q = document.getElementById("search").value.toLowerCase();
+    const matchSearch = !q || p.dot.includes(q) || p.cond.toLowerCase().includes(q) || p.cat.toLowerCase().includes(q) || p.text.toLowerCase().includes(q);
+    const matchCat = activeCategory === "All" || p.cat === activeCategory;
+    return matchSearch && matchCat;
+  });
+  navigator.clipboard.writeText(filtered[i].text).then(() => {
+    const btn = document.getElementById("btn-" + i);
+    btn.textContent = "✓ Copied!";
+    btn.classList.add("copied");
+    setTimeout(() => { btn.textContent = "Copy"; btn.classList.remove("copied"); }, 2000);
+  });
+}
+
+render();
+</script>
+</body>
+</html>
