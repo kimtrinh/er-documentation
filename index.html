@@ -31,6 +31,7 @@
   .copy-btn.copied{background:#16a34a}
   .card-body{padding:12px 16px;font-size:13px;line-height:1.75;color:#cbd5e1}
   .empty{text-align:center;color:#475569;margin-top:60px;font-size:15px}
+  .count{font-size:12px;color:#475569;margin-bottom:12px}
   @media(max-width:600px){
     .card-header{flex-direction:column;align-items:flex-start}
     .copy-btn{width:100%}
@@ -46,7 +47,7 @@
       <h1>ER Rule-Out Dotphrases</h1>
     </div>
     <p class="subtitle">Type a dotphrase or condition → click Copy to paste into your note</p>
-    <input id="search" type="text" placeholder="Search: nosah, PE, meningitis, ectopic..." oninput="render()"/>
+    <input id="search" type="text" placeholder="Search: nosah, PE, AMA, syncope, cauda equina..." oninput="render()"/>
   </div>
 </header>
 
@@ -54,7 +55,10 @@
   <div class="tabs" id="tabs"></div>
 </nav>
 
-<main id="main"></main>
+<main>
+  <p class="count" id="count"></p>
+  <div id="main"></div>
+</main>
 
 <script>
 const phrases = [
@@ -64,32 +68,64 @@ const phrases = [
   {dot:"noacs",cond:"ACS Rule-Out",cat:"Chest Pain",text:"Acute coronary syndrome evaluated and felt to be low probability at this time. Serial troponins negative and non-trending. EKG without ST changes, new LBBB, or dynamic T-wave changes. Symptoms not consistent with typical anginal pattern. HEART score calculated and reflects low risk for major adverse cardiac event."},
   {dot:"nopneumo",cond:"Pneumothorax Rule-Out",cat:"Chest Pain",text:"Pneumothorax considered. Chest radiograph reviewed without evidence of pleural line, tracheal deviation, or asymmetric lung markings. Breath sounds symmetric bilaterally. Clinical presentation not consistent with pneumothorax."},
   {dot:"notamponade",cond:"Cardiac Tamponade Rule-Out",cat:"Chest Pain",text:"Cardiac tamponade considered. No Beck's triad (hypotension, jugular venous distension, muffled heart sounds) present. Bedside ultrasound performed without evidence of pericardial effusion or right heart collapse. Clinical presentation not consistent with tamponade physiology."},
+
   // HEADACHE
   {dot:"nosah",cond:"SAH Rule-Out",cat:"Headache",text:"Subarachnoid hemorrhage considered and felt to be low probability. Headache does not meet Ottawa SAH Rule criteria: onset was not instantaneous or within 1 second, patient is under 40, headache is not described as 'worst of life,' patient did not lose consciousness, and neck stiffness is absent. Non-contrast CT head reviewed and interpreted as negative for intracranial hemorrhage or subarachnoid blood. Lumbar puncture considered; given low pre-test probability, patient counseled and shared decision-making documented."},
   {dot:"nomeningitis",cond:"Meningitis/Encephalitis Rule-Out",cat:"Headache",text:"Bacterial meningitis and encephalitis considered and felt to be low probability. Patient is afebrile, alert, and oriented. No neck stiffness, no Kernig's or Brudzinski's signs elicited. No petechial or purpuric rash. No photophobia, phonophobia, or altered mental status. Clinical presentation not consistent with CNS infection. CT head reviewed prior to LP consideration without contraindication to lumbar puncture if indicated."},
   {dot:"nostroke",cond:"Stroke Rule-Out",cat:"Headache",text:"Ischemic stroke and hemorrhagic stroke considered. Non-contrast CT head reviewed without evidence of acute intracranial pathology. Last known well established. Full neurological examination performed including cranial nerves, motor, sensory, cerebellar, and gait — no focal deficits identified. NIHSS score 0. Symptoms not consistent with cortical or subcortical stroke syndrome. Neurology consulted as appropriate."},
   {dot:"nohypertensiveemergency",cond:"Hypertensive Emergency Rule-Out",cat:"Headache",text:"Hypertensive emergency considered. No evidence of end-organ damage including no papilledema, no altered mental status, no acute chest pain, no shortness of breath, no hematuria, and no focal neurological deficit. Creatinine, urinalysis, and EKG without evidence of acute end-organ involvement. Blood pressure elevated but consistent with hypertensive urgency without emergency features."},
   {dot:"nocvt",cond:"Cerebral Venous Thrombosis Rule-Out",cat:"Headache",text:"Cerebral venous thrombosis considered. Patient without high-risk features including no hypercoagulable state, no oral contraceptive use, no postpartum state, no recent head/neck infection, no papilledema, no progressive or positional headache pattern. No focal neurological deficits on examination. Imaging obtained as clinically indicated."},
+
   // ABDOMINAL
   {dot:"noaaa",cond:"AAA / Aortic Emergency Rule-Out",cat:"Abdominal Pain",text:"Ruptured or symptomatic abdominal aortic aneurysm considered. Patient hemodynamically stable. No pulsatile abdominal mass palpated. No back or flank pain radiation concerning for aortic pathology. Bedside ultrasound performed with adequate visualization of the aorta; diameter within normal limits without evidence of aneurysm. Clinical presentation not consistent with aortic emergency."},
   {dot:"noectopic",cond:"Ectopic Pregnancy Rule-Out",cat:"Abdominal Pain",text:"Ectopic pregnancy considered. Urine pregnancy test negative, effectively ruling out ectopic pregnancy at this time. [If positive: Quantitative beta-hCG obtained. Pelvic ultrasound reviewed with intrauterine pregnancy confirmed / no intrauterine pregnancy visualized. OB/GYN consulted. Patient counseled on ectopic pregnancy precautions and return instructions.]"},
   {dot:"noappendix",cond:"Appendicitis Rule-Out",cat:"Abdominal Pain",text:"Appendicitis considered. Alvarado/MANTRELS score calculated as low risk. Pain is not localized to the right lower quadrant, no rebound tenderness or guarding, no Rovsing's, psoas, or obturator signs. WBC without significant leukocytosis. CT abdomen/pelvis with contrast reviewed and interpreted without evidence of appendiceal wall thickening, periappendiceal fat stranding, or appendicolith. Clinical presentation and imaging not consistent with acute appendicitis."},
   {dot:"nomesischemia",cond:"Mesenteric Ischemia Rule-Out",cat:"Abdominal Pain",text:"Mesenteric ischemia considered given pain out of proportion to physical examination. Patient without high-risk features including no atrial fibrillation, no hypercoagulable state, no recent aortic surgery, no peripheral vascular disease. Abdomen soft without peritoneal signs. Lactate within normal limits. CT angiography of the abdomen/pelvis obtained as clinically indicated."},
   {dot:"nosbo",cond:"Small Bowel Obstruction Rule-Out",cat:"Abdominal Pain",text:"Small bowel obstruction considered. No prior abdominal surgery or known hernia. Abdomen soft, non-distended, bowel sounds present. No emesis. Plain abdominal radiographs reviewed without air-fluid levels, dilated bowel loops, or absence of rectal gas. Clinical presentation not consistent with bowel obstruction."},
+  {dot:"noovariantorsion",cond:"Ovarian Torsion Rule-Out",cat:"Abdominal Pain",text:"Ovarian torsion considered in this female patient with pelvic/lower abdominal pain. Pain is not sudden in onset, not associated with nausea and vomiting out of proportion to examination, and is not unilateral. Pelvic ultrasound with Doppler performed demonstrating normal ovarian blood flow bilaterally, no ovarian enlargement, and no adnexal mass. Clinical presentation and imaging not consistent with ovarian torsion. OB/GYN consulted as appropriate."},
+
   // NEURO
   {dot:"nonci",cond:"Intracranial Injury Rule-Out (Head Trauma)",cat:"Neuro",text:"Intracranial injury evaluated. Canadian CT Head Rule and/or PECARN criteria applied. Patient GCS 15, no loss of consciousness, no amnesia to the event, no vomiting, no signs of basilar skull fracture, no dangerous mechanism. CT head not indicated by validated criteria. Patient observed without deterioration. Concussion precautions and return instructions provided."},
   {dot:"noseizure",cond:"Seizure Work-Up Documented",cat:"Neuro",text:"Seizure evaluated. This appears to represent a provoked/unprovoked first-time seizure. Patient returned to neurological baseline. Blood glucose, electrolytes, renal function reviewed and within normal limits. Toxicology considered. CT head reviewed without acute intracranial pathology. Neurology notified. Patient counseled on driving restrictions per state law, seizure precautions, and return instructions. Outpatient EEG and neurology follow-up arranged."},
   {dot:"nogbs",cond:"Guillain-Barré Rule-Out",cat:"Neuro",text:"Guillain-Barré syndrome considered given ascending weakness. However, symptoms are not progressive, reflexes are intact, no preceding gastroenteritis or recent viral illness. Cranial nerves intact. Respiratory function assessed — no dyspnea, no use of accessory muscles, vital capacity within normal limits. Clinical presentation does not meet criteria for GBS at this time; neurology consulted for further evaluation."},
+  {dot:"nocaudaequina",cond:"Cauda Equina Syndrome Rule-Out",cat:"Neuro",text:"Cauda equina syndrome considered in this patient with low back pain. Patient denies saddle anesthesia, urinary retention, urinary or fecal incontinence, and bilateral lower extremity weakness or numbness. Perineal sensation intact. Rectal tone assessed and normal. No acute motor deficits on lower extremity neurological examination. Clinical presentation not consistent with cauda equina syndrome. MRI lumbar spine obtained/ordered as clinically indicated given degree of suspicion."},
+
   // OB
   {dot:"noeclampsia",cond:"Preeclampsia/Eclampsia Rule-Out",cat:"OB",text:"Preeclampsia and eclampsia considered. Blood pressure reviewed and within acceptable range for gestational age. Patient without severe features: no persistent headache, no visual changes, no right upper quadrant or epigastric pain, no shortness of breath, no altered mental status. Urinalysis without significant proteinuria. Labs including CBC, CMP, LFTs, and uric acid reviewed. OB notified and consulted. Fetal heart tones confirmed."},
   {dot:"nohellp",cond:"HELLP Syndrome Rule-Out",cat:"OB",text:"HELLP syndrome considered in this pregnant patient with abdominal pain. Labs reviewed: hemoglobin stable without evidence of microangiopathic hemolytic anemia, platelet count within normal limits, liver transaminases not elevated, LDH within normal range. Clinical presentation not consistent with HELLP syndrome. OB consulted."},
   {dot:"noabruption",cond:"Placental Abruption Rule-Out",cat:"OB",text:"Placental abruption considered. No significant vaginal bleeding, no uterine tenderness or rigidity, no contractions, no fetal heart rate abnormalities on monitoring. No trauma history. Ultrasound reviewed without retroplacental hematoma or abnormal placental appearance. OB notified and at bedside. Fetal monitoring reassuring."},
+
   // PEDS
   {dot:"nointussusception",cond:"Intussusception Rule-Out",cat:"Peds",text:"Intussusception considered in this pediatric patient with intermittent abdominal pain. No episodic colicky pain with pain-free intervals, no drawing up of legs, no current currant jelly stool, no sausage-shaped abdominal mass palpated. Abdomen soft and non-tender at time of examination. Bedside ultrasound performed without target sign or tubular mass identified. Clinical presentation not consistent with intussusception."},
   {dot:"novolvulus",cond:"Malrotation/Volvulus Rule-Out",cat:"Peds",text:"Malrotation with volvulus considered in this pediatric patient with bilious vomiting. Patient hemodynamically stable. Abdomen soft without peritoneal signs. Upper GI series or CT obtained to evaluate duodenal-jejunal junction position. Pediatric surgery notified. Clinical presentation and imaging reviewed in context of this life-threatening diagnosis."},
   {dot:"noepiglottitis",cond:"Epiglottitis Rule-Out",cat:"Peds",text:"Epiglottitis considered. Patient without classic triad of drooling, dysphagia, and distress. No tripod positioning. Voice not muffled. No stridor at rest. Patient able to handle secretions. Lateral neck radiograph reviewed without thumbprint sign or pre-epiglottic swelling. Direct visualization deferred to maintain airway safety. ENT/anesthesia and pediatrics notified as appropriate."},
   {dot:"nonat",cond:"Non-Accidental Trauma Screen",cat:"Peds",text:"Non-accidental trauma considered given mechanism, age of patient, or pattern of injury. History reviewed for consistency with developmental age and injury pattern. Physical examination performed with careful attention to bruising in non-ambulatory areas, patterned injuries, retinal hemorrhage, and FEN status. Skeletal survey ordered as clinically appropriate. Social work, child life, and child protective services notified per institutional protocol. Mandatory reporting obligations fulfilled."},
-  // OTHER
+
+  // HIGH-RISK DX
+  {dot:"nothyroidstorm",cond:"Thyroid Storm Rule-Out",cat:"High-Risk Dx",text:"Thyroid storm considered in this patient with hyperthyroid features. Burch-Wartofsky Point Scale score calculated and below threshold for thyroid storm diagnosis. Patient without temperature >38.5°C, no heart rate >130, no signs of congestive heart failure, no altered mental status, no hepatic dysfunction. TSH and free T4 obtained. Endocrinology notified. Clinical presentation not consistent with thyroid storm at this time."},
+  {dot:"nomyxedema",cond:"Myxedema Coma Rule-Out",cat:"High-Risk Dx",text:"Myxedema coma considered in this patient with altered mental status and hypothyroid features. Patient without severe hypothermia, no bradycardia, no hypotension, no hypoventilation, no history of hypothyroidism or thyroid surgery. TSH and free T4 obtained. Clinical presentation not consistent with myxedema coma. Endocrinology consulted as appropriate."},
+  {dot:"noadrenalcrisis",cond:"Adrenal Crisis Rule-Out",cat:"High-Risk Dx",text:"Adrenal crisis considered in this hemodynamically unstable patient. Patient without known adrenal insufficiency, no chronic steroid use or recent steroid withdrawal, no hyperpigmentation, no hyponatremia or hyperkalemia on labs. Random cortisol obtained. Clinical presentation not consistent with adrenal crisis. If high clinical suspicion, empiric hydrocortisone administered prior to confirmatory testing per protocol."},
+  {dot:"noglaucoma",cond:"Acute Angle-Closure Glaucoma Rule-Out",cat:"High-Risk Dx",text:"Acute angle-closure glaucoma considered in this patient with eye pain and headache. Patient without mid-dilated fixed pupil, no conjunctival injection or corneal clouding, no severely elevated intraocular pressure on tonometry, no halos around lights, no nausea and vomiting out of proportion to examination. Visual acuity assessed. Ophthalmology consulted as clinically indicated."},
+  {dot:"noludsangina",cond:"Ludwig's Angina / Deep Space Neck Infection Rule-Out",cat:"High-Risk Dx",text:"Ludwig's angina and deep space neck infection considered in this patient with jaw/neck pain and swelling. No submandibular or sublingual swelling, no trismus, no floor of mouth elevation, no drooling, no stridor, no voice changes, no recent dental procedure or tooth infection. Airway assessed as patent and stable. CT neck with contrast obtained as clinically indicated. ENT and anesthesia notified given potential for rapid airway compromise."},
+  {dot:"nofourgangr",cond:"Fournier's Gangrene Rule-Out",cat:"High-Risk Dx",text:"Fournier's gangrene considered in this patient with perineal/scrotal/vulvar pain and swelling. No crepitus palpated, no skin necrosis, no wound that is more extensive than external appearance suggests, no severe sepsis out of proportion to examination. LRINEC score calculated. CT pelvis/perineum reviewed without subcutaneous gas or fascial plane involvement. Surgery consulted. Clinical presentation not consistent with Fournier's gangrene at this time."},
+  {dot:"nocrao",cond:"Central Retinal Artery Occlusion",cat:"High-Risk Dx",text:"Central retinal artery occlusion considered in this patient with acute painless monocular vision loss. Time of symptom onset documented. Visual acuity and visual fields assessed. Afferent pupillary defect evaluated. Ophthalmology contacted emergently. Stroke protocol initiated given CRAO as cerebrovascular equivalent — MRI brain with DWI obtained, neurology notified. Thrombolytics discussed in context of time window and eligibility. Cardiovascular risk factors and embolic source workup initiated."},
+  {dot:"noWernicke",cond:"Wernicke's Encephalopathy Rule-Out",cat:"High-Risk Dx",text:"Wernicke's encephalopathy considered in this patient with altered mental status and history of alcohol use disorder or malnutrition. Classic triad assessed: patient without ophthalmoplegia, ataxia is not clearly present, encephalopathy mild. However, given that the full triad is often absent, thiamine 500mg IV administered prior to any dextrose-containing fluids as a precautionary measure. Thiamine level sent. Clinical team aware that empiric treatment is low-risk and potentially life-saving."},
+
+  // DISPOSITION & SDM
+  {dot:"ama",cond:"Against Medical Advice (AMA)",cat:"Disposition",text:"Patient has been informed of their medical condition, the recommended treatment plan, and the risks of leaving against medical advice including but not limited to: clinical deterioration, serious injury, and death. Patient demonstrates decision-making capacity — they are alert and oriented, understand the information provided, can articulate the risks in their own words, and are able to reason through their decision without evidence of impaired judgment. Patient declines recommended admission/treatment and elects to leave AMA. Patient instructed to return to the ED immediately if condition worsens. Prescriptions and follow-up provided to the extent possible to facilitate continued care. Patient's decision is respected."},
+  {dot:"sdmlowriskcp",cond:"Shared Decision-Making: Low-Risk Chest Pain Discharge",cat:"Disposition",text:"Shared decision-making discussion held with patient regarding low-risk chest pain disposition. Patient informed that initial workup including EKG and serial troponins is reassuring and does not demonstrate evidence of acute myocardial injury. Risks and benefits of observation versus discharge with outpatient follow-up discussed. Patient understands that a small residual risk of MACE cannot be excluded with ED evaluation alone. Patient verbalized understanding and agrees to discharge with close outpatient cardiology follow-up arranged. Return precautions provided including return to ED for any recurrence of chest pain, shortness of breath, palpitations, or syncope."},
+  {dot:"sdmlpsdm",cond:"Shared Decision-Making: LP for SAH Rule-Out",cat:"Disposition",text:"Shared decision-making discussion held regarding lumbar puncture for further evaluation of headache and subarachnoid hemorrhage rule-out. Patient informed that CT head is negative, but a small risk of SAH cannot be completely excluded by CT alone, particularly in headaches presenting beyond 6 hours of onset. The diagnostic yield, procedural risks (post-LP headache, back pain, rare infection or bleeding), and the alternative of discharge with strict return precautions were discussed. Patient verbalized understanding of risks and benefits. Patient elects to [proceed with LP / decline LP and accept residual diagnostic uncertainty with return precautions and close follow-up]."},
+  {dot:"capacityok",cond:"Decision-Making Capacity Confirmed",cat:"Disposition",text:"Decision-making capacity assessed and confirmed. Patient is alert and oriented to person, place, time, and situation. Patient demonstrates the four components of decision-making capacity: (1) ability to communicate a consistent choice, (2) understanding of relevant medical information including diagnosis, treatment options, and consequences, (3) appreciation of how information applies to their own situation, and (4) ability to reason and weigh options. No evidence of acute psychiatric illness, intoxication, or cognitive impairment that would impair capacity at this time."},
+  {dot:"noreturn",cond:"Return Precautions Documented",cat:"Disposition",text:"Discharge instructions reviewed with patient and/or family in detail. Patient verbalized understanding. Patient instructed to return to the emergency department immediately or call 911 for any of the following: worsening symptoms, new symptoms, fever, shortness of breath, chest pain, altered mental status, inability to tolerate oral intake, or any other concerning change in condition. Patient agreeable to follow-up as arranged. Questions answered prior to discharge."},
+
+  // HIGH-VOLUME VISITS
+  {dot:"nosyncope",cond:"Syncope — Low Risk, Discharge",cat:"High-Volume",text:"Syncope evaluated. San Francisco Syncope Rule criteria assessed: no abnormal EKG, no complaint of shortness of breath, no hematocrit <30%, no systolic BP <90 mmHg on arrival, and no history of congestive heart failure. ROSE and Canadian Syncope Risk Scores calculated and reflect low risk for serious adverse event. History consistent with vasovagal or situational syncope: identifiable trigger present, prodromal symptoms of lightheadedness and diaphoresis, rapid return to baseline. EKG reviewed without dysrhythmia, conduction abnormality, or ischemic changes. Orthostatic vitals obtained. Patient discharged with outpatient follow-up and syncope precautions."},
+  {dot:"etohclearance",cond:"Alcohol Intoxication / Medical Clearance",cat:"High-Volume",text:"Patient presenting with acute alcohol intoxication. Serial clinical assessments performed. Patient now alert and oriented, ambulatory, able to tolerate oral intake, and without focal neurological deficits. Vital signs stable and within acceptable range. No signs of occult trauma, withdrawal, or concurrent medical illness. Blood glucose checked and within normal limits. No evidence of alcohol withdrawal — CIWA assessment performed. Patient demonstrates appropriate mentation for safe discharge. Substance use resources offered. Patient discharged to responsible party / independently with instructions to refrain from driving and plan for follow-up."},
+  {dot:"psychclearance",cond:"Psychiatric Medical Clearance",cat:"High-Volume",text:"Medical clearance for psychiatric evaluation performed. History and physical examination completed. Vital signs stable. No acute medical conditions identified that would explain or contribute to psychiatric presentation, including no metabolic derangements, no toxic ingestion, no infectious etiology, no neurological pathology. Laboratory workup reviewed and without clinically significant abnormality. Urine toxicology obtained. Patient is medically stable and cleared for psychiatric evaluation and disposition. Psychiatry notified."},
+  {dot:"alteredms",cond:"Altered Mental Status Work-Up",cat:"High-Volume",text:"Altered mental status evaluated. Broad differential considered including metabolic, infectious, toxic, neurological, and structural etiologies. Blood glucose checked at bedside. Comprehensive labs obtained including CBC, CMP, LFTs, ammonia, thyroid function, urinalysis, and urine culture. Blood cultures obtained as clinically indicated. Urine toxicology and serum ethanol level sent. CT head reviewed without acute intracranial pathology. EKG without acute changes. Medications reviewed for potential contributing agents. Infectious workup initiated. Most likely etiology identified and treatment initiated."},
+  {dot:"flankpain",cond:"Renal Colic / Nephrolithiasis",cat:"High-Volume",text:"Renal colic from nephrolithiasis felt to be the most likely etiology of this patient's flank pain. Urinalysis demonstrating hematuria consistent with stone disease. CT abdomen/pelvis without contrast reviewed demonstrating [ureterolithiasis / no obstructing stone]. Hydronephrosis assessed. Signs of complicated stone disease ruled out: patient afebrile, no leukocytosis, no signs of sepsis, creatinine within acceptable range. Urology notified as appropriate. Patient discharged with adequate analgesia, tamsulosin, urine strainer, and urology follow-up with return precautions for fever, inability to tolerate PO, or uncontrolled pain."},
+
+  // OTHER HIGH-RISK
   {dot:"nosepsis",cond:"Sepsis Screening",cat:"Other",text:"Sepsis screening performed. Patient meets/does not meet SIRS criteria. qSOFA score calculated. Infectious source evaluated. Lactate obtained. Blood cultures drawn prior to antibiotic administration. IV access established, IV fluids initiated as appropriate. Antibiotics administered within 1 hour of sepsis recognition per Surviving Sepsis Campaign guidelines. Source control measures initiated. Patient reassessed at regular intervals with documentation of response to resuscitation."},
   {dot:"notorsion",cond:"Testicular Torsion Rule-Out",cat:"Other",text:"Testicular torsion considered given acute onset scrotal pain. TWIST score calculated. Testicle lies in normal transverse/longitudinal axis. No high-riding testicle. Cremasteric reflex present bilaterally. Scrotal Doppler ultrasound obtained demonstrating normal blood flow bilaterally. Urology notified. Patient counseled on return precautions given time-sensitive nature of this diagnosis."},
   {dot:"nosea",cond:"Spinal Epidural Abscess Rule-Out",cat:"Other",text:"Spinal epidural abscess considered in this patient with back pain. Patient without classic triad of fever, spinal tenderness, and neurological deficit. No IV drug use, no recent spinal procedure, no immunocompromised state, no bacteremia. Neurological examination intact with no motor deficit, no bowel or bladder dysfunction, no saddle anesthesia. MRI spine with and without contrast obtained/ordered as clinically indicated. Neurosurgery notified."},
@@ -115,14 +151,20 @@ cats.forEach(cat => {
   tabsEl.appendChild(btn);
 });
 
-function render() {
+function getFiltered() {
   const q = document.getElementById("search").value.toLowerCase();
-  const main = document.getElementById("main");
-  const filtered = phrases.filter(p => {
+  return phrases.filter(p => {
     const matchSearch = !q || p.dot.includes(q) || p.cond.toLowerCase().includes(q) || p.cat.toLowerCase().includes(q) || p.text.toLowerCase().includes(q);
     const matchCat = activeCategory === "All" || p.cat === activeCategory;
     return matchSearch && matchCat;
   });
+}
+
+function render() {
+  const filtered = getFiltered();
+  const main = document.getElementById("main");
+  const count = document.getElementById("count");
+  count.textContent = `${filtered.length} dotphrase${filtered.length !== 1 ? "s" : ""}`;
 
   if (filtered.length === 0) {
     main.innerHTML = '<p class="empty">No dotphrases found. Try a different search.</p>';
@@ -137,20 +179,15 @@ function render() {
           <span class="condition">${p.cond}</span>
           <span class="category-tag">${p.cat}</span>
         </div>
-        <button class="copy-btn" id="btn-${i}" onclick="copyText(${i}, '${p.dot}')">Copy</button>
+        <button class="copy-btn" id="btn-${i}" onclick="copyText(${i})">Copy</button>
       </div>
-      <p class="card-body" id="text-${i}">${p.text}</p>
+      <p class="card-body">${p.text}</p>
     </div>
   `).join("");
 }
 
-function copyText(i, dot) {
-  const filtered = phrases.filter(p => {
-    const q = document.getElementById("search").value.toLowerCase();
-    const matchSearch = !q || p.dot.includes(q) || p.cond.toLowerCase().includes(q) || p.cat.toLowerCase().includes(q) || p.text.toLowerCase().includes(q);
-    const matchCat = activeCategory === "All" || p.cat === activeCategory;
-    return matchSearch && matchCat;
-  });
+function copyText(i) {
+  const filtered = getFiltered();
   navigator.clipboard.writeText(filtered[i].text).then(() => {
     const btn = document.getElementById("btn-" + i);
     btn.textContent = "✓ Copied!";
