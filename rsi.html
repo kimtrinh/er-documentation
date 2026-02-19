@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>RSI Calculator</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',system-ui,sans-serif;background:#0f172a;color:#e2e8f0;min-height:100vh}
+.sitenav{background:#1e293b;border-bottom:1px solid #334155;padding:0 24px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.sitenav-inner{max-width:960px;margin:0 auto;display:flex;gap:2px;padding:8px 0}
+.sitenav a{padding:7px 14px;border-radius:8px;font-size:13px;font-weight:500;color:#94a3b8;text-decoration:none;white-space:nowrap;transition:all .2s}
+.sitenav a:hover{background:#334155;color:#f1f5f9}
+.sitenav a.active{background:#3b82f6;color:#fff}
+header{background:linear-gradient(135deg,#1e293b,#0f172a);border-bottom:1px solid #1e3a5f;padding:20px 24px}
+.header-inner{max-width:960px;margin:0 auto}
+.logo{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.logo span{font-size:22px}.logo h1{font-size:20px;font-weight:700;color:#f1f5f9}
+.subtitle{font-size:13px;color:#64748b;margin-left:32px}
+main{max-width:960px;margin:0 auto;padding:20px 24px 60px}
+.disclaimer{background:#1e3a5f;border:1px solid #2563eb;border-radius:8px;padding:10px 14px;margin-bottom:20px;font-size:12px;color:#93c5fd;line-height:1.5}
+.disclaimer strong{color:#bfdbfe}
+
+/* WEIGHT BAR */
+.weight-bar{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.weight-bar label{font-size:14px;font-weight:600;color:#f1f5f9;white-space:nowrap}
+.weight-bar input{width:100px;padding:8px 12px;background:#0f172a;border:1px solid #334155;border-radius:8px;color:#38bdf8;font-size:18px;font-weight:700;outline:none;text-align:center}
+.weight-bar input:focus{border-color:#3b82f6}
+.weight-bar .unit{font-size:14px;color:#64748b}
+.flags{display:flex;gap:10px;flex-wrap:wrap;margin-left:auto}
+.flag-btn{padding:6px 14px;border-radius:20px;border:1px solid #334155;background:#0f172a;color:#94a3b8;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s}
+.flag-btn.active-flag{border-color:#f59e0b;background:#292300;color:#fbbf24}
+
+/* LAYOUT */
+.layout{display:grid;grid-template-columns:1fr 280px;gap:16px}
+@media(max-width:768px){.layout{grid-template-columns:1fr}}
+
+/* SECTION HEADERS */
+.section-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#475569;margin:20px 0 8px;padding-left:4px}
+
+/* DRUG CARDS */
+.drug-card{background:#1e293b;border:1px solid #334155;border-radius:12px;margin-bottom:10px;overflow:hidden}
+.drug-header{padding:11px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #334155}
+.drug-name{font-weight:700;font-size:14px;color:#f1f5f9}
+.drug-class{font-size:11px;padding:2px 8px;border-radius:20px;font-weight:600}
+.class-induction{background:#1e3a5f;color:#93c5fd}
+.class-paralytic{background:#1a2e1a;color:#86efac}
+.class-pretreat{background:#2d1b4e;color:#c4b5fd}
+.drug-body{display:grid;grid-template-columns:repeat(3,1fr)}
+.drug-cell{padding:10px 14px;border-right:1px solid #0f172a}
+.drug-cell:last-child{border-right:none}
+.cell-label{font-size:10px;color:#475569;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+.cell-value{font-size:13px;color:#e2e8f0;font-weight:500}
+.cell-value.dose{color:#38bdf8;font-weight:800;font-size:16px}
+.cell-value.alt{color:#a78bfa;font-weight:700;font-size:14px}
+.drug-note{padding:8px 14px;font-size:11px;color:#64748b;background:#0f172a;border-top:1px solid #1e293b;line-height:1.5}
+.drug-note.warn{color:#fbbf24;background:#1c1400}
+.drug-note.danger{color:#f87171;background:#1f0707}
+
+/* POST-INTUBATION DRIPS */
+.drip-card{background:#1e293b;border:1px solid #334155;border-radius:12px;margin-bottom:10px;overflow:hidden}
+.drip-header{padding:11px 16px;border-bottom:1px solid #334155;font-weight:700;font-size:14px;color:#f1f5f9;display:flex;align-items:center;justify-content:space-between}
+.drip-body{padding:12px 16px}
+.drip-row{display:flex;justify-content:space-between;align-items:flex-start;padding:8px 0;border-bottom:1px solid #0f172a;font-size:13px;gap:8px}
+.drip-row:last-child{border-bottom:none}
+.drip-label{color:#94a3b8;flex:1}
+.drip-value{color:#38bdf8;font-weight:700;text-align:right}
+
+/* SIDEBAR */
+.side-card{background:#1e293b;border:1px solid #334155;border-radius:12px;margin-bottom:12px;overflow:hidden}
+.side-header{padding:11px 16px;border-bottom:1px solid #334155;font-weight:700;font-size:13px;color:#f1f5f9}
+.side-body{padding:12px 16px}
+.side-row{font-size:12px;padding:6px 0;border-bottom:1px solid #0f172a;color:#cbd5e1;line-height:1.5}
+.side-row:last-child{border-bottom:none}
+.side-row strong{color:#f1f5f9}
+.side-row .val{color:#38bdf8;font-weight:700}
+
+/* DIFFICULT AIRWAY */
+.diff-card{background:#1e293b;border:1px solid #334155;border-radius:12px;margin-bottom:12px;overflow:hidden}
+.diff-header{padding:11px 16px;border-bottom:1px solid #334155;font-weight:700;font-size:13px;color:#fbbf24}
+.diff-body{padding:12px 16px;font-size:12px;line-height:1.7;color:#cbd5e1}
+.diff-flag{display:none;background:#1c1400;border:1px solid #f59e0b;border-radius:8px;padding:10px 14px;margin-bottom:10px;font-size:12px;color:#fde68a;line-height:1.6}
+.diff-flag.show{display:block}
+
+/* CRIC */
+.cric-card{background:#1e293b;border:1px solid #334155;border-radius:12px;overflow:hidden}
+.cric-header{padding:11px 16px;border-bottom:1px solid #334155;font-weight:700;font-size:13px;color:#f87171}
+.cric-step{display:flex;gap:10px;padding:9px 16px;border-bottom:1px solid #0f172a;font-size:12px;color:#cbd5e1;line-height:1.5;align-items:flex-start}
+.cric-step:last-child{border-bottom:none}
+.cric-num{background:#3b82f6;color:#fff;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px}
+</style>
+</head>
+<body>
+
+<div class="sitenav">
+  <div class="sitenav-inner">
+    <a href="index.html">📋 Dotphrases</a>
+    <a href="calculators.html">🧮 Calculators</a>
+    <a href="vasopressors.html">💊 Vasopressors</a>
+    <a href="rsi.html" class="active">🫁 RSI</a>
+  </div>
+</div>
+
+<header>
+  <div class="header-inner">
+    <div class="logo"><span>🫁</span><h1>RSI Calculator</h1></div>
+    <p class="subtitle">Enter weight → get doses. Flag special conditions for dose adjustments.</p>
+  </div>
+</header>
+
+<main>
+  <div class="disclaimer"><strong>⚠️ Clinical Disclaimer:</strong> Verify all doses with pharmacy. Doses are guidelines only — clinical judgment required. All weights should be actual body weight unless noted.</div>
+
+  <!-- WEIGHT + FLAGS -->
+  <div class="weight-bar">
+    <label>Weight</label>
+    <input type="number" id="weight" value="70" min="1" max="300" oninput="update()"/>
+    <span class="unit">kg</span>
+    <div class="flags">
+      <button class="flag-btn" id="flag-obese" onclick="toggleFlag('obese')">⚠️ Obese (BMI≥30)</button>
+      <button class="flag-btn" id="flag-pregnant" onclick="toggleFlag('pregnant')">🤰 Pregnant</button>
+      <button class="flag-btn" id="flag-difficult" onclick="toggleFlag('difficult')">🚨 Difficult Airway</button>
+    </div>
+  </div>
+
+  <div class="layout">
+    <div>
+
+      <!-- PRETREATMENT -->
+      <div class="section-label">Pretreatment (optional — give 3 min before induction)</div>
+
+      <div class="drug-card">
+        <div class="drug-header">
+          <span class="drug-name">Fentanyl <span style="font-size:11px;color:#64748b;font-weight:400">— opioid blunting</span></span>
+          <span class="drug-class class-pretreat">Pretreatment</span>
+        </div>
+        <div class="drug-body">
+          <div class="drug-cell"><div class="cell-label">Dose</div><div class="cell-value dose" id="fent-dose">—</div></div>
+          <div class="drug-cell"><div class="cell-label">Range</div><div class="cell-value" id="fent-range">—</div></div>
+          <div class="drug-cell"><div class="cell-label">Route / Onset</div><div class="cell-value">IV slow push<br/>1–2 min</div></div>
+        </div>
+        <div class="drug-note">Blunts sympathetic response to laryngoscopy. Use in ICP elevation, aortic dissection, severe HTN. Give slowly over 30–60s to avoid chest wall rigidity.</div>
+      </div>
+
+      <!-- INDUCTION -->
+      <div class="section-label">Induction Agent (choose one)</div>
+
+      <div class="drug-card">
+        <div class="drug-header">
+          <span class="drug-name">Etomidate</span>
+          <span class="drug-class class-induction">Induction</span>
+        </div>
+        <div class="drug-body">
+          <div class="drug-cell"><div class="cell-label">Dose</div><div class="cell-value dose" id="etom-dose">—</div></div>
+          <div class="drug-cell"><div class="cell-label">Total (mg)</div><div class="cell-value alt" id="etom-mg">—</div></div>
+          <div class="drug-cell"><div class="cell-label">Route / Onset</div><div class="cell-value">IV push<br/>15–45 sec</div></div>
+        </div>
+        <div class="drug-note">✅ Hemodynamically neutral — preferred in hypotensive/shocked patients. Single dose adrenal suppression — generally acceptable for RSI. Duration 3–10 min.</div>
+      </div>
+
+      <div class="drug-card">
+        <div class="drug-header">
+          <span class="drug-name">Ketamine</span>
+          <span class="drug-class class-induction">Induction</span>
+        </div>
+        <div class="drug-body">
+          <div class="drug-cell"><div class="cell-label">RSI Dose</div><div class="cell-value dose" id="ket-dose">—</div></div>
+          <div class="drug-cell"><div class="cell-label">Total (mg)</div><div class="cell-value alt" id="ket-mg">—</div></div>
+          <div class="drug-cell"><div class="cell-label">Route / Onset</div><div class="cell-value">IV push<br/>45–60 sec</div></div>
+        </div>
+        <div class="drug-note" id="ket-note">✅ Preferred in bronchospasm, reactive airway, hemodynamic instability. Dissociative at RSI doses. Maintains airway reflexes less than other agents — give full dose. Catecholamine release → BP/HR ↑ (caution in fixed CO states).</div>
+      </div>
+
+      <div class="drug-card">
+        <div class="drug-header">
+          <span class="drug-name">Propofol</span>
+          <span class="drug-class class-induction">Induction</span>
+        </div>
+        <div class="drug-body">
+          <div class="drug-cell"><div class="cell-label">Dose</div><div class="cell-value dose" id="prop-dose">—</div></div>
+          <div class="drug-cell"><div class="cell-label">Total (mg)</div><div class="cell-value alt" id="prop-mg">—</div></div>
+          <div class="drug-cell"><div class="cell-label">Route / Onset</div><div class="cell-value">IV push<br/>15–45 sec</div></div>
+        </div>
+        <div class="drug-note warn">⚠️ Significant hypotension risk — avoid in hemodynamically unstable patients. Best for controlled intubations (e.g. status epilepticus, awake/stable patient). Reduce dose in elderly/frail.</div>
+      </div>
+
+      <div class="drug-card">
+        <div class="drug-header">
+          <span class="drug-name">Midazolam</span>
+          <span class="drug-class class-induction">Induction</span>
+        </div>
+        <div class="drug-body">
+          <div class="drug-cell"><div class="cell-label">Dose</div><div class="cell-value dose" id="midaz-dose">—</div></div>
+          <div class="drug-cell"><div class="cell-label">Total (mg)</div><div class="cell-value alt" id="midaz-mg">—</div></div>
+          <div class="drug-cell"><div class="cell-label">Route / Onset</div><div class="cell-value">IV push<br/>2–3 min</div></div>
+        </div>
+        <div class="drug-note warn">⚠️ Slower onset than other agents — less reliable for RSI. Use as adjunct or when other agents unavailable. Hypotension risk. Reduce dose in elderly, renal/hepatic impairment, or with opioids.</div>
+      </div>
+
+      <!-- PARALYTICS -->
+      <div class="section-label">Paralytic Agent (choose one)</div>
+
+      <div class="drug-card">
+        <div class="drug-header">
+          <span class="drug-name">Succinylcholine <span style="font-size:11px;color:#64748b;font-weight:400">— depolarizing</span></span>
+          <span class="drug-class class-paralytic">Paralytic</span>
+        </div>
+        <div class="drug-body">
+          <div class="drug-cell"><div class="cell-label">Dose</div><div class="cell-value dose" id="succ-dose">—</div></div>
+          <div class="drug-cell"><div class="cell-label">Total (mg)</div><div class="cell-value alt" id="succ-mg">—</div></div>
+          <div class="drug-cell"><div class="cell-label">Onset / Duration</div><div class="cell-value">45–60 sec<br/>~10 min</div></div>
+        </div>
+        <div class="drug-note danger" id="succ-note">⚠️ CONTRAINDICATED: Burns >24h old, crush injury >3 days, prolonged immobility, hyperkalemia, personal/family hx of malignant hyperthermia, myopathies, UMN/LMN lesions >3 days. Use actual body weight (not IBW) in obese patients.</div>
+      </div>
+
+      <div class="drug-card">
+        <div class="drug-header">
+          <span class="drug-name">Rocuronium <span style="font-size:11px;color:#64748b;font-weight:400">— non-depolarizing</span></span>
+          <span class="drug-class class-paralytic">Paralytic</span>
+        </div>
+        <div class="drug-body">
+          <div class="drug-cell"><div class="cell-label">RSI Dose</div><div class="cell-value dose" id="roc-dose">—</div></div>
+          <div class="drug-cell"><div class="cell-label">Total (mg)</div><div class="cell-value alt" id="roc-mg">—</div></div>
+          <div class="drug-cell"><div class="cell-label">Onset / Duration</div><div class="cell-value">60–90 sec<br/>30–60 min</div></div>
+        </div>
+        <div class="drug-note">✅ Preferred when succinylcholine contraindicated. High-dose (1.2 mg/kg) gives near-identical onset to succinylcholine. Reversible with sugammadex (16 mg/kg for immediate reversal). Use IBW in obese patients.</div>
+      </div>
+
+      <div class="drug-card">
+        <div class="drug-header">
+          <span class="drug-name">Vecuronium <span style="font-size:11px;color:#64748b;font-weight:400">— non-depolarizing</span></span>
+          <span class="drug-class class-paralytic">Paralytic</span>
+        </div>
+        <div class="drug-body">
+          <div class="drug-cell"><div class="cell-label">RSI Dose</div><div class="cell-value dose" id="vec-dose">—</div></div>
+          <div class="drug-cell"><div class="cell-label">Total (mg)</div><div class="cell-value alt" id="vec-mg">—</div></div>
+          <div class="drug-cell"><div class="cell-label">Onset / Duration</div><div class="cell-value">3–5 min<br/>25–40 min</div></div>
+        </div>
+        <div class="drug-note warn">⚠️ Slower onset than rocuronium — not ideal for traditional RSI. Use when rocuronium unavailable. Onset can be shortened with priming dose (0.01 mg/kg given 3 min before).</div>
+      </div>
+
+      <!-- POST-INTUBATION -->
+      <div class="section-label">Post-Intubation Sedation & Analgesia</div>
+
+      <div class="drip-card">
+        <div class="drip-header"><span>💤 Sedation Drips</span><span style="font-size:11px;font-weight:400;color:#64748b">Start immediately after intubation</span></div>
+        <div class="drip-body">
+          <div class="drip-row">
+            <div class="drip-label"><strong style="color:#f1f5f9">Propofol</strong><br/><span style="font-size:11px;color:#475569">10mg/mL standard. Preferred ICU sedation (RASS-guided)</span></div>
+            <div class="drip-value" id="prop-drip">—</div>
+          </div>
+          <div class="drip-row">
+            <div class="drip-label"><strong style="color:#f1f5f9">Midazolam</strong><br/><span style="font-size:11px;color:#475569">1mg/mL standard. Use if propofol unavailable or hemodynamically unstable</span></div>
+            <div class="drip-value" id="midaz-drip">—</div>
+          </div>
+          <div class="drip-row">
+            <div class="drip-label"><strong style="color:#f1f5f9">Ketamine</strong><br/><span style="font-size:11px;color:#475569">2mg/mL. Good opioid-sparing option, bronchodilator</span></div>
+            <div class="drip-value" id="ket-drip">—</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="drip-card">
+        <div class="drip-header"><span>💊 Analgesia Drips</span><span style="font-size:11px;font-weight:400;color:#64748b">Analgesia-first approach</span></div>
+        <div class="drip-body">
+          <div class="drip-row">
+            <div class="drip-label"><strong style="color:#f1f5f9">Fentanyl</strong><br/><span style="font-size:11px;color:#475569">50 mcg/mL standard. Preferred — hemodynamically stable, titratable</span></div>
+            <div class="drip-value" id="fent-drip">—</div>
+          </div>
+          <div class="drip-row">
+            <div class="drip-label"><strong style="color:#f1f5f9">Morphine</strong><br/><span style="font-size:11px;color:#475569">1mg/mL standard. Avoid in renal failure (active metabolite accumulates)</span></div>
+            <div class="drip-value" id="morph-drip">—</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- SIDEBAR -->
+    <div>
+
+      <!-- DIFFICULT AIRWAY FLAGS -->
+      <div class="diff-card">
+        <div class="diff-header">🚨 Difficult Airway Alerts</div>
+        <div class="diff-body">
+          <div class="diff-flag" id="flag-obese-msg">
+            <strong>⚠️ Obesity (BMI ≥30)</strong><br/>
+            • Use IBW for rocuronium/vecuronium<br/>
+            • Use actual body weight for succinylcholine<br/>
+            • Ramped positioning — ear to sternal notch<br/>
+            • Pre-oxygenate longer (↓ FRC, ↓ apneic time)<br/>
+            • Video laryngoscopy preferred<br/>
+            • Have bougie ready
+          </div>
+          <div class="diff-flag" id="flag-pregnant-msg">
+            <strong>🤰 Pregnancy</strong><br/>
+            • Left lateral tilt (15°) — relieve aortic compression<br/>
+            • Rapid desaturation — ↑ O₂ consumption<br/>
+            • Difficult airway more likely (airway edema)<br/>
+            • Full stomach — highest aspiration risk<br/>
+            • Succinylcholine safe in pregnancy<br/>
+            • Avoid prolonged apnea — fetal hypoxia risk<br/>
+            • Ketamine safe; avoid large propofol doses
+          </div>
+          <div class="diff-flag" id="flag-difficult-msg">
+            <strong>🚨 Predicted Difficult Airway</strong><br/>
+            • Call for backup / senior now<br/>
+            • Prepare video laryngoscope as primary<br/>
+            • Have bougie, smaller ETT (6.0–6.5), LMA ready<br/>
+            • Cric kit open and at bedside<br/>
+            • Consider awake intubation if time allows<br/>
+            • LEMON assessment: Look, Evaluate 3-3-2, Mallampati, Obstruction, Neck mobility<br/>
+            • Don't paralyze if unsure you can intubate
+          </div>
+          <p style="font-size:12px;color:#475569">Toggle flags above the weight input to show alerts.</p>
+        </div>
+      </div>
+
+      <!-- SUGAMMADEX -->
+      <div class="side-card">
+        <div class="side-header">🔄 Sugammadex (Rocuronium Reversal)</div>
+        <div class="side-body">
+          <div class="side-row"><strong>Routine reversal</strong><br/><span class="val" id="sug-routine">—</span> <span style="color:#64748b">(4 mg/kg)</span></div>
+          <div class="side-row"><strong>Immediate reversal</strong> (can't intubate/oxygenate)<br/><span class="val" id="sug-immediate">—</span> <span style="color:#64748b">(16 mg/kg)</span></div>
+          <div class="side-row" style="font-size:11px;color:#64748b">Onset ~3 min for routine, ~1.5 min for high dose. Only reverses rocuronium/vecuronium — does NOT reverse succinylcholine.</div>
+        </div>
+      </div>
+
+      <!-- ETT SIZE -->
+      <div class="side-card">
+        <div class="side-header">📏 ETT & Equipment Guide</div>
+        <div class="side-body">
+          <div class="side-row"><strong>Adult male ETT</strong><br/><span class="val">7.5–8.0 mm</span></div>
+          <div class="side-row"><strong>Adult female ETT</strong><br/><span class="val">7.0–7.5 mm</span></div>
+          <div class="side-row"><strong>Difficult airway ETT</strong><br/><span class="val">6.0–6.5 mm</span></div>
+          <div class="side-row"><strong>Insertion depth (lips)</strong><br/><span class="val">Male: 23 cm | Female: 21 cm</span></div>
+          <div class="side-row"><strong>Confirm with</strong><br/><span class="val">Waveform capnography + CXR</span></div>
+          <div class="side-row"><strong>Initial vent settings</strong><br/><span class="val" id="vent-tv">—</span><br/><span style="font-size:11px;color:#64748b">TV 6–8 mL/kg IBW, RR 12–16, FiO₂ 100% initially, PEEP 5</span></div>
+        </div>
+      </div>
+
+      <!-- CRIC -->
+      <div class="cric-card">
+        <div class="cric-header">🔪 Surgical Cric — Can't Intubate / Can't Oxygenate</div>
+        <div class="cric-step"><div class="cric-num">1</div><div>Call for help. Position neck extended.</div></div>
+        <div class="cric-step"><div class="cric-num">2</div><div>Identify cricothyroid membrane — midline, between thyroid and cricoid cartilage.</div></div>
+        <div class="cric-step"><div class="cric-num">3</div><div><strong>Scalpel:</strong> Horizontal stab incision through skin and membrane. Hook — tracheal hook to stabilize trachea, pull caudally.</div></div>
+        <div class="cric-step"><div class="cric-num">4</div><div><strong>Bougie:</strong> Insert bougie through incision, advance into trachea (feel rings).</div></div>
+        <div class="cric-step"><div class="cric-num">5</div><div><strong>Tube:</strong> Railroad 6.0 cuffed ETT over bougie. Inflate cuff. Confirm with waveform capnography.</div></div>
+        <div class="cric-step"><div class="cric-num">6</div><div>Ventilate. Secure tube. Reassess. Call surgery for definitive airway.</div></div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<script>
+const flags = {obese:false, pregnant:false, difficult:false};
+
+function toggleFlag(f) {
+  flags[f] = !flags[f];
+  document.getElementById('flag-'+f).classList.toggle('active-flag', flags[f]);
+  document.getElementById('flag-'+f+'-msg').classList.toggle('show', flags[f]);
+  update();
+}
+
+function fmt(n, d=0) { return n.toFixed(d); }
+function mg(n) { return fmt(n) + ' mg'; }
+function mcg(n) { return fmt(n) + ' mcg'; }
+
+function ibw(wt) {
+  // Simplified IBW — use actual wt if lower
+  return Math.min(wt, 70);
+}
+
+function update() {
+  const wt = parseFloat(document.getElementById('weight').value) || 70;
+  const isObese = flags.obese;
+  // For weight-based dosing: rocuronium/vecuronium use IBW in obese
+  const leanWt = isObese ? Math.min(wt * 0.4 + 40, wt) : wt;
+
+  // FENTANYL pretreatment: 1–3 mcg/kg, typical 2 mcg/kg
+  const fentPre = wt * 2;
+  set('fent-dose', '2 mcg/kg');
+  set('fent-range', mcg(wt*1) + ' – ' + mcg(wt*3));
+
+  // ETOMIDATE: 0.3 mg/kg
+  const etomDose = wt * 0.3;
+  set('etom-dose', '0.3 mg/kg');
+  set('etom-mg', mg(etomDose));
+
+  // KETAMINE: 1.5–2 mg/kg for RSI
+  const ketDose = wt * 1.5;
+  set('ket-dose', '1.5–2 mg/kg');
+  set('ket-mg', mg(ketDose) + ' – ' + mg(wt*2));
+
+  // PROPOFOL: 1.5–2.5 mg/kg (reduce in elderly)
+  const propDose = wt * 1.5;
+  set('prop-dose', '1.5–2.5 mg/kg');
+  set('prop-mg', mg(propDose) + ' – ' + mg(wt*2.5));
+
+  // MIDAZOLAM: 0.1–0.3 mg/kg
+  const midazDose = wt * 0.2;
+  set('midaz-dose', '0.1–0.3 mg/kg');
+  set('midaz-mg', mg(wt*0.1) + ' – ' + mg(wt*0.3));
+
+  // SUCCINYLCHOLINE: 1.5 mg/kg actual body weight (obese: 1.5 x actual)
+  const succWt = wt; // always actual body weight
+  const succDose = succWt * 1.5;
+  set('succ-dose', '1.5 mg/kg (ABW)');
+  set('succ-mg', mg(succDose));
+
+  // ROCURONIUM: 1.2 mg/kg for RSI (IBW in obese, max 200mg)
+  const rocWt = isObese ? leanWt : wt;
+  const rocDose = Math.min(rocWt * 1.2, 200);
+  set('roc-dose', '1.2 mg/kg' + (isObese ? ' IBW' : ''));
+  set('roc-mg', mg(rocDose));
+
+  // VECURONIUM: 0.15–0.2 mg/kg for RSI
+  const vecWt = isObese ? leanWt : wt;
+  const vecDose = vecWt * 0.2;
+  set('vec-dose', '0.2 mg/kg' + (isObese ? ' IBW' : ''));
+  set('vec-mg', mg(vecDose));
+
+  // SUGAMMADEX
+  set('sug-routine', mg(wt * 4));
+  set('sug-immediate', mg(wt * 16));
+
+  // VENT TV: 6–8 mL/kg IBW
+  const ibwEst = leanWt;
+  set('vent-tv', 'TV: ' + fmt(ibwEst*6) + '–' + fmt(ibwEst*8) + ' mL');
+
+  // POST-INTUBATION DRIPS
+  set('prop-drip', fmt(wt*0.005,2)+'–'+fmt(wt*0.05,2)+' mg/kg/min\n= '+fmt(wt*0.3,1)+'–'+fmt(wt*3,1)+' mL/hr');
+  set('midaz-drip', fmt(wt*0.02,2)+'–'+fmt(wt*0.1,2)+' mg/kg/hr\n= '+fmt(wt*0.02,1)+'–'+fmt(wt*0.1,1)+' mL/hr');
+  set('ket-drip', '0.1–0.5 mg/kg/hr\n= '+fmt(wt*0.05,1)+'–'+fmt(wt*0.25,1)+' mL/hr');
+  set('fent-drip', '25–200 mcg/hr\n= '+fmt(25/50*60,1)+'–'+fmt(200/50*60,0)+' mL/hr (50mcg/mL)');
+  set('morph-drip', '1–10 mg/hr\n= 1–10 mL/hr (1mg/mL)');
+}
+
+function set(id, val) {
+  const el = document.getElementById(id);
+  if(el) el.textContent = val;
+}
+
+update();
+</script>
+</body>
+</html>
