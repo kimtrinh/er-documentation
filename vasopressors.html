@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Vasopressor Calculator</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',system-ui,sans-serif;background:#0f172a;color:#e2e8f0;min-height:100vh}
+.sitenav{background:#1e293b;border-bottom:1px solid #334155;padding:0 24px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.sitenav-inner{max-width:960px;margin:0 auto;display:flex;gap:2px;padding:8px 0}
+.sitenav a{padding:7px 14px;border-radius:8px;font-size:13px;font-weight:500;color:#94a3b8;text-decoration:none;white-space:nowrap;transition:all .2s}
+.sitenav a:hover{background:#334155;color:#f1f5f9}
+.sitenav a.active{background:#3b82f6;color:#fff}
+header{background:linear-gradient(135deg,#1e293b,#0f172a);border-bottom:1px solid #1e3a5f;padding:20px 24px}
+.header-inner{max-width:960px;margin:0 auto}
+.logo{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.logo span{font-size:22px}.logo h1{font-size:20px;font-weight:700;color:#f1f5f9}
+.subtitle{font-size:13px;color:#64748b;margin-left:32px}
+main{max-width:960px;margin:0 auto;padding:20px 24px 60px}
+.disclaimer{background:#1e3a5f;border:1px solid #2563eb;border-radius:8px;padding:10px 14px;margin-bottom:20px;font-size:12px;color:#93c5fd;line-height:1.5}
+.disclaimer strong{color:#bfdbfe}
+
+/* WEIGHT INPUT */
+.weight-bar{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.weight-bar label{font-size:14px;font-weight:600;color:#f1f5f9;white-space:nowrap}
+.weight-bar input{width:100px;padding:8px 12px;background:#0f172a;border:1px solid #334155;border-radius:8px;color:#38bdf8;font-size:18px;font-weight:700;outline:none;text-align:center}
+.weight-bar input:focus{border-color:#3b82f6}
+.weight-bar .unit{font-size:14px;color:#64748b}
+.weight-bar .ibw{font-size:12px;color:#64748b;margin-left:8px}
+
+/* LAYOUT */
+.layout{display:grid;grid-template-columns:1fr 300px;gap:16px}
+@media(max-width:768px){.layout{grid-template-columns:1fr}}
+
+/* DRUG CARDS */
+.drug-card{background:#1e293b;border:1px solid #334155;border-radius:12px;margin-bottom:12px;overflow:hidden}
+.drug-header{padding:12px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #334155}
+.drug-name{font-weight:700;font-size:15px;color:#f1f5f9}
+.drug-class{font-size:11px;padding:2px 8px;border-radius:20px;font-weight:600}
+.class-vasopressor{background:#1e3a5f;color:#93c5fd}
+.class-inotrope{background:#1a2e1a;color:#86efac}
+.class-both{background:#2d1b4e;color:#c4b5fd}
+.class-push{background:#3b1f00;color:#fdba74}
+.drug-body{padding:0}
+.drug-row{display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:1px solid #0f172a}
+.drug-row:last-child{border-bottom:none}
+.drug-cell{padding:10px 14px}
+.cell-label{font-size:10px;color:#475569;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+.cell-value{font-size:13px;color:#e2e8f0;font-weight:500;line-height:1.4}
+.cell-value.highlight{color:#38bdf8;font-weight:700;font-size:14px}
+.cell-value.rate{color:#a78bfa;font-weight:700}
+.drug-note{padding:8px 14px;font-size:11px;color:#64748b;background:#0f172a;border-top:1px solid #1e293b;line-height:1.5}
+
+/* PUSH DOSE */
+.push-card{background:#1e293b;border:1px solid #334155;border-radius:12px;margin-bottom:12px;overflow:hidden}
+.push-header{padding:12px 16px;border-bottom:1px solid #334155;display:flex;align-items:center;justify-content:space-between}
+.push-body{padding:14px 16px}
+.push-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #1e293b;font-size:13px}
+.push-row:last-child{border-bottom:none}
+.push-label{color:#94a3b8}
+.push-value{color:#f59e0b;font-weight:700}
+
+/* INDICATIONS */
+.ind-card{background:#1e293b;border:1px solid #334155;border-radius:12px;overflow:hidden;position:sticky;top:16px}
+.ind-header{padding:12px 16px;border-bottom:1px solid #334155;font-weight:700;font-size:14px;color:#f1f5f9}
+.ind-item{padding:12px 16px;border-bottom:1px solid #0f172a}
+.ind-item:last-child{border-bottom:none}
+.ind-shock{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.shock-septic{color:#f87171}
+.shock-cardio{color:#fb923c}
+.shock-neuro{color:#facc15}
+.shock-anaph{color:#a78bfa}
+.shock-refrac{color:#94a3b8}
+.ind-drugs{font-size:12px;color:#cbd5e1;line-height:1.7}
+.ind-first{color:#38bdf8;font-weight:600}
+.ind-second{color:#94a3b8}
+
+/* MAP target */
+.map-bar{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:14px 16px;margin-bottom:12px}
+.map-title{font-size:12px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.map-row{display:flex;justify-content:space-between;font-size:12px;padding:5px 0;border-bottom:1px solid #0f172a;color:#cbd5e1}
+.map-row:last-child{border-bottom:none}
+.map-target{color:#38bdf8;font-weight:700}
+</style>
+</head>
+<body>
+
+<div class="sitenav">
+  <div class="sitenav-inner">
+    <a href="index.html">📋 Dotphrases</a>
+    <a href="calculators.html">🧮 Calculators</a>
+    <a href="vasopressors.html" class="active">💊 Vasopressors</a>
+  </div>
+</div>
+
+<header>
+  <div class="header-inner">
+    <div class="logo"><span>💊</span><h1>Vasopressor & Inotrope Calculator</h1></div>
+    <p class="subtitle">Enter patient weight to calculate weight-based doses and infusion rates</p>
+  </div>
+</header>
+
+<main>
+  <div class="disclaimer"><strong>⚠️ Clinical Disclaimer:</strong> Doses are based on standard EM/critical care guidelines. Always verify against your institution's pharmacy protocols. All drips require continuous hemodynamic monitoring.</div>
+
+  <!-- WEIGHT INPUT -->
+  <div class="weight-bar">
+    <label>Patient Weight</label>
+    <input type="number" id="weight" value="70" min="1" max="300" oninput="update()"/>
+    <span class="unit">kg</span>
+    <span class="ibw" id="ibw-note"></span>
+  </div>
+
+  <div class="layout">
+    <!-- LEFT: DRUG CARDS -->
+    <div>
+
+      <!-- NOREPINEPHRINE -->
+      <div class="drug-card">
+        <div class="drug-header">
+          <span class="drug-name">Norepinephrine <span style="font-size:12px;color:#64748b;font-weight:400">(Levophed)</span></span>
+          <span class="drug-class class-vasopressor">Vasopressor</span>
+        </div>
+        <div class="drug-body">
+          <div class="drug-row">
+            <div class="drug-cell"><div class="cell-label">Start</div><div class="cell-value highlight" id="norepi-start">—</div></div>
+            <div class="drug-cell"><div class="cell-label">Usual Range</div><div class="cell-value" id="norepi-range">—</div></div>
+            <div class="drug-cell"><div class="cell-label">Max</div><div class="cell-value" id="norepi-max">—</div></div>
+          </div>
+          <div class="drug-row">
+            <div class="drug-cell"><div class="cell-label">Std Concentration</div><div class="cell-value">4mg / 250mL NS<br/><span style="color:#64748b;font-size:11px">= 16 mcg/mL</span></div></div>
+            <div class="drug-cell"><div class="cell-label">Start Rate</div><div class="cell-value rate" id="norepi-rate-start">—</div></div>
+            <div class="drug-cell"><div class="cell-label">Max Rate</div><div class="cell-value rate" id="norepi-rate-max">—</div></div>
+          </div>
+        </div>
+        <div class="drug-note">💡 <strong>First-line for septic shock.</strong> Potent α1 &gt; β1. Titrate to MAP ≥65. Add vasopressin if >0.25 mcg/kg/min needed.</div>
+      </div>
+
+      <!-- EPINEPHRINE -->
+      <div class="drug-card">
+        <div class="drug-header">
+          <span class="drug-name">Epinephrine</span>
+          <span class="drug-class class-both">Vasopressor + Inotrope</span>
+        </div>
+        <div class="drug-body">
+          <div class="drug-row">
+            <div class="drug-cell"><div class="cell-label">Start</div><div class="cell-value highlight" id="epi-start">—</div></div>
+            <div class="drug-cell"><div class="cell-label">Usual Range</div><div class="cell-value" id="epi-range">—</div></div>
+            <div class="drug-cell"><div class="cell-label">Max</div><div class="cell-value" id="epi-max">—</div></div>
+          </div>
+          <div class="drug-row">
+            <div class="drug-cell"><div class="cell-label">Std Concentration</div><div class="cell-value">4mg / 250mL NS<br/><span style="color:#64748b;font-size:11px">= 16 mcg/mL</span></div></div>
+            <div class="drug-cell"><div class="cell-label">Start Rate</div><div class="cell-value rate" id="epi-rate-start">—</div></div>
+            <div class="drug-cell"><div class="cell-label">Max Rate</div><div class="cell-value rate" id="epi-rate-max">—</div></div>
+          </div>
+        </div>
+        <div class="drug-note">💡 <strong>First-line for anaphylactic shock, refractory shock, cardiac arrest.</strong> Low doses → β predominant (inotropy). High doses → α predominant (vasoconstriction). Monitor for tachyarrhythmia.</div>
+      </div>
+
+      <!-- DOPAMINE -->
+      <div class="drug-card">
+        <div class="drug-header">
+          <span class="drug-name">Dopamine</span>
+          <span class="drug-class class-both">Vasopressor + Inotrope</span>
+        </div>
+        <div class="drug-body">
+          <div class="drug-row">
+            <div class="drug-cell"><div class="cell-label">Start</div><div class="cell-value highlight" id="dopa-start">—</div></div>
+            <div class="drug-cell"><div class="cell-label">Usual Range</div><div class="cell-value" id="dopa-range">—</div></div>
+            <div class="drug-cell"><div class="cell-label">Max</div><div class="cell-value" id="dopa-max">—</div></div>
+          </div>
+          <div class="drug-row">
+            <div class="drug-cell"><div class="cell-label">Std Concentration</div><div class="cell-value">400mg / 250mL NS<br/><span style="color:#64748b;font-size:11px">= 1600 mcg/mL</span></div></div>
+            <div class="drug-cell"><div class="cell-label">Start Rate</div><div class="cell-value rate" id="dopa-rate-start">—</div></div>
+            <div class="drug-cell"><div class="cell-label">Max Rate</div><div class="cell-value rate" id="dopa-rate-max">—</div></div>
+          </div>
+        </div>
+        <div class="drug-note">💡 <strong>Dose-dependent effects:</strong> 2–5 mcg/kg/min → dopaminergic (renal perfusion) | 5–10 → β1 (inotropy, HR) | &gt;10 → α1 (vasoconstriction). Higher arrhythmia risk than norepi — use norepi preferentially in septic shock.</div>
+      </div>
+
+      <!-- VASOPRESSIN -->
+      <div class="drug-card">
+        <div class="drug-header">
+          <span class="drug-name">Vasopressin</span>
+          <span class="drug-class class-vasopressor">Vasopressor</span>
+        </div>
+        <div class="drug-body">
+          <div class="drug-row">
+            <div class="drug-cell"><div class="cell-label">Standard Dose</div><div class="cell-value highlight">0.03–0.04 units/min</div></div>
+            <div class="drug-cell"><div class="cell-label">Max Dose</div><div class="cell-value">0.04 units/min</div></div>
+            <div class="drug-cell"><div class="cell-label">Not Weight-Based</div><div class="cell-value" style="color:#64748b;font-size:12px">Fixed dose only</div></div>
+          </div>
+          <div class="drug-row">
+            <div class="drug-cell"><div class="cell-label">Std Concentration</div><div class="cell-value">20 units / 100mL NS<br/><span style="color:#64748b;font-size:11px">= 0.2 units/mL</span></div></div>
+            <div class="drug-cell"><div class="cell-label">Rate (0.03 u/min)</div><div class="cell-value rate">9 mL/hr</div></div>
+            <div class="drug-cell"><div class="cell-label">Rate (0.04 u/min)</div><div class="cell-value rate">12 mL/hr</div></div>
+          </div>
+        </div>
+        <div class="drug-note">💡 <strong>Adjunct vasopressor in septic shock</strong> when norepi dose ≥0.25 mcg/kg/min. V1 receptor mediated — no tachycardia. Do NOT titrate above 0.04 units/min (mesenteric/digital ischemia risk).</div>
+      </div>
+
+      <!-- PHENYLEPHRINE -->
+      <div class="drug-card">
+        <div class="drug-header">
+          <span class="drug-name">Phenylephrine <span style="font-size:12px;color:#64748b;font-weight:400">(Neo-Synephrine)</span></span>
+          <span class="drug-class class-vasopressor">Vasopressor</span>
+        </div>
+        <div class="drug-body">
+          <div class="drug-row">
+            <div class="drug-cell"><div class="cell-label">Start</div><div class="cell-value highlight" id="phen-start">—</div></div>
+            <div class="drug-cell"><div class="cell-label">Usual Range</div><div class="cell-value" id="phen-range">—</div></div>
+            <div class="drug-cell"><div class="cell-label">Max</div><div class="cell-value" id="phen-max">—</div></div>
+          </div>
+          <div class="drug-row">
+            <div class="drug-cell"><div class="cell-label">Std Concentration</div><div class="cell-value">100mg / 250mL NS<br/><span style="color:#64748b;font-size:11px">= 400 mcg/mL</span></div></div>
+            <div class="drug-cell"><div class="cell-label">Start Rate</div><div class="cell-value rate" id="phen-rate-start">—</div></div>
+            <div class="drug-cell"><div class="cell-label">Max Rate</div><div class="cell-value rate" id="phen-rate-max">—</div></div>
+          </div>
+        </div>
+        <div class="drug-note">💡 <strong>Pure α1 agonist — no β effect.</strong> Preferred in neurogenic shock, SVT with hypotension. Reflex bradycardia may occur. Avoid in cardiogenic shock (increases afterload without inotropy).</div>
+      </div>
+
+      <!-- DOBUTAMINE -->
+      <div class="drug-card">
+        <div class="drug-header">
+          <span class="drug-name">Dobutamine</span>
+          <span class="drug-class class-inotrope">Inotrope</span>
+        </div>
+        <div class="drug-body">
+          <div class="drug-row">
+            <div class="drug-cell"><div class="cell-label">Start</div><div class="cell-value highlight" id="dobu-start">—</div></div>
+            <div class="drug-cell"><div class="cell-label">Usual Range</div><div class="cell-value" id="dobu-range">—</div></div>
+            <div class="drug-cell"><div class="cell-label">Max</div><div class="cell-value" id="dobu-max">—</div></div>
+          </div>
+          <div class="drug-row">
+            <div class="drug-cell"><div class="cell-label">Std Concentration</div><div class="cell-value">250mg / 250mL NS<br/><span style="color:#64748b;font-size:11px">= 1000 mcg/mL</span></div></div>
+            <div class="drug-cell"><div class="cell-label">Start Rate</div><div class="cell-value rate" id="dobu-rate-start">—</div></div>
+            <div class="drug-cell"><div class="cell-label">Max Rate</div><div class="cell-value rate" id="dobu-rate-max">—</div></div>
+          </div>
+        </div>
+        <div class="drug-note">💡 <strong>First-line inotrope for cardiogenic shock with low CO.</strong> β1 &gt; β2. Increases contractility and HR. May cause hypotension via vasodilation — combine with norepi if hypotensive. Not a vasopressor.</div>
+      </div>
+
+      <!-- PUSH-DOSE EPI -->
+      <div class="push-card">
+        <div class="push-header">
+          <span class="drug-name">Push-Dose Epinephrine</span>
+          <span class="drug-class class-push">Bolus / Peri-intubation</span>
+        </div>
+        <div class="push-body">
+          <p style="font-size:12px;color:#64748b;margin-bottom:12px">For peri-intubation hypotension, transient hemodynamic instability while setting up drip. <strong style="color:#fdba74">Preparation: dilute 1mg/10mL (0.1mg/mL) → draw 1mL into 9mL NS syringe → 10 mcg/mL solution.</strong></p>
+          <div class="push-row"><span class="push-label">Standard bolus dose</span><span class="push-value" id="pushd-std">—</span></div>
+          <div class="push-row"><span class="push-label">Volume to give (10 mcg/mL solution)</span><span class="push-value" id="pushd-vol">—</span></div>
+          <div class="push-row"><span class="push-label">Repeat interval</span><span class="push-value">Every 2–5 min PRN</span></div>
+          <div class="push-row"><span class="push-label">Max per bolus</span><span class="push-value">20 mcg (2 mL)</span></div>
+          <p style="font-size:11px;color:#64748b;margin-top:10px">⚠️ Bridge only — start drip immediately. Onset 1 min, duration 5–10 min.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT: INDICATIONS + MAP TARGETS -->
+    <div>
+      <!-- MAP TARGETS -->
+      <div class="map-bar">
+        <div class="map-title">MAP Targets by Condition</div>
+        <div class="map-row"><span>Septic shock</span><span class="map-target">≥ 65 mmHg</span></div>
+        <div class="map-row"><span>Neurogenic shock</span><span class="map-target">≥ 85–90 mmHg</span></div>
+        <div class="map-row"><span>Cardiogenic shock</span><span class="map-target">≥ 65 mmHg</span></div>
+        <div class="map-row"><span>Traumatic brain injury</span><span class="map-target">≥ 80 mmHg</span></div>
+        <div class="map-row"><span>Post-cardiac arrest</span><span class="map-target">≥ 65–80 mmHg</span></div>
+        <div class="map-row"><span>Anaphylaxis</span><span class="map-target">≥ 65 mmHg</span></div>
+      </div>
+
+      <!-- INDICATIONS -->
+      <div class="ind-card">
+        <div class="ind-header">🎯 First-Line by Shock Type</div>
+
+        <div class="ind-item">
+          <div class="ind-shock shock-septic">🔴 Septic / Distributive</div>
+          <div class="ind-drugs">
+            <span class="ind-first">1st: Norepinephrine</span><br/>
+            2nd: Add Vasopressin 0.03 u/min (if norepi ≥0.25)<br/>
+            3rd: Add Epinephrine or Dopamine
+          </div>
+        </div>
+
+        <div class="ind-item">
+          <div class="ind-shock shock-cardio">🟠 Cardiogenic</div>
+          <div class="ind-drugs">
+            <span class="ind-first">1st: Dobutamine</span> (if no hypotension)<br/>
+            If hypotensive: <span class="ind-first">Norepinephrine + Dobutamine</span><br/>
+            Alt: Dopamine (if bradycardic)
+          </div>
+        </div>
+
+        <div class="ind-item">
+          <div class="ind-shock shock-neuro">🟡 Neurogenic</div>
+          <div class="ind-drugs">
+            <span class="ind-first">1st: Phenylephrine or Norepinephrine</span><br/>
+            Target MAP ≥85–90 mmHg<br/>
+            Avoid agents that increase HR if bradycardic → use Norepi
+          </div>
+        </div>
+
+        <div class="ind-item">
+          <div class="ind-shock shock-anaph">🟣 Anaphylactic</div>
+          <div class="ind-drugs">
+            <span class="ind-first">1st: IM Epinephrine 0.3mg</span><br/>
+            If refractory: <span class="ind-first">Epi infusion</span><br/>
+            Add Norepinephrine for persistent hypotension
+          </div>
+        </div>
+
+        <div class="ind-item">
+          <div class="ind-shock shock-refrac">⚪ Peri-intubation Hypotension</div>
+          <div class="ind-drugs">
+            <span class="ind-first">Push-dose Epinephrine 10–20 mcg IV</span><br/>
+            Bridge while setting up drip<br/>
+            Start definitive vasopressor immediately
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+function mcgToRate(mcgPerKgMin, weightKg, concMcgPerMl) {
+  // mL/hr = (mcg/kg/min × kg × 60) / conc_mcg_mL
+  return (mcgPerKgMin * weightKg * 60) / concMcgPerMl;
+}
+
+function fmt(n, decimals=1) { return n.toFixed(decimals); }
+function fmtRate(r) { return fmt(r) + ' mL/hr'; }
+function fmtDose(d) { return fmt(d, 2) + ' mcg/kg/min'; }
+
+function update() {
+  const wt = parseFloat(document.getElementById('weight').value) || 70;
+
+  // NOREPI: conc 16 mcg/mL
+  set('norepi-start', fmtDose(0.01));
+  set('norepi-range', '0.01–0.5 mcg/kg/min');
+  set('norepi-max', fmtDose(0.5));
+  set('norepi-rate-start', fmtRate(mcgToRate(0.01, wt, 16)));
+  set('norepi-rate-max', fmtRate(mcgToRate(0.5, wt, 16)));
+
+  // EPI: conc 16 mcg/mL
+  set('epi-start', fmtDose(0.01));
+  set('epi-range', '0.01–0.5 mcg/kg/min');
+  set('epi-max', fmtDose(0.5));
+  set('epi-rate-start', fmtRate(mcgToRate(0.01, wt, 16)));
+  set('epi-rate-max', fmtRate(mcgToRate(0.5, wt, 16)));
+
+  // DOPAMINE: conc 1600 mcg/mL
+  set('dopa-start', '2–5 mcg/kg/min');
+  set('dopa-range', '5–20 mcg/kg/min');
+  set('dopa-max', '20 mcg/kg/min');
+  set('dopa-rate-start', fmtRate(mcgToRate(5, wt, 1600)));
+  set('dopa-rate-max', fmtRate(mcgToRate(20, wt, 1600)));
+
+  // PHENYLEPHRINE: conc 400 mcg/mL
+  set('phen-start', '0.5 mcg/kg/min');
+  set('phen-range', '0.5–6 mcg/kg/min');
+  set('phen-max', '6 mcg/kg/min');
+  set('phen-rate-start', fmtRate(mcgToRate(0.5, wt, 400)));
+  set('phen-rate-max', fmtRate(mcgToRate(6, wt, 400)));
+
+  // DOBUTAMINE: conc 1000 mcg/mL
+  set('dobu-start', '2.5 mcg/kg/min');
+  set('dobu-range', '2.5–20 mcg/kg/min');
+  set('dobu-max', '20 mcg/kg/min');
+  set('dobu-rate-start', fmtRate(mcgToRate(2.5, wt, 1000)));
+  set('dobu-rate-max', fmtRate(mcgToRate(20, wt, 1000)));
+
+  // PUSH-DOSE EPI: 10 mcg/kg (0.1–0.2 mcg/kg), solution 10 mcg/mL
+  const pushDose = Math.min(20, Math.round(wt * 0.1 / 5) * 5); // nearest 5 mcg, max 20
+  set('pushd-std', pushDose + ' mcg');
+  set('pushd-vol', fmt(pushDose / 10, 1) + ' mL (of 10 mcg/mL solution)');
+}
+
+function set(id, val) {
+  const el = document.getElementById(id);
+  if(el) el.textContent = val;
+}
+
+update();
+</script>
+</body>
+</html>
