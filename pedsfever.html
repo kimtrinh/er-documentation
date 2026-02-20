@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Peds Fever — CA FIRST</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',system-ui,sans-serif;background:#0f172a;color:#e2e8f0;min-height:100vh}
+.sitenav{background:#1e293b;border-bottom:1px solid #334155;padding:0 24px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.sitenav-inner{max-width:960px;margin:0 auto;display:flex;gap:2px;padding:8px 0}
+.sitenav a{padding:7px 14px;border-radius:8px;font-size:13px;font-weight:500;color:#94a3b8;text-decoration:none;white-space:nowrap;transition:all .2s}
+.sitenav a:hover{background:#334155;color:#f1f5f9}
+.sitenav a.active{background:#3b82f6;color:#fff}
+header{background:linear-gradient(135deg,#1e293b,#0f172a);border-bottom:1px solid #1e3a5f;padding:20px 24px}
+.header-inner{max-width:960px;margin:0 auto}
+.logo{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.logo span{font-size:22px}.logo h1{font-size:20px;font-weight:700;color:#f1f5f9}
+.subtitle{font-size:13px;color:#64748b;margin-left:32px}
+main{max-width:960px;margin:0 auto;padding:20px 24px 60px}
+.disclaimer{background:#1e3a5f;border:1px solid #2563eb;border-radius:8px;padding:10px 14px;margin-bottom:20px;font-size:12px;color:#93c5fd;line-height:1.5}
+.disclaimer strong{color:#bfdbfe}
+
+/* AGE TABS */
+.age-tabs{display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap}
+.age-tab{padding:9px 20px;border-radius:10px;border:1px solid #334155;cursor:pointer;font-size:13px;font-weight:700;background:#1e293b;color:#94a3b8;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:2px}
+.age-tab .age-days{font-size:16px;color:#f1f5f9}
+.age-tab.active{border-color:#3b82f6;background:#1e3a5f;color:#93c5fd}
+.age-tab.active .age-days{color:#38bdf8}
+
+/* EXCLUSIONS BAR */
+.excl-bar{background:#1c1400;border:1px solid #f59e0b;border-radius:10px;padding:12px 16px;margin-bottom:20px;font-size:12px;color:#fde68a;line-height:1.7}
+.excl-bar strong{color:#fbbf24;display:block;margin-bottom:4px}
+
+/* GRID */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px}
+@media(max-width:700px){.grid,.grid-3{grid-template-columns:1fr}}
+
+/* CARDS */
+.card{background:#1e293b;border:1px solid #334155;border-radius:12px;overflow:hidden}
+.card-head{padding:11px 16px;border-bottom:1px solid #334155;font-weight:700;font-size:13px;display:flex;align-items:center;gap:8px}
+.card-body{padding:13px 16px;font-size:12.5px;line-height:1.8;color:#cbd5e1}
+
+/* RISK BANDS */
+.risk-high{background:#1f0707;border-color:#dc2626}
+.risk-high .card-head{color:#f87171}
+.risk-mod{background:#1c1400;border-color:#ca8a04}
+.risk-mod .card-head{color:#fbbf24}
+.risk-low{background:#052e16;border-color:#16a34a}
+.risk-low .card-head{color:#86efac}
+.risk-neutral{background:#1e293b;border-color:#334155}
+.risk-neutral .card-head{color:#94a3b8}
+
+/* STEP LISTS */
+.step{display:flex;gap:10px;margin-bottom:8px;align-items:flex-start}
+.step-num{background:#3b82f6;color:#fff;border-radius:50%;min-width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px}
+.step-num.red{background:#dc2626}
+.step-num.green{background:#16a34a}
+.step-num.yellow{background:#ca8a04}
+
+/* IM MARKER TABLE */
+.im-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px}
+.im-table th{text-align:left;color:#64748b;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;padding:6px 10px;border-bottom:1px solid #334155}
+.im-table td{padding:7px 10px;border-bottom:1px solid #0f172a;color:#cbd5e1}
+.im-table tr:last-child td{border-bottom:none}
+.im-table .val{color:#38bdf8;font-weight:700}
+.im-table .pos{color:#f87171;font-weight:700}
+
+/* PILL TAGS */
+.pill{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;margin:2px 2px 2px 0}
+.pill-red{background:#1f0707;color:#f87171;border:1px solid #dc2626}
+.pill-green{background:#052e16;color:#86efac;border:1px solid #16a34a}
+.pill-yellow{background:#1c1400;color:#fbbf24;border:1px solid #ca8a04}
+.pill-blue{background:#1e3a5f;color:#93c5fd;border:1px solid #2563eb}
+
+/* DIVIDER */
+.section-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#475569;margin:20px 0 8px;padding-left:2px}
+
+/* ALGORITHM PANELS */
+.algo-panel{display:none}
+.algo-panel.active{display:block}
+
+/* FLOW ARROWS */
+.flow-arrow{text-align:center;color:#475569;font-size:18px;margin:4px 0}
+
+/* HSV CALLOUT */
+.hsv-callout{background:#1a0a2e;border:1px solid #7c3aed;border-radius:10px;padding:12px 16px;font-size:12px;color:#c4b5fd;line-height:1.7;margin-bottom:14px}
+.hsv-callout strong{color:#a78bfa}
+
+/* BRONC/VAX CALLOUT */
+.lowrisk-callout{background:#0a1f14;border:1px solid #16a34a;border-radius:10px;padding:12px 16px;font-size:12px;color:#86efac;line-height:1.7;margin-bottom:14px}
+.lowrisk-callout strong{color:#4ade80}
+
+/* ADMIT/DISCHARGE SUMMARY */
+.dispo-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+@media(max-width:600px){.dispo-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="sitenav">
+  <div class="sitenav-inner">
+    <a href="index.html">📋 Dotphrases</a>
+    <a href="calculators.html">🧮 Calculators</a>
+    <a href="vasopressors.html">💊 Vasopressors</a>
+    <a href="rsi.html">🫁 RSI</a>
+    <a href="pedsfever.html" class="active">🌡️ Peds Fever</a>
+  </div>
+</div>
+
+<header>
+  <div class="header-inner">
+    <div class="logo"><span>🌡️</span><h1>Febrile Infant — CA FIRST Algorithm</h1></div>
+    <p class="subtitle">California Febrile Infant Risk Stratification Tool · Ages 7–90 days · Fever ≥38.0°C (100.4°F)</p>
+  </div>
+</header>
+
+<main>
+  <div class="disclaimer"><strong>⚠️ Clinical Disclaimer:</strong> CA FIRST is based on AAP CPG 2021 + Roseville Protocol. For well-appearing, previously healthy, full-term infants only. Clinical judgment required. Ill-appearing infants require full sepsis workup regardless of age — this algorithm does not apply.</div>
+
+  <!-- EXCLUSIONS -->
+  <div class="excl-bar">
+    <strong>⛔ EXCLUSIONS — Algorithm does NOT apply if any present:</strong>
+    Prematurity (&lt;37 wks) · High-risk congenital abnormalities · Immunocompromised · Focal bacterial infection (omphalitis, cellulitis, septic arthritis) · Perinatal complications (maternal fever/chorioamnionitis/antibiotics) · Ill-appearing infant · Prior antibiotic use · Previous hospitalization
+  </div>
+
+  <!-- LOW RISK CALLOUTS -->
+  <div class="lowrisk-callout">
+    <strong>✅ Automatic Low Risk (regardless of age 22–90 days):</strong>
+    Bronchiolitis (with or without RSV positive) — no cases of IBI reported in RSV+ infants 22–90 days in CA FIRST data (n=235). · Fever within 48 hours of routine immunization — no cases of IBI in 221 infants. These infants may be managed with reduced workup after clinical assessment.
+  </div>
+
+  <!-- HSV CALLOUT -->
+  <div class="hsv-callout">
+    <strong>🧫 HSV Risk — Consider acyclovir if ANY present:</strong>
+    Maternal genital HSV lesions or fever 48h before/after delivery · Vesicles · Seizures · Hypothermia · Mucous membrane ulcers · CSF pleocytosis without + Gram stain · Leukopenia · Thrombocytopenia · Elevated ALT<br/>
+    <strong>HSV workup:</strong> CSF PCR · Surface swabs (mouth, NP, conjunctivae, anus) · ALT · Blood PCR · Acyclovir 20 mg/kg IV q8h
+  </div>
+
+  <!-- AGE SELECTOR -->
+  <div class="age-tabs">
+    <button class="age-tab active" onclick="showAge('7-21')">
+      <span class="age-days">7–21 days</span>
+      <span>Highest Risk</span>
+    </button>
+    <button class="age-tab" onclick="showAge('22-28')">
+      <span class="age-days">22–28 days</span>
+      <span>Transition Zone</span>
+    </button>
+    <button class="age-tab" onclick="showAge('29-60')">
+      <span class="age-days">29–60 days</span>
+      <span>Risk Stratify</span>
+    </button>
+    <button class="age-tab" onclick="showAge('61-90')">
+      <span class="age-days">61–90 days</span>
+      <span>CA FIRST Extended</span>
+    </button>
+  </div>
+
+  <!-- ════════════════════════════════
+       7–21 DAYS
+  ════════════════════════════════ -->
+  <div class="algo-panel active" id="panel-7-21">
+    <div class="section-label">7–21 Days — All Require Full Workup</div>
+
+    <div class="card risk-high" style="margin-bottom:14px">
+      <div class="card-head">🔴 ALL febrile infants 7–21 days = HIGH RISK — No stratification</div>
+      <div class="card-body">
+        All infants in this age group are high risk regardless of inflammatory markers. Full sepsis workup, parenteral antibiotics, and hospital admission are required. Inflammatory marker results may guide ongoing decisions but do not change initial management.
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="card-head">🔬 Required Workup</div>
+        <div class="card-body">
+          <div class="step"><div class="step-num">1</div><div><strong>Blood:</strong> CBC with differential, blood culture, CMP</div></div>
+          <div class="step"><div class="step-num">2</div><div><strong>Urine:</strong> UA by catheter + urine culture</div></div>
+          <div class="step"><div class="step-num">3</div><div><strong>CSF:</strong> Cell count, Gram stain, glucose, protein, bacterial culture, enterovirus PCR (if available or enterovirus season)</div></div>
+          <div class="step"><div class="step-num">4</div><div><strong>Inflammatory markers:</strong> Procalcitonin (if available), CRP, ANC</div></div>
+          <div class="step"><div class="step-num">5</div><div><strong>HSV:</strong> Evaluate risk factors — see callout above</div></div>
+          <div class="step"><div class="step-num">6</div><div><strong>Respiratory:</strong> Chest X-ray if respiratory symptoms; RSV/flu/COVID testing as appropriate</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">💊 Treatment & Disposition</div>
+        <div class="card-body">
+          <div class="step"><div class="step-num red">A</div><div><strong>Ampicillin</strong> 50 mg/kg IV q6–8h (Listeria, GBS, enterococcus coverage)</div></div>
+          <div class="step"><div class="step-num red">B</div><div><strong>Gentamicin</strong> 4 mg/kg IV q24h OR <strong>Cefotaxime</strong> 50 mg/kg IV q8h (if gentamicin unavailable)</div></div>
+          <div class="step"><div class="step-num red">C</div><div>If CSF pleocytosis or HSV concern: Add <strong>Acyclovir</strong> 20 mg/kg IV q8h</div></div>
+          <div class="step"><div class="step-num red">D</div><div><strong>Admit to hospital</strong> — all infants 7–21 days regardless of IM results</div></div>
+          <div style="margin-top:10px;padding:8px;background:#0f172a;border-radius:8px;font-size:11px;color:#64748b">
+            ⚠️ Do NOT use ceftriaxone in first 28 days (bilirubin displacement risk)
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card risk-neutral">
+      <div class="card-head">📊 Inflammatory Marker Reference (7–21 days)</div>
+      <div class="card-body">
+        <table class="im-table">
+          <tr><th>Marker</th><th>Abnormal Threshold</th><th>Notes</th></tr>
+          <tr><td>Procalcitonin (PCT)</td><td class="pos">&gt; 0.5 ng/mL</td><td>Preferred if rapid turnaround available</td></tr>
+          <tr><td>CRP</td><td class="pos">&gt; 20 mg/L</td><td>May lag 12–24h early in illness</td></tr>
+          <tr><td>ANC</td><td class="pos">&gt; 4000–5200/mm³</td><td>Cutoff varies by protocol; 5200 = PECARN</td></tr>
+          <tr><td>WBC</td><td class="pos">&lt; 5000 or &gt; 15,000</td><td>Less specific than ANC alone</td></tr>
+        </table>
+        <div style="margin-top:10px;font-size:11px;color:#475569">Note: Elevated IMs in 7–21 day group guide ongoing decisions but do NOT change initial management — all require full workup + admission.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════
+       22–28 DAYS
+  ════════════════════════════════ -->
+  <div class="algo-panel" id="panel-22-28">
+    <div class="section-label">22–28 Days — Transitional Risk Stratification</div>
+
+    <div class="card risk-mod" style="margin-bottom:14px">
+      <div class="card-head">🟡 Transitional Zone — IMs can guide LP decision, not admission</div>
+      <div class="card-body">
+        Risk of meningitis is lower in 22–28 day group than &lt;22 days. In some circumstances, clinicians may elect to defer LP and initiate antibiotics — recognizing this limitation. Hospital admission still strongly recommended for most in this age group.
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="card-head">🔬 Required Workup</div>
+        <div class="card-body">
+          <div class="step"><div class="step-num">1</div><div><strong>Blood:</strong> CBC with diff, blood culture, CMP, PCT (if available), CRP</div></div>
+          <div class="step"><div class="step-num">2</div><div><strong>Urine:</strong> UA by catheter + urine culture</div></div>
+          <div class="step"><div class="step-num">3</div><div><strong>CSF:</strong> Strongly recommended — may defer if IMs all normal AND clinical gestalt low risk (shared decision-making)</div></div>
+          <div class="step"><div class="step-num">4</div><div><strong>HSV:</strong> Evaluate risk factors — risk lower after 28 days but still consider if clinical features present</div></div>
+          <div class="step"><div class="step-num">5</div><div><strong>Respiratory:</strong> CXR if respiratory symptoms; viral testing as appropriate</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">📊 IM Results → Management</div>
+        <div class="card-body">
+          <div style="margin-bottom:12px">
+            <span class="pill pill-red">ANY IM Abnormal</span>
+            <div style="margin-top:6px">Full workup including LP · Ampicillin + gentamicin/cefotaxime · Admit · Consider acyclovir if HSV risk</div>
+          </div>
+          <div style="margin-bottom:12px">
+            <span class="pill pill-yellow">All IMs Normal — LP Deferred</span>
+            <div style="margin-top:6px">Options: Observe without treatment + close follow-up · OR empiric antibiotics + admit · Shared decision-making with family · Must reevaluate in 24h</div>
+          </div>
+          <div>
+            <span class="pill pill-green">All IMs Normal — LP Obtained + Normal CSF</span>
+            <div style="margin-top:6px">Lower threshold to discharge with close 24h follow-up if well-appearing and reliable family</div>
+          </div>
+          <div style="margin-top:10px;padding:8px;background:#0f172a;border-radius:8px;font-size:11px;color:#64748b">
+            ⚠️ Do NOT use ceftriaxone in first 28 days (bilirubin displacement)
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card risk-neutral">
+      <div class="card-head">📊 Inflammatory Marker Thresholds (22–28 days)</div>
+      <div class="card-body">
+        <table class="im-table">
+          <tr><th>Marker</th><th>Abnormal</th><th>Interpretation</th></tr>
+          <tr><td>PCT</td><td class="pos">&gt; 0.5 ng/mL</td><td>Best single marker if rapid turnaround available</td></tr>
+          <tr><td>CRP</td><td class="pos">&gt; 20 mg/L</td><td>Use with ANC if PCT unavailable</td></tr>
+          <tr><td>ANC</td><td class="pos">&gt; 4000/mm³ (AAP) or &gt; 5200/mm³ (PECARN)</td><td>Combined with CRP improves specificity</td></tr>
+          <tr><td>Temp</td><td class="pos">&gt; 38.5°C</td><td>Use as IM equivalent if PCT unavailable</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════
+       29–60 DAYS
+  ════════════════════════════════ -->
+  <div class="algo-panel" id="panel-29-60">
+    <div class="section-label">29–60 Days — Risk Stratification by Inflammatory Markers</div>
+
+    <div class="grid">
+      <!-- HIGH RISK -->
+      <div class="card risk-high">
+        <div class="card-head">🔴 HIGH RISK — Any IM Abnormal</div>
+        <div class="card-body">
+          <div style="margin-bottom:10px"><strong style="color:#f87171">Workup:</strong></div>
+          <div class="step"><div class="step-num red">1</div><div>CBC, blood culture, CMP, PCT, CRP</div></div>
+          <div class="step"><div class="step-num red">2</div><div>UA by catheter + urine culture</div></div>
+          <div class="step"><div class="step-num red">3</div><div>LP: CSF cell count, culture, Gram stain, glucose, protein, enterovirus PCR</div></div>
+          <div class="step"><div class="step-num red">4</div><div>CXR if respiratory symptoms</div></div>
+          <hr style="border-color:#334155;margin:10px 0"/>
+          <div style="margin-bottom:6px"><strong style="color:#f87171">Treatment:</strong></div>
+          <div class="step"><div class="step-num red">A</div><div><strong>Ceftriaxone</strong> 50 mg/kg IV q24h (safe after 28 days)</div></div>
+          <div class="step"><div class="step-num red">B</div><div>Consider ampicillin if Listeria concern (rare)</div></div>
+          <div class="step"><div class="step-num red">C</div><div><strong>Admit to hospital</strong></div></div>
+        </div>
+      </div>
+
+      <!-- LOW RISK -->
+      <div class="card risk-low">
+        <div class="card-head">🟢 LOW RISK — All IMs Normal</div>
+        <div class="card-body">
+          <div style="margin-bottom:10px"><strong style="color:#86efac">Workup:</strong></div>
+          <div class="step"><div class="step-num green">1</div><div>CBC, blood culture, PCT, CRP</div></div>
+          <div class="step"><div class="step-num green">2</div><div>UA by catheter + urine culture</div></div>
+          <div class="step"><div class="step-num green">3</div><div>LP: <em>Not required</em> if all IMs normal and well-appearing</div></div>
+          <div class="step"><div class="step-num green">4</div><div>CXR only if respiratory symptoms</div></div>
+          <hr style="border-color:#334155;margin:10px 0"/>
+          <div style="margin-bottom:6px"><strong style="color:#86efac">Disposition:</strong></div>
+          <div class="step"><div class="step-num green">A</div><div>No antibiotics required</div></div>
+          <div class="step"><div class="step-num green">B</div><div><strong>Discharge home</strong> if reliable family + reliable phone + transportation</div></div>
+          <div class="step"><div class="step-num green">C</div><div>Mandatory 24h reevaluation (ED or PCP)</div></div>
+          <div class="step"><div class="step-num green">D</div><div>Hospital observation is always an acceptable alternative</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card risk-neutral">
+      <div class="card-head">📊 Inflammatory Marker Thresholds (29–60 days)</div>
+      <div class="card-body">
+        <table class="im-table">
+          <tr><th>Marker</th><th>Abnormal</th><th>Notes</th></tr>
+          <tr><td>PCT</td><td class="pos">&gt; 0.5 ng/mL</td><td>Preferred — use PECARN rule if available (PCT + ANC)</td></tr>
+          <tr><td>CRP</td><td class="pos">&gt; 20 mg/L</td><td>Use with ANC when PCT unavailable (Step-by-Step)</td></tr>
+          <tr><td>ANC</td><td class="pos">&gt; 4000/mm³ (AAP) or &gt; 5200/mm³ (PECARN)</td><td>—</td></tr>
+          <tr><td>UA</td><td class="pos">+ LE, nitrites, or pyuria</td><td>Abnormal UA = high risk regardless of other IMs</td></tr>
+          <tr><td>Temp</td><td class="pos">&gt; 38.5°C</td><td>Use as IM surrogate when PCT not available</td></tr>
+        </table>
+        <div style="margin-top:10px;padding:8px;background:#0f172a;border-radius:8px;font-size:11px;color:#64748b">
+          <strong style="color:#94a3b8">If PCT unavailable:</strong> Use CRP + ANC + temperature (&gt;38.5°C counts as elevated IM). Any single abnormal = high risk.
+        </div>
+      </div>
+    </div>
+
+    <div class="card risk-neutral" style="margin-top:14px">
+      <div class="card-head">🏠 Discharge Criteria (29–60 days, Low Risk)</div>
+      <div class="card-body">
+        All of the following must be met to discharge:
+        <div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px">
+          <span class="pill pill-green">Well-appearing</span>
+          <span class="pill pill-green">All IMs normal</span>
+          <span class="pill pill-green">UA normal</span>
+          <span class="pill pill-green">Reliable caregiver</span>
+          <span class="pill pill-green">Phone + transportation available</span>
+          <span class="pill pill-green">Agrees to 24h f/u</span>
+          <span class="pill pill-blue">Blood cx sent before discharge</span>
+        </div>
+        <div style="margin-top:10px;font-size:11px;color:#64748b">Return precautions: worsening fever, poor feeding, color change, decreased activity, any parental concern</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════
+       61–90 DAYS (CA FIRST Extended)
+  ════════════════════════════════ -->
+  <div class="algo-panel" id="panel-61-90">
+    <div class="section-label">61–90 Days — CA FIRST Extended Guidance</div>
+
+    <div class="card risk-mod" style="margin-bottom:14px">
+      <div class="card-head">🟡 61–90 Days — CA FIRST Extended (not in AAP CPG)</div>
+      <div class="card-body">
+        The AAP 2021 CPG addresses only 8–60 days. CA FIRST extended the algorithm to 90 days using Kaiser Northern California ED data. Lower overall IBI risk in this age group. Most can be risk-stratified and managed as outpatients if low risk.
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card risk-high">
+        <div class="card-head">🔴 HIGH RISK (61–90 days)</div>
+        <div class="card-body">
+          <strong style="color:#f87171">Any of the following:</strong>
+          <div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:4px">
+            <span class="pill pill-red">Abnormal UA</span>
+            <span class="pill pill-red">ANC &gt; 5200/mm³</span>
+            <span class="pill pill-red">PCT &gt; 0.5 ng/mL</span>
+            <span class="pill pill-red">CRP &gt; 20 mg/L</span>
+            <span class="pill pill-red">Temp &gt; 38.5°C + any abnormal IM</span>
+          </div>
+          <hr style="border-color:#334155;margin:10px 0"/>
+          <div class="step"><div class="step-num red">A</div><div>Full workup: blood cx, UA/ucx, CBC, CMP, IMs</div></div>
+          <div class="step"><div class="step-num red">B</div><div>LP at clinician discretion — lower meningitis risk at this age</div></div>
+          <div class="step"><div class="step-num red">C</div><div>Ceftriaxone 50 mg/kg IV/IM</div></div>
+          <div class="step"><div class="step-num red">D</div><div>Admit or observation depending on clinical trajectory</div></div>
+        </div>
+      </div>
+
+      <div class="card risk-low">
+        <div class="card-head">🟢 LOW RISK (61–90 days)</div>
+        <div class="card-body">
+          <strong style="color:#86efac">All of the following:</strong>
+          <div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:4px">
+            <span class="pill pill-green">Well-appearing</span>
+            <span class="pill pill-green">Normal UA</span>
+            <span class="pill pill-green">All IMs normal</span>
+          </div>
+          <hr style="border-color:#334155;margin:10px 0"/>
+          <div class="step"><div class="step-num green">A</div><div>Blood culture + UA at minimum</div></div>
+          <div class="step"><div class="step-num green">B</div><div>LP generally not required</div></div>
+          <div class="step"><div class="step-num green">C</div><div>Discharge home without antibiotics</div></div>
+          <div class="step"><div class="step-num green">D</div><div>Reliable 24h follow-up required</div></div>
+          <div class="step"><div class="step-num green">E</div><div>Clear return precautions</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lowrisk-callout" style="margin-top:0">
+      <strong>✅ Special Low-Risk Groups (61–90 days):</strong>
+      Bronchiolitis (RSV+ or clinical) — no IBI cases in CA FIRST data for this age group with RSV. · Post-immunization fever (within 48h) — no IBI cases in 221 infants. · These infants may be managed conservatively with clinical assessment and reliable follow-up.
+    </div>
+  </div>
+
+  <!-- BOTTOM REFERENCE -->
+  <div class="section-label">Quick Reference — IBI Risk by Age</div>
+  <div class="grid-3">
+    <div class="card risk-high">
+      <div class="card-head">7–21 days</div>
+      <div class="card-body" style="font-size:12px">
+        IBI risk: <strong style="color:#f87171">~8–12%</strong><br/>
+        Meningitis risk: <strong style="color:#f87171">~3–4%</strong><br/>
+        LP: Required<br/>
+        Admit: Always
+      </div>
+    </div>
+    <div class="card risk-mod">
+      <div class="card-head">22–60 days</div>
+      <div class="card-body" style="font-size:12px">
+        IBI risk: <strong style="color:#fbbf24">~2–4%</strong><br/>
+        Meningitis risk: <strong style="color:#fbbf24">~0.5–1%</strong><br/>
+        LP: Based on IMs<br/>
+        Admit: If high risk
+      </div>
+    </div>
+    <div class="card risk-low">
+      <div class="card-head">61–90 days</div>
+      <div class="card-body" style="font-size:12px">
+        IBI risk: <strong style="color:#86efac">~1–2%</strong><br/>
+        Meningitis risk: <strong style="color:#86efac">&lt;0.5%</strong><br/>
+        LP: Generally not needed<br/>
+        Admit: Low risk if IMs normal
+      </div>
+    </div>
+  </div>
+
+  <div class="card risk-neutral" style="margin-top:14px">
+    <div class="card-head">📖 Source & References</div>
+    <div class="card-body" style="font-size:12px">
+      CA FIRST: Greenhow TL et al. Perm J. 2023;27(3):92–98. doi:10.7812/TPP/23.030 · Kaiser Permanente Northern California ED data, n=3527 infants 7–90 days (2010–2019)<br/>
+      AAP CPG: Pantell RH et al. Pediatrics. 2021;148(2):e2021052228 · PECARN prediction rule: Kuppermann N et al.<br/>
+      UCSF NorCal Consortium Febrile Infant Guidelines 2022
+    </div>
+  </div>
+</main>
+
+<script>
+function showAge(age) {
+  document.querySelectorAll('.algo-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.age-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + age).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+</body>
+</html>
