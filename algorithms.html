@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ED Algorithms</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',system-ui,sans-serif;background:#0f172a;color:#e2e8f0;min-height:100vh}
+
+/* SITE NAV */
+.sitenav{background:#1e293b;border-bottom:1px solid #334155;padding:0 24px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.sitenav-inner{max-width:1100px;margin:0 auto;display:flex;gap:2px;padding:8px 0}
+.sitenav a{padding:7px 14px;border-radius:8px;font-size:13px;font-weight:500;color:#94a3b8;text-decoration:none;white-space:nowrap;transition:all .2s}
+.sitenav a:hover{background:#334155;color:#f1f5f9}
+.sitenav a.active{background:#3b82f6;color:#fff}
+
+/* HEADER */
+header{background:linear-gradient(135deg,#1e293b,#0f172a);border-bottom:1px solid #1e3a5f;padding:20px 24px}
+.header-inner{max-width:1100px;margin:0 auto}
+.logo{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.logo span{font-size:22px}
+.logo h1{font-size:20px;font-weight:700;color:#f1f5f9}
+.subtitle{font-size:13px;color:#64748b;margin-left:32px;margin-bottom:12px}
+.disclaimer{background:#1e3a5f;border:1px solid #2563eb;border-radius:8px;padding:10px 14px;font-size:12px;color:#93c5fd;line-height:1.5}
+.disclaimer strong{color:#bfdbfe}
+
+/* LAYOUT */
+main{max-width:1100px;margin:0 auto;padding:24px 24px 80px}
+
+/* ALGORITHM GRID */
+.algo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-bottom:32px}
+.algo-card{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:16px 18px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:14px}
+.algo-card:hover{border-color:#3b82f6;background:#1e3a5f;transform:translateY(-1px)}
+.algo-card.active{border-color:#3b82f6;background:#1e3a5f}
+.algo-icon{font-size:26px;flex-shrink:0}
+.algo-info{flex:1;min-width:0}
+.algo-title{font-size:14px;font-weight:700;color:#f1f5f9;margin-bottom:2px}
+.algo-meta{font-size:11px;color:#64748b}
+.algo-badge{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:600;white-space:nowrap}
+.badge-ophtho{background:#1e3a5f;color:#38bdf8;border:1px solid #0369a1}
+.badge-cardio{background:#2d1b1b;color:#f87171;border:1px solid #991b1b}
+.badge-ob{background:#1a2e1a;color:#86efac;border:1px solid #166534}
+.badge-thoracic{background:#1e1b2e;color:#a78bfa;border:1px solid #5b21b6}
+.badge-neuro{background:#2d2a1b;color:#fbbf24;border:1px solid #92400e}
+.badge-vascular{background:#2d1b1b;color:#f87171;border:1px solid #991b1b}
+
+/* ALGORITHM VIEWER */
+.algo-viewer{background:#1e293b;border:1px solid #334155;border-radius:16px;overflow:hidden}
+.algo-viewer-header{padding:18px 24px;border-bottom:1px solid #334155;display:flex;align-items:center;gap:12px}
+.algo-viewer-icon{font-size:28px}
+.algo-viewer-title{font-size:18px;font-weight:700;color:#f1f5f9}
+.algo-viewer-updated{font-size:12px;color:#64748b;margin-top:2px}
+.algo-viewer-body{padding:24px}
+
+/* FLOWCHART STYLES */
+.flow{display:flex;flex-direction:column;align-items:center;gap:0}
+.flow-row{display:flex;align-items:center;justify-content:center;gap:0;width:100%;position:relative}
+.flow-col{display:flex;flex-direction:column;align-items:center;gap:0}
+
+/* NODE TYPES */
+.node{padding:10px 16px;font-size:13px;font-weight:500;line-height:1.4;text-align:center;position:relative}
+.node-start{background:#14532d;border:2px solid #22c55e;border-radius:50px;color:#bbf7d0;padding:10px 22px;font-weight:700}
+.node-process{background:#1e3a5f;border:2px solid #3b82f6;border-radius:8px;color:#bfdbfe;max-width:280px;width:100%}
+.node-decision{background:#1c1917;border:2px solid #78716c;color:#d6d3d1;padding:8px 16px;transform:rotate(0deg);border-radius:4px;font-style:italic;font-size:12px}
+.node-action-red{background:#2d1b1b;border:2px solid #ef4444;border-radius:8px;color:#fca5a5;font-weight:700}
+.node-action-blue{background:#1e3a5f;border:2px solid #3b82f6;border-radius:10px;color:#93c5fd;font-weight:600}
+.node-note{background:#0f172a;border:1px dashed #475569;border-radius:8px;color:#94a3b8;font-size:11px;max-width:200px;padding:8px 12px}
+
+/* DIAMOND */
+.diamond-wrap{display:flex;justify-content:center;align-items:center;width:100%;margin:0}
+.diamond{width:100px;height:100px;background:#1c1917;border:2px solid #78716c;transform:rotate(45deg);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.diamond-inner{transform:rotate(-45deg);font-size:12px;color:#d6d3d1;font-weight:600;text-align:center;padding:4px;max-width:80px;line-height:1.2}
+
+/* ARROWS */
+.arrow-down{width:2px;background:#475569;height:24px;margin:0 auto;position:relative}
+.arrow-down::after{content:'';position:absolute;bottom:-5px;left:-4px;border-left:5px solid transparent;border-right:5px solid transparent;border-top:6px solid #475569}
+.arrow-right{height:2px;background:#475569;width:40px;position:relative;flex-shrink:0}
+.arrow-right::after{content:'';position:absolute;right:-5px;top:-4px;border-top:5px solid transparent;border-bottom:5px solid transparent;border-left:6px solid #475569}
+.arrow-label{font-size:11px;color:#94a3b8;font-weight:600;margin:0 6px;white-space:nowrap}
+
+/* CONNECTOR LINES */
+.line-h{height:2px;background:#475569;flex-shrink:0}
+.line-v{width:2px;background:#475569}
+
+/* HEXAGON outcome */
+.hex{background:#1e293b;border:2px solid #3b82f6;border-radius:10px;padding:10px 16px;color:#93c5fd;font-weight:600;font-size:13px;text-align:center;max-width:180px}
+.hex-red{background:#2d1b1b;border-color:#ef4444;color:#fca5a5}
+.hex-green{background:#14532d;border-color:#22c55e;color:#bbf7d0}
+.hex-purple{background:#2e1b4e;border-color:#a78bfa;color:#c4b5fd}
+.hex-yellow{background:#2d2a1b;border-color:#fbbf24;color:#fde68a}
+
+/* SECTION SPACING */
+.section{margin-bottom:28px}
+.section-label{font-size:11px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px}
+
+/* STEP LIST (alternative to flowchart for complex ones) */
+.steps{display:flex;flex-direction:column;gap:10px}
+.step{display:flex;gap:12px;align-items:flex-start}
+.step-num{width:24px;height:24px;border-radius:50%;background:#1e3a5f;border:1px solid #3b82f6;color:#93c5fd;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.step-content{flex:1;font-size:13px;color:#cbd5e1;line-height:1.5}
+.step-content strong{color:#f1f5f9}
+
+/* BRANCH LAYOUT */
+.branch-container{display:flex;gap:20px;width:100%;align-items:flex-start;justify-content:center;flex-wrap:wrap}
+.branch{flex:1;min-width:200px;max-width:320px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.branch-label{font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+
+/* CALLOUT */
+.callout{background:#0f172a;border-left:3px solid #3b82f6;padding:10px 14px;border-radius:0 8px 8px 0;font-size:12px;color:#94a3b8;line-height:1.6;margin:12px 0}
+.callout strong{color:#93c5fd}
+.callout-yellow{border-color:#fbbf24}
+.callout-yellow strong{color:#fde68a}
+.callout-red{border-color:#ef4444}
+.callout-red strong{color:#fca5a5}
+.callout-green{border-color:#22c55e}
+.callout-green strong{color:#bbf7d0}
+
+/* DECISION CARD */
+.decision-card{background:#0f172a;border:1px solid #334155;border-radius:10px;padding:12px 16px}
+.decision-q{font-size:13px;font-weight:600;color:#e2e8f0;margin-bottom:10px}
+.decision-opts{display:flex;flex-direction:column;gap:8px}
+.decision-opt{display:flex;align-items:flex-start;gap:10px;padding:8px 12px;border-radius:8px;cursor:default}
+.opt-yes{background:#14532d;border:1px solid #22c55e}
+.opt-no{background:#1e3a5f;border:1px solid #3b82f6}
+.opt-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;flex-shrink:0;margin-top:1px}
+.badge-yes{background:#22c55e;color:#052e16}
+.badge-no{background:#3b82f6;color:#eff6ff}
+.opt-text{font-size:12px;color:#cbd5e1;line-height:1.4}
+
+/* PLACEHOLDER */
+.placeholder{text-align:center;color:#475569;padding:60px 24px;font-size:15px}
+.placeholder span{display:block;font-size:40px;margin-bottom:12px}
+
+/* EMPTY STATE */
+#viewer-placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 24px;text-align:center}
+#viewer-placeholder .big-icon{font-size:48px;margin-bottom:16px}
+#viewer-placeholder p{color:#475569;font-size:14px}
+
+@media(max-width:700px){
+  .branch-container{flex-direction:column}
+  .branch{max-width:100%}
+  .algo-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="sitenav">
+  <div class="sitenav-inner">
+    <a href="index.html">📋 Dotphrases</a>
+    <a href="calculators.html">🧮 Calculators</a>
+    <a href="vasopressors.html">💊 Vasopressors</a>
+    <a href="rsi.html">🫁 RSI</a>
+    <a href="pedsfever.html">🌡️ Peds Fever</a>
+    <a href="algorithms.html" class="active">🔀 Algorithms</a>
+  </div>
+</div>
+
+<header>
+  <div class="header-inner">
+    <div class="logo"><span>🔀</span><h1>ED Practice Guidelines & Algorithms</h1></div>
+    <p class="subtitle">KP SBC Emergency Department — tap any algorithm to view</p>
+    <div class="disclaimer"><strong>⚠️ Clinical Disclaimer:</strong> These algorithms are institutional practice guidelines and are intended for use at KP SBC facilities. All clinical decisions must be individualized by the treating physician. Guidelines do not substitute for clinical judgment.</div>
+  </div>
+</header>
+
+<main>
+  <!-- ALGORITHM SELECTOR GRID -->
+  <div class="algo-grid" id="algoGrid">
+    <div class="algo-card" onclick="showAlgo('orbital')" id="card-orbital">
+      <div class="algo-icon">👁️</div>
+      <div class="algo-info">
+        <div class="algo-title">Orbital Fractures</div>
+        <div class="algo-meta">Updated 9/19/2025 &nbsp;·&nbsp; <span class="algo-badge badge-ophtho">Ophthalmology</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('papilledema')" id="card-papilledema">
+      <div class="algo-icon">🧠</div>
+      <div class="algo-info">
+        <div class="algo-title">Papilledema</div>
+        <div class="algo-meta">Updated 10/1/2025 &nbsp;·&nbsp; <span class="algo-badge badge-neuro">Neurology</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('pneumomediastinum')" id="card-pneumomediastinum">
+      <div class="algo-icon">🫁</div>
+      <div class="algo-info">
+        <div class="algo-title">Pneumomediastinum</div>
+        <div class="algo-meta">Updated 3/25/2025 &nbsp;·&nbsp; <span class="algo-badge badge-thoracic">Thoracic</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('pregvb')" id="card-pregvb">
+      <div class="algo-icon">🤰</div>
+      <div class="algo-info">
+        <div class="algo-title">Vaginal Bleeding in Pregnancy</div>
+        <div class="algo-meta">Updated 5/23/2025 &nbsp;·&nbsp; <span class="algo-badge badge-ob">OB/GYN</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('aortic')" id="card-aortic">
+      <div class="algo-icon">🩸</div>
+      <div class="algo-info">
+        <div class="algo-title">Aortic Dissection</div>
+        <div class="algo-meta">Updated 5/12/2025 &nbsp;·&nbsp; <span class="algo-badge badge-vascular">Vascular/Cardiac</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('floaters')" id="card-floaters">
+      <div class="algo-icon">✨</div>
+      <div class="algo-info">
+        <div class="algo-title">Visual Floaters & Flashes</div>
+        <div class="algo-meta">Updated 3/24/2025 &nbsp;·&nbsp; <span class="algo-badge badge-ophtho">Ophthalmology</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('nonpregvb')" id="card-nonpregvb">
+      <div class="algo-icon">🔴</div>
+      <div class="algo-info">
+        <div class="algo-title">Non-Pregnant Vaginal Bleeding</div>
+        <div class="algo-meta">Updated 10/2/2025 &nbsp;·&nbsp; <span class="algo-badge badge-ob">OB/GYN</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ALGORITHM VIEWER -->
+  <div class="algo-viewer" id="algoViewer">
+    <div id="viewer-placeholder">
+      <div class="big-icon">🔀</div>
+      <p>Select an algorithm above to view the decision flowchart</p>
+    </div>
+    <div id="viewer-content" style="display:none">
+      <div class="algo-viewer-header">
+        <div class="algo-viewer-icon" id="v-icon"></div>
+        <div>
+          <div class="algo-viewer-title" id="v-title"></div>
+          <div class="algo-viewer-updated" id="v-updated"></div>
+        </div>
+      </div>
+      <div class="algo-viewer-body" id="v-body"></div>
+    </div>
+  </div>
+</main>
+
+<script>
+const algos = {
+
+  orbital: {
+    icon: '👁️',
+    title: 'Orbital Fractures',
+    updated: 'KP SBC ED Practice Guideline · Updated 9/19/2025',
+    render: () => `
+      <div class="flow">
+        <div class="node node-start">Patient presents with <strong>orbital fracture(s)</strong></div>
+        <div class="arrow-down"></div>
+
+        <div class="decision-card" style="width:100%;max-width:520px">
+          <div class="decision-q">Does patient have any of the following?</div>
+          <div style="font-size:12px;color:#94a3b8;line-height:1.8;margin-bottom:12px;padding-left:4px">
+            • Globe rupture<br>
+            • Traumatic retinal detachment<br>
+            • Retrobulbar hematoma<br>
+            • Lacerations involving lacrimal ducts<br>
+            • Entrapment, enophthalmos, or fractures that induce an oculocardiac reflex
+          </div>
+          <div class="decision-opts">
+            <div class="decision-opt opt-yes">
+              <span class="opt-badge badge-yes">YES</span>
+              <div class="opt-text"><strong style="color:#fca5a5">Notify on-call Ophthalmologist</strong></div>
+            </div>
+            <div class="decision-opt opt-no">
+              <span class="opt-badge badge-no">NO</span>
+              <div class="opt-text">Proceed to next decision point ↓</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="arrow-down"></div>
+
+        <div class="decision-card" style="width:100%;max-width:520px">
+          <div class="decision-q">Are there any other associated facial fractures?</div>
+          <div class="decision-opts">
+            <div class="decision-opt opt-yes">
+              <span class="opt-badge badge-yes">YES</span>
+              <div class="opt-text"><strong style="color:#fca5a5">Urgent HNS <em>and</em> Ophthalmology referral</strong></div>
+            </div>
+            <div class="decision-opt opt-no">
+              <span class="opt-badge badge-no">NO</span>
+              <div class="opt-text"><strong style="color:#93c5fd">Urgent Ophthalmology referral</strong></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `
+  },
+
+  papilledema: {
+    icon: '🧠',
+    title: 'Papilledema',
+    updated: 'KP SBC ED Practice Guideline · Updated 10/1/2025',
+    render: () => `
+      <div class="flow">
+        <div class="node node-start">Papilledema identified on physical exam</div>
+        <div class="arrow-down"></div>
+
+        <div class="decision-card" style="width:100%;max-width:520px">
+          <div class="decision-q">Is patient having symptoms?</div>
+          <div class="callout callout-yellow" style="margin:0 0 12px 0"><strong>Symptoms include:</strong> Headache, vision change, altered mental status</div>
+          <div class="decision-opts">
+            <div class="decision-opt opt-no">
+              <span class="opt-badge badge-no">NO</span>
+              <div class="opt-text"><strong style="color:#93c5fd">Urgent Outpatient Neurology Followup</strong></div>
+            </div>
+            <div class="decision-opt opt-yes">
+              <span class="opt-badge badge-yes">YES</span>
+              <div class="opt-text">Proceed with imaging ↓</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="arrow-down"></div>
+
+        <div class="node node-process" style="max-width:520px;text-align:left;padding:14px 18px">
+          <strong style="color:#bfdbfe">🔬 Obtain Imaging:</strong>
+          <div style="margin-top:8px;font-size:12px;color:#94a3b8;line-height:1.8">
+            • MRI brain and orbits <strong>w/wo contrast</strong><br>
+            • MRV brain <strong>wo contrast</strong>
+          </div>
+        </div>
+
+        <div class="arrow-down"></div>
+
+        <div class="decision-card" style="width:100%;max-width:520px">
+          <div class="decision-q">Any concerning findings on imaging?</div>
+          <div class="decision-opts">
+            <div class="decision-opt opt-yes">
+              <span class="opt-badge badge-yes">YES</span>
+              <div class="opt-text"><strong style="color:#fca5a5">Discuss case with Neurologist</strong></div>
+            </div>
+            <div class="decision-opt opt-no">
+              <span class="opt-badge badge-no">NO</span>
+              <div class="opt-text">Proceed with LP ↓ (results also go to Neurologist)</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="arrow-down"></div>
+
+        <div class="node node-process" style="max-width:520px">
+          <strong style="color:#bfdbfe">Lumbar Puncture with opening pressure</strong>
+          <div style="font-size:12px;color:#94a3b8;margin-top:6px">Discuss results with Neurologist regardless of findings</div>
+        </div>
+      </div>
+    `
+  },
+
+  pneumomediastinum: {
+    icon: '🫁',
+    title: 'Pneumomediastinum',
+    updated: 'KP SBC ED Practice Guideline · Updated 3/25/2025',
+    render: () => `
+      <div class="flow">
+        <div class="node node-start">Pneumomediastinum identified on imaging study</div>
+        <div class="arrow-down"></div>
+
+        <div class="decision-card" style="width:100%;max-width:520px">
+          <div class="decision-q">Is this a <strong>Primary</strong> pneumomediastinum?</div>
+          <div class="callout" style="margin:0 0 12px 0">
+            <strong>Primary:</strong> No clear cause, or associated with smoking / recreational drug inhalation. Generally benign and requires no intervention.
+          </div>
+          <div class="callout callout-yellow" style="margin:0 0 12px 0">
+            <strong>Secondary:</strong> Due to an underlying cause — intrinsic lung disease, iatrogenic causes, trauma, vomiting, etc.
+          </div>
+          <div class="decision-opts">
+            <div class="decision-opt opt-yes">
+              <span class="opt-badge badge-yes">YES — Primary</span>
+              <div class="opt-text"><strong style="color:#93c5fd">PCP follow-up</strong> — discharge with outpatient follow-up</div>
+            </div>
+            <div class="decision-opt opt-no" style="background:#2d1b1b;border-color:#ef4444">
+              <span class="opt-badge badge-no" style="background:#ef4444">NO — Secondary</span>
+              <div class="opt-text"><strong style="color:#fca5a5">Notify on-call Thoracic Surgeon</strong></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `
+  },
+
+  pregvb: {
+    icon: '🤰',
+    title: 'Vaginal Bleeding in Pregnancy',
+    updated: 'KP SBC ED Practice Guideline · Updated 5/23/2025',
+    render: () => `
+      <div class="flow">
+        <div class="node node-start">Patient presents with vaginal bleeding during pregnancy</div>
+
+        <div class="callout callout-yellow" style="margin:16px 0">
+          <strong>Contact GYN via Vocera:</strong> FMC → "GYN" &nbsp;|&nbsp; OMC → "OMC GYN"
+        </div>
+
+        <div class="decision-card" style="width:100%;max-width:560px">
+          <div class="decision-q">Hemodynamically stable?</div>
+          <div class="decision-opts">
+            <div class="decision-opt opt-no" style="background:#2d1b1b;border-color:#ef4444">
+              <span class="opt-badge badge-no" style="background:#ef4444">NO</span>
+              <div class="opt-text"><strong style="color:#fca5a5">Notify on-call OB/GYN immediately</strong></div>
+            </div>
+            <div class="decision-opt opt-yes">
+              <span class="opt-badge badge-yes">YES</span>
+              <div class="opt-text">Obtain <strong>CBC, HCG, ABO-Rh</strong> → proceed ↓</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="arrow-down"></div>
+
+        <div class="decision-card" style="width:100%;max-width:560px">
+          <div class="decision-q">Gestational age ≥20 weeks?</div>
+          <div class="decision-opts">
+            <div class="decision-opt opt-yes">
+              <span class="opt-badge badge-yes">YES</span>
+              <div class="opt-text">Medically clear patient (address non-OB issues) → <strong style="color:#fca5a5">Notify on-call OB/GYN AND send to L&D</strong></div>
+            </div>
+            <div class="decision-opt opt-no">
+              <span class="opt-badge badge-no">NO (&lt;20 weeks)</span>
+              <div class="opt-text">Obtain <strong>pelvic ultrasound</strong> → proceed ↓</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="arrow-down"></div>
+
+        <div class="decision-card" style="width:100%;max-width:560px">
+          <div class="decision-q">Does patient have any of the following?</div>
+          <div style="font-size:12px;color:#94a3b8;line-height:1.8;margin-bottom:12px">
+            • <strong>Heavy</strong> bleeding<br>• <strong>Severe</strong> pelvic pain<br>• <strong>Failed prior treatment</strong>
+          </div>
+          <div class="decision-opts">
+            <div class="decision-opt opt-yes">
+              <span class="opt-badge badge-yes">YES</span>
+              <div class="opt-text"><strong>NPO + Type &amp; Screen</strong> → imaging for ectopic / lateralizing pain → <strong style="color:#fca5a5">Discuss with OB/GYN</strong></div>
+            </div>
+            <div class="decision-opt opt-no">
+              <span class="opt-badge badge-no">NO</span>
+              <div class="opt-text">See ultrasound results below ↓</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="arrow-down"></div>
+
+        <div style="font-size:12px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.05em;margin:8px 0">Ultrasound Results — Management by Findings</div>
+
+        <div class="branch-container">
+          <div class="branch">
+            <div class="node node-process" style="font-size:12px;text-align:center;padding:10px">IUP with cardiac activity</div>
+            <div style="font-size:12px;color:#94a3b8;text-align:center;padding:6px">Consider vaginal progesterone if hx of miscarriage</div>
+            <div class="hex hex-green" style="font-size:12px">Patient calls OB to establish care</div>
+          </div>
+          <div class="branch">
+            <div class="node node-process" style="font-size:12px;text-align:center;padding:10px">IUP — unable to establish viability</div>
+            <div class="hex hex-red" style="font-size:12px">Discuss with OB/GYN → OB CM arranges follow-up</div>
+          </div>
+          <div class="branch">
+            <div class="node node-process" style="font-size:12px;text-align:center;padding:10px">Early pregnancy loss</div>
+            <div class="hex hex-red" style="font-size:12px">Discuss with OB/GYN → OB CM arranges follow-up</div>
+          </div>
+          <div class="branch">
+            <div class="node node-process" style="font-size:12px;text-align:center;padding:10px">Pregnancy of unknown location</div>
+            <div class="hex hex-red" style="font-size:12px">Discuss with OB/GYN → OB CM arranges follow-up<br><em style="font-size:11px">Route charts of all PUL to OB CM, even non-KP members</em></div>
+          </div>
+        </div>
+
+        <div class="callout callout-green" style="margin-top:20px;width:100%;max-width:560px">
+          <strong>Anti-D Immunoglobulin:</strong> If Rh negative: &lt;12 weeks → administer if confirmed ectopic or molar pregnancy. ≥12 weeks → administer.
+        </div>
+        <div class="callout callout-yellow" style="width:100%;max-width:560px">
+          <strong>Vaginal Progesterone (order code 23013):</strong> 200 mg BID vaginally until 16 weeks GA. Indicated if ≤12 weeks AND history of miscarriage. Contraindicated in peanut allergy; caution with active cancer.
+        </div>
+      </div>
+    `
+  },
+
+  aortic: {
+    icon: '🩸',
+    title: 'Aortic Dissection',
+    updated: 'KP SBC ED Practice Guideline · Updated 5/12/2025',
+    render: () => `
+      <div class="flow">
+        <div class="node node-start">Patient presents with acute aortic dissection</div>
+        <div class="arrow-down"></div>
+
+        <div class="callout" style="width:100%;max-width:520px;margin-bottom:12px">
+          <strong>Classification Reference:</strong><br>
+          Stanford Type A = ascending aorta involved (DeBakey I or II)<br>
+          Stanford Type B = descending only (DeBakey III)
+        </div>
+
+        <div class="decision-card" style="width:100%;max-width:520px">
+          <div class="decision-q">Does dissection include the <strong>ascending aorta</strong>?</div>
+          <div class="decision-opts">
+            <div class="decision-opt opt-no">
+              <span class="opt-badge badge-no">NO</span>
+              <div class="opt-text"><strong>Stanford Type B</strong> → <strong style="color:#93c5fd">Notify on-call Vascular Surgeon</strong></div>
+            </div>
+            <div class="decision-opt opt-yes">
+              <span class="opt-badge badge-yes">YES</span>
+              <div class="opt-text"><strong>Stanford Type A</strong> → proceed ↓</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="arrow-down"></div>
+
+        <div class="decision-card" style="width:100%;max-width:520px">
+          <div class="decision-q">Any <strong>descending malperfusion</strong>? (visceral, renal, lower extremity)</div>
+          <div class="decision-opts">
+            <div class="decision-opt opt-yes">
+              <span class="opt-badge badge-yes">YES</span>
+              <div class="opt-text">
+                <strong style="color:#fca5a5">FIRST: Notify on-call Cardiac Surgeon</strong><br>
+                <strong style="color:#93c5fd">SECOND: Notify on-call Vascular Surgeon</strong><br>
+                <span style="font-size:11px;color:#94a3b8">Repairing ascending aorta will often adequately restore distal perfusion</span>
+              </div>
+            </div>
+            <div class="decision-opt opt-no">
+              <span class="opt-badge badge-no">NO</span>
+              <div class="opt-text"><strong style="color:#fca5a5">Notify on-call Cardiac Surgeon</strong></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `
+  },
+
+  floaters: {
+    icon: '✨',
+    title: 'Visual Floaters & Flashes',
+    updated: 'KP SBC ED Practice Guideline · Updated 3/24/2025',
+    render: () => `
+      <div class="flow">
+        <div class="node node-start">Patient presents with visual <strong>floaters</strong> or <strong>flashes</strong></div>
+        <div class="arrow-down"></div>
+
+        <div class="decision-card" style="width:100%;max-width:520px">
+          <div class="decision-q">Acute onset?</div>
+          <div class="decision-opts">
+            <div class="decision-opt opt-no">
+              <span class="opt-badge badge-no">NO</span>
+              <div class="opt-text"><strong style="color:#93c5fd">Routine Ophthalmology referral</strong></div>
+            </div>
+            <div class="decision-opt opt-yes">
+              <span class="opt-badge badge-yes">YES</span>
+              <div class="opt-text">Proceed ↓</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="arrow-down"></div>
+
+        <div class="decision-card" style="width:100%;max-width:520px">
+          <div class="decision-q">Decreased <strong>visual acuity</strong> OR <strong>visual field loss</strong>?</div>
+          <div class="decision-opts">
+            <div class="decision-opt opt-yes">
+              <span class="opt-badge badge-yes">YES</span>
+              <div class="opt-text">
+                Upload <strong>fundus photos</strong> to HealthConnect →
+                <strong style="color:#fca5a5"> Notify on-call Ophthalmologist</strong><br>
+                <span style="font-size:11px;color:#fde68a">⚠️ High-risk of retinal detachment. May require immediate referral to retinal surgeon.</span>
+              </div>
+            </div>
+            <div class="decision-opt opt-no">
+              <span class="opt-badge badge-no">NO</span>
+              <div class="opt-text">Proceed ↓</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="arrow-down"></div>
+
+        <div class="decision-card" style="width:100%;max-width:520px">
+          <div class="decision-q">History of <strong>retinal detachment/tear</strong> OR recent <strong>ocular trauma</strong>?</div>
+          <div class="decision-opts">
+            <div class="decision-opt opt-yes">
+              <span class="opt-badge badge-yes">YES</span>
+              <div class="opt-text">
+                Upload <strong>fundus photos</strong> to HealthConnect →
+                <strong style="color:#fca5a5"> Notify on-call Ophthalmologist</strong><br>
+                <span style="font-size:11px;color:#fde68a">⚠️ High-risk of retinal detachment. May require immediate referral to retinal surgeon.</span>
+              </div>
+            </div>
+            <div class="decision-opt opt-no">
+              <span class="opt-badge badge-no">NO</span>
+              <div class="opt-text"><strong style="color:#93c5fd">Urgent Ophthalmology referral</strong> — typically results in follow-up within 24 hours</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `
+  },
+
+  nonpregvb: {
+    icon: '🔴',
+    title: 'Non-Pregnant Vaginal Bleeding',
+    updated: 'KP SBC ED Practice Guideline · Updated 10/2/2025',
+    render: () => `
+      <div class="flow">
+        <div class="node node-start">Vaginal bleeding outside of pregnancy</div>
+
+        <div class="callout callout-yellow" style="margin:16px 0">
+          <strong>Contact GYN via Vocera:</strong> FMC → "GYN" &nbsp;|&nbsp; OMC → "OMC GYN"
+        </div>
+
+        <div class="decision-card" style="width:100%;max-width:580px">
+          <div class="decision-q">Hemodynamically unstable? AND/OR Very brisk hemorrhage? AND/OR Anemia requiring transfusion?</div>
+          <div class="decision-opts">
+            <div class="decision-opt opt-yes">
+              <span class="opt-badge badge-yes">YES</span>
+              <div class="opt-text"><strong style="color:#fca5a5">Notify on-call OB/GYN</strong></div>
+            </div>
+            <div class="decision-opt opt-no">
+              <span class="opt-badge badge-no">NO</span>
+              <div class="opt-text">Determine menopausal status → proceed ↓</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="arrow-down"></div>
+
+        <div class="branch-container" style="align-items:flex-start">
+
+          <!-- Pre-menopausal branch -->
+          <div class="branch" style="max-width:340px">
+            <div class="node node-process" style="font-size:13px;font-weight:700;text-align:center">Pre-menopausal</div>
+            <div class="arrow-down" style="height:16px"></div>
+            <div class="decision-card" style="width:100%">
+              <div class="decision-q" style="font-size:12px">Does patient desire pregnancy?</div>
+              <div class="decision-opts">
+                <div class="decision-opt opt-yes" style="padding:6px 10px">
+                  <span class="opt-badge badge-yes" style="font-size:9px">YES</span>
+                  <div class="opt-text" style="font-size:11px">Outpatient GYN Followup + <strong>TXA 1.3g TID × 5 days</strong>
+                  <br><span style="color:#fde68a;font-size:10px">⚠️ TXA contraindicated in thromboembolic disease</span></div>
+                </div>
+                <div class="decision-opt opt-no" style="padding:6px 10px">
+                  <span class="opt-badge badge-no" style="font-size:9px">NO</span>
+                  <div class="opt-text" style="font-size:11px">Check estrogen contraindications ↓</div>
+                </div>
+              </div>
+            </div>
+            <div class="arrow-down" style="height:16px"></div>
+            <div class="decision-card" style="width:100%">
+              <div class="decision-q" style="font-size:12px">Contraindications to estrogen?</div>
+              <div class="callout callout-red" style="margin:0 0 8px 0;font-size:11px">
+                <strong>Estrogen contraindications:</strong> Smoking ≥35 yrs, HTN, VTE hx, ischemic heart disease, CVA, migraine with aura, breast cancer, liver disease, DM with PVD, valvular HD
+              </div>
+              <div class="decision-opts">
+                <div class="decision-opt opt-yes" style="padding:6px 10px">
+                  <span class="opt-badge badge-yes" style="font-size:9px">YES</span>
+                  <div class="opt-text" style="font-size:11px">Check acute-on-chronic AUB ↓</div>
+                </div>
+                <div class="decision-opt opt-no" style="padding:6px 10px">
+                  <span class="opt-badge badge-no" style="font-size:9px">NO</span>
+                  <div class="opt-text" style="font-size:11px">Check acute-on-chronic AUB ↓</div>
+                </div>
+              </div>
+            </div>
+            <div class="arrow-down" style="height:16px"></div>
+            <div class="decision-card" style="width:100%">
+              <div class="decision-q" style="font-size:12px">Acute-on-chronic AUB AND/OR new/worsening anemia?</div>
+              <div class="decision-opts">
+                <div class="decision-opt opt-yes" style="padding:6px 10px">
+                  <span class="opt-badge badge-yes" style="font-size:9px">YES</span>
+                  <div class="opt-text" style="font-size:11px">Outpatient GYN + <strong>COC taper</strong><br>
+                    <span style="color:#94a3b8">Junel 1mg: 4 pills×4d, 3 pills×3d, 2 pills×2d, 1 pill until f/u (3 mo supply)</span>
+                  </div>
+                </div>
+                <div class="decision-opt opt-no" style="padding:6px 10px">
+                  <span class="opt-badge badge-no" style="font-size:9px">NO</span>
+                  <div class="opt-text" style="font-size:11px">Outpatient GYN + <strong>Daily COC</strong> (e.g., Junel 1 mg)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Post-menopausal branch -->
+          <div class="branch" style="max-width:220px">
+            <div class="node node-process" style="font-size:13px;font-weight:700;text-align:center">Post-menopausal</div>
+            <div class="arrow-down" style="height:16px"></div>
+            <div class="node node-process" style="font-size:12px;text-align:center;padding:10px">
+              Obtain TVUS to expedite outpatient workup<br><span style="color:#94a3b8">(if none in last 6 months)</span>
+            </div>
+            <div class="arrow-down" style="height:16px"></div>
+            <div class="hex" style="font-size:12px">Outpatient GYN Followup</div>
+          </div>
+        </div>
+
+        <div class="callout callout-yellow" style="margin-top:20px;width:100%;max-width:580px">
+          <strong>Estrogen contraindicated? — Provera alternatives:</strong><br>
+          Acute-on-chronic AUB / worsening anemia → Outpatient GYN + <strong>Provera taper</strong> (60mg×1wk, 40mg×1wk, 20mg×1wk, 10mg until f/u)<br>
+          Otherwise → <strong>Nora-BE or Provera 10 mg daily</strong> until GYN followup<br>
+          <span style="color:#fca5a5">Provera contraindicated in breast cancer or liver disease.</span>
+        </div>
+      </div>
+    `
+  }
+};
+
+let currentAlgo = null;
+
+function showAlgo(key) {
+  const algo = algos[key];
+  if (!algo) return;
+
+  // Update active card
+  document.querySelectorAll('.algo-card').forEach(c => c.classList.remove('active'));
+  document.getElementById('card-' + key).classList.add('active');
+
+  // Update viewer
+  document.getElementById('viewer-placeholder').style.display = 'none';
+  document.getElementById('viewer-content').style.display = 'block';
+  document.getElementById('v-icon').textContent = algo.icon;
+  document.getElementById('v-title').textContent = algo.title;
+  document.getElementById('v-updated').textContent = algo.updated;
+  document.getElementById('v-body').innerHTML = algo.render();
+
+  // Scroll to viewer
+  document.getElementById('algoViewer').scrollIntoView({behavior:'smooth', block:'start'});
+  currentAlgo = key;
+}
+</script>
+</body>
+</html>
