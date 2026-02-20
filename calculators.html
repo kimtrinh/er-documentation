@@ -79,6 +79,7 @@ main{max-width:900px;margin:0 auto;padding:24px}
     <a href="index.html">📋 Dotphrases</a>
     <a href="calculators.html" class="active">🧮 Calculators</a>
     <a href="vasopressors.html">💊 Vasopressors</a>
+    <a href="rsi.html">🫁 RSI</a>
   </div>
 </div>
 
@@ -281,28 +282,29 @@ function showCalc(id) {
 
 // ── PERC ─────────────────────────────────────────────────────
 const percChecked = Array(8).fill(false);
+let percTouched = false;
 function togglePerc(i) {
+  percTouched = true;
   percChecked[i] = !percChecked[i];
   document.getElementById('perc'+i).checked = percChecked[i];
   updatePerc();
 }
 function updatePerc() {
   const any = percChecked.some(Boolean);
-  const all = percChecked.every(c => !c);
   const r = document.getElementById('perc-result');
-  if (!any) {
+  if (!percTouched) {
     r.className='result neutral';
     r.innerHTML='<div class="result-label">Check criteria above</div><div class="result-action">All 8 must be absent to rule out PE without further testing.</div>';
-  } else if (percChecked.some(Boolean)) {
+  } else if (!any) {
+    r.className='result low';
+    r.innerHTML='<div class="result-label">✓ PERC Negative — PE Ruled Out</div><div class="result-action">If pre-test probability is low (Wells &lt;2), no further workup needed for PE.</div>';
+  } else {
     r.className='result high';
     r.innerHTML='<div class="result-label">⚠️ PERC Not Met — Cannot Rule Out PE</div><div class="result-action">One or more PERC criteria present. Proceed with Wells PE score and D-dimer or CT-PA as indicated.</div>';
   }
-  if (all) {
-    r.className='result low';
-    r.innerHTML='<div class="result-label">✓ PERC Negative — PE Ruled Out</div><div class="result-action">If pre-test probability is low (Wells &lt;2), no further workup needed for PE.</div>';
-  }
 }
 function resetPerc() {
+  percTouched = false;
   percChecked.fill(false);
   for(let i=0;i<8;i++) document.getElementById('perc'+i).checked=false;
   updatePerc();
