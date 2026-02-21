@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>KP SBC ER Toolkit</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080f1a;--surface:#0d1829;--surface2:#111f35;--surface3:#162540;
+  --border:#1a2d48;--border2:#243d5c;
+  --text:#e8f0fc;--text2:#8fa8c8;--text3:#4a6280;
+  --blue:#3b82f6;--blue2:#1d4ed8;--blue3:#0d2038;
+  --green:#22c55e;--green2:#15803d;--green3:#0d2d1f;
+  --amber:#f59e0b;--red:#ef4444;--purple:#a78bfa;--cyan:#22d3ee;
+  --mono:'JetBrains Mono',monospace;--sans:'DM Sans',system-ui,sans-serif;
+}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh}
+
+/* NAV - compact, links only */
+.sitenav{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.sitenav-inner{max-width:1200px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:8px;height:46px}
+.nav-logo{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--blue);white-space:nowrap;flex-shrink:0;text-decoration:none;margin-right:6px}
+.nav-logo span{color:var(--text3)}
+.nav-links{display:flex;gap:1px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-link{padding:5px 10px;border-radius:6px;font-size:12px;font-weight:600;color:var(--text2);text-decoration:none;white-space:nowrap;transition:all .15s}
+.nav-link:hover{background:var(--surface2);color:var(--text)}
+.nav-link.active{background:var(--blue2);color:#fff}
+
+/* SEARCH HERO - full width */
+.search-hero{background:linear-gradient(170deg,#0f1e38 0%,var(--bg) 100%);border-bottom:1px solid var(--border);padding:24px 0 20px}
+.search-hero-inner{max-width:100%;padding:0 24px}
+.search-label{font-size:15px;font-weight:800;color:var(--text);margin-bottom:2px}
+.search-sublabel{font-size:12px;color:var(--text3);margin-bottom:14px}
+
+/* THE BIG SEARCH */
+.search-wrap{position:relative;width:100%}
+.search-input{
+  width:100%;
+  padding:15px 120px 15px 52px;
+  background:var(--surface);
+  border:1.5px solid var(--border2);
+  border-radius:12px;
+  color:var(--text);
+  font-size:16px;
+  font-family:var(--sans);
+  outline:none;
+  transition:border-color .2s,box-shadow .2s;
+  -webkit-appearance:none;
+}
+.search-input:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(59,130,246,.15)}
+.search-input::placeholder{color:var(--text3)}
+.search-icon{position:absolute;left:17px;top:50%;transform:translateY(-50%);font-size:19px;pointer-events:none}
+.search-shortcut{position:absolute;right:15px;top:50%;transform:translateY(-50%);font-size:11px;color:var(--text3);font-family:var(--mono);background:var(--surface2);border:1px solid var(--border);padding:3px 8px;border-radius:5px;pointer-events:none;white-space:nowrap}
+
+/* DROPDOWN */
+.search-dropdown{position:absolute;top:calc(100% + 8px);left:0;right:0;background:var(--surface);border:1px solid var(--border2);border-radius:12px;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,.75);z-index:500;display:none;max-height:72vh;overflow-y:auto}
+.search-dropdown.open{display:block}
+.sdrop-group{padding:7px 14px 3px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--text3);border-top:1px solid var(--border);background:var(--surface);position:sticky;top:0;z-index:1}
+.sdrop-group:first-child{border-top:none}
+.sdrop-row{display:flex;align-items:center;gap:12px;padding:9px 14px;text-decoration:none;transition:background .1s;cursor:pointer}
+.sdrop-row:hover,.sdrop-row.hi{background:var(--surface2)}
+.sdrop-ico{font-size:15px;width:22px;text-align:center;flex-shrink:0}
+.sdrop-body{flex:1;min-width:0}
+.sdrop-title{font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sdrop-sub{font-size:11px;color:var(--text3);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sdrop-tag{font-size:10px;padding:2px 7px;border-radius:20px;font-weight:700;white-space:nowrap;flex-shrink:0;border:1px solid transparent}
+.t-phrase{background:var(--blue3);color:#38bdf8;border-color:#0369a1}
+.t-calc{background:var(--green3);color:#4ade80;border-color:var(--green2)}
+.t-drug{background:#2d1f0d;color:#fb923c;border-color:#c2410c}
+.t-phone{background:#1f1a0d;color:#facc15;border-color:#a16207}
+.t-algo{background:#0d2d2d;color:#22d3ee;border-color:#0e7490}
+.t-neuro{background:#1f0d2d;color:#e879f9;border-color:#a21caf}
+.sdrop-empty{padding:22px 14px;text-align:center;font-size:13px;color:var(--text3)}
+.sdrop-footer{padding:5px 14px 8px;font-size:11px;color:var(--text3);border-top:1px solid var(--border)}
+
+/* FILTER CHIPS */
+.chips{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
+.chip{padding:5px 13px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:11px;font-weight:600;cursor:pointer;transition:all .15s;font-family:var(--sans)}
+.chip:hover{border-color:var(--border2);color:var(--text2);background:var(--surface2)}
+.chip.on{border-color:var(--blue);background:var(--blue3);color:#38bdf8}
+
+/* STATS */
+.stats-row{display:flex;gap:22px;margin-top:16px}
+.stn{font-size:18px;font-weight:800;color:var(--blue);font-family:var(--mono);line-height:1}
+.stl{font-size:10px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+
+/* MAIN */
+main{max-width:1100px;margin:0 auto;padding:22px 24px 80px}
+.sec-head{display:flex;align-items:center;gap:10px;margin:22px 0 11px}
+.sec-head h2{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--text3);white-space:nowrap}
+.sec-head::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* TOOL GRID */
+.tool-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:8px}
+.tc{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:13px;transition:all .15s;text-decoration:none;display:flex;flex-direction:column;gap:5px}
+.tc:hover{border-color:var(--border2);background:var(--surface2);transform:translateY(-1px)}
+.tc.hi-blue{border-color:rgba(59,130,246,.35)}
+.tc.hi-purple{border-color:rgba(126,34,206,.35);position:relative}
+.tc.hi-purple::after{content:'NEW';position:absolute;top:8px;right:8px;background:#7e22ce;color:#fff;font-size:9px;font-weight:800;padding:1px 5px;border-radius:20px}
+.tc-ico{font-size:21px}
+.tc-name{font-size:13px;font-weight:700;color:var(--text)}
+.tc-desc{font-size:11px;color:var(--text3);line-height:1.4;flex:1}
+.tc-meta{display:flex;align-items:center;margin-top:2px}
+.tc-count{font-size:10px;color:var(--text3);font-family:var(--mono)}
+.tc-arr{margin-left:auto;color:var(--border2);font-size:13px;transition:color .15s}
+.tc:hover .tc-arr{color:var(--blue)}
+
+/* TWO COL PANELS */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+@media(max-width:640px){.two-col{grid-template-columns:1fr}}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.panel-hd{padding:9px 14px;border-bottom:1px solid var(--border);font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.8px}
+.prow{display:flex;align-items:center;gap:10px;padding:8px 14px;transition:background .1s;text-decoration:none}
+.prow:hover{background:var(--surface2)}
+.prow-body{flex:1;min-width:0}
+.prow-title{font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prow-sub{font-size:11px;color:var(--text3)}
+.prow-tag{font-size:10px;padding:2px 7px;border-radius:20px;font-weight:600;flex-shrink:0;white-space:nowrap}
+.pt-blue{background:var(--blue3);color:#38bdf8}
+.pt-green{background:var(--green3);color:#4ade80}
+.pt-orange{background:#2d1f0d;color:#fb923c}
+.pt-purple{background:#1f0d2d;color:#e879f9}
+
+/* QUICK DIAL */
+.dial-box{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.dial-sec-label{display:block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text3);padding:9px 14px 5px;border-top:1px solid var(--border)}
+.dial-sec:first-child .dial-sec-label{border-top:none}
+.dial-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:7px;padding:0 12px 11px}
+.dc{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px;text-decoration:none;display:block;transition:all .15s}
+.dc:hover{border-color:var(--border2);background:var(--surface2)}
+.dc.omc{border-color:rgba(59,130,246,.28);background:rgba(13,32,56,.55)}
+.dc.fmc{border-color:rgba(34,197,94,.22);background:rgba(13,45,31,.5)}
+.dc.ext{border-color:rgba(245,158,11,.22);background:rgba(45,31,13,.45)}
+.dc-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text3);margin-bottom:3px;line-height:1.3}
+.dc-num{font-size:14px;font-weight:800;color:var(--text);font-family:var(--mono);line-height:1}
+.dc-note{font-size:9px;color:var(--text3);margin-top:2px;line-height:1.3}
+
+/* MOBILE */
+@media(max-width:640px){
+  .search-hero-inner,.main{padding-left:16px;padding-right:16px}
+  .search-shortcut{display:none}
+  .stats-row{display:none}
+  .mobile-nav{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);display:flex;padding:5px 0 calc(5px + env(safe-area-inset-bottom));z-index:100}
+  .mob-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;padding:2px 0;font-size:9px;font-weight:700;color:var(--text3);text-decoration:none;text-transform:uppercase}
+  .mob-item.active{color:var(--blue)}
+  .mob-icon{font-size:19px}
+  main{padding-bottom:80px}
+}
+@media(min-width:641px){.mobile-nav{display:none}}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="sitenav">
+  <div class="sitenav-inner">
+    <a class="nav-logo" href="home.html">⚡ KP<span>/</span>ER</a>
+    <div class="nav-links">
+      <a class="nav-link active" href="home.html">🏠 Home</a>
+      <a class="nav-link" href="index.html">📋 Phrases</a>
+      <a class="nav-link" href="calculators.html">🧮 Calcs</a>
+      <a class="nav-link" href="vasopressors.html">💊 Vasopressors</a>
+      <a class="nav-link" href="rsi.html">🫁 RSI</a>
+      <a class="nav-link" href="algorithms.html">🔀 Algorithms</a>
+      <a class="nav-link" href="neurohub.html">🧠 Neuro Hub</a>
+      <a class="nav-link" href="pedsfever.html">🌡️ Peds Fever</a>
+      <a class="nav-link" href="agreements.html">🤝 Agreements</a>
+      <a class="nav-link" href="ed-phone-directory.html">📞 Directory</a>
+      <a class="nav-link" href="links.html">🔗 Links</a>
+      <a class="nav-link" href="roadmap.html">🗺️ Roadmap</a>
+    </div>
+  </div>
+</nav>
+
+<!-- FULL-WIDTH SEARCH HERO -->
+<div class="search-hero">
+  <div class="search-hero-inner">
+    <div class="search-label">KP SBC Emergency Medicine</div>
+    <div class="search-sublabel">OMC · FMC — search dotphrases, calculators, drugs, algorithms, and phone numbers</div>
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input class="search-input" id="si" type="text"
+        placeholder="Search everything — e.g. PE, ketamine, ortho, HEART score, aortic dissection, 47333, ETAP..."
+        autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+        oninput="doSearch(this.value)" onkeydown="searchKey(event)"/>
+      <span class="search-shortcut">⌘K to focus</span>
+      <div class="search-dropdown" id="sd"></div>
+    </div>
+    <div class="chips">
+      <button class="chip on" onclick="setFilter('all',this)">All</button>
+      <button class="chip" onclick="setFilter('phrase',this)">📋 Dotphrases</button>
+      <button class="chip" onclick="setFilter('calc',this)">🧮 Calculators</button>
+      <button class="chip" onclick="setFilter('drug',this)">💊 Drugs</button>
+      <button class="chip" onclick="setFilter('algo',this)">🔀 Algorithms</button>
+      <button class="chip" onclick="setFilter('neuro',this)">🧠 Neuro Hub</button>
+      <button class="chip" onclick="setFilter('phone',this)">📞 Phones</button>
+    </div>
+    <div class="stats-row">
+      <div><div class="stn">120</div><div class="stl">Dotphrases</div></div>
+      <div><div class="stn">12</div><div class="stl">Calculators</div></div>
+      <div><div class="stn">7</div><div class="stl">Algorithms</div></div>
+      <div><div class="stn">200+</div><div class="stl">Contacts</div></div>
+    </div>
+  </div>
+</div>
+
+<main>
+  <!-- TOOLS -->
+  <div class="sec-head"><h2>Clinical Tools</h2></div>
+  <div class="tool-grid" style="margin-bottom:22px">
+    <a class="tc hi-blue" href="index.html"><div class="tc-ico">📋</div><div class="tc-name">Dotphrases</div><div class="tc-desc">Rule-out templates across 20 categories</div><div class="tc-meta"><span class="tc-count">120 phrases</span><span class="tc-arr">→</span></div></a>
+    <a class="tc" href="calculators.html"><div class="tc-ico">🧮</div><div class="tc-name">Calculators</div><div class="tc-desc">HEART, Wells PE/DVT, PERC, PECARN, LRINEC</div><div class="tc-meta"><span class="tc-count">12 calcs</span><span class="tc-arr">→</span></div></a>
+    <a class="tc" href="vasopressors.html"><div class="tc-ico">💊</div><div class="tc-name">Vasopressors</div><div class="tc-desc">Weight-based drip dosing + push-dose</div><div class="tc-meta"><span class="tc-count">8 agents</span><span class="tc-arr">→</span></div></a>
+    <a class="tc" href="rsi.html"><div class="tc-ico">🫁</div><div class="tc-name">RSI</div><div class="tc-desc">Induction + paralytic dosing, airway flags</div><div class="tc-meta"><span class="tc-count">Weight-based</span><span class="tc-arr">→</span></div></a>
+    <a class="tc" href="algorithms.html"><div class="tc-ico">🔀</div><div class="tc-name">Algorithms</div><div class="tc-desc">KP SBC ED Practice Guideline flowcharts</div><div class="tc-meta"><span class="tc-count">7 algorithms</span><span class="tc-arr">→</span></div></a>
+    <a class="tc" href="neurohub.html"><div class="tc-ico">🧠</div><div class="tc-name">Neuro Hub</div><div class="tc-desc">ICH, tPA criteria, reversal, stroke triage</div><div class="tc-meta"><span class="tc-count">ICH · tPA · Reversal</span><span class="tc-arr">→</span></div></a>
+    <a class="tc" href="pedsfever.html"><div class="tc-ico">🌡️</div><div class="tc-name">Peds Fever</div><div class="tc-desc">CA FIRST age-stratified workup protocol</div><div class="tc-meta"><span class="tc-count">Age-stratified</span><span class="tc-arr">→</span></div></a>
+    <a class="tc hi-purple" href="agreements.html"><div class="tc-ico">🤝</div><div class="tc-name">Service Agreements</div><div class="tc-desc">Consult criteria &amp; escalation by specialty</div><div class="tc-meta"><span class="tc-count" style="color:var(--purple)">Add yours</span><span class="tc-arr">→</span></div></a>
+    <a class="tc" href="ed-phone-directory.html"><div class="tc-ico">📞</div><div class="tc-name">Phone Directory</div><div class="tc-desc">OMC &amp; FMC — all extensions, pagers, lines</div><div class="tc-meta"><span class="tc-count">200+ contacts</span><span class="tc-arr">→</span></div></a>
+  </div>
+
+  <!-- QUICK ACCESS + AGREEMENTS -->
+  <div class="two-col" style="margin-bottom:22px">
+    <div class="panel">
+      <div class="panel-hd">⚡ Quick Access</div>
+      <a class="prow" href="index.html"><div class="prow-body"><div class="prow-title">PE Rule-Out <span style="font-family:var(--mono);font-size:11px;color:var(--text3)">.nope</span></div><div class="prow-sub">PERC · Wells · low probability</div></div><span class="prow-tag pt-blue">Chest</span></a>
+      <a class="prow" href="index.html"><div class="prow-body"><div class="prow-title">ACS Rule-Out <span style="font-family:var(--mono);font-size:11px;color:var(--text3)">.noacs</span></div><div class="prow-sub">HEART score · serial troponins</div></div><span class="prow-tag pt-blue">Chest</span></a>
+      <a class="prow" href="index.html"><div class="prow-body"><div class="prow-title">SAH Rule-Out <span style="font-family:var(--mono);font-size:11px;color:var(--text3)">.nosah</span></div><div class="prow-sub">Ottawa rule · thunderclap headache</div></div><span class="prow-tag pt-blue">HA</span></a>
+      <a class="prow" href="vasopressors.html"><div class="prow-body"><div class="prow-title">Norepinephrine</div><div class="prow-sub">0.01–3 mcg/kg/min · septic shock first-line</div></div><span class="prow-tag pt-orange">Vasc</span></a>
+      <a class="prow" href="calculators.html"><div class="prow-body"><div class="prow-title">HEART Score</div><div class="prow-sub">ACS chest pain risk stratification</div></div><span class="prow-tag pt-green">Calc</span></a>
+      <a class="prow" href="neurohub.html"><div class="prow-body"><div class="prow-title">ICH Protocol</div><div class="prow-sub">BP targets · reversal · neurosurg criteria</div></div><span class="prow-tag pt-purple">Neuro</span></a>
+    </div>
+    <div class="panel">
+      <div class="panel-hd">🤝 Service Agreements</div>
+      <a class="prow" href="agreements.html" style="display:flex;flex-direction:column;align-items:flex-start;padding:18px 14px;gap:8px">
+        <div style="font-size:13px;color:var(--text2);line-height:1.6">No agreements yet. Document consult criteria, response times, and escalation paths by specialty.</div>
+        <div style="font-size:12px;font-weight:700;color:var(--purple)">+ Add first agreement →</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- QUICK DIAL -->
+  <div class="sec-head"><h2>Quick Dial</h2></div>
+  <div class="dial-box">
+
+    <div class="dial-sec">
+      <span class="dial-sec-label">🔵 OMC — Internal Medicine</span>
+      <div class="dial-grid">
+        <a class="dc omc" href="ed-phone-directory.html"><div class="dc-lbl">OMC Int. Med 7a–3:30p</div><div class="dc-num">Vocera</div><div class="dc-note">Extension</div></a>
+        <a class="dc omc" href="ed-phone-directory.html"><div class="dc-lbl">OMC Int. Med 3:30p–7a</div><div class="dc-num">47333</div><div class="dc-note">Extension</div></a>
+      </div>
+    </div>
+
+    <div class="dial-sec">
+      <span class="dial-sec-label">🟢 FMC — Internal Medicine</span>
+      <div class="dial-grid">
+        <a class="dc fmc" href="ed-phone-directory.html"><div class="dc-lbl">FMC Int. Med 7a–7p</div><div class="dc-num">Vocera</div><div class="dc-note">Extension</div></a>
+        <a class="dc fmc" href="ed-phone-directory.html"><div class="dc-lbl">FMC Int. Med 7p–7a</div><div class="dc-num">27028</div><div class="dc-note">Extension</div></a>
+      </div>
+    </div>
+
+    <div class="dial-sec">
+      <span class="dial-sec-label">🔵 OMC — ED Lines</span>
+      <div class="dial-grid">
+        <a class="dc omc" href="ed-phone-directory.html"><div class="dc-lbl">OMC Charge Nurse</div><div class="dc-num">45860</div><div class="dc-note">CISCO wireless · office 45832</div></a>
+        <a class="dc omc" href="ed-phone-directory.html"><div class="dc-lbl">OMC Ambulance Triage</div><div class="dc-num">45861</div><div class="dc-note">Ambulance RN</div></a>
+        <a class="dc omc" href="ed-phone-directory.html"><div class="dc-lbl">OMC Triage</div><div class="dc-num">49808</div><div class="dc-note">30-Second Triage</div></a>
+      </div>
+    </div>
+
+    <div class="dial-sec">
+      <span class="dial-sec-label">🟢 FMC — ED Lines</span>
+      <div class="dial-grid">
+        <a class="dc fmc" href="ed-phone-directory.html"><div class="dc-lbl">FMC Charge Nurse</div><div class="dc-num">27071</div><div class="dc-note">Beeper 1204</div></a>
+        <a class="dc fmc" href="ed-phone-directory.html"><div class="dc-lbl">FMC Ambulance Triage</div><div class="dc-num">27018</div><div class="dc-note">Extension</div></a>
+        <a class="dc fmc" href="ed-phone-directory.html"><div class="dc-lbl">FMC Triage</div><div class="dc-num">27008</div><div class="dc-note">Extension</div></a>
+      </div>
+    </div>
+
+    <div class="dial-sec">
+      <span class="dial-sec-label">🟡 External / Transfer</span>
+      <div class="dial-grid">
+        <a class="dc ext" href="ed-phone-directory.html"><div class="dc-lbl">ETAP</div><div class="dc-num">(562) 658-3998</div><div class="dc-note">Emergency Transfer Auth.</div></a>
+        <a class="dc ext" href="ed-phone-directory.html"><div class="dc-lbl">PTAC</div><div class="dc-num">(562) 658-3980</div><div class="dc-note">Transfer Authorization</div></a>
+        <a class="dc ext" href="ed-phone-directory.html"><div class="dc-lbl">Poison Control</div><div class="dc-num">(800) 222-1222</div><div class="dc-note">24/7</div></a>
+        <a class="dc ext" href="ed-phone-directory.html"><div class="dc-lbl">SART Nurse</div><div class="dc-num">(909) 427-9227</div><div class="dc-note">Sexual Assault Response</div></a>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<div class="mobile-nav">
+  <a class="mob-item active" href="home.html"><span class="mob-icon">🏠</span>Home</a>
+  <a class="mob-item" href="index.html"><span class="mob-icon">📋</span>Phrases</a>
+  <a class="mob-item" href="calculators.html"><span class="mob-icon">🧮</span>Calcs</a>
+  <a class="mob-item" href="vasopressors.html"><span class="mob-icon">💊</span>Drugs</a>
+  <a class="mob-item" href="ed-phone-directory.html"><span class="mob-icon">📞</span>Directory</a>
+</div>
+
+<script src="search-index.js"></script>
+<script>
+// ══════════════════════════════════════════
+//  SEARCH INDEX
+// ══════════════════════════════════════════
+// Search index loaded from search-index.js
+const getIDX = () => (window.getSearchIndex ? window.getSearchIndex() : SEARCH_INDEX);
+
+// ══════════════════════════════════════════
+//  SEARCH LOGIC
+// ══════════════════════════════════════════
+let activeFilter = 'all';
+let hiIdx = -1;
+
+const GROUP_PRIORITY = [
+  'Dotphrases','Calculators','Algorithms','Neuro Hub','Drugs',
+  'OMC','FMC','External',
+  'OMC Imaging Orders','FMC Imaging Orders',
+  'OMC Key Staff','FMC Key Staff',
+  'Reference'
+];
+
+function matchesActiveFilter(item) {
+  if (activeFilter === 'all') return true;
+  if (activeFilter === 'phone') return ['phone', 'imaging', 'staff'].includes(item.type);
+  return item.type === activeFilter;
+}
+
+function getResultGroup(item) {
+  if (item.type === 'phrase') return 'Dotphrases';
+  if (item.type === 'calc') return 'Calculators';
+  if (item.type === 'drug') return 'Drugs';
+  if (item.type === 'phone') return item.g || 'Phone Directory';
+  if (item.type === 'imaging') return item.g || 'Imaging Orders';
+  if (item.type === 'staff') return item.g || 'Key Staff';
+  if (item.type === 'algo') return 'Algorithms';
+  if (item.type === 'neuro') return 'Neuro Hub';
+  if (item.type === 'page') return item.g || 'Reference';
+  return item.g || 'Other';
+}
+
+function getOrderedGroups(groups) {
+  const names = Object.keys(groups);
+  const rest = names.filter(n => !GROUP_PRIORITY.includes(n)).sort((a,b) => a.localeCompare(b));
+  return GROUP_PRIORITY.filter(n => groups[n]).concat(rest);
+}
+
+function setFilter(f, el) {
+  activeFilter = f;
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
+  el.classList.add('on');
+  const q = document.getElementById('si').value;
+  if (q.trim()) doSearch(q);
+}
+
+function doSearch(q) {
+  const dd = document.getElementById('sd');
+  q = q.trim();
+  if (!q) { dd.classList.remove('open'); hiIdx = -1; return; }
+  const lo = q.toLowerCase();
+
+  let results = getIDX().filter(item => {
+    if (!matchesActiveFilter(item)) return false;
+    return (
+      item.t.toLowerCase().includes(lo) ||
+      item.s.toLowerCase().includes(lo) ||
+      item.g.toLowerCase().includes(lo)
+    );
+  });
+
+  // Boost title-starts-with matches
+  results.sort((a, b) => {
+    const at = a.t.toLowerCase().startsWith(lo) ? 0 : 1;
+    const bt = b.t.toLowerCase().startsWith(lo) ? 0 : 1;
+    return at - bt;
+  });
+
+  const total = results.length;
+  results = results.slice(0, 22);
+  hiIdx = -1;
+
+  if (!results.length) {
+    dd.innerHTML = '<div class="sdrop-empty">No results — try different keywords or clear the filter</div>';
+    dd.classList.add('open');
+    return;
+  }
+
+  const groups = {};
+  results.forEach(r => {
+    const g = getResultGroup(r);
+    if (!groups[g]) groups[g] = [];
+    groups[g].push(r);
+  });
+
+  let html = '';
+  getOrderedGroups(groups).forEach(grp => {
+    if (!groups[grp]) return;
+    html += `<div class="sdrop-group">${grp}</div>`;
+    groups[grp].forEach(item => {
+      html += `<a class="sdrop-row" href="${item.u}">
+        <span class="sdrop-ico">${item.i}</span>
+        <div class="sdrop-body">
+          <div class="sdrop-title">${item.t}</div>
+          <div class="sdrop-sub">${item.s}</div>
+        </div>
+        <span class="sdrop-tag ${item.gc}">${item.g}</span>
+      </a>`;
+    });
+  });
+  if (total > 22) {
+    html += `<div class="sdrop-footer">Showing 22 of ${total} results — refine your search</div>`;
+  }
+  dd.innerHTML = html;
+  dd.classList.add('open');
+}
+
+function searchKey(e) {
+  const dd = document.getElementById('sd');
+  const rows = Array.from(dd.querySelectorAll('.sdrop-row'));
+  if (e.key === 'ArrowDown') {
+    hiIdx = Math.min(hiIdx + 1, rows.length - 1);
+    rows.forEach((el, i) => el.classList.toggle('hi', i === hiIdx));
+    if (rows[hiIdx]) rows[hiIdx].scrollIntoView({block:'nearest'});
+    e.preventDefault();
+  } else if (e.key === 'ArrowUp') {
+    hiIdx = Math.max(hiIdx - 1, 0);
+    rows.forEach((el, i) => el.classList.toggle('hi', i === hiIdx));
+    e.preventDefault();
+  } else if (e.key === 'Enter' && hiIdx >= 0 && rows[hiIdx]) {
+    rows[hiIdx].click();
+  } else if (e.key === 'Escape') {
+    dd.classList.remove('open');
+    document.getElementById('si').blur();
+  }
+}
+
+// ⌘K / Ctrl+K
+document.addEventListener('keydown', e => {
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+    e.preventDefault();
+    const inp = document.getElementById('si');
+    inp.focus(); inp.select();
+  }
+});
+
+// click outside
+document.addEventListener('click', e => {
+  if (!e.target.closest('.search-wrap')) {
+    document.getElementById('sd').classList.remove('open');
+  }
+});
+</script>
+</body>
+</html>

@@ -8,11 +8,7 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Inter',system-ui,sans-serif;background:#0f172a;color:#e2e8f0;min-height:100vh}
 
-.sitenav{background:#1e293b;border-bottom:1px solid #334155;padding:0 24px;overflow-x:auto;-webkit-overflow-scrolling:touch}
-.sitenav-inner{max-width:960px;margin:0 auto;display:flex;gap:2px;padding:8px 0}
-.sitenav a{padding:7px 14px;border-radius:8px;font-size:13px;font-weight:500;color:#94a3b8;text-decoration:none;white-space:nowrap;transition:all .2s}
-.sitenav a:hover{background:#334155;color:#f1f5f9}
-.sitenav a.active{background:#3b82f6;color:#fff}
+
 
 header{background:linear-gradient(135deg,#1e293b,#0f172a);border-bottom:1px solid #1e3a5f;padding:24px 24px 20px}
 .header-inner{max-width:900px;margin:0 auto}
@@ -36,25 +32,41 @@ main{max-width:900px;margin:0 auto;padding:28px 24px 80px}
 .link-desc{font-size:12px;color:#64748b;line-height:1.5}
 .link-arrow{color:#334155;font-size:14px;flex-shrink:0;margin-top:3px;transition:color .2s}
 .link-card:hover .link-arrow{color:#3b82f6}
+
+/* ===== SHARED NEW NAV ===== */
+@media(max-width:640px){}
+.sitenav{background:#0d1829;border-bottom:1px solid #1a2d48;position:sticky;top:0;z-index:100;font-family:'DM Sans',system-ui,sans-serif}
+.sitenav-inner{max-width:1200px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:6px;height:46px}
+.nav-logo{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:#3b82f6;white-space:nowrap;flex-shrink:0;text-decoration:none;margin-right:6px}
+.nav-logo span{color:#4a6280}
+.nav-links{display:flex;gap:1px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-link{padding:5px 10px;border-radius:6px;font-size:12px;font-weight:600;color:#8fa8c8;text-decoration:none;white-space:nowrap;transition:all .15s}
+.nav-link:hover{background:#111f35;color:#e8f0fc}
+.nav-link.active{background:#1d4ed8;color:#fff}
+@media(max-width:640px){.nav-link{font-size:11px;padding:4px 8px}}
 </style>
 </head>
 <body>
-
-<div class="sitenav">
+<nav class="sitenav">
   <div class="sitenav-inner">
-    <a href="index.html">📋 Dotphrases</a>
-    <a href="calculators.html">🧮 Calculators</a>
-    <a href="vasopressors.html">💊 Vasopressors</a>
-    <a href="rsi.html">🫁 RSI</a>
-    <a href="pedsfever.html">🌡️ Peds Fever</a>
-    <a href="algorithms.html">🔀 Algorithms</a>
-    <a href="neurohub.html">🧠 Neuro Hub</a>
-    <a href="roadmap.html">🗺️ Roadmap</a>
-    <a href="links.html" class="active">🔗 Links</a>
-    <a href="ed-phone-directory.html">📞 Phone Directory</a>
+    <a class="nav-logo" href="home.html">⚡ KP<span>/</span>ER</a>
+    <div class="nav-links">
+      <a class="nav-link" href="home.html">🏠 Home</a>
+      <a class="nav-link" href="index.html">📋 Phrases</a>
+      <a class="nav-link" href="calculators.html">🧮 Calcs</a>
+      <a class="nav-link" href="vasopressors.html">💊 Vasopressors</a>
+      <a class="nav-link" href="rsi.html">🫁 RSI</a>
+      <a class="nav-link" href="algorithms.html">🔀 Algorithms</a>
+      <a class="nav-link" href="neurohub.html">🧠 Neuro Hub</a>
+      <a class="nav-link" href="pedsfever.html">🌡️ Peds Fever</a>
+      <a class="nav-link" href="agreements.html">🤝 Agreements</a>
+      <a class="nav-link" href="ed-phone-directory.html">📞 Directory</a>
+      <a class="nav-link active" href="links.html">🔗 Links</a>
+      <a class="nav-link" href="roadmap.html">🗺️ Roadmap</a>
+    </div>
   </div>
-</div>
-
+</nav>
 <header>
   <div class="header-inner">
     <div class="logo"><span>🔗</span><h1>Quick Links</h1></div>
@@ -93,5 +105,10 @@ main{max-width:900px;margin:0 auto;padding:28px 24px 80px}
   </div>
 
 </main>
+
+<script src="search-index.js"></script>
+<script id="shared-nav-search">
+</script>
+
 </body>
 </html>
