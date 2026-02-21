@@ -105,7 +105,9 @@ main{max-width:980px;margin:0 auto;padding:24px}
     <button class="calc-tab" onclick="showCalc('wellsdvt')">🦵 Wells DVT</button>
     <button class="calc-tab" onclick="showCalc('cthead')">🧠 Canadian CT Head</button>
     <button class="calc-tab" onclick="showCalc('softtissue')">🦠 Soft Tissue & Sepsis</button>
-    <button class="calc-tab" onclick="showCalc('other')">🧩 Other</button>
+    <button class="calc-tab" onclick="showCalc('centor')">🦠 Centor</button>
+    <button class="calc-tab" onclick="showCalc('pecarn')">👶 PECARN</button>
+    <button class="calc-tab" onclick="showCalc('pedsfever')">🌡️ Peds Fever</button>
   </div>
 
   <!-- ══════════════════════════════════════════
@@ -535,7 +537,7 @@ main{max-width:980px;margin:0 auto;padding:24px}
   <!-- ══════════════════════════════════════════
        OTHER
   ══════════════════════════════════════════ -->
-  <div id="calc-other" style="display:none">
+  <div id="calc-centor" style="display:none">
     <div class="calc-grid">
 
       <!-- CENTOR / MCISAAC -->
@@ -571,6 +573,12 @@ main{max-width:980px;margin:0 auto;padding:24px}
         </div>
       </div>
 
+    </div>
+  </div>
+
+  <div id="calc-pecarn" style="display:none">
+    <div class="calc-grid">
+
       <!-- PECARN -->
       <div class="card">
         <div class="card-title">👶 PECARN Pediatric Head Injury</div>
@@ -601,6 +609,12 @@ main{max-width:980px;margin:0 auto;padding:24px}
         </div>
       </div>
 
+    </div>
+  </div>
+
+  <div id="calc-pedsfever" style="display:none">
+    <div class="calc-grid">
+
       <!-- PEDS FEVER LINK -->
       <div class="card">
         <div class="card-title">🌡️ Peds Fever (0–60d)</div>
@@ -626,11 +640,11 @@ main{max-width:980px;margin:0 auto;padding:24px}
 <script>
 // ── CALC TAB SWITCHING ───────────────────────────────────────
 function showCalc(id) {
-  ['wellspe','heart','wellsdvt','cthead','softtissue','other'].forEach(c => {
+  ['wellspe','heart','wellsdvt','cthead','softtissue','centor','pecarn','pedsfever'].forEach(c => {
     document.getElementById('calc-'+c).style.display = c===id ? '' : 'none';
   });
   document.querySelectorAll('.calc-tab').forEach((btn,i) => {
-    btn.classList.toggle('active', ['wellspe','heart','wellsdvt','cthead','softtissue','other'][i]===id);
+    btn.classList.toggle('active', ['wellspe','heart','wellsdvt','cthead','softtissue','centor','pecarn','pedsfever'][i]===id);
   });
 }
 
