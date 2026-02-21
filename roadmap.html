@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Roadmap — ER Documentation</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',system-ui,sans-serif;background:#0f172a;color:#e2e8f0;min-height:100vh}
+
+/* NAV */
+.sitenav{background:#1e293b;border-bottom:1px solid #334155;padding:0 24px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.sitenav-inner{max-width:1100px;margin:0 auto;display:flex;gap:2px;padding:8px 0}
+.sitenav a{padding:7px 14px;border-radius:8px;font-size:13px;font-weight:500;color:#94a3b8;text-decoration:none;white-space:nowrap;transition:all .2s}
+.sitenav a:hover{background:#334155;color:#f1f5f9}
+.sitenav a.active{background:#3b82f6;color:#fff}
+
+/* HEADER */
+header{background:linear-gradient(135deg,#1e293b,#0f172a);border-bottom:1px solid #1e3a5f;padding:24px 24px 20px}
+.header-inner{max-width:1100px;margin:0 auto;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.header-left .logo{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.header-left .logo span{font-size:24px}
+.header-left .logo h1{font-size:20px;font-weight:800;color:#f1f5f9}
+.header-left .subtitle{font-size:13px;color:#64748b;margin-left:34px}
+.suggest-btn{padding:10px 20px;background:#3b82f6;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0}
+.suggest-btn:hover{background:#2563eb}
+
+main{max-width:1100px;margin:0 auto;padding:24px 24px 80px}
+
+/* FILTER TABS */
+.filter-bar{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;align-items:center}
+.filter-tab{padding:7px 16px;border-radius:20px;border:1px solid #334155;background:#1e293b;color:#94a3b8;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s}
+.filter-tab:hover{border-color:#3b82f6;color:#f1f5f9}
+.filter-tab.active{background:#3b82f6;border-color:#3b82f6;color:#fff}
+.filter-spacer{flex:1}
+.sort-select{padding:7px 12px;background:#1e293b;border:1px solid #334155;border-radius:8px;color:#94a3b8;font-size:13px;cursor:pointer;outline:none}
+.sort-select:focus{border-color:#3b82f6}
+
+/* BOARD COLUMNS */
+.board{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:start}
+@media(max-width:800px){.board{grid-template-columns:1fr}}
+
+.column-header{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.column-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.8px}
+.column-count{background:#0f172a;color:#475569;font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px}
+.col-planned .column-title{color:#f59e0b}
+.col-inprogress .column-title{color:#3b82f6}
+.col-done .column-title{color:#22c55e}
+.col-planned .column-header::before{content:'';width:8px;height:8px;border-radius:50%;background:#f59e0b;flex-shrink:0}
+.col-inprogress .column-header::before{content:'';width:8px;height:8px;border-radius:50%;background:#3b82f6;flex-shrink:0}
+.col-done .column-header::before{content:'';width:8px;height:8px;border-radius:50%;background:#22c55e;flex-shrink:0}
+
+/* CARDS */
+.item-card{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:14px 16px;margin-bottom:10px;transition:border-color .15s,transform .1s;cursor:default}
+.item-card:hover{border-color:#3b82f6;transform:translateY(-1px)}
+.item-header{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px}
+.vote-btn{display:flex;flex-direction:column;align-items:center;gap:2px;flex-shrink:0;cursor:pointer;user-select:none;padding:6px 8px;border-radius:8px;border:1px solid #334155;background:#0f172a;transition:all .2s;min-width:44px}
+.vote-btn:hover{border-color:#3b82f6;background:#1e3a5f}
+.vote-btn.voted{border-color:#3b82f6;background:#1e3a5f}
+.vote-btn .chevron{font-size:10px;color:#475569;line-height:1}
+.vote-btn.voted .chevron{color:#60a5fa}
+.vote-count{font-size:15px;font-weight:800;color:#cbd5e1;line-height:1}
+.vote-btn.voted .vote-count{color:#60a5fa}
+.item-body{flex:1;min-width:0}
+.item-title{font-size:14px;font-weight:600;color:#f1f5f9;line-height:1.4;margin-bottom:4px}
+.item-desc{font-size:12px;color:#64748b;line-height:1.5}
+.item-footer{display:flex;align-items:center;gap:6px;margin-top:10px;flex-wrap:wrap}
+.tag{display:inline-block;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:600}
+.tag-cardiology{background:#1e1b4b;color:#a5b4fc;border:1px solid #4f46e5}
+.tag-airway{background:#1c0a0a;color:#fca5a5;border:1px solid #dc2626}
+.tag-tox{background:#1c1400;color:#fde68a;border:1px solid #ca8a04}
+.tag-peds{background:#0c2340;color:#7dd3fc;border:1px solid #0ea5e9}
+.tag-workflow{background:#052e16;color:#86efac;border:1px solid #16a34a}
+.tag-neuro{background:#1e1b4b;color:#c4b5fd;border:1px solid #7c3aed}
+.tag-trauma{background:#1f0707;color:#f87171;border:1px solid #ef4444}
+.tag-docs{background:#1e293b;color:#94a3b8;border:1px solid #475569}
+.tag-ux{background:#0f2d2d;color:#5eead4;border:1px solid #0d9488}
+.tag-renal{background:#1a1a2e;color:#a78bfa;border:1px solid #6d28d9}
+.tag-gi{background:#1a0e00;color:#fb923c;border:1px solid #ea580c}
+.item-submitter{font-size:11px;color:#334155;margin-left:auto}
+
+/* DONE CARD */
+.col-done .item-card{opacity:.75}
+.col-done .item-card:hover{opacity:1}
+.done-check{color:#22c55e;font-size:16px;margin-right:2px}
+
+/* SUGGESTION MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:1000;display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .2s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{background:#1e293b;border:1px solid #334155;border-radius:16px;padding:28px;width:100%;max-width:500px;transform:translateY(16px);transition:transform .2s}
+.modal-overlay.open .modal{transform:translateY(0)}
+.modal h2{font-size:18px;font-weight:800;color:#f1f5f9;margin-bottom:4px}
+.modal .modal-sub{font-size:13px;color:#64748b;margin-bottom:22px}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:12px;font-weight:600;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.form-group input,.form-group textarea,.form-group select{width:100%;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:10px 14px;color:#f1f5f9;font-size:14px;font-family:inherit;outline:none;transition:border-color .2s;resize:none}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:#3b82f6}
+.form-group textarea{min-height:90px}
+.form-group select option{background:#1e293b}
+.tag-selector{display:flex;gap:6px;flex-wrap:wrap}
+.tag-opt{padding:4px 12px;border-radius:20px;border:1px solid #334155;background:#0f172a;color:#64748b;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s}
+.tag-opt:hover{border-color:#3b82f6;color:#93c5fd}
+.tag-opt.selected{border-color:#3b82f6;background:#1e3a5f;color:#93c5fd}
+.modal-footer{display:flex;gap:10px;justify-content:flex-end;margin-top:22px}
+.btn-cancel{padding:9px 18px;border-radius:8px;border:1px solid #334155;background:transparent;color:#64748b;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-cancel:hover{background:#334155;color:#f1f5f9}
+.btn-submit{padding:9px 20px;border-radius:8px;border:none;background:#3b82f6;color:#fff;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s}
+.btn-submit:hover{background:#2563eb}
+.btn-submit:disabled{background:#1e3a5f;color:#334155;cursor:not-allowed}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;background:#1e293b;border:1px solid #22c55e;color:#86efac;padding:12px 20px;border-radius:10px;font-size:13px;font-weight:600;z-index:2000;transform:translateY(80px);opacity:0;transition:all .3s}
+.toast.show{transform:translateY(0);opacity:1}
+
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:32px 16px;color:#334155;font-size:13px}
+.empty-state .icon{font-size:28px;margin-bottom:8px;opacity:.4}
+</style>
+</head>
+<body>
+
+<div class="sitenav">
+  <div class="sitenav-inner">
+    <a href="index.html">📋 Dotphrases</a>
+    <a href="calculators.html">🧮 Calculators</a>
+    <a href="vasopressors.html">💊 Vasopressors</a>
+    <a href="rsi.html">🫁 RSI</a>
+    <a href="pedsfever.html">🌡️ Peds Fever</a>
+    <a href="algorithms.html">🔀 Algorithms</a>
+    <a href="neurohub.html">🧠 Neuro Hub</a>
+    <a href="roadmap.html" class="active">🗺️ Roadmap</a>
+  </div>
+</div>
+
+<header>
+  <div class="header-inner">
+    <div class="header-left">
+      <div class="logo"><span>🗺️</span><h1>Feature Roadmap</h1></div>
+      <p class="subtitle">Vote on what to build next · Suggest new features · See what's in progress</p>
+    </div>
+    <button class="suggest-btn" onclick="openModal()">+ Suggest a Feature</button>
+  </div>
+</header>
+
+<main>
+
+  <!-- FILTER BAR -->
+  <div class="filter-bar">
+    <button class="filter-tab active" onclick="filterTag('all',this)">All</button>
+    <button class="filter-tab" onclick="filterTag('Cardiology',this)">Cardiology</button>
+    <button class="filter-tab" onclick="filterTag('Airway',this)">Airway</button>
+    <button class="filter-tab" onclick="filterTag('Tox',this)">Tox</button>
+    <button class="filter-tab" onclick="filterTag('Peds',this)">Peds</button>
+    <button class="filter-tab" onclick="filterTag('Neuro',this)">Neuro</button>
+    <button class="filter-tab" onclick="filterTag('Workflow',this)">Workflow</button>
+    <button class="filter-tab" onclick="filterTag('Trauma',this)">Trauma</button>
+    <div class="filter-spacer"></div>
+    <select class="sort-select" onchange="sortItems(this.value)">
+      <option value="votes">Most Voted</option>
+      <option value="newest">Newest</option>
+    </select>
+  </div>
+
+  <!-- BOARD -->
+  <div class="board">
+
+    <!-- PLANNED -->
+    <div id="col-planned">
+      <div class="column-header col-planned">
+        <span class="column-title">Planned</span>
+        <span class="column-count" id="count-planned">0</span>
+      </div>
+      <div id="items-planned"></div>
+    </div>
+
+    <!-- IN PROGRESS -->
+    <div id="col-inprogress">
+      <div class="column-header col-inprogress">
+        <span class="column-title">In Progress</span>
+        <span class="column-count" id="count-inprogress">0</span>
+      </div>
+      <div id="items-inprogress"></div>
+    </div>
+
+    <!-- DONE -->
+    <div id="col-done">
+      <div class="column-header col-done">
+        <span class="column-title">Shipped</span>
+        <span class="column-count" id="count-done">0</span>
+      </div>
+      <div id="items-done"></div>
+    </div>
+
+  </div>
+</main>
+
+<!-- SUGGEST MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="handleOverlayClick(event)">
+  <div class="modal">
+    <h2>Suggest a Feature</h2>
+    <p class="modal-sub">What would make this tool more useful in your workflow?</p>
+    <div class="form-group">
+      <label>Feature Title *</label>
+      <input type="text" id="input-title" placeholder="e.g. NIHSS Calculator, Stroke Alert Dotphrase" maxlength="80"/>
+    </div>
+    <div class="form-group">
+      <label>Description</label>
+      <textarea id="input-desc" placeholder="Describe the feature and why it would help your workflow..."></textarea>
+    </div>
+    <div class="form-group">
+      <label>Category</label>
+      <div class="tag-selector" id="tag-selector">
+        <span class="tag-opt" onclick="selectTag(this,'Cardiology')">Cardiology</span>
+        <span class="tag-opt" onclick="selectTag(this,'Airway')">Airway</span>
+        <span class="tag-opt" onclick="selectTag(this,'Tox')">Tox</span>
+        <span class="tag-opt" onclick="selectTag(this,'Peds')">Peds</span>
+        <span class="tag-opt" onclick="selectTag(this,'Neuro')">Neuro</span>
+        <span class="tag-opt" onclick="selectTag(this,'Workflow')">Workflow</span>
+        <span class="tag-opt" onclick="selectTag(this,'Trauma')">Trauma</span>
+        <span class="tag-opt" onclick="selectTag(this,'GI')">GI</span>
+        <span class="tag-opt" onclick="selectTag(this,'Renal')">Renal</span>
+        <span class="tag-opt" onclick="selectTag(this,'Docs')">Docs</span>
+        <span class="tag-opt" onclick="selectTag(this,'UX')">UX</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Your Name (optional)</label>
+      <input type="text" id="input-name" placeholder="Dr. Smith, Attending, etc."/>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-submit" id="submit-btn" onclick="submitSuggestion()">Submit</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────
+// Seed data — pre-populated with high-value feature ideas for ER docs
+const SEED = [
+  // PLANNED
+  {id:'s3',status:'planned',title:'Stroke Protocol Page',desc:'Time-critical documentation for stroke activation, NIHSS, last known well, and STEMI cath lab activation. With auto-timestamp.',tag:'Neuro',votes:19,submitter:'Dr. Kim',ts:1708100000},
+
+  // IN PROGRESS
+  {id:'s9',status:'inprogress',title:'HEART Score Calculator',desc:'Full interactive HEART score with copy-documentation button. Integrated into ACS rule-out dotphrase.',tag:'Cardiology',votes:22,submitter:'Dr. Kim',ts:1708400000},
+  {id:'s10',status:'inprogress',title:'Consent Dotphrases',desc:'Procedure-specific informed consent documentation for LP, central line, intubation, chest tube, cardioversion, I&D, fracture reduction, and more.',tag:'Docs',votes:17,submitter:'Risk Management',ts:1708350000},
+
+  // SHIPPED
+  {id:'s11',status:'done',title:'Copy-to-Clipboard on All Calculators',desc:'PERC, Wells PE, Wells DVT, Canadian CT Head Rule — each result generates a paste-ready documentation string.',tag:'Workflow',votes:26,submitter:'Dr. Kim',ts:1707500000},
+  {id:'s12',status:'done',title:'Neuro Hub ICH Protocol Page',desc:'Full clinical operations page for Regional Neuro Hub: ETAP line, hours, Neurology First rule, reversal table, triage flowchart.',tag:'Neuro',votes:20,submitter:'Dr. Kim',ts:1707400000},
+  {id:'s13',status:'done',title:'Wells PE + PERC Documentation Text',desc:'PERC negative/positive generates full chart-ready documentation with citation. Wells PE score copies with risk tier and plan.',tag:'Cardiology',votes:18,submitter:'Dr. Kim',ts:1707300000},
+  {id:'s14',status:'done',title:'RSI Weight-Based Drug Calculator',desc:'Enter weight → get doses for etomidate, ketamine, succinylcholine, rocuronium, propofol, fentanyl. With obese/pregnant/difficult airway flags.',tag:'Airway',votes:16,submitter:'Dr. Kim',ts:1707200000},
+  {id:'s15',status:'done',title:'Peds Fever CA FIRST Protocol',desc:'Age-stratified pediatric fever workup by age group (0–28d, 29–60d, 61–90d, 3–36mo) with risk stratification and workup guidance.',tag:'Peds',votes:14,submitter:'Dr. Kim',ts:1707100000},
+  {id:'s16',status:'done',title:'Evidence-Based Scores in Dotphrases',desc:'nope, noacs, nodvt, nonci, sdmlowriskcp all updated with validated score language, criteria, and citations (Kline 2004, Six 2008, Wells 2003, Stiell 2001).',tag:'Docs',votes:12,submitter:'Dr. Kim',ts:1707000000},
+];
+
+// ── STATE ─────────────────────────────────────────────────────
+let items = [];
+let votedIds = new Set();
+let selectedTag = null;
+let currentFilter = 'all';
+let currentSort = 'votes';
+
+const DATA_VERSION = 'v2';
+function loadState() {
+  try {
+    const ver = localStorage.getItem('roadmap_version');
+    const saved = localStorage.getItem('roadmap_items');
+    const voted = localStorage.getItem('roadmap_voted');
+    if (saved && ver === DATA_VERSION) items = JSON.parse(saved);
+    else { items = JSON.parse(JSON.stringify(SEED)); localStorage.removeItem('roadmap_voted'); }
+    if (voted && ver === DATA_VERSION) votedIds = new Set(JSON.parse(voted));
+  } catch(e) {
+    items = JSON.parse(JSON.stringify(SEED));
+  }
+}
+
+function saveState() {
+  try {
+    localStorage.setItem('roadmap_version', DATA_VERSION);
+    localStorage.setItem('roadmap_items', JSON.stringify(items));
+    localStorage.setItem('roadmap_voted', JSON.stringify([...votedIds]));
+  } catch(e) {}
+}
+
+// ── RENDER ────────────────────────────────────────────────────
+const TAG_CLASS = {
+  Cardiology:'tag-cardiology',Airway:'tag-airway',Tox:'tag-tox',Peds:'tag-peds',
+  Workflow:'tag-workflow',Neuro:'tag-neuro',Trauma:'tag-trauma',Docs:'tag-docs',
+  UX:'tag-ux',Renal:'tag-renal',GI:'tag-gi'
+};
+
+function tagClass(t){ return TAG_CLASS[t] || 'tag-docs'; }
+
+function getFiltered(status) {
+  return items
+    .filter(i => i.status === status)
+    .filter(i => currentFilter === 'all' || i.tag === currentFilter)
+    .sort((a,b) => currentSort === 'votes' ? b.votes - a.votes : b.ts - a.ts);
+}
+
+function renderAll() {
+  ['planned','inprogress','done'].forEach(s => {
+    const list = getFiltered(s);
+    const el = document.getElementById('items-' + s);
+    const count = document.getElementById('count-' + s);
+    count.textContent = list.length;
+    if (list.length === 0) {
+      el.innerHTML = `<div class="empty-state"><div class="icon">📭</div>No items match this filter</div>`;
+      return;
+    }
+    el.innerHTML = list.map(item => cardHTML(item)).join('');
+  });
+}
+
+function cardHTML(item) {
+  const voted = votedIds.has(item.id);
+  const isDone = item.status === 'done';
+  const check = isDone ? '<span class="done-check">✓</span>' : '';
+  return `
+  <div class="item-card" id="card-${item.id}">
+    <div class="item-header">
+      <button class="vote-btn ${voted?'voted':''}" onclick="vote('${item.id}')" title="${voted?'Remove vote':'Upvote'}">
+        <span class="chevron">▲</span>
+        <span class="vote-count" id="vc-${item.id}">${item.votes}</span>
+      </button>
+      <div class="item-body">
+        <div class="item-title">${check}${item.title}</div>
+        ${item.desc ? `<div class="item-desc">${item.desc}</div>` : ''}
+      </div>
+    </div>
+    <div class="item-footer">
+      ${item.tag ? `<span class="tag ${tagClass(item.tag)}">${item.tag}</span>` : ''}
+      ${item.submitter ? `<span class="item-submitter">${item.submitter}</span>` : ''}
+    </div>
+  </div>`;
+}
+
+// ── VOTE ──────────────────────────────────────────────────────
+function vote(id) {
+  const item = items.find(i => i.id === id);
+  if (!item) return;
+  if (votedIds.has(id)) {
+    votedIds.delete(id);
+    item.votes = Math.max(0, item.votes - 1);
+  } else {
+    votedIds.add(id);
+    item.votes++;
+  }
+  saveState();
+  // Update just this card's vote UI without full re-render
+  const btn = document.querySelector(`#card-${id} .vote-btn`);
+  const vc = document.getElementById('vc-' + id);
+  if (btn) btn.classList.toggle('voted', votedIds.has(id));
+  if (vc) vc.textContent = item.votes;
+  // Re-sort if needed
+  if (currentSort === 'votes') renderAll();
+}
+
+// ── FILTER / SORT ─────────────────────────────────────────────
+function filterTag(tag, el) {
+  currentFilter = tag;
+  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderAll();
+}
+
+function sortItems(val) {
+  currentSort = val;
+  renderAll();
+}
+
+// ── MODAL ─────────────────────────────────────────────────────
+function openModal() {
+  document.getElementById('modal-overlay').classList.add('open');
+  document.getElementById('input-title').focus();
+}
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  resetForm();
+}
+function handleOverlayClick(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+}
+
+function selectTag(el, tag) {
+  document.querySelectorAll('.tag-opt').forEach(t => t.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedTag = tag;
+}
+
+function resetForm() {
+  document.getElementById('input-title').value = '';
+  document.getElementById('input-desc').value = '';
+  document.getElementById('input-name').value = '';
+  document.querySelectorAll('.tag-opt').forEach(t => t.classList.remove('selected'));
+  selectedTag = null;
+}
+
+function submitSuggestion() {
+  const title = document.getElementById('input-title').value.trim();
+  if (!title) {
+    document.getElementById('input-title').focus();
+    document.getElementById('input-title').style.borderColor = '#dc2626';
+    setTimeout(() => document.getElementById('input-title').style.borderColor = '', 1500);
+    return;
+  }
+  const desc = document.getElementById('input-desc').value.trim();
+  const name = document.getElementById('input-name').value.trim();
+  const newItem = {
+    id: 'u' + Date.now(),
+    status: 'planned',
+    title,
+    desc,
+    tag: selectedTag,
+    votes: 1,
+    submitter: name || 'Anonymous',
+    ts: Math.floor(Date.now() / 1000)
+  };
+  votedIds.add(newItem.id);
+  items.unshift(newItem);
+  saveState();
+  closeModal();
+  renderAll();
+  showToast('✅ Feature submitted! Thanks for the suggestion.');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3200);
+}
+
+// ── KEYBOARD ──────────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+});
+
+// ── INIT ─────────────────────────────────────────────────────
+loadState();
+renderAll();
+</script>
+</body>
+</html>

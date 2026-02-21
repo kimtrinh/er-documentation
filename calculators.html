@@ -10,18 +10,18 @@ body{font-family:'Inter',system-ui,sans-serif;background:#0f172a;color:#e2e8f0;m
 
 /* NAV */
 .sitenav{background:#1e293b;border-bottom:1px solid #334155;padding:0 24px;overflow-x:auto;-webkit-overflow-scrolling:touch}
-.sitenav-inner{max-width:900px;margin:0 auto;display:flex;gap:2px;padding:8px 0}
+.sitenav-inner{max-width:980px;margin:0 auto;display:flex;gap:2px;padding:8px 0}
 .sitenav a{padding:7px 14px;border-radius:8px;font-size:13px;font-weight:500;color:#94a3b8;text-decoration:none;white-space:nowrap;transition:all .2s}
 .sitenav a:hover{background:#334155;color:#f1f5f9}
 .sitenav a.active{background:#3b82f6;color:#fff}
 
 header{background:linear-gradient(135deg,#1e293b,#0f172a);border-bottom:1px solid #1e3a5f;padding:20px 24px}
-.header-inner{max-width:900px;margin:0 auto}
+.header-inner{max-width:980px;margin:0 auto}
 .logo{display:flex;align-items:center;gap:10px;margin-bottom:4px}
 .logo span{font-size:22px}.logo h1{font-size:20px;font-weight:700;color:#f1f5f9}
 .subtitle{font-size:13px;color:#64748b;margin-left:32px}
 
-main{max-width:900px;margin:0 auto;padding:24px}
+main{max-width:980px;margin:0 auto;padding:24px}
 .calc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:24px}
 
 /* CALC TABS */
@@ -44,9 +44,11 @@ main{max-width:900px;margin:0 auto;padding:24px}
 /* RADIO */
 .radio-group{margin-bottom:10px}
 .radio-group label{display:block;font-size:12px;color:#64748b;margin-bottom:6px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
-.radio-option{display:flex;align-items:center;gap:8px;padding:7px 0;cursor:pointer;font-size:13px;color:#cbd5e1;border-bottom:1px solid #1e293b}
+.radio-option{display:flex;align-items:center;gap:8px;padding:8px 0;cursor:pointer;font-size:13px;color:#cbd5e1;border-bottom:1px solid #1e293b}
 .radio-option:last-child{border-bottom:none}
-.radio-option input{accent-color:#3b82f6;width:16px;height:16px;cursor:pointer}
+.radio-option input{accent-color:#3b82f6;width:16px;height:16px;cursor:pointer;flex-shrink:0}
+.radio-option span{flex:1;line-height:1.4}
+.radio-option .radio-pts{font-size:12px;font-weight:700;color:#38bdf8;white-space:nowrap}
 
 /* RESULT */
 .result{margin-top:16px;border-radius:10px;padding:14px 16px;border:1px solid}
@@ -58,47 +60,51 @@ main{max-width:900px;margin:0 auto;padding:24px}
 .result-label{font-size:14px;font-weight:600;margin-bottom:6px}
 .result-action{font-size:12px;line-height:1.6;opacity:.9}
 
-.reset-btn{margin-top:12px;padding:7px 16px;border-radius:8px;border:1px solid #334155;background:transparent;color:#64748b;font-size:12px;cursor:pointer;transition:all .2s;width:100%}
+/* COPY DOC BUTTON */
+.copy-doc-btn{margin-top:10px;padding:8px 16px;border-radius:8px;border:1px solid #3b82f6;background:#1e3a5f;color:#93c5fd;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;width:100%;display:none;align-items:center;justify-content:center;gap:6px}
+.copy-doc-btn:hover{background:#2563eb;color:#fff;border-color:#2563eb}
+.copy-doc-btn.show{display:flex}
+.copy-doc-btn.copied{background:#052e16;border-color:#16a34a;color:#86efac}
+
+.reset-btn{margin-top:8px;padding:7px 16px;border-radius:8px;border:1px solid #334155;background:transparent;color:#64748b;font-size:12px;cursor:pointer;transition:all .2s;width:100%}
 .reset-btn:hover{background:#334155;color:#f1f5f9}
 
 .disclaimer{background:#1e3a5f;border:1px solid #2563eb;border-radius:8px;padding:10px 14px;margin-bottom:20px;font-size:12px;color:#93c5fd;line-height:1.5}
 .disclaimer strong{color:#bfdbfe}
-
-/* PERC badge */
-.perc-met{display:inline-block;background:#052e16;border:1px solid #16a34a;color:#86efac;border-radius:6px;padding:3px 10px;font-size:12px;font-weight:700;margin-top:6px}
-.perc-notmet{display:inline-block;background:#1f0707;border:1px solid #dc2626;color:#fca5a5;border-radius:6px;padding:3px 10px;font-size:12px;font-weight:700;margin-top:6px}
 
 @media(max-width:600px){main{padding:16px}}
 </style>
 </head>
 <body>
 
-<!-- SITE NAV -->
 <div class="sitenav">
   <div class="sitenav-inner">
     <a href="index.html">📋 Dotphrases</a>
-    <a href="calculators.html">🧮 Calculators</a>
+    <a href="calculators.html" class="active">🧮 Calculators</a>
     <a href="vasopressors.html">💊 Vasopressors</a>
     <a href="rsi.html">🫁 RSI</a>
     <a href="pedsfever.html">🌡️ Peds Fever</a>
     <a href="algorithms.html">🔀 Algorithms</a>
+    <a href="neurohub.html">🧠 Neuro Hub</a>
+    <a href="roadmap.html">🗺️ Roadmap</a>
   </div>
 </div>
+
 <header>
   <div class="header-inner">
     <div class="logo"><span>🧮</span><h1>ER Clinical Calculators</h1></div>
-    <p class="subtitle">Wells PE · PERC · Wells DVT · Canadian CT Head Rule</p>
+    <p class="subtitle">Wells PE · PERC · Wells DVT · HEART Score · Canadian CT Head — tap score to copy documentation</p>
   </div>
 </header>
 
 <main>
   <div class="disclaimer"><strong>⚠️ Clinical Disclaimer:</strong> Calculators are decision-support tools only. Always apply clinical judgment. Scores do not replace physician assessment.</div>
 
-  <!-- CALC TABS -->
   <div class="calc-tabs">
-    <button class="calc-tab active" onclick="showCalc('wellspe')">Wells PE + PERC</button>
-    <button class="calc-tab" onclick="showCalc('wellsdvt')">Wells DVT</button>
-    <button class="calc-tab" onclick="showCalc('cthead')">Canadian CT Head</button>
+    <button class="calc-tab active" onclick="showCalc('wellspe')">🫁 Wells PE + PERC</button>
+    <button class="calc-tab" onclick="showCalc('heart')">❤️ HEART Score</button>
+    <button class="calc-tab" onclick="showCalc('wellsdvt')">🦵 Wells DVT</button>
+    <button class="calc-tab" onclick="showCalc('cthead')">🧠 Canadian CT Head</button>
   </div>
 
   <!-- ══════════════════════════════════════════
@@ -111,7 +117,7 @@ main{max-width:900px;margin:0 auto;padding:24px}
       <div class="card">
         <div class="card-title">🔍 PERC Rule <span style="font-size:12px;font-weight:400;color:#64748b">— Rule OUT PE (use first)</span></div>
         <div class="card-body">
-          <p style="font-size:12px;color:#64748b;margin-bottom:12px">All 8 must be absent to PERC-negative. Use only if Wells PE &lt;2 (low pre-test probability).</p>
+          <p style="font-size:12px;color:#64748b;margin-bottom:12px">All 8 must be <strong style="color:#f1f5f9">absent</strong> to PERC-negative. Use only if Wells PE &lt;2 (low pre-test probability).</p>
           <div id="perc-criteria">
             <div class="criterion" onclick="togglePerc(0)"><input type="checkbox" id="perc0"> <span class="criterion-label">Age ≥ 50</span></div>
             <div class="criterion" onclick="togglePerc(1)"><input type="checkbox" id="perc1"> <span class="criterion-label">HR ≥ 100 bpm</span></div>
@@ -122,10 +128,11 @@ main{max-width:900px;margin:0 auto;padding:24px}
             <div class="criterion" onclick="togglePerc(6)"><input type="checkbox" id="perc6"> <span class="criterion-label">Prior PE or DVT</span></div>
             <div class="criterion" onclick="togglePerc(7)"><input type="checkbox" id="perc7"> <span class="criterion-label">Hormone use (OCP, HRT, or estrogenic)</span></div>
           </div>
-          <div id="perc-result" class="result neutral" style="margin-top:16px">
+          <div id="perc-result" class="result neutral">
             <div class="result-label">Check criteria above</div>
             <div class="result-action">All 8 must be absent to rule out PE without further testing.</div>
           </div>
+          <button id="perc-copy-btn" class="copy-doc-btn" onclick="copyDoc('perc')">📋 Copy Documentation</button>
           <button class="reset-btn" onclick="resetPerc()">Reset</button>
         </div>
       </div>
@@ -143,12 +150,91 @@ main{max-width:900px;margin:0 auto;padding:24px}
             <div class="criterion" onclick="toggleWellsPE(5,1)"><input type="checkbox" id="wpe5"><span class="criterion-label">Hemoptysis</span><span class="criterion-pts">+1</span></div>
             <div class="criterion" onclick="toggleWellsPE(6,1)"><input type="checkbox" id="wpe6"><span class="criterion-label">Malignancy (treatment within 6 months or palliative)</span><span class="criterion-pts">+1</span></div>
           </div>
-          <div id="wellspe-result" class="result neutral" style="margin-top:16px">
+          <div id="wellspe-result" class="result neutral">
             <div class="result-score">0</div>
             <div class="result-label">Select criteria above</div>
             <div class="result-action">—</div>
           </div>
+          <button id="wellspe-copy-btn" class="copy-doc-btn" onclick="copyDoc('wellspe')">📋 Copy Documentation</button>
           <button class="reset-btn" onclick="resetWellsPE()">Reset</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       HEART SCORE
+  ══════════════════════════════════════════ -->
+  <div id="calc-heart" style="display:none">
+    <div class="calc-grid">
+
+      <div class="card">
+        <div class="card-title">❤️ HEART Score <span style="font-size:12px;font-weight:400;color:#64748b">— Chest Pain Risk Stratification</span></div>
+        <div class="card-body">
+          <p style="font-size:12px;color:#64748b;margin-bottom:14px">Each category scored 0–2. Score ≤3 = low risk (MACE &lt;2%). Use with serial troponins.</p>
+
+          <!-- H: History -->
+          <div class="radio-group">
+            <label>H — History</label>
+            <div class="radio-option" onclick="setHEART('h',0,this)"><input type="radio" name="heart-h" value="0"><span>Slightly suspicious — mostly non-specific features</span><span class="radio-pts">0</span></div>
+            <div class="radio-option" onclick="setHEART('h',1,this)"><input type="radio" name="heart-h" value="1"><span>Moderately suspicious — features of ACS but not classic</span><span class="radio-pts">+1</span></div>
+            <div class="radio-option" onclick="setHEART('h',2,this)"><input type="radio" name="heart-h" value="2"><span>Highly suspicious — classic exertional, pressure-type, radiation</span><span class="radio-pts">+2</span></div>
+          </div>
+
+          <!-- E: EKG -->
+          <div class="radio-group">
+            <label>E — EKG</label>
+            <div class="radio-option" onclick="setHEART('e',0,this)"><input type="radio" name="heart-e" value="0"><span>Normal</span><span class="radio-pts">0</span></div>
+            <div class="radio-option" onclick="setHEART('e',1,this)"><input type="radio" name="heart-e" value="1"><span>Non-specific repolarization disturbance (LBBB, pacemaker, early repol, LVH, ST depression ≤1mm)</span><span class="radio-pts">+1</span></div>
+            <div class="radio-option" onclick="setHEART('e',2,this)"><input type="radio" name="heart-e" value="2"><span>Significant ST deviation — ST depression &gt;1mm, new ST elevation, T-wave inversion</span><span class="radio-pts">+2</span></div>
+          </div>
+
+          <!-- A: Age -->
+          <div class="radio-group">
+            <label>A — Age</label>
+            <div class="radio-option" onclick="setHEART('a',0,this)"><input type="radio" name="heart-a" value="0"><span>Age &lt; 45</span><span class="radio-pts">0</span></div>
+            <div class="radio-option" onclick="setHEART('a',1,this)"><input type="radio" name="heart-a" value="1"><span>Age 45–64</span><span class="radio-pts">+1</span></div>
+            <div class="radio-option" onclick="setHEART('a',2,this)"><input type="radio" name="heart-a" value="2"><span>Age ≥ 65</span><span class="radio-pts">+2</span></div>
+          </div>
+
+          <!-- R: Risk Factors -->
+          <div class="radio-group">
+            <label>R — Risk Factors (HTN, hypercholesterolemia, DM, obesity BMI&gt;30, smoking, family hx, atherosclerosis)</label>
+            <div class="radio-option" onclick="setHEART('r',0,this)"><input type="radio" name="heart-r" value="0"><span>No known risk factors</span><span class="radio-pts">0</span></div>
+            <div class="radio-option" onclick="setHEART('r',1,this)"><input type="radio" name="heart-r" value="1"><span>1–2 risk factors</span><span class="radio-pts">+1</span></div>
+            <div class="radio-option" onclick="setHEART('r',2,this)"><input type="radio" name="heart-r" value="2"><span>≥3 risk factors OR known CAD / atherosclerotic disease</span><span class="radio-pts">+2</span></div>
+          </div>
+
+          <!-- T: Troponin -->
+          <div class="radio-group">
+            <label>T — Troponin (relative to institutional upper limit of normal)</label>
+            <div class="radio-option" onclick="setHEART('t',0,this)"><input type="radio" name="heart-t" value="0"><span>≤ normal limit (≤1× ULN)</span><span class="radio-pts">0</span></div>
+            <div class="radio-option" onclick="setHEART('t',1,this)"><input type="radio" name="heart-t" value="1"><span>1–3× ULN</span><span class="radio-pts">+1</span></div>
+            <div class="radio-option" onclick="setHEART('t',2,this)"><input type="radio" name="heart-t" value="2"><span>&gt;3× ULN</span><span class="radio-pts">+2</span></div>
+          </div>
+
+          <div id="heart-result" class="result neutral">
+            <div class="result-score">—</div>
+            <div class="result-label">Select all categories above</div>
+            <div class="result-action">Score each domain to calculate HEART score.</div>
+          </div>
+          <button id="heart-copy-btn" class="copy-doc-btn" onclick="copyDoc('heart')">📋 Copy Documentation</button>
+          <button class="reset-btn" onclick="resetHEART()">Reset</button>
+        </div>
+      </div>
+
+      <!-- Interpretation reference -->
+      <div class="card" style="align-self:start">
+        <div class="card-title">📊 HEART Score Interpretation</div>
+        <div class="card-body" style="font-size:13px;line-height:1.9;color:#cbd5e1">
+          <p style="margin-bottom:10px;color:#64748b;font-size:12px">6-week MACE risk (death, MI, revascularization):</p>
+          <p><span style="color:#86efac;font-weight:700">0–3 — Low Risk</span><br/>MACE ~1.7%. Eligible for early discharge with outpatient follow-up if serial troponins negative. Shared decision-making discussion documented.</p>
+          <br/>
+          <p><span style="color:#fde047;font-weight:700">4–6 — Moderate Risk</span><br/>MACE ~12–17%. Consider observation, stress testing, or cardiology consult. Not safe for routine discharge without further evaluation.</p>
+          <br/>
+          <p><span style="color:#fca5a5;font-weight:700">7–10 — High Risk</span><br/>MACE ~50–65%. Early invasive strategy indicated. Cardiology consult, admission, likely catheterization.</p>
+          <br/>
+          <p style="font-size:12px;color:#475569;border-top:1px solid #334155;padding-top:10px">⚠️ HEART score does <strong style="color:#94a3b8">not</strong> replace clinical judgment. Patients with STEMI, new LBBB, or hemodynamic instability require immediate intervention regardless of score.</p>
         </div>
       </div>
     </div>
@@ -168,16 +254,17 @@ main{max-width:900px;margin:0 auto;padding:24px}
             <div class="criterion" onclick="toggleWellsDVT(2,1)"><input type="checkbox" id="wdvt2"><span class="criterion-label">Bedridden &gt;3 days OR major surgery within 12 weeks requiring GA/regional anesthesia</span><span class="criterion-pts">+1</span></div>
             <div class="criterion" onclick="toggleWellsDVT(3,1)"><input type="checkbox" id="wdvt3"><span class="criterion-label">Localized tenderness along deep venous system</span><span class="criterion-pts">+1</span></div>
             <div class="criterion" onclick="toggleWellsDVT(4,1)"><input type="checkbox" id="wdvt4"><span class="criterion-label">Entire leg swollen</span><span class="criterion-pts">+1</span></div>
-            <div class="criterion" onclick="toggleWellsDVT(5,1)"><input type="checkbox" id="wdvt5"><span class="criterion-label">Calf swelling &gt;3cm compared to asymptomatic leg (measured 10cm below tibial tuberosity)</span><span class="criterion-pts">+1</span></div>
+            <div class="criterion" onclick="toggleWellsDVT(5,1)"><input type="checkbox" id="wdvt5"><span class="criterion-label">Calf swelling &gt;3cm vs asymptomatic leg (10cm below tibial tuberosity)</span><span class="criterion-pts">+1</span></div>
             <div class="criterion" onclick="toggleWellsDVT(6,1)"><input type="checkbox" id="wdvt6"><span class="criterion-label">Pitting edema confined to symptomatic leg</span><span class="criterion-pts">+1</span></div>
             <div class="criterion" onclick="toggleWellsDVT(7,1)"><input type="checkbox" id="wdvt7"><span class="criterion-label">Collateral superficial veins (non-varicose)</span><span class="criterion-pts">+1</span></div>
             <div class="criterion" onclick="toggleWellsDVT(8,-2)"><input type="checkbox" id="wdvt8"><span class="criterion-label">Alternative diagnosis at least as likely as DVT</span><span class="criterion-pts">−2</span></div>
           </div>
-          <div id="wellsdvt-result" class="result neutral" style="margin-top:16px">
+          <div id="wellsdvt-result" class="result neutral">
             <div class="result-score">0</div>
             <div class="result-label">Select criteria above</div>
             <div class="result-action">—</div>
           </div>
+          <button id="wellsdvt-copy-btn" class="copy-doc-btn" onclick="copyDoc('wellsdvt')">📋 Copy Documentation</button>
           <button class="reset-btn" onclick="resetWellsDVT()">Reset</button>
         </div>
       </div>
@@ -186,9 +273,9 @@ main{max-width:900px;margin:0 auto;padding:24px}
         <div class="card-title">📊 Interpretation</div>
         <div class="card-body" style="font-size:13px;line-height:1.8;color:#cbd5e1">
           <p style="margin-bottom:10px;color:#64748b;font-size:12px">Wells DVT Score interpretation:</p>
-          <p><span style="color:#86efac;font-weight:700">≤1 — Low probability</span><br/>DVT prevalence ~5%. If D-dimer negative → DVT excluded. If D-dimer positive → ultrasound.</p>
+          <p><span style="color:#86efac;font-weight:700">≤1 — Low probability</span><br/>DVT prevalence ~5%. D-dimer negative → DVT excluded. D-dimer positive → ultrasound.</p>
           <br/>
-          <p><span style="color:#fde047;font-weight:700">2–6 — Moderate probability</span><br/>DVT prevalence ~17%. Perform compression ultrasound. If negative + D-dimer negative → DVT excluded.</p>
+          <p><span style="color:#fde047;font-weight:700">2–6 — Moderate probability</span><br/>DVT prevalence ~17%. Compression ultrasound. If negative + D-dimer negative → DVT excluded.</p>
           <br/>
           <p><span style="color:#fca5a5;font-weight:700">≥7 — High probability</span><br/>DVT prevalence ~53%. Compression ultrasound regardless of D-dimer. If negative, repeat in 1 week or MRI.</p>
         </div>
@@ -202,7 +289,6 @@ main{max-width:900px;margin:0 auto;padding:24px}
   <div id="calc-cthead" style="display:none">
     <div class="calc-grid">
 
-      <!-- Eligibility -->
       <div class="card">
         <div class="card-title">✅ Eligibility Check</div>
         <div class="card-body">
@@ -220,15 +306,14 @@ main{max-width:900px;margin:0 auto;padding:24px}
         </div>
       </div>
 
-      <!-- High-risk factors -->
       <div class="card">
-        <div class="card-title">🔴 High-Risk Factors <span style="font-size:12px;font-weight:400;color:#64748b">— CT indicated if ANY present</span></div>
+        <div class="card-title">🔴 High-Risk Factors <span style="font-size:12px;font-weight:400;color:#64748b">— CT if ANY present</span></div>
         <div class="card-body">
           <p style="font-size:12px;color:#64748b;margin-bottom:8px">Predicts need for neurological intervention:</p>
           <div id="cthead-high">
-            <div class="criterion" onclick="toggleCTHigh(0)"><input type="checkbox" id="cth0"><span class="criterion-label">GCS score &lt; 15 at 2 hours post-injury</span></div>
+            <div class="criterion" onclick="toggleCTHigh(0)"><input type="checkbox" id="cth0"><span class="criterion-label">GCS &lt; 15 at 2 hours post-injury</span></div>
             <div class="criterion" onclick="toggleCTHigh(1)"><input type="checkbox" id="cth1"><span class="criterion-label">Suspected open or depressed skull fracture</span></div>
-            <div class="criterion" onclick="toggleCTHigh(2)"><input type="checkbox" id="cth2"><span class="criterion-label">Any sign of basal skull fracture (hemotympanum, "raccoon" eyes, CSF leak, Battle's sign)</span></div>
+            <div class="criterion" onclick="toggleCTHigh(2)"><input type="checkbox" id="cth2"><span class="criterion-label">Any sign of basal skull fracture (hemotympanum, raccoon eyes, CSF leak, Battle's sign)</span></div>
             <div class="criterion" onclick="toggleCTHigh(3)"><input type="checkbox" id="cth3"><span class="criterion-label">Vomiting ≥ 2 episodes</span></div>
             <div class="criterion" onclick="toggleCTHigh(4)"><input type="checkbox" id="cth4"><span class="criterion-label">Age ≥ 65</span></div>
           </div>
@@ -238,14 +323,13 @@ main{max-width:900px;margin:0 auto;padding:24px}
         </div>
       </div>
 
-      <!-- Medium-risk factors -->
       <div class="card">
-        <div class="card-title">🟡 Medium-Risk Factors <span style="font-size:12px;font-weight:400;color:#64748b">— CT indicated if ANY present</span></div>
+        <div class="card-title">🟡 Medium-Risk Factors <span style="font-size:12px;font-weight:400;color:#64748b">— CT if ANY present</span></div>
         <div class="card-body">
-          <p style="font-size:12px;color:#64748b;margin-bottom:8px">Predicts brain injury on CT (not necessarily requiring intervention):</p>
+          <p style="font-size:12px;color:#64748b;margin-bottom:8px">Predicts brain injury on CT:</p>
           <div id="cthead-med">
             <div class="criterion" onclick="toggleCTMed(0)"><input type="checkbox" id="ctm0"><span class="criterion-label">Amnesia before impact ≥ 30 minutes</span></div>
-            <div class="criterion" onclick="toggleCTMed(1)"><input type="checkbox" id="ctm1"><span class="criterion-label">Dangerous mechanism (pedestrian struck by motor vehicle, occupant ejected, fall &gt;3 feet or 5 stairs)</span></div>
+            <div class="criterion" onclick="toggleCTMed(1)"><input type="checkbox" id="ctm1"><span class="criterion-label">Dangerous mechanism (pedestrian struck by MVC, ejected, fall &gt;3 feet or 5 stairs)</span></div>
           </div>
           <div id="cthead-med-result" class="result neutral" style="margin-top:12px">
             <div class="result-label">Check factors above</div>
@@ -253,14 +337,14 @@ main{max-width:900px;margin:0 auto;padding:24px}
         </div>
       </div>
 
-      <!-- Overall result -->
       <div class="card" style="align-self:start">
         <div class="card-title">📋 Overall Recommendation</div>
         <div class="card-body">
           <div id="cthead-overall" class="result neutral">
             <div class="result-label">Complete eligibility + factors above</div>
-            <div class="result-action">The Canadian CT Head Rule applies to patients with minor head injury (GCS 13–15) with LOC, amnesia, or confusion.</div>
+            <div class="result-action">Canadian CT Head Rule applies to minor head injury (GCS 13–15) with LOC, amnesia, or confusion.</div>
           </div>
+          <button id="cthead-copy-btn" class="copy-doc-btn" onclick="copyDoc('cthead')">📋 Copy Documentation</button>
           <button class="reset-btn" onclick="resetCTHead()">Reset All</button>
         </div>
       </div>
@@ -273,11 +357,97 @@ main{max-width:900px;margin:0 auto;padding:24px}
 <script>
 // ── CALC TAB SWITCHING ───────────────────────────────────────
 function showCalc(id) {
-  ['wellspe','wellsdvt','cthead'].forEach(c => {
+  ['wellspe','heart','wellsdvt','cthead'].forEach(c => {
     document.getElementById('calc-'+c).style.display = c===id ? '' : 'none';
   });
   document.querySelectorAll('.calc-tab').forEach((btn,i) => {
-    btn.classList.toggle('active', ['wellspe','wellsdvt','cthead'][i]===id);
+    btn.classList.toggle('active', ['wellspe','heart','wellsdvt','cthead'][i]===id);
+  });
+}
+
+// ── COPY DOCUMENTATION ───────────────────────────────────────
+function copyDoc(type) {
+  let text = '';
+  const btn = document.getElementById(type+'-copy-btn');
+
+  if (type === 'perc') {
+    const any = percChecked.some(Boolean);
+    if (!any) {
+      text = 'Pulmonary embolism ruled out utilizing the PE Rule-Out Criteria (PERC). Pre-test probability was low by clinical gestalt. All 8 PERC criteria were absent: age <50, heart rate <100 bpm, SpO2 ≥95% on room air, no unilateral leg swelling, no hemoptysis, no recent surgery or trauma within 4 weeks, no prior PE or DVT, and no exogenous estrogen use. PERC rule satisfied — no further workup for PE indicated per validated clinical decision rule (Kline et al., Ann Emerg Med 2004).';
+    } else {
+      const present = ['age ≥50','HR ≥100 bpm','SpO2 <95%','unilateral leg swelling','hemoptysis','recent surgery/trauma','prior PE or DVT','hormone use'].filter((_,i)=>percChecked[i]);
+      text = 'PERC rule criteria not fully satisfied. The following PERC criteria were present: ' + present.join(', ') + '. Pre-test probability insufficient to rule out PE by PERC criteria alone. Wells PE score calculated and workup initiated accordingly.';
+    }
+  }
+
+  else if (type === 'wellspe') {
+    const score = wpeChecked.reduce((s,c,i)=>s+(c?wpePoints[i]:0),0);
+    const cats = ['clinical signs/symptoms of DVT','PE is #1 or equally likely diagnosis','HR >100 bpm','immobilization ≥3 days or surgery in past 4 weeks','prior PE or DVT history','hemoptysis','active malignancy'].filter((_,i)=>wpeChecked[i]);
+    let risk, plan;
+    if(score<=1){risk='low probability';plan='Pre-test probability low. If PERC criteria satisfied, no further PE workup indicated. If PERC not satisfied, D-dimer obtained — if negative, PE excluded.';}
+    else if(score<=6){risk='moderate probability';plan='D-dimer obtained. If elevated, CT pulmonary angiography performed to evaluate for PE.';}
+    else{risk='high probability';plan='CT pulmonary angiography pursued directly. Empiric anticoagulation considered while awaiting imaging given high pre-test probability.';}
+    text = 'Wells PE criteria applied for pulmonary embolism risk stratification. Wells PE score: ' + score + ' — ' + risk + '. ' + (cats.length ? 'Criteria contributing to score: ' + cats.join(', ') + '. ' : 'No Wells criteria met. ') + plan;
+  }
+
+  else if (type === 'heart') {
+    const score = ['h','e','a','r','t'].reduce((s,k)=>s+(heartScores[k]??0),0);
+    const filled = ['h','e','a','r','t'].every(k=>heartScores[k]!==null);
+    if (!filled) { alert('Please complete all 5 HEART score categories first.'); return; }
+    let risk, plan;
+    const hDesc = ['slightly suspicious (mostly non-specific)','moderately suspicious (atypical ACS features)','highly suspicious (classic anginal)'][heartScores['h']];
+    const eDesc = ['normal','non-specific repolarization disturbance','significant ST deviation'][heartScores['e']];
+    const aDesc = ['<45','45–64','≥65'][heartScores['a']];
+    const rDesc = ['no known risk factors','1–2 cardiovascular risk factors','≥3 risk factors or known CAD/atherosclerotic disease'][heartScores['r']];
+    const tDesc = ['≤1× ULN','1–3× ULN','>3× ULN'][heartScores['t']];
+    if(score<=3){risk='low risk';plan='HEART score in low-risk range. Serial troponins negative and non-trending. Shared decision-making discussion held with patient regarding low-risk disposition. Patient discharged with cardiology follow-up and return precautions.';}
+    else if(score<=6){risk='moderate risk';plan='HEART score in moderate-risk range. Cardiology notified. Observation, further risk stratification with stress testing, or cardiology-guided management plan initiated.';}
+    else{risk='high risk';plan='HEART score in high-risk range. Cardiology consulted for early invasive strategy. Admission planned.';}
+    text = 'HEART score calculated for chest pain risk stratification. Total HEART score: ' + score + '/10 — ' + risk + '. Score breakdown: History ' + heartScores['h'] + '/2 (' + hDesc + '); EKG ' + heartScores['e'] + '/2 (' + eDesc + '); Age ' + heartScores['a'] + '/2 (' + aDesc + '); Risk factors ' + heartScores['r'] + '/2 (' + rDesc + '); Troponin ' + heartScores['t'] + '/2 (' + tDesc + '). ' + plan;
+  }
+
+  else if (type === 'wellsdvt') {
+    const score = wdvtChecked.reduce((s,c,i)=>s+(c?wdvtPoints[i]:0),0);
+    const cats = ['active cancer','paralysis/paresis/immobilization','bedridden >3 days or recent major surgery','localized tenderness along DVS','entire leg swollen','calf swelling >3cm vs contralateral','pitting edema in symptomatic leg','collateral superficial veins','alternative diagnosis equally likely (−2)'].filter((_,i)=>wdvtChecked[i]);
+    let risk, plan;
+    if(score<=1){risk='low probability';plan='D-dimer obtained. If negative, DVT excluded per validated algorithm. If positive, compression ultrasound of lower extremity obtained.';}
+    else if(score<=6){risk='moderate probability';plan='Compression ultrasound of lower extremity obtained. If negative and D-dimer negative, DVT excluded.';}
+    else{risk='high probability';plan='Compression ultrasound of lower extremity obtained regardless of D-dimer result given high pre-test probability. If negative, repeat ultrasound in 1 week or MRI considered.';}
+    text = 'Wells DVT criteria applied for deep vein thrombosis risk stratification. Wells DVT score: ' + score + ' — ' + risk + '. ' + (cats.length ? 'Criteria present: ' + cats.join(', ') + '. ' : 'No Wells DVT criteria met. ') + plan;
+  }
+
+  else if (type === 'cthead') {
+    const eligible = cteChecked.every(Boolean);
+    const anyHigh = cthChecked.some(Boolean);
+    const anyMed = ctmChecked.some(Boolean);
+    const highPresent = ['GCS <15 at 2h post-injury','suspected open/depressed skull fracture','signs of basal skull fracture','vomiting ≥2 episodes','age ≥65'].filter((_,i)=>cthChecked[i]);
+    const medPresent = ['amnesia before impact ≥30 min','dangerous mechanism'].filter((_,i)=>ctmChecked[i]);
+    if (!eligible) {
+      text = 'Canadian CT Head Rule evaluated. Patient does not meet all eligibility criteria for the rule — CT head obtained based on clinical judgment.';
+    } else if (!anyHigh && !anyMed) {
+      text = 'Canadian CT Head Rule applied to this eligible patient with minor head injury (GCS 13–15, witnessed LOC/amnesia/confusion). No high-risk factors identified (no GCS <15 at 2h, no open/depressed fracture, no basal skull fracture signs, no vomiting ≥2 episodes, age <65). No medium-risk factors identified (no amnesia ≥30 min before impact, no dangerous mechanism). Per Canadian CT Head Rule, CT head not required. Patient observed without neurological deterioration. Concussion precautions and return precautions provided (Stiell et al., Lancet 2001).';
+    } else {
+      const factors = [...highPresent.map(f=>'[HIGH RISK] '+f), ...medPresent.map(f=>'[MED RISK] '+f)];
+      text = 'Canadian CT Head Rule applied. Patient eligible (GCS 13–15, LOC/amnesia/confusion, age ≥16, injury within 24h, no coagulopathy). CT head indicated based on the following criteria: ' + factors.join('; ') + '. CT head obtained.';
+    }
+  }
+
+  if (!text) return;
+  navigator.clipboard.writeText(text).then(()=>{
+    const orig = btn.innerHTML;
+    btn.innerHTML = '✅ Copied!';
+    btn.classList.add('copied');
+    setTimeout(()=>{ btn.innerHTML = orig; btn.classList.remove('copied'); }, 2200);
+  }).catch(()=>{
+    // fallback
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.style.position='fixed'; ta.style.opacity='0';
+    document.body.appendChild(ta); ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    btn.innerHTML = '✅ Copied!';
+    btn.classList.add('copied');
+    setTimeout(()=>{ btn.innerHTML = '📋 Copy Documentation'; btn.classList.remove('copied'); }, 2200);
   });
 }
 
@@ -293,28 +463,34 @@ function togglePerc(i) {
 function updatePerc() {
   const any = percChecked.some(Boolean);
   const r = document.getElementById('perc-result');
+  const btn = document.getElementById('perc-copy-btn');
   if (!percTouched) {
     r.className='result neutral';
     r.innerHTML='<div class="result-label">Check criteria above</div><div class="result-action">All 8 must be absent to rule out PE without further testing.</div>';
-  } else if (!any) {
+    btn.classList.remove('show'); return;
+  }
+  btn.classList.add('show');
+  if (!any) {
     r.className='result low';
-    r.innerHTML='<div class="result-label">✓ PERC Negative — PE Ruled Out</div><div class="result-action">If pre-test probability is low (Wells &lt;2), no further workup needed for PE.</div>';
+    r.innerHTML='<div class="result-label">✓ PERC Negative — PE Ruled Out</div><div class="result-action">All 8 PERC criteria absent. If pre-test probability is low (Wells &lt;2), no further workup needed for PE.</div>';
   } else {
     r.className='result high';
-    r.innerHTML='<div class="result-label">⚠️ PERC Not Met — Cannot Rule Out PE</div><div class="result-action">One or more PERC criteria present. Proceed with Wells PE score and D-dimer or CT-PA as indicated.</div>';
+    r.innerHTML='<div class="result-label">⚠️ PERC Positive — Cannot Rule Out PE</div><div class="result-action">One or more PERC criteria present. Proceed with Wells PE score + D-dimer or CT-PA as indicated.</div>';
   }
 }
 function resetPerc() {
-  percTouched = false;
-  percChecked.fill(false);
+  percTouched = false; percChecked.fill(false);
   for(let i=0;i<8;i++) document.getElementById('perc'+i).checked=false;
+  document.getElementById('perc-copy-btn').classList.remove('show');
   updatePerc();
 }
 
 // ── WELLS PE ──────────────────────────────────────────────────
 const wpePoints = [3,3,1.5,1.5,1.5,1,1];
 const wpeChecked = Array(7).fill(false);
-function toggleWellsPE(i, pts) {
+let wpeTouched = false;
+function toggleWellsPE(i) {
+  wpeTouched = true;
   wpeChecked[i] = !wpeChecked[i];
   document.getElementById('wpe'+i).checked = wpeChecked[i];
   updateWellsPE();
@@ -323,27 +499,61 @@ function updateWellsPE() {
   let score = 0;
   wpeChecked.forEach((c,i) => { if(c) score += wpePoints[i]; });
   const r = document.getElementById('wellspe-result');
+  const btn = document.getElementById('wellspe-copy-btn');
+  if (!wpeTouched) { btn.classList.remove('show'); return; }
+  btn.classList.add('show');
   let cls, label, action;
-  if(score <= 1) {
-    cls='low'; label='Low Probability'; action='PE prevalence ~1.3%. If PERC negative → no further workup. If PERC positive → D-dimer. If D-dimer negative → PE excluded.';
-  } else if(score <= 6) {
-    cls='moderate'; label='Moderate Probability'; action='PE prevalence ~16%. D-dimer recommended. If positive or score 2–6 → CT pulmonary angiography.';
-  } else {
-    cls='high'; label='High Probability'; action='PE prevalence ~41%. Proceed directly to CT pulmonary angiography. Consider empiric anticoagulation while awaiting imaging.';
-  }
+  if(score<=1){cls='low';label='Low Probability (Wells ≤1)';action='PE prevalence ~1.3%. Apply PERC — if all 8 criteria absent → PE excluded. If PERC positive → D-dimer.';}
+  else if(score<=6){cls='moderate';label='Moderate Probability (Wells 2–6)';action='PE prevalence ~16%. D-dimer recommended. If elevated → CT pulmonary angiography.';}
+  else{cls='high';label='High Probability (Wells ≥7)';action='PE prevalence ~41%. Proceed directly to CT-PA. Consider empiric anticoagulation while awaiting imaging.';}
   r.className='result '+cls;
   r.innerHTML=`<div class="result-score">${score}</div><div class="result-label">${label}</div><div class="result-action">${action}</div>`;
 }
 function resetWellsPE() {
-  wpeChecked.fill(false);
+  wpeTouched=false; wpeChecked.fill(false);
   for(let i=0;i<7;i++) document.getElementById('wpe'+i).checked=false;
+  document.getElementById('wellspe-copy-btn').classList.remove('show');
   updateWellsPE();
+}
+
+// ── HEART SCORE ───────────────────────────────────────────────
+const heartScores = {h:null,e:null,a:null,r:null,t:null};
+function setHEART(key, val, el) {
+  heartScores[key] = val;
+  el.querySelector('input').checked = true;
+  updateHEART();
+}
+function updateHEART() {
+  const filled = ['h','e','a','r','t'].every(k=>heartScores[k]!==null);
+  const score = ['h','e','a','r','t'].reduce((s,k)=>s+(heartScores[k]??0),0);
+  const r = document.getElementById('heart-result');
+  const btn = document.getElementById('heart-copy-btn');
+  if (!filled) {
+    r.className='result neutral';
+    r.innerHTML=`<div class="result-score">${score}</div><div class="result-label">Select all 5 categories</div><div class="result-action">Complete all domains to calculate HEART score.</div>`;
+    btn.classList.remove('show'); return;
+  }
+  btn.classList.add('show');
+  let cls, label, action;
+  if(score<=3){cls='low';label='Low Risk — HEART Score '+score+'/10';action='MACE risk ~1.7%. With negative serial troponins, eligible for early discharge with outpatient cardiology follow-up. Shared decision-making discussion documented.';}
+  else if(score<=6){cls='moderate';label='Moderate Risk — HEART Score '+score+'/10';action='MACE risk ~12–17%. Observation or cardiology consult recommended. Stress testing or further risk stratification prior to discharge.';}
+  else{cls='high';label='High Risk — HEART Score '+score+'/10';action='MACE risk ~50–65%. Cardiology consulted. Admission and early invasive strategy indicated.';}
+  r.className='result '+cls;
+  r.innerHTML=`<div class="result-score">${score}/10</div><div class="result-label">${label}</div><div class="result-action">${action}</div>`;
+}
+function resetHEART() {
+  ['h','e','a','r','t'].forEach(k=>heartScores[k]=null);
+  document.querySelectorAll('input[name^="heart-"]').forEach(r=>r.checked=false);
+  document.getElementById('heart-copy-btn').classList.remove('show');
+  updateHEART();
 }
 
 // ── WELLS DVT ─────────────────────────────────────────────────
 const wdvtPoints = [1,1,1,1,1,1,1,1,-2];
 const wdvtChecked = Array(9).fill(false);
-function toggleWellsDVT(i, pts) {
+let wdvtTouched = false;
+function toggleWellsDVT(i) {
+  wdvtTouched = true;
   wdvtChecked[i] = !wdvtChecked[i];
   document.getElementById('wdvt'+i).checked = wdvtChecked[i];
   updateWellsDVT();
@@ -352,20 +562,20 @@ function updateWellsDVT() {
   let score = 0;
   wdvtChecked.forEach((c,i) => { if(c) score += wdvtPoints[i]; });
   const r = document.getElementById('wellsdvt-result');
+  const btn = document.getElementById('wellsdvt-copy-btn');
+  if (!wdvtTouched) { btn.classList.remove('show'); return; }
+  btn.classList.add('show');
   let cls, label, action;
-  if(score <= 1) {
-    cls='low'; label='Low Probability'; action='DVT prevalence ~5%. If D-dimer negative → DVT excluded. If D-dimer positive → compression ultrasound.';
-  } else if(score <= 6) {
-    cls='moderate'; label='Moderate Probability'; action='DVT prevalence ~17%. Compression ultrasound recommended. If negative + D-dimer negative → DVT excluded.';
-  } else {
-    cls='high'; label='High Probability'; action='DVT prevalence ~53%. Compression ultrasound regardless of D-dimer. If negative, consider repeat in 1 week or MRI.';
-  }
+  if(score<=1){cls='low';label='Low Probability (Wells ≤1)';action='DVT prevalence ~5%. D-dimer negative → DVT excluded. D-dimer positive → compression ultrasound.';}
+  else if(score<=6){cls='moderate';label='Moderate Probability (Wells 2–6)';action='DVT prevalence ~17%. Compression ultrasound recommended. Negative US + negative D-dimer → DVT excluded.';}
+  else{cls='high';label='High Probability (Wells ≥7)';action='DVT prevalence ~53%. Compression ultrasound regardless of D-dimer. If negative, consider repeat in 1 week or MRI.';}
   r.className='result '+cls;
   r.innerHTML=`<div class="result-score">${score}</div><div class="result-label">${label}</div><div class="result-action">${action}</div>`;
 }
 function resetWellsDVT() {
-  wdvtChecked.fill(false);
+  wdvtTouched=false; wdvtChecked.fill(false);
   for(let i=0;i<9;i++) document.getElementById('wdvt'+i).checked=false;
+  document.getElementById('wellsdvt-copy-btn').classList.remove('show');
   updateWellsDVT();
 }
 
@@ -373,68 +583,44 @@ function resetWellsDVT() {
 const cteChecked = Array(5).fill(false);
 const cthChecked = Array(5).fill(false);
 const ctmChecked = Array(2).fill(false);
-
-function toggleCTElig(i) {
-  cteChecked[i]=!cteChecked[i];
-  document.getElementById('cte'+i).checked=cteChecked[i];
-  updateCTHead();
-}
-function toggleCTHigh(i) {
-  cthChecked[i]=!cthChecked[i];
-  document.getElementById('cth'+i).checked=cthChecked[i];
-  updateCTHead();
-}
-function toggleCTMed(i) {
-  ctmChecked[i]=!ctmChecked[i];
-  document.getElementById('ctm'+i).checked=ctmChecked[i];
-  updateCTHead();
-}
-
+function toggleCTElig(i){cteChecked[i]=!cteChecked[i];document.getElementById('cte'+i).checked=cteChecked[i];updateCTHead();}
+function toggleCTHigh(i){cthChecked[i]=!cthChecked[i];document.getElementById('cth'+i).checked=cthChecked[i];updateCTHead();}
+function toggleCTMed(i){ctmChecked[i]=!ctmChecked[i];document.getElementById('ctm'+i).checked=ctmChecked[i];updateCTHead();}
 function updateCTHead() {
   const eligible = cteChecked.every(Boolean);
   const er = document.getElementById('cthead-elig-result');
-  if(cteChecked.every(c=>!c)) {
-    er.className='result neutral';
-    er.innerHTML='<div class="result-label">Check eligibility above</div>';
-  } else if(eligible) {
-    er.className='result low';
-    er.innerHTML='<div class="result-label">✓ Rule Applicable</div>';
-  } else {
-    er.className='result moderate';
-    er.innerHTML='<div class="result-label">⚠️ Not all eligibility criteria met — rule may not apply</div>';
-  }
-
-  const anyHigh = cthChecked.some(Boolean);
-  const hr = document.getElementById('cthead-high-result');
-  hr.className = anyHigh ? 'result high' : 'result low';
-  hr.innerHTML = anyHigh
-    ? '<div class="result-label">⚠️ High-risk factor present → CT indicated</div>'
-    : '<div class="result-label">✓ No high-risk factors</div>';
-
-  const anyMed = ctmChecked.some(Boolean);
-  const mr = document.getElementById('cthead-med-result');
-  mr.className = anyMed ? 'result moderate' : 'result low';
-  mr.innerHTML = anyMed
-    ? '<div class="result-label">⚠️ Medium-risk factor present → CT indicated</div>'
-    : '<div class="result-label">✓ No medium-risk factors</div>';
-
-  const overall = document.getElementById('cthead-overall');
-  if(!eligible) {
+  if(cteChecked.every(c=>!c)){er.className='result neutral';er.innerHTML='<div class="result-label">Check eligibility above</div>';}
+  else if(eligible){er.className='result low';er.innerHTML='<div class="result-label">✓ Rule Applicable</div>';}
+  else{er.className='result moderate';er.innerHTML='<div class="result-label">⚠️ Eligibility criteria incomplete</div>';}
+  const anyHigh=cthChecked.some(Boolean);
+  const hr=document.getElementById('cthead-high-result');
+  hr.className=anyHigh?'result high':'result low';
+  hr.innerHTML=anyHigh?'<div class="result-label">⚠️ High-risk factor present → CT indicated</div>':'<div class="result-label">✓ No high-risk factors</div>';
+  const anyMed=ctmChecked.some(Boolean);
+  const mr=document.getElementById('cthead-med-result');
+  mr.className=anyMed?'result moderate':'result low';
+  mr.innerHTML=anyMed?'<div class="result-label">⚠️ Medium-risk factor present → CT indicated</div>':'<div class="result-label">✓ No medium-risk factors</div>';
+  const overall=document.getElementById('cthead-overall');
+  const btn=document.getElementById('cthead-copy-btn');
+  if(!eligible){
     overall.className='result neutral';
-    overall.innerHTML='<div class="result-label">Complete eligibility check first</div><div class="result-action">Rule only applies to minor head injury with GCS 13–15, LOC/amnesia/confusion, age ≥16, injury within 24h, no coagulopathy.</div>';
-  } else if(anyHigh || anyMed) {
+    overall.innerHTML='<div class="result-label">Complete eligibility check first</div><div class="result-action">Rule applies to minor head injury: GCS 13–15, LOC/amnesia/confusion, age ≥16, injury within 24h, no coagulopathy.</div>';
+    btn.classList.remove('show');
+  } else if(anyHigh||anyMed){
     overall.className='result high';
-    overall.innerHTML='<div class="result-label">🔴 CT Head Indicated</div><div class="result-action">'+(anyHigh?'High-risk factor(s) present — CT indicated for possible neurological intervention. ':'')+(anyMed?'Medium-risk factor(s) present — CT indicated to detect brain injury.':'')+'</div>';
+    overall.innerHTML='<div class="result-label">🔴 CT Head Indicated</div><div class="result-action">'+(anyHigh?'High-risk factor(s) present — CT for possible neurological intervention. ':'')+(anyMed?'Medium-risk factor(s) present — CT to detect brain injury.':'')+'</div>';
+    btn.classList.add('show');
   } else {
     overall.className='result low';
-    overall.innerHTML='<div class="result-label">✓ CT Not Required by Rule</div><div class="result-action">No high- or medium-risk factors identified in eligible patient. CT not required per Canadian CT Head Rule. Apply clinical judgment — rule does not apply if anticoagulated or GCS &lt;13.</div>';
+    overall.innerHTML='<div class="result-label">✓ CT Not Required by Canadian CT Head Rule</div><div class="result-action">No high- or medium-risk factors in eligible patient. CT not indicated per validated rule. Apply clinical judgment.</div>';
+    btn.classList.add('show');
   }
 }
-
-function resetCTHead() {
-  cteChecked.fill(false); cthChecked.fill(false); ctmChecked.fill(false);
+function resetCTHead(){
+  cteChecked.fill(false);cthChecked.fill(false);ctmChecked.fill(false);
   for(let i=0;i<5;i++){document.getElementById('cte'+i).checked=false;document.getElementById('cth'+i).checked=false;}
-  for(let i=0;i<2;i++) document.getElementById('ctm'+i).checked=false;
+  for(let i=0;i<2;i++)document.getElementById('ctm'+i).checked=false;
+  document.getElementById('cthead-copy-btn').classList.remove('show');
   updateCTHead();
 }
 </script>

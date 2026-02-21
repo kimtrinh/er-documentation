@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Neuro Hub — ICH Protocol</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',system-ui,sans-serif;background:#0f172a;color:#e2e8f0;min-height:100vh}
+
+/* NAV */
+.sitenav{background:#1e293b;border-bottom:1px solid #334155;padding:0 24px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.sitenav-inner{max-width:1000px;margin:0 auto;display:flex;gap:2px;padding:8px 0}
+.sitenav a{padding:7px 14px;border-radius:8px;font-size:13px;font-weight:500;color:#94a3b8;text-decoration:none;white-space:nowrap;transition:all .2s}
+.sitenav a:hover{background:#334155;color:#f1f5f9}
+.sitenav a.active{background:#7c3aed;color:#fff}
+
+/* HEADER */
+header{background:linear-gradient(135deg,#1e1b4b,#0f172a);border-bottom:2px solid #4f46e5;padding:24px 24px 20px}
+.header-inner{max-width:1000px;margin:0 auto}
+.logo{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+.logo span{font-size:28px}
+.logo h1{font-size:22px;font-weight:800;color:#f1f5f9;letter-spacing:-.3px}
+.logo .badge{background:#4f46e5;color:#e0e7ff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:.5px;text-transform:uppercase}
+.subtitle{font-size:13px;color:#818cf8;margin-left:40px}
+
+/* STATUS ALERT */
+.status-alert{max-width:1000px;margin:16px auto 0;padding:0 24px}
+.alert-box{border-radius:10px;padding:12px 18px;font-size:13px;line-height:1.6;display:flex;align-items:flex-start;gap:12px}
+.alert-box.expanded{background:#1a2e1a;border:1px solid #22c55e;color:#86efac}
+.alert-box.expanded .alert-icon{font-size:18px;margin-top:1px;flex-shrink:0}
+.alert-box.standard{background:#1e293b;border:1px solid #334155;color:#94a3b8}
+
+main{max-width:1000px;margin:0 auto;padding:24px 24px 80px}
+
+/* SECTION HEADINGS */
+.section-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#6366f1;margin:32px 0 12px;padding-left:2px;display:flex;align-items:center;gap:8px}
+.section-label::after{content:'';flex:1;height:1px;background:#1e293b}
+
+/* GRID */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+@media(max-width:700px){.grid-2,.grid-3{grid-template-columns:1fr}}
+
+/* CARDS */
+.card{background:#1e293b;border:1px solid #334155;border-radius:14px;overflow:hidden}
+.card-head{padding:13px 18px;border-bottom:1px solid #334155;font-weight:700;font-size:14px;display:flex;align-items:center;gap:8px;color:#f1f5f9}
+.card-body{padding:16px 18px;font-size:13px;line-height:1.8;color:#cbd5e1}
+
+/* CTA BOXES */
+.cta-phone{background:linear-gradient(135deg,#312e81,#1e1b4b);border:2px solid #6366f1;border-radius:14px;padding:20px 24px;text-align:center}
+.cta-phone .label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#a5b4fc;margin-bottom:6px}
+.cta-phone .number{font-size:34px;font-weight:900;color:#ffffff;letter-spacing:1px;margin-bottom:4px;font-variant-numeric:tabular-nums}
+.cta-phone .sublabel{font-size:12px;color:#818cf8}
+
+.cta-hours{background:linear-gradient(135deg,#0c1a2e,#1e293b);border:2px solid #0ea5e9;border-radius:14px;padding:20px 24px;text-align:center}
+.cta-hours .label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#7dd3fc;margin-bottom:8px}
+.cta-hours .time{font-size:26px;font-weight:900;color:#f0f9ff;margin-bottom:4px}
+.cta-hours .days{font-size:13px;color:#7dd3fc;font-weight:600}
+
+/* RULE BOX — NEUROLOGY FIRST */
+.rule-box{background:#1c0a0a;border:2px solid #dc2626;border-radius:14px;padding:18px 22px}
+.rule-box .rule-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.rule-box .rule-head .icon{font-size:22px}
+.rule-box .rule-head h3{font-size:16px;font-weight:800;color:#f87171}
+.rule-box .rule-body{font-size:13px;color:#fca5a5;line-height:1.7}
+.rule-box .rule-body strong{color:#fff;font-weight:700}
+
+/* TRIGGER LIST */
+.trigger-list{list-style:none;padding:0}
+.trigger-list li{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid #0f172a;font-size:13px;color:#cbd5e1;line-height:1.5}
+.trigger-list li:last-child{border-bottom:none}
+.trigger-list .dot{width:8px;height:8px;border-radius:50%;background:#f59e0b;flex-shrink:0;margin-top:5px}
+.trigger-list .dot.red{background:#ef4444}
+.trigger-list .dot.green{background:#22c55e}
+
+/* CALLBACK BADGE */
+.callback-badge{display:inline-flex;align-items:center;gap:6px;background:#1c1400;border:1px solid #f59e0b;color:#fde68a;border-radius:8px;padding:5px 12px;font-size:12px;font-weight:700;margin-bottom:12px}
+
+/* FLOWCHART */
+.flow{display:flex;flex-direction:column;gap:0}
+.flow-step{background:#1e293b;border:1px solid #334155;border-radius:10px;padding:14px 18px;position:relative}
+.flow-step.red{background:#1a0808;border-color:#dc2626}
+.flow-step.yellow{background:#1c1400;border-color:#ca8a04}
+.flow-step.green{background:#052e16;border-color:#16a34a}
+.flow-step.purple{background:#1e1b4b;border-color:#4f46e5}
+.flow-step.blue{background:#0c1a2e;border-color:#0ea5e9}
+.flow-step-num{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;font-size:11px;font-weight:800;margin-right:8px;flex-shrink:0}
+.step-head{display:flex;align-items:center;font-weight:700;font-size:13px;color:#f1f5f9;margin-bottom:4px}
+.step-body{font-size:12px;color:#94a3b8;line-height:1.6;margin-left:30px}
+.step-body strong{color:#e2e8f0}
+.flow-arrow{text-align:center;color:#334155;font-size:20px;padding:2px 0;line-height:1}
+
+/* DECISION BOX */
+.decision-box{background:#0f172a;border:2px dashed #334155;border-radius:10px;padding:10px 16px;margin:2px 0;text-align:center;font-size:12px;color:#64748b}
+.decision-box strong{color:#94a3b8}
+
+/* DISPOSITION */
+.dispo-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:600px){.dispo-grid{grid-template-columns:1fr}}
+.dispo-card{border-radius:12px;padding:16px 18px;font-size:13px;line-height:1.7}
+.dispo-card.no-surg{background:#052e16;border:1px solid #16a34a;color:#86efac}
+.dispo-card.surg{background:#1e1b4b;border:1px solid #4f46e5;color:#c7d2fe}
+.dispo-card h4{font-size:14px;font-weight:700;margin-bottom:8px}
+
+/* EXCLUSION BOX */
+.exclusion{background:#1c1400;border:1px solid #ca8a04;border-radius:10px;padding:12px 16px;font-size:12px;color:#fde68a;line-height:1.7;margin-top:10px}
+.exclusion strong{color:#fbbf24}
+
+/* REVERSAL TABLE */
+.rev-table{width:100%;border-collapse:collapse;font-size:12.5px}
+.rev-table th{text-align:left;color:#64748b;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:8px 12px;border-bottom:1px solid #334155}
+.rev-table td{padding:9px 12px;border-bottom:1px solid #0f172a;color:#cbd5e1;vertical-align:top}
+.rev-table tr:last-child td{border-bottom:none}
+.rev-table .drug{color:#a5b4fc;font-weight:700}
+.rev-table .dose{color:#38bdf8;font-weight:600}
+
+/* PILLS */
+.pill{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;margin:2px 2px 2px 0}
+.pill-red{background:#1f0707;color:#f87171;border:1px solid #dc2626}
+.pill-green{background:#052e16;color:#86efac;border:1px solid #16a34a}
+.pill-yellow{background:#1c1400;color:#fbbf24;border:1px solid #ca8a04}
+.pill-purple{background:#1e1b4b;color:#c4b5fd;border:1px solid #7c3aed}
+.pill-blue{background:#0c1a2e;color:#7dd3fc;border:1px solid #0ea5e9}
+</style>
+</head>
+<body>
+
+<!-- SITE NAV -->
+<div class="sitenav">
+  <div class="sitenav-inner">
+    <a href="index.html">📋 Dotphrases</a>
+    <a href="calculators.html">🧮 Calculators</a>
+    <a href="vasopressors.html">💊 Vasopressors</a>
+    <a href="rsi.html">🫁 RSI</a>
+    <a href="pedsfever.html">🌡️ Peds Fever</a>
+    <a href="algorithms.html">🔀 Algorithms</a>
+    <a href="neurohub.html" class="active">🧠 Neuro Hub</a>
+    <a href="roadmap.html">🗺️ Roadmap</a>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <span>🧠</span>
+      <h1>Regional Neuro Hub</h1>
+      <span class="badge">ICH Protocol</span>
+    </div>
+    <p class="subtitle">Clinical Protocol &amp; Operations — Emergency Department &amp; Hospitalist Staff</p>
+  </div>
+</header>
+
+<!-- STATUS ALERT -->
+<div class="status-alert">
+  <div class="alert-box expanded">
+    <span class="alert-icon">🟢</span>
+    <div>
+      <strong>EXPANDED HOURS CURRENTLY ACTIVE:</strong> Due to high-census period, Neuro Hub is available <strong>7:00 AM – 9:00 PM daily</strong> until further notice. Standard hours are 1:00 PM – 9:00 PM, 7 days/week. Contact your charge nurse or administrator for current operational status.
+    </div>
+  </div>
+</div>
+
+<main>
+
+  <!-- ══════════════ OVERVIEW ══════════════ -->
+  <div class="section-label">Overview &amp; Scope</div>
+  <div class="card">
+    <div class="card-head">🏥 What Is the Neuro Hub?</div>
+    <div class="card-body">
+      The <strong style="color:#f1f5f9">Regional Neuro Hub</strong> is the <strong style="color:#f1f5f9">primary triage and consultation point for all Intracerebral Hemorrhage (ICH) cases</strong> at this facility and affiliated sites — <em>excluding LAMC, which has its own neurosurgical coverage.</em>
+      <br/><br/>
+      The Hub is staffed by Regional Vascular Neurology and exists to:
+      <ul style="margin-top:10px;padding-left:4px;list-style:none">
+        <li style="padding:5px 0;display:flex;gap:8px"><span style="color:#6366f1;font-weight:700">→</span> Standardize acute ICH management across the network</li>
+        <li style="padding:5px 0;display:flex;gap:8px"><span style="color:#6366f1;font-weight:700">→</span> Optimize ICU capacity utilization</li>
+        <li style="padding:5px 0;display:flex;gap:8px"><span style="color:#6366f1;font-weight:700">→</span> Reduce unnecessary or premature neurosurgical transfers</li>
+        <li style="padding:5px 0;display:flex;gap:8px"><span style="color:#6366f1;font-weight:700">→</span> Provide real-time guidance on BP targets, reversal agents, and osmotherapy</li>
+      </ul>
+      <div class="exclusion"><strong>⚠️ Site Exclusion:</strong> LAMC patients are excluded from this protocol. All other ED and Hospitalist sites route ICH through this Hub before any neurosurgical contact.</div>
+    </div>
+  </div>
+
+  <!-- ══════════════ HOURS + PHONE ══════════════ -->
+  <div class="section-label">Access — Hours &amp; Contact</div>
+  <div class="grid-2">
+
+    <div class="cta-phone">
+      <div class="label">📞 Primary Contact — ETAP Line</div>
+      <div class="number">866-361-2911</div>
+      <div class="sublabel">Available during all operational hours · ~5 min callback guaranteed</div>
+    </div>
+
+    <div class="cta-hours">
+      <div class="label">🕐 Standard Operational Hours</div>
+      <div class="time">1:00 PM – 9:00 PM</div>
+      <div class="days">7 Days/Week · Including Weekends &amp; Holidays</div>
+    </div>
+
+  </div>
+
+  <!-- ══════════════ NEUROLOGY FIRST RULE ══════════════ -->
+  <div class="section-label">The Neurology First Rule</div>
+  <div class="rule-box">
+    <div class="rule-head">
+      <span class="icon">🚫</span>
+      <h3>Do NOT Page Neurosurgery Directly for ICH</h3>
+    </div>
+    <div class="rule-body">
+      All ICH cases — regardless of size, location, or perceived severity — <strong>must be triaged through the Regional Vascular Neurology team via the ETAP line first.</strong>
+      <br/><br/>
+      The Neuro Hub neurologist will determine whether surgical escalation is warranted and will initiate neurosurgery contact internally if needed. Bypassing this step delays standardized care, disrupts triage flow, and may result in inappropriate or premature surgical referrals.
+      <br/><br/>
+      <strong>One call. One number. Every time: 866-361-2911</strong>
+    </div>
+  </div>
+
+  <!-- ══════════════ WHEN TO CALL ══════════════ -->
+  <div class="section-label">When to Call — Clinical Triggers</div>
+  <div class="grid-2">
+
+    <div class="card">
+      <div class="card-head">🔴 Mandatory Call Triggers</div>
+      <div class="card-body">
+        <ul class="trigger-list">
+          <li><span class="dot red"></span>Any <strong style="color:#f1f5f9">confirmed ICH</strong> on CT head or MRI — regardless of volume, location, or GCS</li>
+          <li><span class="dot red"></span>Any <strong style="color:#f1f5f9">suspected ICH</strong> with high clinical probability pending imaging</li>
+          <li><span class="dot red"></span>ICH with <strong style="color:#f1f5f9">concurrent anticoagulation</strong> — Warfarin, DOAC, antiplatelet — requiring urgent reversal guidance</li>
+          <li><span class="dot red"></span>ICH with <strong style="color:#f1f5f9">acute BP crisis</strong> requiring titration target guidance</li>
+          <li><span class="dot red"></span>ICH with <strong style="color:#f1f5f9">neurological deterioration</strong> — GCS decline, new herniation signs</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">⚡ 5-Minute Callback — Immediate Consult Topics</div>
+      <div class="card-body">
+        <div class="callback-badge">⏱ ~5 min callback guaranteed</div>
+        <ul class="trigger-list">
+          <li><span class="dot"></span><strong style="color:#f1f5f9">Blood pressure titration targets</strong> — individualized SBP goal (typically &lt;140–160 mmHg depending on presentation)</li>
+          <li><span class="dot"></span><strong style="color:#f1f5f9">Anticoagulation reversal</strong> — Kcentra (4F-PCC) for warfarin/Xa inhibitors, Andexxa for direct Xa inhibitors, idarucizumab for dabigatran</li>
+          <li><span class="dot"></span><strong style="color:#f1f5f9">Hyperosmotic therapy</strong> — Mannitol vs. hypertonic saline, dosing, ICP monitoring guidance</li>
+          <li><span class="dot"></span>Seizure prophylaxis, glucose management, fever control, VTE prophylaxis timing</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══════════════ REVERSAL QUICK REFERENCE ══════════════ -->
+  <div class="section-label">Anticoagulation Reversal — Quick Reference</div>
+  <div class="card">
+    <div class="card-head">💊 Reversal Agents (Neuro Hub will confirm dosing for individual patient)</div>
+    <div class="card-body" style="padding:0">
+      <table class="rev-table">
+        <thead>
+          <tr>
+            <th>Anticoagulant</th>
+            <th>Agent</th>
+            <th>Reversal Drug</th>
+            <th>Starting Point</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Warfarin (supratherapeutic INR)</td>
+            <td class="drug">4F-PCC (Kcentra)</td>
+            <td><span class="pill pill-purple">Kcentra</span></td>
+            <td class="dose">25–50 units/kg IV (INR-based dosing) + Vitamin K 10mg IV</td>
+          </tr>
+          <tr>
+            <td>Direct Xa inhibitor (rivaroxaban, apixaban, edoxaban)</td>
+            <td class="drug">Andexanet alfa</td>
+            <td><span class="pill pill-blue">Andexxa</span></td>
+            <td class="dose">Low or High dose regimen based on drug &amp; last dose timing — Neuro Hub directs</td>
+          </tr>
+          <tr>
+            <td>Direct Xa inhibitor (if Andexxa unavailable)</td>
+            <td class="drug">4F-PCC off-label</td>
+            <td><span class="pill pill-purple">Kcentra</span></td>
+            <td class="dose">50 units/kg IV — per Neuro Hub guidance</td>
+          </tr>
+          <tr>
+            <td>Dabigatran (direct thrombin inhibitor)</td>
+            <td class="drug">Idarucizumab</td>
+            <td><span class="pill pill-green">Praxbind</span></td>
+            <td class="dose">5g IV (two 2.5g vials) — reversal within minutes</td>
+          </tr>
+          <tr>
+            <td>Heparin / LMWH</td>
+            <td class="drug">Protamine sulfate</td>
+            <td><span class="pill pill-yellow">Protamine</span></td>
+            <td class="dose">1mg per 100 units heparin (last 2–4h); 1mg per 1mg enoxaparin</td>
+          </tr>
+        </tbody>
+      </table>
+      <p style="font-size:11px;color:#475569;padding:10px 14px;border-top:1px solid #0f172a">⚠️ All reversal dosing should be confirmed with the Neuro Hub neurologist on the ETAP line before administration. Anti-Xa levels may be required prior to Andexxa administration.</p>
+    </div>
+  </div>
+
+  <!-- ══════════════ FLOWCHART ══════════════ -->
+  <div class="section-label">Quick Reference Triage Flowchart</div>
+  <div class="flow">
+
+    <div class="flow-step red">
+      <div class="step-head">
+        <span class="flow-step-num" style="background:#dc2626;color:#fff">1</span>
+        CT Head confirms or strongly suspects ICH
+      </div>
+      <div class="step-body">
+        Patient presents with focal neurological deficit, headache, altered mental status, or acute hypertension. Non-contrast CT head obtained.
+        <br/><strong>→ Do not delay this step to call anyone.</strong>
+      </div>
+    </div>
+    <div class="flow-arrow">↓</div>
+
+    <div class="flow-step yellow">
+      <div class="step-head">
+        <span class="flow-step-num" style="background:#ca8a04;color:#fff">2</span>
+        Immediate stabilization while calling
+      </div>
+      <div class="step-body">
+        <strong>Airway:</strong> Assess — intubate if GCS ≤8 or airway at risk &nbsp;|&nbsp;
+        <strong>BP:</strong> Begin antihypertensives (nicardipine, labetalol) targeting SBP &lt;180 while awaiting Hub guidance &nbsp;|&nbsp;
+        <strong>Glucose:</strong> Check and correct &nbsp;|&nbsp;
+        <strong>Anticoagulation:</strong> Determine agent and last dose — do not reverse until Hub confirms
+      </div>
+    </div>
+    <div class="flow-arrow">↓</div>
+
+    <div class="flow-step purple">
+      <div class="step-head">
+        <span class="flow-step-num" style="background:#4f46e5;color:#fff">3</span>
+        Call ETAP Line — 866-361-2911
+      </div>
+      <div class="step-body">
+        Available <strong>1:00 PM – 9:00 PM daily</strong> (currently expanded to 7:00 AM – 9:00 PM).
+        Expect callback within <strong>~5 minutes.</strong> Have ready: CT findings, GCS, vitals, medications/anticoagulants, INR/anti-Xa level if available.
+      </div>
+    </div>
+    <div class="flow-arrow">↓</div>
+
+    <div class="flow-step blue">
+      <div class="step-head">
+        <span class="flow-step-num" style="background:#0ea5e9;color:#fff">4</span>
+        Neuro Hub Neurologist Triages Case
+      </div>
+      <div class="step-body">
+        Hub neurologist reviews case and directs: <strong>BP target, reversal protocol, osmotherapy, disposition.</strong>
+        They will contact Neurosurgery internally if surgical evaluation is warranted — <strong>you do not need to call Neurosurgery.</strong>
+      </div>
+    </div>
+    <div class="flow-arrow">↓</div>
+
+    <div class="decision-box">
+      <strong>Does the patient require surgical intervention?</strong>
+    </div>
+    <div class="flow-arrow">↓</div>
+
+    <div class="dispo-grid" style="margin-top:4px">
+      <div class="dispo-card no-surg">
+        <h4>✅ Medical Management Only</h4>
+        No neurosurgery consult required from your end.<br/>
+        Neuro Hub directs ongoing care:<br/>
+        · BP titration to target<br/>
+        · Anticoagulation reversal completed<br/>
+        · Osmotherapy as needed<br/>
+        · ICU admission per Hub guidance<br/>
+        · Repeat imaging protocol
+      </div>
+      <div class="dispo-card surg">
+        <h4>🔵 Surgical Escalation Needed</h4>
+        Neuro Hub neurologist contacts Neurosurgery directly and internally.<br/>
+        You will be notified of the surgical plan.<br/>
+        · Transfer vs. in-house OR determined by Hub<br/>
+        · You continue medical stabilization<br/>
+        · Hub coordinates logistics and transport if needed
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══════════════ DISPOSITION ══════════════ -->
+  <div class="section-label">Disposition Summary</div>
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-head" style="color:#86efac">✅ Medical ICH — No Surgery</div>
+      <div class="card-body">
+        Managed at your facility per Neuro Hub protocol. No neurosurgery consult needed from your end. Neuro Hub oversees care plan and follow-up imaging timing.
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-head" style="color:#c4b5fd">🔵 Surgical Escalation</div>
+      <div class="card-body">
+        Neuro Hub neurologist handles neurosurgery contact. Transfer arranged by Hub if operative intervention requires a higher-level facility.
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-head" style="color:#fbbf24">⚠️ Outside Hub Hours</div>
+      <div class="card-body">
+        Outside operational hours (before 1 PM standard / before 7 AM expanded), contact your on-call neurologist or transfer center per your facility's backup protocol.
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ RAPID REFERENCE ══════════════ -->
+  <div class="section-label">One-Page Rapid Reference</div>
+  <div class="card" style="border-color:#4f46e5">
+    <div class="card-head" style="background:#1e1b4b;color:#e0e7ff">⚡ Neuro Hub ICH — At a Glance</div>
+    <div class="card-body">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
+        <div>
+          <p style="font-size:11px;color:#6366f1;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Who to Call</p>
+          <p style="font-size:15px;font-weight:800;color:#fff;margin-bottom:2px">866-361-2911</p>
+          <p style="font-size:12px;color:#818cf8">ETAP Line · Vascular Neurology · ~5 min callback</p>
+        </div>
+        <div>
+          <p style="font-size:11px;color:#0ea5e9;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">When Open</p>
+          <p style="font-size:13px;font-weight:700;color:#f1f5f9">Standard: 1 PM – 9 PM daily</p>
+          <p style="font-size:12px;color:#7dd3fc">Expanded: 7 AM – 9 PM (current)</p>
+        </div>
+        <div>
+          <p style="font-size:11px;color:#22c55e;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Hub Covers</p>
+          <p style="font-size:12px;color:#cbd5e1;line-height:1.7">BP targets · Kcentra / Andexxa / Praxbind dosing · Osmotherapy · Neurosurgery escalation · ICU disposition</p>
+        </div>
+        <div>
+          <p style="font-size:11px;color:#f87171;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Do NOT</p>
+          <p style="font-size:12px;color:#fca5a5;line-height:1.7">Page Neurosurgery directly · Reverse anticoagulation without Hub guidance · Skip the call for "small" ICH</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+</body>
+</html>
