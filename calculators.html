@@ -61,7 +61,7 @@ main{max-width:980px;margin:0 auto;padding:24px}
 .result-action{font-size:12px;line-height:1.6;opacity:.9}
 
 /* COPY DOC BUTTON */
-.copy-doc-btn{margin-top:10px;padding:8px 16px;border-radius:8px;border:1px solid #3b82f6;background:#1e3a5f;color:#93c5fd;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;width:100%;display:none;align-items:center;justify-content:center;gap:6px}
+.copy-doc-btn{margin-top:10px;padding:8px 16px;border-radius:8px;border:1px solid #3b82f6;background:#1e3a5f;color:#93c5fd;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;width:100%;display:flex;align-items:center;justify-content:center;gap:6px}
 .copy-doc-btn:hover{background:#2563eb;color:#fff;border-color:#2563eb}
 .copy-doc-btn.show{display:flex}
 .copy-doc-btn.copied{background:#052e16;border-color:#16a34a;color:#86efac}
@@ -99,7 +99,7 @@ main{max-width:980px;margin:0 auto;padding:24px}
 <header>
   <div class="header-inner">
     <div class="logo"><span>🧮</span><h1>ER Clinical Calculators</h1></div>
-    <p class="subtitle">Wells PE · PERC · Wells DVT · HEART · Adult Head CT Rules · PECARN · Centor</p>
+    <p class="subtitle">Wells PE · PERC · Wells DVT · HEART Score · Canadian CT Head — tap score to copy documentation</p>
   </div>
 </header>
 
@@ -110,11 +110,9 @@ main{max-width:980px;margin:0 auto;padding:24px}
     <button class="calc-tab active" onclick="showCalc('wellspe')">🫁 Wells PE + PERC</button>
     <button class="calc-tab" onclick="showCalc('heart')">❤️ HEART Score</button>
     <button class="calc-tab" onclick="showCalc('wellsdvt')">🦵 Wells DVT</button>
-    <button class="calc-tab" onclick="showCalc('cthead')">🧠 Head CT Rules (Adult)</button>
-    <button class="calc-tab" onclick="showCalc('pecarn')">🧒 PECARN Head Injury</button>
-    <button class="calc-tab" onclick="showCalc('centor')">🦠 Strep (Centor/McIsaac)</button>
-    <button class="calc-tab" onclick="showCalc('pedsfever')">🌡️ Peds Fever</button>
+    <button class="calc-tab" onclick="showCalc('cthead')">🧠 Canadian CT Head</button>
     <button class="calc-tab" onclick="showCalc('softtissue')">🦠 Soft Tissue & Sepsis</button>
+    <button class="calc-tab" onclick="showCalc('other')">🧩 Other</button>
   </div>
 
   <!-- ══════════════════════════════════════════
@@ -359,43 +357,6 @@ main{max-width:980px;margin:0 auto;padding:24px}
         </div>
       </div>
 
-      <div class="card">
-        <div class="card-title">🧠 New Orleans Criteria (Adult Minor Head Injury)</div>
-        <div class="card-body">
-          <p style="font-size:12px;color:#64748b;margin-bottom:10px">
-            For GCS 15 with LOC/amnesia/disorientation. If any present → consider CT.
-          </p>
-          <ul style="margin-left:18px;color:#cbd5e1;line-height:1.8;font-size:13px">
-            <li>Headache</li>
-            <li>Vomiting</li>
-            <li>Age &gt; 60</li>
-            <li>Drug/alcohol intoxication</li>
-            <li>Persistent anterograde amnesia</li>
-            <li>Visible trauma above clavicles</li>
-            <li>Seizure</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">🧠 NEXUS-II (Adult Blunt Head Trauma)</div>
-        <div class="card-body">
-          <p style="font-size:12px;color:#64748b;margin-bottom:10px">
-            If any present → consider CT.
-          </p>
-          <ul style="margin-left:18px;color:#cbd5e1;line-height:1.8;font-size:13px">
-            <li>Evidence of significant skull fracture</li>
-            <li>Scalp hematoma</li>
-            <li>Neurologic deficit</li>
-            <li>Altered level of alertness</li>
-            <li>Abnormal behavior</li>
-            <li>Coagulopathy</li>
-            <li>Persistent vomiting</li>
-            <li>Age ≥ 65</li>
-          </ul>
-        </div>
-      </div>
-
     </div>
   </div>
 
@@ -404,116 +365,7 @@ main{max-width:980px;margin:0 auto;padding:24px}
   <!-- ══════════════════════════════════════════
        SOFT TISSUE & SEPSIS
   ═══════════════════════════════════════════ -->
-  
-  <!-- ══════════════════════════════════════════
-       CENTOR / MCISAAC (HEDIS PHARYNGITIS)
-  ══════════════════════════════════════════ -->
-  <div id="calc-centor" style="display:none">
-    <div class="calc-grid">
-      <div class="card">
-        <div class="card-title">🦠 Strep Pharyngitis — Centor / McIsaac</div>
-        <div class="card-body">
-          <p style="font-size:12px;color:#64748b;margin-bottom:12px">
-            Decision-support only. Score applies to patients with symptoms consistent with acute pharyngitis.
-          </p>
-
-          <div class="criterion"><input type="checkbox" id="centor-exudate" onchange="calcCentor()">
-            <span class="criterion-label">Tonsillar exudates</span><span class="criterion-pts">+1</span></div>
-
-          <div class="criterion"><input type="checkbox" id="centor-nodes" onchange="calcCentor()">
-            <span class="criterion-label">Tender anterior cervical adenopathy</span><span class="criterion-pts">+1</span></div>
-
-          <div class="criterion"><input type="checkbox" id="centor-fever" onchange="calcCentor()">
-            <span class="criterion-label">Fever (≥38°C / 100.4°F)</span><span class="criterion-pts">+1</span></div>
-
-          <div class="criterion"><input type="checkbox" id="centor-nocough" onchange="calcCentor()">
-            <span class="criterion-label">No cough</span><span class="criterion-pts">+1</span></div>
-
-          <div class="radio-group" style="margin-top:10px">
-            <label>Age adjustment (McIsaac)</label>
-            <div class="radio-option"><input type="radio" name="centor-age" value="1" onchange="calcCentor()">
-              <span>3–14 years</span><span class="radio-pts">+1</span></div>
-            <div class="radio-option"><input type="radio" name="centor-age" value="0" onchange="calcCentor()">
-              <span>15–44 years</span><span class="radio-pts">0</span></div>
-            <div class="radio-option"><input type="radio" name="centor-age" value="-1" onchange="calcCentor()">
-              <span>≥45 years</span><span class="radio-pts">-1</span></div>
-          </div>
-
-          <div id="centor-result" class="result neutral">
-            <div class="result-score">—</div>
-            <div class="result-label">Select criteria</div>
-            <div class="result-action">Tip: use RADT/NAAT per local workflow. Consider backup culture in kids if RADT negative.</div>
-          </div>
-
-          <button id="centor-reset" class="reset-btn" onclick="resetCentor()">Reset</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════════
-       PECARN HEAD INJURY
-  ══════════════════════════════════════════ -->
-  <div id="calc-pecarn" style="display:none">
-    <div class="calc-grid">
-      <div class="card">
-        <div class="card-title">🧒 PECARN Pediatric Head Injury (CT Decision Support)</div>
-        <div class="card-body">
-          <p style="font-size:12px;color:#64748b;margin-bottom:12px">
-            For minor blunt head trauma, GCS 14–15. Decision-support only — apply clinical judgment and local protocol.
-          </p>
-
-          <div class="radio-group">
-            <label>Age group</label>
-            <div class="radio-option"><input type="radio" name="pecarn-age" value="lt2" onchange="renderPecarn();calcPecarn()">
-              <span>&lt; 2 years</span></div>
-            <div class="radio-option"><input type="radio" name="pecarn-age" value="ge2" onchange="renderPecarn();calcPecarn()">
-              <span>≥ 2 years</span></div>
-          </div>
-
-          <div id="pecarn-criteria-wrap"></div>
-
-          <div id="pecarn-result" class="result neutral">
-            <div class="result-score">—</div>
-            <div class="result-label">Select age group + criteria</div>
-            <div class="result-action">Output is a guidance band (CT vs Observe vs No CT). Not a mandate.</div>
-          </div>
-
-          <button id="pecarn-copy-btn" class="copy-doc-btn" onclick="copyDoc(\'pecarn\')">📋 Copy Documentation</button>
-          <button class="reset-btn" onclick="resetPecarn()">Reset</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════════
-       PEDS FEVER
-  ══════════════════════════════════════════ -->
-  <div id="calc-pedsfever" style="display:none">
-    <div class="calc-grid">
-      <div class="card">
-        <div class="card-title">🌡️ Pediatric Fever — CA FIRST (Quick Access)</div>
-        <div class="card-body">
-          <p style="font-size:12px;color:#64748b;margin-bottom:12px">
-            This is a shortcut into the full Peds Fever protocol page used on this site.
-          </p>
-
-          <div class="result neutral" style="margin-top:0">
-            <div class="result-label">Open full protocol</div>
-            <div class="result-action">
-              <a href="pedsfever.html" style="color:#60a5fa;text-decoration:none;font-weight:700">→ Peds Fever (CA FIRST) Page</a><br/>
-              Includes: exclusions, age-stratified workup (0–28d, 29–60d, 61–90d, 3–36mo), IM marker table, and disposition guidance.
-            </div>
-          </div>
-
-          <div style="margin-top:14px;font-size:12px;color:#94a3b8;line-height:1.7">
-            <strong style="color:#f1f5f9">Reminder:</strong> Always confirm age in days, prematurity, and immunization status; apply shared decision-making and local pathways.
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-<div id="calc-softtissue" style="display:none">
+  <div id="calc-softtissue" style="display:none">
     <div class="calc-grid">
 
       <!-- LRINEC -->
@@ -686,177 +538,420 @@ main{max-width:980px;margin:0 auto;padding:24px}
     </div>
   </div>
 
+
+  <!-- ══════════════════════════════════════════
+       OTHER
+  ══════════════════════════════════════════ -->
+  <div id="calc-other" style="display:none">
+    <div class="calc-grid">
+
+      <!-- CENTOR / MCISAAC -->
+      <div class="card">
+        <div class="card-title">🦠 Centor / McIsaac (Strep Pharyngitis)</div>
+        <div class="card-body">
+          <p style="font-size:12px;color:#64748b;margin-bottom:12px">
+            Centor criteria (+1 each): tonsillar exudate, tender anterior cervical nodes, fever, absence of cough.
+            McIsaac adds age adjustment.
+          </p>
+
+          <div id="centor-criteria">
+            <div class="criterion" onclick="toggleCentor(0)"><input type="checkbox" id="centor0"><span class="criterion-label">Tonsillar exudates</span><span class="criterion-pts">+1</span></div>
+            <div class="criterion" onclick="toggleCentor(1)"><input type="checkbox" id="centor1"><span class="criterion-label">Tender anterior cervical adenopathy</span><span class="criterion-pts">+1</span></div>
+            <div class="criterion" onclick="toggleCentor(2)"><input type="checkbox" id="centor2"><span class="criterion-label">Fever (subjective or ≥38°C)</span><span class="criterion-pts">+1</span></div>
+            <div class="criterion" onclick="toggleCentor(3)"><input type="checkbox" id="centor3"><span class="criterion-label">Absence of cough</span><span class="criterion-pts">+1</span></div>
+          </div>
+
+          <div class="radio-group" style="margin-top:14px">
+            <label>Age adjustment (McIsaac)</label>
+            <div class="radio-option" onclick="setCentorAge(1,this)"><input type="radio" name="centor-age" value="1"><span>Age 3–14</span><span class="radio-pts">+1</span></div>
+            <div class="radio-option" onclick="setCentorAge(0,this)"><input type="radio" name="centor-age" value="0"><span>Age 15–44</span><span class="radio-pts">0</span></div>
+            <div class="radio-option" onclick="setCentorAge(-1,this)"><input type="radio" name="centor-age" value="-1"><span>Age ≥45</span><span class="radio-pts">−1</span></div>
+          </div>
+
+          <div id="centor-result" class="result neutral">
+            <div class="result-score">0</div>
+            <div class="result-label">Select criteria above</div>
+            <div class="result-action">Recommendation will appear here.</div>
+          </div>
+          <button id="centor-copy-btn" class="copy-doc-btn" onclick="copyDoc('centor')">📋 Copy Documentation</button>
+          <button class="reset-btn" onclick="resetCentor()">Reset</button>
+        </div>
+      </div>
+
+      <!-- PECARN -->
+      <div class="card">
+        <div class="card-title">👶 PECARN Pediatric Head Injury</div>
+        <div class="card-body">
+          <p style="font-size:12px;color:#64748b;margin-bottom:12px">
+            Decision support for minor blunt head trauma (GCS 14–15). Choose age group, then select findings.
+          </p>
+
+          <div class="radio-group">
+            <label>Age group</label>
+            <div class="radio-option" onclick="setPecarnAge('<2',this)"><input type="radio" name="pecarn-age" value="<2"><span>&lt; 2 years</span><span class="radio-pts"></span></div>
+            <div class="radio-option" onclick="setPecarnAge('>=2',this)"><input type="radio" name="pecarn-age" value=">=2"><span>≥ 2 years</span><span class="radio-pts"></span></div>
+          </div>
+
+          <div id="pecarn-criteria-wrap" style="margin-top:10px">
+            <!-- injected by JS -->
+          </div>
+
+          <div id="pecarn-result" class="result neutral">
+            <div class="result-score">—</div>
+            <div class="result-label">Select age group + findings</div>
+            <div class="result-action">Recommendation will appear here.</div>
+          </div>
+          <button id="pecarn-copy-btn" class="copy-doc-btn" onclick="copyDoc('pecarn')">📋 Copy Documentation</button>
+          <button class="reset-btn" onclick="resetPecarn()">Reset</button>
+
+          <p style="font-size:11px;color:#64748b;margin-top:10px">PECARN supports CT vs observation; always use clinical judgment, and consider non-accidental trauma.</p>
+        </div>
+      </div>
+
+      <!-- PEDS FEVER LINK -->
+      <div class="card">
+        <div class="card-title">🌡️ Peds Fever (0–60d)</div>
+        <div class="card-body">
+          <p style="font-size:12px;color:#64748b;margin-bottom:12px">
+            Full workflow is on the dedicated page (labs, age bands, disposition suggestions).
+          </p>
+          <a href="pedsfever.html" style="display:inline-block;width:100%;text-align:center;padding:10px 14px;border-radius:10px;border:1px solid #3b82f6;background:#1e3a5f;color:#bfdbfe;font-weight:700;text-decoration:none">Open Peds Fever Page</a>
+          <div style="height:12px"></div>
+          <div id="pedsfever-note" class="result neutral">
+            <div class="result-label">Quick note</div>
+            <div class="result-action">Use the 0–60 day fever algorithm on the Peds Fever page for age-based evaluation and disposition.</div>
+          </div>
+          <button id="pedsfever-copy-btn" class="copy-doc-btn" onclick="copyDoc('pedsfever')">📋 Copy Documentation</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
 </main>
 
 <script>
 // ── CALC TAB SWITCHING ───────────────────────────────────────
 function showCalc(id) {
-  const calcs = ['wellspe','heart','wellsdvt','cthead','pecarn','centor','pedsfever','softtissue'];
-
-  calcs.forEach(c => {
-    const el = document.getElementById('calc-'+c);
-    if (el) el.style.display = (c === id) ? '' : 'none';
+  ['wellspe','heart','wellsdvt','cthead','softtissue','other'].forEach(c => {
+    document.getElementById('calc-'+c).style.display = c===id ? '' : 'none';
   });
-
-  const tabs = document.querySelectorAll('.calc-tab');
-  tabs.forEach((btn, i) => btn.classList.toggle('active', calcs[i] === id));
+  document.querySelectorAll('.calc-tab').forEach((btn,i) => {
+    btn.classList.toggle('active', ['wellspe','heart','wellsdvt','cthead','softtissue','other'][i]===id);
+  });
 }
 
 // ── COPY DOCUMENTATION ───────────────────────────────────────
-function copyText(text, btn){
-  const onSuccess = ()=>{
-    const orig = btn ? btn.innerHTML : null;
-    if(btn){
-      btn.innerHTML = '✅ Copied!';
-      btn.classList.add('copied');
-      setTimeout(()=>{ btn.innerHTML = orig; btn.classList.remove('copied'); }, 2200);
-    }
-  };
-
-  const fallback = ()=>{
-    const ta = document.createElement('textarea');
-    ta.value = text;
-    ta.style.position='fixed';
-    ta.style.left='-9999px';
-    ta.style.top='0';
-    ta.setAttribute('readonly','');
-    document.body.appendChild(ta);
-    ta.select();
-    ta.setSelectionRange(0, ta.value.length);
-    try{ document.execCommand('copy'); }catch(e){}
-    document.body.removeChild(ta);
-    onSuccess();
-  };
-
-  if(navigator.clipboard && window.isSecureContext){
-    navigator.clipboard.writeText(text).then(onSuccess).catch(fallback);
-  } else {
-    fallback();
+function copyTextToClipboard(text) {
+  // Works on https:// (secure context) and also on file:// via fallback.
+  if (navigator.clipboard && window.isSecureContext) {
+    return navigator.clipboard.writeText(text);
   }
+  return new Promise((resolve, reject) => {
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.top = '-9999px';
+      ta.style.left = '-9999px';
+      document.body.appendChild(ta);
+      ta.select();
+      const ok = document.execCommand('copy');
+      document.body.removeChild(ta);
+      ok ? resolve() : reject(new Error('copy_failed'));
+    } catch (e) {
+      reject(e);
+    }
+  });
+}
+
+function flashCopied(btn) {
+  if (!btn) return;
+  const orig = btn.innerHTML;
+  btn.innerHTML = '✅ Copied!';
+  btn.classList.add('copied');
+  setTimeout(()=>{ btn.innerHTML = orig; btn.classList.remove('copied'); }, 2200);
+}
+
+function fmtLines(lines) {
+  return lines.filter(Boolean).join('
+');
 }
 
 function copyDoc(type) {
   let text = '';
-  const btn = document.getElementById(type+'-copy-btn');
+  const btn = document.getElementById(type + '-copy-btn');
 
+  // ----- PERC -----
   if (type === 'perc') {
-    const any = percChecked.some(Boolean);
-    if (!any) {
-      text = 'PERC Rule (Pulmonary Embolism Rule-out Criteria) applied. Pulmonary embolism ruled out utilizing the PERC rule. Pre-test probability was low by clinical gestalt. All 8 PERC criteria were absent: age <50, heart rate <100 bpm, SpO2 ≥95% on room air, no unilateral leg swelling, no hemoptysis, no recent surgery or trauma within 4 weeks, no prior PE or DVT, and no exogenous estrogen use. PERC rule satisfied — no further workup for PE indicated per validated clinical decision rule (Kline et al., Ann Emerg Med 2004).';
+    const labels = [
+      'Age ≥50',
+      'HR ≥100 bpm',
+      'SpO₂ <95% on room air',
+      'Unilateral leg swelling',
+      'Hemoptysis',
+      'Recent surgery or trauma (≤4 weeks)',
+      'Prior PE or DVT',
+      'Hormone use (OCP/HRT/estrogen)',
+    ];
+    const present = labels.filter((_,i)=>percChecked[i]);
+    if (present.length === 0) {
+      text = fmtLines([
+        'PERC (PE Rule-Out Criteria): PERC negative (0/8).',
+        'All PERC criteria absent: age <50, HR <100, SpO₂ ≥95% RA, no unilateral leg swelling, no hemoptysis, no recent surgery/trauma, no prior PE/DVT, no estrogen use.',
+        'Recommendation: If low pre-test probability, PE can be ruled out without D-dimer/CTPA per PERC.'
+      ]);
     } else {
-      const present = ['age ≥50','HR ≥100 bpm','SpO2 <95%','unilateral leg swelling','hemoptysis','recent surgery/trauma','prior PE or DVT','hormone use'].filter((_,i)=>percChecked[i]);
-      text = 'PERC rule criteria not fully satisfied. The following PERC criteria were present: ' + present.join(', ') + '. Pre-test probability insufficient to rule out PE by PERC criteria alone. Wells PE score calculated and workup initiated accordingly.';
+      text = fmtLines([
+        `PERC (PE Rule-Out Criteria): PERC positive (${present.length}/8).`,
+        'Criteria present:',
+        ...present.map(x => `- ${x}`),
+        'Recommendation: Cannot rule out PE by PERC alone. Proceed with Wells PE + D-dimer/CTPA as indicated.'
+      ]);
     }
   }
 
+  // ----- Wells PE -----
   else if (type === 'wellspe') {
+    const labels = [
+      'Clinical signs/symptoms of DVT',
+      'PE is #1 diagnosis OR equally likely',
+      'HR >100 bpm',
+      'Immobilization ≥3 days OR surgery in past 4 weeks',
+      'Prior PE or DVT',
+      'Hemoptysis',
+      'Malignancy (treatment within 6 months or palliative)',
+    ];
     const score = wpeChecked.reduce((s,c,i)=>s+(c?wpePoints[i]:0),0);
-    const labels = ['Clinical signs/symptoms of DVT','PE is #1 or equally likely diagnosis','HR >100 bpm','Immobilization ≥3 days or surgery in past 4 weeks','Prior PE or DVT history','Hemoptysis','Active malignancy'];
-    const cats = labels.filter((_,i)=>wpeChecked[i]);
-    const breakdown = labels.map((l,i)=>wpeChecked[i] ? `${l} (+${wpePoints[i]})` : null).filter(Boolean);
+    const items = labels.map((lab,i)=>({lab, pts:wpePoints[i], on:wpeChecked[i]})).filter(x=>x.on);
+
     let risk, plan;
-    if(score<=1){risk='low probability';plan='Pre-test probability low. If PERC criteria satisfied, no further PE workup indicated. If PERC not satisfied, D-dimer obtained — if negative, PE excluded.';}
-    else if(score<=6){risk='moderate probability';plan='D-dimer obtained. If elevated, CT pulmonary angiography performed to evaluate for PE.';}
-    else{risk='high probability';plan='CT pulmonary angiography pursued directly. Empiric anticoagulation considered while awaiting imaging given high pre-test probability.';}
-    text = 'Wells Score (PE) calculated for pulmonary embolism risk stratification. Total Wells PE score: ' + score + ' — ' + risk + '. ' + (breakdown.length ? 'Score breakdown: ' + breakdown.join('; ') + '. ' : 'No Wells criteria met. ') + plan;
+    if (score <= 1) { risk='Low'; plan='If PERC negative, no further PE workup. If PERC positive, obtain D-dimer; if positive → CTPA (or V/Q as appropriate).'; }
+    else if (score <= 6) { risk='Moderate'; plan='Obtain D-dimer; if positive → CTPA (or V/Q as appropriate).'; }
+    else { risk='High'; plan='Proceed directly to imaging (CTPA) and consider empiric anticoagulation as clinically appropriate.'; }
+
+    text = fmtLines([
+      `Wells PE score: ${score} (${risk} pre-test probability).`,
+      (items.length ? 'Points:' : 'Points: (no criteria selected)'),
+      ...items.map(x => `- ${x.lab} (${x.pts} point${x.pts===1?'':'s'})`),
+      `Recommendation: ${plan}`
+    ]);
   }
 
+  // ----- HEART -----
   else if (type === 'heart') {
-    const score = ['h','e','a','r','t'].reduce((s,k)=>s+(heartScores[k]??0),0);
     const filled = ['h','e','a','r','t'].every(k=>heartScores[k]!==null);
-    if (!filled) { alert('Please complete all 5 HEART score categories first.'); return; }
-    let risk, plan;
-    const hDesc = ['slightly suspicious (mostly non-specific)','moderately suspicious (atypical ACS features)','highly suspicious (classic anginal)'][heartScores['h']];
-    const eDesc = ['normal','non-specific repolarization disturbance','significant ST deviation'][heartScores['e']];
-    const aDesc = ['<45','45–64','≥65'][heartScores['a']];
-    const rDesc = ['no known risk factors','1–2 cardiovascular risk factors','≥3 risk factors or known CAD/atherosclerotic disease'][heartScores['r']];
+    if (!filled) {
+      alert('Please complete all 5 HEART score categories first.');
+      return;
+    }
+    const score = ['h','e','a','r','t'].reduce((s,k)=>s+(heartScores[k]??0),0);
+    const hDesc = ['Slightly suspicious','Moderately suspicious','Highly suspicious'][heartScores['h']];
+    const eDesc = ['Normal','Non-specific repolarization disturbance','Significant ST deviation'][heartScores['e']];
+    const aDesc = ['Age <45','Age 45–64','Age ≥65'][heartScores['a']];
+    const rDesc = ['No risk factors','1–2 risk factors','≥3 risk factors or known CAD'][heartScores['r']];
     const tDesc = ['≤1× ULN','1–3× ULN','>3× ULN'][heartScores['t']];
-    if(score<=3){risk='low risk';plan='HEART score in low-risk range. Serial troponins negative and non-trending. Shared decision-making discussion held with patient regarding low-risk disposition. Patient discharged with cardiology follow-up and return precautions.';}
-    else if(score<=6){risk='moderate risk';plan='HEART score in moderate-risk range. Cardiology notified. Observation, further risk stratification with stress testing, or cardiology-guided management plan initiated.';}
-    else{risk='high risk';plan='HEART score in high-risk range. Cardiology consulted for early invasive strategy. Admission planned.';}
-    text = 'HEART score calculated for chest pain risk stratification. Total HEART score: ' + score + '/10 — ' + risk + '. Score breakdown: History ' + heartScores['h'] + '/2 (' + hDesc + '); EKG ' + heartScores['e'] + '/2 (' + eDesc + '); Age ' + heartScores['a'] + '/2 (' + aDesc + '); Risk factors ' + heartScores['r'] + '/2 (' + rDesc + '); Troponin ' + heartScores['t'] + '/2 (' + tDesc + '). ' + plan;
-  }
 
-  else if (type === 'wellsdvt') {
-    const score = wdvtChecked.reduce((s,c,i)=>s+(c?wdvtPoints[i]:0),0);
-    const labels = ['Active cancer','Paralysis/paresis/recent immobilization of lower extremity','Bedridden >3 days or major surgery within 12 weeks','Localized tenderness along deep venous system','Entire leg swollen','Calf swelling >3 cm vs contralateral','Pitting edema confined to symptomatic leg','Collateral superficial veins (non-varicose)','Alternative diagnosis at least as likely (−2)'];
-    const cats = labels.filter((_,i)=>wdvtChecked[i]);
-    const breakdown = labels.map((l,i)=>wdvtChecked[i] ? `${l} (${wdvtPoints[i]>0?`+${wdvtPoints[i]}`:wdvtPoints[i]})` : null).filter(Boolean);
     let risk, plan;
-    if(score<=1){risk='low probability';plan='D-dimer obtained. If negative, DVT excluded per validated algorithm. If positive, compression ultrasound of lower extremity obtained.';}
-    else if(score<=6){risk='moderate probability';plan='Compression ultrasound of lower extremity obtained. If negative and D-dimer negative, DVT excluded.';}
-    else{risk='high probability';plan='Compression ultrasound of lower extremity obtained regardless of D-dimer result given high pre-test probability. If negative, repeat ultrasound in 1 week or MRI considered.';}
-    text = 'Wells DVT criteria applied for deep vein thrombosis risk stratification. Wells DVT score: ' + score + ' — ' + risk + '. ' + (cats.length ? 'Criteria present: ' + cats.join(', ') + '. ' : 'No Wells DVT criteria met. ') + plan;
+    if (score <= 3) { risk='Low risk'; plan='If serial troponins negative and no concerning features, consider discharge with follow-up and return precautions.'; }
+    else if (score <= 6) { risk='Moderate risk'; plan='Observation / further risk stratification (e.g., stress testing/CTA) per local protocol; consider cardiology input.'; }
+    else { risk='High risk'; plan='Admit; cardiology consult for early invasive strategy as indicated.'; }
+
+    text = fmtLines([
+      `HEART score: ${score}/10 (${risk}).`,
+      'Breakdown:',
+      `- History: ${heartScores['h']}/2 (${hDesc})`,
+      `- EKG: ${heartScores['e']}/2 (${eDesc})`,
+      `- Age: ${heartScores['a']}/2 (${aDesc})`,
+      `- Risk factors: ${heartScores['r']}/2 (${rDesc})`,
+      `- Troponin: ${heartScores['t']}/2 (${tDesc})`,
+      `Recommendation: ${plan}`
+    ]);
   }
 
+  // ----- Wells DVT -----
+  else if (type === 'wellsdvt') {
+    const labels = [
+      'Active cancer',
+      'Paralysis/paresis/recent immobilization of lower extremity',
+      'Bedridden >3 days OR major surgery within 12 weeks (requiring general/regional anesthesia)',
+      'Localized tenderness along deep venous system',
+      'Entire leg swollen',
+      'Calf swelling >3 cm compared with asymptomatic leg',
+      'Pitting edema confined to symptomatic leg',
+      'Collateral superficial veins (nonvaricose)',
+      'Alternative diagnosis at least as likely (subtract)',
+    ];
+    const score = wdvtChecked.reduce((s,c,i)=>s+(c?wdvtPoints[i]:0),0);
+    const items = labels.map((lab,i)=>({lab, pts:wdvtPoints[i], on:wdvtChecked[i]})).filter(x=>x.on);
+
+    let risk, plan;
+    if (score <= 1) { risk='Low'; plan='Consider D-dimer; if positive → compression ultrasound. If D-dimer negative → DVT excluded in appropriate context.'; }
+    else if (score <= 6) { risk='Moderate'; plan='Compression ultrasound; consider D-dimer/serial imaging per protocol if initial US negative.'; }
+    else { risk='High'; plan='Compression ultrasound regardless of D-dimer; if initial US negative but suspicion high → repeat imaging in ~1 week or alternative imaging.'; }
+
+    text = fmtLines([
+      `Wells DVT score: ${score} (${risk} pre-test probability).`,
+      (items.length ? 'Points:' : 'Points: (no criteria selected)'),
+      ...items.map(x => `- ${x.lab} (${x.pts>0?'+':''}${x.pts})`),
+      `Recommendation: ${plan}`
+    ]);
+  }
+
+  // ----- Canadian CT Head -----
   else if (type === 'cthead') {
     const eligible = cteChecked.every(Boolean);
-    const anyHigh = cthChecked.some(Boolean);
-    const anyMed = ctmChecked.some(Boolean);
-    const highPresent = ['GCS <15 at 2h post-injury','suspected open/depressed skull fracture','signs of basal skull fracture','vomiting ≥2 episodes','age ≥65'].filter((_,i)=>cthChecked[i]);
-    const medPresent = ['amnesia before impact ≥30 min','dangerous mechanism'].filter((_,i)=>ctmChecked[i]);
+    const highLabels = [
+      'GCS <15 at 2 hours post-injury',
+      'Suspected open/depressed skull fracture',
+      'Signs of basal skull fracture',
+      'Vomiting ≥2 episodes',
+      'Age ≥65',
+    ];
+    const medLabels = [
+      'Amnesia before impact ≥30 minutes',
+      'Dangerous mechanism',
+    ];
+    const high = highLabels.filter((_,i)=>cthChecked[i]);
+    const med  = medLabels.filter((_,i)=>ctmChecked[i]);
+
     if (!eligible) {
-      text = 'Canadian CT Head Rule evaluated. Patient does not meet all eligibility criteria for the rule — CT head obtained based on clinical judgment.';
-    } else if (!anyHigh && !anyMed) {
-      text = 'Canadian CT Head Rule applied to this eligible patient with minor head injury (GCS 13–15, witnessed LOC/amnesia/confusion). No high-risk factors identified (no GCS <15 at 2h, no open/depressed fracture, no basal skull fracture signs, no vomiting ≥2 episodes, age <65). No medium-risk factors identified (no amnesia ≥30 min before impact, no dangerous mechanism). Per Canadian CT Head Rule, CT head not required. Patient observed without neurological deterioration. Concussion precautions and return precautions provided (Stiell et al., Lancet 2001).';
+      text = fmtLines([
+        'Canadian CT Head Rule: Not eligible (rule criteria not fully met).',
+        'Recommendation: Use clinical judgment; consider CT head based on overall risk factors/anticoagulation/abnormal exam.'
+      ]);
+    } else if (high.length === 0 && med.length === 0) {
+      text = fmtLines([
+        'Canadian CT Head Rule: Eligible patient with minor head injury.',
+        'High-risk factors: none.',
+        'Medium-risk factors: none.',
+        'Recommendation: CT head not required per CCHR; observe as appropriate + provide concussion/return precautions.'
+      ]);
     } else {
-      const factors = [...highPresent.map(f=>'[HIGH RISK] '+f), ...medPresent.map(f=>'[MED RISK] '+f)];
-      text = 'Canadian CT Head Rule applied. Patient eligible (GCS 13–15, LOC/amnesia/confusion, age ≥16, injury within 24h, no coagulopathy). CT head indicated based on the following criteria: ' + factors.join('; ') + '. CT head obtained.';
+      text = fmtLines([
+        'Canadian CT Head Rule: Eligible patient with minor head injury.',
+        (high.length ? 'High-risk factors present:' : 'High-risk factors: none.'),
+        ...high.map(x=>`- ${x}`),
+        (med.length ? 'Medium-risk factors present:' : 'Medium-risk factors: none.'),
+        ...med.map(x=>`- ${x}`),
+        'Recommendation: CT head indicated per CCHR.'
+      ]);
     }
+  }
+
+  // ----- LRINEC -----
+  else if (type === 'lrinec') {
+    if (!window.lrinecDetail || window.lrinecDetail.incomplete) {
+      alert('Enter all LRINEC labs to generate documentation.');
+      return;
+    }
+    const d = window.lrinecDetail;
+    text = fmtLines([
+      `LRINEC score: ${d.total}.`,
+      'Points:',
+      ...d.items.map(it => `- ${it.name}: ${it.value} → ${it.points} point${it.points===1?'':'s'} (${it.rule})`),
+      `Recommendation: ${d.reco}`
+    ]);
+  }
+
+  // ----- FGSI -----
+  else if (type === 'fgsi') {
+    if (!window.fgsiDetail || window.fgsiDetail.incomplete) {
+      alert('Enter all FGSI vitals/labs to generate documentation.');
+      return;
+    }
+    const d = window.fgsiDetail;
+    text = fmtLines([
+      `FGSI (Fournier’s Gangrene Severity Index): ${d.total}.`,
+      'Points:',
+      ...d.items.map(it => `- ${it.name}: ${it.value} → ${it.points}`),
+      `Recommendation: ${d.reco}`
+    ]);
+  }
+
+  // ----- SIRS -----
+  else if (type === 'sirs') {
+    const labels = ['Temp >38°C or <36°C','HR >90','RR >20 or PaCO₂ <32','WBC >12 or <4 or >10% bands'];
+    const pos = labels.filter((_,i)=>sirsChecked[i]);
+    text = fmtLines([
+      `SIRS criteria: ${pos.length}/4 positive.`,
+      (pos.length ? 'Positive criteria:' : 'Positive criteria: none.'),
+      ...pos.map(x=>`- ${x}`),
+      'Recommendation: SIRS supports systemic inflammatory response in appropriate context; manage/disposition based on suspected source and overall clinical picture.'
+    ]);
+  }
+
+  // ----- qSOFA -----
+  else if (type === 'qsofa') {
+    const labels = ['RR ≥22','SBP ≤100','Altered mental status (GCS<15)'];
+    const pos = labels.filter((_,i)=>qsofaChecked[i]);
+    text = fmtLines([
+      `qSOFA: ${pos.length}/3.`,
+      (pos.length ? 'Positive criteria:' : 'Positive criteria: none.'),
+      ...pos.map(x=>`- ${x}`),
+      'Recommendation: Elevated qSOFA suggests higher risk; supports escalation/close monitoring in the appropriate clinical context.'
+    ]);
+  }
+
+  // ----- Shock Index -----
+  else if (type === 'shock') {
+    const hr = parseFloat(document.getElementById('si-hr').value);
+    const sbp = parseFloat(document.getElementById('si-sbp').value);
+    if (Number.isNaN(hr) || Number.isNaN(sbp) || sbp <= 0) {
+      alert('Enter HR and SBP first.');
+      return;
+    }
+    const si = (hr/sbp).toFixed(2);
+    const concern = (parseFloat(si) > 0.90) ? 'elevated' : 'not elevated';
+    text = fmtLines([
+      `Shock Index (HR/SBP): ${si}. (HR ${hr}, SBP ${sbp}).`,
+      `Interpretation: Shock index is ${concern} (threshold often cited >0.9, context dependent).`,
+      'Recommendation: Assess perfusion, lactate, bleeding/sepsis/cardiogenic etiologies; resuscitate/escalate per clinical context.'
+    ]);
+  }
+
+  // ----- Centor / McIsaac -----
+  else if (type === 'centor') {
+    if (!window.centorDetail) { alert('Select criteria first.'); return; }
+    const d = window.centorDetail;
+    text = fmtLines([
+      `Centor/McIsaac score: ${d.total}.`,
+      'Points:',
+      ...d.items.map(it => `- ${it}`),
+      `Recommendation: ${d.reco}`
+    ]);
+  }
+
+  // ----- PECARN -----
+  else if (type === 'pecarn') {
+    if (!window.pecarnDetail || window.pecarnDetail.incomplete) {
+      alert('Select age group and findings first.');
+      return;
+    }
+    const d = window.pecarnDetail;
+    text = fmtLines([
+      `PECARN Pediatric Head Injury (${d.ageGroup}):`,
+      (d.high.length ? 'High-risk findings:' : 'High-risk findings: none.'),
+      ...d.high.map(x=>`- ${x}`),
+      (d.intermediate.length ? 'Intermediate-risk findings:' : 'Intermediate-risk findings: none.'),
+      ...d.intermediate.map(x=>`- ${x}`),
+      `Recommendation: ${d.reco}`
+    ]);
+  }
+
+  // ----- Peds fever note -----
+  else if (type === 'pedsfever') {
+    text = 'Peds Fever (0–60 days): See pedsfever.html for age-based algorithm (labs, disposition, antibiotics) per local workflow. Use clinical judgment and institutional protocols.';
   }
 
   if (!text) return;
-  
-  else if (type === 'lrinec') {
-    const scoreEl = document.querySelector('#lrinec-result .result-score');
-    const score = scoreEl ? scoreEl.textContent : '—';
-    text = `LRINEC score calculated as ${score}. While LRINEC has limited sensitivity and should NOT be used to rule out necrotizing soft tissue infection, an elevated score increases concern and supports early surgical consultation and escalation of care when clinically indicated.`;
-  }
-  else if (type === 'fgsi') {
-    const scoreEl = document.querySelector('#fgsi-result .result-score');
-    const score = scoreEl ? scoreEl.textContent : '—';
-    text = `Fournier’s Gangrene Severity Index (FGSI) calculated as ${score}. FGSI is a prognostic severity tool and supports ICU-level care and aggressive management when elevated (commonly cited threshold >9 associated with high mortality risk).`;
-  }
-  else if (type === 'sirs') {
-    const n = sirsChecked.filter(Boolean).length;
-    text = `SIRS criteria assessed: ${n}/4 positive. Findings support systemic inflammatory response in the appropriate clinical context; management and disposition based on overall clinical picture and suspected source.`;
-  }
-  else if (type === 'qsofa') {
-    const n = qsofaChecked.filter(Boolean).length;
-    text = `qSOFA calculated: ${n}/3. qSOFA is a mortality risk screen; elevated score supports escalation of care and close monitoring in appropriate clinical context.`;
-  }
-  else if (type === 'shock') {
-    const scoreEl = document.querySelector('#si-result .result-score');
-    const si = scoreEl ? scoreEl.textContent : '—';
-    text = `Shock Index calculated (HR/SBP): ${si}. Elevated shock index can suggest occult shock physiology; resuscitation and escalation based on perfusion status and clinical context.`;
-  }
 
-
-else if (type === 'centor') {
-    const score = centorState.score;
-    if (score === null) { alert('Select Centor/McIsaac criteria first.'); return; }
-    const breakdown = centorState.breakdown;
-    const plan = centorState.plan;
-    text = `Centor/McIsaac Score (Strep Pharyngitis) calculated. Total score: ${score}. ` +
-           (breakdown.length ? `Score breakdown: ${breakdown.join('; ')}. ` : '') +
-           plan;
-  }
-
-  else if (type === 'pecarn') {
-    if(!pecarnState.ageGroup){ alert('Select PECARN age group first.'); return; }
-    const rec = pecarnState.recommendation;
-    const ageLabel = pecarnState.ageGroup === 'lt2' ? '<2 years' : '≥2 years';
-    const breakdown = pecarnState.checked.map(x=>`• ${x}`).join(' ');
-    text = `PECARN Pediatric Head Injury Rule applied (${ageLabel}, GCS 14–15, minor blunt head trauma). ` +
-           (pecarnState.checked.length ? `Risk features present: ${pecarnState.checked.join('; ')}. ` : 'No PECARN risk features selected. ') +
-           `Recommendation: ${rec}. Clinical judgment and shared decision-making applied as appropriate.`;
-  }
-
-  copyText(text, btn);
+  copyTextToClipboard(text).then(() => flashCopied(btn)).catch(() => {
+    alert('Copy failed. Try selecting the text manually.');
+  });
 }
 
-let centorState = {score:null, breakdown:[], plan:''};
-let pecarnState = {ageGroup:null, checked:[], recommendation:''};
 
 // ── PERC ─────────────────────────────────────────────────────
 const percChecked = Array(8).fill(false);
@@ -1055,6 +1150,7 @@ function calcLRINEC() {
   if (!filledAny) {
     setResult('lrinec-result', 'neutral', '—', 'Enter labs above', 'LRINEC: ≤5 low, 6–7 intermediate, ≥8 high (risk stratification only).');
     if(btn) btn.classList.remove('show');
+    window.fgsiDetail = { incomplete:true };
     return;
   }
 
@@ -1075,6 +1171,21 @@ function calcLRINEC() {
   let cls='low', label='Low risk', action='LRINEC ≤5. Do NOT use to rule out — correlate clinically; early surgical consult if concern.';
   if (score >= 8) { cls='high'; label='High risk'; action='LRINEC ≥8. High concern for NSTI (risk stratification only). Consider emergent surgery consult + imaging if it will not delay OR.'; }
   else if (score >= 6) { cls='moderate'; label='Intermediate risk'; action='LRINEC 6–7. Consider imaging + early surgery consult if clinically concerning.'; }
+
+  // Build detail for documentation copy
+  window.lrinecDetail = {
+    incomplete: false,
+    total: score,
+    items: [
+      {name:'CRP', value: (Number.isNaN(crp)?'—':crp)+' mg/L', points: crpPts, rule:'≥150 = 4'},
+      {name:'WBC', value: (Number.isNaN(wbc)?'—':wbc)+' ×10³/µL', points: wbcPts, rule:'15–25 = 1; >25 = 2'},
+      {name:'Hgb', value: (Number.isNaN(hgb)?'—':hgb)+' g/dL', points: hgbPts, rule:'11–13.5 = 1; <11 = 2'},
+      {name:'Na', value: (Number.isNaN(na)?'—':na)+' mmol/L', points: naPts, rule:'<135 = 2'},
+      {name:'Creatinine', value: (Number.isNaN(cr)?'—':cr)+' mg/dL', points: crPts, rule:'>1.6 = 2'},
+      {name:'Glucose', value: (Number.isNaN(glu)?'—':glu)+' mg/dL', points: gluPts, rule:'>180 = 1'},
+    ],
+    reco: action
+  };
 
   setResult('lrinec-result', cls, String(score), label, action);
   if(btn) btn.classList.add('show');
@@ -1114,6 +1225,7 @@ function calcFGSI() {
   if (!filledAny) {
     setResult('fgsi-result', 'neutral', '—', 'Enter vitals/labs above', 'FGSI is prognostic. A commonly used threshold is >9 (high mortality risk).');
     if(btn) btn.classList.remove('show');
+    window.lrinecDetail = { incomplete:true };
     return;
   }
 
@@ -1217,6 +1329,24 @@ function calcFGSI() {
   let cls='low', label='Lower risk', action='FGSI ≤9 (prognostic tool). Use clinical judgment for ICU vs floor, operative urgency, etc.';
   if (total > 9) { cls='high'; label='High mortality risk'; action='FGSI >9 is commonly associated with high mortality risk; supports ICU-level care and aggressive management.'; }
 
+  // Build detail for documentation copy
+  window.fgsiDetail = {
+    incomplete: false,
+    total: total,
+    items: [
+      {name:'Temp (°C)', value: t, points: tempScore},
+      {name:'HR', value: hr, points: hrScore},
+      {name:'RR', value: rr, points: rrScore},
+      {name:'Na', value: na, points: naScore},
+      {name:'K', value: k, points: kScore},
+      {name:'Creatinine', value: cr, points: crScore},
+      {name:'Hct', value: hct, points: hctScore},
+      {name:'WBC', value: wbc, points: wbcScore},
+      {name:'HCO₃', value: hco3, points: hco3Score},
+    ],
+    reco: action
+  };
+
   setResult('fgsi-result', cls, String(total), label, action);
   if(btn) btn.classList.add('show');
 }
@@ -1296,198 +1426,131 @@ updateSIRS();
 updateQSOFA();
 
 
-// ── CENTOR / MCISAAC ──────────────────────────────────────────
-function calcCentor() {
-  const ex = document.getElementById('centor-exudate').checked;
-  const nd = document.getElementById('centor-nodes').checked;
-  const fv = document.getElementById('centor-fever').checked;
-  const nc = document.getElementById('centor-nocough').checked;
+// ── CENTOR / MCISAAC ─────────────────────────────────────────
+const centorChecked = [false,false,false,false];
+let centorAgeAdj = 0;
 
-  let score = (ex?1:0) + (nd?1:0) + (fv?1:0) + (nc?1:0);
+function toggleCentor(i){
+  centorChecked[i] = !centorChecked[i];
+  const box = document.getElementById('centor'+i);
+  if (box) box.checked = centorChecked[i];
+  updateCentor();
+}
+function setCentorAge(v, el){
+  centorAgeAdj = v;
+  // mark radio visually
+  document.querySelectorAll('input[name="centor-age"]').forEach(r => r.checked = (parseInt(r.value,10)===v));
+  updateCentor();
+}
+function updateCentor(){
+  const base = centorChecked.filter(Boolean).length;
+  const total = base + (centorAgeAdj ?? 0);
+  let cls='neutral', label='Select criteria above', action='—';
 
-  const ageEl = document.querySelector('input[name="centor-age"]:checked');
-  const ageAdj = ageEl ? parseInt(ageEl.value,10) : null;
-  if(ageAdj !== null) score += ageAdj;
-
-  const breakdown = [];
-  if(ex) breakdown.push('Tonsillar exudates (+1)');
-  if(nd) breakdown.push('Tender anterior cervical adenopathy (+1)');
-  if(fv) breakdown.push('Fever ≥38°C (+1)');
-  if(nc) breakdown.push('No cough (+1)');
-  if(ageAdj !== null){
-    if(ageAdj === 1) breakdown.push('Age 3–14 (+1)');
-    else if(ageAdj === 0) breakdown.push('Age 15–44 (0)');
-    else if(ageAdj === -1) breakdown.push('Age ≥45 (−1)');
-  }
-
-  const box = document.getElementById('centor-result');
-  const copyBtn = document.getElementById('centor-copy-btn');
-
-  if(ageAdj === null && !ex && !nd && !fv && !nc){
-    box.className = 'result neutral';
-    box.innerHTML = '<div class="result-score">—</div><div class="result-label">Select criteria</div><div class="result-action">Choose findings to calculate score.</div>';
-    if(copyBtn) copyBtn.classList.remove('show');
-    centorState = {score:null, breakdown:[], plan:''};
-    return;
-  }
-
-  let plan = '';
-  // Conservative, commonly-used approach (test vs treat varies by local protocol)
-  if(score <= 1){
-    plan = 'Low risk. Recommend no GAS testing and no antibiotics (supportive care) unless clinical concern warrants.';
-    box.className = 'result low';
-  } else if(score === 2 || score === 3){
-    plan = 'Intermediate risk. Recommend rapid antigen detection test (RADT) and treat if positive; consider culture per local protocol.';
-    box.className = 'result moderate';
+  if (base === 0 && (centorAgeAdj===0 || centorAgeAdj===null)) {
+    cls='neutral'; label='Select criteria above'; action='Recommendation will appear here.';
   } else {
-    plan = 'Higher risk. Consider RADT/culture and empiric treatment based on local protocol and shared decision-making.';
-    box.className = 'result high';
+    cls='low';
+    label = 'McIsaac total';
+    // Common ED guidance (varies): 0–1 no testing, 2–3 RADT, 4–5 consider empiric or RADT.
+    if (total <= 1) { cls='low'; action='Score 0–1: No testing or antibiotics; symptomatic care.'; }
+    else if (total <= 3) { cls='moderate'; action='Score 2–3: Perform rapid antigen detection test (RADT) (± culture per local practice). Treat if positive.'; }
+    else { cls='high'; action='Score 4–5: Consider empiric treatment OR RADT (institution-dependent); assess for complications/alternate dx.'; }
   }
 
-  box.innerHTML = `<div class="result-score">${score}</div>
-                   <div class="result-label">${plan}</div>
-                   <div class="result-action">Centor/McIsaac documentation available via copy button.</div>`;
+  setResult('centor-result', cls, String(total), label, action);
 
-  if(copyBtn) copyBtn.classList.add('show');
-  centorState = {score, breakdown, plan};
+  const ageLabel = centorAgeAdj===1 ? 'Age 3–14 (+1)' : (centorAgeAdj===0 ? 'Age 15–44 (+0)' : 'Age ≥45 (−1)');
+  const items = [];
+  const labels = ['Tonsillar exudates (+1)','Tender anterior cervical adenopathy (+1)','Fever (+1)','Absence of cough (+1)'];
+  labels.forEach((l,i)=>{ if(centorChecked[i]) items.push(l); });
+  items.push(ageLabel);
+
+  window.centorDetail = { total, items, reco: action.replace(/^Score \d+–\d+: /,'').replace(/^Score \d+: /,'') };
 }
-
 function resetCentor(){
-  ['centor-exudate','centor-nodes','centor-fever','centor-nocough'].forEach(id=>{
-    const el=document.getElementById(id); if(el) el.checked=false;
-  });
-  document.querySelectorAll('input[name="centor-age"]').forEach(r=>r.checked=false);
-  const box=document.getElementById('centor-result');
-  if(box){
-    box.className='result neutral';
-    box.innerHTML='<div class="result-score">—</div><div class="result-label">Select criteria</div><div class="result-action">Choose findings to calculate score.</div>';
-  }
-  const btn=document.getElementById('centor-copy-btn');
-  if(btn) btn.classList.remove('show');
-  centorState={score:null, breakdown:[], plan:''};
+  centorChecked.fill(false);
+  for(let i=0;i<4;i++){ const el=document.getElementById('centor'+i); if(el) el.checked=false; }
+  centorAgeAdj = 0;
+  document.querySelectorAll('input[name="centor-age"]').forEach(r=>{ r.checked = (parseInt(r.value,10)===0); });
+  updateCentor();
 }
 
-// ── PECARN ────────────────────────────────────────────────────
-const PECARN = {
-  lt2: {
-    high: [
-      {id:'p_lt2_ams', label:'Altered mental status'},
-      {id:'p_lt2_palpskull', label:'Palpable skull fracture'}
-    ],
-    inter: [
-      {id:'p_lt2_scalp', label:'Non-frontal scalp hematoma (occipital/parietal/temporal)'},
-      {id:'p_lt2_loc', label:'Loss of consciousness ≥ 5 seconds'},
-      {id:'p_lt2_sevmech', label:'Severe mechanism of injury'},
-      {id:'p_lt2_notnormal', label:'Not acting normally per parent'}
-    ]
+// ── PECARN ───────────────────────────────────────────────────
+let pecarnAgeGroup = null;
+let pecarnChecked = [];
+const pecarnDefs = {
+  '<2': {
+    high: ['GCS <15, altered mental status, or palpable skull fracture'],
+    intermediate: ['Non-frontal scalp hematoma','Loss of consciousness ≥5 seconds','Severe mechanism of injury','Not acting normally per parent']
   },
-  ge2: {
-    high: [
-      {id:'p_ge2_ams', label:'Altered mental status'},
-      {id:'p_ge2_basilar', label:'Signs of basilar skull fracture'}
-    ],
-    inter: [
-      {id:'p_ge2_loc', label:'Any loss of consciousness'},
-      {id:'p_ge2_vomit', label:'Vomiting'},
-      {id:'p_ge2_sevhead', label:'Severe headache'},
-      {id:'p_ge2_sevmech', label:'Severe mechanism of injury'}
-    ]
+  '>=2': {
+    high: ['GCS <15 or altered mental status','Signs of basilar skull fracture'],
+    intermediate: ['History of loss of consciousness','History of vomiting','Severe headache','Severe mechanism of injury']
   }
 };
 
-function renderPecarn(){
-  const age = document.querySelector('input[name="pecarn-age"]:checked');
+function renderPecarnCriteria(){
   const wrap = document.getElementById('pecarn-criteria-wrap');
   if (!wrap) return;
+  if (!pecarnAgeGroup) { wrap.innerHTML=''; return; }
 
-  if (!age) { wrap.innerHTML = ''; return; }
+  const def = pecarnDefs[pecarnAgeGroup];
+  pecarnChecked = Array(def.high.length + def.intermediate.length).fill(false);
 
-  const cfg = PECARN[age.value];
-  const mkRow = (o, pts) => `
-    <div class="criterion" onclick="toggleById('${o.id}')">
-      <input type="checkbox" id="${o.id}" onchange="calcPecarn()">
-      <span class="criterion-label">${o.label}</span>
-      <span class="criterion-pts">${pts}</span>
-    </div>`;
+  let html = '';
+  html += '<div style="font-size:12px;color:#64748b;font-weight:700;margin:8px 0 6px">High-risk</div>';
+  def.high.forEach((lab,i)=>{
+    html += `<div class="criterion" onclick="togglePecarn(${i})"><input type="checkbox" id="pecarn${i}"><span class="criterion-label">${lab}</span></div>`;
+  });
+  html += '<div style="font-size:12px;color:#64748b;font-weight:700;margin:12px 0 6px">Intermediate-risk</div>';
+  def.intermediate.forEach((lab,j)=>{
+    const idx = def.high.length + j;
+    html += `<div class="criterion" onclick="togglePecarn(${idx})"><input type="checkbox" id="pecarn${idx}"><span class="criterion-label">${lab}</span></div>`;
+  });
 
-  wrap.innerHTML = `
-    <div style="margin-top:8px;font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:.6px">High risk</div>
-    ${cfg.high.map(o => mkRow(o, 'CT')).join('')}
-    <div style="margin-top:14px;font-size:11px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:.6px">Intermediate risk</div>
-    ${cfg.inter.map(o => mkRow(o, 'Obs/CT')).join('')}
-  `;
+  wrap.innerHTML = html;
 }
 
-function toggleById(id){
-  const el = document.getElementById(id);
-  if (!el) return;
-  el.checked = !el.checked;
-  calcPecarn();
+function setPecarnAge(g, el){
+  pecarnAgeGroup = g;
+  document.querySelectorAll('input[name="pecarn-age"]').forEach(r => r.checked = (r.value===g));
+  renderPecarnCriteria();
+  updatePecarn();
 }
-
-function calcPecarn(){
-  const ageEl = document.querySelector('input[name="pecarn-age"]:checked');
-  const box = document.getElementById('pecarn-result');
-  const copyBtn = document.getElementById('pecarn-copy-btn');
-  if (!box) return;
-
-  if (!ageEl) {
-    box.className = 'result neutral';
-    box.innerHTML = '<div class="result-score">—</div><div class="result-label">Select age group</div><div class="result-action">Choose &lt;2 vs ≥2 years first.</div>';
-    if(copyBtn) copyBtn.classList.remove('show');
-    pecarnState = {ageGroup:null, checked:[], recommendation:''};
+function togglePecarn(i){
+  pecarnChecked[i] = !pecarnChecked[i];
+  const box = document.getElementById('pecarn'+i);
+  if (box) box.checked = pecarnChecked[i];
+  updatePecarn();
+}
+function updatePecarn(){
+  const r = document.getElementById('pecarn-result');
+  if (!pecarnAgeGroup) {
+    setResult('pecarn-result','neutral','—','Select age group + findings','Recommendation will appear here.');
+    window.pecarnDetail = { incomplete:true };
     return;
   }
+  const def = pecarnDefs[pecarnAgeGroup];
+  const high = def.high.filter((_,i)=>pecarnChecked[i]);
+  const intermediate = def.intermediate.filter((_,j)=>pecarnChecked[def.high.length + j]);
 
-  const ageGroup = ageEl.value; // lt2 or ge2
-  const cfg = PECARN[ageGroup];
+  let cls='low', label='Very low risk', action='No PECARN risk factors selected. CT generally not indicated; observe/discharge per clinical judgment.';
+  if (high.length) { cls='high'; label='High risk'; action='High-risk PECARN feature(s) present → CT head generally recommended (or urgent imaging/consult as clinically appropriate).'; }
+  else if (intermediate.length) { cls='moderate'; label='Intermediate risk'; action='Intermediate-risk feature(s) present → observation vs CT based on shared decision-making, exam trajectory, and clinician judgment.'; }
 
-  const checked = [];
-  let anyHigh = false;
-  let anyInter = false;
-
-  cfg.high.forEach(o=>{
-    const el = document.getElementById(o.id);
-    if(el && el.checked){ anyHigh = true; checked.push(o.label); }
-  });
-  cfg.inter.forEach(o=>{
-    const el = document.getElementById(o.id);
-    if(el && el.checked){ anyInter = true; checked.push(o.label); }
-  });
-
-  let rec = '';
-  if(anyHigh){
-    rec = 'CT head recommended (PECARN high-risk feature present).';
-    box.className = 'result high';
-  } else if(anyInter){
-    rec = 'Observation vs CT head (PECARN intermediate-risk feature present).';
-    box.className = 'result moderate';
-  } else {
-    rec = 'No CT head recommended (no PECARN high/intermediate features selected).';
-    box.className = 'result low';
-  }
-
-  box.innerHTML = `<div class="result-score">${anyHigh?'CT':(anyInter?'OBS/CT':'NO CT')}</div>
-                   <div class="result-label">${rec}</div>
-                   <div class="result-action">Copy documentation if needed.</div>`;
-
-  if(copyBtn) copyBtn.classList.add('show');
-  pecarnState = {ageGroup, checked, recommendation: rec};
+  setResult('pecarn-result', cls, (high.length? 'CT' : (intermediate.length? 'Observe/CT' : 'No CT')), label, action);
+  window.pecarnDetail = { incomplete:false, ageGroup:pecarnAgeGroup, high, intermediate, reco: action.replace(/^[^—]*—\s*/,'') };
 }
-
 function resetPecarn(){
-  document.querySelectorAll('input[name="pecarn-age"]').forEach(r => r.checked = false);
+  pecarnAgeGroup = null;
+  pecarnChecked = [];
+  document.querySelectorAll('input[name="pecarn-age"]').forEach(r=>r.checked=false);
   const wrap = document.getElementById('pecarn-criteria-wrap');
-  if(wrap) wrap.innerHTML = '';
-  const box = document.getElementById('pecarn-result');
-  if(box){
-    box.className = 'result neutral';
-    box.innerHTML = '<div class="result-score">—</div><div class="result-label">Select age group</div><div class="result-action">Choose &lt;2 vs ≥2 years first.</div>';
-  }
-  const btn = document.getElementById('pecarn-copy-btn');
-  if(btn) btn.classList.remove('show');
-  pecarnState = {ageGroup:null, checked:[], recommendation:''};
+  if (wrap) wrap.innerHTML = '';
+  updatePecarn();
 }
+
 </script>
 </body>
 </html>
