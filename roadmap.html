@@ -409,24 +409,30 @@ function submitSuggestion() {
     setTimeout(() => document.getElementById('input-title').style.borderColor = '', 1500);
     return;
   }
+
   const desc = document.getElementById('input-desc').value.trim();
-  const name = document.getElementById('input-name').value.trim();
-  const newItem = {
-    id: 'u' + Date.now(),
-    status: 'planned',
-    title,
-    desc,
-    tag: selectedTag,
-    votes: 1,
-    submitter: name || 'Anonymous',
-    ts: Math.floor(Date.now() / 1000)
-  };
-  votedIds.add(newItem.id);
-  items.unshift(newItem);
-  saveState();
+  const name = (document.getElementById('input-name').value || '').trim() || 'Anonymous';
+  const tag = selectedTag || '';
+
+  // Google Form (prefilled) — shared storage for everyone (responses land in the linked Sheet)
+  const FORM_BASE = "https://docs.google.com/forms/d/e/1FAIpQLSftejPFLQfXJXbR1byrQ6Co47FGVUYp8jNtnZ3MK8g2PtSk-g/viewform?usp=pp_url";
+  const ENTRY_NAME = "entry.587021054";
+  const ENTRY_TEXT = "entry.1057679111";
+  const ENTRY_PUBLISH = "entry.475669583";
+
+  // Combine title + optional detail into a single request string (you can change this format anytime)
+  const requestText = `${title}${desc ? " — " + desc : ""}${tag ? " [" + tag + "]" : ""}`;
+
+  const url =
+    `${FORM_BASE}` +
+    `&${ENTRY_NAME}=${encodeURIComponent(name)}` +
+    `&${ENTRY_TEXT}=${encodeURIComponent(requestText)}` +
+    `&${ENTRY_PUBLISH}=Yes,+publish+my+request`;
+
+  window.open(url, "_blank");
+
   closeModal();
-  renderAll();
-  showToast('✅ Feature submitted! Thanks for the suggestion.');
+  showToast("Almost done — click Submit in the form to publish it for everyone.");
 }
 
 function showToast(msg) {
