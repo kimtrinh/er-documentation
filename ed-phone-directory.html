@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KP ED Phone Directory</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1c2128;
+    --border: #30363d;
+    --omc: #e8622a;
+    --omc-dim: rgba(232,98,42,0.12);
+    --omc-border: rgba(232,98,42,0.3);
+    --fmc: #2a7de8;
+    --fmc-dim: rgba(42,125,232,0.12);
+    --fmc-border: rgba(42,125,232,0.3);
+    --text: #e6edf3;
+    --text-muted: #8b949e;
+    --text-dim: #6e7681;
+    --accent: #58a6ff;
+    --green: #3fb950;
+    --tag-bg: #21262d;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(8px);
+  }
+
+  .header-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+
+  .header-title span { color: var(--text); }
+
+  .search-wrap {
+    flex: 1;
+    max-width: 480px;
+    position: relative;
+  }
+
+  .search-wrap svg {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    pointer-events: none;
+  }
+
+  #globalSearch {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    padding: 8px 12px 8px 36px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  #globalSearch:focus { border-color: var(--accent); }
+  #globalSearch::placeholder { color: var(--text-dim); }
+
+  .search-count {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 11px;
+    color: var(--text-dim);
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  main {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  @media (max-width: 900px) {
+    main { grid-template-columns: 1fr; }
+  }
+
+  .hospital-panel {
+    background: var(--surface);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .hospital-panel.omc { border: 1px solid var(--omc-border); }
+  .hospital-panel.fmc { border: 1px solid var(--fmc-border); }
+
+  .panel-header {
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .omc .panel-header { background: var(--omc-dim); border-bottom: 1px solid var(--omc-border); }
+  .fmc .panel-header { background: var(--fmc-dim); border-bottom: 1px solid var(--fmc-border); }
+
+  .hospital-name {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+
+  .omc .hospital-name { color: var(--omc); }
+  .fmc .hospital-name { color: var(--fmc); }
+
+  .hospital-sub {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 2px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  .add-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--tag-bg);
+    color: var(--text-muted);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .add-btn:hover {
+    border-color: var(--green);
+    color: var(--green);
+    background: rgba(63,185,80,0.1);
+  }
+
+  .section {
+    padding: 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section:last-child { border-bottom: none; }
+
+  .section-header {
+    padding: 10px 20px;
+    background: var(--surface2);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-header::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.6;
+  }
+
+  .entries { padding: 4px 0; }
+
+  .entry {
+    display: flex;
+    align-items: center;
+    padding: 7px 20px;
+    gap: 12px;
+    transition: background 0.1s;
+    border-radius: 4px;
+  }
+
+  .entry:hover { background: var(--surface2); }
+
+  .entry-name {
+    flex: 1;
+    color: var(--text);
+    font-size: 13px;
+  }
+
+  .entry-note {
+    font-size: 11px;
+    color: var(--text-dim);
+    display: block;
+    font-style: italic;
+  }
+
+  .entry-number {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    white-space: nowrap;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 4px;
+    transition: background 0.1s;
+  }
+
+  .entry-number:hover { background: rgba(88,166,255,0.1); }
+
+  .entry-number.ext { color: var(--text-muted); font-weight: 400; }
+
+  .entry-type {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    background: var(--tag-bg);
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    flex-shrink: 0;
+    width: 38px;
+    text-align: center;
+  }
+
+  .entry-type.pager { color: #a5d6ff; border-color: rgba(165,214,255,0.3); }
+  .entry-type.ext { color: #d2a8ff; border-color: rgba(210,168,255,0.3); }
+  .entry-type.phone { color: #ffa657; border-color: rgba(255,166,87,0.3); }
+
+  .entry.custom .entry-name { color: var(--green); }
+  .entry.custom .entry-number { color: var(--green); }
+
+  .entry.hidden { display: none; }
+
+  .delete-btn {
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    cursor: pointer;
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-size: 14px;
+    line-height: 1;
+    opacity: 0;
+    transition: all 0.1s;
+  }
+
+  .entry:hover .delete-btn { opacity: 1; }
+  .delete-btn:hover { color: #f85149; background: rgba(248,81,73,0.1); }
+
+  /* Modal */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+    backdrop-filter: blur(4px);
+  }
+
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    width: 420px;
+    max-width: 95vw;
+    transform: translateY(10px);
+    transition: transform 0.2s;
+  }
+
+  .modal-overlay.open .modal { transform: translateY(0); }
+
+  .modal-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .modal-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .modal-close {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  .modal-close:hover { background: var(--tag-bg); color: var(--text); }
+
+  .modal-body { padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+
+  .form-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .form-input, .form-select {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 13px;
+    padding: 9px 12px;
+    outline: none;
+    transition: border-color 0.15s;
+    width: 100%;
+  }
+
+  .form-input:focus, .form-select:focus { border-color: var(--accent); }
+  .form-select option { background: var(--surface2); }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  .modal-footer {
+    padding: 14px 20px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+
+  .btn {
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    transition: all 0.15s;
+  }
+
+  .btn-ghost { background: transparent; color: var(--text-muted); }
+  .btn-ghost:hover { background: var(--tag-bg); color: var(--text); }
+
+  .btn-primary { background: var(--green); border-color: var(--green); color: #0d1117; }
+  .btn-primary:hover { opacity: 0.85; }
+
+  .no-results {
+    padding: 32px 20px;
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 13px;
+    font-family: 'IBM Plex Mono', monospace;
+    display: none;
+  }
+
+  mark {
+    background: rgba(255,210,0,0.3);
+    color: inherit;
+    border-radius: 2px;
+    padding: 0 1px;
+  }
+
+  .imaging-code {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: #ffa657;
+    background: rgba(255,166,87,0.1);
+    border: 1px solid rgba(255,166,87,0.2);
+    padding: 2px 6px;
+    border-radius: 3px;
+  }
+
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--surface);
+    border: 1px solid var(--green);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--green);
+    z-index: 300;
+    transform: translateY(60px);
+    opacity: 0;
+    transition: all 0.25s;
+  }
+
+  .toast.show { transform: translateY(0); opacity: 1; }
+
+  .updated-badge {
+    font-size: 10px;
+    color: var(--text-dim);
+    font-family: 'IBM Plex Mono', monospace;
+    font-style: italic;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-title">KP SBC // <span>ED DIRECTORY</span></div>
+  <div class="search-wrap">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+    <input type="text" id="globalSearch" placeholder="Search name or number..." autocomplete="off">
+    <span class="search-count" id="searchCount"></span>
+  </div>
+  <span class="updated-badge">Updated 11/2024</span>
+</header>
+
+<main>
+  <!-- OMC PANEL -->
+  <div class="hospital-panel omc" id="omcPanel">
+    <div class="panel-header">
+      <div>
+        <div class="hospital-name">OMC — Ontario Medical Center</div>
+        <div class="hospital-sub">Emergency Department</div>
+      </div>
+      <button class="add-btn" onclick="openModal('omc')">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add Entry
+      </button>
+    </div>
+    <div id="omcEntries"></div>
+    <div class="no-results" id="omcNoResults">No matching entries</div>
+  </div>
+
+  <!-- FMC PANEL -->
+  <div class="hospital-panel fmc" id="fmcPanel">
+    <div class="panel-header">
+      <div>
+        <div class="hospital-name">FMC — Fontana Medical Center</div>
+        <div class="hospital-sub">Emergency Department</div>
+      </div>
+      <button class="add-btn" onclick="openModal('fmc')">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add Entry
+      </button>
+    </div>
+    <div id="fmcEntries"></div>
+    <div class="no-results" id="fmcNoResults">No matching entries</div>
+  </div>
+</main>
+
+<!-- Add Entry Modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="modalTitle">Add Entry</span>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Category</label>
+          <select class="form-select" id="newCategory">
+            <option value="LOCATIONS">Locations</option>
+            <option value="CONSULTS">Consults</option>
+            <option value="INTERNAL SERVICES">Internal Services</option>
+            <option value="EXTERNAL SERVICES">External Services</option>
+            <option value="PHYSICIAN SUPPORT">Physician Support</option>
+            <option value="SECURITY">Security</option>
+            <option value="KEY STAFF">Key Staff</option>
+            <option value="WORKFLOWS">Workflows</option>
+            <option value="OTHER">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Type</label>
+          <select class="form-select" id="newType">
+            <option value="ext">Extension</option>
+            <option value="pager">Pager</option>
+            <option value="phone">Phone</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Name / Label</label>
+        <input class="form-input" id="newName" placeholder="e.g. Cardiology" type="text">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Number</label>
+        <input class="form-input" id="newNumber" placeholder="e.g. 45100 or (909) 555-1234" type="text">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Notes (optional)</label>
+        <input class="form-input" id="newNote" placeholder="e.g. 7a–3p only" type="text">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="addEntry()">Add Entry</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const data = {
+  omc: {
+    "LOCATIONS": [
+      { name: "Triage / 30-Second Triage", number: "49808", type: "ext" },
+      { name: "Ambulance RN", number: "45861", type: "ext" },
+      { name: "ED Main Line – ED Nurses", number: "45800", type: "ext" },
+      { name: "Bat Phone (Medics access to ED)", number: "45816", type: "ext" },
+      { name: "Charge Nurses (CISCO wireless)", number: "45860", type: "ext", note: "Office 45832" },
+      { name: "ED Pod A (Nurse Station)", number: "47510", type: "ext" },
+      { name: "ED Pod A – Clerk", number: "45810", type: "ext", note: "Fax 45811" },
+      { name: "ED Pod B (Nurse Station)", number: "47520", type: "ext" },
+      { name: "ED Pod B – Clerk", number: "45820", type: "ext", note: "Fax 45821" },
+      { name: "ED Pod C (Nurse Station)", number: "47530", type: "ext" },
+      { name: "ED Pod C – Clerk", number: "45830", type: "ext", note: "Fax 45831" },
+      { name: "MOD POD RN", number: "45886", type: "ext" },
+      { name: "PIT RN", number: "45882", type: "ext" },
+      { name: "Urgent Care", number: "42544 / 42525", type: "ext" },
+      { name: "ED Admin Office", number: "45842", type: "ext" },
+      { name: "ACD Phone", number: "45884", type: "ext" },
+      { name: "Staffing Dept – Call-offs Line", number: "45852", type: "ext" },
+    ],
+    "CONSULTS": [
+      { name: "Anesthesia", number: "47250", type: "ext" },
+      { name: "General Surgery", number: "p1065", type: "pager" },
+      { name: "Internal Medicine", number: "Vocera", type: "ext", note: "7a–3:30p" },
+      { name: "Internal Medicine", number: "47333", type: "ext", note: "3:30p–7a" },
+      { name: "Interventional Radiology (IR)", number: "45210 / 45254", type: "ext" },
+      { name: "Neurosurgery", number: "ETAP", type: "phone" },
+      { name: "OBGYN", number: `Vocera "OMC Gyn"`, type: "ext" },
+      { name: "Operating Room", number: "49183", type: "ext", note: "OR Main 43910" },
+      { name: "Orthopedics", number: "(909) 457-2048", type: "phone", note: "7a–10p" },
+      { name: "Orthopedics", number: "Attending", type: "phone", note: "10p–7a" },
+      { name: "Ortho Techs Pager", number: "909-209-0360", type: "phone" },
+      { name: "Pediatrics Consult – POD", number: "909-209-0668", type: "phone" },
+      { name: "Peritoneal Dialysis RN", number: "43039", type: "ext" },
+      { name: "Physical Therapy", number: "45707", type: "ext", note: "Lead 47088 / Fax 45701" },
+      { name: "PICC RN", number: "47787 / 47789", type: "ext" },
+      { name: "Podiatry", number: "8-250-7777 → 1984", type: "phone", note: "8a–5p" },
+      { name: "Psychiatry (ED ext / Director)", number: "45855 / 427-3705", type: "ext", note: "8a–12a" },
+      { name: "Psychiatry", number: "FMC Psychiatry", type: "phone", note: "12a–8a" },
+      { name: "Respiratory", number: "43981", type: "ext" },
+    ],
+    "INTERNAL SERVICES": [
+      { name: "X-ray / ED", number: "45279", type: "ext" },
+      { name: "CT", number: "45302", type: "ext" },
+      { name: "MRI", number: "45304 / 45305", type: "ext" },
+      { name: "Ultrasound", number: "45320", type: "ext" },
+      { name: "Laboratory", number: "42970", type: "ext" },
+      { name: "Blood Bank", number: "42984", type: "ext" },
+      { name: "Pharmacy – Inpatient", number: "43500", type: "ext" },
+      { name: "Pharmacy – Outpatient", number: "43120", type: "ext" },
+      { name: "CACC RN", number: "8-332-6515", type: "ext" },
+      { name: "MOB D (Pharmacy Out-Patient)", number: "MOB D – 24 Hr", type: "ext", note: "Appt Center 888-750-0036" },
+      { name: "2E – ICU", number: "225-244", type: "ext", note: "Charge 43636" },
+      { name: "2W – Step Down", number: "201-224", type: "ext", note: "Charge 43640" },
+      { name: "3E – Med Surg", number: "325-348", type: "ext", note: "Charge 43788" },
+      { name: "3W – Med Surg", number: "301-324", type: "ext", note: "Charge 43737" },
+      { name: "4E – Med Surg", number: "425-448", type: "ext", note: "Charge 43888" },
+      { name: "4W – Med Surg", number: "401-424", type: "ext", note: "Charge 43838" },
+      { name: "Labor & Delivery", number: "45555", type: "ext", note: "Nursery 49130 / NICU 45590" },
+      { name: "PACU", number: "43940", type: "ext" },
+      { name: "Perinatal", number: "47350", type: "ext" },
+      { name: "Cast Room", number: "49890", type: "ext" },
+      { name: "Food & Nutrition", number: "43460", type: "ext", note: "43663 / 43477" },
+      { name: "Sterile Processing", number: "43440", type: "ext" },
+      { name: "Utilization / Case Manager", number: "47331", type: "ext" },
+      { name: "Morgue", number: "44630", type: "ext" },
+      { name: "Engineering", number: "45185", type: "ext", note: "Dept 45163" },
+      { name: "EVS", number: "45540", type: "ext" },
+      { name: "Facilities Services", number: "43663", type: "ext" },
+      { name: "Help Desk / IT", number: "44357", type: "ext", note: "8-330-1143" },
+      { name: "HR Service Center", number: "877-457-4772", type: "phone" },
+      { name: "HUB / Transportation", number: "877-227-8799", type: "phone" },
+      { name: "Linen Department", number: "45610", type: "ext" },
+      { name: "Mail Pick-Up", number: "42250", type: "ext" },
+      { name: "Materials Management", number: "42860", type: "ext" },
+      { name: "M/M Cisco 0600-1430", number: "45893", type: "ext" },
+      { name: "Admitting", number: "45330", type: "ext", note: "Cisco 49334" },
+      { name: "Cashier Office", number: "45337", type: "ext", note: "Fax 43191" },
+      { name: "Inpatient Financial Counselor", number: "45338", type: "ext", note: "Alt 45339" },
+      { name: "ED Copay / ED Financial Counselor", number: "43194", type: "ext", note: "Alt 43193" },
+    ],
+    "EXTERNAL SERVICES": [
+      { name: "ETAP", number: "(562) 658-3998", type: "phone" },
+      { name: "ONRAD", number: "(800) 848-5876", type: "phone" },
+      { name: "Poison Control", number: "(800) 222-1222", type: "phone" },
+      { name: "PTAC", number: "(562) 658-3980", type: "phone" },
+      { name: "SART Nurse", number: "(909) 427-9227", type: "phone" },
+      { name: "Ontario Police Department", number: "909-986-6711", type: "phone" },
+      { name: "Decedent Affairs", number: "47957", type: "ext" },
+      { name: "Employee Health", number: "42191", type: "ext", note: "Fax 42199" },
+      { name: "Member Services", number: "800-464-4000", type: "phone" },
+      { name: "MRN #", number: "1-858-614-1900", type: "phone", note: "8-279-3333" },
+      { name: "Ethics Consultation", number: "909-209-4688", type: "phone" },
+      { name: "Education – Palm Ct.", number: "TL 286 / 909-609-3650", type: "phone", note: "Fax 909-609-3659 / OMC Ph → 42841" },
+    ],
+    "PHYSICIAN SUPPORT": [
+      { name: "Case Manager / Utilization", number: "47333", type: "ext" },
+      { name: "Social Services", number: "43322", type: "ext", note: "8:30a–10:30p" },
+      { name: "Social Services", number: "43320", type: "ext" },
+    ],
+    "SECURITY": [
+      { name: "Security", number: "45500", type: "ext" },
+      { name: "Security Specialist", number: "41555", type: "ext" },
+      { name: "Badge Office", number: "47292", type: "ext" },
+    ],
+    "OTHER IMPORTANT NUMBERS": [
+      { name: "Vocera", number: "47690", type: "ext" },
+      { name: "Fax (ED Clerks)", number: "(909) 724-5811", type: "phone" },
+      { name: "Fax (ED Charge)", number: "(909) 724-5804", type: "phone" },
+      { name: "Physician Help Desk", number: "1 (888) 457-4872", type: "phone" },
+      { name: "ED Main Tel", number: "909-724-5800", type: "phone" },
+      { name: "TieLine FMC", number: "8-332", type: "ext", note: "OLD: 8-250 / Palm Ct: 8-127" },
+    ],
+    "KEY STAFF — OMC ED": [
+      { name: "Dr. Michael Schwartzwald, Chief of Svc.", number: "45840", type: "ext" },
+      { name: "Catherine Kim MD / Darlena Monet MD (ACOS)", number: "—", type: "ext" },
+      { name: "Michelle Sperry MD", number: "—", type: "ext" },
+      { name: "Marlene Lamberton, RN – OMC Director", number: "45841", type: "ext", note: "TL 826-45841" },
+      { name: "Brittany Martinez – OMC Admin Specialist", number: "45842", type: "ext", note: "Fax 45801" },
+      { name: "Dept / General Staff Fax", number: "45838", type: "ext" },
+      { name: "Claude Allaire, RN – ACD", number: "45817", type: "ext" },
+      { name: "Paxton Faskell, RN – ACD", number: "45809", type: "ext" },
+      { name: "Rosa Gonzalez, RN – ACD", number: "45828", type: "ext" },
+      { name: "Marcos Guerra, RN – ACD", number: "45851", type: "ext" },
+      { name: "Sonya Sandhu, RN – ACD/Educator", number: "45826", type: "ext" },
+      { name: "Willie Hernandez, RN – ACD/Educator", number: "45827", type: "ext" },
+      { name: "Gerry Pence – Unit Manager", number: "45848", type: "ext" },
+      { name: "Lynda Salas – Clerical Svcs Supervisor", number: "—", type: "ext" },
+      { name: "Communications / In-basket RN", number: "45849", type: "ext" },
+    ],
+    "IMAGING ORDERS — CT": [
+      { name: "3D Post-Processing (add-on)", number: "76377H", type: "ext" },
+      { name: "Aortic Dissection", number: "228245", type: "ext" },
+      { name: "Auditory Canal", number: "70480K", type: "ext" },
+      { name: "Mesenteric Ischemia", number: "74174A", type: "ext" },
+      { name: "Pan-scan", number: "207001", type: "ext" },
+      { name: "Pulmonary Embolism", number: "71275J", type: "ext" },
+    ],
+    "IMAGING ORDERS — ULTRASOUND": [
+      { name: "Pylorus", number: "76705AM", type: "ext" },
+      { name: "MSK / Soft Tissue Mass", number: "76881G", type: "ext" },
+      { name: "Appendix (Peds)", number: "76856B", type: "ext" },
+      { name: "Pelvis (Non-OB)", number: "225581", type: "ext" },
+      { name: "Pelvis (OB <14wks)", number: "218633", type: "ext" },
+    ],
+    "IMAGING ORDERS — XRAY": [
+      { name: "Gastrostomy Tube Confirmation", number: "74018A", type: "ext", note: "Also order Gastrograffin 20mL → 5980" },
+    ],
+  },
+  fmc: {
+    "LOCATIONS": [
+      { name: "Main Line", number: "(909) 427-5000", type: "phone" },
+      { name: "ED Main Line", number: "29111", type: "ext" },
+      { name: "Triage", number: "27008", type: "ext" },
+      { name: "Ambulance Triage", number: "27018", type: "ext" },
+      { name: "Ambulance Triage – ED Clerk", number: "27000", type: "ext" },
+      { name: "Ambulance – AMR", number: "800-474-1777", type: "phone" },
+      { name: "Clerk / ED Resource Clerk", number: "27062", type: "ext" },
+      { name: "ED Ambulance Triage Clerk", number: "27021", type: "ext" },
+      { name: "Charge Nurse / ED Charge RN", number: "27071", type: "ext", note: "Beeper 1204" },
+      { name: "Pod A", number: "29112", type: "ext" },
+      { name: "Pod B", number: "29113", type: "ext" },
+      { name: "Pod C", number: "29114", type: "ext" },
+      { name: "Pod D", number: "29115", type: "ext" },
+      { name: "MOD POD", number: "27065", type: "ext" },
+      { name: "CCT", number: "27064", type: "ext" },
+      { name: "PITT", number: "29000", type: "ext" },
+      { name: "ED Staff Lounge", number: "39143 / 39144", type: "ext" },
+      { name: "ED Co-Pay", number: "28162", type: "ext" },
+      { name: "ED Financial Counselor", number: "28191", type: "ext" },
+      { name: "ED Fax Machine – Side A", number: "29100", type: "ext" },
+      { name: "ED Fax Machine – Amb Triage", number: "27001", type: "ext" },
+      { name: "ED Fax Machine – Side C", number: "29130", type: "ext" },
+      { name: "ED Fax Machine – Side D", number: "29140", type: "ext" },
+      { name: "ED Triage 30sec RM1/RM2/RM3/RM4", number: "27008/39101/39102/39103/39104", type: "ext" },
+      { name: "ED Triage 30sec – ED Clerk", number: "27009", type: "ext" },
+      { name: "ED Housekeeping Triage/Pod A/B", number: "28540", type: "ext", note: "Beeper 6204" },
+      { name: "ED Housekeeping Pod C/D", number: "28540", type: "ext", note: "Beeper 6206" },
+    ],
+    "CONSULTS": [
+      { name: "Anesthesia", number: "24939", type: "ext" },
+      { name: "General Surgery", number: "p1681", type: "pager" },
+      { name: "Surgery – MD", number: "26263", type: "ext", note: "Beeper 1685" },
+      { name: "Internal Medicine", number: "Vocera", type: "ext", note: "7a–7p" },
+      { name: "Internal Medicine", number: "27028", type: "ext", note: "7p–7a" },
+      { name: "Interventional Radiology", number: "24050 / 24060", type: "ext" },
+      { name: "Neurosurgery", number: "p2020", type: "pager", note: "3a–9p" },
+      { name: "Neurosurgery", number: "Virtualist", type: "phone", note: "9p–3a" },
+      { name: "NICU", number: "27300", type: "ext" },
+      { name: "OBGYN / OB-GYN MD", number: "1588", type: "ext", note: `Vocera "Gyn" (24190)` },
+      { name: "Orthopedics PA", number: "p1651", type: "pager", note: "7a–10p" },
+      { name: "Orthopedics", number: "Attending", type: "phone", note: "10p–7a" },
+      { name: "Pain Clinic", number: "73185", type: "ext" },
+      { name: "Pediatrics (Hospitalist)", number: "p1223", type: "pager" },
+      { name: "Pediatrics (PICU)", number: "p3966", type: "pager" },
+      { name: "Peritoneal Dialysis RN", number: "p7117", type: "pager" },
+      { name: "Dialysis – Peritoneal MOB 3, 1st Floor", number: "74253", type: "ext", note: "Beeper 7117" },
+      { name: "Dialysis – HEMO 6th Floor", number: "28600 / 28608", type: "ext" },
+      { name: "PICC RN", number: "p2723", type: "pager", note: "Ext 26511 (5 North)" },
+      { name: "PICC Line RN – 5 North", number: "26511", type: "ext" },
+      { name: "Podiatry", number: "p1984", type: "pager" },
+      { name: "Psychiatry / PSYCH", number: "75313", type: "ext" },
+      { name: "Mental Health", number: "8-127-2941", type: "ext" },
+      { name: "Respiratory", number: "28998 / 28871 Cisco", type: "ext", note: "Beeper 1404" },
+      { name: "Radiology (File Room)", number: "76600", type: "ext", note: "7a–11:30p" },
+      { name: "Radiology (STAT reads)", number: "76600", type: "ext", note: "7a–7p" },
+      { name: "Substance Abuse", number: "29119", type: "ext", note: "7:30a–3:30p M–F" },
+      { name: "Wound RN", number: "29652", type: "ext" },
+      { name: "Wound Clinic", number: "75439", type: "ext" },
+      { name: "Wound Care", number: "866-454-3485", type: "phone" },
+      { name: "Wound Ostomy RN", number: "209-0456 / 370-7552", type: "phone" },
+      { name: "Pacemaker", number: "7716", type: "pager" },
+      { name: "Stroke Alert / Internal Overhead", number: "21006", type: "ext" },
+    ],
+    "INTERNAL SERVICES": [
+      { name: "X-ray", number: "24164", type: "ext" },
+      { name: "X-ray – File Room", number: "77651", type: "ext" },
+      { name: "CT 1", number: "24019", type: "ext" },
+      { name: "Fluoroscopy", number: "27655", type: "ext" },
+      { name: "MRI", number: "24351", type: "ext" },
+      { name: "Nuclear Med – MOB 3 Basement", number: "75260", type: "ext" },
+      { name: "Ultrasound", number: "27652", type: "ext" },
+      { name: "Laboratory / Blood Bank", number: "28060 / 28080", type: "ext" },
+      { name: "Laboratory – STAT", number: "38055", type: "ext" },
+      { name: "Cath Labs RM1/RM2/RM3/PACU", number: "24658 / 24653 / 24626 / 24675", type: "ext" },
+      { name: "Pharmacy – Inpatient", number: "38339 / 38352 Cisco", type: "ext", note: "Beeper 3323 PGR" },
+      { name: "Pharmacy – Outpatient", number: "28018", type: "ext" },
+      { name: "Pharmacy – Thrombo Code", number: "2396", type: "pager" },
+      { name: "Pharmacy – ED", number: "28372", type: "ext" },
+      { name: "OB/GYN MD", number: "1588", type: "ext" },
+      { name: "OCC MED RN station / Main Line", number: "77009 / 73917", type: "ext", note: "Fax 5146" },
+      { name: "ICU – 2 North (201-221)", number: "29200", type: "ext" },
+      { name: "ICU – 2 South (222-240)", number: "2950", type: "ext" },
+      { name: "Operating Room", number: "26200 / 26263", type: "ext" },
+      { name: "Labor & Delivery / Intake", number: "27373 / 27350 / 27372", type: "ext" },
+      { name: "PACU", number: "26254", type: "ext" },
+      { name: "Med Surg – 3 North (301-324)", number: "29300", type: "ext" },
+      { name: "Mother Baby – 3 South (325-348)", number: "29350", type: "ext" },
+      { name: "Nursery", number: "27330", type: "ext" },
+      { name: "ICU – 4 North (401-410)", number: "29400", type: "ext" },
+      { name: "Peds ICU – 4 North (411-420)", number: "29445", type: "ext" },
+      { name: "Pediatrics – 4 South (421-444)", number: "29450", type: "ext" },
+      { name: "SDU – 5 North (501-524)", number: "29500", type: "ext" },
+      { name: "SDU – 5 South (525-548)", number: "29550", type: "ext" },
+      { name: "Stress Testing / Treadmill", number: "24677", type: "ext" },
+      { name: "Med Surg – 6 North (601-624)", number: "29600", type: "ext" },
+      { name: "Med Surg – 6 South (625-648)", number: "29650", type: "ext" },
+      { name: "Med Surg – 7 North (701-724)", number: "29700", type: "ext" },
+      { name: "Med Surg – 7 South (725-748)", number: "29750", type: "ext" },
+      { name: "Infusion Center", number: "75650", type: "ext" },
+      { name: "Appt Bypass Line", number: "8-127-3301", type: "ext" },
+      { name: "Gen. Appointment Line", number: "888-750-0036", type: "phone" },
+      { name: "Blood Bank", number: "28060", type: "ext" },
+      { name: "Admitting", number: "28181", type: "ext" },
+      { name: "Bed Coordinator", number: "26514 / 26515", type: "ext" },
+      { name: "Biomed / Engineering / Maintenance", number: "26918 / 26060", type: "ext" },
+      { name: "Central Supply", number: "27176", type: "ext" },
+      { name: "Dietary", number: "24460", type: "ext" },
+      { name: "EVS Supervisor", number: "28540", type: "ext" },
+      { name: "Sterile Processing", number: "38517 / 28503", type: "ext" },
+      { name: "Linen Room / Supervisor", number: "28914", type: "ext", note: "Beeper 1110" },
+    ],
+    "EXTERNAL SERVICES": [
+      { name: "ETAP / Burn Transfers (Member)", number: "(562) 658-3998", type: "phone" },
+      { name: "Burn Transfers (Non-member – ARMC)", number: "(909) 580-1000", type: "phone" },
+      { name: "ONRAD / Telerad", number: "(800) 848-5876", type: "phone" },
+      { name: "Telerad", number: "(562) 658-3095", type: "phone" },
+      { name: "Poison Control", number: "(800) 222-1222", type: "phone" },
+      { name: "PTAC", number: "(562) 658-3980", type: "phone" },
+      { name: "SART Nurse", number: "(909) 427-9227", type: "phone" },
+      { name: "One Legacy", number: "800-338-6112", type: "phone" },
+      { name: "Fontana PD", number: "909-822-1121", type: "phone" },
+      { name: "Yellow Cab", number: "909-622-1313", type: "phone" },
+      { name: "Coroner's Office", number: "909-387-2978", type: "phone" },
+      { name: "Home Health / Hospice", number: "8-286-3800 / 3838", type: "phone" },
+      { name: "Language Line Services", number: "1-800-523-1786", type: "phone" },
+      { name: "Member Services", number: "800-464-4000", type: "phone", note: "8-122-4000" },
+      { name: "EPRP Call Center", number: "1-800-447-3777", type: "phone", note: "Beeper 8-320-3000" },
+      { name: "IT National Service Desk", number: "1-888-457-4872", type: "phone" },
+      { name: "Non-Member", number: "858-614-3333", type: "phone", note: "8-279-3333" },
+    ],
+    "PHYSICIAN SUPPORT": [
+      { name: "Case Manager", number: "(909) 491-1014", type: "phone" },
+      { name: "Case Manager", number: "(909) 491-9091", type: "phone" },
+      { name: "Case Manager", number: "(909) 775-7767", type: "phone" },
+      { name: "Discharge Planner / Case Mgr", number: "34959 / 34960", type: "ext" },
+      { name: "Social Services", number: "75191 / 76491", type: "ext", note: "8a–5p" },
+      { name: "Social Services", number: "(909) 459-3974", type: "phone", note: "5p–11p" },
+      { name: "Urgent Care", number: "75750", type: "ext" },
+      { name: "PT Eval", number: "35707", type: "ext" },
+    ],
+    "SECURITY": [
+      { name: "Security – Med Center", number: "75500", type: "ext" },
+      { name: "Badge Office", number: "74190", type: "ext" },
+    ],
+    "OTHER IMPORTANT NUMBERS": [
+      { name: "Vocera", number: "24190", type: "ext", note: "(909) 302-4190" },
+      { name: "Fax", number: "(909) 302-7001", type: "phone" },
+      { name: "Physician Help Desk", number: "1 (888) 457-4872", type: "phone" },
+      { name: "Physician Help Desk (alt)", number: "(951) 270-5599", type: "phone" },
+      { name: "ACD On Call", number: "Vocera", type: "ext" },
+      { name: "ED Staffing Office", number: "29170", type: "ext", note: "Fax 29167" },
+      { name: "ED Physician Suite", number: "29000", type: "ext", note: "Fax 29110" },
+      { name: "Help Desk", number: "74357", type: "ext" },
+      { name: "HUB", number: "1-877-227-8799", type: "phone" },
+    ],
+    "KEY STAFF — FMC ED": [
+      { name: "Dr. Michael Schwartzwald, Chief", number: "29184", type: "ext" },
+      { name: "Michelle Ocon, RN – Clinical Director", number: "29182", type: "ext" },
+      { name: "Kristin Kern, RN – ACD", number: "29083", type: "ext" },
+      { name: "Wendi Schmidt – ACD", number: "29082", type: "ext" },
+      { name: "Abigail Rojas, RN – ACD", number: "29081", type: "ext" },
+      { name: "Kristy Bruce, RN – ACD", number: "29169", type: "ext" },
+      { name: "Kari Gaston, RN – ACD", number: "29080", type: "ext" },
+      { name: "Sonya Sandhu, RN – ACD/Clinical Educator", number: "29177", type: "ext" },
+      { name: "Tara Andrews, ADA", number: "29171", type: "ext", note: "Fax 29196" },
+      { name: "David Thiessen – Unit Manager", number: "29086", type: "ext", note: "Fax 29110" },
+      { name: "Denise Ramos", number: "29176", type: "ext", note: "Fax 29196" },
+      { name: "ED Security Specialist", number: "35500", type: "ext" },
+    ],
+    "WORKFLOWS — FMC": [
+      { name: "Ectopic Watch", number: "Fwd chart to Jessica Dasco", type: "ext" },
+      { name: "Occupational Exposure", number: "Fwd chart to Gina Cummings", type: "ext" },
+      { name: "OnRad Delays (>3 hrs) 12p–7a", number: "(909) 302-4112", type: "phone" },
+      { name: "Radiology Schedule: KP Telerad M–Th 7p–7a", number: "OnRad F–Su 7p–7a", type: "ext" },
+      { name: "Ontario ER – Pod A Ambulance", number: "8-264-5810", type: "ext" },
+      { name: "Ontario ER – Pod B", number: "8-264-5820", type: "ext" },
+      { name: "Ontario ER – Pod C", number: "8-264-5830", type: "ext" },
+      { name: "Ontario ER – Abnormal Results Nurse", number: "8-264-5849", type: "ext" },
+    ],
+    "IMAGING ORDERS — CT": [
+      { name: "3D Post-Processing (add-on)", number: "76377H", type: "ext" },
+      { name: "Aortic Dissection", number: "228245", type: "ext" },
+      { name: "Auditory Canal", number: "70480K", type: "ext" },
+      { name: "Mesenteric Ischemia", number: "74174A", type: "ext" },
+      { name: "Pan-scan", number: "207001", type: "ext" },
+      { name: "Pulmonary Embolism", number: "71275J", type: "ext" },
+    ],
+    "IMAGING ORDERS — ULTRASOUND": [
+      { name: "Pylorus", number: "76705AM", type: "ext" },
+      { name: "MSK / Soft Tissue Mass", number: "76881G", type: "ext" },
+      { name: "Appendix (Peds)", number: "76856B", type: "ext" },
+      { name: "Pelvis (Non-OB)", number: "225581", type: "ext" },
+      { name: "Pelvis (OB <14wks)", number: "218633", type: "ext" },
+    ],
+    "IMAGING ORDERS — XRAY": [
+      { name: "Gastrostomy Tube Confirmation", number: "74018A", type: "ext", note: "Also order Gastrograffin 20mL → 5980" },
+    ],
+  }
+};
+
+// Custom entries stored in memory
+const customEntries = { omc: [], fmc: [] };
+let currentHospital = 'omc';
+
+function highlight(text, query) {
+  if (!query) return text;
+  const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return text.replace(new RegExp(`(${escaped})`, 'gi'), '<mark>$1</mark>');
+}
+
+function isImaging(section) {
+  return section.startsWith('IMAGING');
+}
+
+function buildEntry(item, section, hospital, idx, isCustom = false) {
+  const id = `${hospital}-${section.replace(/\s/g,'-')}-${idx}`;
+  const numberDisplay = isImaging(section)
+    ? `<span class="imaging-code">${item.number}</span>`
+    : `<span class="entry-number ${item.type}" onclick="copyNum(this,'${item.number}')" title="Click to copy">${item.number}</span>`;
+
+  return `
+    <div class="entry${isCustom ? ' custom' : ''}" id="${id}" data-name="${item.name.toLowerCase()}" data-number="${item.number.toLowerCase()}">
+      <div class="entry-name">
+        ${item.name}
+        ${item.note ? `<span class="entry-note">${item.note}</span>` : ''}
+      </div>
+      ${numberDisplay}
+      <span class="entry-type ${item.type}">${item.type === 'pager' ? 'pgr' : item.type === 'ext' ? 'ext' : 'tel'}</span>
+      ${isCustom ? `<button class="delete-btn" onclick="deleteCustom('${hospital}',${idx})" title="Delete">×</button>` : ''}
+    </div>
+  `;
+}
+
+function renderHospital(hospital) {
+  const container = document.getElementById(`${hospital}Entries`);
+  let html = '';
+  const sections = data[hospital];
+  for (const [section, entries] of Object.entries(sections)) {
+    html += `<div class="section" data-section="${section}">
+      <div class="section-header">${section}</div>
+      <div class="entries">`;
+    entries.forEach((item, i) => {
+      html += buildEntry(item, section, hospital, i);
+    });
+    html += `</div></div>`;
+  }
+
+  // Custom entries grouped by category
+  const customs = customEntries[hospital];
+  if (customs.length > 0) {
+    const byCategory = {};
+    customs.forEach((item, i) => {
+      const cat = item.category || 'OTHER';
+      if (!byCategory[cat]) byCategory[cat] = [];
+      byCategory[cat].push({ item, i });
+    });
+    for (const [cat, entries] of Object.entries(byCategory)) {
+      html += `<div class="section custom-section" data-section="${cat}">
+        <div class="section-header">${cat} ★</div>
+        <div class="entries">`;
+      entries.forEach(({ item, i }) => {
+        html += buildEntry(item, cat, hospital, i, true);
+      });
+      html += `</div></div>`;
+    }
+  }
+
+  container.innerHTML = html;
+}
+
+function renderAll() {
+  renderHospital('omc');
+  renderHospital('fmc');
+}
+
+renderAll();
+
+// Search
+const searchInput = document.getElementById('globalSearch');
+const searchCount = document.getElementById('searchCount');
+
+searchInput.addEventListener('input', () => {
+  const q = searchInput.value.trim().toLowerCase();
+  let total = 0;
+
+  ['omc', 'fmc'].forEach(hospital => {
+    const container = document.getElementById(`${hospital}Entries`);
+    const entries = container.querySelectorAll('.entry');
+    let visible = 0;
+
+    entries.forEach(entry => {
+      const name = entry.dataset.name || '';
+      const number = entry.dataset.number || '';
+      const match = !q || name.includes(q) || number.includes(q);
+      entry.classList.toggle('hidden', !match);
+      if (match) visible++;
+    });
+
+    // Section visibility
+    container.querySelectorAll('.section').forEach(sec => {
+      const anyVisible = sec.querySelector('.entry:not(.hidden)');
+      sec.style.display = anyVisible ? '' : 'none';
+    });
+
+    document.getElementById(`${hospital}NoResults`).style.display = visible === 0 && q ? 'block' : 'none';
+    total += visible;
+  });
+
+  searchCount.textContent = q ? `${total} found` : '';
+});
+
+// Modal
+function openModal(hospital) {
+  currentHospital = hospital;
+  document.getElementById('modalTitle').textContent = `Add Entry — ${hospital.toUpperCase()}`;
+  document.getElementById('modalOverlay').classList.add('open');
+  document.getElementById('newName').focus();
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.getElementById('newName').value = '';
+  document.getElementById('newNumber').value = '';
+  document.getElementById('newNote').value = '';
+}
+
+document.getElementById('modalOverlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('modalOverlay')) closeModal();
+});
+
+function addEntry() {
+  const name = document.getElementById('newName').value.trim();
+  const number = document.getElementById('newNumber').value.trim();
+  const note = document.getElementById('newNote').value.trim();
+  const type = document.getElementById('newType').value;
+  const category = document.getElementById('newCategory').value;
+
+  if (!name || !number) { showToast('Name and number required.'); return; }
+
+  customEntries[currentHospital].push({ name, number, type, note, category });
+  closeModal();
+  renderHospital(currentHospital);
+  showToast(`Added "${name}" to ${currentHospital.toUpperCase()}`);
+}
+
+function deleteCustom(hospital, idx) {
+  customEntries[hospital].splice(idx, 1);
+  renderHospital(hospital);
+  showToast('Entry removed.');
+}
+
+function copyNum(el, num) {
+  navigator.clipboard.writeText(num).then(() => {
+    const orig = el.textContent;
+    el.textContent = 'copied!';
+    setTimeout(() => el.textContent = orig, 1200);
+  });
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+</script>
+</body>
+</html>
