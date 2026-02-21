@@ -70,6 +70,14 @@ main{max-width:980px;margin:0 auto;padding:24px}
 /* INPUTS */
 .input{width:100%;padding:10px;border-radius:10px;border:1px solid #334155;background:#0f172a;color:#e2e8f0;outline:none}
 .input:focus{border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,.2)}
+
+/* SITE NAV */
+.sitenav{background:#0f172a;border-bottom:1px solid #1e3a5f;padding:0 24px;position:sticky;top:0;z-index:100}
+.sitenav-inner{max-width:980px;margin:0 auto;display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+.sitenav-inner::-webkit-scrollbar{display:none}
+.sitenav-inner a{font-family:'Inter',system-ui,sans-serif;font-size:13px;font-weight:600;color:#64748b;text-decoration:none;padding:12px 10px;white-space:nowrap;border-bottom:2px solid transparent;transition:all .2s}
+.sitenav-inner a:hover{color:#e2e8f0;border-bottom-color:#334155}
+.sitenav-inner a.active{color:#38bdf8;border-bottom-color:#38bdf8}
 </style>
 </head>
 <body>
