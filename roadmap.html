@@ -25,24 +25,6 @@ header{background:linear-gradient(135deg,#1e293b,#0f172a);border-bottom:1px soli
 .suggest-btn{padding:10px 20px;background:#3b82f6;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0}
 .suggest-btn:hover{background:#2563eb}
 
-
-.admin-btn{padding:10px 14px;background:#0f172a;color:#93c5fd;border:1px solid #334155;border-radius:10px;font-size:13px;font-weight:800;cursor:pointer;transition:all .2s;white-space:nowrap}
-.admin-btn:hover{border-color:#3b82f6;color:#e0f2fe}
-.admin-btn.active{background:#1e3a5f;border-color:#3b82f6;color:#fff}
-
-.admin-bar{margin:14px 0 18px;background:#111827;border:1px solid #334155;border-radius:12px;padding:12px 14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.admin-bar .hint{color:#94a3b8;font-size:12px}
-.admin-bar .spacer{flex:1}
-.admin-action{padding:8px 12px;border-radius:10px;border:1px solid #334155;background:#0f172a;color:#cbd5e1;font-size:12px;font-weight:800;cursor:pointer;transition:all .2s}
-.admin-action:hover{border-color:#3b82f6;background:#1e3a5f}
-.admin-action.danger{border-color:#7f1d1d;color:#fecaca;background:#1f0707}
-.admin-action.danger:hover{border-color:#ef4444}
-
-.admin-controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
-.admin-mini{padding:6px 10px;border-radius:10px;border:1px solid #334155;background:#0f172a;color:#cbd5e1;font-size:11px;font-weight:800;cursor:pointer;transition:all .2s}
-.admin-mini:hover{border-color:#3b82f6;background:#1e3a5f}
-.admin-mini.danger{border-color:#7f1d1d;color:#fecaca;background:#1f0707}
-.admin-mini.danger:hover{border-color:#ef4444}
 main{max-width:1100px;margin:0 auto;padding:24px 24px 80px}
 
 /* FILTER TABS */
@@ -157,7 +139,7 @@ main{max-width:1100px;margin:0 auto;padding:24px 24px 80px}
       <div class="logo"><span>🗺️</span><h1>Feature Roadmap</h1></div>
       <p class="subtitle">Vote on what to build next · Suggest new features · See what's in progress</p>
     </div>
-    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end"><button class="admin-btn" id="adminToggle" onclick="toggleAdmin()" title="Admin mode (local)">Admin</button><button class="suggest-btn" onclick="openModal()">+ Suggest a Feature</button></div>
+    <button class="suggest-btn" onclick="openModal()">+ Suggest a Feature</button>
   </div>
 </header>
 
@@ -174,14 +156,6 @@ main{max-width:1100px;margin:0 auto;padding:24px 24px 80px}
     <button class="filter-tab" onclick="filterTag('Workflow',this)">Workflow</button>
     <button class="filter-tab" onclick="filterTag('Trauma',this)">Trauma</button>
     <div class="filter-spacer"></div>
-  <div class="admin-bar" id="adminBar" style="display:none">
-    <div class="hint"><strong>Admin mode:</strong> Move cards between columns or delete them. Changes apply to <em>your browser</em> until you export and commit.</div>
-    <div class="spacer"></div>
-    <button class="admin-action" onclick="exportRoadmap()">Export changes</button>
-    <button class="admin-action" onclick="resetLocalRoadmap()">Reset local state</button>
-    <button class="admin-action danger" onclick="disableAdmin()">Exit admin</button>
-  </div>
-
     <select class="sort-select" onchange="sortItems(this.value)">
       <option value="votes">Most Voted</option>
       <option value="newest">Newest</option>
@@ -291,120 +265,6 @@ let selectedTag = null;
 let currentFilter = 'all';
 let currentSort = 'votes';
 
-
-
-// ── ADMIN MODE ────────────────────────────────────────────────
-const params = new URLSearchParams(window.location.search);
-let isAdmin = (params.get('admin') === '1') || (localStorage.getItem('roadmap_admin') === '1');
-
-function syncAdminUI() {
-  const btn = document.getElementById('adminToggle');
-  const bar = document.getElementById('adminBar');
-  if (btn) btn.classList.toggle('active', !!isAdmin);
-  if (bar) bar.style.display = isAdmin ? 'flex' : 'none';
-}
-
-function toggleAdmin() {
-  isAdmin = !isAdmin;
-  localStorage.setItem('roadmap_admin', isAdmin ? '1' : '0');
-  syncAdminUI();
-  renderAll();
-}
-
-function disableAdmin() {
-  isAdmin = false;
-  localStorage.setItem('roadmap_admin', '0');
-  syncAdminUI();
-  renderAll();
-}
-
-function setStatus(id, status) {
-  const item = items.find(i => i.id === id);
-  if (!item) return;
-  item.status = status;
-  saveState();
-  renderAll();
-  showToast?.(`Moved to ${status.replace('inprogress','in progress')}`);
-}
-
-function deleteItem(id) {
-  if (!confirm('Delete this item? This affects your local view until you export + commit.')) return;
-  items = items.filter(i => i.id !== id);
-  votedIds.delete(id);
-  saveState();
-  renderAll();
-  showToast?.('Deleted (local)');
-}
-
-function resetLocalRoadmap() {
-  if (!confirm('Reset your local roadmap state back to the default seed?')) return;
-  localStorage.removeItem('roadmap_items');
-  localStorage.removeItem('roadmap_voted');
-  localStorage.setItem('roadmap_version', DATA_VERSION);
-  loadState();
-  renderAll();
-  syncAdminUI();
-  showToast?.('Reset local state');
-}
-
-function exportRoadmap() {
-  const payload = JSON.stringify(items, null, 2);
-  const snippet =
-`// Replace your SEED with this exported array, then commit/push
-const SEED = ${payload};`;
-  // Reuse modal if available, else simple prompt
-  const box = document.createElement('div');
-  box.style.position = 'fixed';
-  box.style.inset = '0';
-  box.style.background = 'rgba(0,0,0,.6)';
-  box.style.display = 'flex';
-  box.style.alignItems = 'center';
-  box.style.justifyContent = 'center';
-  box.style.padding = '24px';
-  box.style.zIndex = '9999';
-
-  const inner = document.createElement('div');
-  inner.style.width = 'min(900px, 95vw)';
-  inner.style.background = '#0f172a';
-  inner.style.border = '1px solid #334155';
-  inner.style.borderRadius = '14px';
-  inner.style.padding = '16px';
-
-  inner.innerHTML = `
-    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px">
-      <div style="font-weight:900;color:#f1f5f9">Export roadmap changes</div>
-      <button class="admin-action danger" id="closeExport">Close</button>
-    </div>
-    <div style="color:#94a3b8;font-size:12px;line-height:1.5;margin-bottom:10px">
-      Copy this into <code>roadmap.html</code> (replace the existing <code>SEED</code> array), then commit/push so everyone sees the changes.
-    </div>
-    <textarea id="exportText" style="width:100%;height:340px;background:#0b1220;color:#e2e8f0;border:1px solid #334155;border-radius:12px;padding:12px;font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;font-size:12px;line-height:1.5"></textarea>
-    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:10px;flex-wrap:wrap">
-      <button class="admin-action" id="copyExport">Copy</button>
-      <button class="admin-action" id="downloadExport">Download JSON</button>
-    </div>
-  `;
-  box.appendChild(inner);
-  document.body.appendChild(box);
-
-  const ta = inner.querySelector('#exportText');
-  ta.value = snippet;
-
-  inner.querySelector('#closeExport').onclick = () => box.remove();
-  inner.querySelector('#copyExport').onclick = async () => {
-    try { await navigator.clipboard.writeText(snippet); showToast?.('Copied'); }
-    catch(e){ ta.select(); document.execCommand('copy'); showToast?.('Copied'); }
-  };
-  inner.querySelector('#downloadExport').onclick = () => {
-    const blob = new Blob([payload], {type:'application/json'});
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'roadmap-items.json';
-    a.click();
-    URL.revokeObjectURL(a.href);
-  };
-}
-
 const DATA_VERSION = 'v2';
 function loadState() {
   try {
@@ -476,18 +336,11 @@ function cardHTML(item) {
     <div class="item-footer">
       ${item.tag ? `<span class="tag ${tagClass(item.tag)}">${item.tag}</span>` : ''}
       ${item.submitter ? `<span class="item-submitter">${item.submitter}</span>` : ''}
-
-      ${isAdmin ? `
-        <div class="admin-controls">
-          ${item.status !== 'planned' ? `<button class="admin-mini" onclick="setStatus('${item.id}','planned')">→ Planned</button>` : ``}
-          ${item.status !== 'inprogress' ? `<button class="admin-mini" onclick="setStatus('${item.id}','inprogress')">→ In progress</button>` : ``}
-          ${item.status !== 'done' ? `<button class="admin-mini" onclick="setStatus('${item.id}','done')">✓ Done</button>` : ``}
-          <button class="admin-mini danger" onclick="deleteItem('${item.id}')">Delete</button>
-        </div>
-      ` : ``}
     </div>
   </div>`;
-} ──────────────────────────────────────────────────────
+}
+
+// ── VOTE ──────────────────────────────────────────────────────
 function vote(id) {
   const item = items.find(i => i.id === id);
   if (!item) return;

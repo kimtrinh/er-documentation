@@ -73,6 +73,10 @@ main{max-width:980px;margin:0 auto;padding:24px}
 .disclaimer strong{color:#bfdbfe}
 
 @media(max-width:600px){main{padding:16px}}
+
+/* INPUTS */
+.input{width:100%;padding:10px;border-radius:10px;border:1px solid #334155;background:#0f172a;color:#e2e8f0;outline:none}
+.input:focus{border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,.2)}
 </style>
 </head>
 <body>
@@ -107,6 +111,7 @@ main{max-width:980px;margin:0 auto;padding:24px}
     <button class="calc-tab" onclick="showCalc('heart')">❤️ HEART Score</button>
     <button class="calc-tab" onclick="showCalc('wellsdvt')">🦵 Wells DVT</button>
     <button class="calc-tab" onclick="showCalc('cthead')">🧠 Canadian CT Head</button>
+    <button class="calc-tab" onclick="showCalc('softtissue')">🦠 Soft Tissue & Sepsis</button>
   </div>
 
   <!-- ══════════════════════════════════════════
@@ -354,16 +359,194 @@ main{max-width:980px;margin:0 auto;padding:24px}
     </div>
   </div>
 
+
+
+  <!-- ══════════════════════════════════════════
+       SOFT TISSUE & SEPSIS
+  ═══════════════════════════════════════════ -->
+  <div id="calc-softtissue" style="display:none">
+    <div class="calc-grid">
+
+      <!-- LRINEC -->
+      <div class="card">
+        <div class="card-title">🩸 LRINEC (Necrotizing Soft Tissue Infection)</div>
+        <div class="card-body">
+
+          <p style="font-size:12px;color:#64748b;margin-bottom:12px">
+            LRINEC is a risk stratification/documentation tool — limited sensitivity (do NOT use to rule out nec fasc).
+          </p>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <div>
+              <label style="display:block;font-size:12px;color:#64748b;font-weight:600;margin-bottom:6px">CRP (mg/L)</label>
+              <input id="lr-crp" type="number" inputmode="decimal" placeholder="e.g., 180"
+                oninput="calcLRINEC()" class="input"/>
+            </div>
+            <div>
+              <label style="display:block;font-size:12px;color:#64748b;font-weight:600;margin-bottom:6px">WBC (×10³/µL)</label>
+              <input id="lr-wbc" type="number" inputmode="decimal" placeholder="e.g., 22"
+                oninput="calcLRINEC()" class="input"/>
+            </div>
+            <div>
+              <label style="display:block;font-size:12px;color:#64748b;font-weight:600;margin-bottom:6px">Hgb (g/dL)</label>
+              <input id="lr-hgb" type="number" inputmode="decimal" placeholder="e.g., 12.5"
+                oninput="calcLRINEC()" class="input"/>
+            </div>
+            <div>
+              <label style="display:block;font-size:12px;color:#64748b;font-weight:600;margin-bottom:6px">Na (mmol/L)</label>
+              <input id="lr-na" type="number" inputmode="decimal" placeholder="e.g., 131"
+                oninput="calcLRINEC()" class="input"/>
+            </div>
+            <div>
+              <label style="display:block;font-size:12px;color:#64748b;font-weight:600;margin-bottom:6px">Creatinine (mg/dL)</label>
+              <input id="lr-cr" type="number" inputmode="decimal" placeholder="e.g., 2.1"
+                oninput="calcLRINEC()" class="input"/>
+            </div>
+            <div>
+              <label style="display:block;font-size:12px;color:#64748b;font-weight:600;margin-bottom:6px">Glucose (mg/dL)</label>
+              <input id="lr-glu" type="number" inputmode="decimal" placeholder="e.g., 220"
+                oninput="calcLRINEC()" class="input"/>
+            </div>
+          </div>
+
+          <div id="lrinec-result" class="result neutral">
+            <div class="result-score">—</div>
+            <div class="result-label">Enter labs above</div>
+            <div class="result-action">LRINEC: ≤5 low, 6–7 intermediate, ≥8 high (risk stratification only).</div>
+          </div>
+
+          <button id="lrinec-copy-btn" class="copy-doc-btn" onclick="copyDoc('lrinec')">📋 Copy Documentation</button>
+          <button class="reset-btn" onclick="resetLRINEC()">Reset</button>
+        </div>
+      </div>
+
+      <!-- FGSI -->
+      <div class="card">
+        <div class="card-title">⚠️ Fournier’s Gangrene Severity Index (FGSI)</div>
+        <div class="card-body">
+
+          <p style="font-size:12px;color:#64748b;margin-bottom:12px">
+            Prognostic score (mortality risk / ICU justification). Commonly cited: FGSI &gt; 9 → high mortality risk.
+          </p>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <div><label style="display:block;font-size:12px;color:#64748b;font-weight:600;margin-bottom:6px">Temp (°C)</label>
+              <input id="fg-temp" type="number" inputmode="decimal" placeholder="e.g., 39.2" oninput="calcFGSI()" class="input"/>
+            </div>
+            <div><label style="display:block;font-size:12px;color:#64748b;font-weight:600;margin-bottom:6px">HR</label>
+              <input id="fg-hr" type="number" inputmode="numeric" placeholder="e.g., 145" oninput="calcFGSI()" class="input"/>
+            </div>
+            <div><label style="display:block;font-size:12px;color:#64748b;font-weight:600;margin-bottom:6px">RR</label>
+              <input id="fg-rr" type="number" inputmode="numeric" placeholder="e.g., 28" oninput="calcFGSI()" class="input"/>
+            </div>
+            <div><label style="display:block;font-size:12px;color:#64748b;font-weight:600;margin-bottom:6px">Na (mmol/L)</label>
+              <input id="fg-na" type="number" inputmode="decimal" placeholder="e.g., 128" oninput="calcFGSI()" class="input"/>
+            </div>
+            <div><label style="display:block;font-size:12px;color:#64748b;font-weight:600;margin-bottom:6px">K (mmol/L)</label>
+              <input id="fg-k" type="number" inputmode="decimal" placeholder="e.g., 5.7" oninput="calcFGSI()" class="input"/>
+            </div>
+            <div><label style="display:block;font-size:12px;color:#64748b;font-weight:600;margin-bottom:6px">Creatinine (mg/dL)</label>
+              <input id="fg-cr" type="number" inputmode="decimal" placeholder="e.g., 2.3" oninput="calcFGSI()" class="input"/>
+            </div>
+            <div><label style="display:block;font-size:12px;color:#64748b;font-weight:600;margin-bottom:6px">Hct (%)</label>
+              <input id="fg-hct" type="number" inputmode="decimal" placeholder="e.g., 28" oninput="calcFGSI()" class="input"/>
+            </div>
+            <div><label style="display:block;font-size:12px;color:#64748b;font-weight:600;margin-bottom:6px">WBC (×10³/µL)</label>
+              <input id="fg-wbc" type="number" inputmode="decimal" placeholder="e.g., 24" oninput="calcFGSI()" class="input"/>
+            </div>
+            <div style="grid-column:1 / -1">
+              <label style="display:block;font-size:12px;color:#64748b;font-weight:600;margin-bottom:6px">HCO₃ (mmol/L, venous)</label>
+              <input id="fg-hco3" type="number" inputmode="decimal" placeholder="e.g., 17" oninput="calcFGSI()" class="input"/>
+            </div>
+          </div>
+
+          <div id="fgsi-result" class="result neutral">
+            <div class="result-score">—</div>
+            <div class="result-label">Enter vitals/labs above</div>
+            <div class="result-action">FGSI is prognostic. A commonly used threshold is &gt;9 (high mortality risk).</div>
+          </div>
+
+          <button id="fgsi-copy-btn" class="copy-doc-btn" onclick="copyDoc('fgsi')">📋 Copy Documentation</button>
+          <button class="reset-btn" onclick="resetFGSI()">Reset</button>
+        </div>
+      </div>
+
+      <!-- SIRS -->
+      <div class="card">
+        <div class="card-title">🌡️ SIRS</div>
+        <div class="card-body">
+          <div id="sirs-criteria">
+            <div class="criterion" onclick="toggleSIRS(0)"><input type="checkbox" id="sirs0"><span class="criterion-label">Temp &gt;38°C or &lt;36°C</span></div>
+            <div class="criterion" onclick="toggleSIRS(1)"><input type="checkbox" id="sirs1"><span class="criterion-label">HR &gt;90</span></div>
+            <div class="criterion" onclick="toggleSIRS(2)"><input type="checkbox" id="sirs2"><span class="criterion-label">RR &gt;20 or PaCO₂ &lt;32</span></div>
+            <div class="criterion" onclick="toggleSIRS(3)"><input type="checkbox" id="sirs3"><span class="criterion-label">WBC &gt;12 or &lt;4 or bands &gt;10%</span></div>
+          </div>
+          <div id="sirs-result" class="result neutral">
+            <div class="result-score">0</div>
+            <div class="result-label">Select criteria above</div>
+            <div class="result-action">≥2 suggests systemic inflammatory response.</div>
+          </div>
+          <button id="sirs-copy-btn" class="copy-doc-btn" onclick="copyDoc('sirs')">📋 Copy Documentation</button>
+          <button class="reset-btn" onclick="resetSIRS()">Reset</button>
+        </div>
+      </div>
+
+      <!-- qSOFA -->
+      <div class="card">
+        <div class="card-title">🧠 qSOFA</div>
+        <div class="card-body">
+          <div id="qsofa-criteria">
+            <div class="criterion" onclick="toggleQSOFA(0)"><input type="checkbox" id="qsofa0"><span class="criterion-label">RR ≥22</span></div>
+            <div class="criterion" onclick="toggleQSOFA(1)"><input type="checkbox" id="qsofa1"><span class="criterion-label">SBP ≤100</span></div>
+            <div class="criterion" onclick="toggleQSOFA(2)"><input type="checkbox" id="qsofa2"><span class="criterion-label">Altered mentation</span></div>
+          </div>
+          <div id="qsofa-result" class="result neutral">
+            <div class="result-score">0</div>
+            <div class="result-label">Select criteria above</div>
+            <div class="result-action">≥2 associated with higher mortality risk → escalate care.</div>
+          </div>
+          <button id="qsofa-copy-btn" class="copy-doc-btn" onclick="copyDoc('qsofa')">📋 Copy Documentation</button>
+          <button class="reset-btn" onclick="resetQSOFA()">Reset</button>
+        </div>
+      </div>
+
+      <!-- Shock Index -->
+      <div class="card">
+        <div class="card-title">💥 Shock Index</div>
+        <div class="card-body">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <div>
+              <label style="display:block;font-size:12px;color:#64748b;font-weight:600;margin-bottom:6px">HR</label>
+              <input id="si-hr" type="number" inputmode="numeric" placeholder="e.g., 120" oninput="calcShockIndex()" class="input"/>
+            </div>
+            <div>
+              <label style="display:block;font-size:12px;color:#64748b;font-weight:600;margin-bottom:6px">SBP</label>
+              <input id="si-sbp" type="number" inputmode="numeric" placeholder="e.g., 95" oninput="calcShockIndex()" class="input"/>
+            </div>
+          </div>
+          <div id="si-result" class="result neutral">
+            <div class="result-score">—</div>
+            <div class="result-label">Enter HR + SBP</div>
+            <div class="result-action">Shock Index = HR/SBP. &gt;0.9 is concerning for occult shock in many contexts.</div>
+          </div>
+          <button id="si-copy-btn" class="copy-doc-btn" onclick="copyDoc('shock')">📋 Copy Documentation</button>
+          <button class="reset-btn" onclick="resetShockIndex()">Reset</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
 </main>
 
 <script>
 // ── CALC TAB SWITCHING ───────────────────────────────────────
 function showCalc(id) {
-  ['wellspe','heart','wellsdvt','cthead'].forEach(c => {
+  ['wellspe','heart','wellsdvt','cthead','softtissue'].forEach(c => {
     document.getElementById('calc-'+c).style.display = c===id ? '' : 'none';
   });
   document.querySelectorAll('.calc-tab').forEach((btn,i) => {
-    btn.classList.toggle('active', ['wellspe','heart','wellsdvt','cthead'][i]===id);
+    btn.classList.toggle('active', ['wellspe','heart','wellsdvt','cthead','softtissue'][i]===id);
   });
 }
 
@@ -435,6 +618,32 @@ function copyDoc(type) {
   }
 
   if (!text) return;
+  
+  else if (type === 'lrinec') {
+    const scoreEl = document.querySelector('#lrinec-result .result-score');
+    const score = scoreEl ? scoreEl.textContent : '—';
+    text = `LRINEC score calculated as ${score}. While LRINEC has limited sensitivity and should NOT be used to rule out necrotizing soft tissue infection, an elevated score increases concern and supports early surgical consultation and escalation of care when clinically indicated.`;
+  }
+  else if (type === 'fgsi') {
+    const scoreEl = document.querySelector('#fgsi-result .result-score');
+    const score = scoreEl ? scoreEl.textContent : '—';
+    text = `Fournier’s Gangrene Severity Index (FGSI) calculated as ${score}. FGSI is a prognostic severity tool and supports ICU-level care and aggressive management when elevated (commonly cited threshold >9 associated with high mortality risk).`;
+  }
+  else if (type === 'sirs') {
+    const n = sirsChecked.filter(Boolean).length;
+    text = `SIRS criteria assessed: ${n}/4 positive. Findings support systemic inflammatory response in the appropriate clinical context; management and disposition based on overall clinical picture and suspected source.`;
+  }
+  else if (type === 'qsofa') {
+    const n = qsofaChecked.filter(Boolean).length;
+    text = `qSOFA calculated: ${n}/3. qSOFA is a mortality risk screen; elevated score supports escalation of care and close monitoring in appropriate clinical context.`;
+  }
+  else if (type === 'shock') {
+    const scoreEl = document.querySelector('#si-result .result-score');
+    const si = scoreEl ? scoreEl.textContent : '—';
+    text = `Shock Index calculated (HR/SBP): ${si}. Elevated shock index can suggest occult shock physiology; resuscitation and escalation based on perfusion status and clinical context.`;
+  }
+
+
   navigator.clipboard.writeText(text).then(()=>{
     const orig = btn.innerHTML;
     btn.innerHTML = '✅ Copied!';
@@ -625,6 +834,271 @@ function resetCTHead(){
   document.getElementById('cthead-copy-btn').classList.remove('show');
   updateCTHead();
 }
+
+// ── SOFT TISSUE & SEPSIS ───────────────────────────────────────
+function setResult(elId, cls, score, label, action){
+  const el = document.getElementById(elId);
+  if(!el) return;
+  el.className = 'result ' + cls;
+  el.innerHTML = `<div class="result-score">${score}</div><div class="result-label">${label}</div><div class="result-action">${action}</div>`;
+}
+
+// LRINEC: CRP≥150=4; WBC 15–25=1, >25=2; Hgb 11–13.5=1, <11=2; Na<135=2; Cr>1.6=2; Glu>180=1
+function calcLRINEC() {
+  const crp = parseFloat(document.getElementById('lr-crp').value);
+  const wbc = parseFloat(document.getElementById('lr-wbc').value);
+  const hgb = parseFloat(document.getElementById('lr-hgb').value);
+  const na  = parseFloat(document.getElementById('lr-na').value);
+  const cr  = parseFloat(document.getElementById('lr-cr').value);
+  const glu = parseFloat(document.getElementById('lr-glu').value);
+
+  const vals = [crp,wbc,hgb,na,cr,glu];
+  const filledAny = vals.some(v => !Number.isNaN(v));
+  const btn = document.getElementById('lrinec-copy-btn');
+
+  if (!filledAny) {
+    setResult('lrinec-result', 'neutral', '—', 'Enter labs above', 'LRINEC: ≤5 low, 6–7 intermediate, ≥8 high (risk stratification only).');
+    if(btn) btn.classList.remove('show');
+    return;
+  }
+
+  let score = 0;
+  if (!Number.isNaN(crp) && crp >= 150) score += 4;
+  if (!Number.isNaN(wbc)) {
+    if (wbc > 25) score += 2;
+    else if (wbc >= 15) score += 1;
+  }
+  if (!Number.isNaN(hgb)) {
+    if (hgb < 11) score += 2;
+    else if (hgb <= 13.5) score += 1;
+  }
+  if (!Number.isNaN(na) && na < 135) score += 2;
+  if (!Number.isNaN(cr) && cr > 1.6) score += 2;
+  if (!Number.isNaN(glu) && glu > 180) score += 1;
+
+  let cls='low', label='Low risk', action='LRINEC ≤5. Do NOT use to rule out — correlate clinically; early surgical consult if concern.';
+  if (score >= 8) { cls='high'; label='High risk'; action='LRINEC ≥8. High concern for NSTI (risk stratification only). Consider emergent surgery consult + imaging if it will not delay OR.'; }
+  else if (score >= 6) { cls='moderate'; label='Intermediate risk'; action='LRINEC 6–7. Consider imaging + early surgery consult if clinically concerning.'; }
+
+  setResult('lrinec-result', cls, String(score), label, action);
+  if(btn) btn.classList.add('show');
+}
+
+function resetLRINEC() {
+  ['lr-crp','lr-wbc','lr-hgb','lr-na','lr-cr','lr-glu'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+  calcLRINEC();
+}
+
+// FGSI scoring bins (0–4 each)
+function fgRangeScore(val, ranges) {
+  if (Number.isNaN(val)) return null;
+  for (const r of ranges) {
+    if (r.min !== null && val < r.min) continue;
+    if (r.max !== null && val > r.max) continue;
+    return r.score;
+  }
+  return 0;
+}
+
+function calcFGSI() {
+  const t = parseFloat(document.getElementById('fg-temp').value);
+  const hr = parseFloat(document.getElementById('fg-hr').value);
+  const rr = parseFloat(document.getElementById('fg-rr').value);
+  const na = parseFloat(document.getElementById('fg-na').value);
+  const k  = parseFloat(document.getElementById('fg-k').value);
+  const cr = parseFloat(document.getElementById('fg-cr').value);
+  const hct = parseFloat(document.getElementById('fg-hct').value);
+  const wbc = parseFloat(document.getElementById('fg-wbc').value);
+  const hco3 = parseFloat(document.getElementById('fg-hco3').value);
+
+  const vals = [t,hr,rr,na,k,cr,hct,wbc,hco3];
+  const filledAny = vals.some(v => !Number.isNaN(v));
+  const btn = document.getElementById('fgsi-copy-btn');
+
+  if (!filledAny) {
+    setResult('fgsi-result', 'neutral', '—', 'Enter vitals/labs above', 'FGSI is prognostic. A commonly used threshold is >9 (high mortality risk).');
+    if(btn) btn.classList.remove('show');
+    return;
+  }
+
+  const tempScore = fgRangeScore(t, [
+    {min:41.0, max:null, score:4},
+    {min:39.0, max:40.9, score:3},
+    {min:38.5, max:38.9, score:1},
+    {min:36.0, max:38.4, score:0},
+    {min:34.0, max:35.9, score:1},
+    {min:32.0, max:33.9, score:2},
+    {min:30.0, max:31.9, score:3},
+    {min:null, max:29.9, score:4},
+  ]);
+
+  const hrScore = fgRangeScore(hr, [
+    {min:180.001, max:null, score:4},
+    {min:140.0, max:179.0, score:3},
+    {min:110.0, max:139.0, score:2},
+    {min:70.0,  max:109.0, score:0},
+    {min:55.0,  max:69.0,  score:2},
+    {min:40.0,  max:54.0,  score:3},
+    {min:null,  max:39.0,  score:4},
+  ]);
+
+  const rrScore = fgRangeScore(rr, [
+    {min:50.001, max:null, score:4},
+    {min:35.0, max:49.0, score:3},
+    {min:25.0, max:34.0, score:1},
+    {min:12.0, max:24.0, score:0},
+    {min:10.0, max:11.0, score:1},
+    {min:6.0,  max:9.0,  score:2},
+    {min:null, max:5.0,  score:4},
+  ]);
+
+  const naScore = fgRangeScore(na, [
+    {min:180.001, max:null, score:4},
+    {min:160.0, max:179.0, score:3},
+    {min:155.0, max:159.0, score:2},
+    {min:150.0, max:154.0, score:1},
+    {min:130.0, max:149.0, score:0},
+    {min:120.0, max:129.0, score:2},
+    {min:111.0, max:119.0, score:3},
+    {min:null,  max:110.0, score:4},
+  ]);
+
+  const kScore = fgRangeScore(k, [
+    {min:7.0,  max:null, score:4},
+    {min:6.0,  max:6.9, score:3},
+    {min:5.5,  max:5.9, score:1},
+    {min:3.5,  max:5.4, score:0},
+    {min:3.0,  max:3.4, score:1},
+    {min:2.5,  max:2.9, score:2},
+    {min:null, max:2.499, score:4},
+  ]);
+
+  const crScore = fgRangeScore(cr, [
+    {min:3.5,  max:null, score:4},
+    {min:2.0,  max:3.4, score:3},
+    {min:1.5,  max:1.9, score:2},
+    {min:0.6,  max:1.4, score:0},
+    {min:null, max:0.599, score:2},
+  ]);
+
+  const hctScore = fgRangeScore(hct, [
+    {min:60.0, max:null, score:4},
+    {min:50.0, max:59.9, score:2},
+    {min:46.0, max:49.9, score:1},
+    {min:30.0, max:45.9, score:0},
+    {min:20.0, max:29.9, score:2},
+    {min:null, max:19.999, score:4},
+  ]);
+
+  const wbcScore = fgRangeScore(wbc, [
+    {min:40.0, max:null, score:4},
+    {min:20.0, max:39.9, score:2},
+    {min:15.0, max:19.9, score:1},
+    {min:3.0,  max:14.9, score:0},
+    {min:1.0,  max:2.9,  score:2},
+    {min:null, max:0.999, score:4},
+  ]);
+
+  const hco3Score = fgRangeScore(hco3, [
+    {min:52.0, max:null, score:4},
+    {min:41.0, max:51.9, score:3},
+    {min:32.0, max:40.9, score:1},
+    {min:22.0, max:31.9, score:0},
+    {min:18.0, max:21.9, score:2},
+    {min:15.0, max:17.9, score:3},
+    {min:null, max:14.999, score:4},
+  ]);
+
+  const scores = [tempScore,hrScore,rrScore,naScore,kScore,crScore,hctScore,wbcScore,hco3Score];
+  const incomplete = scores.some(s => s === null);
+  if (incomplete) {
+    setResult('fgsi-result', 'neutral', '—', 'Fill all vitals/labs', 'FGSI requires all 9 parameters to calculate.');
+    if(btn) btn.classList.remove('show');
+    return;
+  }
+
+  const total = scores.reduce((a,b)=>a+b,0);
+  let cls='low', label='Lower risk', action='FGSI ≤9 (prognostic tool). Use clinical judgment for ICU vs floor, operative urgency, etc.';
+  if (total > 9) { cls='high'; label='High mortality risk'; action='FGSI >9 is commonly associated with high mortality risk; supports ICU-level care and aggressive management.'; }
+
+  setResult('fgsi-result', cls, String(total), label, action);
+  if(btn) btn.classList.add('show');
+}
+
+function resetFGSI() {
+  ['fg-temp','fg-hr','fg-rr','fg-na','fg-k','fg-cr','fg-hct','fg-wbc','fg-hco3'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+  calcFGSI();
+}
+
+// SIRS
+let sirsChecked = [false,false,false,false];
+function toggleSIRS(i){
+  sirsChecked[i] = !sirsChecked[i];
+  const box = document.getElementById('sirs'+i);
+  if(box) box.checked = sirsChecked[i];
+  updateSIRS();
+}
+function updateSIRS(){
+  const n = sirsChecked.filter(Boolean).length;
+  const cls = (n>=2) ? 'moderate' : 'neutral';
+  setResult('sirs-result', cls, String(n), (n>=2?'SIRS positive':'SIRS not met'), 'SIRS is supportive context; not a sepsis definition by itself.');
+  const btn = document.getElementById('sirs-copy-btn');
+  if(btn) btn.classList.toggle('show', n>0);
+}
+function resetSIRS(){
+  sirsChecked=[false,false,false,false];
+  for(let i=0;i<4;i++){ const box=document.getElementById('sirs'+i); if(box) box.checked=false; }
+  updateSIRS();
+}
+
+// qSOFA
+let qsofaChecked = [false,false,false];
+function toggleQSOFA(i){
+  qsofaChecked[i] = !qsofaChecked[i];
+  const box = document.getElementById('qsofa'+i);
+  if(box) box.checked = qsofaChecked[i];
+  updateQSOFA();
+}
+function updateQSOFA(){
+  const n = qsofaChecked.filter(Boolean).length;
+  const cls = (n>=2) ? 'high' : (n===1 ? 'moderate' : 'neutral');
+  setResult('qsofa-result', cls, String(n), (n>=2?'High risk':'qSOFA score'), 'qSOFA is a mortality risk screen; escalate care when concerning.');
+  const btn = document.getElementById('qsofa-copy-btn');
+  if(btn) btn.classList.toggle('show', n>0);
+}
+function resetQSOFA(){
+  qsofaChecked=[false,false,false];
+  for(let i=0;i<3;i++){ const box=document.getElementById('qsofa'+i); if(box) box.checked=false; }
+  updateQSOFA();
+}
+
+// Shock Index
+function calcShockIndex(){
+  const hr = parseFloat(document.getElementById('si-hr').value);
+  const sbp = parseFloat(document.getElementById('si-sbp').value);
+  const btn = document.getElementById('si-copy-btn');
+  if (Number.isNaN(hr) || Number.isNaN(sbp) || sbp<=0){
+    setResult('si-result','neutral','—','Enter HR + SBP','Shock Index = HR/SBP.');
+    if(btn) btn.classList.remove('show');
+    return;
+  }
+  const si = hr/sbp;
+  let cls='neutral', label='Shock Index', action='Interpret in clinical context.';
+  if (si > 0.9){ cls='moderate'; label='Concerning'; action='Shock Index >0.9 can indicate occult shock. Reassess perfusion, lactate, and resuscitate/escalate as appropriate.'; }
+  if (si >= 1.3){ cls='high'; label='High concern'; action='Shock Index ≥1.3 suggests significant shock physiology → aggressive resuscitation/escalation.'; }
+  setResult('si-result', cls, si.toFixed(2), label, action);
+  if(btn) btn.classList.add('show');
+}
+function resetShockIndex(){
+  const a=document.getElementById('si-hr'); if(a) a.value='';
+  const b=document.getElementById('si-sbp'); if(b) b.value='';
+  calcShockIndex();
+}
+
+// Initialize defaults
+updateSIRS();
+updateQSOFA();
+
 </script>
 </body>
 </html>
