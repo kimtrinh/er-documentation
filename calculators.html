@@ -678,6 +678,16 @@ function fmtLines(lines) {
   return lines.filter(Boolean).join('\n');
 }
 
+function centorInterpretation(score) {
+  // McIsaac/Centor typical guidance (local protocols may vary)
+  if (score <= 1) return 'Low likelihood of GAS. No testing or antibiotics typically indicated; symptomatic care.';
+  if (score === 2) return 'Intermediate likelihood. Consider rapid strep test (and culture per age/local protocol).';
+  if (score === 3) return 'Moderate likelihood. Rapid strep testing recommended; treat if positive.';
+  // 4–5
+  return 'High likelihood. Consider empiric treatment or rapid testing per local protocol.';
+}
+
+
 function copyDoc(type) {
   let text = '';
   const btn = document.getElementById(type + '-copy-btn');
@@ -841,13 +851,26 @@ function copyDoc(type) {
 
   // ----- LRINEC -----
   else if (type === 'lrinec') {
-    if (!window.lrinecDetail || window.lrinecDetail.incomplete) {
-      alert('Enter all LRINEC labs to generate documentation.');
+    if (!window.lrinecDetail) {
+      alert('Enter LRINEC labs first.');
       return;
     }
     const d = window.lrinecDetail;
+
+    // Interpretation (common convention): ≤5 low, 6–7 intermediate, ≥8 high
+    let interp = d.interpretation;
+    if (!interp) {
+      const s = d.total ?? 0;
+      if (s >= 8) interp = 'High risk (LRINEC ≥ 8)';
+      else if (s >= 6) interp = 'Intermediate risk (LRINEC 6–7)';
+      else interp = 'Lower risk (LRINEC ≤ 5)';
+      if (d.incomplete) interp += ' — based on available data';
+    }
+
     text = fmtLines([
       `LRINEC score: ${d.total}.`,
+      `Interpretation: ${interp}.`,
+      (d.incomplete && d.missing && d.missing.length ? `Missing: ${d.missing.join(', ')}.` : ''),
       'Points:',
       ...d.items.map(it => `- ${it.name}: ${it.value} → ${it.points} point${it.points===1?'':'s'} (${it.rule})`),
       `Recommendation: ${d.reco}`
@@ -856,13 +879,17 @@ function copyDoc(type) {
 
   // ----- FGSI -----
   else if (type === 'fgsi') {
-    if (!window.fgsiDetail || window.fgsiDetail.incomplete) {
-      alert('Enter all FGSI vitals/labs to generate documentation.');
-      return;
-    }
+    if (!window.fgsiDetail) { alert('Enter FGSI vitals/labs first.'); return; }
     const d = window.fgsiDetail;
+
+    const interp = d.interpretation
+      ? d.interpretation + (d.incomplete ? '' : '')
+      : ((d.total > 9) ? 'High mortality risk (FGSI > 9)' : 'Lower mortality risk (FGSI ≤ 9)') + (d.incomplete ? ' — based on available data' : '');
+
     text = fmtLines([
       `FGSI (Fournier’s Gangrene Severity Index): ${d.total}.`,
+      `Interpretation: ${interp}.`,
+      (d.incomplete && d.missing && d.missing.length ? `Missing: ${d.missing.join(', ')}.` : ''),
       'Points:',
       ...d.items.map(it => `- ${it.name}: ${it.value} → ${it.points}`),
       `Recommendation: ${d.reco}`
@@ -874,7 +901,7 @@ function copyDoc(type) {
     const labels = ['Temp >38°C or <36°C','HR >90','RR >20 or PaCO₂ <32','WBC >12 or <4 or >10% bands'];
     const pos = labels.filter((_,i)=>sirsChecked[i]);
     text = fmtLines([
-      `SIRS criteria: ${pos.length}/4 positive.`,
+      `SIRS: ${pos.length}/4 positive (${pos.length>=2?'SIRS positive':'SIRS negative'}).`,
       (pos.length ? 'Positive criteria:' : 'Positive criteria: none.'),
       ...pos.map(x=>`- ${x}`),
       'Recommendation: SIRS supports systemic inflammatory response in appropriate context; manage/disposition based on suspected source and overall clinical picture.'
@@ -916,6 +943,7 @@ function copyDoc(type) {
     const d = window.centorDetail;
     text = fmtLines([
       `Centor/McIsaac score: ${d.total}.`,
+      `Interpretation: ${centorInterpretation(d.total)}.`,
       'Points:',
       ...d.items.map(it => `- ${it}`),
       `Recommendation: ${d.reco}`
@@ -1167,14 +1195,31 @@ function calcLRINEC() {
   if (!Number.isNaN(cr) && cr > 1.6) score += 2;
   if (!Number.isNaN(glu) && glu > 180) score += 1;
 
+  const missingNames = [];
+  if (Number.isNaN(crp)) missingNames.push('CRP');
+  if (Number.isNaN(wbc)) missingNames.push('WBC');
+  if (Number.isNaN(hgb)) missingNames.push('Hgb');
+  if (Number.isNaN(na))  missingNames.push('Na');
+  if (Number.isNaN(cr))  missingNames.push('Creatinine');
+  if (Number.isNaN(glu)) missingNames.push('Glucose');
+  const incomplete = missingNames.length > 0;
+
   let cls='low', label='Low risk', action='LRINEC ≤5. Do NOT use to rule out — correlate clinically; early surgical consult if concern.';
   if (score >= 8) { cls='high'; label='High risk'; action='LRINEC ≥8. High concern for NSTI (risk stratification only). Consider emergent surgery consult + imaging if it will not delay OR.'; }
   else if (score >= 6) { cls='moderate'; label='Intermediate risk'; action='LRINEC 6–7. Consider imaging + early surgery consult if clinically concerning.'; }
 
+  if (incomplete) {
+    action += ` Based on available data; missing: ${missingNames.join(', ')}.`;
+    label += ' (provisional)';
+    cls = 'neutral';
+  }
+
   // Build detail for documentation copy
   window.lrinecDetail = {
-    incomplete: false,
+    incomplete: incomplete,
+    missing: missingNames,
     total: score,
+    interpretation: (score >= 8 ? 'High risk (LRINEC ≥ 8)' : (score >= 6 ? 'Intermediate risk (LRINEC 6–7)' : 'Lower risk (LRINEC ≤ 5)')) + (incomplete ? ' — based on available data' : ''),
     items: [
       {name:'CRP', value: (Number.isNaN(crp)?'—':crp)+' mg/L', points: crpPts, rule:'≥150 = 4'},
       {name:'WBC', value: (Number.isNaN(wbc)?'—':wbc)+' ×10³/µL', points: wbcPts, rule:'15–25 = 1; >25 = 2'},
@@ -1183,6 +1228,7 @@ function calcLRINEC() {
       {name:'Creatinine', value: (Number.isNaN(cr)?'—':cr)+' mg/dL', points: crPts, rule:'>1.6 = 2'},
       {name:'Glucose', value: (Number.isNaN(glu)?'—':glu)+' mg/dL', points: gluPts, rule:'>180 = 1'},
     ],
+    interpretation: (total > 9 ? 'High mortality risk (FGSI > 9)' : 'Lower mortality risk (FGSI ≤ 9)'),
     reco: action
   };
 
@@ -1317,10 +1363,61 @@ function calcFGSI() {
   ]);
 
   const scores = [tempScore,hrScore,rrScore,naScore,kScore,crScore,hctScore,wbcScore,hco3Score];
-  const incomplete = scores.some(s => s === null);
+  const missing = scores.filter(s => s === null).length;
+  const partialTotal = scores.filter(s => s !== null).reduce((a,b)=>a+b,0);
+  const incomplete = missing > 0;
   if (incomplete) {
-    setResult('fgsi-result', 'neutral', '—', 'Fill all vitals/labs', 'FGSI requires all 9 parameters to calculate.');
-    if(btn) btn.classList.remove('show');
+    // Build a provisional detail object so you can still copy/paste documentation.
+    const missingNames = [];
+    if (Number.isNaN(t)) missingNames.push('Temp');
+    if (Number.isNaN(hr)) missingNames.push('HR');
+    if (Number.isNaN(rr)) missingNames.push('RR');
+    if (Number.isNaN(na)) missingNames.push('Na');
+    if (Number.isNaN(k))  missingNames.push('K');
+    if (Number.isNaN(cr)) missingNames.push('Creatinine');
+    if (Number.isNaN(hct)) missingNames.push('Hct');
+    if (Number.isNaN(wbc)) missingNames.push('WBC');
+    if (Number.isNaN(hco3)) missingNames.push('HCO₃');
+
+    let cls='neutral';
+    let label='More data needed';
+    let interpretation = 'Provisional (based on available data)';
+    let action = `FGSI is incomplete (${missingNames.length} missing): ${missingNames.join(', ')}. Interpret cautiously; missing values may increase final score.`;
+
+    if (partialTotal > 9) {
+      cls='high';
+      label='High mortality risk';
+      interpretation = 'High mortality risk (FGSI > 9) — based on available data';
+      action = `Partial FGSI is already >9 (≥${partialTotal}) with ${missingNames.length} missing. Final FGSI cannot be ≤9; treat as high-risk and manage aggressively (ICU-level care often warranted).`;
+    } else {
+      // You wanted "lower risk" language available for documentation,
+      // but we keep it explicitly provisional when incomplete.
+      label='Lower risk';
+      interpretation = 'Lower mortality risk (FGSI ≤ 9) — based on available data';
+      action = `Current partial FGSI is ${partialTotal} with ${missingNames.length} missing. Final interpretation requires all 9 parameters; missing values may increase the final score.`;
+    }
+
+    window.fgsiDetail = {
+      incomplete: true,
+      missing: missingNames,
+      total: partialTotal,
+      interpretation: interpretation,
+      items: [
+        {name:'Temp (°C)', value: (Number.isNaN(t)?'—':t), points: tempScore},
+        {name:'HR', value: (Number.isNaN(hr)?'—':hr), points: hrScore},
+        {name:'RR', value: (Number.isNaN(rr)?'—':rr), points: rrScore},
+        {name:'Na', value: (Number.isNaN(na)?'—':na), points: naScore},
+        {name:'K', value: (Number.isNaN(k)?'—':k), points: kScore},
+        {name:'Creatinine', value: (Number.isNaN(cr)?'—':cr), points: crScore},
+        {name:'Hct', value: (Number.isNaN(hct)?'—':hct), points: hctScore},
+        {name:'WBC', value: (Number.isNaN(wbc)?'—':wbc), points: wbcScore},
+        {name:'HCO₃', value: (Number.isNaN(hco3)?'—':hco3), points: hco3Score},
+      ],
+      reco: action
+    };
+
+    setResult('fgsi-result', cls, (partialTotal>9?`≥${partialTotal}`:String(partialTotal)), label, action);
+    if(btn) btn.classList.add('show');
     return;
   }
 
