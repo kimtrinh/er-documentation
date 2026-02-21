@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Links — ER Documentation</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',system-ui,sans-serif;background:#0f172a;color:#e2e8f0;min-height:100vh}
+
+.sitenav{background:#1e293b;border-bottom:1px solid #334155;padding:0 24px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.sitenav-inner{max-width:900px;margin:0 auto;display:flex;gap:2px;padding:8px 0}
+.sitenav a{padding:7px 14px;border-radius:8px;font-size:13px;font-weight:500;color:#94a3b8;text-decoration:none;white-space:nowrap;transition:all .2s}
+.sitenav a:hover{background:#334155;color:#f1f5f9}
+.sitenav a.active{background:#3b82f6;color:#fff}
+
+header{background:linear-gradient(135deg,#1e293b,#0f172a);border-bottom:1px solid #1e3a5f;padding:24px 24px 20px}
+.header-inner{max-width:900px;margin:0 auto}
+.logo{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.logo span{font-size:24px}
+.logo h1{font-size:20px;font-weight:800;color:#f1f5f9}
+.subtitle{font-size:13px;color:#64748b;margin-left:34px}
+
+main{max-width:900px;margin:0 auto;padding:28px 24px 80px}
+
+.section-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#3b82f6;margin:28px 0 12px;display:flex;align-items:center;gap:8px}
+.section-label::after{content:'';flex:1;height:1px;background:#1e293b}
+
+.links-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+
+.link-card{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:16px 18px;text-decoration:none;color:inherit;display:flex;align-items:flex-start;gap:14px;transition:all .2s;cursor:pointer}
+.link-card:hover{border-color:#3b82f6;background:#1e3a5f;transform:translateY(-1px)}
+.link-icon{font-size:26px;flex-shrink:0;margin-top:1px}
+.link-info{flex:1;min-width:0}
+.link-title{font-size:14px;font-weight:700;color:#f1f5f9;margin-bottom:3px}
+.link-desc{font-size:12px;color:#64748b;line-height:1.5}
+.link-arrow{color:#334155;font-size:14px;flex-shrink:0;margin-top:3px;transition:color .2s}
+.link-card:hover .link-arrow{color:#3b82f6}
+</style>
+</head>
+<body>
+
+<div class="sitenav">
+  <div class="sitenav-inner">
+    <a href="index.html">📋 Dotphrases</a>
+    <a href="calculators.html">🧮 Calculators</a>
+    <a href="vasopressors.html">💊 Vasopressors</a>
+    <a href="rsi.html">🫁 RSI</a>
+    <a href="pedsfever.html">🌡️ Peds Fever</a>
+    <a href="algorithms.html">🔀 Algorithms</a>
+    <a href="neurohub.html">🧠 Neuro Hub</a>
+    <a href="roadmap.html">🗺️ Roadmap</a>
+    <a href="links.html" class="active">🔗 Links</a>
+  </div>
+</div>
+
+<header>
+  <div class="header-inner">
+    <div class="logo"><span>🔗</span><h1>Quick Links</h1></div>
+    <p class="subtitle">Tools, portals, and resources</p>
+  </div>
+</header>
+
+<main>
+
+  <div class="section-label">My Tools</div>
+  <div class="links-grid">
+
+    <a class="link-card" href="https://kimtrinh.github.io/paycheck-calculator/" target="_blank" rel="noopener">
+      <span class="link-icon">💵</span>
+      <div class="link-info">
+        <div class="link-title">Paycheck Calculator</div>
+        <div class="link-desc">Calculate net pay, taxes, and deductions</div>
+      </div>
+      <span class="link-arrow">↗</span>
+    </a>
+
+  </div>
+
+  <div class="section-label">Work Portals</div>
+  <div class="links-grid">
+
+    <a class="link-card" href="https://sp-cloud.kp.org/sites/Fontario/SitePages/CollabHome.aspx" target="_blank" rel="noopener">
+      <span class="link-icon">🏥</span>
+      <div class="link-info">
+        <div class="link-title">Fontario SharePoint</div>
+        <div class="link-desc">KP Fontario collaboration hub and intranet</div>
+      </div>
+      <span class="link-arrow">↗</span>
+    </a>
+
+  </div>
+
+</main>
+</body>
+</html>
