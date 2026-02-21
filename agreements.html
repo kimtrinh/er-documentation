@@ -255,6 +255,14 @@ let editIndex = -1;
 let activeFilter = 'All';
 
 function saveToStorage() { localStorage.setItem('er_agreements', JSON.stringify(agreements)); }
+function escapeHtml(value) {
+  return String(value ?? '').replace(/[&<>"']/g, ch => (
+    ch === '&' ? '&amp;' :
+    ch === '<' ? '&lt;' :
+    ch === '>' ? '&gt;' :
+    ch === '"' ? '&quot;' : '&#39;'
+  ));
+}
 
 function openModal(idx) {
   editIndex = idx !== undefined ? idx : -1;
@@ -328,7 +336,12 @@ function render() {
   // rebuild filters
   const cats = ['All', ...Array.from(new Set(agreements.map(a => a.category)))];
   const fb = document.getElementById('filterBar');
-  fb.innerHTML = cats.map(c => `<button class="filter-btn${c===activeFilter?' active':''}" onclick="filterAgreements('${c}',this)">${c}</button>`).join('');
+  fb.innerHTML = cats.map(c => (
+    `<button class="filter-btn${c===activeFilter?' active':''}" data-filter="${escapeHtml(c)}">${escapeHtml(c)}</button>`
+  )).join('');
+  fb.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => filterAgreements(btn.dataset.filter, btn));
+  });
 
   if (!filtered.length) {
     grid.innerHTML = '';
@@ -340,25 +353,34 @@ function render() {
   grid.innerHTML = filtered.map((a, i) => {
     const realIdx = agreements.indexOf(a);
     const s = STATUS_MAP[a.status] || STATUS_MAP.active;
+    const safeIcon = escapeHtml(a.icon || '🏥');
+    const safeSpecialty = escapeHtml(a.specialty || '');
+    const safeCategory = escapeHtml(a.category || '');
+    const safeCriteria = escapeHtml(a.criteria || '');
+    const safeResponse = escapeHtml(a.response || '');
+    const safeCoverage = escapeHtml(a.coverage || '');
+    const safeEscalation = escapeHtml(a.escalation || '');
+    const safeNotes = escapeHtml(a.notes || '');
+    const safeAdded = escapeHtml(a.added || '');
     return `<div class="ag-card">
       <div class="ag-head">
-        <span class="ag-icon">${a.icon}</span>
+        <span class="ag-icon">${safeIcon}</span>
         <div>
-          <div class="ag-specialty">${a.specialty}</div>
-          <div class="ag-subtitle">${a.category}</div>
+          <div class="ag-specialty">${safeSpecialty}</div>
+          <div class="ag-subtitle">${safeCategory}</div>
         </div>
         <div class="ag-status"><span class="status-dot ${s.dot}"></span><span style="color:var(--text2)">${s.label}</span></div>
       </div>
       <div class="ag-body">
-        ${a.criteria ? `<div class="ag-section"><div class="ag-section-label">Consult Criteria</div><div class="ag-content">${a.criteria}</div></div>` : ''}
-        ${a.response ? `<div class="ag-section"><div class="ag-section-label">Response Time</div><div class="ag-content">${a.response}</div></div>` : ''}
-        ${a.coverage ? `<div class="ag-section"><div class="ag-section-label">Coverage / Hours</div><div class="ag-content">${a.coverage}</div></div>` : ''}
-        ${a.escalation ? `<div class="ag-section"><div class="ag-section-label">Escalation Path</div><div class="ag-content">${a.escalation}</div></div>` : ''}
-        ${a.notes ? `<div class="ag-section"><div class="ag-section-label">Notes / Exclusions</div><div class="ag-content" style="color:var(--amber)">${a.notes}</div></div>` : ''}
+        ${safeCriteria ? `<div class="ag-section"><div class="ag-section-label">Consult Criteria</div><div class="ag-content">${safeCriteria}</div></div>` : ''}
+        ${safeResponse ? `<div class="ag-section"><div class="ag-section-label">Response Time</div><div class="ag-content">${safeResponse}</div></div>` : ''}
+        ${safeCoverage ? `<div class="ag-section"><div class="ag-section-label">Coverage / Hours</div><div class="ag-content">${safeCoverage}</div></div>` : ''}
+        ${safeEscalation ? `<div class="ag-section"><div class="ag-section-label">Escalation Path</div><div class="ag-content">${safeEscalation}</div></div>` : ''}
+        ${safeNotes ? `<div class="ag-section"><div class="ag-section-label">Notes / Exclusions</div><div class="ag-content" style="color:var(--amber)">${safeNotes}</div></div>` : ''}
         <div style="display:flex;gap:8px;margin-top:12px;padding-top:10px;border-top:1px solid var(--border)">
           <button class="btn btn-ghost" style="font-size:11px;padding:5px 12px" onclick="openModal(${realIdx})">Edit</button>
           <button class="btn" style="font-size:11px;padding:5px 12px;background:transparent;color:var(--red);border-color:var(--border)" onclick="deleteAgreement(${realIdx})">Delete</button>
-          ${a.added ? `<span style="margin-left:auto;font-size:10px;color:var(--text3);align-self:center">Added ${a.added}</span>` : ''}
+          ${safeAdded ? `<span style="margin-left:auto;font-size:10px;color:var(--text3);align-self:center">Added ${safeAdded}</span>` : ''}
         </div>
       </div>
     </div>`;

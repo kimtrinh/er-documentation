@@ -26,6 +26,7 @@ main{max-width:1100px;margin:0 auto;padding:24px 24px 80px}
 .algo-card{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:16px 18px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:14px}
 .algo-card:hover{border-color:#3b82f6;background:#1e3a5f;transform:translateY(-1px)}
 .algo-card.active{border-color:#3b82f6;background:#1e3a5f}
+.algo-card:focus-visible{outline:2px solid #60a5fa;outline-offset:2px}
 .algo-icon{font-size:26px;flex-shrink:0}
 .algo-info{flex:1;min-width:0}
 .algo-title{font-size:14px;font-weight:700;color:#f1f5f9;margin-bottom:2px}
@@ -181,49 +182,49 @@ main{max-width:1100px;margin:0 auto;padding:24px 24px 80px}
 <main>
   <!-- ALGORITHM SELECTOR GRID -->
   <div class="algo-grid" id="algoGrid">
-    <div class="algo-card" onclick="showAlgo('orbital')" id="card-orbital">
+    <div class="algo-card" onclick="showAlgo('orbital')" id="card-orbital" data-algo="orbital" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
       <div class="algo-icon">👁️</div>
       <div class="algo-info">
         <div class="algo-title">Orbital Fractures</div>
         <div class="algo-meta">Updated 9/19/2025 &nbsp;·&nbsp; <span class="algo-badge badge-ophtho">Ophthalmology</span></div>
       </div>
     </div>
-    <div class="algo-card" onclick="showAlgo('papilledema')" id="card-papilledema">
+    <div class="algo-card" onclick="showAlgo('papilledema')" id="card-papilledema" data-algo="papilledema" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
       <div class="algo-icon">🧠</div>
       <div class="algo-info">
         <div class="algo-title">Papilledema</div>
         <div class="algo-meta">Updated 10/1/2025 &nbsp;·&nbsp; <span class="algo-badge badge-neuro">Neurology</span></div>
       </div>
     </div>
-    <div class="algo-card" onclick="showAlgo('pneumomediastinum')" id="card-pneumomediastinum">
+    <div class="algo-card" onclick="showAlgo('pneumomediastinum')" id="card-pneumomediastinum" data-algo="pneumomediastinum" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
       <div class="algo-icon">🫁</div>
       <div class="algo-info">
         <div class="algo-title">Pneumomediastinum</div>
         <div class="algo-meta">Updated 3/25/2025 &nbsp;·&nbsp; <span class="algo-badge badge-thoracic">Thoracic</span></div>
       </div>
     </div>
-    <div class="algo-card" onclick="showAlgo('pregvb')" id="card-pregvb">
+    <div class="algo-card" onclick="showAlgo('pregvb')" id="card-pregvb" data-algo="pregvb" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
       <div class="algo-icon">🤰</div>
       <div class="algo-info">
         <div class="algo-title">Vaginal Bleeding in Pregnancy</div>
         <div class="algo-meta">Updated 5/23/2025 &nbsp;·&nbsp; <span class="algo-badge badge-ob">OB/GYN</span></div>
       </div>
     </div>
-    <div class="algo-card" onclick="showAlgo('aortic')" id="card-aortic">
+    <div class="algo-card" onclick="showAlgo('aortic')" id="card-aortic" data-algo="aortic" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
       <div class="algo-icon">🩸</div>
       <div class="algo-info">
         <div class="algo-title">Aortic Dissection</div>
         <div class="algo-meta">Updated 5/12/2025 &nbsp;·&nbsp; <span class="algo-badge badge-vascular">Vascular/Cardiac</span></div>
       </div>
     </div>
-    <div class="algo-card" onclick="showAlgo('floaters')" id="card-floaters">
+    <div class="algo-card" onclick="showAlgo('floaters')" id="card-floaters" data-algo="floaters" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
       <div class="algo-icon">✨</div>
       <div class="algo-info">
         <div class="algo-title">Visual Floaters & Flashes</div>
         <div class="algo-meta">Updated 3/24/2025 &nbsp;·&nbsp; <span class="algo-badge badge-ophtho">Ophthalmology</span></div>
       </div>
     </div>
-    <div class="algo-card" onclick="showAlgo('nonpregvb')" id="card-nonpregvb">
+    <div class="algo-card" onclick="showAlgo('nonpregvb')" id="card-nonpregvb" data-algo="nonpregvb" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
       <div class="algo-icon">🔴</div>
       <div class="algo-info">
         <div class="algo-title">Non-Pregnant Vaginal Bleeding</div>
@@ -716,14 +717,35 @@ const algos = {
 };
 
 let currentAlgo = null;
+const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-function showAlgo(key) {
+function normalizeAlgoHash(hash) {
+  const raw = String(hash || '').replace(/^#/, '').trim();
+  if (!raw) return '';
+  if (raw.startsWith('card-')) return raw.slice(5);
+  return raw;
+}
+
+function setAlgoHash(key) {
+  const target = `#card-${key}`;
+  if (window.location.hash === target) return;
+  history.replaceState(null, '', target);
+}
+
+function showAlgo(key, options = {}) {
   const algo = algos[key];
   if (!algo) return;
+  const { skipHash = false, skipScroll = false } = options;
 
   // Update active card
-  document.querySelectorAll('.algo-card').forEach(c => c.classList.remove('active'));
-  document.getElementById('card-' + key).classList.add('active');
+  document.querySelectorAll('.algo-card').forEach(c => {
+    c.classList.remove('active');
+    c.setAttribute('aria-pressed', 'false');
+  });
+  const activeCard = document.getElementById('card-' + key);
+  if (!activeCard) return;
+  activeCard.classList.add('active');
+  activeCard.setAttribute('aria-pressed', 'true');
 
   // Update viewer
   document.getElementById('viewer-placeholder').style.display = 'none';
@@ -733,10 +755,38 @@ function showAlgo(key) {
   document.getElementById('v-updated').textContent = algo.updated;
   document.getElementById('v-body').innerHTML = algo.render();
 
-  // Scroll to viewer
-  document.getElementById('algoViewer').scrollIntoView({behavior:'smooth', block:'start'});
   currentAlgo = key;
+  if (!skipHash) setAlgoHash(key);
+
+  // Scroll to viewer
+  if (!skipScroll) {
+    document.getElementById('algoViewer').scrollIntoView({
+      behavior: prefersReducedMotion ? 'auto' : 'smooth',
+      block:'start'
+    });
+  }
 }
+
+document.getElementById('algoGrid').addEventListener('keydown', e => {
+  const card = e.target.closest('.algo-card');
+  if (!card) return;
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    const key = card.dataset.algo;
+    if (key) showAlgo(key);
+  }
+});
+
+const initialAlgo = normalizeAlgoHash(window.location.hash);
+if (initialAlgo && algos[initialAlgo]) {
+  showAlgo(initialAlgo, { skipHash: true });
+}
+
+window.addEventListener('hashchange', () => {
+  const key = normalizeAlgoHash(window.location.hash);
+  if (!key || !algos[key] || key === currentAlgo) return;
+  showAlgo(key, { skipHash: true, skipScroll: true });
+});
 </script>
 
 <script id="shared-nav-search">

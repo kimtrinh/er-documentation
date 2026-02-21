@@ -91,6 +91,7 @@
 
   #globalSearch:focus { border-color: var(--accent); }
   #globalSearch::placeholder { color: var(--text-dim); }
+  #globalSearch:focus-visible { box-shadow: 0 0 0 3px rgba(88,166,255,0.2); }
 
   .search-count {
     position: absolute;
@@ -238,9 +239,14 @@
     padding: 2px 6px;
     border-radius: 4px;
     transition: background 0.1s;
+    border: none;
+    background: transparent;
+    -webkit-appearance: none;
+    appearance: none;
   }
 
   .entry-number:hover { background: rgba(88,166,255,0.1); }
+  .entry-number:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
   .entry-number.ext { color: var(--text-muted); font-weight: 400; }
 
@@ -281,6 +287,7 @@
 
   .entry:hover .delete-btn { opacity: 1; }
   .delete-btn:hover { color: #f85149; background: rgba(248,81,73,0.1); }
+  .delete-btn:focus-visible { outline: 2px solid #f85149; outline-offset: 2px; }
 
   /* Modal */
   .modal-overlay {
@@ -485,8 +492,8 @@
   <div class="header-title">KP SBC // <span>ED DIRECTORY</span></div>
   <div class="search-wrap">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-    <input type="text" id="globalSearch" placeholder="Search name or number..." autocomplete="off">
-    <span class="search-count" id="searchCount"></span>
+    <input type="text" id="globalSearch" placeholder="Search name or number..." autocomplete="off" aria-label="Search phone directory">
+    <span class="search-count" id="searchCount" role="status" aria-live="polite"></span>
   </div>
   <span class="updated-badge">Updated 11/2024</span>
 </header>
@@ -933,10 +940,61 @@ const data = {
   }
 };
 
-// Custom entries stored in memory
+const PHONE_INDEX_STORAGE_KEY = 'kp_er_phone_directory_index_v1';
+const CUSTOM_ENTRIES_STORAGE_KEY = 'kp_er_phone_custom_entries_v1';
 const customEntries = { omc: [], fmc: [] };
 let currentHospital = 'omc';
-const PHONE_INDEX_STORAGE_KEY = 'kp_er_phone_directory_index_v1';
+
+function escapeHtml(value) {
+  return String(value ?? '').replace(/[&<>"']/g, ch => (
+    ch === '&' ? '&amp;' :
+    ch === '<' ? '&lt;' :
+    ch === '>' ? '&gt;' :
+    ch === '"' ? '&quot;' : '&#39;'
+  ));
+}
+
+function slugify(value) {
+  const slug = String(value || '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+  return slug || 'section';
+}
+
+function normalizeCustomEntry(item) {
+  if (!item || typeof item !== 'object') return null;
+  const name = String(item.name || '').trim();
+  const number = String(item.number || '').trim();
+  if (!name || !number) return null;
+  const type = ['ext', 'pager', 'phone'].includes(item.type) ? item.type : 'ext';
+  const note = String(item.note || '').trim();
+  const category = String(item.category || 'OTHER').trim() || 'OTHER';
+  return { name, number, type, note, category };
+}
+
+function loadCustomEntries() {
+  try {
+    const raw = localStorage.getItem(CUSTOM_ENTRIES_STORAGE_KEY);
+    if (!raw) return;
+    const parsed = JSON.parse(raw);
+    ['omc', 'fmc'].forEach(hospital => {
+      const arr = parsed && Array.isArray(parsed[hospital]) ? parsed[hospital] : [];
+      customEntries[hospital] = arr.map(normalizeCustomEntry).filter(Boolean);
+    });
+  } catch (e) {
+    customEntries.omc = [];
+    customEntries.fmc = [];
+  }
+}
+
+function saveCustomEntries() {
+  try {
+    localStorage.setItem(CUSTOM_ENTRIES_STORAGE_KEY, JSON.stringify(customEntries));
+  } catch (e) {
+    // Ignore storage failures (private mode or quota limits).
+  }
+}
 
 function entryTypeFromSection(section) {
   if ((section || '').startsWith('IMAGING')) return 'imaging';
@@ -1026,23 +1084,31 @@ function isImaging(section) {
 }
 
 function buildEntry(item, section, hospital, idx, isCustom = false) {
-  const id = `${hospital}-${section.replace(/\s/g,'-')}-${idx}`;
-  const noteText = (item.note || '').toLowerCase();
-  const sectionText = (section || '').toLowerCase();
-  const searchHaystack = `${item.name} ${item.number} ${noteText} ${sectionText}`.toLowerCase();
+  const id = `${hospital}-${slugify(section)}-${idx}`;
+  const nameText = String(item.name || '');
+  const numberText = String(item.number || '');
+  const noteRaw = String(item.note || '');
+  const noteText = noteRaw.toLowerCase();
+  const sectionText = String(section || '').toLowerCase();
+  const searchHaystack = `${nameText} ${numberText} ${noteText} ${sectionText}`.toLowerCase();
+  const safeName = escapeHtml(nameText);
+  const safeNumber = escapeHtml(numberText);
+  const safeNote = escapeHtml(noteRaw);
+  const safeHospital = escapeHtml(hospital);
+  const typeClass = item.type === 'pager' ? 'pager' : item.type === 'phone' ? 'phone' : 'ext';
   const numberDisplay = isImaging(section)
-    ? `<span class="imaging-code">${item.number}</span>`
-    : `<span class="entry-number ${item.type}" onclick="copyNum(this,'${item.number}')" title="Click to copy">${item.number}</span>`;
+    ? `<span class="imaging-code">${safeNumber}</span>`
+    : `<button type="button" class="entry-number ${typeClass} js-copy-num" data-number="${safeNumber}" title="Click to copy">${safeNumber}</button>`;
 
   return `
-    <div class="entry${isCustom ? ' custom' : ''}" id="${id}" data-name="${item.name.toLowerCase()}" data-number="${item.number.toLowerCase()}" data-section="${sectionText}" data-note="${noteText}" data-search="${searchHaystack}">
+    <div class="entry${isCustom ? ' custom' : ''}" id="${id}" data-name="${escapeHtml(nameText.toLowerCase())}" data-number="${escapeHtml(numberText.toLowerCase())}" data-section="${escapeHtml(sectionText)}" data-note="${escapeHtml(noteText)}" data-search="${escapeHtml(searchHaystack)}">
       <div class="entry-name">
-        ${item.name}
-        ${item.note ? `<span class="entry-note">${item.note}</span>` : ''}
+        ${safeName}
+        ${noteRaw ? `<span class="entry-note">${safeNote}</span>` : ''}
       </div>
       ${numberDisplay}
-      <span class="entry-type ${item.type}">${item.type === 'pager' ? 'pgr' : item.type === 'ext' ? 'ext' : 'tel'}</span>
-      ${isCustom ? `<button class="delete-btn" onclick="deleteCustom('${hospital}',${idx})" title="Delete">×</button>` : ''}
+      <span class="entry-type ${typeClass}">${item.type === 'pager' ? 'pgr' : item.type === 'ext' ? 'ext' : 'tel'}</span>
+      ${isCustom ? `<button class="delete-btn js-delete-custom" data-hospital="${safeHospital}" data-index="${idx}" title="Delete">×</button>` : ''}
     </div>
   `;
 }
@@ -1052,8 +1118,8 @@ function renderHospital(hospital) {
   let html = '';
   const sections = data[hospital];
   for (const [section, entries] of Object.entries(sections)) {
-    html += `<div class="section" data-section="${section}">
-      <div class="section-header">${section}</div>
+    html += `<div class="section" data-section="${escapeHtml(section)}">
+      <div class="section-header">${escapeHtml(section)}</div>
       <div class="entries">`;
     entries.forEach((item, i) => {
       html += buildEntry(item, section, hospital, i);
@@ -1071,8 +1137,8 @@ function renderHospital(hospital) {
       byCategory[cat].push({ item, i });
     });
     for (const [cat, entries] of Object.entries(byCategory)) {
-      html += `<div class="section custom-section" data-section="${cat}">
-        <div class="section-header">${cat} ★</div>
+      html += `<div class="section custom-section" data-section="${escapeHtml(cat)}">
+        <div class="section-header">${escapeHtml(cat)} ★</div>
         <div class="entries">`;
       entries.forEach(({ item, i }) => {
         html += buildEntry(item, cat, hospital, i, true);
@@ -1089,8 +1155,24 @@ function renderAll() {
   renderHospital('fmc');
 }
 
+loadCustomEntries();
 renderAll();
 exportPhoneDirectoryIndex();
+
+document.addEventListener('click', e => {
+  const copyBtn = e.target.closest('.js-copy-num');
+  if (copyBtn) {
+    copyNum(copyBtn, copyBtn.dataset.number || '');
+    return;
+  }
+
+  const deleteBtn = e.target.closest('.js-delete-custom');
+  if (deleteBtn) {
+    const hospital = deleteBtn.dataset.hospital;
+    const idx = Number.parseInt(deleteBtn.dataset.index || '', 10);
+    if (hospital && Number.isInteger(idx)) deleteCustom(hospital, idx);
+  }
+});
 
 // Search
 const searchInput = document.getElementById('globalSearch');
@@ -1151,17 +1233,22 @@ function addEntry() {
   const type = document.getElementById('newType').value;
   const category = document.getElementById('newCategory').value;
 
-  if (!name || !number) { showToast('Name and number required.'); return; }
+  const entry = normalizeCustomEntry({ name, number, type, note, category });
+  if (!entry) { showToast('Name and number required.'); return; }
 
-  customEntries[currentHospital].push({ name, number, type, note, category });
+  customEntries[currentHospital].push(entry);
+  saveCustomEntries();
   closeModal();
   renderHospital(currentHospital);
   exportPhoneDirectoryIndex();
-  showToast(`Added "${name}" to ${currentHospital.toUpperCase()}`);
+  showToast(`Added "${entry.name}" to ${currentHospital.toUpperCase()}`);
 }
 
 function deleteCustom(hospital, idx) {
+  if (!customEntries[hospital]) return;
+  if (!Number.isInteger(idx) || idx < 0 || idx >= customEntries[hospital].length) return;
   customEntries[hospital].splice(idx, 1);
+  saveCustomEntries();
   renderHospital(hospital);
   exportPhoneDirectoryIndex();
   showToast('Entry removed.');

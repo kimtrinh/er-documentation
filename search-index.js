@@ -175,13 +175,13 @@ const SEARCH_INDEX = [
   {type:'calc',i:'🧮',t:'Peds Fever Risk Stratification',s:'Febrile infant  ·  0-60 days  ·  sepsis workup  ·  LP',g:'Calculator',gc:'t-calc',u:'calculators.html#calc-pedsfever'},
 
   // ── ALGORITHMS ─────────────────────────────────────────────────────────
-  {type:'algo',i:'🔀',t:'Orbital Fractures',s:'ophthalmology  ·  eye  ·  ocular  ·  orbital blowout  ·  trauma  ·  KP SBC ED Practice Guideline',g:'Algorithm',gc:'t-algo',u:'algorithms.html#orbital'},
-  {type:'algo',i:'🔀',t:'Papilledema',s:'optic disc swelling  ·  elevated ICP  ·  vision  ·  neurology  ·  KP SBC ED Practice Guideline',g:'Algorithm',gc:'t-algo',u:'algorithms.html#papilledema'},
-  {type:'algo',i:'🔀',t:'Pneumomediastinum',s:'mediastinal air  ·  esophageal rupture  ·  Boerhaave  ·  chest  ·  KP SBC ED Practice Guideline',g:'Algorithm',gc:'t-algo',u:'algorithms.html#pneumomediastinum'},
-  {type:'algo',i:'🔀',t:'Vaginal Bleeding in Pregnancy',s:'OB bleeding  ·  first trimester  ·  placenta  ·  abruption  ·  KP SBC ED Practice Guideline',g:'Algorithm',gc:'t-algo',u:'algorithms.html#pregvb'},
-  {type:'algo',i:'🔀',t:'Aortic Dissection',s:'chest pain  ·  tearing  ·  CTA  ·  type A type B  ·  vascular  ·  KP SBC ED Practice Guideline',g:'Algorithm',gc:'t-algo',u:'algorithms.html#aortic'},
-  {type:'algo',i:'🔀',t:'Visual Floaters & Flashes',s:'ophthalmology  ·  retinal detachment  ·  vitreous  ·  vision  ·  KP SBC ED Practice Guideline',g:'Algorithm',gc:'t-algo',u:'algorithms.html#floaters'},
-  {type:'algo',i:'🔀',t:'Non-Pregnant Vaginal Bleeding',s:'GYN  ·  vaginal bleeding  ·  non-OB  ·  ectopic  ·  KP SBC ED Practice Guideline',g:'Algorithm',gc:'t-algo',u:'algorithms.html#nonpregvb'},
+  {type:'algo',i:'🔀',t:'Orbital Fractures',s:'ophthalmology  ·  eye  ·  ocular  ·  orbital blowout  ·  trauma  ·  KP SBC ED Practice Guideline',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-orbital'},
+  {type:'algo',i:'🔀',t:'Papilledema',s:'optic disc swelling  ·  elevated ICP  ·  vision  ·  neurology  ·  KP SBC ED Practice Guideline',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-papilledema'},
+  {type:'algo',i:'🔀',t:'Pneumomediastinum',s:'mediastinal air  ·  esophageal rupture  ·  Boerhaave  ·  chest  ·  KP SBC ED Practice Guideline',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-pneumomediastinum'},
+  {type:'algo',i:'🔀',t:'Vaginal Bleeding in Pregnancy',s:'OB bleeding  ·  first trimester  ·  placenta  ·  abruption  ·  KP SBC ED Practice Guideline',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-pregvb'},
+  {type:'algo',i:'🔀',t:'Aortic Dissection',s:'chest pain  ·  tearing  ·  CTA  ·  type A type B  ·  vascular  ·  KP SBC ED Practice Guideline',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-aortic'},
+  {type:'algo',i:'🔀',t:'Visual Floaters & Flashes',s:'ophthalmology  ·  retinal detachment  ·  vitreous  ·  vision  ·  KP SBC ED Practice Guideline',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-floaters'},
+  {type:'algo',i:'🔀',t:'Non-Pregnant Vaginal Bleeding',s:'GYN  ·  vaginal bleeding  ·  non-OB  ·  ectopic  ·  KP SBC ED Practice Guideline',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-nonpregvb'},
 
   // ── NEURO HUB ───────────────────────────────────────────────────────────
   {type:'neuro',i:'🧠',t:'Neuro Hub — ICH Protocol Overview',s:'ICH  ·  intracerebral hemorrhage  ·  stroke  ·  neurology consult',g:'Neuro Hub',gc:'t-neuro',u:'neurohub.html'},
@@ -472,6 +472,7 @@ if (typeof window !== 'undefined') {
 .kp-sg:first-child{border-top:none}
 .kp-sr{display:flex;align-items:center;gap:10px;padding:9px 14px;text-decoration:none}
 .kp-sr:hover,.kp-sr.hi{background:#111f35}
+.kp-sr:focus-visible{outline:2px solid #60a5fa;outline-offset:-2px}
 .kp-si{width:20px;text-align:center;font-size:14px;flex-shrink:0}
 .kp-sb{flex:1;min-width:0}
 .kp-st{font-size:13px;color:#e8f0fc;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -495,9 +496,11 @@ if (typeof window !== 'undefined') {
   host.innerHTML = `
 <div id="kp-shared-search-wrap">
   <span id="kp-shared-search-icon">🔎</span>
-  <input id="kp-shared-search-input" type="text" autocomplete="off" spellcheck="false" placeholder="Search toolkit + phone directory...">
+  <input id="kp-shared-search-input" type="text" autocomplete="off" spellcheck="false" placeholder="Search toolkit + phone directory..."
+    role="combobox" aria-autocomplete="list" aria-haspopup="listbox" aria-expanded="false"
+    aria-controls="kp-shared-search-dd" aria-label="Search toolkit and phone directory">
   <span id="kp-shared-search-kbd">⌘K</span>
-  <div id="kp-shared-search-dd"></div>
+  <div id="kp-shared-search-dd" role="listbox" aria-label="Search results"></div>
 </div>`;
   nav.insertAdjacentElement('afterend', host);
 
@@ -534,6 +537,12 @@ if (typeof window !== 'undefined') {
       ? trimmed
       : 'home.html';
   };
+  const setExpanded = (open) => input.setAttribute('aria-expanded', open ? 'true' : 'false');
+  const clearActiveDescendant = () => input.removeAttribute('aria-activedescendant');
+  const setActiveDescendant = (rows) => {
+    if (hiIdx >= 0 && rows[hiIdx] && rows[hiIdx].id) input.setAttribute('aria-activedescendant', rows[hiIdx].id);
+    else clearActiveDescendant();
+  };
 
   const getGroup = (item) => {
     if (item.type === 'phrase') return 'Dotphrases';
@@ -562,6 +571,8 @@ if (typeof window !== 'undefined') {
       dd.classList.remove('open');
       dd.innerHTML = '';
       hiIdx = -1;
+      clearActiveDescendant();
+      setExpanded(false);
       return;
     }
 
@@ -590,8 +601,9 @@ if (typeof window !== 'undefined') {
     hiIdx = -1;
 
     if (!results.length) {
-      dd.innerHTML = '<div class="kp-empty">No results</div>';
+      dd.innerHTML = '<div class="kp-empty" role="status" aria-live="polite">No results</div>';
       dd.classList.add('open');
+      setExpanded(true);
       return;
     }
 
@@ -603,10 +615,12 @@ if (typeof window !== 'undefined') {
     });
 
     let html = '';
+    let rowIndex = 0;
     orderedGroups(grouped).forEach((groupName) => {
       html += `<div class="kp-sg">${escapeHtml(groupName)}</div>`;
       grouped[groupName].forEach((item) => {
-        html += `<a class="kp-sr" href="${safeHref(item.u)}">
+        const rowId = `kp-sr-${rowIndex++}`;
+        html += `<a class="kp-sr" id="${rowId}" role="option" aria-selected="false" href="${safeHref(item.u)}">
   <span class="kp-si">${escapeHtml(item.i)}</span>
   <div class="kp-sb">
     <div class="kp-st">${escapeHtml(item.t)}</div>
@@ -623,6 +637,8 @@ if (typeof window !== 'undefined') {
 
     dd.innerHTML = html;
     dd.classList.add('open');
+    setExpanded(true);
+    clearActiveDescendant();
   };
 
   input.addEventListener('input', () => render(input.value));
@@ -631,14 +647,24 @@ if (typeof window !== 'undefined') {
     const rows = Array.from(dd.querySelectorAll('.kp-sr'));
     if (e.key === 'ArrowDown') {
       hiIdx = Math.min(hiIdx + 1, rows.length - 1);
-      rows.forEach((el, i) => el.classList.toggle('hi', i === hiIdx));
+      rows.forEach((el, i) => {
+        const active = i === hiIdx;
+        el.classList.toggle('hi', active);
+        el.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
+      setActiveDescendant(rows);
       if (rows[hiIdx]) rows[hiIdx].scrollIntoView({ block: 'nearest' });
       e.preventDefault();
       return;
     }
     if (e.key === 'ArrowUp') {
       hiIdx = Math.max(hiIdx - 1, 0);
-      rows.forEach((el, i) => el.classList.toggle('hi', i === hiIdx));
+      rows.forEach((el, i) => {
+        const active = i === hiIdx;
+        el.classList.toggle('hi', active);
+        el.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
+      setActiveDescendant(rows);
       e.preventDefault();
       return;
     }
@@ -648,6 +674,8 @@ if (typeof window !== 'undefined') {
     }
     if (e.key === 'Escape') {
       dd.classList.remove('open');
+      setExpanded(false);
+      clearActiveDescendant();
       input.blur();
     }
   });
@@ -655,6 +683,8 @@ if (typeof window !== 'undefined') {
   document.addEventListener('click', (e) => {
     if (!e.target.closest('#kp-shared-search-wrap')) {
       dd.classList.remove('open');
+      setExpanded(false);
+      clearActiveDescendant();
     }
   });
 

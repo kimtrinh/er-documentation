@@ -62,6 +62,7 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
 .sdrop-group:first-child{border-top:none}
 .sdrop-row{display:flex;align-items:center;gap:12px;padding:9px 14px;text-decoration:none;transition:background .1s;cursor:pointer}
 .sdrop-row:hover,.sdrop-row.hi{background:var(--surface2)}
+.sdrop-row:focus-visible{outline:2px solid #60a5fa;outline-offset:-2px}
 .sdrop-ico{font-size:15px;width:22px;text-align:center;flex-shrink:0}
 .sdrop-body{flex:1;min-width:0}
 .sdrop-title{font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -185,9 +186,11 @@ main{max-width:1100px;margin:0 auto;padding:22px 24px 80px}
       <input class="search-input" id="si" type="text"
         placeholder="Search everything — e.g. PE, ketamine, ortho, HEART score, aortic dissection, 47333, ETAP..."
         autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+        role="combobox" aria-autocomplete="list" aria-haspopup="listbox" aria-expanded="false"
+        aria-controls="sd" aria-label="Search toolkit and phone directory"
         oninput="doSearch(this.value)" onkeydown="searchKey(event)"/>
       <span class="search-shortcut">⌘K to focus</span>
-      <div class="search-dropdown" id="sd"></div>
+      <div class="search-dropdown" id="sd" role="listbox" aria-label="Search results"></div>
     </div>
     <div class="chips">
       <button class="chip on" onclick="setFilter('all',this)">All</button>
@@ -199,10 +202,10 @@ main{max-width:1100px;margin:0 auto;padding:22px 24px 80px}
       <button class="chip" onclick="setFilter('phone',this)">📞 Phones</button>
     </div>
     <div class="stats-row">
-      <div><div class="stn">120</div><div class="stl">Dotphrases</div></div>
-      <div><div class="stn">12</div><div class="stl">Calculators</div></div>
-      <div><div class="stn">7</div><div class="stl">Algorithms</div></div>
-      <div><div class="stn">200+</div><div class="stl">Contacts</div></div>
+      <div><div class="stn" id="stat-phrases">127</div><div class="stl">Dotphrases</div></div>
+      <div><div class="stn" id="stat-calcs">13</div><div class="stl">Calculators</div></div>
+      <div><div class="stn" id="stat-algos">7</div><div class="stl">Algorithms</div></div>
+      <div><div class="stn" id="stat-contacts">132</div><div class="stl">Contacts</div></div>
     </div>
   </div>
 </div>
@@ -348,6 +351,56 @@ function getOrderedGroups(groups) {
   return GROUP_PRIORITY.filter(n => groups[n]).concat(rest);
 }
 
+function escapeHtml(value) {
+  return String(value ?? '').replace(/[&<>"']/g, ch => (
+    ch === '&' ? '&amp;' :
+    ch === '<' ? '&lt;' :
+    ch === '>' ? '&gt;' :
+    ch === '"' ? '&quot;' : '&#39;'
+  ));
+}
+
+function safeHref(href) {
+  const trimmed = String(href || '').trim();
+  return /^[A-Za-z0-9._/-]+\.html(?:#[A-Za-z0-9._:-]+)?$/.test(trimmed) ? trimmed : 'home.html';
+}
+
+function setSearchExpanded(open) {
+  const input = document.getElementById('si');
+  input.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+
+function clearSearchActiveDescendant() {
+  document.getElementById('si').removeAttribute('aria-activedescendant');
+}
+
+function setSearchActiveDescendant(rows) {
+  const input = document.getElementById('si');
+  if (hiIdx >= 0 && rows[hiIdx] && rows[hiIdx].id) input.setAttribute('aria-activedescendant', rows[hiIdx].id);
+  else clearSearchActiveDescendant();
+}
+
+function updateHomeStats() {
+  const idx = getIDX();
+  const counts = idx.reduce((acc, item) => {
+    acc[item.type] = (acc[item.type] || 0) + 1;
+    return acc;
+  }, {});
+  const phrases = counts.phrase || 0;
+  const calcs = counts.calc || 0;
+  const algos = counts.algo || 0;
+  const contacts = (counts.phone || 0) + (counts.imaging || 0) + (counts.staff || 0);
+
+  const setStat = (id, value) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = String(value);
+  };
+  setStat('stat-phrases', phrases);
+  setStat('stat-calcs', calcs);
+  setStat('stat-algos', algos);
+  setStat('stat-contacts', contacts);
+}
+
 function setFilter(f, el) {
   activeFilter = f;
   document.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
@@ -359,7 +412,13 @@ function setFilter(f, el) {
 function doSearch(q) {
   const dd = document.getElementById('sd');
   q = q.trim();
-  if (!q) { dd.classList.remove('open'); hiIdx = -1; return; }
+  if (!q) {
+    dd.classList.remove('open');
+    hiIdx = -1;
+    setSearchExpanded(false);
+    clearSearchActiveDescendant();
+    return;
+  }
   const lo = q.toLowerCase();
 
   let results = getIDX().filter(item => {
@@ -383,8 +442,10 @@ function doSearch(q) {
   hiIdx = -1;
 
   if (!results.length) {
-    dd.innerHTML = '<div class="sdrop-empty">No results — try different keywords or clear the filter</div>';
+    dd.innerHTML = '<div class="sdrop-empty" role="status" aria-live="polite">No results — try different keywords or clear the filter</div>';
     dd.classList.add('open');
+    setSearchExpanded(true);
+    clearSearchActiveDescendant();
     return;
   }
 
@@ -396,17 +457,19 @@ function doSearch(q) {
   });
 
   let html = '';
+  let rowIdx = 0;
   getOrderedGroups(groups).forEach(grp => {
     if (!groups[grp]) return;
-    html += `<div class="sdrop-group">${grp}</div>`;
+    html += `<div class="sdrop-group">${escapeHtml(grp)}</div>`;
     groups[grp].forEach(item => {
-      html += `<a class="sdrop-row" href="${item.u}">
-        <span class="sdrop-ico">${item.i}</span>
+      const rowId = `srow-${rowIdx++}`;
+      html += `<a class="sdrop-row" id="${rowId}" role="option" aria-selected="false" href="${safeHref(item.u)}">
+        <span class="sdrop-ico">${escapeHtml(item.i)}</span>
         <div class="sdrop-body">
-          <div class="sdrop-title">${item.t}</div>
-          <div class="sdrop-sub">${item.s}</div>
+          <div class="sdrop-title">${escapeHtml(item.t)}</div>
+          <div class="sdrop-sub">${escapeHtml(item.s)}</div>
         </div>
-        <span class="sdrop-tag ${item.gc}">${item.g}</span>
+        <span class="sdrop-tag ${escapeHtml(item.gc)}">${escapeHtml(item.g)}</span>
       </a>`;
     });
   });
@@ -415,6 +478,8 @@ function doSearch(q) {
   }
   dd.innerHTML = html;
   dd.classList.add('open');
+  setSearchExpanded(true);
+  clearSearchActiveDescendant();
 }
 
 function searchKey(e) {
@@ -422,17 +487,29 @@ function searchKey(e) {
   const rows = Array.from(dd.querySelectorAll('.sdrop-row'));
   if (e.key === 'ArrowDown') {
     hiIdx = Math.min(hiIdx + 1, rows.length - 1);
-    rows.forEach((el, i) => el.classList.toggle('hi', i === hiIdx));
+    rows.forEach((el, i) => {
+      const active = i === hiIdx;
+      el.classList.toggle('hi', active);
+      el.setAttribute('aria-selected', active ? 'true' : 'false');
+    });
+    setSearchActiveDescendant(rows);
     if (rows[hiIdx]) rows[hiIdx].scrollIntoView({block:'nearest'});
     e.preventDefault();
   } else if (e.key === 'ArrowUp') {
     hiIdx = Math.max(hiIdx - 1, 0);
-    rows.forEach((el, i) => el.classList.toggle('hi', i === hiIdx));
+    rows.forEach((el, i) => {
+      const active = i === hiIdx;
+      el.classList.toggle('hi', active);
+      el.setAttribute('aria-selected', active ? 'true' : 'false');
+    });
+    setSearchActiveDescendant(rows);
     e.preventDefault();
   } else if (e.key === 'Enter' && hiIdx >= 0 && rows[hiIdx]) {
     rows[hiIdx].click();
   } else if (e.key === 'Escape') {
     dd.classList.remove('open');
+    setSearchExpanded(false);
+    clearSearchActiveDescendant();
     document.getElementById('si').blur();
   }
 }
@@ -450,7 +527,20 @@ document.addEventListener('keydown', e => {
 document.addEventListener('click', e => {
   if (!e.target.closest('.search-wrap')) {
     document.getElementById('sd').classList.remove('open');
+    setSearchExpanded(false);
+    clearSearchActiveDescendant();
   }
+});
+
+document.getElementById('si').addEventListener('focus', () => {
+  const q = document.getElementById('si').value.trim();
+  if (q) doSearch(q);
+});
+
+updateHomeStats();
+window.addEventListener('storage', e => {
+  const key = window.KP_ER_SEARCH && window.KP_ER_SEARCH.phoneIndexStorageKey;
+  if (!key || e.key === key) updateHomeStats();
 });
 </script>
 </body>
