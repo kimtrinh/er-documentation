@@ -207,7 +207,7 @@ main{max-width:1100px;margin:0 auto;padding:24px 24px 80px}
       <div class="algo-icon">🤰</div>
       <div class="algo-info">
         <div class="algo-title">Vaginal Bleeding in Pregnancy</div>
-        <div class="algo-meta">Updated 5/23/2025 &nbsp;·&nbsp; <span class="algo-badge badge-ob">OB/GYN</span></div>
+        <div class="algo-meta">Updated 5/3/2025 &nbsp;·&nbsp; <span class="algo-badge badge-ob">OB/GYN</span></div>
       </div>
     </div>
     <div class="algo-card" onclick="showAlgo('aortic')" id="card-aortic" data-algo="aortic" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
@@ -400,93 +400,130 @@ const algos = {
   pregvb: {
     icon: '🤰',
     title: 'Vaginal Bleeding in Pregnancy',
-    updated: 'KP SBC ED Practice Guideline · Updated 5/23/2025',
+    updated: 'KP SBC GYN and ED Practice Guideline · Updated 5/3/2025',
     render: () => `
       <div class="flow">
-        <div class="node node-start">Patient presents with vaginal bleeding during pregnancy</div>
+        <div class="node node-start" style="max-width:760px">KP SBC GYN and ED Practice Guideline: Vaginal Bleeding in Pregnancy</div>
 
-        <div class="callout callout-yellow" style="margin:16px 0">
-          <strong>Contact GYN via Vocera:</strong> FMC → "GYN" &nbsp;|&nbsp; OMC → "OMC GYN"
+        <div class="callout callout-green" style="margin:16px 0;width:100%;max-width:760px">
+          <strong>First Trimester Bleeding Protocol Goal:</strong> Provide the highest quality of service to our patients.
         </div>
 
-        <div class="decision-card" style="width:100%;max-width:560px">
-          <div class="decision-q">Hemodynamically stable?</div>
+        <div class="decision-card" style="width:100%;max-width:760px">
+          <div class="decision-q">Initial RN intake should include</div>
+          <div style="font-size:12px;color:#94a3b8;line-height:1.8">
+            • Age, gravida/para, and LMP<br>
+            • Quantity of bleeding and associated symptoms<br>
+            • Vital signs and urine pregnancy test
+          </div>
+        </div>
+
+        <div class="arrow-down"></div>
+
+        <div class="decision-card" style="width:100%;max-width:760px">
+          <div class="decision-q">Is pregnancy confirmed?</div>
+          <div class="decision-opts">
+            <div class="decision-opt opt-no">
+              <span class="opt-badge badge-no">NO</span>
+              <div class="opt-text">Use the <strong style="color:#93c5fd">Non-Pregnant Vaginal Bleeding</strong> pathway.</div>
+            </div>
+            <div class="decision-opt opt-yes">
+              <span class="opt-badge badge-yes">YES</span>
+              <div class="opt-text">Obtain <strong>STAT CBC, quantitative beta hCG, ABO-Rh, and pelvic exam</strong>.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="arrow-down"></div>
+
+        <div class="decision-card" style="width:100%;max-width:760px">
+          <div class="decision-q">Any high-risk feature?</div>
+          <div style="font-size:12px;color:#94a3b8;line-height:1.8;margin-bottom:12px">
+            • Heavy bleeding<br>• Severe pain<br>• Failed treatment
+          </div>
           <div class="decision-opts">
             <div class="decision-opt opt-no" style="background:#2d1b1b;border-color:#ef4444">
               <span class="opt-badge badge-no" style="background:#ef4444">NO</span>
-              <div class="opt-text"><strong style="color:#fca5a5">Notify on-call OB/GYN immediately</strong></div>
+              <div class="opt-text">If stable, ED provider evaluates and uses ultrasound findings to guide management.</div>
             </div>
             <div class="decision-opt opt-yes">
               <span class="opt-badge badge-yes">YES</span>
-              <div class="opt-text">Obtain <strong>CBC, HCG, ABO-Rh</strong> → proceed ↓</div>
+              <div class="opt-text"><strong>NPO + Type and Screen</strong> and ensure imaging/labs/exam are complete, then <strong style="color:#fca5a5">call GYN on-call for surgical consult</strong>.</div>
             </div>
           </div>
         </div>
 
         <div class="arrow-down"></div>
 
-        <div class="decision-card" style="width:100%;max-width:560px">
-          <div class="decision-q">Gestational age ≥20 weeks?</div>
+        <div class="decision-card" style="width:100%;max-width:760px">
+          <div class="decision-q">Gestational age >20 weeks?</div>
           <div class="decision-opts">
             <div class="decision-opt opt-yes">
               <span class="opt-badge badge-yes">YES</span>
-              <div class="opt-text">Medically clear patient (address non-OB issues) → <strong style="color:#fca5a5">Notify on-call OB/GYN AND send to L&D</strong></div>
+              <div class="opt-text">If unstable, <strong style="color:#fca5a5">GYN on-call assesses in ED</strong>. If stable and no OB complaints, clear non-OB issues then notify GYN and send to <strong>L&amp;D</strong>.</div>
             </div>
             <div class="decision-opt opt-no">
-              <span class="opt-badge badge-no">NO (&lt;20 weeks)</span>
-              <div class="opt-text">Obtain <strong>pelvic ultrasound</strong> → proceed ↓</div>
+              <span class="opt-badge badge-no">NO (&lt;=20 weeks)</span>
+              <div class="opt-text">Treat in ED and proceed with first-trimester ultrasound pathway below.</div>
             </div>
           </div>
         </div>
 
         <div class="arrow-down"></div>
 
-        <div class="decision-card" style="width:100%;max-width:560px">
-          <div class="decision-q">Does patient have any of the following?</div>
-          <div style="font-size:12px;color:#94a3b8;line-height:1.8;margin-bottom:12px">
-            • <strong>Heavy</strong> bleeding<br>• <strong>Severe</strong> pelvic pain<br>• <strong>Failed prior treatment</strong>
-          </div>
-          <div class="decision-opts">
-            <div class="decision-opt opt-yes">
-              <span class="opt-badge badge-yes">YES</span>
-              <div class="opt-text"><strong>NPO + Type &amp; Screen</strong> → imaging for ectopic / lateralizing pain → <strong style="color:#fca5a5">Discuss with OB/GYN</strong></div>
-            </div>
-            <div class="decision-opt opt-no">
-              <span class="opt-badge badge-no">NO</span>
-              <div class="opt-text">See ultrasound results below ↓</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="arrow-down"></div>
-
-        <div style="font-size:12px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.05em;margin:8px 0">Ultrasound Results — Management by Findings</div>
+        <div style="font-size:12px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.05em;margin:8px 0;text-align:center">Ultrasound Interpretation and Management</div>
 
         <div class="branch-container">
           <div class="branch">
-            <div class="node node-process" style="font-size:12px;text-align:center;padding:10px">IUP with cardiac activity</div>
-            <div style="font-size:12px;color:#94a3b8;text-align:center;padding:6px">Consider vaginal progesterone if hx of miscarriage</div>
-            <div class="hex hex-green" style="font-size:12px">Patient calls OB to establish care</div>
+            <div class="node node-process" style="font-size:12px;text-align:center;padding:10px">IUP with heartbeat</div>
+            <div class="hex hex-green" style="font-size:12px">Discharge with OB follow-up. Patient calls for prenatal new appointment if not established. No GYN referral or CM routing.</div>
           </div>
           <div class="branch">
-            <div class="node node-process" style="font-size:12px;text-align:center;padding:10px">IUP — unable to establish viability</div>
-            <div class="hex hex-red" style="font-size:12px">Discuss with OB/GYN → OB CM arranges follow-up</div>
+            <div class="node node-process" style="font-size:12px;text-align:center;padding:10px">IUP, viability unclear</div>
+            <div style="font-size:11px;color:#94a3b8;text-align:center;padding:0 6px 6px;line-height:1.4">Small (&lt;7 mm) pole with no cardiac motion, or gestational sac with yolk sac and no fetal pole</div>
+            <div class="hex hex-red" style="font-size:12px">Call GYN on-call for SBAR. Route to case management.</div>
           </div>
           <div class="branch">
-            <div class="node node-process" style="font-size:12px;text-align:center;padding:10px">Early pregnancy loss</div>
-            <div class="hex hex-red" style="font-size:12px">Discuss with OB/GYN → OB CM arranges follow-up</div>
+            <div class="node node-process" style="font-size:12px;text-align:center;padding:10px">Failed IUP</div>
+            <div style="font-size:11px;color:#94a3b8;text-align:center;padding:0 6px 6px;line-height:1.4">Fetal pole &gt;7 mm with no cardiac motion, or empty gestational sac &gt;25 mm</div>
+            <div class="hex hex-red" style="font-size:12px">Call GYN on-call for SBAR. Route to case management.</div>
           </div>
           <div class="branch">
             <div class="node node-process" style="font-size:12px;text-align:center;padding:10px">Pregnancy of unknown location</div>
-            <div class="hex hex-red" style="font-size:12px">Discuss with OB/GYN → OB CM arranges follow-up<br><em style="font-size:11px">Route charts of all PUL to OB CM, even non-KP members</em></div>
+            <div style="font-size:11px;color:#94a3b8;text-align:center;padding:0 6px 6px;line-height:1.4">Only gestational sac, possible pseudo sac, or empty uterus with positive serum hCG</div>
+            <div class="hex hex-red" style="font-size:12px">Route to case management. If concern for ectopic, consult GYN and prep for OR.</div>
           </div>
         </div>
 
-        <div class="callout callout-green" style="margin-top:20px;width:100%;max-width:560px">
-          <strong>Anti-D Immunoglobulin:</strong> If Rh negative: &lt;12 weeks → administer if confirmed ectopic or molar pregnancy. ≥12 weeks → administer.
+        <div class="callout callout-yellow" style="margin-top:20px;width:100%;max-width:760px">
+          <strong>Anti-D Immunoglobulin recommendations:</strong><br>
+          <strong>Before 12 weeks:</strong> indicated for confirmed ectopic or molar pregnancy, and after CVS or MFPR. Not indicated for induced abortion, spontaneous/threatened miscarriage, or pregnancy of unknown location.<br>
+          <strong>12 weeks or later:</strong> routine at 28 weeks and after sensitizing events.<br>
+          <strong>Postpartum:</strong> Rh D-positive neonate delivery, or pregnancy loss/termination at &gt;=20 weeks.<br>
+          <span style="font-size:11px">Sensitizing events include abdominal trauma, vaginal bleeding/spotting, amniocentesis, CVS, ECV, miscarriage/threatened miscarriage, ectopic/molar pregnancy, manual placenta removal, stillbirth/IUFD, delivery, or termination.</span>
         </div>
-        <div class="callout callout-yellow" style="width:100%;max-width:560px">
-          <strong>Vaginal Progesterone (order code 23013):</strong> 200 mg BID vaginally until 16 weeks GA. Indicated if ≤12 weeks AND history of miscarriage. Contraindicated in peanut allergy; caution with active cancer.
+
+        <div class="callout callout-green" style="width:100%;max-width:760px">
+          <strong>Vaginal micronized progesterone supplementation:</strong><br>
+          Consider in early pregnancy bleeding with miscarriage history: 200 mg or 400 mg vaginally BID through 16 weeks.<br>
+          Start at 200 mg BID; if bleeding does not stop or decrease after 7 days, increase to 400 mg BID.<br>
+          Evidence highlights: ~3% increased live birth in threatened miscarriage, ~8% increase with prior miscarriages (RR 1.08, CI 1.02-1.14).<br>
+          KP HealthConnect order code: <strong>23013</strong>.
+          <div style="margin-top:8px;font-size:11px;color:#94a3b8;line-height:1.5">
+            Exclusions: CRL &gt;=7 mm with no heartbeat, gestational sac &gt;=25 mm with no fetal pole, ectopic pregnancy, life-threatening condition, or allergy (e.g., peanut).
+          </div>
+        </div>
+
+        <div class="callout" style="width:100%;max-width:760px">
+          <strong>OB trauma pathway:</strong><br>
+          <strong>&lt;20 weeks:</strong> treat in ED, document fetal heart tones before discharge, follow up with OB clinic (no GYN referral needed).<br>
+          <strong>&gt;20 weeks:</strong> unstable patients are assessed by GYN in ED; stable patients without OB complaints can be cleared by ED/trauma then sent to L&amp;D after notifying GYN on-call.
+        </div>
+
+        <div class="callout callout-yellow" style="width:100%;max-width:760px">
+          <strong>GYN coverage (24/7/365):</strong><br>
+          Fontana Medical Center: Vocera "GYN"; Case Managers: Traci Brennan or Noelle Miranda.<br>
+          Ontario Medical Center: Vocera "OMC GYN"; Case Managers: Loan Truong or Sara Sealy.
         </div>
       </div>
     `

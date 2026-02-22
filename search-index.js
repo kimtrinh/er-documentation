@@ -178,7 +178,7 @@ const SEARCH_INDEX = [
   {type:'algo',i:'🔀',t:'Orbital Fractures',s:'ophthalmology  ·  eye  ·  ocular  ·  orbital blowout  ·  trauma  ·  KP SBC ED Practice Guideline',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-orbital'},
   {type:'algo',i:'🔀',t:'Papilledema',s:'optic disc swelling  ·  elevated ICP  ·  vision  ·  neurology  ·  KP SBC ED Practice Guideline',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-papilledema'},
   {type:'algo',i:'🔀',t:'Pneumomediastinum',s:'mediastinal air  ·  esophageal rupture  ·  Boerhaave  ·  chest  ·  KP SBC ED Practice Guideline',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-pneumomediastinum'},
-  {type:'algo',i:'🔀',t:'Vaginal Bleeding in Pregnancy',s:'OB bleeding  ·  first trimester  ·  placenta  ·  abruption  ·  KP SBC ED Practice Guideline',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-pregvb'},
+  {type:'algo',i:'🔀',t:'Vaginal Bleeding in Pregnancy',s:'OB bleeding  ·  first trimester  ·  anti-D immunoglobulin  ·  Rhogam  ·  progesterone  ·  pregnancy of unknown location  ·  OB trauma  ·  KP SBC GYN and ED Practice Guideline',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-pregvb'},
   {type:'algo',i:'🔀',t:'Aortic Dissection',s:'chest pain  ·  tearing  ·  CTA  ·  type A type B  ·  vascular  ·  KP SBC ED Practice Guideline',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-aortic'},
   {type:'algo',i:'🔀',t:'Visual Floaters & Flashes',s:'ophthalmology  ·  retinal detachment  ·  vitreous  ·  vision  ·  KP SBC ED Practice Guideline',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-floaters'},
   {type:'algo',i:'🔀',t:'Non-Pregnant Vaginal Bleeding',s:'GYN  ·  vaginal bleeding  ·  non-OB  ·  ectopic  ·  KP SBC ED Practice Guideline',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-nonpregvb'},

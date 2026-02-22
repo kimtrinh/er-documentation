@@ -586,7 +586,7 @@
     </div>
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
-      <button class="btn btn-notify" onclick="submitEntryForPublish()">Submit for Publish</button>
+      <button class="btn btn-notify" onclick="submitEntryForPublish()">Email for Publish</button>
       <button class="btn btn-primary" onclick="addEntry()">Add Local Entry</button>
     </div>
   </div>
@@ -950,8 +950,7 @@ const data = {
 
 const PHONE_INDEX_STORAGE_KEY = 'kp_er_phone_directory_index_v1';
 const CUSTOM_ENTRIES_STORAGE_KEY = 'kp_er_phone_custom_entries_v1';
-const PHONE_DIRECTORY_ISSUE_URL = 'https://github.com/kimtrinh/er-documentation/issues/new';
-const PHONE_DIRECTORY_ISSUE_LABEL = 'phone-directory';
+const PHONE_DIRECTORY_SUBMIT_EMAIL = 'kltrinh@gmail.com';
 const customEntries = { omc: [], fmc: [] };
 let currentHospital = 'omc';
 
@@ -1268,23 +1267,23 @@ function submitEntryForPublish() {
   if (!entry) return;
 
   const hospital = currentHospital.toUpperCase();
-  const title = `Phone Directory Update: ${hospital} - ${entry.name}`;
+  const subject = `Phone Directory Update: ${hospital} - ${entry.name}`;
   const body = [
-    '### Requested Phone Directory Entry',
+    'Requested Phone Directory Entry',
     '',
-    `- Hospital: ${hospital}`,
-    `- Category: ${entry.category}`,
-    `- Name / Label: ${entry.name}`,
-    `- Number: ${entry.number}`,
-    `- Type: ${entry.type}`,
-    `- Notes: ${entry.note || '(none)'}`,
+    `Hospital: ${hospital}`,
+    `Category: ${entry.category}`,
+    `Name / Label: ${entry.name}`,
+    `Number: ${entry.number}`,
+    `Type: ${entry.type}`,
+    `Notes: ${entry.note || '(none)'}`,
     '',
     'Please review and publish this change to the shared phone directory.'
   ].join('\n');
 
-  const issueUrl = `${PHONE_DIRECTORY_ISSUE_URL}?labels=${encodeURIComponent(PHONE_DIRECTORY_ISSUE_LABEL)}&title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`;
-  window.open(issueUrl, '_blank', 'noopener');
-  showToast('Opened GitHub issue form. Submit it to notify the maintainer.');
+  const mailtoUrl = `mailto:${encodeURIComponent(PHONE_DIRECTORY_SUBMIT_EMAIL)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  window.location.href = mailtoUrl;
+  showToast('Opened email draft to notify maintainer.');
 }
 
 function deleteCustom(hospital, idx) {
