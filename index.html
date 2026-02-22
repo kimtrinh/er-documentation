@@ -537,10 +537,21 @@ document.getElementById('si').addEventListener('focus', () => {
   if (q) doSearch(q);
 });
 
+window.addEventListener('kp-search-index-updated', () => {
+  const q = document.getElementById('si').value.trim();
+  if (q) doSearch(q);
+});
+
 updateHomeStats();
 window.addEventListener('storage', e => {
-  const key = window.KP_ER_SEARCH && window.KP_ER_SEARCH.phoneIndexStorageKey;
-  if (!key || e.key === key) updateHomeStats();
+  const keys = window.KP_ER_SEARCH
+    ? [window.KP_ER_SEARCH.phoneIndexStorageKey, window.KP_ER_SEARCH.serviceAgreementsStorageKey]
+    : [];
+  if (!keys.length || keys.includes(e.key)) {
+    updateHomeStats();
+    const q = document.getElementById('si').value.trim();
+    if (q) doSearch(q);
+  }
 });
 </script>
 </body>

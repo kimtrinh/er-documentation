@@ -410,7 +410,11 @@ async function init() {
     const res = await fetch('./data/service_agreements_index.json', { cache: 'no-store' });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const payload = await res.json();
-    state.agreements = Array.isArray(payload.agreements) ? payload.agreements : [];
+    const agreements = Array.isArray(payload.agreements) ? payload.agreements : [];
+    state.agreements = agreements.filter((agreement) => {
+      const src = String((agreement && agreement.source_filename) || '').toLowerCase();
+      return src.endsWith('.doc') || src.endsWith('.docx');
+    });
   } catch (err) {
     document.getElementById('resultCount').textContent = 'Failed to load agreement index';
     const note = location.protocol === 'file:'

@@ -360,6 +360,8 @@ const SEARCH_INDEX = [
 ];
 
 const KP_PHONE_INDEX_STORAGE_KEY = 'kp_er_phone_directory_index_v1';
+const KP_SERVICE_AGREEMENTS_STORAGE_KEY = 'kp_er_service_agreements_index_v1';
+const KP_SERVICE_AGREEMENTS_URL = 'data/service_agreements_index.json';
 
 function kpDefaultTagClass(type) {
   if (type === 'phrase') return 't-phrase';
@@ -412,6 +414,88 @@ function kpReadPhoneIndexFromStorage() {
   }
 }
 
+function kpBuildAgreementSearchSubtitle(agreement) {
+  const chunks = [];
+  if (Array.isArray(agreement.departments) && agreement.departments.length) {
+    chunks.push(agreement.departments.join(' / '));
+  }
+  if (Array.isArray(agreement.tags) && agreement.tags.length) {
+    chunks.push(agreement.tags.slice(0, 6).join(' '));
+  }
+  if (Array.isArray(agreement.summary_bullets) && agreement.summary_bullets.length) {
+    chunks.push(agreement.summary_bullets.slice(0, 3).join(' '));
+  }
+  if (Array.isArray(agreement.ed_actions) && agreement.ed_actions.length) {
+    chunks.push(agreement.ed_actions.slice(0, 2).join(' '));
+  }
+  if (agreement.last_updated) {
+    chunks.push(`updated ${agreement.last_updated}`);
+  }
+  let subtitle = chunks.join(' · ').replace(/\s+/g, ' ').trim();
+  if (subtitle.length > 380) subtitle = `${subtitle.slice(0, 377)}...`;
+  return subtitle;
+}
+
+function kpNormalizeAgreementSearchItem(agreement) {
+  if (!agreement || typeof agreement !== 'object') return null;
+  const title = String(agreement.title || '').trim();
+  if (!title) return null;
+  return kpNormalizeSearchItem({
+    type: 'page',
+    i: '📑',
+    t: title,
+    s: kpBuildAgreementSearchSubtitle(agreement),
+    g: 'Service Agreements',
+    gc: 't-algo',
+    u: 'service-agreements.html',
+  });
+}
+
+function kpReadServiceAgreementIndexFromStorage() {
+  if (typeof window === 'undefined' || !window.localStorage) return [];
+  try {
+    const raw = window.localStorage.getItem(KP_SERVICE_AGREEMENTS_STORAGE_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return [];
+    return parsed.map(kpNormalizeSearchItem).filter(Boolean);
+  } catch (err) {
+    return [];
+  }
+}
+
+function kpWriteServiceAgreementIndexToStorage(items) {
+  if (typeof window === 'undefined' || !window.localStorage) return;
+  try {
+    window.localStorage.setItem(KP_SERVICE_AGREEMENTS_STORAGE_KEY, JSON.stringify(items));
+  } catch (err) {
+    // Ignore storage quota/private mode failures.
+  }
+}
+
+async function kpRefreshServiceAgreementIndex() {
+  if (typeof window === 'undefined' || typeof fetch !== 'function') return;
+  try {
+    const res = await fetch(KP_SERVICE_AGREEMENTS_URL, { cache: 'no-store' });
+    if (!res.ok) return;
+    const payload = await res.json();
+    const agreements = Array.isArray(payload && payload.agreements) ? payload.agreements : [];
+    const items = agreements
+      .filter((agreement) => {
+        const src = String((agreement && agreement.source_filename) || '').toLowerCase();
+        return src.endsWith('.doc') || src.endsWith('.docx');
+      })
+      .map(kpNormalizeAgreementSearchItem)
+      .filter(Boolean);
+    kpWriteServiceAgreementIndexToStorage(items);
+    if (typeof window.dispatchEvent === 'function' && typeof CustomEvent === 'function') {
+      window.dispatchEvent(new CustomEvent('kp-search-index-updated'));
+    }
+  } catch (err) {
+    // Ignore network failures so static search still works.
+  }
+}
+
 function getSearchIndex() {
   const merged = [];
   const seen = new Set();
@@ -433,6 +517,7 @@ function getSearchIndex() {
 
   SEARCH_INDEX.forEach(add);
   kpReadPhoneIndexFromStorage().forEach(add);
+  kpReadServiceAgreementIndexFromStorage().forEach(add);
   return merged;
 }
 
@@ -441,7 +526,9 @@ if (typeof window !== 'undefined') {
   window.KP_ER_SEARCH = {
     getSearchIndex,
     phoneIndexStorageKey: KP_PHONE_INDEX_STORAGE_KEY,
+    serviceAgreementsStorageKey: KP_SERVICE_AGREEMENTS_STORAGE_KEY,
   };
+  kpRefreshServiceAgreementIndex();
 }
 
 (function initSharedNavSearch() {
@@ -643,6 +730,9 @@ if (typeof window !== 'undefined') {
 
   input.addEventListener('input', () => render(input.value));
   input.addEventListener('focus', () => { if (input.value.trim()) render(input.value); });
+  window.addEventListener('kp-search-index-updated', () => {
+    if (input.value.trim()) render(input.value);
+  });
   input.addEventListener('keydown', (e) => {
     const rows = Array.from(dd.querySelectorAll('.kp-sr'));
     if (e.key === 'ArrowDown') {
