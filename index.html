@@ -3,375 +3,545 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>ER Dotphrases</title>
+<title>KP SBC ER Toolkit</title>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap');
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',system-ui,sans-serif;background:#0f172a;color:#e2e8f0;min-height:100vh}
-header{background:linear-gradient(135deg,#1e293b,#0f172a);border-bottom:1px solid #1e3a5f;padding:20px 24px}
-.header-inner{max-width:900px;margin:0 auto}
-.logo{display:flex;align-items:center;gap:10px;margin-bottom:4px}
-.logo span{font-size:22px}.logo h1{font-size:20px;font-weight:700;color:#f1f5f9}
-.subtitle{font-size:13px;color:#64748b;margin-left:32px;margin-bottom:12px}
-.disclaimer{background:#1e3a5f;border:1px solid #2563eb;border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:12px;color:#93c5fd;line-height:1.5}
-.disclaimer strong{color:#bfdbfe}
-#search{width:100%;padding:12px 16px;background:#1e293b;border:1px solid #334155;border-radius:10px;color:#f1f5f9;font-size:15px;outline:none;transition:border-color .2s}
-#search:focus{border-color:#3b82f6}
-#search::placeholder{color:#475569}
-nav{background:#0f172a;border-bottom:1px solid #1e293b;overflow-x:auto;-webkit-overflow-scrolling:touch}
-.tabs{max-width:900px;margin:0 auto;display:flex;gap:4px;padding:8px 24px}
-.tab{padding:6px 14px;border-radius:20px;border:none;cursor:pointer;font-size:13px;font-weight:500;white-space:nowrap;background:#1e293b;color:#94a3b8;transition:all .2s}
-.tab.active{background:#3b82f6;color:#fff}
-main{max-width:900px;margin:0 auto;padding:16px 24px 60px}
-.count{font-size:12px;color:#475569;margin-bottom:12px}
-.card{background:#1e293b;border:1px solid #334155;border-radius:12px;margin-bottom:12px;overflow:hidden;transition:border-color .2s}
-.card:hover{border-color:#3b82f6}
-.card-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid #334155;gap:8px;flex-wrap:wrap}
-.card-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.dotphrase{background:#0f172a;color:#38bdf8;padding:3px 10px;border-radius:6px;font-size:13px;font-weight:700;border:1px solid #1e3a5f;font-family:monospace}
-.condition{font-weight:600;font-size:14px;color:#f1f5f9}
-.category-tag{font-size:11px;background:#0f172a;color:#64748b;padding:2px 8px;border-radius:20px;border:1px solid #1e293b}
-.copy-btn{padding:6px 14px;border-radius:8px;border:none;cursor:pointer;font-size:12px;font-weight:600;background:#3b82f6;color:#fff;transition:background .2s;white-space:nowrap;flex-shrink:0}
-.copy-btn.copied{background:#16a34a}
-.card-body{padding:12px 16px;font-size:13px;line-height:1.75;color:#cbd5e1}
-.empty{text-align:center;color:#475569;margin-top:60px;font-size:15px}
-@media(max-width:600px){.card-header{flex-direction:column;align-items:flex-start}.copy-btn{width:100%}}
+:root{
+  --bg:#080f1a;--surface:#0d1829;--surface2:#111f35;--surface3:#162540;
+  --border:#1a2d48;--border2:#243d5c;
+  --text:#e8f0fc;--text2:#8fa8c8;--text3:#4a6280;
+  --blue:#3b82f6;--blue2:#1d4ed8;--blue3:#0d2038;
+  --green:#22c55e;--green2:#15803d;--green3:#0d2d1f;
+  --amber:#f59e0b;--red:#ef4444;--purple:#a78bfa;--cyan:#22d3ee;
+  --mono:'JetBrains Mono',monospace;--sans:'DM Sans',system-ui,sans-serif;
+}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh}
 
-/* ===== SHARED NEW NAV ===== */
-@media(max-width:640px){}
-.sitenav{background:#0d1829;border-bottom:1px solid #1a2d48;position:sticky;top:0;z-index:100;font-family:'DM Sans',system-ui,sans-serif}
-.sitenav-inner{max-width:1200px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:6px;height:46px}
-.nav-logo{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:#3b82f6;white-space:nowrap;flex-shrink:0;text-decoration:none;margin-right:6px}
-.nav-logo span{color:#4a6280}
+/* NAV - compact, links only */
+.sitenav{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.sitenav-inner{max-width:1200px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:8px;height:46px}
+.nav-logo{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--blue);white-space:nowrap;flex-shrink:0;text-decoration:none;margin-right:6px}
+.nav-logo span{color:var(--text3)}
 .nav-links{display:flex;gap:1px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .nav-links::-webkit-scrollbar{display:none}
-.nav-link{padding:5px 10px;border-radius:6px;font-size:12px;font-weight:600;color:#8fa8c8;text-decoration:none;white-space:nowrap;transition:all .15s}
-.nav-link:hover{background:#111f35;color:#e8f0fc}
-.nav-link.active{background:#1d4ed8;color:#fff}
-@media(max-width:640px){.nav-link{font-size:11px;padding:4px 8px}}
+.nav-link{padding:5px 10px;border-radius:6px;font-size:12px;font-weight:600;color:var(--text2);text-decoration:none;white-space:nowrap;transition:all .15s}
+.nav-link:hover{background:var(--surface2);color:var(--text)}
+.nav-link.active{background:var(--blue2);color:#fff}
+
+/* SEARCH HERO - full width */
+.search-hero{background:linear-gradient(170deg,#0f1e38 0%,var(--bg) 100%);border-bottom:1px solid var(--border);padding:24px 0 20px}
+.search-hero-inner{max-width:100%;padding:0 24px}
+.search-label{font-size:15px;font-weight:800;color:var(--text);margin-bottom:2px}
+.search-sublabel{font-size:12px;color:var(--text3);margin-bottom:14px}
+
+/* THE BIG SEARCH */
+.search-wrap{position:relative;width:100%}
+.search-input{
+  width:100%;
+  padding:15px 120px 15px 52px;
+  background:var(--surface);
+  border:1.5px solid var(--border2);
+  border-radius:12px;
+  color:var(--text);
+  font-size:16px;
+  font-family:var(--sans);
+  outline:none;
+  transition:border-color .2s,box-shadow .2s;
+  -webkit-appearance:none;
+}
+.search-input:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(59,130,246,.15)}
+.search-input::placeholder{color:var(--text3)}
+.search-icon{position:absolute;left:17px;top:50%;transform:translateY(-50%);font-size:19px;pointer-events:none}
+.search-shortcut{position:absolute;right:15px;top:50%;transform:translateY(-50%);font-size:11px;color:var(--text3);font-family:var(--mono);background:var(--surface2);border:1px solid var(--border);padding:3px 8px;border-radius:5px;pointer-events:none;white-space:nowrap}
+
+/* DROPDOWN */
+.search-dropdown{position:absolute;top:calc(100% + 8px);left:0;right:0;background:var(--surface);border:1px solid var(--border2);border-radius:12px;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,.75);z-index:500;display:none;max-height:72vh;overflow-y:auto}
+.search-dropdown.open{display:block}
+.sdrop-group{padding:7px 14px 3px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--text3);border-top:1px solid var(--border);background:var(--surface);position:sticky;top:0;z-index:1}
+.sdrop-group:first-child{border-top:none}
+.sdrop-row{display:flex;align-items:center;gap:12px;padding:9px 14px;text-decoration:none;transition:background .1s;cursor:pointer}
+.sdrop-row:hover,.sdrop-row.hi{background:var(--surface2)}
+.sdrop-row:focus-visible{outline:2px solid #60a5fa;outline-offset:-2px}
+.sdrop-ico{font-size:15px;width:22px;text-align:center;flex-shrink:0}
+.sdrop-body{flex:1;min-width:0}
+.sdrop-title{font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sdrop-sub{font-size:11px;color:var(--text3);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sdrop-tag{font-size:10px;padding:2px 7px;border-radius:20px;font-weight:700;white-space:nowrap;flex-shrink:0;border:1px solid transparent}
+.t-phrase{background:var(--blue3);color:#38bdf8;border-color:#0369a1}
+.t-calc{background:var(--green3);color:#4ade80;border-color:var(--green2)}
+.t-drug{background:#2d1f0d;color:#fb923c;border-color:#c2410c}
+.t-phone{background:#1f1a0d;color:#facc15;border-color:#a16207}
+.t-algo{background:#0d2d2d;color:#22d3ee;border-color:#0e7490}
+.t-neuro{background:#1f0d2d;color:#e879f9;border-color:#a21caf}
+.sdrop-empty{padding:22px 14px;text-align:center;font-size:13px;color:var(--text3)}
+.sdrop-footer{padding:5px 14px 8px;font-size:11px;color:var(--text3);border-top:1px solid var(--border)}
+
+/* FILTER CHIPS */
+.chips{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
+.chip{padding:5px 13px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:11px;font-weight:600;cursor:pointer;transition:all .15s;font-family:var(--sans)}
+.chip:hover{border-color:var(--border2);color:var(--text2);background:var(--surface2)}
+.chip.on{border-color:var(--blue);background:var(--blue3);color:#38bdf8}
+
+/* STATS */
+.stats-row{display:flex;gap:22px;margin-top:16px}
+.stn{font-size:18px;font-weight:800;color:var(--blue);font-family:var(--mono);line-height:1}
+.stl{font-size:10px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+
+/* MAIN */
+main{max-width:1100px;margin:0 auto;padding:22px 24px 80px}
+.sec-head{display:flex;align-items:center;gap:10px;margin:22px 0 11px}
+.sec-head h2{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--text3);white-space:nowrap}
+.sec-head::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* TOOL GRID */
+.tool-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:8px}
+.tc{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:13px;transition:all .15s;text-decoration:none;display:flex;flex-direction:column;gap:5px}
+.tc:hover{border-color:var(--border2);background:var(--surface2);transform:translateY(-1px)}
+.tc.hi-blue{border-color:rgba(59,130,246,.35)}
+.tc.hi-purple{border-color:rgba(126,34,206,.35);position:relative}
+.tc.hi-purple::after{content:'NEW';position:absolute;top:8px;right:8px;background:#7e22ce;color:#fff;font-size:9px;font-weight:800;padding:1px 5px;border-radius:20px}
+.tc-ico{font-size:21px}
+.tc-name{font-size:13px;font-weight:700;color:var(--text)}
+.tc-desc{font-size:11px;color:var(--text3);line-height:1.4;flex:1}
+.tc-meta{display:flex;align-items:center;margin-top:2px}
+.tc-count{font-size:10px;color:var(--text3);font-family:var(--mono)}
+.tc-arr{margin-left:auto;color:var(--border2);font-size:13px;transition:color .15s}
+.tc:hover .tc-arr{color:var(--blue)}
+
+/* TWO COL PANELS */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+@media(max-width:640px){.two-col{grid-template-columns:1fr}}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.panel-hd{padding:9px 14px;border-bottom:1px solid var(--border);font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.8px}
+.prow{display:flex;align-items:center;gap:10px;padding:8px 14px;transition:background .1s;text-decoration:none}
+.prow:hover{background:var(--surface2)}
+.prow-body{flex:1;min-width:0}
+.prow-title{font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prow-sub{font-size:11px;color:var(--text3)}
+.prow-tag{font-size:10px;padding:2px 7px;border-radius:20px;font-weight:600;flex-shrink:0;white-space:nowrap}
+.pt-blue{background:var(--blue3);color:#38bdf8}
+.pt-green{background:var(--green3);color:#4ade80}
+.pt-orange{background:#2d1f0d;color:#fb923c}
+.pt-purple{background:#1f0d2d;color:#e879f9}
+
+/* QUICK DIAL */
+.dial-box{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.dial-sec-label{display:block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text3);padding:9px 14px 5px;border-top:1px solid var(--border)}
+.dial-sec:first-child .dial-sec-label{border-top:none}
+.dial-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:7px;padding:0 12px 11px}
+.dc{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px;text-decoration:none;display:block;transition:all .15s}
+.dc:hover{border-color:var(--border2);background:var(--surface2)}
+.dc.omc{border-color:rgba(59,130,246,.28);background:rgba(13,32,56,.55)}
+.dc.fmc{border-color:rgba(34,197,94,.22);background:rgba(13,45,31,.5)}
+.dc.ext{border-color:rgba(245,158,11,.22);background:rgba(45,31,13,.45)}
+.dc-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text3);margin-bottom:3px;line-height:1.3}
+.dc-num{font-size:14px;font-weight:800;color:var(--text);font-family:var(--mono);line-height:1}
+.dc-note{font-size:9px;color:var(--text3);margin-top:2px;line-height:1.3}
+
+/* MOBILE */
+@media(max-width:640px){
+  .search-hero-inner,.main{padding-left:16px;padding-right:16px}
+  .search-shortcut{display:none}
+  .stats-row{display:none}
+  .mobile-nav{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);display:flex;padding:5px 0 calc(5px + env(safe-area-inset-bottom));z-index:100}
+  .mob-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;padding:2px 0;font-size:9px;font-weight:700;color:var(--text3);text-decoration:none;text-transform:uppercase}
+  .mob-item.active{color:var(--blue)}
+  .mob-icon{font-size:19px}
+  main{padding-bottom:80px}
+}
+@media(min-width:641px){.mobile-nav{display:none}}
 </style>
 </head>
 <body>
+
+<!-- NAV -->
 <nav class="sitenav">
   <div class="sitenav-inner">
-    <a class="nav-logo" href="home.html">⚡ KP<span>/</span>ER</a>
+    <a class="nav-logo" href="index.html">⚡ KP<span>/</span>ER</a>
     <div class="nav-links">
-      <a class="nav-link" href="home.html">🏠 Home</a>
-      <a class="nav-link active" href="index.html">📋 Phrases</a>
+      <a class="nav-link active" href="index.html">🏠 Home</a>
+      <a class="nav-link" href="dotphrase.html">📋 Phrases</a>
       <a class="nav-link" href="calculators.html">🧮 Calcs</a>
       <a class="nav-link" href="vasopressors.html">💊 Vasopressors</a>
       <a class="nav-link" href="rsi.html">🫁 RSI</a>
       <a class="nav-link" href="algorithms.html">🔀 Algorithms</a>
       <a class="nav-link" href="neurohub.html">🧠 Neuro Hub</a>
       <a class="nav-link" href="pedsfever.html">🌡️ Peds Fever</a>
-      <a class="nav-link" href="agreements.html">🤝 Agreements</a>
+      <a class="nav-link" href="service-agreements.html">📑 Service Agreements</a>
       <a class="nav-link" href="ed-phone-directory.html">📞 Directory</a>
       <a class="nav-link" href="links.html">🔗 Links</a>
       <a class="nav-link" href="roadmap.html">🗺️ Roadmap</a>
     </div>
   </div>
 </nav>
-<header>
-  <div class="header-inner">
-    <div class="logo"><span>🏥</span><h1>ER Rule-Out Dotphrases</h1></div>
-    <p class="subtitle">Search all dotphrases or browse by category</p>
-    <div class="disclaimer"><strong>⚠️ Clinical Disclaimer:</strong> These are documentation templates only. All phrases must be reviewed, individualized, and verified by the treating physician before use. Do not copy without confirming accuracy for each patient encounter. Templates do not substitute for clinical judgment.</div>
-    <input id="search" type="text" placeholder="Search: nosah, PE, DKA, compartment, abscess..." oninput="render()"/>
+
+<!-- FULL-WIDTH SEARCH HERO -->
+<div class="search-hero">
+  <div class="search-hero-inner">
+    <div class="search-label">KP SBC Emergency Medicine</div>
+    <div class="search-sublabel">OMC · FMC — search dotphrases, calculators, drugs, algorithms, and phone numbers</div>
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input class="search-input" id="si" type="text"
+        placeholder="Search everything — e.g. PE, ketamine, ortho, HEART score, aortic dissection, 47333, ETAP..."
+        autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+        role="combobox" aria-autocomplete="list" aria-haspopup="listbox" aria-expanded="false"
+        aria-controls="sd" aria-label="Search toolkit and phone directory"
+        oninput="doSearch(this.value)" onkeydown="searchKey(event)"/>
+      <span class="search-shortcut">⌘K to focus</span>
+      <div class="search-dropdown" id="sd" role="listbox" aria-label="Search results"></div>
+    </div>
+    <div class="chips">
+      <button class="chip on" onclick="setFilter('all',this)">All</button>
+      <button class="chip" onclick="setFilter('phrase',this)">📋 Dotphrases</button>
+      <button class="chip" onclick="setFilter('calc',this)">🧮 Calculators</button>
+      <button class="chip" onclick="setFilter('drug',this)">💊 Drugs</button>
+      <button class="chip" onclick="setFilter('algo',this)">🔀 Algorithms</button>
+      <button class="chip" onclick="setFilter('neuro',this)">🧠 Neuro Hub</button>
+      <button class="chip" onclick="setFilter('phone',this)">📞 Phones</button>
+    </div>
+    <div class="stats-row">
+      <div><div class="stn" id="stat-phrases">127</div><div class="stl">Dotphrases</div></div>
+      <div><div class="stn" id="stat-calcs">13</div><div class="stl">Calculators</div></div>
+      <div><div class="stn" id="stat-algos">7</div><div class="stl">Algorithms</div></div>
+      <div><div class="stn" id="stat-contacts">132</div><div class="stl">Contacts</div></div>
+    </div>
   </div>
-</header>
-<nav><div class="tabs" id="tabs"></div></nav>
-<main><p class="count" id="count"></p><div id="main"></div></main>
+</div>
+
+<main>
+  <!-- TOOLS -->
+  <div class="sec-head"><h2>Clinical Tools</h2></div>
+  <div class="tool-grid" style="margin-bottom:22px">
+    <a class="tc hi-blue" href="dotphrase.html"><div class="tc-ico">📋</div><div class="tc-name">Dotphrases</div><div class="tc-desc">Rule-out templates across 20 categories</div><div class="tc-meta"><span class="tc-count">120 phrases</span><span class="tc-arr">→</span></div></a>
+    <a class="tc" href="calculators.html"><div class="tc-ico">🧮</div><div class="tc-name">Calculators</div><div class="tc-desc">HEART, Wells PE/DVT, PERC, PECARN, LRINEC</div><div class="tc-meta"><span class="tc-count">12 calcs</span><span class="tc-arr">→</span></div></a>
+    <a class="tc" href="vasopressors.html"><div class="tc-ico">💊</div><div class="tc-name">Vasopressors</div><div class="tc-desc">Weight-based drip dosing + push-dose</div><div class="tc-meta"><span class="tc-count">8 agents</span><span class="tc-arr">→</span></div></a>
+    <a class="tc" href="rsi.html"><div class="tc-ico">🫁</div><div class="tc-name">RSI</div><div class="tc-desc">Induction + paralytic dosing, airway flags</div><div class="tc-meta"><span class="tc-count">Weight-based</span><span class="tc-arr">→</span></div></a>
+    <a class="tc" href="algorithms.html"><div class="tc-ico">🔀</div><div class="tc-name">Algorithms</div><div class="tc-desc">KP SBC ED Practice Guideline flowcharts</div><div class="tc-meta"><span class="tc-count">7 algorithms</span><span class="tc-arr">→</span></div></a>
+    <a class="tc" href="neurohub.html"><div class="tc-ico">🧠</div><div class="tc-name">Neuro Hub</div><div class="tc-desc">ICH, tPA criteria, reversal, stroke triage</div><div class="tc-meta"><span class="tc-count">ICH · tPA · Reversal</span><span class="tc-arr">→</span></div></a>
+    <a class="tc" href="pedsfever.html"><div class="tc-ico">🌡️</div><div class="tc-name">Peds Fever</div><div class="tc-desc">CA FIRST age-stratified workup protocol</div><div class="tc-meta"><span class="tc-count">Age-stratified</span><span class="tc-arr">→</span></div></a>
+    <a class="tc hi-purple" href="service-agreements.html"><div class="tc-ico">🤝</div><div class="tc-name">Service Agreements</div><div class="tc-desc">Consult criteria &amp; escalation by specialty</div><div class="tc-meta"><span class="tc-count" style="color:var(--purple)">Add yours</span><span class="tc-arr">→</span></div></a>
+    <a class="tc" href="ed-phone-directory.html"><div class="tc-ico">📞</div><div class="tc-name">Phone Directory</div><div class="tc-desc">OMC &amp; FMC — all extensions, pagers, lines</div><div class="tc-meta"><span class="tc-count">200+ contacts</span><span class="tc-arr">→</span></div></a>
+  </div>
+
+  <!-- QUICK ACCESS + AGREEMENTS -->
+  <div class="two-col" style="margin-bottom:22px">
+    <div class="panel">
+      <div class="panel-hd">⚡ Quick Access</div>
+      <a class="prow" href="dotphrase.html"><div class="prow-body"><div class="prow-title">PE Rule-Out <span style="font-family:var(--mono);font-size:11px;color:var(--text3)">.nope</span></div><div class="prow-sub">PERC · Wells · low probability</div></div><span class="prow-tag pt-blue">Chest</span></a>
+      <a class="prow" href="dotphrase.html"><div class="prow-body"><div class="prow-title">ACS Rule-Out <span style="font-family:var(--mono);font-size:11px;color:var(--text3)">.noacs</span></div><div class="prow-sub">HEART score · serial troponins</div></div><span class="prow-tag pt-blue">Chest</span></a>
+      <a class="prow" href="dotphrase.html"><div class="prow-body"><div class="prow-title">SAH Rule-Out <span style="font-family:var(--mono);font-size:11px;color:var(--text3)">.nosah</span></div><div class="prow-sub">Ottawa rule · thunderclap headache</div></div><span class="prow-tag pt-blue">HA</span></a>
+      <a class="prow" href="vasopressors.html"><div class="prow-body"><div class="prow-title">Norepinephrine</div><div class="prow-sub">0.01–3 mcg/kg/min · septic shock first-line</div></div><span class="prow-tag pt-orange">Vasc</span></a>
+      <a class="prow" href="calculators.html"><div class="prow-body"><div class="prow-title">HEART Score</div><div class="prow-sub">ACS chest pain risk stratification</div></div><span class="prow-tag pt-green">Calc</span></a>
+      <a class="prow" href="neurohub.html"><div class="prow-body"><div class="prow-title">ICH Protocol</div><div class="prow-sub">BP targets · reversal · neurosurg criteria</div></div><span class="prow-tag pt-purple">Neuro</span></a>
+    </div>
+    <div class="panel">
+      <div class="panel-hd">🤝 Service Agreements</div>
+      <a class="prow" href="service-agreements.html" style="display:flex;flex-direction:column;align-items:flex-start;padding:18px 14px;gap:8px">
+        <div style="font-size:13px;color:var(--text2);line-height:1.6">No agreements yet. Document consult criteria, response times, and escalation paths by specialty.</div>
+        <div style="font-size:12px;font-weight:700;color:var(--purple)">+ Add first agreement →</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- QUICK DIAL -->
+  <div class="sec-head"><h2>Quick Dial</h2></div>
+  <div class="dial-box">
+
+    <div class="dial-sec">
+      <span class="dial-sec-label">🔵 OMC — Internal Medicine</span>
+      <div class="dial-grid">
+        <a class="dc omc" href="ed-phone-directory.html"><div class="dc-lbl">OMC Int. Med 7a–3:30p</div><div class="dc-num">Vocera</div><div class="dc-note">Extension</div></a>
+        <a class="dc omc" href="ed-phone-directory.html"><div class="dc-lbl">OMC Int. Med 3:30p–7a</div><div class="dc-num">47333</div><div class="dc-note">Extension</div></a>
+      </div>
+    </div>
+
+    <div class="dial-sec">
+      <span class="dial-sec-label">🟢 FMC — Internal Medicine</span>
+      <div class="dial-grid">
+        <a class="dc fmc" href="ed-phone-directory.html"><div class="dc-lbl">FMC Int. Med 7a–7p</div><div class="dc-num">Vocera</div><div class="dc-note">Extension</div></a>
+        <a class="dc fmc" href="ed-phone-directory.html"><div class="dc-lbl">FMC Int. Med 7p–7a</div><div class="dc-num">27028</div><div class="dc-note">Extension</div></a>
+      </div>
+    </div>
+
+    <div class="dial-sec">
+      <span class="dial-sec-label">🔵 OMC — ED Lines</span>
+      <div class="dial-grid">
+        <a class="dc omc" href="ed-phone-directory.html"><div class="dc-lbl">OMC Charge Nurse</div><div class="dc-num">45860</div><div class="dc-note">CISCO wireless · office 45832</div></a>
+        <a class="dc omc" href="ed-phone-directory.html"><div class="dc-lbl">OMC Ambulance Triage</div><div class="dc-num">45861</div><div class="dc-note">Ambulance RN</div></a>
+        <a class="dc omc" href="ed-phone-directory.html"><div class="dc-lbl">OMC Triage</div><div class="dc-num">49808</div><div class="dc-note">30-Second Triage</div></a>
+      </div>
+    </div>
+
+    <div class="dial-sec">
+      <span class="dial-sec-label">🟢 FMC — ED Lines</span>
+      <div class="dial-grid">
+        <a class="dc fmc" href="ed-phone-directory.html"><div class="dc-lbl">FMC Charge Nurse</div><div class="dc-num">27071</div><div class="dc-note">Beeper 1204</div></a>
+        <a class="dc fmc" href="ed-phone-directory.html"><div class="dc-lbl">FMC Ambulance Triage</div><div class="dc-num">27018</div><div class="dc-note">Extension</div></a>
+        <a class="dc fmc" href="ed-phone-directory.html"><div class="dc-lbl">FMC Triage</div><div class="dc-num">27008</div><div class="dc-note">Extension</div></a>
+      </div>
+    </div>
+
+    <div class="dial-sec">
+      <span class="dial-sec-label">🟡 External / Transfer</span>
+      <div class="dial-grid">
+        <a class="dc ext" href="ed-phone-directory.html"><div class="dc-lbl">ETAP</div><div class="dc-num">(562) 658-3998</div><div class="dc-note">Emergency Transfer Auth.</div></a>
+        <a class="dc ext" href="ed-phone-directory.html"><div class="dc-lbl">PTAC</div><div class="dc-num">(562) 658-3980</div><div class="dc-note">Transfer Authorization</div></a>
+        <a class="dc ext" href="ed-phone-directory.html"><div class="dc-lbl">Poison Control</div><div class="dc-num">(800) 222-1222</div><div class="dc-note">24/7</div></a>
+        <a class="dc ext" href="ed-phone-directory.html"><div class="dc-lbl">SART Nurse</div><div class="dc-num">(909) 427-9227</div><div class="dc-note">Sexual Assault Response</div></a>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<div class="mobile-nav">
+  <a class="mob-item active" href="index.html"><span class="mob-icon">🏠</span>Home</a>
+  <a class="mob-item" href="dotphrase.html"><span class="mob-icon">📋</span>Phrases</a>
+  <a class="mob-item" href="calculators.html"><span class="mob-icon">🧮</span>Calcs</a>
+  <a class="mob-item" href="vasopressors.html"><span class="mob-icon">💊</span>Drugs</a>
+  <a class="mob-item" href="ed-phone-directory.html"><span class="mob-icon">📞</span>Directory</a>
+</div>
 
 <script src="search-index.js"></script>
 <script>
-const phrases = [
-  // CHEST PAIN
-  {dot:"nope",cond:"PE Rule-Out",cat:"Chest Pain",text:"Pulmonary embolism considered and ruled out using a validated, stepwise approach. Pre-test probability assessed as low by clinical gestalt. Wells PE score calculated: 0 points — low probability (PE prevalence <2%). PE Rule-Out Criteria (PERC) applied: all 8 criteria absent — age <50, heart rate <100 bpm, SpO2 ≥95% on room air, no unilateral leg swelling, no hemoptysis, no surgery or trauma within 4 weeks, no prior PE or DVT, no exogenous estrogen use. PERC rule satisfied in the context of low pre-test probability — no further workup for pulmonary embolism indicated per validated clinical decision rule (Kline et al., Ann Emerg Med 2004). Patient hemodynamically stable throughout evaluation."},
-  {dot:"nodissection",cond:"Aortic Dissection Rule-Out",cat:"Chest Pain",text:"Aortic dissection considered and felt to be low probability. Patient does not have high-risk features including: no hypertension history, no Marfan or connective tissue disorder, no prior aortic valve or aortic surgery, no abrupt onset tearing or ripping chest/back/abdominal pain, no pulse or blood pressure differential, no focal neurological deficit, no widened mediastinum on imaging. Pain character, onset, and clinical presentation are not consistent with aortic dissection."},
-  {dot:"noacs",cond:"ACS Rule-Out",cat:"Chest Pain",text:"Acute coronary syndrome evaluated and felt to be low probability at this time. HEART score calculated for structured risk stratification: History 0–1 (symptoms not consistent with typical anginal pattern); EKG 0 (no ST changes, new LBBB, or dynamic T-wave abnormality); Age 0–1; Risk factors 0–1 (cardiovascular risk factor burden assessed); Troponin 0 (serial high-sensitivity troponins obtained, negative and non-trending). Total HEART score in low-risk range (≤3), corresponding to a major adverse cardiac event (MACE) rate of <2% at 6 weeks (Six et al., Eur Heart J Acute Cardiovasc Care 2008). EKG reviewed without evidence of ischemic changes. Shared decision-making discussion held with patient regarding low-risk chest pain disposition, residual risk, and the importance of outpatient follow-up. Patient discharged with cardiology follow-up arranged and return precautions documented."},
-  {dot:"nopneumo",cond:"Pneumothorax Rule-Out",cat:"Chest Pain",text:"Pneumothorax considered. Chest radiograph reviewed without evidence of pleural line, tracheal deviation, or asymmetric lung markings. Breath sounds symmetric bilaterally. Clinical presentation not consistent with pneumothorax."},
-  {dot:"notamponade",cond:"Cardiac Tamponade Rule-Out",cat:"Chest Pain",text:"Cardiac tamponade considered. No Beck's triad (hypotension, jugular venous distension, muffled heart sounds) present. Bedside ultrasound performed without evidence of pericardial effusion or right heart collapse. Clinical presentation not consistent with tamponade physiology."},
+// ══════════════════════════════════════════
+//  SEARCH INDEX
+// ══════════════════════════════════════════
+// Search index loaded from search-index.js
+const getIDX = () => (window.getSearchIndex ? window.getSearchIndex() : SEARCH_INDEX);
 
-  // HEADACHE
-  {dot:"nosah",cond:"SAH Rule-Out",cat:"Headache",text:"Subarachnoid hemorrhage considered and felt to be low probability. Headache does not meet Ottawa SAH Rule criteria: onset was not instantaneous or within 1 second, patient is under 40, headache is not described as 'worst of life,' patient did not lose consciousness, and neck stiffness is absent. Non-contrast CT head reviewed and interpreted as negative for intracranial hemorrhage or subarachnoid blood. Lumbar puncture considered; given low pre-test probability, patient counseled and shared decision-making documented."},
-  {dot:"nomeningitis",cond:"Meningitis/Encephalitis Rule-Out",cat:"Headache",text:"Bacterial meningitis and encephalitis considered and felt to be low probability. Patient is afebrile, alert, and oriented. No neck stiffness, no Kernig's or Brudzinski's signs elicited. No petechial or purpuric rash. No photophobia, phonophobia, or altered mental status. Clinical presentation not consistent with CNS infection. CT head reviewed prior to LP consideration without contraindication to lumbar puncture if indicated."},
-  {dot:"nostroke",cond:"Stroke Rule-Out",cat:"Headache",text:"Ischemic stroke and hemorrhagic stroke considered. Non-contrast CT head reviewed without evidence of acute intracranial pathology. Last known well established. Full neurological examination performed including cranial nerves, motor, sensory, cerebellar, and gait — no focal deficits identified. NIHSS score 0. Symptoms not consistent with cortical or subcortical stroke syndrome. Neurology consulted as appropriate."},
-  {dot:"nohypertensiveemergency",cond:"Hypertensive Emergency Rule-Out",cat:"Headache",text:"Hypertensive emergency considered. No evidence of end-organ damage including no papilledema, no altered mental status, no acute chest pain, no shortness of breath, no hematuria, and no focal neurological deficit. Creatinine, urinalysis, and EKG without evidence of acute end-organ involvement. Blood pressure elevated but consistent with hypertensive urgency without emergency features."},
-  {dot:"nocvt",cond:"Cerebral Venous Thrombosis Rule-Out",cat:"Headache",text:"Cerebral venous thrombosis considered. Patient without high-risk features including no hypercoagulable state, no oral contraceptive use, no postpartum state, no recent head/neck infection, no papilledema, no progressive or positional headache pattern. No focal neurological deficits on examination. Imaging obtained as clinically indicated."},
+// ══════════════════════════════════════════
+//  SEARCH LOGIC
+// ══════════════════════════════════════════
+let activeFilter = 'all';
+let hiIdx = -1;
 
-  // ABDOMINAL PAIN
-  {dot:"noaaa",cond:"AAA / Aortic Emergency Rule-Out",cat:"Abdominal Pain",text:"Ruptured or symptomatic abdominal aortic aneurysm considered. Patient hemodynamically stable. No pulsatile abdominal mass palpated. No back or flank pain radiation concerning for aortic pathology. Bedside ultrasound performed with adequate visualization of the aorta; diameter within normal limits without evidence of aneurysm. Clinical presentation not consistent with aortic emergency."},
-  {dot:"noectopic",cond:"Ectopic Pregnancy Rule-Out",cat:"Abdominal Pain",text:"Ectopic pregnancy considered. Urine pregnancy test negative, effectively ruling out ectopic pregnancy at this time. [If positive: Quantitative beta-hCG obtained. Pelvic ultrasound reviewed with intrauterine pregnancy confirmed / no intrauterine pregnancy visualized. OB/GYN consulted. Patient counseled on ectopic pregnancy precautions and return instructions.]"},
-  {dot:"noappendix",cond:"Appendicitis Rule-Out",cat:"Abdominal Pain",text:"Appendicitis considered. Alvarado/MANTRELS score calculated as low risk. Pain is not localized to the right lower quadrant, no rebound tenderness or guarding, no Rovsing's, psoas, or obturator signs. WBC without significant leukocytosis. CT abdomen/pelvis with contrast reviewed and interpreted without evidence of appendiceal wall thickening, periappendiceal fat stranding, or appendicolith. Clinical presentation and imaging not consistent with acute appendicitis."},
-  {dot:"nomesischemia",cond:"Mesenteric Ischemia Rule-Out",cat:"Abdominal Pain",text:"Mesenteric ischemia considered given pain out of proportion to physical examination. Patient without high-risk features including no atrial fibrillation, no hypercoagulable state, no recent aortic surgery, no peripheral vascular disease. Abdomen soft without peritoneal signs. Lactate within normal limits. CT angiography of the abdomen/pelvis obtained as clinically indicated."},
-  {dot:"nosbo",cond:"Small Bowel Obstruction Rule-Out",cat:"Abdominal Pain",text:"Small bowel obstruction considered. No prior abdominal surgery or known hernia. Abdomen soft, non-distended, bowel sounds present. No emesis. Plain abdominal radiographs reviewed without air-fluid levels, dilated bowel loops, or absence of rectal gas. Clinical presentation not consistent with bowel obstruction."},
-  {dot:"noovariantorsion",cond:"Ovarian Torsion Rule-Out",cat:"Abdominal Pain",text:"Ovarian torsion considered in this female patient with pelvic/lower abdominal pain. Pain is not sudden in onset, not associated with nausea and vomiting out of proportion to examination, and is not unilateral. Pelvic ultrasound with Doppler performed demonstrating normal ovarian blood flow bilaterally, no ovarian enlargement, and no adnexal mass. Clinical presentation and imaging not consistent with ovarian torsion. OB/GYN consulted as appropriate."},
-  {dot:"noepigastric",cond:"Epigastric Pain Rule-Out (Pancreatitis / Hepatitis / Biliary)",cat:"Abdominal Pain",text:"Acute pancreatitis considered. Serum lipase within normal limits, making pancreatitis unlikely given the high negative predictive value of a normal lipase (94–100%). Patient does not meet Revised Atlanta Criteria for pancreatitis: no lipase ≥3x upper limit of normal, no back radiation, no nausea/vomiting out of proportion to examination. Hepatitis considered; ALT, AST, alkaline phosphatase, and bilirubin all within normal limits without evidence of hepatocellular or cholestatic injury. Biliary pathology considered; no Murphy's sign, no fever, no jaundice, no right upper quadrant tenderness. Clinical presentation not consistent with pancreatitis, hepatitis, or acute biliary disease."},
-
-  // GI
-  {dot:"nougibleed",cond:"Upper GI Bleed Documentation",cat:"GI",text:"Upper gastrointestinal bleeding identified. Hemodynamic stability assessed and resuscitation initiated. Two large-bore IVs placed. Type and screen sent. CBC, CMP, coagulation studies, and lactate obtained. Glasgow-Blatchford Score calculated to guide need for urgent endoscopy. PPI therapy initiated IV. Nasogastric lavage considered based on clinical presentation. GI consulted for urgent endoscopy. Endoscopy timing determined based on hemodynamic stability and risk stratification. Transfusion threshold assessed — goal Hgb >7 g/dL (>8 in CAD). Reversal of anticoagulation considered. ICU admission criteria assessed."},
-  {dot:"nolgibleed",cond:"Lower GI Bleed Documentation",cat:"GI",text:"Lower gastrointestinal bleeding evaluated. Hemodynamic stability assessed and resuscitation initiated. Brisk versus slow bleed characterized clinically. Upper GI source excluded — no hematemesis, no coffee-ground emesis, nasogastric lavage clear if obtained. CBC, CMP, coagulation studies obtained. Type and screen sent. CT angiography of abdomen/pelvis considered for active extravasation. GI and surgery consulted based on severity. Colonoscopy timing discussed. Transfusion threshold assessed. Anticoagulation reversal considered. Anorectal examination performed to exclude hemorrhoidal or anorectal source."},
-  {dot:"nohepfailure",cond:"Liver Failure / Hepatic Encephalopathy",cat:"GI",text:"Acute liver failure and hepatic encephalopathy evaluated. Mental status graded by West Haven criteria. LFTs, INR, bilirubin, albumin, and ammonia obtained. Acetaminophen level sent to exclude drug-induced liver injury. Toxicology screen obtained. Viral hepatitis serologies sent. CBC reviewed for thrombocytopenia. Renal function assessed for hepatorenal syndrome. Cerebral edema risk evaluated in acute liver failure. Lactulose initiated for encephalopathy. Rifaximin considered. GI/hepatology and transplant team notified. ICU level monitoring initiated given risk of rapid deterioration."},
-  {dot:"nobowelperf",cond:"Bowel Perforation Rule-Out",cat:"GI",text:"Bowel perforation considered in this patient with acute abdominal pain. Peritoneal signs assessed — no rigidity, no guarding, no rebound tenderness. Upright chest radiograph and/or abdominal films reviewed without free air under the diaphragm. CT abdomen/pelvis reviewed without pneumoperitoneum, extraluminal air, or free fluid suggesting perforation. No fever or leukocytosis. Clinical presentation not consistent with bowel perforation at this time. Surgery notified as clinically appropriate."},
-
-  // NEURO
-  {dot:"nonci",cond:"Intracranial Injury Rule-Out (Head Trauma)",cat:"Neuro",text:"Intracranial injury evaluated following minor head trauma. Canadian CT Head Rule applied to this eligible patient (GCS 13–15, witnessed LOC/amnesia/confusion, age ≥16, injury within 24 hours, no coagulopathy or anticoagulation). High-risk factors absent: GCS remained 15 at 2 hours post-injury, no suspected open or depressed skull fracture, no signs of basal skull fracture (no hemotympanum, no periorbital ecchymosis, no CSF otorrhea/rhinorrhea, no Battle's sign), no vomiting ≥2 episodes, age <65. Medium-risk factors absent: amnesia before impact <30 minutes, no dangerous mechanism (no pedestrian-MVC, no ejection, no fall >3 feet or 5 stairs). Per Canadian CT Head Rule, CT head not indicated (Stiell et al., Lancet 2001). Patient observed in the ED without neurological deterioration. GCS 15 at time of disposition. Concussion precautions reviewed. Return precautions provided."},
-  {dot:"noseizure",cond:"Seizure Work-Up Documented",cat:"Neuro",text:"Seizure evaluated. This appears to represent a provoked/unprovoked first-time seizure. Patient returned to neurological baseline. Blood glucose, electrolytes, renal function reviewed and within normal limits. Toxicology considered. CT head reviewed without acute intracranial pathology. Neurology notified. Patient counseled on driving restrictions per state law, seizure precautions, and return instructions. Outpatient EEG and neurology follow-up arranged."},
-  {dot:"nogbs",cond:"Guillain-Barré Rule-Out",cat:"Neuro",text:"Guillain-Barré syndrome considered given ascending weakness. However, symptoms are not progressive, reflexes are intact, no preceding gastroenteritis or recent viral illness. Cranial nerves intact. Respiratory function assessed — no dyspnea, no use of accessory muscles, vital capacity within normal limits. Clinical presentation does not meet criteria for GBS at this time; neurology consulted for further evaluation."},
-  {dot:"nocaudaequina",cond:"Cauda Equina Syndrome Rule-Out",cat:"Neuro",text:"Cauda equina syndrome considered in this patient with low back pain. Patient denies saddle anesthesia, urinary retention, urinary or fecal incontinence, and bilateral lower extremity weakness or numbness. Perineal sensation intact. Rectal tone assessed and normal. No acute motor deficits on lower extremity neurological examination. Clinical presentation not consistent with cauda equina syndrome. MRI lumbar spine obtained/ordered as clinically indicated given degree of suspicion."},
-
-  // OB
-  {dot:"noeclampsia",cond:"Preeclampsia/Eclampsia Rule-Out",cat:"OB",text:"Preeclampsia and eclampsia considered. Blood pressure reviewed and within acceptable range for gestational age. Patient without severe features: no persistent headache, no visual changes, no right upper quadrant or epigastric pain, no shortness of breath, no altered mental status. Urinalysis without significant proteinuria. Labs including CBC, CMP, LFTs, and uric acid reviewed. OB notified and consulted. Fetal heart tones confirmed."},
-  {dot:"nohellp",cond:"HELLP Syndrome Rule-Out",cat:"OB",text:"HELLP syndrome considered in this pregnant patient with abdominal pain. Labs reviewed: hemoglobin stable without evidence of microangiopathic hemolytic anemia, platelet count within normal limits, liver transaminases not elevated, LDH within normal range. Clinical presentation not consistent with HELLP syndrome. OB consulted."},
-  {dot:"noabruption",cond:"Placental Abruption Rule-Out",cat:"OB",text:"Placental abruption considered. No significant vaginal bleeding, no uterine tenderness or rigidity, no contractions, no fetal heart rate abnormalities on monitoring. No trauma history. Ultrasound reviewed without retroplacental hematoma or abnormal placental appearance. OB notified and at bedside. Fetal monitoring reassuring."},
-
-  // PEDS
-  {dot:"nointussusception",cond:"Intussusception Rule-Out",cat:"Peds",text:"Intussusception considered in this pediatric patient with intermittent abdominal pain. No episodic colicky pain with pain-free intervals, no drawing up of legs, no current currant jelly stool, no sausage-shaped abdominal mass palpated. Abdomen soft and non-tender at time of examination. Bedside ultrasound performed without target sign or tubular mass identified. Clinical presentation not consistent with intussusception."},
-  {dot:"novolvulus",cond:"Malrotation/Volvulus Rule-Out",cat:"Peds",text:"Malrotation with volvulus considered in this pediatric patient with bilious vomiting. Patient hemodynamically stable. Abdomen soft without peritoneal signs. Upper GI series or CT obtained to evaluate duodenal-jejunal junction position. Pediatric surgery notified. Clinical presentation and imaging reviewed in context of this life-threatening diagnosis."},
-  {dot:"noepiglottitis",cond:"Epiglottitis Rule-Out",cat:"Peds",text:"Epiglottitis considered. Patient without classic triad of drooling, dysphagia, and distress. No tripod positioning. Voice not muffled. No stridor at rest. Patient able to handle secretions. Lateral neck radiograph reviewed without thumbprint sign or pre-epiglottic swelling. Direct visualization deferred to maintain airway safety. ENT/anesthesia and pediatrics notified as appropriate."},
-  {dot:"nonat",cond:"Non-Accidental Trauma Screen",cat:"Peds",text:"Non-accidental trauma considered given mechanism, age of patient, or pattern of injury. History reviewed for consistency with developmental age and injury pattern. Physical examination performed with careful attention to bruising in non-ambulatory areas, patterned injuries, retinal hemorrhage, and FEN status. Skeletal survey ordered as clinically appropriate. Social work, child life, and child protective services notified per institutional protocol. Mandatory reporting obligations fulfilled."},
-
-  // HEAD & NECK
-  {dot:"nomastoiditis",cond:"Mastoiditis Rule-Out",cat:"Head & Neck",text:"Mastoiditis considered in this patient with ear pain and/or swelling. No postauricular erythema, swelling, or tenderness over the mastoid. No auricle displaced anteriorly or inferiorly. No fever or leukocytosis. Tympanic membrane visualized — no bulging, perforation, or signs of acute otitis media with intracranial extension. No signs of intracranial complication including no headache, altered mental status, or meningismus. Clinical presentation not consistent with acute mastoiditis."},
-  {dot:"nopta",cond:"Peritonsillar Abscess Rule-Out",cat:"Head & Neck",text:"Peritonsillar abscess considered in this patient with sore throat and odynophagia. No uvular deviation, no unilateral tonsillar bulging, no trismus, no muffled 'hot potato' voice, no drooling. Oropharynx examined with adequate visualization — tonsils symmetric without peritonsillar fullness or fluctuance. Airway patent and stable. Clinical presentation consistent with pharyngitis/tonsillitis without abscess formation."},
-  {dot:"norpha",cond:"Retropharyngeal Abscess Rule-Out",cat:"Head & Neck",text:"Retropharyngeal abscess considered given neck pain, odynophagia, and fever. No meningismus, no stridor, no drooling, no tripod positioning, no muffled voice. Neck mobility assessed without significant limitation. No bulging of the posterior pharyngeal wall on examination. Lateral neck radiograph reviewed without prevertebral soft tissue widening. CT neck with contrast obtained/deferred based on clinical judgment. Airway continuously monitored. Clinical presentation not consistent with retropharyngeal abscess."},
-  {dot:"nomalignantotitis",cond:"Malignant Otitis Externa Rule-Out",cat:"Head & Neck",text:"Malignant (necrotizing) otitis externa considered in this patient with ear pain and otorrhea. Patient without diabetes or immunocompromised state. No granulation tissue visualized at the floor of the external auditory canal. No facial nerve palsy or other cranial nerve deficits. No jaw pain or trismus suggesting temporomandibular joint or skull base involvement. ESR/CRP obtained. CT temporal bones or MRI considered if clinical suspicion persists. Clinical presentation consistent with uncomplicated otitis externa at this time."},
-  {dot:"nogca",cond:"Temporal Arteritis (GCA) Rule-Out",cat:"Head & Neck",text:"Giant cell arteritis considered in this patient with headache and/or vision changes. Patient under 50 years of age or without classic risk profile. No temporal artery tenderness or nodularity on palpation. No jaw claudication. No scalp tenderness. No new visual symptoms including diplopia, amaurosis fugax, or vision loss. ESR and CRP obtained and within normal limits / mildly elevated. Ophthalmology notified as appropriate. Given the risk of permanent vision loss, if clinical suspicion remains high despite normal inflammatory markers, temporal artery biopsy and empiric high-dose corticosteroids discussed with consulting team."},
-  {dot:"nolemierres",cond:"Lemierre's Syndrome Rule-Out",cat:"Head & Neck",text:"Lemierre's syndrome considered in this young patient with recent pharyngitis and new systemic symptoms. No neck swelling or tenderness along the anterior sternocleidomastoid border suggesting internal jugular vein thrombophlebitis. No septic pulmonary emboli symptoms including pleuritic chest pain, hemoptysis, or hypoxia. Blood cultures obtained. CT neck with contrast obtained/considered to evaluate for internal jugular vein thrombosis and peritonsillar or parapharyngeal extension. Clinical presentation not consistent with Lemierre's syndrome at this time."},
-
-  // HIGH-RISK DX
-  {dot:"nothyroidstorm",cond:"Thyroid Storm Rule-Out",cat:"High-Risk Dx",text:"Thyroid storm considered in this patient with hyperthyroid features. Burch-Wartofsky Point Scale score calculated and below threshold for thyroid storm diagnosis. Patient without temperature >38.5°C, no heart rate >130, no signs of congestive heart failure, no altered mental status, no hepatic dysfunction. TSH and free T4 obtained. Endocrinology notified. Clinical presentation not consistent with thyroid storm at this time."},
-  {dot:"nomyxedema",cond:"Myxedema Coma Rule-Out",cat:"High-Risk Dx",text:"Myxedema coma considered in this patient with altered mental status and hypothyroid features. Patient without severe hypothermia, no bradycardia, no hypotension, no hypoventilation, no history of hypothyroidism or thyroid surgery. TSH and free T4 obtained. Clinical presentation not consistent with myxedema coma. Endocrinology consulted as appropriate."},
-  {dot:"noadrenalcrisis",cond:"Adrenal Crisis Rule-Out",cat:"High-Risk Dx",text:"Adrenal crisis considered in this hemodynamically unstable patient. Patient without known adrenal insufficiency, no chronic steroid use or recent steroid withdrawal, no hyperpigmentation, no hyponatremia or hyperkalemia on labs. Random cortisol obtained. Clinical presentation not consistent with adrenal crisis. If high clinical suspicion, empiric hydrocortisone administered prior to confirmatory testing per protocol."},
-  {dot:"noglaucoma",cond:"Acute Angle-Closure Glaucoma Rule-Out",cat:"High-Risk Dx",text:"Acute angle-closure glaucoma considered in this patient with eye pain and headache. Patient without mid-dilated fixed pupil, no conjunctival injection or corneal clouding, no severely elevated intraocular pressure on tonometry, no halos around lights, no nausea and vomiting out of proportion to examination. Visual acuity assessed. Ophthalmology consulted as clinically indicated."},
-  {dot:"noludsangina",cond:"Ludwig's Angina / Deep Space Neck Infection Rule-Out",cat:"High-Risk Dx",text:"Ludwig's angina and deep space neck infection considered in this patient with jaw/neck pain and swelling. No submandibular or sublingual swelling, no trismus, no floor of mouth elevation, no drooling, no stridor, no voice changes, no recent dental procedure or tooth infection. Airway assessed as patent and stable. CT neck with contrast obtained as clinically indicated. ENT and anesthesia notified given potential for rapid airway compromise."},
-  {dot:"nofourgangr",cond:"Fournier's Gangrene Rule-Out",cat:"High-Risk Dx",text:"Fournier's gangrene considered in this patient with perineal/scrotal/vulvar pain and swelling. No crepitus palpated, no skin necrosis, no wound that is more extensive than external appearance suggests, no severe sepsis out of proportion to examination. LRINEC score calculated. CT pelvis/perineum reviewed without subcutaneous gas or fascial plane involvement. Surgery consulted. Clinical presentation not consistent with Fournier's gangrene at this time."},
-  {dot:"nocrao",cond:"Central Retinal Artery Occlusion",cat:"High-Risk Dx",text:"Central retinal artery occlusion considered in this patient with acute painless monocular vision loss. Time of symptom onset documented. Visual acuity and visual fields assessed. Afferent pupillary defect evaluated. Ophthalmology contacted emergently. Stroke protocol initiated given CRAO as cerebrovascular equivalent — MRI brain with DWI obtained, neurology notified. Thrombolytics discussed in context of time window and eligibility. Cardiovascular risk factors and embolic source workup initiated."},
-  {dot:"noWernicke",cond:"Wernicke's Encephalopathy Rule-Out",cat:"High-Risk Dx",text:"Wernicke's encephalopathy considered in this patient with altered mental status and history of alcohol use disorder or malnutrition. Classic triad assessed: patient without ophthalmoplegia, ataxia is not clearly present, encephalopathy mild. However, given that the full triad is often absent, thiamine 500mg IV administered prior to any dextrose-containing fluids as a precautionary measure. Thiamine level sent. Clinical team aware that empiric treatment is low-risk and potentially life-saving."},
-
-  // DISPOSITION
-  {dot:"ama",cond:"Against Medical Advice (AMA)",cat:"Disposition",text:"Patient has been informed of their medical condition, the recommended treatment plan, and the risks of leaving against medical advice including but not limited to: clinical deterioration, serious injury, and death. Patient demonstrates decision-making capacity — they are alert and oriented, understand the information provided, can articulate the risks in their own words, and are able to reason through their decision without evidence of impaired judgment. Patient declines recommended admission/treatment and elects to leave AMA. Patient instructed to return to the ED immediately if condition worsens. Prescriptions and follow-up provided to the extent possible to facilitate continued care. Patient's decision is respected."},
-  {dot:"sdmlowriskcp",cond:"Shared Decision-Making: Low-Risk Chest Pain Discharge",cat:"Disposition",text:"Shared decision-making discussion held with patient regarding low-risk chest pain disposition. HEART score calculated in low-risk range (≤3/10), corresponding to a 6-week MACE risk of <2%. Serial high-sensitivity troponins obtained, negative and non-trending. EKG reviewed without ischemic changes. Patient informed that the structured risk assessment, EKG, and serial troponins are collectively reassuring and do not demonstrate evidence of acute myocardial injury or high-risk features. Patient counseled that a small residual risk of major adverse cardiac event (MACE) cannot be entirely excluded by ED evaluation alone, and that outpatient stress testing may be warranted based on cardiovascular risk profile. Risks and benefits of continued observation versus early discharge with cardiology follow-up discussed. Patient verbalized understanding and agrees to discharge with close outpatient cardiology follow-up arranged. Return precautions provided: return to ED immediately for recurrent or worsening chest pain, shortness of breath, palpitations, near-syncope, or syncope."},
-  {dot:"sdmlpsdm",cond:"Shared Decision-Making: LP for SAH Rule-Out",cat:"Disposition",text:"Shared decision-making discussion held regarding lumbar puncture for further evaluation of headache and subarachnoid hemorrhage rule-out. Patient informed that CT head is negative, but a small risk of SAH cannot be completely excluded by CT alone, particularly in headaches presenting beyond 6 hours of onset. The diagnostic yield, procedural risks (post-LP headache, back pain, rare infection or bleeding), and the alternative of discharge with strict return precautions were discussed. Patient verbalized understanding of risks and benefits. Patient elects to [proceed with LP / decline LP and accept residual diagnostic uncertainty with return precautions and close follow-up]."},
-  {dot:"capacityok",cond:"Decision-Making Capacity Confirmed",cat:"Disposition",text:"Decision-making capacity assessed and confirmed. Patient is alert and oriented to person, place, time, and situation. Patient demonstrates the four components of decision-making capacity: (1) ability to communicate a consistent choice, (2) understanding of relevant medical information including diagnosis, treatment options, and consequences, (3) appreciation of how information applies to their own situation, and (4) ability to reason and weigh options. No evidence of acute psychiatric illness, intoxication, or cognitive impairment that would impair capacity at this time."},
-  {dot:"noreturn",cond:"Return Precautions Documented",cat:"Disposition",text:"Discharge instructions reviewed with patient and/or family in detail. Patient verbalized understanding. Patient instructed to return to the emergency department immediately or call 911 for any of the following: worsening symptoms, new symptoms, fever, shortness of breath, chest pain, altered mental status, inability to tolerate oral intake, or any other concerning change in condition. Patient agreeable to follow-up as arranged. Questions answered prior to discharge."},
-
-  // HIGH-VOLUME
-  {dot:"nosyncope",cond:"Syncope — Low Risk, Discharge",cat:"High-Volume",text:"Syncope evaluated. San Francisco Syncope Rule criteria assessed: no abnormal EKG, no complaint of shortness of breath, no hematocrit <30%, no systolic BP <90 mmHg on arrival, and no history of congestive heart failure. ROSE and Canadian Syncope Risk Scores calculated and reflect low risk for serious adverse event. History consistent with vasovagal or situational syncope: identifiable trigger present, prodromal symptoms of lightheadedness and diaphoresis, rapid return to baseline. EKG reviewed without dysrhythmia, conduction abnormality, or ischemic changes. Orthostatic vitals obtained. Patient discharged with outpatient follow-up and syncope precautions."},
-  {dot:"etohclearance",cond:"Alcohol Intoxication / Medical Clearance",cat:"High-Volume",text:"Patient presenting with acute alcohol intoxication. Serial clinical assessments performed. Patient now alert and oriented, ambulatory, able to tolerate oral intake, and without focal neurological deficits. Vital signs stable and within acceptable range. No signs of occult trauma, withdrawal, or concurrent medical illness. Blood glucose checked and within normal limits. No evidence of alcohol withdrawal — CIWA assessment performed. Patient demonstrates appropriate mentation for safe discharge. Substance use resources offered. Patient discharged to responsible party / independently with instructions to refrain from driving and plan for follow-up."},
-  {dot:"alteredms",cond:"Altered Mental Status Work-Up",cat:"High-Volume",text:"Altered mental status evaluated. Broad differential considered including metabolic, infectious, toxic, neurological, and structural etiologies. Blood glucose checked at bedside. Comprehensive labs obtained including CBC, CMP, LFTs, ammonia, thyroid function, urinalysis, and urine culture. Blood cultures obtained as clinically indicated. Urine toxicology and serum ethanol level sent. CT head reviewed without acute intracranial pathology. EKG without acute changes. Medications reviewed for potential contributing agents. Infectious workup initiated. Most likely etiology identified and treatment initiated."},
-  {dot:"flankpain",cond:"Renal Colic / Nephrolithiasis",cat:"High-Volume",text:"Renal colic from nephrolithiasis felt to be the most likely etiology of this patient's flank pain. Urinalysis demonstrating hematuria consistent with stone disease. CT abdomen/pelvis without contrast reviewed demonstrating [ureterolithiasis / no obstructing stone]. Hydronephrosis assessed. Signs of complicated stone disease ruled out: patient afebrile, no leukocytosis, no signs of sepsis, creatinine within acceptable range. Urology notified as appropriate. Patient discharged with adequate analgesia, tamsulosin, urine strainer, and urology follow-up with return precautions for fever, inability to tolerate PO, or uncontrolled pain."},
-
-  // AIRWAY / RESPIRATORY
-  {dot:"noanaphylaxis",cond:"Anaphylaxis Documentation",cat:"Airway / Respiratory",text:"Anaphylaxis recognized and treated. Diagnosis based on acute onset of illness involving skin/mucosal tissue (urticaria, flushing, angioedema) plus either respiratory compromise or hypotension after exposure to likely allergen. Epinephrine 0.3mg IM administered to lateral thigh — time documented. IV access established, IV fluids initiated. Diphenhydramine, H2 blocker, and corticosteroids administered. Patient monitored for biphasic reaction — observation period of minimum 4–6 hours initiated. Trigger identified and documented. Epinephrine autoinjector prescribed at discharge. Allergy/immunology follow-up arranged. Return precautions reviewed."},
-  {dot:"noangioedema",cond:"Angioedema / Airway Threat Assessment",cat:"Airway / Respiratory",text:"Angioedema evaluated with continuous airway assessment. No stridor, no drooling, no voice changes, no respiratory distress, no uvular or posterior pharyngeal edema threatening airway patency. ACE inhibitor use reviewed — ACE-inhibitor-induced angioedema considered; medication held. Hereditary angioedema considered; C4 level and C1-esterase inhibitor level sent if suspected. Airway team (anesthesia/ENT) notified prophylactically given risk of rapid progression. Patient not left unmonitored. Airway intervention not required at this time."},
-  {dot:"noasthma",cond:"Asthma Exacerbation Severity",cat:"Airway / Respiratory",text:"Asthma exacerbation evaluated and severity classified. Peak flow or FEV1 obtained pre- and post-treatment. No accessory muscle use, no pulsus paradoxus, no inability to speak in full sentences, no silent chest, no cyanosis, SpO2 >92% on room air. Severity classified as mild-moderate based on clinical assessment. Albuterol and ipratropium nebulization initiated. Systemic corticosteroids administered. Response to treatment assessed at regular intervals. Disposition determined based on post-treatment peak flow and clinical trajectory."},
-  {dot:"nochf",cond:"Acute Pulmonary Edema / CHF Exacerbation",cat:"Airway / Respiratory",text:"Acute decompensated heart failure evaluated. BNP/NT-proBNP obtained and interpreted in clinical context. Chest radiograph reviewed for pulmonary vascular congestion, interstitial edema, pleural effusions, and cardiomegaly. Bedside cardiac ultrasound performed assessing for reduced EF, B-lines on lung ultrasound, and IVC plethora. Precipitating factors assessed including medication non-compliance, dietary indiscretion, infection, arrhythmia, and ACS. IV diuresis initiated. Respiratory status monitored continuously. Cardiology notified."},
-  {dot:"noaspiration",cond:"Aspiration Pneumonia Risk Documentation",cat:"Airway / Respiratory",text:"Aspiration pneumonia considered given altered mental status, dysphagia, or witnessed aspiration event. Oxygenation and respiratory status assessed. Chest radiograph reviewed for right lower lobe or dependent segment infiltrate. Oral cavity and secretion management assessed. Gag reflex evaluated. NPO status initiated. Aspiration precautions documented. Speech therapy swallow evaluation ordered as clinically appropriate. Antibiotics initiated if evidence of aspiration pneumonitis progressing to pneumonia."},
-
-  // CARDIOLOGY
-  {dot:"noafib",cond:"Atrial Fibrillation with RVR — Rate Control",cat:"Cardiology",text:"Atrial fibrillation with rapid ventricular response identified on EKG. Hemodynamic stability assessed — patient not a candidate for emergent cardioversion at this time. Rate control strategy initiated. CHA2DS2-VASc score calculated for anticoagulation risk stratification. Duration of AFib assessed — onset within/beyond 48 hours documented for cardioversion consideration. Thyroid function, electrolytes, and CBC reviewed. Cardiology notified. Anticoagulation initiated/discussed with patient based on stroke risk score and bleeding risk. Rate and rhythm goal documented."},
-  {dot:"nobradycardia",cond:"Bradycardia / Heart Block Documentation",cat:"Cardiology",text:"Symptomatic bradycardia evaluated. EKG reviewed — rhythm characterized as [sinus bradycardia / first-degree AV block / Mobitz I / Mobitz II / complete heart block]. Hemodynamic stability assessed. Reversible causes reviewed including medications (beta blockers, calcium channel blockers, digoxin), hypothyroidism, electrolyte abnormalities, Lyme disease, and inferior MI. Atropine administered/not indicated based on degree of block and hemodynamic status. Transcutaneous pacing available at bedside. Cardiology notified. Transvenous pacing discussed."},
-  {dot:"nohypertensiveurgency",cond:"Hypertensive Urgency Discharge",cat:"Cardiology",text:"Hypertensive urgency managed. End-organ damage excluded as documented separately. Asymptomatic severe hypertension without emergency features. Gradual blood pressure reduction initiated — goal of no more than 25% reduction in MAP over first 24 hours to avoid hypoperfusion injury. Oral antihypertensive initiated or adjusted. Medication compliance and contributing factors reviewed. Patient instructed to follow up with primary care within 24–72 hours for blood pressure reassessment. Return precautions provided for any symptoms of end-organ involvement."},
-
-  // RENAL / METABOLIC
-  {dot:"noaki",cond:"AKI Workup",cat:"Renal / Metabolic",text:"Acute kidney injury identified and categorized. Prerenal, intrinsic renal, and postrenal etiologies assessed. Volume status examined clinically. BUN:creatinine ratio reviewed. Urinalysis with microscopy obtained — assessed for casts, protein, and blood. Bladder ultrasound performed to rule out obstruction. Nephrotoxic medications identified and held. Contrast administration risk discussed. Urology notified if obstructive etiology suspected. Nephrology consulted as clinically indicated. IV fluids initiated for prerenal etiology. Strict I&Os and daily creatinine trending initiated."},
-  {dot:"nohyperkalemia",cond:"Hyperkalemia Management",cat:"Renal / Metabolic",text:"Hyperkalemia identified. EKG reviewed for peaked T waves, prolonged PR, widened QRS, sine wave pattern, or ventricular dysrhythmia. Cardiac membrane stabilization with calcium gluconate/chloride administered if EKG changes present — time and dose documented. Potassium shift initiated with insulin and dextrose. Albuterol nebulization administered as adjunct. Sodium bicarbonate considered if concurrent acidosis. Kayexalate or patiromer initiated for elimination. Dialysis indications assessed. Nephrology notified. Repeat potassium and EKG obtained to confirm response to treatment."},
-  {dot:"nodka",cond:"DKA / HHS Documentation",cat:"Renal / Metabolic",text:"Diabetic ketoacidosis evaluated. Diagnostic criteria confirmed: glucose >250 mg/dL, pH <7.3 or bicarb <18, anion gap >12, ketonemia/ketonuria. HHS considered if glucose >600 and serum osmolality >320 without significant acidosis. Precipitating cause identified — infection, medication non-compliance, new diagnosis. IV fluid resuscitation initiated with isotonic saline. Insulin infusion protocol initiated after potassium confirmed >3.5 mEq/L. Electrolytes, glucose, and VBG monitored every 1–2 hours. Phosphate and magnesium repleted as indicated. Endocrinology notified. ICU admission criteria assessed."},
-  {dot:"nohyponatremia",cond:"Hyponatremia Workup",cat:"Renal / Metabolic",text:"Hyponatremia identified and workup initiated. Serum osmolality obtained to confirm true hypotonic hyponatremia. Urine sodium and urine osmolality obtained to differentiate etiology. Volume status assessed clinically. Etiology categorized as hypovolemic, euvolemic (SIADH, hypothyroidism, adrenal insufficiency), or hypervolemic (CHF, cirrhosis, nephrotic syndrome). Chronicity assessed — acute (<48 hours) vs chronic. Correction rate carefully monitored to avoid osmotic demyelination syndrome — goal <8–10 mEq/L per 24 hours in chronic hyponatremia. Neurology and nephrology notified if symptomatic or severe."},
-  {dot:"nohypoglycemia",cond:"Hypoglycemia Workup",cat:"Renal / Metabolic",text:"Hypoglycemia identified and treated. Point-of-care glucose confirmed low. Dextrose administered IV / glucagon administered IM — time and dose documented. Repeat glucose obtained confirming adequate response. Etiology evaluated: insulin or sulfonylurea use, alcohol ingestion, missed meal, infection or sepsis, adrenal insufficiency, insulinoma. Medication list reviewed. Endocrinology consulted if non-diabetic hypoglycemia or recurrent episodes. Patient observed until glucose stable and patient tolerating oral intake. Diabetic patients counseled on hypoglycemia recognition, prevention, and glucagon kit use."},
-  {dot:"nohypercalcemia",cond:"Hypercalcemia Workup",cat:"Renal / Metabolic",text:"Hypercalcemia identified. Corrected calcium calculated for albumin level. Severity classified: mild (<12 mg/dL), moderate (12–14 mg/dL), severe (>14 mg/dL or symptomatic). Symptoms assessed including confusion, weakness, nausea, constipation, polyuria, and shortened QT on EKG. IV fluid resuscitation initiated. Calcitonin administered for rapid correction in severe cases. Bisphosphonates considered. PTH, PTHrP, vitamin D levels, and SPEP sent to identify etiology — primary hyperparathyroidism, malignancy, granulomatous disease reviewed. Oncology or endocrinology notified as appropriate."},
-
-  // GU / GYN
-  {dot:"noepididymitis",cond:"Epididymo-Orchitis Rule-Out",cat:"GU / GYN",text:"Epididymo-orchitis considered as the etiology of acute scrotal pain. Testicular torsion excluded as documented separately. Cremasteric reflex present. Tenderness localized to epididymis posteriorly rather than diffuse testicular tenderness. Prehn's sign assessed. Scrotal Doppler ultrasound demonstrating normal to increased blood flow consistent with inflammatory process rather than torsion. Urinalysis with pyuria and/or bacteriuria supportive of infectious etiology. STI workup including NAAT for gonorrhea and chlamydia sent. Appropriate antibiotics initiated based on patient age and risk factors. Urology notified."},
-  {dot:"nopid",cond:"Pelvic Inflammatory Disease Documentation",cat:"GU / GYN",text:"Pelvic inflammatory disease diagnosed based on clinical criteria. Minimum criteria met: cervical motion tenderness and/or uterine tenderness and/or adnexal tenderness in a sexually active female without other explanation. Additional supportive criteria documented: fever, mucopurulent cervical discharge, elevated WBC, elevated ESR/CRP, NAAT positive for gonorrhea or chlamydia. Pregnancy test negative. Pelvic ultrasound obtained to assess for tubo-ovarian abscess. Outpatient versus inpatient treatment criteria assessed per CDC guidelines. OB/GYN notified. Appropriate antibiotic regimen initiated. Partner treatment and STI counseling provided."},
-  {dot:"nourinaryretention",cond:"Urinary Retention Documentation",cat:"GU / GYN",text:"Urinary retention evaluated. Bladder ultrasound or post-void residual confirmed significant urinary retention. Urethral catheterization performed — time, catheter size, and urine output documented. Obstructive etiology assessed including BPH, urethral stricture, and constipation. Neurogenic etiology considered — sacral nerve function assessed. Medications reviewed for anticholinergic or alpha-agonist contributors. UA and urine culture sent. PSA considered in appropriate male patients. Urology notified for follow-up and further evaluation. Catheter left in place / trial of void arranged as clinically appropriate."},
-
-  // PSYCHIATRIC
-  {dot:"siscreen",cond:"Suicidal Ideation Risk Stratification",cat:"Psychiatric",text:"Suicidal ideation evaluated. Columbia Suicide Severity Rating Scale (C-SSRS) administered. Patient denies active suicidal ideation with intent or plan at this time. Risk and protective factors assessed: [note relevant factors]. No access to lethal means identified. No prior suicide attempts. No active psychosis, intoxication, or severe hopelessness noted. Patient able to engage in safety planning discussion. Psychiatry consulted. Patient monitored continuously. Disposition determined in collaboration with psychiatric team."},
-  {dot:"hiscreen",cond:"Homicidal Ideation Screening",cat:"Psychiatric",text:"Homicidal ideation assessed. Patient denies thoughts of harming others. No identified specific target or plan. No access to weapons reported. No command auditory hallucinations directing violence. Patient without agitation or threatening behavior during evaluation. Psychiatry consulted. Duty to warn obligations assessed per applicable state law and institutional protocol. Clinical team and security notified as appropriate."},
-  {dot:"agitation",cond:"Agitation / Excited Delirium Documentation",cat:"Psychiatric",text:"Acute agitation evaluated. Organic etiologies assessed and addressed including hypoglycemia, hypoxia, intoxication, withdrawal, metabolic derangement, head trauma, and CNS infection. Vital signs obtained. Chemical sedation administered as clinically indicated for patient and staff safety — medication, dose, route, and time documented. Continuous monitoring of respiratory status, airway, and hemodynamics performed post-sedation. Restraints applied/not applied; if applied, type, time, clinical justification, and reassessment interval documented per institutional protocol. Psychiatry notified."},
-  {dot:"psychmedclear",cond:"Psychiatric Medical Clearance",cat:"Psychiatric",text:"Medical clearance for psychiatric evaluation performed. History and physical examination completed. Vital signs stable. No acute medical conditions identified that would explain or contribute to psychiatric presentation, including no metabolic derangements, no toxic ingestion, no infectious etiology, no neurological pathology. Laboratory workup reviewed and without clinically significant abnormality. Urine toxicology obtained. Patient is medically stable and cleared for psychiatric evaluation and disposition. Psychiatry notified."},
-
-  // TOXICOLOGY
-  {dot:"noacetaminophen",cond:"Acetaminophen Overdose Risk Stratification",cat:"Toxicology",text:"Acetaminophen toxicity evaluated. Time of ingestion established. Serum acetaminophen level obtained at appropriate interval (≥4 hours post-ingestion). Level plotted on Rumack-Matthew nomogram — patient falls below treatment line, NAC not indicated at this time. Ingestion amount, timing, and chronicity of use assessed. LFTs, INR, and creatinine reviewed as baseline hepatic and renal function. No evidence of hepatotoxicity. Poison control consulted. Patient monitored for clinical deterioration."},
-  {dot:"nosalicylate",cond:"Salicylate Toxicity Rule-Out",cat:"Toxicology",text:"Salicylate toxicity considered given clinical presentation. Serum salicylate level obtained and below toxic threshold (<30 mg/dL therapeutic, >40 mg/dL toxic). No tinnitus, no hyperpnea, no altered mental status, no diaphoresis. Acid-base status assessed — no respiratory alkalosis or high anion gap metabolic acidosis on VBG. Ingestion history reviewed. Poison control consulted. Clinical presentation not consistent with salicylate toxicity."},
-  {dot:"notca",cond:"TCA Overdose Rule-Out",cat:"Toxicology",text:"Tricyclic antidepressant overdose considered. EKG reviewed — QRS duration <100ms, no terminal R wave in aVR >3mm, no rightward axis deviation, no prolonged QTc. No altered mental status, no seizure activity, no hypotension, no anticholinergic signs. History reviewed for TCA use. Sodium bicarbonate therapy discussed in context of clinical presentation. Poison control consulted. Serial EKGs obtained. Clinical presentation not consistent with TCA toxicity at this time."},
-  {dot:"noserotonin",cond:"Serotonin Syndrome Rule-Out",cat:"Toxicology",text:"Serotonin syndrome considered given medication history and clinical presentation. Hunter Criteria assessed: no clonus (spontaneous, inducible, or ocular), no agitation, no diaphoresis, no tremor, no hyperreflexia, no hyperthermia. Medication list reviewed for serotonergic agents including SSRIs, SNRIs, MAOIs, triptans, tramadol, linezolid, and illicit substances. Clinical presentation not consistent with serotonin syndrome. Poison control consulted as appropriate."},
-  {dot:"noanticholinergic",cond:"Anticholinergic Toxidrome Rule-Out",cat:"Toxicology",text:"Anticholinergic toxidrome considered. Patient without classic findings: no hyperthermia, no tachycardia, no mydriasis, no flushed dry skin, no urinary retention, no decreased bowel sounds, no altered mental status or agitation. Mnemonic assessed: 'Hot as a hare, blind as a bat, dry as a bone, red as a beet, mad as a hatter' — absent. Medication and substance history reviewed. Poison control consulted. Clinical presentation not consistent with anticholinergic toxidrome."},
-  {dot:"noopioidtox",cond:"Opioid Toxicity / Overdose",cat:"Toxicology",text:"Opioid toxicity considered. Classic opioid toxidrome assessed: no miosis, no respiratory depression, no altered mental status or loss of consciousness. Respiratory rate, oxygen saturation, and mental status within acceptable limits. No needle tracks or signs of IV drug use noted on examination. Naloxone administered/not indicated based on clinical presentation. UDS obtained. Poison control consulted as appropriate. Patient monitored continuously for clinical deterioration."},
-  {dot:"noheatstroke",cond:"Heat Stroke Rule-Out",cat:"Toxicology",text:"Heat stroke considered in this patient with hyperthermia and altered mental status after heat exposure. Classic vs exertional heat stroke differentiated. Core temperature obtained rectally. No core temperature >40°C (104°F). Neurological status assessed — no confusion, no ataxia, no loss of consciousness attributable to hyperthermia. Anhidrosis not present. Immediate cooling measures initiated/not required based on temperature. LFTs, CK, coagulation studies, and renal function obtained to assess for end-organ damage. Heat exhaustion without heat stroke criteria met. Aggressive cooling continued until core temperature <38.5°C."},
-  {dot:"nohypothermia",cond:"Hypothermia Management",cat:"Toxicology",text:"Hypothermia identified and severity classified: mild (32–35°C), moderate (28–32°C), severe (<28°C). Core temperature obtained. Cardiac monitoring initiated — Osborn (J) waves assessed on EKG, ventricular fibrillation risk highest below 30°C. Rewarming strategy initiated based on severity: passive external rewarming for mild, active external rewarming for moderate, active internal rewarming for severe. Wet clothing removed. Warm IV fluids administered. Underlying cause assessed including exposure, hypothyroidism, hypoglycemia, sepsis, and intoxication. ECMO considered for cardiac arrest with severe hypothermia. 'Not dead until warm and dead' principle applied."},
-
-  // HEMATOLOGY / ONCOLOGY
-  {dot:"noneutropenic",cond:"Neutropenic Fever",cat:"Hematology / Oncology",text:"Neutropenic fever identified in this oncology patient. ANC calculated and confirmed <500 cells/mcL or <1000 cells/mcL with expected decline. MASCC score calculated to stratify low versus high risk. Temperature >38.3°C single reading or >38.0°C sustained. Blood cultures obtained from all lumens of central venous catheter and peripheral site prior to antibiotic administration. CBC, CMP, LFTs, and urinalysis obtained. Chest radiograph reviewed. Broad-spectrum antipseudomonal antibiotics initiated within 60 minutes of presentation. Oncology notified. Antifungal coverage considered based on duration of neutropenia and clinical status. Isolation precautions initiated."},
-  {dot:"nosicklecell",cond:"Sickle Cell Crisis Documentation",cat:"Hematology / Oncology",text:"Sickle cell vaso-occlusive crisis evaluated. Pain crisis characterized and compared to patient's baseline. Infection, acute chest syndrome, splenic sequestration, and stroke assessed and excluded. CBC with differential and reticulocyte count obtained. Chest radiograph reviewed. Oxygen saturation monitored — supplemental oxygen for SpO2 <95%. IV access established and IV fluids initiated. Multimodal analgesia initiated per sickle cell pain protocol — IV opioids titrated to effect. Incentive spirometry ordered. Hydroxyurea compliance assessed. Hematology notified. Transfusion indications evaluated."},
-  {dot:"nohyperviscosity",cond:"Hyperviscosity Syndrome Rule-Out",cat:"Hematology / Oncology",text:"Hyperviscosity syndrome considered in this patient with known or suspected hematologic malignancy. Classic triad assessed: no mucosal bleeding, no visual disturbances, no neurological symptoms (headache, altered mental status, stroke-like symptoms). Fundoscopic examination performed — no retinal vein engorgement or hemorrhages. CBC reviewed for markedly elevated WBC or hematocrit. SPEP ordered to assess for paraproteinemia. Hematology/oncology notified urgently. Plasmapheresis or leukapheresis discussed as clinically indicated. Clinical presentation not consistent with hyperviscosity syndrome at this time."},
-  {dot:"notumourlysis",cond:"Tumor Lysis Syndrome Rule-Out",cat:"Hematology / Oncology",text:"Tumor lysis syndrome considered in this patient with hematologic malignancy or after chemotherapy initiation. Cairo-Bishop criteria assessed: no hyperuricemia (>8 mg/dL), no hyperkalemia (>6 mEq/L), no hyperphosphatemia (>4.5 mg/dL), no hypocalcemia (<7 mg/dL), no >25% change from baseline. Renal function assessed. EKG reviewed for hyperkalemia or hypocalcemia-related changes. Allopurinol or rasburicase initiated prophylactically/therapeutically per oncology protocol. Aggressive IV hydration initiated. Oncology notified. Continuous cardiac monitoring and serial labs initiated."},
-
-  // INFECTIOUS DISEASE
-  {dot:"nosepticjoint",cond:"Septic Arthritis Rule-Out",cat:"Infectious Disease",text:"Septic arthritis considered in this patient with acute monoarthritis. Joint aspiration performed/considered — synovial fluid sent for cell count with differential, crystal analysis, Gram stain, and culture. WBC and inflammatory markers obtained. No fever, no overlying skin erythema or warmth beyond what is expected, no restricted range of motion due to pain at rest. If crystal arthropathy (gout or pseudogout) identified on synovial fluid analysis, septic arthritis co-infection cannot be fully excluded and is managed accordingly. Orthopedics notified as appropriate."},
-  {dot:"noosteo",cond:"Osteomyelitis Rule-Out",cat:"Infectious Disease",text:"Osteomyelitis considered in this patient with bone pain, soft tissue infection, or non-healing wound. No focal bony tenderness, no overlying soft tissue infection with deep extension, no fever or systemic signs of infection. WBC, ESR, and CRP obtained. Plain radiographs reviewed without periosteal reaction, cortical irregularity, or lytic lesions — note that early osteomyelitis may be radiographically occult. MRI of affected area considered as the imaging modality of choice if clinical suspicion persists. Orthopedics and infectious disease consulted as clinically indicated."},
-  {dot:"noendocarditis",cond:"Endocarditis Risk Documentation",cat:"Infectious Disease",text:"Infective endocarditis considered given clinical presentation. Modified Duke Criteria assessed. No fever, no new or changing murmur, no vascular phenomena (emboli, Janeway lesions, conjunctival hemorrhage), no immunologic phenomena (Osler nodes, Roth spots, positive rheumatoid factor), no known valvular disease or prosthetic valve. Blood cultures obtained from two separate sites prior to antibiotic administration. Echocardiogram obtained/ordered as clinically indicated. Cardiology and infectious disease consulted. Clinical presentation does not meet major or minor Duke Criteria for definite or possible endocarditis at this time."},
-
-  // VASCULAR
-  {dot:"nolimbischemia",cond:"Acute Limb Ischemia Rule-Out",cat:"Vascular",text:"Acute limb ischemia considered. Six Ps assessed: no pain out of proportion, no pallor, no pulselessness, no paresthesias, no paralysis, no poikilothermia. Peripheral pulses palpated and symmetric bilaterally. Capillary refill brisk. No history of atrial fibrillation, hypercoagulable state, or peripheral vascular disease. ABI considered. Vascular surgery notified as appropriate. Clinical presentation not consistent with acute limb ischemia."},
-  {dot:"nodvt",cond:"DVT Rule-Out",cat:"Vascular",text:"Deep vein thrombosis considered. Wells DVT score calculated: total score ≤1 — low pre-test probability (DVT prevalence ~5%). No active malignancy, no paralysis or recent immobilization, no prolonged immobility or recent surgery, no localized tenderness along the deep venous system, no entire leg swelling, no unilateral calf swelling >3cm, no unilateral pitting edema, no collateral superficial veins; alternative diagnosis considered at least as likely. D-dimer obtained and within normal limits. In the context of low Wells DVT probability and a negative D-dimer, DVT is excluded per validated algorithm (Wells et al., NEJM 2003). Compression ultrasound of the lower extremity obtained/deferred based on clinical risk stratification. Clinical presentation not consistent with deep vein thrombosis."},
-  {dot:"nocompartment",cond:"Compartment Syndrome Rule-Out",cat:"Vascular",text:"Compartment syndrome considered given mechanism and clinical presentation. Pain out of proportion to injury assessed — pain level consistent with injury severity. No pain with passive stretch of muscles in affected compartment. Compartment feels soft and compressible without woody or tense induration. Distal pulses, capillary refill, and neurological function intact. No paresthesias or weakness in distribution of nerves traversing affected compartment. Compartment pressures measured if clinical suspicion persists. Orthopedic surgery notified. Clinical presentation not consistent with compartment syndrome at this time."},
-
-  // OPHTHALMOLOGY
-  {dot:"noretinaldetach",cond:"Retinal Detachment Rule-Out",cat:"Ophthalmology",text:"Retinal detachment considered in this patient with acute visual symptoms. No new floaters, no photopsia (flashes of light), no visual field defect or 'curtain' obscuring vision. Visual acuity assessed and at baseline. No afferent pupillary defect. Bedside ocular ultrasound performed without evidence of retinal detachment or vitreous hemorrhage. Ophthalmology consulted as appropriate. Clinical presentation not consistent with retinal detachment."},
-  {dot:"noorbitalcellulitis",cond:"Orbital vs Preseptal Cellulitis",cat:"Ophthalmology",text:"Orbital cellulitis distinguished from preseptal cellulitis. No proptosis, no restricted or painful extraocular movements, no diplopia, no vision change, no afferent pupillary defect, no chemosis. Infection appears anterior to the orbital septum. CT orbits with contrast obtained/considered to confirm absence of postseptal involvement, subperiosteal abscess, or intracranial extension. Ophthalmology and ENT notified. IV antibiotics initiated. Clinical presentation consistent with preseptal cellulitis without evidence of orbital involvement."},
-
-  // MSK / TRAUMA
-  {dot:"noscaphoid",cond:"Scaphoid Fracture Rule-Out",cat:"MSK / Trauma",text:"Scaphoid fracture considered in this patient with wrist pain after fall on outstretched hand. No anatomical snuffbox tenderness, no scaphoid tubercle tenderness, no pain with axial compression of thumb. Plain radiographs of the wrist reviewed without fracture — noting that initial radiographs may be negative in up to 20% of scaphoid fractures. Given the risk of avascular necrosis with missed fracture, patient counseled on this limitation. Thumb spica splint applied and outpatient MRI or repeat films in 10–14 days arranged if clinical suspicion persists."},
-  {dot:"nospinalcord",cond:"Spinal Cord Injury / SCIWORA Rule-Out",cat:"MSK / Trauma",text:"Spinal cord injury considered given mechanism. NEXUS and/or Canadian C-Spine Rule applied. Patient without midline cervical tenderness, no altered mental status, no focal neurological deficit, no distracting injury, no intoxication. Full motor and sensory examination performed — no deficits identified. CT cervical spine reviewed without fracture, malalignment, or ligamentous injury. SCIWORA considered in patients with neurological symptoms and normal imaging — MRI spine obtained/ordered if any neurological signs present. Spine precautions maintained until cleared."},
-  {dot:"nolisfranc",cond:"Lisfranc Injury Rule-Out",cat:"MSK / Trauma",text:"Lisfranc injury considered in this patient with midfoot pain. No tenderness at the tarsometatarsal joint complex. No plantar ecchymosis (pathognomonic finding). No pain with passive abduction/pronation stress of the forefoot. Weight-bearing radiographs obtained — no diastasis between first and second metatarsal bases, no fleck sign, no malalignment at tarsometatarsal joints. If clinical suspicion remains despite negative plain films, weight-bearing CT or MRI considered. Orthopedics notified as appropriate."},
-
-  // SOCIAL / LEGAL
-  {dot:"dvscreen",cond:"Domestic Violence Screening",cat:"Social / Legal",text:"Intimate partner violence screening performed in private setting without partner present. Validated screening tool administered. Patient denies current intimate partner violence, coercion, or abuse at this time. Safety assessment completed. Patient provided with information about local resources, hotlines, and safety planning regardless of disclosure. Social work consulted as appropriate. Mandatory reporting obligations assessed per state law. Documentation completed in manner that protects patient safety."},
-  {dot:"refusalimaging",cond:"Capacity to Refuse Imaging / Procedure",cat:"Social / Legal",text:"Patient declining recommended [imaging/procedure] despite medical advice. Decision-making capacity assessed and confirmed as documented separately. Patient informed of the indication for the recommended study, the risks of declining including missed or delayed diagnosis, potential for clinical deterioration, and risk of serious or life-threatening illness. Patient verbalized understanding of risks in their own words. Patient's right to refuse is respected. Risks of refusal thoroughly documented. Patient instructed to return immediately if symptoms worsen or change. Plan for follow-up arranged."},
-  {dot:"emtala",cond:"EMTALA Medical Screening Exam",cat:"Social / Legal",text:"EMTALA medical screening examination performed. Patient presented to the emergency department requesting evaluation. Medical screening examination completed by a qualified medical professional to determine whether an emergency medical condition exists. [Emergency medical condition identified / No emergency medical condition identified at this time.] Patient stabilized to the extent possible within the capabilities of this facility. Transfer considerations and obligations assessed if patient requires higher level of care beyond current facility capability. All EMTALA obligations fulfilled."},
-
-  // WOUND / DERM
-  {dot:"woundexplore",cond:"High-Risk Wound Exploration",cat:"Wound / Derm",text:"Wound explored under adequate lighting and anesthesia. Depth of wound assessed with visualization of wound base. Tendon integrity confirmed — no tendon laceration or partial injury identified; full range of motion against resistance tested distal to wound without pain or weakness. Neurovascular status distal to wound intact — two-point discrimination, capillary refill, and distal pulses assessed. No foreign body identified on exploration or imaging as clinically indicated. No joint capsule violation — joint space not entered. Wound irrigated with copious normal saline under pressure. Closure performed / wound managed with delayed primary closure / wound left open as clinically indicated."},
-  {dot:"abscessid",cond:"Abscess I&D Documentation",cat:"Wound / Derm",text:"Abscess incision and drainage performed. Informed consent obtained. Area prepped and draped in sterile fashion. Local anesthesia achieved with [agent, concentration, volume]. Incision made over point of maximal fluctuance — length and depth documented. Purulent material expressed and sent for culture and sensitivity. Cavity explored with blunt dissection to break up loculations. Wound irrigated with normal saline. Packing placed / wound left open as clinically indicated. Post-procedure neurovascular status intact. Wound care instructions provided. Return in 48 hours for wound check. Antibiotics prescribed/not prescribed based on clinical criteria including size, extent of surrounding cellulitis, systemic signs, and patient immune status."},
-  {dot:"nonecksofttissue",cond:"Soft Tissue Infection — Severity Assessment",cat:"Wound / Derm",text:"Soft tissue infection evaluated and severity classified. Cellulitis versus abscess versus necrotizing fasciitis differentiated on clinical examination. LRINEC score calculated. Wound borders marked to monitor progression. Systemic signs assessed — temperature, heart rate, WBC, CRP reviewed. No crepitus, no skin necrosis, no pain out of proportion to examination, no wooden induration suggesting deep fascial involvement. Imaging obtained as clinically indicated. IV versus oral antibiotic therapy determined based on severity, extent, location, and patient immune status. Admission criteria assessed. Surgery notified if any concern for deep tissue involvement."},
-
-  // PROCEDURES
-  {dot:"procthoracentesis",cond:"Thoracentesis Documentation",cat:"Procedures",text:"Thoracentesis performed for [diagnostic / therapeutic] indication. Informed consent obtained. Time-out performed. Pleural effusion confirmed on bedside ultrasound — location, size, and echogenicity characterized. Patient positioned sitting upright leaning forward. Ultrasound-guided technique used to mark insertion site. Area prepped and draped in sterile fashion. Local anesthesia achieved. Needle inserted above the rib to avoid neurovascular bundle. [Volume] of [serous/serosanguineous/exudative] fluid removed without difficulty. Pleural fluid sent for cell count, LDH, protein, glucose, pH, culture, and cytology as clinically indicated. Light's criteria applied. Post-procedure chest radiograph obtained to assess for pneumothorax. Patient tolerated procedure well without immediate complications."},
-  {dot:"procparacentesis",cond:"Paracentesis Documentation",cat:"Procedures",text:"Paracentesis performed for [diagnostic / therapeutic] indication. Informed consent obtained. Time-out performed. Ascites confirmed and characterized on bedside ultrasound. Optimal insertion site identified under ultrasound guidance — left lower quadrant approach used. Coagulation status reviewed — procedure performed with INR [value]. Area prepped and draped in sterile fashion. Local anesthesia achieved. [Volume] of [serous/turbid] peritoneal fluid drained without complication. Fluid sent for cell count with differential, albumin, total protein, culture, and cytology as clinically indicated. SAAG calculated. Albumin infusion administered for large-volume paracentesis (>5L) per SBP prophylaxis and circulatory dysfunction prevention protocol. Patient tolerated procedure without immediate complications."},
-  {dot:"proccardioversion",cond:"Cardioversion Documentation",cat:"Procedures",text:"Electrical cardioversion performed. Indication: [AFib/flutter/SVT/VT] with [hemodynamic instability / rhythm control strategy]. Informed consent obtained / emergent procedure performed without consent due to hemodynamic instability. Time-out performed. IV access confirmed. Procedural sedation administered — agent, dose, and time documented. Continuous cardiac monitoring, pulse oximetry, and capnography in place. Synchronized cardioversion performed — energy level [J], number of attempts documented. Post-cardioversion rhythm assessed — [sinus rhythm / rhythm unchanged]. Hemodynamic status post-procedure stable. Anticoagulation status confirmed prior to elective cardioversion — [patient anticoagulated ≥3 weeks / TEE performed without thrombus / duration of AFib <48 hours]."},
-  {dot:"procpericardiocentesis",cond:"Pericardiocentesis Documentation",cat:"Procedures",text:"Pericardiocentesis performed for cardiac tamponade. Emergent procedure indicated by hemodynamic compromise — hypotension, JVD, and muffled heart sounds / echocardiographic evidence of tamponade physiology with right heart collapse. Bedside ultrasound performed confirming pericardial effusion and tamponade physiology. Subxiphoid approach used under ultrasound guidance. Area prepped and draped in sterile fashion. Needle advanced toward left shoulder with continuous aspiration and ECG monitoring. [Volume] of [serous/hemorrhagic] pericardial fluid aspirated — immediate hemodynamic improvement documented. Repeat ultrasound confirming decompression. Specimen sent for cell count, culture, cytology, and LDH. Cardiothoracic surgery notified. Post-procedure hemodynamics documented."},
-
-  // OTHER
-  {dot:"nosepsis",cond:"Sepsis Screening",cat:"Other",text:"Sepsis screening performed. Patient meets/does not meet SIRS criteria. qSOFA score calculated. Infectious source evaluated. Lactate obtained. Blood cultures drawn prior to antibiotic administration. IV access established, IV fluids initiated as appropriate. Antibiotics administered within 1 hour of sepsis recognition per Surviving Sepsis Campaign guidelines. Source control measures initiated. Patient reassessed at regular intervals with documentation of response to resuscitation."},
-  {dot:"notorsion",cond:"Testicular Torsion Rule-Out",cat:"Other",text:"Testicular torsion considered given acute onset scrotal pain. TWIST score calculated. Testicle lies in normal transverse/longitudinal axis. No high-riding testicle. Cremasteric reflex present bilaterally. Scrotal Doppler ultrasound obtained demonstrating normal blood flow bilaterally. Urology notified. Patient counseled on return precautions given time-sensitive nature of this diagnosis."},
-  {dot:"nosea",cond:"Spinal Epidural Abscess Rule-Out",cat:"Other",text:"Spinal epidural abscess considered in this patient with back pain. Patient without classic triad of fever, spinal tenderness, and neurological deficit. No IV drug use, no recent spinal procedure, no immunocompromised state, no bacteremia. Neurological examination intact with no motor deficit, no bowel or bladder dysfunction, no saddle anesthesia. MRI spine with and without contrast obtained/ordered as clinically indicated. Neurosurgery notified."},
-  {dot:"nonecfasc",cond:"Necrotizing Fasciitis Rule-Out",cat:"Other",text:"Necrotizing fasciitis considered given soft tissue infection. LRINEC score calculated. No crepitus palpated, no skin necrosis, no wooden-hard induration beyond the area of erythema, no pain out of proportion to examination. No subcutaneous gas on imaging. WBC, CRP, sodium, creatinine, glucose reviewed. Patient without septic physiology. Wound re-examined after IV antibiotics. Surgery consulted for operative evaluation as clinically indicated."},
-  {dot:"noco",cond:"Carbon Monoxide Poisoning Rule-Out",cat:"Other",text:"Carbon monoxide poisoning considered given clinical presentation. History reviewed for CO exposure risk: no gas appliances, no enclosed space, no house fire, no generator or vehicle exhaust exposure. Multiple household members without similar symptoms. Carboxyhemoglobin level obtained and within normal limits. Pulse oximetry unreliable for CO — co-oximetry used. Clinical presentation not consistent with CO toxicity."},
-
-  // CONSENT DOCUMENTATION
-  {dot:"consentlp",cond:"Consent — Lumbar Puncture",cat:"Consent",text:"Informed consent obtained from patient / patient's legally authorized representative for lumbar puncture. The indication, nature of the procedure, and clinical necessity were explained in terms the patient could understand. Risks discussed include: headache (post-dural puncture headache, ~10–30%), local pain or discomfort at needle site, bleeding or hematoma, infection (meningitis, discitis — rare), transient nerve irritation or radiculopathy, and rare risk of spinal cord injury or epidural hematoma (risk significantly elevated if coagulopathy present — INR and platelet count reviewed). Potential benefits discussed: diagnosis of meningitis, subarachnoid hemorrhage, CNS malignancy, demyelinating disease, or other CSF pathology requiring urgent diagnosis and treatment. Alternatives discussed: CT head alone (insufficient to exclude SAH in the appropriate time window), empiric treatment without CSF analysis (acceptable only in select circumstances). Patient verbalized understanding, had opportunity to ask questions, and consented to proceed. No coagulopathy or contraindications identified. Patient positioned and procedure performed."},
-  {dot:"consentcl",cond:"Consent — Central Line (CVC)",cat:"Consent",text:"Informed consent obtained from patient / patient's legally authorized representative for central venous catheter placement. Indication reviewed: [vasopressor administration / CVP monitoring / emergent access / long-term IV access / hemodialysis]. Procedure, site selection (internal jugular / subclavian / femoral), and ultrasound-guided technique explained. Risks discussed include: arterial puncture (~1–5%), pneumothorax (highest with subclavian approach, ~1–2%), hemothorax, air embolism, catheter malposition, local hematoma, thrombosis, and infection including catheter-related bloodstream infection (CRBSI). Benefits discussed: reliable vascular access, hemodynamic monitoring, administration of medications not tolerated peripherally. Alternatives discussed: peripheral IV, intraosseous access (IO), or peripherally inserted central catheter (PICC) where clinically appropriate. Patient verbalized understanding and consented. Time-out performed prior to procedure. Sterile technique and maximal barrier precautions utilized."},
-  {dot:"consentintubation",cond:"Consent — Endotracheal Intubation / RSI",cat:"Consent",text:"Informed consent obtained from patient / patient's legally authorized representative for endotracheal intubation and mechanical ventilation. Clinical indication explained: [respiratory failure / airway protection / hypoxia / altered mental status / impending respiratory arrest]. Nature of procedure explained including administration of sedative and paralytic agents (RSI), direct or video laryngoscopy, and post-intubation mechanical ventilation. Risks discussed include: dental or oropharyngeal trauma, esophageal intubation, hypoxia during procedure, aspiration, laryngospasm, hemodynamic instability from induction agents, and need for surgical airway (cricothyrotomy) if intubation fails. Post-intubation complications discussed including ventilator-associated pneumonia, subglottic injury, and ventilator-induced lung injury. Benefits discussed: securing the airway, preventing aspiration, ensuring adequate oxygenation and ventilation. Alternatives discussed: non-invasive ventilation (BiPAP/HFNC) where clinically appropriate. Patient / representative verbalized understanding and consented. [Emergent procedure performed without consent due to: altered mental status / respiratory arrest / inability to protect airway — delay to obtain consent would have resulted in imminent patient harm.] Time-out and pre-oxygenation performed prior to RSI."},
-  {dot:"consentprocsedation",cond:"Consent — Procedural Sedation",cat:"Consent",text:"Informed consent obtained from patient / patient's legally authorized representative for procedural sedation and analgesia. Indication: [fracture reduction / cardioversion / laceration repair / joint dislocation / I&D]. Nature of procedure explained: administration of sedative and/or analgesic agents (ketamine / propofol / midazolam / fentanyl) to achieve a reduced level of consciousness allowing the procedure to be performed with minimal discomfort. Risks discussed include: respiratory depression (including apnea requiring bag-mask ventilation), hypoxia, laryngospasm, aspiration (increased risk if not NPO), hemodynamic instability, emergence reaction (ketamine), nausea/vomiting, and allergic reaction. Post-procedure monitoring discussed including recovery period before discharge. Benefits: patient comfort and cooperation, procedural success. Alternatives: local anesthesia alone, regional nerve block, or general anesthesia in the operating room. Patient verbalized understanding. Pre-sedation assessment performed: NPO status reviewed, ASA classification documented, airway assessment performed, IV access confirmed, monitoring (continuous SpO2, capnography, cardiac monitor, BP) in place, resuscitation equipment and reversal agents at bedside."},
-  {dot:"consentchesttube",cond:"Consent — Chest Tube / Tube Thoracostomy",cat:"Consent",text:"Informed consent obtained from patient / patient's legally authorized representative for tube thoracostomy (chest tube placement). Indication: [pneumothorax / hemothorax / empyema / large pleural effusion]. Nature of procedure explained: placement of a drain into the pleural space under local anesthesia using a blunt dissection technique, with ultrasound guidance as applicable. Risks discussed include: pain at insertion site, bleeding or hematoma, infection (empyema, wound infection), injury to intercostal vessels or nerves, malposition (lung parenchyma, abdomen, fissure), subcutaneous emphysema, re-expansion pulmonary edema (large effusions), lung laceration, and diaphragmatic injury. Benefits: evacuation of air, blood, or fluid from the pleural space, lung re-expansion, hemodynamic improvement. Alternatives: observation for small pneumothorax, needle decompression (temporizing only), pigtail catheter placement. Patient verbalized understanding and consented. [Emergent procedure performed without consent due to hemodynamic instability / tension physiology — immediate intervention required.] Time-out performed, site confirmed, sterile technique used."},
-  {dot:"consentthoracentesis",cond:"Consent — Thoracentesis",cat:"Consent",text:"Informed consent obtained from patient / patient's legally authorized representative for thoracentesis. Indication: [diagnostic / therapeutic] evaluation of pleural effusion. Nature of procedure explained: ultrasound-guided needle aspiration of pleural fluid. Risks discussed include: pneumothorax (~1–6%), pain at insertion site, local hematoma or bleeding, intercostal vessel laceration (avoided by inserting above the rib), infection, re-expansion pulmonary edema (large-volume drainage), and vasovagal reaction. Benefits: diagnostic clarity (cell count, culture, cytology, LDH, protein for Light's criteria), symptomatic relief for large effusions. Alternatives: CT-guided thoracentesis by IR, empiric treatment without sampling where appropriate, observation for small asymptomatic effusions. Patient verbalized understanding and consented. Ultrasound performed confirming effusion size and safe window. Coagulation status reviewed prior to procedure."},
-  {dot:"consentparacentesis",cond:"Consent — Paracentesis",cat:"Consent",text:"Informed consent obtained from patient / patient's legally authorized representative for diagnostic and/or therapeutic paracentesis. Indication: [new-onset ascites / suspected SBP / tense ascites causing respiratory compromise / refractory ascites]. Nature of procedure explained: ultrasound-guided needle aspiration of peritoneal fluid, typically via the left lower quadrant. Risks discussed include: abdominal wall hematoma, persistent ascitic leak, bowel perforation (rare with ultrasound guidance), infection, and in large-volume paracentesis, post-paracentesis circulatory dysfunction (mitigated with albumin infusion). Benefits: diagnosis of spontaneous bacterial peritonitis (SBP), symptomatic relief in tense ascites, fluid analysis for cytology and culture. Alternatives: empiric antibiotics for suspected SBP without sampling (inferior — suboptimal management of resistant organisms), diuretic management for non-tense ascites. Coagulation status reviewed — INR [value], platelets [value]. Ascites confirmed on bedside ultrasound. Patient verbalized understanding and consented."},
-  {dot:"consentcard",cond:"Consent — Cardioversion (Elective)",cat:"Consent",text:"Informed consent obtained from patient / patient's legally authorized representative for elective synchronized direct current cardioversion (DCCV). Indication: [atrial fibrillation / atrial flutter / SVT / ventricular tachycardia with preserved hemodynamics] with rhythm control strategy. Nature of procedure explained: delivery of synchronized electrical shock under procedural sedation to restore sinus rhythm. Risks discussed include: thromboembolism/stroke (risk mitigated by anticoagulation status — patient anticoagulated ≥3 weeks / duration of arrhythmia <48 hours / TEE without thrombus), skin burns at pad sites, post-cardioversion arrhythmias including bradycardia or ventricular arrhythmia (rare), failure to convert, immediate recurrence of arrhythmia, and risks of procedural sedation (respiratory depression, aspiration, hypotension). Benefits: restoration of sinus rhythm, hemodynamic improvement, symptom relief. Alternatives: rate control alone, pharmacologic cardioversion (amiodarone, ibutilide, flecainide — with appropriate eligibility), observation. CHA2DS2-VASc score: [value]. Anticoagulation status confirmed. NPO status reviewed. Patient verbalized understanding and consented."},
-  {dot:"consentpacing",cond:"Consent — Transcutaneous Pacing",cat:"Consent",text:"Informed consent obtained from patient / patient's legally authorized representative for transcutaneous cardiac pacing. Indication: symptomatic bradycardia / high-degree heart block with hemodynamic compromise unresponsive to atropine. [Emergent procedure performed without consent due to hemodynamic instability / altered mental status — delay would have resulted in imminent patient harm.] Nature of procedure explained: delivery of electrical impulses through external pacing pads applied to the chest wall to stimulate cardiac contraction. Risks discussed include: significant pain and discomfort requiring analgesia and sedation, skin burns at pad sites, failure to capture, pacemaker-mediated tachycardia (rare), and the possibility of escalation to transvenous pacing if transcutaneous pacing fails. Benefits: rapid restoration of adequate heart rate and cardiac output in potentially fatal bradyarrhythmia. Alternatives: atropine (already administered / not indicated for high-degree block), transvenous pacing (arranged — cardiology notified), dopamine or epinephrine infusion as bridge. Patient / representative verbalized understanding. Analgesia and sedation administered to minimize discomfort. Capture confirmed on monitor with correlating pulse."},
-  {dot:"consentpericardio",cond:"Consent — Pericardiocentesis",cat:"Consent",text:"Informed consent obtained from patient / patient's legally authorized representative for pericardiocentesis. [Emergent procedure performed without consent due to hemodynamic instability consistent with cardiac tamponade — immediate drainage required to prevent cardiac arrest.] Indication: cardiac tamponade with hemodynamic compromise confirmed on bedside echocardiogram (pericardial effusion with right heart collapse and respiratory variation in flow velocities). Nature of procedure explained: ultrasound-guided needle aspiration of pericardial fluid via subxiphoid approach with continuous ECG monitoring. Risks discussed include: coronary artery laceration, right ventricular perforation, arrhythmia, pneumothorax, infection, incomplete drainage, and re-accumulation requiring surgical pericardial window. Benefits: immediate hemodynamic stabilization by relieving tamponade physiology. Alternatives: emergent surgical pericardial window (if percutaneous approach fails), thoracotomy in extremis. Cardiothoracic surgery notified. Bedside echo confirmed effusion and approach site. Patient / representative verbalized understanding."},
-  {dot:"consentlaceration",cond:"Consent — Laceration Repair",cat:"Consent",text:"Informed consent obtained from patient for laceration repair. Nature of procedure explained: wound irrigation, exploration, and closure using [sutures / staples / tissue adhesive / steri-strips]. Wound characteristics documented: location, length (cm), depth, contamination, time since injury, mechanism. Risks discussed include: infection (cellulitis, abscess formation — especially with contaminated or bite wounds), bleeding, scarring (including hypertrophic or keloid scar), wound dehiscence, incomplete healing, suture reaction, and need for return visit for suture/staple removal. Neurovascular status assessed: sensation intact, motor intact, capillary refill brisk distal to wound. Tendon function tested and intact. No retained foreign body identified — wound explored under direct visualization and/or imaging obtained as indicated. Benefits: cosmetic and functional closure, reduced infection risk with properly irrigated and closed wound. Wound irrigated with normal saline under pressure. Local anesthesia achieved with [lidocaine / bupivacaine]. Patient tolerated procedure without complication. Tetanus status reviewed and updated as indicated. Return precautions for signs of infection provided."},
-  {dot:"consentidabscess",cond:"Consent — Incision & Drainage (I&D)",cat:"Consent",text:"Informed consent obtained from patient for incision and drainage of abscess. Location and extent of abscess reviewed with patient. Nature of procedure explained: administration of local anesthesia, incision over the point of maximum fluctuance, drainage of purulent contents, cavity exploration to break up loculations, irrigation, and packing placement. Risks discussed include: incomplete drainage requiring repeat procedure or operative I&D, local hematoma, injury to adjacent structures (nerves, vessels — particularly with perianal or facial abscesses), scarring, wound infection or recurrence, cellulitis progression, and rare risk of bacteremia or sepsis. Benefits: source control, pain relief, and resolution of infection. The limitations of local anesthesia for deep or complex abscesses discussed — procedural sedation offered/not required. Methicillin-resistant Staphylococcus aureus (MRSA) as a common causative organism discussed. Antibiotic therapy discussed: TMP-SMX / clindamycin initiated / not required for uncomplicated abscess in immunocompetent patient per IDSA guidelines. Wound culture sent. Patient tolerated procedure without complication. Return precautions provided."},
-  {dot:"consentfracturereduction",cond:"Consent — Fracture / Dislocation Reduction",cat:"Consent",text:"Informed consent obtained from patient / patient's legally authorized representative for closed fracture or joint dislocation reduction. Injury: [fracture site / joint — e.g., distal radius, Colles, shoulder dislocation, hip dislocation, Monteggia, ankle]. Radiographic imaging reviewed. Neurovascular status assessed prior to reduction: sensation, motor, and distal pulses documented. Nature of procedure explained: manipulation under analgesia and/or procedural sedation to restore normal anatomic alignment. Risks discussed include: failure to reduce (requiring operative management), neurovascular injury during reduction, soft tissue injury, conversion of closed to open fracture (rare), post-reduction arterial injury (especially hip dislocation — avascular necrosis risk increases with delay), and risks of procedural sedation. Benefits: restoration of alignment, neurovascular decompression (particularly for fractures with neurovascular compromise), improved healing, pain relief, and reduction of operative risk if alignment is achieved. Pre-reduction neurovascular exam documented. Post-reduction neurovascular exam documented. Post-reduction radiograph obtained confirming acceptable alignment. Orthopedic surgery notified as clinically indicated. Immobilization applied — splint / sling. Patient instructed on non-weight-bearing status and orthopedic follow-up."}
+const GROUP_PRIORITY = [
+  'Dotphrases','Calculators','Algorithms','Neuro Hub','Drugs',
+  'OMC','FMC','External',
+  'OMC Imaging Orders','FMC Imaging Orders',
+  'OMC Key Staff','FMC Key Staff',
+  'Reference'
 ];
 
-const cats = ["All", ...Array.from(new Set(phrases.map(p => p.cat)))];
-let activeCategory = "All";
-
-const tabsEl = document.getElementById("tabs");
-cats.forEach(cat => {
-  const btn = document.createElement("button");
-  btn.className = "tab" + (cat === "All" ? " active" : "");
-  btn.textContent = cat;
-  btn.onclick = () => {
-    activeCategory = cat;
-    document.querySelectorAll(".tab").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    render();
-  };
-  tabsEl.appendChild(btn);
-});
-
-function getFiltered() {
-  const q = document.getElementById("search").value.toLowerCase();
-  return phrases.filter(p => {
-    const matchSearch = !q || p.dot.includes(q) || p.cond.toLowerCase().includes(q)
-      || p.cat.toLowerCase().includes(q) || p.text.toLowerCase().includes(q);
-    const matchCat = activeCategory === "All" || p.cat === activeCategory;
-    return matchSearch && matchCat;
-  });
+function matchesActiveFilter(item) {
+  if (activeFilter === 'all') return true;
+  if (activeFilter === 'phone') return ['phone', 'imaging', 'staff'].includes(item.type);
+  return item.type === activeFilter;
 }
 
-function render() {
-  const filtered = getFiltered();
-  const mainEl = document.getElementById("main");
-  const countEl = document.getElementById("count");
-  countEl.textContent = `${filtered.length} dotphrase${filtered.length !== 1 ? "s" : ""} ${activeCategory !== "All" ? "in " + activeCategory : "total"}`;
-  if (filtered.length === 0) {
-    mainEl.innerHTML = '<p class="empty">No dotphrases found. Try a different search.</p>';
+function getResultGroup(item) {
+  if (item.type === 'phrase') return 'Dotphrases';
+  if (item.type === 'calc') return 'Calculators';
+  if (item.type === 'drug') return 'Drugs';
+  if (item.type === 'phone') return item.g || 'Phone Directory';
+  if (item.type === 'imaging') return item.g || 'Imaging Orders';
+  if (item.type === 'staff') return item.g || 'Key Staff';
+  if (item.type === 'algo') return 'Algorithms';
+  if (item.type === 'neuro') return 'Neuro Hub';
+  if (item.type === 'page') return item.g || 'Reference';
+  return item.g || 'Other';
+}
+
+function getOrderedGroups(groups) {
+  const names = Object.keys(groups);
+  const rest = names.filter(n => !GROUP_PRIORITY.includes(n)).sort((a,b) => a.localeCompare(b));
+  return GROUP_PRIORITY.filter(n => groups[n]).concat(rest);
+}
+
+function escapeHtml(value) {
+  return String(value ?? '').replace(/[&<>"']/g, ch => (
+    ch === '&' ? '&amp;' :
+    ch === '<' ? '&lt;' :
+    ch === '>' ? '&gt;' :
+    ch === '"' ? '&quot;' : '&#39;'
+  ));
+}
+
+function safeHref(href) {
+  const trimmed = String(href || '').trim();
+  return /^[A-Za-z0-9._/-]+\.html(?:#[A-Za-z0-9._:-]+)?$/.test(trimmed) ? trimmed : 'index.html';
+}
+
+function setSearchExpanded(open) {
+  const input = document.getElementById('si');
+  input.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+
+function clearSearchActiveDescendant() {
+  document.getElementById('si').removeAttribute('aria-activedescendant');
+}
+
+function setSearchActiveDescendant(rows) {
+  const input = document.getElementById('si');
+  if (hiIdx >= 0 && rows[hiIdx] && rows[hiIdx].id) input.setAttribute('aria-activedescendant', rows[hiIdx].id);
+  else clearSearchActiveDescendant();
+}
+
+function updateHomeStats() {
+  const idx = getIDX();
+  const counts = idx.reduce((acc, item) => {
+    acc[item.type] = (acc[item.type] || 0) + 1;
+    return acc;
+  }, {});
+  const phrases = counts.phrase || 0;
+  const calcs = counts.calc || 0;
+  const algos = counts.algo || 0;
+  const contacts = (counts.phone || 0) + (counts.imaging || 0) + (counts.staff || 0);
+
+  const setStat = (id, value) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = String(value);
+  };
+  setStat('stat-phrases', phrases);
+  setStat('stat-calcs', calcs);
+  setStat('stat-algos', algos);
+  setStat('stat-contacts', contacts);
+}
+
+function setFilter(f, el) {
+  activeFilter = f;
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
+  el.classList.add('on');
+  const q = document.getElementById('si').value;
+  if (q.trim()) doSearch(q);
+}
+
+function doSearch(q) {
+  const dd = document.getElementById('sd');
+  q = q.trim();
+  if (!q) {
+    dd.classList.remove('open');
+    hiIdx = -1;
+    setSearchExpanded(false);
+    clearSearchActiveDescendant();
     return;
   }
-  mainEl.innerHTML = filtered.map((p, i) => `
-    <div class="card">
-      <div class="card-header">
-        <div class="card-meta">
-          <span class="dotphrase">.${p.dot}</span>
-          <span class="condition">${p.cond}</span>
-          <span class="category-tag">${p.cat}</span>
+  const lo = q.toLowerCase();
+
+  let results = getIDX().filter(item => {
+    if (!matchesActiveFilter(item)) return false;
+    return (
+      item.t.toLowerCase().includes(lo) ||
+      item.s.toLowerCase().includes(lo) ||
+      item.g.toLowerCase().includes(lo)
+    );
+  });
+
+  // Boost title-starts-with matches
+  results.sort((a, b) => {
+    const at = a.t.toLowerCase().startsWith(lo) ? 0 : 1;
+    const bt = b.t.toLowerCase().startsWith(lo) ? 0 : 1;
+    return at - bt;
+  });
+
+  const total = results.length;
+  results = results.slice(0, 22);
+  hiIdx = -1;
+
+  if (!results.length) {
+    dd.innerHTML = '<div class="sdrop-empty" role="status" aria-live="polite">No results — try different keywords or clear the filter</div>';
+    dd.classList.add('open');
+    setSearchExpanded(true);
+    clearSearchActiveDescendant();
+    return;
+  }
+
+  const groups = {};
+  results.forEach(r => {
+    const g = getResultGroup(r);
+    if (!groups[g]) groups[g] = [];
+    groups[g].push(r);
+  });
+
+  let html = '';
+  let rowIdx = 0;
+  getOrderedGroups(groups).forEach(grp => {
+    if (!groups[grp]) return;
+    html += `<div class="sdrop-group">${escapeHtml(grp)}</div>`;
+    groups[grp].forEach(item => {
+      const rowId = `srow-${rowIdx++}`;
+      html += `<a class="sdrop-row" id="${rowId}" role="option" aria-selected="false" href="${safeHref(item.u)}">
+        <span class="sdrop-ico">${escapeHtml(item.i)}</span>
+        <div class="sdrop-body">
+          <div class="sdrop-title">${escapeHtml(item.t)}</div>
+          <div class="sdrop-sub">${escapeHtml(item.s)}</div>
         </div>
-        <button class="copy-btn" id="btn-${i}" onclick="copyText(${i})">Copy</button>
-      </div>
-      <p class="card-body">${p.text}</p>
-    </div>
-  `).join("");
+        <span class="sdrop-tag ${escapeHtml(item.gc)}">${escapeHtml(item.g)}</span>
+      </a>`;
+    });
+  });
+  if (total > 22) {
+    html += `<div class="sdrop-footer">Showing 22 of ${total} results — refine your search</div>`;
+  }
+  dd.innerHTML = html;
+  dd.classList.add('open');
+  setSearchExpanded(true);
+  clearSearchActiveDescendant();
 }
 
-function copyText(i) {
-  const filtered = getFiltered();
-  const text = filtered[i] ? filtered[i].text : "";
-  const btn = document.getElementById("btn-" + i);
-  if (!text || !btn) return;
-
-  const fallbackCopy = () => {
-    const ta = document.createElement("textarea");
-    ta.value = text;
-    ta.setAttribute("readonly", "");
-    ta.style.position = "fixed";
-    ta.style.top = "-9999px";
-    ta.style.left = "-9999px";
-    document.body.appendChild(ta);
-    ta.focus();
-    ta.select();
-    let ok = false;
-    try {
-      ok = document.execCommand("copy");
-    } catch (e) {
-      ok = false;
-    }
-    document.body.removeChild(ta);
-    return ok;
-  };
-
-  const onSuccess = () => {
-    btn.textContent = "✓ Copied!";
-    btn.classList.add("copied");
-    setTimeout(() => { btn.textContent = "Copy"; btn.classList.remove("copied"); }, 2000);
-  };
-
-  const onFailure = () => {
-    btn.textContent = "Copy failed";
-    btn.classList.remove("copied");
-    setTimeout(() => { btn.textContent = "Copy"; }, 2000);
-  };
-
-  if (navigator.clipboard && window.isSecureContext) {
-    navigator.clipboard.writeText(text).then(onSuccess).catch(() => {
-      if (fallbackCopy()) onSuccess();
-      else onFailure();
+function searchKey(e) {
+  const dd = document.getElementById('sd');
+  const rows = Array.from(dd.querySelectorAll('.sdrop-row'));
+  if (e.key === 'ArrowDown') {
+    hiIdx = Math.min(hiIdx + 1, rows.length - 1);
+    rows.forEach((el, i) => {
+      const active = i === hiIdx;
+      el.classList.toggle('hi', active);
+      el.setAttribute('aria-selected', active ? 'true' : 'false');
     });
-  } else if (fallbackCopy()) {
-    onSuccess();
-  } else {
-    onFailure();
+    setSearchActiveDescendant(rows);
+    if (rows[hiIdx]) rows[hiIdx].scrollIntoView({block:'nearest'});
+    e.preventDefault();
+  } else if (e.key === 'ArrowUp') {
+    hiIdx = Math.max(hiIdx - 1, 0);
+    rows.forEach((el, i) => {
+      const active = i === hiIdx;
+      el.classList.toggle('hi', active);
+      el.setAttribute('aria-selected', active ? 'true' : 'false');
+    });
+    setSearchActiveDescendant(rows);
+    e.preventDefault();
+  } else if (e.key === 'Enter' && hiIdx >= 0 && rows[hiIdx]) {
+    rows[hiIdx].click();
+  } else if (e.key === 'Escape') {
+    dd.classList.remove('open');
+    setSearchExpanded(false);
+    clearSearchActiveDescendant();
+    document.getElementById('si').blur();
   }
 }
 
-render();
-</script>
+// ⌘K / Ctrl+K
+document.addEventListener('keydown', e => {
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+    e.preventDefault();
+    const inp = document.getElementById('si');
+    inp.focus(); inp.select();
+  }
+});
 
-<script id="shared-nav-search">
-</script>
+// click outside
+document.addEventListener('click', e => {
+  if (!e.target.closest('.search-wrap')) {
+    document.getElementById('sd').classList.remove('open');
+    setSearchExpanded(false);
+    clearSearchActiveDescendant();
+  }
+});
 
+document.getElementById('si').addEventListener('focus', () => {
+  const q = document.getElementById('si').value.trim();
+  if (q) doSearch(q);
+});
+
+updateHomeStats();
+window.addEventListener('storage', e => {
+  const key = window.KP_ER_SEARCH && window.KP_ER_SEARCH.phoneIndexStorageKey;
+  if (!key || e.key === key) updateHomeStats();
+});
+</script>
 </body>
 </html>

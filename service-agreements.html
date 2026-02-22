@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Service Agreements Library - KP SBC ER</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=DM+Sans:wght@400;500;600;700;800&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080f1a;--surface:#0d1829;--surface2:#111f35;--surface3:#162540;
+  --border:#1a2d48;--border2:#243d5c;
+  --text:#e8f0fc;--text2:#8fa8c8;--text3:#4a6280;
+  --blue:#3b82f6;--blue2:#1d4ed8;--blue3:#0d2038;
+  --green:#22c55e;--amber:#f59e0b;--purple:#a78bfa;
+  --mono:'JetBrains Mono',monospace;--sans:'DM Sans',system-ui,sans-serif;
+}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh}
+.sitenav{background:#0d1829;border-bottom:1px solid #1a2d48;position:sticky;top:0;z-index:100;font-family:'DM Sans',system-ui,sans-serif}
+.sitenav-inner{max-width:1280px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:6px;height:46px}
+.nav-logo{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:#3b82f6;white-space:nowrap;flex-shrink:0;text-decoration:none;margin-right:6px}
+.nav-logo span{color:#4a6280}
+.nav-links{display:flex;gap:1px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-link{padding:5px 10px;border-radius:6px;font-size:12px;font-weight:600;color:#8fa8c8;text-decoration:none;white-space:nowrap;transition:all .15s}
+.nav-link:hover{background:#111f35;color:#e8f0fc}
+.nav-link.active{background:#1d4ed8;color:#fff}
+@media(max-width:640px){.nav-link{font-size:11px;padding:4px 8px}}
+
+header{background:linear-gradient(160deg,#0f1e38 0%,#080f1a 100%);border-bottom:1px solid var(--border);padding:22px 20px}
+.header-inner{max-width:1280px;margin:0 auto}
+.kicker{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.9px;font-weight:700}
+h1{font-size:28px;line-height:1.15;margin-top:6px}
+.subtitle{font-size:13px;color:var(--text2);margin-top:8px}
+.banner{margin-top:14px;background:#2d1f0d;border:1px solid #a16207;color:#fcd34d;padding:10px 12px;border-radius:10px;font-size:13px;font-weight:600}
+
+main{max-width:1280px;margin:0 auto;padding:20px}
+.controls{display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-bottom:14px}
+.search-wrap{position:relative}
+.search-input{width:100%;padding:14px 14px 14px 44px;border-radius:12px;border:1px solid var(--border2);background:var(--surface);color:var(--text);font-size:15px;outline:none}
+.search-input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(59,130,246,.2)}
+.search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:16px;color:var(--text3)}
+.right-controls{display:flex;gap:10px;align-items:center;justify-content:flex-end;flex-wrap:wrap}
+.select{padding:10px 12px;background:var(--surface);border:1px solid var(--border2);border-radius:10px;color:var(--text);font-size:13px}
+.toggle{display:flex;align-items:center;gap:6px;color:var(--text2);font-size:13px;white-space:nowrap}
+
+.filters{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.filter-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px}
+.filter-title{font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:var(--text3);font-weight:700;margin-bottom:8px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{padding:5px 10px;border:1px solid var(--border2);border-radius:16px;background:transparent;color:var(--text2);font-size:11px;cursor:pointer;transition:.15s;font-family:var(--sans)}
+.chip:hover{border-color:#375376;color:var(--text)}
+.chip.on{background:var(--blue3);border-color:var(--blue);color:#93c5fd}
+
+.meta-row{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.result-count{font-size:13px;color:var(--text2)}
+.small-note{font-size:11px;color:var(--text3)}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(350px,1fr));gap:12px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.card:hover{border-color:var(--border2)}
+.card-title{font-size:16px;font-weight:700;line-height:1.3}
+.card-sub{font-size:11px;color:var(--text3);font-family:var(--mono)}
+.badges{display:flex;flex-wrap:wrap;gap:6px}
+.badge{font-size:10px;padding:3px 8px;border-radius:14px;font-weight:700;border:1px solid transparent}
+.b-dept{background:#0d2038;color:#93c5fd;border-color:#1d4ed8}
+.b-tag{background:#10281d;color:#86efac;border-color:#15803d}
+.b-date{background:#27170d;color:#fbbf24;border-color:#a16207}
+.section{border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.section summary{cursor:pointer;list-style:none;padding:9px 10px;background:var(--surface2);font-size:12px;font-weight:700;color:var(--text2)}
+.section summary::-webkit-details-marker{display:none}
+.section ul{padding:9px 20px 11px 24px}
+.section li{font-size:12px;color:var(--text2);line-height:1.5;margin-bottom:4px}
+.section li:last-child{margin-bottom:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:2px}
+.btn{padding:8px 10px;border-radius:8px;border:1px solid var(--border2);background:var(--surface2);color:var(--text);font-size:12px;cursor:pointer;font-family:var(--sans)}
+.btn:hover{border-color:#41628a}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn-primary{background:var(--blue3);border-color:#1d4ed8;color:#bfdbfe}
+
+.empty{border:1px dashed var(--border2);border-radius:12px;padding:28px;text-align:center;color:var(--text3);font-size:14px;background:var(--surface)}
+
+@media(max-width:900px){
+  .controls{grid-template-columns:1fr}
+  .right-controls{justify-content:flex-start}
+  .filters{grid-template-columns:1fr}
+}
+@media(max-width:420px){
+  .grid{grid-template-columns:1fr}
+  h1{font-size:23px}
+}
+</style>
+</head>
+<body>
+<nav class="sitenav">
+  <div class="sitenav-inner">
+    <a class="nav-logo" href="index.html">⚡ KP<span>/</span>ER</a>
+    <div class="nav-links">
+      <a class="nav-link" href="index.html">🏠 Home</a>
+      <a class="nav-link" href="dotphrase.html">📋 Phrases</a>
+      <a class="nav-link" href="calculators.html">🧮 Calcs</a>
+      <a class="nav-link" href="vasopressors.html">💊 Vasopressors</a>
+      <a class="nav-link" href="rsi.html">🫁 RSI</a>
+      <a class="nav-link" href="algorithms.html">🔀 Algorithms</a>
+      <a class="nav-link" href="neurohub.html">🧠 Neuro Hub</a>
+      <a class="nav-link" href="pedsfever.html">🌡️ Peds Fever</a>
+      <a class="nav-link active" href="service-agreements.html">📑 Service Agreements</a>
+      <a class="nav-link" href="ed-phone-directory.html">📞 Directory</a>
+      <a class="nav-link" href="links.html">🔗 Links</a>
+      <a class="nav-link" href="roadmap.html">🗺️ Roadmap</a>
+    </div>
+  </div>
+</nav>
+
+<header>
+  <div class="header-inner">
+    <div class="kicker">Policy Reference Library</div>
+    <h1>Service Agreements</h1>
+    <div class="subtitle">Searchable, redacted summaries of agreement scope, ED actions, escalation, ownership, and timing cues.</div>
+    <div class="banner">Internal reference summaries. Verify the most current policy.</div>
+  </div>
+</header>
+
+<main>
+  <section class="controls">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input id="searchInput" class="search-input" type="text" placeholder="Search by keyword, title, tags, actions, escalation, ownership..." autocomplete="off"/>
+    </div>
+    <div class="right-controls">
+      <label class="toggle"><input id="olderToggle" type="checkbox"/> older than 5 years</label>
+      <select id="sortSelect" class="select" aria-label="Sort results">
+        <option value="relevance">Sort: relevance</option>
+        <option value="title">Sort: title</option>
+        <option value="last_updated">Sort: last updated</option>
+      </select>
+    </div>
+  </section>
+
+  <section class="filters">
+    <div class="filter-box">
+      <div class="filter-title">Department Filters (multi-select)</div>
+      <div id="deptChips" class="chips"></div>
+    </div>
+    <div class="filter-box">
+      <div class="filter-title">Tag Filters (multi-select)</div>
+      <div id="tagChips" class="chips"></div>
+    </div>
+  </section>
+
+  <div class="meta-row">
+    <div id="resultCount" class="result-count">Loading...</div>
+    <div class="small-note">Open Document stays disabled until a SharePoint URL is added in data.</div>
+  </div>
+
+  <section id="results" class="grid" aria-live="polite"></section>
+</main>
+
+<script>
+const state = {
+  agreements: [],
+  query: '',
+  selectedDepts: new Set(),
+  selectedTags: new Set(),
+  olderThanFiveYears: false,
+  sort: 'relevance'
+};
+
+function escapeHtml(value) {
+  return String(value ?? '').replace(/[&<>"']/g, (ch) => (
+    ch === '&' ? '&amp;' :
+    ch === '<' ? '&lt;' :
+    ch === '>' ? '&gt;' :
+    ch === '"' ? '&quot;' : '&#39;'
+  ));
+}
+
+function normalize(value) {
+  return String(value || '').toLowerCase();
+}
+
+function tokenize(value) {
+  return normalize(value)
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean);
+}
+
+function parseDate(value) {
+  if (!value) return null;
+  const d = new Date(value + 'T00:00:00');
+  return Number.isNaN(d.getTime()) ? null : d;
+}
+
+function olderThanFiveYears(value) {
+  const d = parseDate(value);
+  if (!d) return false;
+  const cutoff = new Date();
+  cutoff.setFullYear(cutoff.getFullYear() - 5);
+  return d < cutoff;
+}
+
+function scoreAgreement(item, tokens) {
+  if (!tokens.length) return 1;
+  const title = tokenize(item.title).join(' ');
+  const tags = tokenize((item.tags || []).join(' ')).join(' ');
+  const depts = tokenize((item.departments || []).join(' ')).join(' ');
+  const summary = tokenize((item.summary_bullets || []).join(' ')).join(' ');
+  const actions = tokenize((item.ed_actions || []).join(' ')).join(' ');
+  const consult = tokenize((item.consults_and_escalation || []).join(' ')).join(' ');
+  const ownership = tokenize((item.disposition_or_ownership || []).join(' ')).join(' ');
+  const timing = tokenize((item.timing_targets || []).join(' ')).join(' ');
+  const source = tokenize(item.source_filename || '').join(' ');
+  const notes = tokenize(item.redaction_notes || '').join(' ');
+  const all = [title, tags, depts, summary, actions, consult, ownership, timing, source, notes].join(' ');
+
+  let matchedTokens = 0;
+  let score = 0;
+  tokens.forEach((token) => {
+    let matched = false;
+    if (title.includes(token)) score += 8;
+    if (title.includes(token)) matched = true;
+    if (tags.includes(token)) { score += 5; matched = true; }
+    if (depts.includes(token)) { score += 3; matched = true; }
+    if (summary.includes(token)) { score += 2; matched = true; }
+    if (actions.includes(token) || consult.includes(token) || ownership.includes(token) || timing.includes(token)) { score += 1; matched = true; }
+    if (source.includes(token)) { score += 2; matched = true; }
+  if (matched) matchedTokens += 1;
+  });
+  if (!matchedTokens) return 0;
+  score += Math.round((matchedTokens / tokens.length) * 4);
+  return score;
+}
+
+function matchFilters(item) {
+  if (state.selectedDepts.size) {
+    const hasDept = (item.departments || []).some((d) => state.selectedDepts.has(d));
+    if (!hasDept) return false;
+  }
+  if (state.selectedTags.size) {
+    const hasTag = (item.tags || []).some((t) => state.selectedTags.has(t));
+    if (!hasTag) return false;
+  }
+  if (state.olderThanFiveYears && !olderThanFiveYears(item.last_updated)) {
+    return false;
+  }
+  return true;
+}
+
+function getFilteredRows() {
+  const tokens = tokenize(state.query);
+  const rows = [];
+
+  state.agreements.forEach((item) => {
+    if (!matchFilters(item)) return;
+    const relevance = scoreAgreement(item, tokens);
+    if (tokens.length && relevance === 0) return;
+    rows.push({ item, relevance });
+  });
+
+  rows.sort((a, b) => {
+    if (state.sort === 'title') {
+      return a.item.title.localeCompare(b.item.title);
+    }
+    if (state.sort === 'last_updated') {
+      const ad = parseDate(a.item.last_updated);
+      const bd = parseDate(b.item.last_updated);
+      if (ad && bd) return bd - ad;
+      if (bd) return 1;
+      if (ad) return -1;
+      return a.item.title.localeCompare(b.item.title);
+    }
+
+    if (b.relevance !== a.relevance) return b.relevance - a.relevance;
+    const ad = parseDate(a.item.last_updated);
+    const bd = parseDate(b.item.last_updated);
+    if (ad && bd && bd.getTime() !== ad.getTime()) return bd - ad;
+    if (bd && !ad) return 1;
+    if (ad && !bd) return -1;
+    return a.item.title.localeCompare(b.item.title);
+  });
+
+  return rows;
+}
+
+async function copyBullets(title, bullets) {
+  const text = `${title}\n${(bullets || []).map((b) => `- ${b}`).join('\n')}`;
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch (_) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    ta.remove();
+  }
+}
+
+function sectionHtml(title, bullets, openDefault) {
+  const openAttr = openDefault ? ' open' : '';
+  const lis = (bullets || []).map((b) => `<li>${escapeHtml(b)}</li>`).join('');
+  return `<details class="section"${openAttr}><summary>${escapeHtml(title)}</summary><ul>${lis || '<li>No items</li>'}</ul></details>`;
+}
+
+function renderResults() {
+  const container = document.getElementById('results');
+  const resultCount = document.getElementById('resultCount');
+  const rows = getFilteredRows();
+
+  resultCount.textContent = `${rows.length} agreement${rows.length === 1 ? '' : 's'} found`;
+
+  if (!rows.length) {
+    container.innerHTML = '<div class="empty">No agreements match your current search/filter settings.</div>';
+    return;
+  }
+
+  container.innerHTML = rows.map(({ item }, idx) => {
+    const updated = item.last_updated ? item.last_updated : 'unknown';
+    const deptBadges = (item.departments || []).map((d) => `<span class="badge b-dept">${escapeHtml(d)}</span>`).join('');
+    const tagBadges = (item.tags || []).map((t) => `<span class="badge b-tag">${escapeHtml(t)}</span>`).join('');
+    const docButton = item.sharepoint_url
+      ? `<a class="btn btn-primary" href="${escapeHtml(item.sharepoint_url)}" target="_blank" rel="noopener">Open Document</a>`
+      : `<button class="btn btn-primary" disabled>Open Document</button>`;
+
+    return `
+      <article class="card">
+        <div class="card-title">${escapeHtml(item.title)}</div>
+        <div class="card-sub">Source: ${escapeHtml(item.source_filename || '')}</div>
+        <div class="badges">
+          <span class="badge b-date">Updated: ${escapeHtml(updated)}</span>
+          ${deptBadges}
+          ${tagBadges}
+        </div>
+        ${sectionHtml('Summary Bullets', item.summary_bullets, true)}
+        ${sectionHtml('ED Actions', item.ed_actions, false)}
+        ${sectionHtml('Consults and Escalation', item.consults_and_escalation, false)}
+        ${sectionHtml('Disposition or Ownership', item.disposition_or_ownership, false)}
+        ${sectionHtml('Timing Targets', item.timing_targets, false)}
+        <div class="small-note">${escapeHtml(item.redaction_notes || '')}</div>
+        <div class="actions">
+          <button class="btn js-copy-ed" data-idx="${idx}">Copy ED Actions</button>
+          <button class="btn js-copy-summary" data-idx="${idx}">Copy Summary</button>
+          ${docButton}
+        </div>
+      </article>
+    `;
+  }).join('');
+
+  container.querySelectorAll('.js-copy-ed').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const idx = Number(btn.getAttribute('data-idx'));
+      const row = rows[idx];
+      if (!row) return;
+      copyBullets(row.item.title, row.item.ed_actions || []);
+    });
+  });
+
+  container.querySelectorAll('.js-copy-summary').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const idx = Number(btn.getAttribute('data-idx'));
+      const row = rows[idx];
+      if (!row) return;
+      copyBullets(row.item.title, row.item.summary_bullets || []);
+    });
+  });
+}
+
+function renderFilterChips(containerId, values, selectedSet, onToggle) {
+  const container = document.getElementById(containerId);
+  if (!values.length) {
+    container.innerHTML = '<span class="small-note">No values found</span>';
+    return;
+  }
+  container.innerHTML = values.map((value) => {
+    const active = selectedSet.has(value) ? ' on' : '';
+    return `<button class="chip${active}" data-value="${escapeHtml(value)}">${escapeHtml(value)}</button>`;
+  }).join('');
+
+  container.querySelectorAll('.chip').forEach((chip) => {
+    chip.addEventListener('click', () => onToggle(chip.dataset.value || ''));
+  });
+}
+
+function toggleSetValue(set, value) {
+  if (set.has(value)) set.delete(value);
+  else set.add(value);
+}
+
+function renderFiltersAndResults() {
+  const deptValues = Array.from(new Set(state.agreements.flatMap((a) => a.departments || []))).sort((a, b) => a.localeCompare(b));
+  const tagValues = Array.from(new Set(state.agreements.flatMap((a) => a.tags || []))).sort((a, b) => a.localeCompare(b));
+
+  renderFilterChips('deptChips', deptValues, state.selectedDepts, (value) => {
+    toggleSetValue(state.selectedDepts, value);
+    renderFiltersAndResults();
+  });
+
+  renderFilterChips('tagChips', tagValues, state.selectedTags, (value) => {
+    toggleSetValue(state.selectedTags, value);
+    renderFiltersAndResults();
+  });
+
+  renderResults();
+}
+
+async function init() {
+  try {
+    const res = await fetch('./data/service_agreements_index.json', { cache: 'no-store' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const payload = await res.json();
+    state.agreements = Array.isArray(payload.agreements) ? payload.agreements : [];
+  } catch (err) {
+    document.getElementById('resultCount').textContent = 'Failed to load agreement index';
+    const note = location.protocol === 'file:'
+      ? ' This page must be served via HTTP (for example: python3 -m http.server) to load JSON data.'
+      : '';
+    document.getElementById('results').innerHTML = `<div class="empty">Could not load data/service_agreements_index.json (${escapeHtml(err.message)}).${escapeHtml(note)}</div>`;
+    return;
+  }
+
+  document.getElementById('searchInput').addEventListener('input', (e) => {
+    state.query = e.target.value || '';
+    renderResults();
+  });
+
+  document.getElementById('olderToggle').addEventListener('change', (e) => {
+    state.olderThanFiveYears = !!e.target.checked;
+    renderResults();
+  });
+
+  document.getElementById('sortSelect').addEventListener('change', (e) => {
+    state.sort = e.target.value || 'relevance';
+    renderResults();
+  });
+
+  renderFiltersAndResults();
+}
+
+init();
+</script>
+</body>
+</html>

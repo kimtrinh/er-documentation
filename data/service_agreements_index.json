@@ -1,0 +1,838 @@
+{
+  "version": 1,
+  "generated_at": "2026-02-22T00:45:18.698848+00:00",
+  "agreements": [
+    {
+      "id": "adult-primary-care-and-emergency-medicine-service-agreement",
+      "title": "Adult Primary Care and Emergency Medicine Service Agreement",
+      "source_filename": "Service agreements/Adult Primary Care and Emergency Medicine Service Agreement.pdf",
+      "file_type": "pdf",
+      "departments": [
+        "Emergency Medicine",
+        "Internal Medicine",
+        "Primary Care"
+      ],
+      "last_updated": null,
+      "tags": [
+        "consult-workflow",
+        "escalation",
+        "ownership"
+      ],
+      "summary_bullets": [
+        "Defines a shared workflow between Emergency Medicine, Internal Medicine, Primary Care for this service-line agreement.",
+        "Clarifies which patient scenarios are in-scope versus when alternate pathways are required.",
+        "Emphasizes ED stabilization, focused workup, and serial reassessment before final handoff.",
+        "Outlines required chart documentation to support consultant acceptance and safe transitions of care.",
+        "Describes escalation expectations when patient status changes or response is delayed.",
+        "Specifies when ownership transitions from the ED team to the receiving specialty service."
+      ],
+      "ed_actions": [
+        "Stabilize immediate threats first and document objective severity findings before handoff discussions.",
+        "Initiate pathway-appropriate diagnostic workup and early treatment from the ED side.",
+        "Place consult/transfer requests with concise clinical indication and current response to therapy.",
+        "Record consultant communication, recommendations, and ownership status in the chart."
+      ],
+      "consults_and_escalation": [
+        "Engage the primary specialty once inclusion criteria are met and communicate key objective findings.",
+        "Escalate to the on-call attending or service lead when callback is delayed or recommendations conflict.",
+        "Use departmental chain-of-command for unresolved acceptance disputes or prolonged boarding risk.",
+        "Document each escalation step and closed-loop communication outcome."
+      ],
+      "disposition_or_ownership": [
+        "ED team retains active ownership until receiving service acceptance is documented.",
+        "Receiving service owns definitive inpatient or transfer plan after acceptance criteria are met.",
+        "If clinical status changes before transfer, disposition should be re-evaluated under ED oversight."
+      ],
+      "timing_targets": [],
+      "redaction_notes": "Limited machine-readable PDF text; summary inferred from filename and sparse metadata. Summary confidence is lower due to limited machine-readable source text.",
+      "sharepoint_url": null
+    },
+    {
+      "id": "hospitalist-intensivist-cardiologist-and-emergency-medicine",
+      "title": "Hospitalist Intensivist Cardiologist and Emergency Medicine",
+      "source_filename": "Service agreements/Hospitalist Intensivist Cardiologist and Emergency Medicine.pdf",
+      "file_type": "pdf",
+      "departments": [
+        "Emergency Medicine",
+        "Internal Medicine",
+        "Hospital Medicine",
+        "Cardiology",
+        "Critical Care"
+      ],
+      "last_updated": null,
+      "tags": [
+        "critical-care",
+        "consult-workflow",
+        "escalation",
+        "ownership"
+      ],
+      "summary_bullets": [
+        "Defines a shared workflow between Emergency Medicine, Internal Medicine, Hospital Medicine for this service-line agreement.",
+        "Clarifies which patient scenarios are in-scope versus when alternate pathways are required.",
+        "Emphasizes ED stabilization, focused workup, and serial reassessment before final handoff.",
+        "Outlines required chart documentation to support consultant acceptance and safe transitions of care.",
+        "Describes escalation expectations when patient status changes or response is delayed.",
+        "Specifies when ownership transitions from the ED team to the receiving specialty service."
+      ],
+      "ed_actions": [
+        "Stabilize immediate threats first and document objective severity findings before handoff discussions.",
+        "Initiate pathway-appropriate diagnostic workup and early treatment from the ED side.",
+        "Place consult/transfer requests with concise clinical indication and current response to therapy.",
+        "Record consultant communication, recommendations, and ownership status in the chart."
+      ],
+      "consults_and_escalation": [
+        "Engage the primary specialty once inclusion criteria are met and communicate key objective findings.",
+        "Escalate to the on-call attending or service lead when callback is delayed or recommendations conflict.",
+        "Use departmental chain-of-command for unresolved acceptance disputes or prolonged boarding risk.",
+        "Document each escalation step and closed-loop communication outcome."
+      ],
+      "disposition_or_ownership": [
+        "ED team retains active ownership until receiving service acceptance is documented.",
+        "Receiving service owns definitive inpatient or transfer plan after acceptance criteria are met.",
+        "If clinical status changes before transfer, disposition should be re-evaluated under ED oversight."
+      ],
+      "timing_targets": [],
+      "redaction_notes": "Limited machine-readable PDF text; summary inferred from filename and sparse metadata. Summary confidence is lower due to limited machine-readable source text.",
+      "sharepoint_url": null
+    },
+    {
+      "id": "im-and-em-non-member-management-6-29-22",
+      "title": "IM and EM Non-member Management 6-29-22",
+      "source_filename": "Service agreements/IM and EM Non-member Management 6-29-22.docx",
+      "file_type": "docx",
+      "departments": [
+        "Emergency Medicine",
+        "Internal Medicine",
+        "Hospital Medicine",
+        "Critical Care",
+        "Case Management"
+      ],
+      "last_updated": "2022-06-29",
+      "tags": [
+        "consult-workflow",
+        "disposition",
+        "transfer",
+        "non-member",
+        "critical-care",
+        "quality-safety",
+        "escalation",
+        "ownership"
+      ],
+      "summary_bullets": [
+        "Defines a shared workflow between Emergency Medicine, Internal Medicine, Hospital Medicine for this service-line agreement.",
+        "Clarifies which patient scenarios are in-scope versus when alternate pathways are required.",
+        "Emphasizes ED stabilization, focused workup, and serial reassessment before final handoff.",
+        "Outlines required chart documentation to support consultant acceptance and safe transitions of care.",
+        "Describes escalation expectations when patient status changes or response is delayed.",
+        "Specifies when ownership transitions from the ED team to the receiving specialty service.",
+        "Highlights transfer-readiness criteria and coordination steps for interfacility movement."
+      ],
+      "ed_actions": [
+        "Stabilize immediate threats first and document objective severity findings before handoff discussions.",
+        "Initiate pathway-appropriate diagnostic workup and early treatment from the ED side.",
+        "Place consult/transfer requests with concise clinical indication and current response to therapy.",
+        "Record consultant communication, recommendations, and ownership status in the chart.",
+        "Coordinate with case management on transfer logistics once the patient is clinically ready."
+      ],
+      "consults_and_escalation": [
+        "Engage the primary specialty once inclusion criteria are met and communicate key objective findings.",
+        "Escalate to the on-call attending or service lead when callback is delayed or recommendations conflict.",
+        "Use departmental chain-of-command for unresolved acceptance disputes or prolonged boarding risk.",
+        "Document each escalation step and closed-loop communication outcome."
+      ],
+      "disposition_or_ownership": [
+        "ED team retains active ownership until receiving service acceptance is documented.",
+        "Receiving service owns definitive inpatient or transfer plan after acceptance criteria are met.",
+        "If clinical status changes before transfer, disposition should be re-evaluated under ED oversight.",
+        "Transfer destination and accepting clinician should be explicitly documented before departure."
+      ],
+      "timing_targets": [],
+      "redaction_notes": "Potential contact details or identifiers were intentionally excluded from published fields.",
+      "sharepoint_url": null
+    },
+    {
+      "id": "im-and-er-code-sepsis-service-agreement",
+      "title": "IM and ER Code Sepsis Service Agreement",
+      "source_filename": "Service agreements/IM and ER Code Sepsis Service Agreement.docx",
+      "file_type": "docx",
+      "departments": [
+        "Emergency Medicine",
+        "Internal Medicine",
+        "Case Management"
+      ],
+      "last_updated": null,
+      "tags": [
+        "consult-workflow",
+        "disposition",
+        "transfer",
+        "sepsis",
+        "escalation",
+        "ownership"
+      ],
+      "summary_bullets": [
+        "Defines a shared workflow between Emergency Medicine, Internal Medicine, Case Management for this service-line agreement.",
+        "Clarifies which patient scenarios are in-scope versus when alternate pathways are required.",
+        "Emphasizes ED stabilization, focused workup, and serial reassessment before final handoff.",
+        "Outlines required chart documentation to support consultant acceptance and safe transitions of care.",
+        "Describes escalation expectations when patient status changes or response is delayed.",
+        "Specifies when ownership transitions from the ED team to the receiving specialty service.",
+        "Highlights transfer-readiness criteria and coordination steps for interfacility movement.",
+        "Prioritizes early recognition and time-sensitive sepsis treatment milestones."
+      ],
+      "ed_actions": [
+        "Stabilize immediate threats first and document objective severity findings before handoff discussions.",
+        "Initiate pathway-appropriate diagnostic workup and early treatment from the ED side.",
+        "Place consult/transfer requests with concise clinical indication and current response to therapy.",
+        "Record consultant communication, recommendations, and ownership status in the chart.",
+        "Coordinate with case management on transfer logistics once the patient is clinically ready.",
+        "Complete sepsis bundle milestones and reassess perfusion status at defined checkpoints."
+      ],
+      "consults_and_escalation": [
+        "Engage the primary specialty once inclusion criteria are met and communicate key objective findings.",
+        "Escalate to the on-call attending or service lead when callback is delayed or recommendations conflict.",
+        "Use departmental chain-of-command for unresolved acceptance disputes or prolonged boarding risk.",
+        "Document each escalation step and closed-loop communication outcome."
+      ],
+      "disposition_or_ownership": [
+        "ED team retains active ownership until receiving service acceptance is documented.",
+        "Receiving service owns definitive inpatient or transfer plan after acceptance criteria are met.",
+        "If clinical status changes before transfer, disposition should be re-evaluated under ED oversight.",
+        "Transfer destination and accepting clinician should be explicitly documented before departure."
+      ],
+      "timing_targets": [],
+      "redaction_notes": "Potential contact details or identifiers were intentionally excluded from published fields.",
+      "sharepoint_url": null
+    },
+    {
+      "id": "im-and-er-nonmember-service-agreement",
+      "title": "IM and ER Nonmember Service Agreement",
+      "source_filename": "Service agreements/IM and ER Nonmember Service Agreement.pdf",
+      "file_type": "pdf",
+      "departments": [
+        "Emergency Medicine",
+        "Internal Medicine"
+      ],
+      "last_updated": "2021-10-27",
+      "tags": [
+        "consult-workflow",
+        "non-member",
+        "escalation",
+        "ownership"
+      ],
+      "summary_bullets": [
+        "Defines a shared workflow between Emergency Medicine, Internal Medicine for this service-line agreement.",
+        "Clarifies which patient scenarios are in-scope versus when alternate pathways are required.",
+        "Emphasizes ED stabilization, focused workup, and serial reassessment before final handoff.",
+        "Outlines required chart documentation to support consultant acceptance and safe transitions of care.",
+        "Describes escalation expectations when patient status changes or response is delayed.",
+        "Specifies when ownership transitions from the ED team to the receiving specialty service.",
+        "Highlights transfer-readiness criteria and coordination steps for interfacility movement."
+      ],
+      "ed_actions": [
+        "Stabilize immediate threats first and document objective severity findings before handoff discussions.",
+        "Initiate pathway-appropriate diagnostic workup and early treatment from the ED side.",
+        "Place consult/transfer requests with concise clinical indication and current response to therapy.",
+        "Record consultant communication, recommendations, and ownership status in the chart.",
+        "Coordinate with case management on transfer logistics once the patient is clinically ready."
+      ],
+      "consults_and_escalation": [
+        "Engage the primary specialty once inclusion criteria are met and communicate key objective findings.",
+        "Escalate to the on-call attending or service lead when callback is delayed or recommendations conflict.",
+        "Use departmental chain-of-command for unresolved acceptance disputes or prolonged boarding risk.",
+        "Document each escalation step and closed-loop communication outcome."
+      ],
+      "disposition_or_ownership": [
+        "ED team retains active ownership until receiving service acceptance is documented.",
+        "Receiving service owns definitive inpatient or transfer plan after acceptance criteria are met.",
+        "If clinical status changes before transfer, disposition should be re-evaluated under ED oversight.",
+        "Transfer destination and accepting clinician should be explicitly documented before departure."
+      ],
+      "timing_targets": [],
+      "redaction_notes": "Limited machine-readable PDF text; summary inferred from filename and sparse metadata. Summary confidence is lower due to limited machine-readable source text.",
+      "sharepoint_url": null
+    },
+    {
+      "id": "necrotizing-fasciitis-service-agreement",
+      "title": "Necrotizing Fasciitis Service Agreement",
+      "source_filename": "Service agreements/Necrotizing Fasciitis Service Agreement.pdf",
+      "file_type": "pdf",
+      "departments": [
+        "Emergency Medicine",
+        "Surgery"
+      ],
+      "last_updated": "2022-09-25",
+      "tags": [
+        "consult-workflow",
+        "necrotizing-fasciitis",
+        "escalation",
+        "ownership"
+      ],
+      "summary_bullets": [
+        "Defines a shared workflow between Emergency Medicine, Surgery for this service-line agreement.",
+        "Clarifies which patient scenarios are in-scope versus when alternate pathways are required.",
+        "Emphasizes ED stabilization, focused workup, and serial reassessment before final handoff.",
+        "Outlines required chart documentation to support consultant acceptance and safe transitions of care.",
+        "Describes escalation expectations when patient status changes or response is delayed.",
+        "Specifies when ownership transitions from the ED team to the receiving specialty service.",
+        "Treats suspected necrotizing soft tissue infection as a high-acuity surgical emergency."
+      ],
+      "ed_actions": [
+        "Stabilize immediate threats first and document objective severity findings before handoff discussions.",
+        "Initiate pathway-appropriate diagnostic workup and early treatment from the ED side.",
+        "Place consult/transfer requests with concise clinical indication and current response to therapy.",
+        "Record consultant communication, recommendations, and ownership status in the chart.",
+        "Escalate early to surgery for suspected necrotizing infection rather than prolonged ED observation."
+      ],
+      "consults_and_escalation": [
+        "Engage the primary specialty once inclusion criteria are met and communicate key objective findings.",
+        "Escalate to the on-call attending or service lead when callback is delayed or recommendations conflict.",
+        "Use departmental chain-of-command for unresolved acceptance disputes or prolonged boarding risk.",
+        "Document each escalation step and closed-loop communication outcome.",
+        "Escalate suspected necrotizing infection immediately due to potential rapid clinical decline."
+      ],
+      "disposition_or_ownership": [
+        "ED team retains active ownership until receiving service acceptance is documented.",
+        "Receiving service owns definitive inpatient or transfer plan after acceptance criteria are met.",
+        "If clinical status changes before transfer, disposition should be re-evaluated under ED oversight."
+      ],
+      "timing_targets": [],
+      "redaction_notes": "Limited machine-readable PDF text; summary inferred from filename and sparse metadata. Summary confidence is lower due to limited machine-readable source text.",
+      "sharepoint_url": null
+    },
+    {
+      "id": "neurosurgery-ed-transfer-agreement",
+      "title": "Neurosurgery ED Transfer Agreement",
+      "source_filename": "Service agreements/Neurosurgery ED Transfer Agreement.docx",
+      "file_type": "docx",
+      "departments": [
+        "Emergency Medicine",
+        "Internal Medicine",
+        "Critical Care",
+        "Neurosurgery",
+        "Surgery",
+        "Case Management"
+      ],
+      "last_updated": "2016-12-14",
+      "tags": [
+        "disposition",
+        "transfer",
+        "critical-care",
+        "surgical",
+        "consult-workflow",
+        "escalation",
+        "ownership"
+      ],
+      "summary_bullets": [
+        "Defines a shared workflow between Emergency Medicine, Internal Medicine, Critical Care for this service-line agreement.",
+        "Clarifies which patient scenarios are in-scope versus when alternate pathways are required.",
+        "Emphasizes ED stabilization, focused workup, and serial reassessment before final handoff.",
+        "Outlines required chart documentation to support consultant acceptance and safe transitions of care.",
+        "Describes escalation expectations when patient status changes or response is delayed.",
+        "Specifies when ownership transitions from the ED team to the receiving specialty service.",
+        "Highlights transfer-readiness criteria and coordination steps for interfacility movement.",
+        "Defines neurologic red flags that trigger urgent specialist escalation."
+      ],
+      "ed_actions": [
+        "Stabilize immediate threats first and document objective severity findings before handoff discussions.",
+        "Initiate pathway-appropriate diagnostic workup and early treatment from the ED side.",
+        "Place consult/transfer requests with concise clinical indication and current response to therapy.",
+        "Record consultant communication, recommendations, and ownership status in the chart.",
+        "Coordinate with case management on transfer logistics once the patient is clinically ready."
+      ],
+      "consults_and_escalation": [
+        "Engage the primary specialty once inclusion criteria are met and communicate key objective findings.",
+        "Escalate to the on-call attending or service lead when callback is delayed or recommendations conflict.",
+        "Use departmental chain-of-command for unresolved acceptance disputes or prolonged boarding risk.",
+        "Document each escalation step and closed-loop communication outcome.",
+        "For neurologic deterioration, bypass routine callback flow and escalate urgently per stroke/neurosurgery policy."
+      ],
+      "disposition_or_ownership": [
+        "ED team retains active ownership until receiving service acceptance is documented.",
+        "Receiving service owns definitive inpatient or transfer plan after acceptance criteria are met.",
+        "If clinical status changes before transfer, disposition should be re-evaluated under ED oversight.",
+        "Transfer destination and accepting clinician should be explicitly documented before departure."
+      ],
+      "timing_targets": [
+        "Operational timing reference noted: within 10 minutes."
+      ],
+      "redaction_notes": "Potential contact details or identifiers were intentionally excluded from published fields.",
+      "sharepoint_url": null
+    },
+    {
+      "id": "ob-gyn-urgent-care-and-emergency-medicine-service-agreement",
+      "title": "OB-GYN, Urgent Care and Emergency Medicine Service Agreement",
+      "source_filename": "Service agreements/OB-GYN, Urgent Care and Emergency Medicine Service Agreement.pdf",
+      "file_type": "pdf",
+      "departments": [
+        "Emergency Medicine",
+        "OB/GYN",
+        "Urgent Care"
+      ],
+      "last_updated": null,
+      "tags": [
+        "consult-workflow",
+        "pregnancy",
+        "escalation",
+        "ownership"
+      ],
+      "summary_bullets": [
+        "Defines a shared workflow between Emergency Medicine, OB/GYN, Urgent Care for this service-line agreement.",
+        "Clarifies which patient scenarios are in-scope versus when alternate pathways are required.",
+        "Emphasizes ED stabilization, focused workup, and serial reassessment before final handoff.",
+        "Outlines required chart documentation to support consultant acceptance and safe transitions of care.",
+        "Describes escalation expectations when patient status changes or response is delayed.",
+        "Specifies when ownership transitions from the ED team to the receiving specialty service.",
+        "Addresses pregnancy-related escalation and cross-coverage expectations between OB/GYN and ED."
+      ],
+      "ed_actions": [
+        "Stabilize immediate threats first and document objective severity findings before handoff discussions.",
+        "Initiate pathway-appropriate diagnostic workup and early treatment from the ED side.",
+        "Place consult/transfer requests with concise clinical indication and current response to therapy.",
+        "Record consultant communication, recommendations, and ownership status in the chart.",
+        "Prioritize maternal stabilization and fetal-risk communication when pregnancy-related concerns are present."
+      ],
+      "consults_and_escalation": [
+        "Engage the primary specialty once inclusion criteria are met and communicate key objective findings.",
+        "Escalate to the on-call attending or service lead when callback is delayed or recommendations conflict.",
+        "Use departmental chain-of-command for unresolved acceptance disputes or prolonged boarding risk.",
+        "Document each escalation step and closed-loop communication outcome."
+      ],
+      "disposition_or_ownership": [
+        "ED team retains active ownership until receiving service acceptance is documented.",
+        "Receiving service owns definitive inpatient or transfer plan after acceptance criteria are met.",
+        "If clinical status changes before transfer, disposition should be re-evaluated under ED oversight."
+      ],
+      "timing_targets": [],
+      "redaction_notes": "Limited machine-readable PDF text; summary inferred from filename and sparse metadata. Summary confidence is lower due to limited machine-readable source text.",
+      "sharepoint_url": null
+    },
+    {
+      "id": "ophthalmology-and-emergency-medicine-service-agreement",
+      "title": "Ophthalmology and Emergency Medicine Service Agreement",
+      "source_filename": "Service agreements/Ophthalmology and Emergency Medicine Service Agreement.docx",
+      "file_type": "docx",
+      "departments": [
+        "Emergency Medicine",
+        "Internal Medicine",
+        "Ophthalmology"
+      ],
+      "last_updated": "2016-08-23",
+      "tags": [
+        "consult-workflow",
+        "non-member",
+        "pregnancy",
+        "escalation",
+        "ownership"
+      ],
+      "summary_bullets": [
+        "Defines a shared workflow between Emergency Medicine, Internal Medicine, Ophthalmology for this service-line agreement.",
+        "Clarifies which patient scenarios are in-scope versus when alternate pathways are required.",
+        "Emphasizes ED stabilization, focused workup, and serial reassessment before final handoff.",
+        "Outlines required chart documentation to support consultant acceptance and safe transitions of care.",
+        "Describes escalation expectations when patient status changes or response is delayed.",
+        "Specifies when ownership transitions from the ED team to the receiving specialty service.",
+        "Highlights transfer-readiness criteria and coordination steps for interfacility movement.",
+        "Distinguishes urgent ocular conditions from cases that can be routed to expedited follow-up."
+      ],
+      "ed_actions": [
+        "Stabilize immediate threats first and document objective severity findings before handoff discussions.",
+        "Initiate pathway-appropriate diagnostic workup and early treatment from the ED side.",
+        "Place consult/transfer requests with concise clinical indication and current response to therapy.",
+        "Record consultant communication, recommendations, and ownership status in the chart.",
+        "Coordinate with case management on transfer logistics once the patient is clinically ready."
+      ],
+      "consults_and_escalation": [
+        "Engage the primary specialty once inclusion criteria are met and communicate key objective findings.",
+        "Escalate to the on-call attending or service lead when callback is delayed or recommendations conflict.",
+        "Use departmental chain-of-command for unresolved acceptance disputes or prolonged boarding risk.",
+        "Document each escalation step and closed-loop communication outcome."
+      ],
+      "disposition_or_ownership": [
+        "ED team retains active ownership until receiving service acceptance is documented.",
+        "Receiving service owns definitive inpatient or transfer plan after acceptance criteria are met.",
+        "If clinical status changes before transfer, disposition should be re-evaluated under ED oversight.",
+        "Transfer destination and accepting clinician should be explicitly documented before departure."
+      ],
+      "timing_targets": [],
+      "redaction_notes": "Potential contact details or identifiers were intentionally excluded from published fields.",
+      "sharepoint_url": null
+    },
+    {
+      "id": "pediatric-appendicitis-service-line-agreement-with-appendicitis",
+      "title": "Pediatric Appendicitis Service Line Agreement with Appendicitis",
+      "source_filename": "Service agreements/Pediatric Appendicitis Service Line Agreement with Appendicitis.docx",
+      "file_type": "docx",
+      "departments": [
+        "Emergency Medicine",
+        "Internal Medicine",
+        "Urgent Care",
+        "Pediatrics",
+        "Neurology",
+        "Surgery",
+        "Case Management"
+      ],
+      "last_updated": null,
+      "tags": [
+        "disposition",
+        "transfer",
+        "appendicitis",
+        "pediatric",
+        "surgical",
+        "quality-safety",
+        "consult-workflow",
+        "escalation",
+        "ownership"
+      ],
+      "summary_bullets": [
+        "Defines a shared workflow between Emergency Medicine, Internal Medicine, Urgent Care for this service-line agreement.",
+        "Clarifies which patient scenarios are in-scope versus when alternate pathways are required.",
+        "Emphasizes ED stabilization, focused workup, and serial reassessment before final handoff.",
+        "Outlines required chart documentation to support consultant acceptance and safe transitions of care.",
+        "Describes escalation expectations when patient status changes or response is delayed.",
+        "Specifies when ownership transitions from the ED team to the receiving specialty service.",
+        "Highlights transfer-readiness criteria and coordination steps for interfacility movement.",
+        "Frames appendicitis decision points around risk stratification, imaging, and surgery notification."
+      ],
+      "ed_actions": [
+        "Stabilize immediate threats first and document objective severity findings before handoff discussions.",
+        "Initiate pathway-appropriate diagnostic workup and early treatment from the ED side.",
+        "Place consult/transfer requests with concise clinical indication and current response to therapy.",
+        "Record consultant communication, recommendations, and ownership status in the chart.",
+        "Coordinate with case management on transfer logistics once the patient is clinically ready.",
+        "Use pediatric appendicitis pathway criteria to guide imaging and surgical notification timing."
+      ],
+      "consults_and_escalation": [
+        "Engage the primary specialty once inclusion criteria are met and communicate key objective findings.",
+        "Escalate to the on-call attending or service lead when callback is delayed or recommendations conflict.",
+        "Use departmental chain-of-command for unresolved acceptance disputes or prolonged boarding risk.",
+        "Document each escalation step and closed-loop communication outcome."
+      ],
+      "disposition_or_ownership": [
+        "ED team retains active ownership until receiving service acceptance is documented.",
+        "Receiving service owns definitive inpatient or transfer plan after acceptance criteria are met.",
+        "If clinical status changes before transfer, disposition should be re-evaluated under ED oversight.",
+        "Transfer destination and accepting clinician should be explicitly documented before departure."
+      ],
+      "timing_targets": [],
+      "redaction_notes": "Potential contact details or identifiers were intentionally excluded from published fields.",
+      "sharepoint_url": null
+    },
+    {
+      "id": "pediatrics-and-emergency-medicine-service-agreement-transfer-from-omc-to-fmc",
+      "title": "Pediatrics and Emergency Medicine Service Agreement Transfer from OMC to FMC",
+      "source_filename": "Service agreements/Pediatrics and Emergency Medicine Service Agreement Transfer from OMC to FMC.pdf",
+      "file_type": "pdf",
+      "departments": [
+        "Emergency Medicine",
+        "Pediatrics",
+        "Case Management"
+      ],
+      "last_updated": null,
+      "tags": [
+        "consult-workflow",
+        "disposition",
+        "transfer",
+        "pediatric",
+        "escalation",
+        "ownership"
+      ],
+      "summary_bullets": [
+        "Defines a shared workflow between Emergency Medicine, Pediatrics, Case Management for this service-line agreement.",
+        "Clarifies which patient scenarios are in-scope versus when alternate pathways are required.",
+        "Emphasizes ED stabilization, focused workup, and serial reassessment before final handoff.",
+        "Outlines required chart documentation to support consultant acceptance and safe transitions of care.",
+        "Describes escalation expectations when patient status changes or response is delayed.",
+        "Specifies when ownership transitions from the ED team to the receiving specialty service.",
+        "Highlights transfer-readiness criteria and coordination steps for interfacility movement."
+      ],
+      "ed_actions": [
+        "Stabilize immediate threats first and document objective severity findings before handoff discussions.",
+        "Initiate pathway-appropriate diagnostic workup and early treatment from the ED side.",
+        "Place consult/transfer requests with concise clinical indication and current response to therapy.",
+        "Record consultant communication, recommendations, and ownership status in the chart.",
+        "Coordinate with case management on transfer logistics once the patient is clinically ready."
+      ],
+      "consults_and_escalation": [
+        "Engage the primary specialty once inclusion criteria are met and communicate key objective findings.",
+        "Escalate to the on-call attending or service lead when callback is delayed or recommendations conflict.",
+        "Use departmental chain-of-command for unresolved acceptance disputes or prolonged boarding risk.",
+        "Document each escalation step and closed-loop communication outcome."
+      ],
+      "disposition_or_ownership": [
+        "ED team retains active ownership until receiving service acceptance is documented.",
+        "Receiving service owns definitive inpatient or transfer plan after acceptance criteria are met.",
+        "If clinical status changes before transfer, disposition should be re-evaluated under ED oversight.",
+        "Transfer destination and accepting clinician should be explicitly documented before departure."
+      ],
+      "timing_targets": [],
+      "redaction_notes": "Limited machine-readable PDF text; summary inferred from filename and sparse metadata. Summary confidence is lower due to limited machine-readable source text.",
+      "sharepoint_url": null
+    },
+    {
+      "id": "psych-and-ed-service-agreement",
+      "title": "Psych and ED Service Agreement",
+      "source_filename": "Service agreements/Psych and ED Service Agreement.docx",
+      "file_type": "docx",
+      "departments": [
+        "Emergency Medicine",
+        "Internal Medicine",
+        "Hospital Medicine",
+        "Psychiatry",
+        "Neurology",
+        "Urology",
+        "Skilled Nursing Facility",
+        "Case Management"
+      ],
+      "last_updated": "2016-12-05",
+      "tags": [
+        "consult-workflow",
+        "escalation",
+        "disposition",
+        "transfer",
+        "behavioral-health",
+        "pregnancy",
+        "quality-safety",
+        "ownership"
+      ],
+      "summary_bullets": [
+        "Defines a shared workflow between Emergency Medicine, Internal Medicine, Hospital Medicine for this service-line agreement.",
+        "Clarifies which patient scenarios are in-scope versus when alternate pathways are required.",
+        "Emphasizes ED stabilization, focused workup, and serial reassessment before final handoff.",
+        "Outlines required chart documentation to support consultant acceptance and safe transitions of care.",
+        "Describes escalation expectations when patient status changes or response is delayed.",
+        "Specifies when ownership transitions from the ED team to the receiving specialty service.",
+        "Highlights transfer-readiness criteria and coordination steps for interfacility movement.",
+        "Separates medical screening responsibilities from behavioral-health disposition responsibilities."
+      ],
+      "ed_actions": [
+        "Stabilize immediate threats first and document objective severity findings before handoff discussions.",
+        "Initiate pathway-appropriate diagnostic workup and early treatment from the ED side.",
+        "Place consult/transfer requests with concise clinical indication and current response to therapy.",
+        "Record consultant communication, recommendations, and ownership status in the chart.",
+        "Coordinate with case management on transfer logistics once the patient is clinically ready.",
+        "Document medical screening completion and any exclusion criteria before psychiatric placement."
+      ],
+      "consults_and_escalation": [
+        "Engage the primary specialty once inclusion criteria are met and communicate key objective findings.",
+        "Escalate to the on-call attending or service lead when callback is delayed or recommendations conflict.",
+        "Use departmental chain-of-command for unresolved acceptance disputes or prolonged boarding risk.",
+        "Document each escalation step and closed-loop communication outcome.",
+        "Coordinate escalation jointly with psychiatry and medicine when medical and behavioral risks overlap."
+      ],
+      "disposition_or_ownership": [
+        "ED team retains active ownership until receiving service acceptance is documented.",
+        "Receiving service owns definitive inpatient or transfer plan after acceptance criteria are met.",
+        "If clinical status changes before transfer, disposition should be re-evaluated under ED oversight.",
+        "Transfer destination and accepting clinician should be explicitly documented before departure.",
+        "Behavioral-health placement proceeds only after documented medical screening/clearance milestones."
+      ],
+      "timing_targets": [
+        "Operational timing reference noted: every 24 hours."
+      ],
+      "redaction_notes": "Potential contact details or identifiers were intentionally excluded from published fields.",
+      "sharepoint_url": null
+    },
+    {
+      "id": "psychiatry-im-hospitalists-and-emergency-medicine-service-agreement",
+      "title": "Psychiatry, IM Hospitalists, and Emergency Medicine Service Agreement",
+      "source_filename": "Service agreements/Psychiatry, IM Hospitalists, and Emergency Medicine Service Agreement.doc",
+      "file_type": "other",
+      "departments": [
+        "Emergency Medicine",
+        "Internal Medicine",
+        "Hospital Medicine",
+        "Psychiatry"
+      ],
+      "last_updated": null,
+      "tags": [
+        "consult-workflow",
+        "escalation",
+        "disposition",
+        "behavioral-health",
+        "ownership"
+      ],
+      "summary_bullets": [
+        "Defines a shared workflow between Emergency Medicine, Internal Medicine, Hospital Medicine for this service-line agreement.",
+        "Clarifies which patient scenarios are in-scope versus when alternate pathways are required.",
+        "Emphasizes ED stabilization, focused workup, and serial reassessment before final handoff.",
+        "Outlines required chart documentation to support consultant acceptance and safe transitions of care.",
+        "Describes escalation expectations when patient status changes or response is delayed.",
+        "Specifies when ownership transitions from the ED team to the receiving specialty service.",
+        "Separates medical screening responsibilities from behavioral-health disposition responsibilities."
+      ],
+      "ed_actions": [
+        "Stabilize immediate threats first and document objective severity findings before handoff discussions.",
+        "Initiate pathway-appropriate diagnostic workup and early treatment from the ED side.",
+        "Place consult/transfer requests with concise clinical indication and current response to therapy.",
+        "Record consultant communication, recommendations, and ownership status in the chart.",
+        "Document medical screening completion and any exclusion criteria before psychiatric placement."
+      ],
+      "consults_and_escalation": [
+        "Engage the primary specialty once inclusion criteria are met and communicate key objective findings.",
+        "Escalate to the on-call attending or service lead when callback is delayed or recommendations conflict.",
+        "Use departmental chain-of-command for unresolved acceptance disputes or prolonged boarding risk.",
+        "Document each escalation step and closed-loop communication outcome.",
+        "Coordinate escalation jointly with psychiatry and medicine when medical and behavioral risks overlap."
+      ],
+      "disposition_or_ownership": [
+        "ED team retains active ownership until receiving service acceptance is documented.",
+        "Receiving service owns definitive inpatient or transfer plan after acceptance criteria are met.",
+        "If clinical status changes before transfer, disposition should be re-evaluated under ED oversight.",
+        "Behavioral-health placement proceeds only after documented medical screening/clearance milestones."
+      ],
+      "timing_targets": [],
+      "redaction_notes": "Potential contact details or identifiers were intentionally excluded from published fields.",
+      "sharepoint_url": null
+    },
+    {
+      "id": "snf-to-emergency-medicine-service-agreement-final",
+      "title": "SNF to Emergency Medicine Service Agreement Final",
+      "source_filename": "Service agreements/SNF to Emergency Medicine Service Agreement Final.pdf",
+      "file_type": "pdf",
+      "departments": [
+        "Emergency Medicine",
+        "Skilled Nursing Facility"
+      ],
+      "last_updated": null,
+      "tags": [
+        "consult-workflow",
+        "escalation",
+        "ownership"
+      ],
+      "summary_bullets": [
+        "Defines a shared workflow between Emergency Medicine, Skilled Nursing Facility for this service-line agreement.",
+        "Clarifies which patient scenarios are in-scope versus when alternate pathways are required.",
+        "Emphasizes ED stabilization, focused workup, and serial reassessment before final handoff.",
+        "Outlines required chart documentation to support consultant acceptance and safe transitions of care.",
+        "Describes escalation expectations when patient status changes or response is delayed.",
+        "Specifies when ownership transitions from the ED team to the receiving specialty service."
+      ],
+      "ed_actions": [
+        "Stabilize immediate threats first and document objective severity findings before handoff discussions.",
+        "Initiate pathway-appropriate diagnostic workup and early treatment from the ED side.",
+        "Place consult/transfer requests with concise clinical indication and current response to therapy.",
+        "Record consultant communication, recommendations, and ownership status in the chart."
+      ],
+      "consults_and_escalation": [
+        "Engage the primary specialty once inclusion criteria are met and communicate key objective findings.",
+        "Escalate to the on-call attending or service lead when callback is delayed or recommendations conflict.",
+        "Use departmental chain-of-command for unresolved acceptance disputes or prolonged boarding risk.",
+        "Document each escalation step and closed-loop communication outcome."
+      ],
+      "disposition_or_ownership": [
+        "ED team retains active ownership until receiving service acceptance is documented.",
+        "Receiving service owns definitive inpatient or transfer plan after acceptance criteria are met.",
+        "If clinical status changes before transfer, disposition should be re-evaluated under ED oversight."
+      ],
+      "timing_targets": [],
+      "redaction_notes": "Limited machine-readable PDF text; summary inferred from filename and sparse metadata. Summary confidence is lower due to limited machine-readable source text.",
+      "sharepoint_url": null
+    },
+    {
+      "id": "urology-and-emergency-medicine-service-agreement-2019",
+      "title": "Urology and Emergency Medicine Service Agreement 2019",
+      "source_filename": "Service agreements/Urology and Emergency Medicine Service Agreement 2019.docx",
+      "file_type": "docx",
+      "departments": [
+        "Emergency Medicine",
+        "Internal Medicine",
+        "Critical Care",
+        "Urology",
+        "Surgery"
+      ],
+      "last_updated": null,
+      "tags": [
+        "consult-workflow",
+        "sepsis",
+        "pregnancy",
+        "critical-care",
+        "surgical",
+        "escalation",
+        "ownership"
+      ],
+      "summary_bullets": [
+        "Defines a shared workflow between Emergency Medicine, Internal Medicine, Critical Care for this service-line agreement.",
+        "Clarifies which patient scenarios are in-scope versus when alternate pathways are required.",
+        "Emphasizes ED stabilization, focused workup, and serial reassessment before final handoff.",
+        "Outlines required chart documentation to support consultant acceptance and safe transitions of care.",
+        "Describes escalation expectations when patient status changes or response is delayed.",
+        "Specifies when ownership transitions from the ED team to the receiving specialty service.",
+        "Prioritizes early recognition and time-sensitive sepsis treatment milestones."
+      ],
+      "ed_actions": [
+        "Stabilize immediate threats first and document objective severity findings before handoff discussions.",
+        "Initiate pathway-appropriate diagnostic workup and early treatment from the ED side.",
+        "Place consult/transfer requests with concise clinical indication and current response to therapy.",
+        "Record consultant communication, recommendations, and ownership status in the chart.",
+        "Complete sepsis bundle milestones and reassess perfusion status at defined checkpoints."
+      ],
+      "consults_and_escalation": [
+        "Engage the primary specialty once inclusion criteria are met and communicate key objective findings.",
+        "Escalate to the on-call attending or service lead when callback is delayed or recommendations conflict.",
+        "Use departmental chain-of-command for unresolved acceptance disputes or prolonged boarding risk.",
+        "Document each escalation step and closed-loop communication outcome."
+      ],
+      "disposition_or_ownership": [
+        "ED team retains active ownership until receiving service acceptance is documented.",
+        "Receiving service owns definitive inpatient or transfer plan after acceptance criteria are met.",
+        "If clinical status changes before transfer, disposition should be re-evaluated under ED oversight."
+      ],
+      "timing_targets": [
+        "Operational timing reference noted: 7 pm- 7am."
+      ],
+      "redaction_notes": "No explicit sensitive fields were carried into output; summaries are intentionally high-level.",
+      "sharepoint_url": null
+    },
+    {
+      "id": "urology-and-emergency-medicine-service-agreement",
+      "title": "Urology and Emergency Medicine Service Agreement",
+      "source_filename": "Service agreements/Urology and Emergency Medicine Service Agreement.docx",
+      "file_type": "docx",
+      "departments": [
+        "Emergency Medicine",
+        "Internal Medicine",
+        "Critical Care",
+        "Urology",
+        "Surgery"
+      ],
+      "last_updated": "2017-06-01",
+      "tags": [
+        "consult-workflow",
+        "disposition",
+        "pregnancy",
+        "critical-care",
+        "surgical",
+        "escalation",
+        "ownership"
+      ],
+      "summary_bullets": [
+        "Defines a shared workflow between Emergency Medicine, Internal Medicine, Critical Care for this service-line agreement.",
+        "Clarifies which patient scenarios are in-scope versus when alternate pathways are required.",
+        "Emphasizes ED stabilization, focused workup, and serial reassessment before final handoff.",
+        "Outlines required chart documentation to support consultant acceptance and safe transitions of care.",
+        "Describes escalation expectations when patient status changes or response is delayed.",
+        "Specifies when ownership transitions from the ED team to the receiving specialty service."
+      ],
+      "ed_actions": [
+        "Stabilize immediate threats first and document objective severity findings before handoff discussions.",
+        "Initiate pathway-appropriate diagnostic workup and early treatment from the ED side.",
+        "Place consult/transfer requests with concise clinical indication and current response to therapy.",
+        "Record consultant communication, recommendations, and ownership status in the chart."
+      ],
+      "consults_and_escalation": [
+        "Engage the primary specialty once inclusion criteria are met and communicate key objective findings.",
+        "Escalate to the on-call attending or service lead when callback is delayed or recommendations conflict.",
+        "Use departmental chain-of-command for unresolved acceptance disputes or prolonged boarding risk.",
+        "Document each escalation step and closed-loop communication outcome."
+      ],
+      "disposition_or_ownership": [
+        "ED team retains active ownership until receiving service acceptance is documented.",
+        "Receiving service owns definitive inpatient or transfer plan after acceptance criteria are met.",
+        "If clinical status changes before transfer, disposition should be re-evaluated under ED oversight."
+      ],
+      "timing_targets": [],
+      "redaction_notes": "Potential contact details or identifiers were intentionally excluded from published fields.",
+      "sharepoint_url": null
+    }
+  ]
+}
