@@ -401,6 +401,13 @@
   .btn-primary { background: var(--green); border-color: var(--green); color: #0d1117; }
   .btn-primary:hover { opacity: 0.85; }
 
+  .btn-notify {
+    background: rgba(59, 130, 246, 0.14);
+    border-color: rgba(59, 130, 246, 0.5);
+    color: #bfdbfe;
+  }
+  .btn-notify:hover { background: rgba(59, 130, 246, 0.22); color: #dbeafe; }
+
   .no-results {
     padding: 32px 20px;
     text-align: center;
@@ -579,7 +586,8 @@
     </div>
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
-      <button class="btn btn-primary" onclick="addEntry()">Add Entry</button>
+      <button class="btn btn-notify" onclick="submitEntryForPublish()">Submit for Publish</button>
+      <button class="btn btn-primary" onclick="addEntry()">Add Local Entry</button>
     </div>
   </div>
 </div>
@@ -942,6 +950,8 @@ const data = {
 
 const PHONE_INDEX_STORAGE_KEY = 'kp_er_phone_directory_index_v1';
 const CUSTOM_ENTRIES_STORAGE_KEY = 'kp_er_phone_custom_entries_v1';
+const PHONE_DIRECTORY_ISSUE_URL = 'https://github.com/kimtrinh/er-documentation/issues/new';
+const PHONE_DIRECTORY_ISSUE_LABEL = 'phone-directory';
 const customEntries = { omc: [], fmc: [] };
 let currentHospital = 'omc';
 
@@ -1227,14 +1237,8 @@ document.getElementById('modalOverlay').addEventListener('click', e => {
 });
 
 function addEntry() {
-  const name = document.getElementById('newName').value.trim();
-  const number = document.getElementById('newNumber').value.trim();
-  const note = document.getElementById('newNote').value.trim();
-  const type = document.getElementById('newType').value;
-  const category = document.getElementById('newCategory').value;
-
-  const entry = normalizeCustomEntry({ name, number, type, note, category });
-  if (!entry) { showToast('Name and number required.'); return; }
+  const entry = collectModalEntry();
+  if (!entry) return;
 
   customEntries[currentHospital].push(entry);
   saveCustomEntries();
@@ -1242,6 +1246,45 @@ function addEntry() {
   renderHospital(currentHospital);
   exportPhoneDirectoryIndex();
   showToast(`Added "${entry.name}" to ${currentHospital.toUpperCase()}`);
+}
+
+function collectModalEntry() {
+  const name = document.getElementById('newName').value.trim();
+  const number = document.getElementById('newNumber').value.trim();
+  const note = document.getElementById('newNote').value.trim();
+  const type = document.getElementById('newType').value;
+  const category = document.getElementById('newCategory').value;
+
+  const entry = normalizeCustomEntry({ name, number, type, note, category });
+  if (!entry) {
+    showToast('Name and number required.');
+    return null;
+  }
+  return entry;
+}
+
+function submitEntryForPublish() {
+  const entry = collectModalEntry();
+  if (!entry) return;
+
+  const hospital = currentHospital.toUpperCase();
+  const title = `Phone Directory Update: ${hospital} - ${entry.name}`;
+  const body = [
+    '### Requested Phone Directory Entry',
+    '',
+    `- Hospital: ${hospital}`,
+    `- Category: ${entry.category}`,
+    `- Name / Label: ${entry.name}`,
+    `- Number: ${entry.number}`,
+    `- Type: ${entry.type}`,
+    `- Notes: ${entry.note || '(none)'}`,
+    '',
+    'Please review and publish this change to the shared phone directory.'
+  ].join('\n');
+
+  const issueUrl = `${PHONE_DIRECTORY_ISSUE_URL}?labels=${encodeURIComponent(PHONE_DIRECTORY_ISSUE_LABEL)}&title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`;
+  window.open(issueUrl, '_blank', 'noopener');
+  showToast('Opened GitHub issue form. Submit it to notify the maintainer.');
 }
 
 function deleteCustom(hospital, idx) {
