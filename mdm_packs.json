@@ -1,0 +1,251 @@
+{
+  "packs": [
+    {
+      "id": "mdmccp",
+      "aliases": ["mdm-chest", "ccp"],
+      "title": "Chest Pain",
+      "base_mdm_template": "Patient evaluated for chest pain with focused assessment for life-threatening etiologies, targeted diagnostics, and risk-stratified disposition.",
+      "ddx": [
+        { "label": "ACS", "group": "Life-threatening", "tags": ["acs"], "ruleouts": ["noacs"], "default_checked": true },
+        { "label": "PE", "group": "Life-threatening", "tags": ["pe"], "ruleouts": ["nope"], "default_checked": true },
+        { "label": "Aortic dissection", "group": "Life-threatening", "tags": ["dissection"], "ruleouts": ["nodissection"], "default_checked": true },
+        { "label": "Pneumothorax", "group": "Life-threatening", "tags": ["ptx"], "ruleouts": ["noptx"], "default_checked": false },
+        { "label": "Pericarditis", "group": "Common", "tags": ["pericarditis"], "ruleouts": [], "default_checked": false },
+        { "label": "Pneumonia", "group": "Common", "tags": ["pna"], "ruleouts": ["nopna"], "default_checked": false },
+        { "label": "Esophageal rupture", "group": "Other", "tags": ["esoph"], "ruleouts": [], "default_checked": false },
+        { "label": "GERD/MSK", "group": "Other", "tags": ["gi_msk"], "ruleouts": [], "default_checked": false }
+      ],
+      "risk_toggles": [
+        {
+          "id": "ccp_heart_score",
+          "label": "HEART score documented",
+          "tags_required": ["acs"],
+          "input": { "type": "number", "label": "Score", "placeholder": "0-10", "min": 0, "max": 10 },
+          "sentence_template": "HEART score = {value}; risk stratification discussed and disposition determined accordingly."
+        },
+        {
+          "id": "ccp_trop_reassuring",
+          "label": "Serial troponins reassuring",
+          "tags_required": ["acs"],
+          "sentence_template": "Serial troponins obtained and reassuring."
+        },
+        {
+          "id": "ccp_ecg_nonischemic",
+          "label": "ECG without ischemic changes",
+          "tags_required": ["acs"],
+          "sentence_template": "ECG reviewed without acute ischemic changes."
+        },
+        {
+          "id": "ccp_perc_negative",
+          "label": "PERC negative",
+          "tags_required": ["pe"],
+          "sentence_template": "PE considered; patient is PERC negative and low risk, so further PE testing not indicated."
+        },
+        {
+          "id": "ccp_wells_ddimer",
+          "label": "Wells low + D-dimer negative",
+          "tags_required": ["pe"],
+          "sentence_template": "PE considered; Wells low risk and D-dimer negative, so PE effectively excluded without imaging."
+        },
+        {
+          "id": "ccp_cta_pe_not_indicated",
+          "label": "CTA PE considered / not indicated",
+          "tags_required": ["pe"],
+          "sentence_template": "CT pulmonary angiography considered; not indicated given low clinical suspicion and reassuring evaluation."
+        },
+        {
+          "id": "ccp_dissection_low_suspicion",
+          "label": "Low suspicion dissection",
+          "tags_required": ["dissection"],
+          "sentence_template": "Aortic dissection considered; low clinical suspicion based on history/exam and available diagnostics."
+        },
+        {
+          "id": "ccp_cta_aorta_not_indicated",
+          "label": "CTA aorta considered / not indicated",
+          "tags_required": ["dissection"],
+          "sentence_template": "CTA aorta considered; not indicated given low clinical suspicion and reassuring evaluation."
+        }
+      ]
+    },
+    {
+      "id": "mdmsob",
+      "aliases": ["mdm-dyspnea", "sob"],
+      "title": "Shortness of Breath",
+      "base_mdm_template": "Patient evaluated for dyspnea with cardiopulmonary differential, focused diagnostics, and risk-stratified disposition.",
+      "ddx": [
+        { "label": "PE", "group": "Life-threatening", "tags": ["pe"], "ruleouts": ["nope"], "default_checked": true },
+        { "label": "Pneumonia", "group": "Common", "tags": ["pna"], "ruleouts": ["nopna"], "default_checked": true },
+        { "label": "CHF/pulmonary edema", "group": "Common", "tags": ["chf"], "ruleouts": ["nochf"], "default_checked": true },
+        { "label": "COPD/asthma exacerbation", "group": "Common", "tags": ["copd_asthma"], "ruleouts": ["noasthma"], "default_checked": false },
+        { "label": "Pneumothorax", "group": "Life-threatening", "tags": ["ptx"], "ruleouts": ["noptx"], "default_checked": false },
+        { "label": "ACS atypical", "group": "Other", "tags": ["acs"], "ruleouts": ["noacs"], "default_checked": false }
+      ],
+      "risk_toggles": [
+        {
+          "id": "sob_perc_negative",
+          "label": "PERC negative",
+          "tags_required": ["pe"],
+          "sentence_template": "PE considered; patient is PERC negative and low risk, so further PE testing not indicated."
+        },
+        {
+          "id": "sob_wells_ddimer",
+          "label": "Wells low + D-dimer negative",
+          "tags_required": ["pe"],
+          "sentence_template": "PE considered; Wells low risk and D-dimer negative, so PE effectively excluded without imaging."
+        },
+        {
+          "id": "sob_cta_pe_not_indicated",
+          "label": "CTA PE considered / not indicated",
+          "tags_required": ["pe"],
+          "sentence_template": "CT pulmonary angiography considered; not indicated given low clinical suspicion and reassuring evaluation."
+        },
+        {
+          "id": "sob_cxr_no_consolidation",
+          "label": "CXR without consolidation",
+          "tags_required": ["pna"],
+          "sentence_template": "CXR reviewed without focal consolidation."
+        },
+        {
+          "id": "sob_no_volume_overload",
+          "label": "No volume overload on exam",
+          "tags_required": ["chf"],
+          "sentence_template": "No clinical evidence of volume overload on exam."
+        },
+        {
+          "id": "sob_improved",
+          "label": "Improved with treatment in ED",
+          "tags_required": [],
+          "sentence_template": "Symptoms improved with ED treatment and patient remained stable."
+        }
+      ]
+    },
+    {
+      "id": "mdmabd",
+      "aliases": ["mdm-abd", "abd"],
+      "title": "Abdominal Pain",
+      "base_mdm_template": "Patient evaluated for abdominal pain with broad intra-abdominal differential, serial abdominal exams, and risk-based testing/disposition.",
+      "ddx": [
+        { "label": "Appendicitis", "group": "Life-threatening", "tags": ["appy"], "ruleouts": ["noappendicitis"], "default_checked": true },
+        { "label": "Biliary colic/cholecystitis", "group": "Common", "tags": ["biliary"], "ruleouts": ["nobiliary"], "default_checked": true },
+        { "label": "SBO/ileus", "group": "Life-threatening", "tags": ["sbo"], "ruleouts": ["nosbo"], "default_checked": true },
+        { "label": "Pancreatitis", "group": "Common", "tags": ["panc"], "ruleouts": ["noepigastric"], "default_checked": false },
+        { "label": "Diverticulitis", "group": "Common", "tags": ["divert"], "ruleouts": [], "default_checked": false },
+        { "label": "AAA", "group": "Life-threatening", "tags": ["aaa"], "ruleouts": ["noaaa"], "default_checked": false },
+        { "label": "Mesenteric ischemia", "group": "Life-threatening", "tags": ["mes_isch"], "ruleouts": ["nomesischemia"], "default_checked": false }
+      ],
+      "risk_toggles": [
+        {
+          "id": "abd_ct_not_indicated",
+          "label": "CT A/P considered / not indicated",
+          "tags_required": [],
+          "sentence_template": "CT abdomen/pelvis considered; not indicated given low suspicion and reassuring evaluation."
+        },
+        {
+          "id": "abd_ruq_us_negative",
+          "label": "US RUQ reviewed",
+          "tags_required": ["biliary"],
+          "sentence_template": "RUQ ultrasound reviewed without acute cholecystitis."
+        },
+        {
+          "id": "abd_lipase_reassuring",
+          "label": "Lipase reassuring",
+          "tags_required": ["panc"],
+          "sentence_template": "Lipase reviewed and not consistent with pancreatitis."
+        },
+        {
+          "id": "abd_no_peritonitis",
+          "label": "No peritonitis",
+          "tags_required": [],
+          "sentence_template": "No peritoneal signs on exam."
+        }
+      ]
+    },
+    {
+      "id": "mdmha",
+      "aliases": ["mdm-headache", "headache"],
+      "title": "Headache / Neuro",
+      "base_mdm_template": "Patient evaluated for headache/neuro complaint with focused exclusion of intracranial and infectious emergencies.",
+      "ddx": [
+        { "label": "SAH", "group": "Life-threatening", "tags": ["sah"], "ruleouts": ["nosah"], "default_checked": true },
+        { "label": "Meningitis/encephalitis", "group": "Life-threatening", "tags": ["meningitis"], "ruleouts": ["nomeningitis"], "default_checked": true },
+        { "label": "Stroke/ICH", "group": "Life-threatening", "tags": ["stroke_ich"], "ruleouts": ["nostroke"], "default_checked": true },
+        { "label": "Temporal arteritis", "group": "Other", "tags": ["gca"], "ruleouts": ["nogca"], "default_checked": false },
+        { "label": "Migraine/tension", "group": "Common", "tags": ["primary_ha"], "ruleouts": [], "default_checked": false }
+      ],
+      "risk_toggles": [
+        {
+          "id": "ha_neuro_intact",
+          "label": "Neuro intact",
+          "tags_required": [],
+          "sentence_template": "Neuro exam non-focal."
+        },
+        {
+          "id": "ha_no_meningismus",
+          "label": "No meningismus",
+          "tags_required": ["meningitis"],
+          "sentence_template": "No meningismus on exam."
+        },
+        {
+          "id": "ha_ct_head_negative",
+          "label": "CT head reviewed",
+          "tags_required": ["sah", "stroke_ich"],
+          "sentence_template": "CT head reviewed without acute intracranial abnormality."
+        },
+        {
+          "id": "ha_sah_rule_negative",
+          "label": "SAH rule negative",
+          "tags_required": ["sah"],
+          "sentence_template": "Low suspicion for SAH based on history/exam and decision rule criteria."
+        }
+      ]
+    },
+    {
+      "id": "mdmfever",
+      "aliases": ["mdm-sepsis", "fever"],
+      "title": "Fever / Sepsis Evaluation",
+      "base_mdm_template": "Patient evaluated for febrile illness with infectious source assessment and sepsis risk stratification.",
+      "ddx": [
+        { "label": "Pneumonia", "group": "Common", "tags": ["pna"], "ruleouts": ["nopna"], "default_checked": true },
+        { "label": "UTI/pyelonephritis", "group": "Common", "tags": ["uti"], "ruleouts": ["nouti"], "default_checked": true },
+        { "label": "Viral syndrome", "group": "Common", "tags": ["viral"], "ruleouts": ["noviral"], "default_checked": true },
+        { "label": "Bacteremia/sepsis", "group": "Life-threatening", "tags": ["sepsis"], "ruleouts": ["nosepsis"], "default_checked": false },
+        { "label": "SSTI", "group": "Common", "tags": ["ssti"], "ruleouts": ["nossti"], "default_checked": false }
+      ],
+      "risk_toggles": [
+        {
+          "id": "fever_sepsis_screen",
+          "label": "Sepsis screen considered",
+          "tags_required": ["sepsis"],
+          "input": {
+            "type": "select",
+            "label": "Criteria",
+            "default": "did not",
+            "options": [
+              { "label": "Did not meet", "value": "did not" },
+              { "label": "Did meet", "value": "did" }
+            ]
+          },
+          "sentence_template": "Sepsis considered; patient {value} meet criteria for severe sepsis/septic shock during ED course."
+        },
+        {
+          "id": "fever_lactate_reassuring",
+          "label": "Lactate reassuring",
+          "tags_required": ["sepsis"],
+          "sentence_template": "Lactate reviewed and reassuring."
+        },
+        {
+          "id": "fever_blood_cultures",
+          "label": "Blood cultures obtained",
+          "tags_required": ["sepsis"],
+          "sentence_template": "Blood cultures obtained."
+        },
+        {
+          "id": "fever_improved_stable",
+          "label": "Improved / stable vitals",
+          "tags_required": [],
+          "sentence_template": "Patient remained hemodynamically stable with improvement during ED course."
+        }
+      ]
+    }
+  ]
+}

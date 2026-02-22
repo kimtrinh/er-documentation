@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MDM Builder</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',system-ui,sans-serif;background:#0f172a;color:#e2e8f0;min-height:100vh}
+header{background:linear-gradient(135deg,#1e293b,#0f172a);border-bottom:1px solid #1e3a5f;padding:20px 24px}
+.header-inner{max-width:1100px;margin:0 auto}
+.logo{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.logo span{font-size:22px}.logo h1{font-size:20px;font-weight:700;color:#f1f5f9}
+.subtitle{font-size:13px;color:#64748b;margin-left:32px;margin-bottom:12px}
+.disclaimer{background:#1e3a5f;border:1px solid #2563eb;border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:12px;color:#93c5fd;line-height:1.5}
+.disclaimer strong{color:#bfdbfe}
+
+.controls{display:grid;grid-template-columns:2fr 1.2fr 1.5fr;gap:12px;align-items:end}
+.control{display:flex;flex-direction:column;gap:6px}
+.control label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#8fa8c8;font-weight:700}
+.control select,.control input[type="text"]{width:100%;padding:10px 12px;background:#1e293b;border:1px solid #334155;border-radius:10px;color:#f1f5f9;font-size:14px;outline:none}
+.control select:focus,.control input[type="text"]:focus{border-color:#3b82f6}
+.mode-toggle{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.mode-pill{display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #334155;background:#1e293b;border-radius:999px;color:#cbd5e1;font-size:13px;font-weight:600;cursor:pointer}
+.mode-pill input{accent-color:#3b82f6}
+.alias-hint{margin-top:8px;font-size:11px;color:#64748b}
+
+main{max-width:1100px;margin:0 auto;padding:18px 24px 64px}
+.grid{display:grid;grid-template-columns:1.1fr 1fr;gap:16px;align-items:start}
+.panel{background:#1e293b;border:1px solid #334155;border-radius:12px;overflow:hidden}
+.panel-head{padding:12px 14px;border-bottom:1px solid #334155;background:#172235}
+.panel-head h2{font-size:13px;color:#f1f5f9;font-weight:700;letter-spacing:.02em}
+.panel-body{padding:14px}
+.section-subgroup + .section-subgroup{margin-top:14px}
+.section-subgroup h4{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#8fa8c8;margin-bottom:8px}
+.check-grid{display:grid;grid-template-columns:1fr;gap:8px}
+.check-row{display:flex;align-items:flex-start;gap:8px;padding:9px 10px;background:#0f172a;border:1px solid #27364d;border-radius:9px;font-size:13px;color:#cbd5e1}
+.check-row input{margin-top:2px;accent-color:#3b82f6}
+.ruleout-label{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.missing-tag{font-size:11px;color:#fca5a5;border:1px solid #7f1d1d;background:#2d1b1b;padding:1px 6px;border-radius:20px}
+
+.risk-row + .risk-row{margin-top:10px}
+.risk-input-wrap{display:flex;align-items:center;gap:8px;margin:8px 2px 0 28px}
+.risk-input-wrap span{font-size:11px;color:#94a3b8;min-width:54px}
+.risk-input-wrap input,.risk-input-wrap select{background:#0f172a;border:1px solid #334155;border-radius:8px;color:#e2e8f0;font-size:12px;padding:6px 8px;min-width:120px}
+.risk-input-wrap input:disabled,.risk-input-wrap select:disabled{opacity:.5}
+
+.preview-wrap{display:flex;flex-direction:column;gap:10px}
+.preview{width:100%;min-height:500px;resize:vertical;background:#0f172a;border:1px solid #334155;border-radius:10px;color:#e2e8f0;padding:12px;font:13px/1.55 'JetBrains Mono',monospace;outline:none}
+.copy-row{display:flex;gap:8px;flex-wrap:wrap}
+.copy-btn{padding:8px 12px;border-radius:8px;border:1px solid #334155;background:#1e293b;color:#e2e8f0;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s}
+.copy-btn:hover{border-color:#3b82f6;color:#bfdbfe}
+.copy-btn.copied{background:#14532d;border-color:#22c55e;color:#bbf7d0}
+.empty-block{font-size:12px;color:#64748b;padding:6px 2px}
+
+@media(max-width:980px){
+  .controls{grid-template-columns:1fr}
+  .grid{grid-template-columns:1fr}
+  .preview{min-height:320px}
+}
+
+/* ===== SHARED NEW NAV ===== */
+@media(max-width:640px){}
+.sitenav{background:#0d1829;border-bottom:1px solid #1a2d48;position:sticky;top:0;z-index:100;font-family:'DM Sans',system-ui,sans-serif}
+.sitenav-inner{max-width:1200px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:6px;height:46px;overflow:hidden}
+.nav-logo{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:#3b82f6;white-space:nowrap;flex-shrink:0;text-decoration:none;margin-right:6px}
+.nav-logo span{color:#4a6280}
+.nav-links{display:flex;flex:1;min-width:0;gap:1px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;white-space:nowrap;padding-right:10px}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-link{padding:5px 10px;border-radius:6px;font-size:12px;font-weight:600;color:#8fa8c8;text-decoration:none;white-space:nowrap;transition:all .15s}
+.nav-link:hover{background:#111f35;color:#e8f0fc}
+.nav-link.active{background:#1d4ed8;color:#fff}
+@media(max-width:640px){.nav-link{font-size:11px;padding:4px 8px}}
+</style>
+</head>
+<body>
+<nav class="sitenav">
+  <div class="sitenav-inner">
+    <a class="nav-logo" href="index.html">⚡ KP<span>/</span>ER</a>
+    <div class="nav-links">
+      <a class="nav-link" href="index.html">🏠 Home</a>
+      <a class="nav-link" href="dotphrase.html">📋 Phrases</a>
+      <a class="nav-link active" href="mdm.html">🧾 MDM</a>
+      <a class="nav-link" href="calculators.html">🧮 Calcs</a>
+      <a class="nav-link" href="vasopressors.html">💊 Vasopressors</a>
+      <a class="nav-link" href="rsi.html">🫁 RSI</a>
+      <a class="nav-link" href="algorithms.html">🔀 Algorithms</a>
+      <a class="nav-link" href="neurohub.html">🧠 Neuro Hub</a>
+      <a class="nav-link" href="pedsfever.html">🌡️ Peds Fever</a>
+      <a class="nav-link" href="service-agreements.html">📑 Service Agreements</a>
+      <a class="nav-link" href="ed-phone-directory.html">📞 Directory</a>
+      <a class="nav-link" href="links.html">🔗 Links</a>
+      <a class="nav-link" href="roadmap.html">🗺️ Roadmap</a>
+    </div>
+  </div>
+</nav>
+
+<header>
+  <div class="header-inner">
+    <div class="logo"><span>🧾</span><h1>Chief Complaint MDM Builder</h1></div>
+    <p class="subtitle">Build defensible MDM text with DDx, risk stratification, and linked rule-outs.</p>
+    <div class="disclaimer"><strong>⚠️ Clinical Disclaimer:</strong> Generated text is a documentation aid. Review and tailor to the patient, diagnostics, and ED course before use.</div>
+
+    <div class="controls">
+      <div class="control">
+        <label for="packSelect">Chief Complaint Pack</label>
+        <select id="packSelect" aria-label="Chief Complaint Pack"></select>
+      </div>
+      <div class="control">
+        <label for="commandInput">Quick Command</label>
+        <input id="commandInput" type="text" placeholder="Type mdmccp, mdmsob, mdmabd..." autocomplete="off" spellcheck="false" aria-label="Quick Command Alias">
+      </div>
+      <div class="control">
+        <label>Output Mode</label>
+        <div class="mode-toggle">
+          <label class="mode-pill"><input id="modeDotphrase" name="outputMode" type="radio" value="dotphrase" checked>Dotphrase</label>
+          <label class="mode-pill"><input id="modeExpanded" name="outputMode" type="radio" value="expanded">Expanded</label>
+        </div>
+      </div>
+    </div>
+    <div id="aliasHint" class="alias-hint"></div>
+  </div>
+</header>
+
+<main>
+  <div class="grid">
+    <div>
+      <section class="panel">
+        <div class="panel-head"><h2>DDx</h2></div>
+        <div class="panel-body" id="ddxContainer"></div>
+      </section>
+
+      <section class="panel" style="margin-top:14px">
+        <div class="panel-head"><h2>Rule-outs</h2></div>
+        <div class="panel-body" id="ruleoutContainer"></div>
+      </section>
+
+      <section class="panel" style="margin-top:14px">
+        <div class="panel-head"><h2>Risk Tools</h2></div>
+        <div class="panel-body" id="riskContainer"></div>
+      </section>
+    </div>
+
+    <section class="panel">
+      <div class="panel-head"><h2>Live Preview</h2></div>
+      <div class="panel-body preview-wrap">
+        <div class="copy-row">
+          <button id="copyFullBtn" class="copy-btn" type="button">Copy Full MDM</button>
+          <button id="copyDdxBtn" class="copy-btn" type="button">Copy DDx only</button>
+          <button id="copyRuleoutsBtn" class="copy-btn" type="button">Copy Rule-outs only</button>
+        </div>
+        <textarea id="mdmPreview" class="preview" spellcheck="false" aria-label="MDM output preview"></textarea>
+      </div>
+    </section>
+  </div>
+</main>
+
+<script src="search-index.js"></script>
+<script src="data/dotphrases.js"></script>
+<script src="mdm.js"></script>
+
+<script id="shared-nav-search">
+</script>
+</body>
+</html>
