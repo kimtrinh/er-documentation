@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated_at": "2026-02-22T02:28:36.509786+00:00",
+  "generated_at": "2026-02-22T03:23:00.544123+00:00",
   "agreements": [
     {
       "id": "covid-19-ischemic-stroke-management-in-covid-patients-v2",
@@ -1451,34 +1451,35 @@
         "ownership"
       ],
       "summary_bullets": [
-        "Immediate ED action: Fournier's gangrene of scrotum and penis (if perirectal involvement or not sure, call general surgery).",
-        "Immediate ED action: Hospital Medicine admit and no need to call Urologic Surgery overnight (7 pm- 7am).",
-        "Key rule: No need to call Urologist and out-patient Urologic Surgery referral.",
-        "Key rule: Obstructive ureteral stone with fever (>38C).",
-        "Practical note: Acute urinary retention s/p Foley placement (start pt on Flomax).",
-        "Practical note: Acute epididymo-orchitis with sepsis and no abscess or gangrene.",
-        "Practical note: No Urologic Surgery referral and follow-up with PCP."
+        "Urgent/emergent urologic conditions requiring immediate Urology call include torsion, persistent priapism, penile fracture, unreducible paraphimosis, and refractory catheter/hematuria scenarios.",
+        "Fournier's gangrene of the scrotum or penis requires immediate specialist escalation; if perirectal involvement is present or unclear, involve General Surgery.",
+        "Infected or high-risk obstruction (obstructing stone with fever >38C, solitary-kidney obstruction, bilateral obstruction) is treated as time-sensitive and requires immediate Urology involvement.",
+        "Hospital Medicine admission can proceed without overnight Urology call (7 PM-7 AM) for select non-fever obstructive pain/vomiting, controlled hematuria on CBI, or septic epididymo-orchitis without abscess/gangrene.",
+        "Stable patients with larger stones, urinary retention after Foley, hydronephrosis, or renal/testicular masses are directed to outpatient Urology referral without ED Urology consult.",
+        "Small uncomplicated stones, non-obstructive UTI/pyelo, balanitis/posthitis, uncomplicated epididymo-orchitis, benign cystic findings, and negative-ultrasound testicular pain follow PCP pathway.",
+        "Acute urinary retention after Foley placement should include tamsulosin initiation and outpatient Urology planning when otherwise stable."
       ],
       "ed_actions": [
-        "Stabilize immediate threats and document objective severity findings before handoff.",
-        "Initiate pathway-specific treatment and diagnostics before consultant transfer of ownership.",
-        "Record all consultant communication and explicit ownership in the chart.",
-        "Complete sepsis bundle steps and reassess perfusion while disposition is being arranged."
+        "Call Urology immediately for torsion, persistent priapism, penile fracture, unreducible paraphimosis, infected obstruction, refractory hematuria, or difficult catheterization with acute retention.",
+        "For Fournier's gangrene, call Urology immediately and add General Surgery if perirectal extension is present or uncertain.",
+        "If hematuria persists despite CBI and repeated Foley irrigation, treat as urgent and escalate to Urology.",
+        "For stable urinary retention after Foley placement, start tamsulosin and arrange outpatient Urology referral.",
+        "Document pathway category (urgent call, admit/no overnight call, outpatient referral, or PCP follow-up) in the ED note."
       ],
       "consults_and_escalation": [
-        "Consult flow: Fournier's gangrene of scrotum and penis (if perirectal involvement or not sure, call general surgery).",
-        "Consult flow: Hospital Medicine admit and no need to call Urologic Surgery overnight (7 pm- 7am).",
-        "Consult flow: No need to call Urologist and out-patient Urologic Surgery referral."
+        "Immediate consult pathway: Urology for all urgent/emergent categories.",
+        "Cross-service escalation: Add General Surgery for suspected Fournier's with perirectal involvement or unclear anatomic extension.",
+        "No overnight Urology call window for specified admit category: 7 PM-7 AM.",
+        "Escalate atypical high-risk presentations that do not cleanly fit categories via attending-to-attending discussion."
       ],
       "disposition_or_ownership": [
-        "Ownership/disposition: Hospital Medicine admit and no need to call Urologic Surgery overnight (7 pm- 7am).",
-        "Ownership/disposition: No need to call Urologist and out-patient Urologic Surgery referral.",
-        "ED retains active ownership until receiving service acceptance is explicitly documented.",
-        "Receiving service assumes ongoing plan after acceptance criteria are satisfied.",
-        "If status changes before transfer/admission, disposition should be re-evaluated under ED oversight."
+        "Admit to Hospital Medicine (without overnight Urology call, 7 PM-7 AM) for non-fever obstructive pain/vomiting, controlled gross hematuria on CBI, or septic epididymo-orchitis without abscess/gangrene.",
+        "Outpatient Urology referral (no ED consult) for stable obstruction >3 mm without fever, asymptomatic hydronephrosis, renal stone >=10 mm, post-Foley retention, asymptomatic renal mass/complex cyst, or testicular mass.",
+        "PCP follow-up (no Urology referral) for obstruction <=3 mm without fever, non-obstructive UTI/pyelo, balanitis/posthitis, uncomplicated epididymo-orchitis, renal stone <10 mm without obstruction, benign hydrocele/epididymal cyst, negative-ultrasound testicular pain, or microlithiasis."
       ],
       "timing_targets": [
-        "Timing expectation: Hospital Medicine admit and no need to call Urologic Surgery overnight (7 pm- 7am)."
+        "Timing expectation: Immediate Urology contact for urgent/emergent conditions.",
+        "Timing expectation: No overnight Urology call required from 7 PM-7 AM for defined Hospital Medicine admit scenarios."
       ],
       "redaction_notes": "No explicit sensitive fields were carried into output; summaries are intentionally high-level.",
       "sharepoint_url": null
@@ -1502,33 +1503,32 @@
         "ownership"
       ],
       "summary_bullets": [
-        "Purpose: In order to provide consistent support to the Emergency Department, the Department of Urology has provided a list of common urological pathologies seen in the ED.",
-        "Immediate ED action: Fournier's gangrene of scrotum and penis (if perirectal involvement or not sure, call general surgery).",
-        "Key rule: Obstructive urinary stone with fever (>38C) or intractable pain or intractable vomiting.",
-        "Key rule: Obstructive urinary stone in solitary kidney.",
-        "Practical note: Urological Evaluation of Emergency Department Patients.",
-        "Practical note: Difficult catheterization and acute post-op surgical complications.",
-        "Practical note: Acute urinary retention s/p Foley placement."
+        "Use a tiered ED workflow: urgent Urology call, Hospital Medicine admission without overnight call, outpatient Urology referral, or PCP follow-up based on risk and stability.",
+        "Urgent/emergent triggers include torsion, persistent priapism, penile fracture, unreducible paraphimosis, Fournier's gangrene, infected/high-risk obstruction, refractory hematuria, difficult catheterization with acute retention, and post-op complications.",
+        "If Fournier's has possible perirectal extension or anatomy is unclear, include General Surgery with Urology.",
+        "Selected non-fever obstructive pain/vomiting, controlled hematuria on CBI, and septic epididymo-orchitis without abscess/gangrene can be admitted to Hospital Medicine without overnight Urology call.",
+        "Stable patients with larger stones or non-emergent GU findings should be routed to outpatient Urology or PCP follow-up according to pathway criteria.",
+        "For retention after Foley placement, initiate tamsulosin and arrange appropriate outpatient follow-up."
       ],
       "ed_actions": [
-        "ED should: In order to provide consistent support to the Emergency Department, the Department of Urology has provided a list of common urological pathologies seen in.",
-        "Stabilize immediate threats and document objective severity findings before handoff.",
-        "Initiate pathway-specific treatment and diagnostics before consultant transfer of ownership.",
-        "Record all consultant communication and explicit ownership in the chart."
+        "Call Urology immediately for all urgent/emergent categories and document the specific trigger.",
+        "If concern for Fournier's extends to perirectal tissues, call General Surgery in parallel.",
+        "Escalate persistent gross hematuria despite CBI and repeated Foley irrigation as urgent.",
+        "For stable retention after Foley placement, start tamsulosin and route to outpatient Urology."
       ],
       "consults_and_escalation": [
-        "Consult flow: Fournier's gangrene of scrotum and penis (if perirectal involvement or not sure, call general surgery).",
-        "Engage the designated specialty once inclusion criteria are met.",
-        "Escalate to attending/chief pathways when callback is delayed or recommendations conflict.",
-        "Document closed-loop communication for each escalation step."
+        "Primary urgent consult: Urology.",
+        "Cross-service consult: General Surgery when Fournier's anatomy extends beyond urologic boundaries.",
+        "Use attending-level escalation when classification is uncertain or condition is worsening."
       ],
       "disposition_or_ownership": [
-        "Ownership/disposition: In order to provide consistent support to the Emergency Department, the Department of Urology has provided a list of common urological pathologies seen in.",
-        "ED retains active ownership until receiving service acceptance is explicitly documented.",
-        "Receiving service assumes ongoing plan after acceptance criteria are satisfied.",
-        "If status changes before transfer/admission, disposition should be re-evaluated under ED oversight."
+        "Hospital Medicine admit without overnight Urology call (7 PM-7 AM) for defined intermediate-risk scenarios.",
+        "Outpatient Urology referral for stable stone/mass/retention categories not requiring emergent intervention.",
+        "PCP follow-up for uncomplicated low-risk findings without obstruction, fever, or instability."
       ],
-      "timing_targets": [],
+      "timing_targets": [
+        "Timing expectation: Immediate Urology involvement for urgent/emergent presentations."
+      ],
       "redaction_notes": "Potential contact details or identifiers were intentionally excluded from published fields.",
       "sharepoint_url": null
     }
