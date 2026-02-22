@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generated_at": "2026-02-22T01:26:01.119820+00:00",
+  "generated_at": "2026-02-22T02:28:36.509786+00:00",
   "agreements": [
     {
       "id": "covid-19-ischemic-stroke-management-in-covid-patients-v2",
@@ -10,9 +10,7 @@
       "departments": [
         "Emergency Medicine",
         "Internal Medicine",
-        "Cardiology",
-        "Neurology",
-        "Urology"
+        "Neurology"
       ],
       "last_updated": null,
       "tags": [
@@ -21,14 +19,13 @@
         "ownership"
       ],
       "summary_bullets": [
-        "Clinical criteria: Factors associated with stroke include: older age, risk factors (hypertension, diabetes, and prior ischemic disease), elevated C-reactive protein, elevated D-dimer, and more severe COVID-19 disease. However.",
-        "Escalation note: In patients with known COVID-19, the decision to give IV rtPA has to be made after PLT, PT and PTT are back due to concern for.",
-        "Key provision: Note: After IV tPA, D-dimer level tends to increase. This needs to be taken into account when following D-Dimer levels for systemic prognostication purposes.",
-        "Key provision: Tele-stroke physicians will ask RAPID Abbott testing for all stroke patients ≤60 with symptoms concerning for/or a known embolic stroke including patients going for thrombectomy, even.",
-        "Key provision: The proposed duration is at least 4 weeks. The duration will also depend on the status of active infection/inflammation, persistent hypercoagulable state on serial labs. An."
+        "Decision points: Factors associated with stroke include: older age, risk factors (hypertension, diabetes, and prior ischemic disease), elevated C-reactive protein, elevated D-dimer, and more severe COVID-19 disease. However.",
+        "Escalation: In patients with known COVID-19, the decision to give IV rtPA has to be made after PLT, PT and PTT are back due to concern for.",
+        "Practical note: Note: After IV tPA, D-dimer level tends to increase. This needs to be taken into account when following D-Dimer levels for systemic prognostication purposes.",
+        "Practical note: In addition to standard work up, consider requesting D-Dimer (use the D-dimer quantitative for DVT order), Anti-phospholipid Ab panel (Lupus anticoagulants, beta2 glycoprotein antibodies and anti-cardiolipin.",
+        "Practical note: Tele-stroke physicians will ask RAPID Abbott testing for all stroke patients ≤60 with symptoms concerning for/or a known embolic stroke including patients going for thrombectomy, even."
       ],
       "ed_actions": [
-        "ED should: In addition to standard work up, consider requesting D-Dimer (use the D-dimer quantitative for DVT order), Anti-phospholipid Ab panel (Lupus anticoagulants, beta2 glycoprotein antibodies.",
         "Stabilize immediate threats and document objective severity findings before handoff.",
         "Initiate pathway-specific treatment and diagnostics before consultant transfer of ownership.",
         "Record all consultant communication and explicit ownership in the chart."
@@ -53,8 +50,7 @@
       "source_filename": "Service agreements/Deliveries Prior to Arrival.docx",
       "file_type": "docx",
       "departments": [
-        "Emergency Medicine",
-        "Ophthalmology"
+        "Emergency Medicine"
       ],
       "last_updated": null,
       "tags": [
@@ -63,24 +59,25 @@
         "ownership"
       ],
       "summary_bullets": [
-        "Workflow detail: Wait for physician assessment before sending mom and baby upstairs.",
-        "Workflow detail: Wait for physician assessment before sending mom and/or baby upstairs.",
-        "Key provision: If mom and/or baby are unstable and the patient’s location (remaining in ED).",
-        "Key provision: When no PITT provide available (on a transport or not here) call the provider that is up next to receive a patient (this blessing for transport.",
-        "Key provision: If mom and/or baby are stable and, on their way, upstairs.",
-        "Key provision: When mom and baby arrive together.",
-        "Key provision: Call L&D charge to let them know if the patient is going upstairs or staying in the ED."
+        "Immediate ED action: Call L&D charge to let them know if the patient is going upstairs or staying in the ED.",
+        "Immediate ED action: When no PITT provide available (on a transport or not here) call the provider that is up next to receive a patient for each patient (for.",
+        "ED workflow: If one or both are staying in department follow normal process for triage, bed assigning, etc.",
+        "ED workflow: Wait for physician assessment before sending mom and baby upstairs.",
+        "Practical note: If mom and/or baby are unstable and the patient’s location (remaining in ED).",
+        "Practical note: When no PITT provide available (on a transport or not here) call the provider that is up next to receive a patient (this blessing for transport.",
+        "Practical note: If mom and/or baby are stable and, on their way, upstairs."
       ],
       "ed_actions": [
-        "ED should: When no PITT provide available (on a transport or not here) call the provider that is up next to receive a patient (this blessing.",
         "ED should: Call L&D charge to let them know if the patient is going upstairs or staying in the ED.",
-        "ED should: When no PITT provide available (on a transport or not here) call the provider that is up next to receive a patient for each.",
-        "ED should: Call L&D charge and notify."
+        "ED should: When no PITT provide available (on a transport or not here) call the provider that is up next to receive a patient (this blessing.",
+        "Stabilize immediate threats and document objective severity findings before handoff.",
+        "Initiate pathway-specific treatment and diagnostics before consultant transfer of ownership.",
+        "Record all consultant communication and explicit ownership in the chart."
       ],
       "consults_and_escalation": [
-        "Consult flow: When no PITT provide available (on a transport or not here) call the provider that is up next to receive a patient (this blessing.",
         "Consult flow: Call L&D charge to let them know if the patient is going upstairs or staying in the ED.",
         "Consult flow: When no PITT provide available (on a transport or not here) call the provider that is up next to receive a patient for each.",
+        "Consult flow: When no PITT provide available (on a transport or not here) call the provider that is up next to receive a patient (this blessing.",
         "Consult flow: Call L&D charge and notify."
       ],
       "disposition_or_ownership": [
@@ -110,11 +107,10 @@
         "ownership"
       ],
       "summary_bullets": [
-        "Agreement purpose: Once a hip fracture patient arrives at the ED we've asked for Medicine to be consulted to Admit and Orthopaedics to be consulted to expedite surgical.",
+        "Purpose: Once a hip fracture patient arrives at the ED we've asked for Medicine to be consulted to Admit and Orthopaedics to be consulted to expedite surgical.",
         "Defines shared expectations between Emergency Medicine, Internal Medicine, Surgery for this pathway.",
         "Defines consult and handoff expectations for hip fractures ortho im.",
-        "Clarifies when ED-led management continues versus transition to receiving service.",
-        "Use the source policy to confirm implementation details for local practice."
+        "Review source document for full operational details not captured in this summary."
       ],
       "ed_actions": [
         "Stabilize immediate threats and document objective severity findings before handoff.",
@@ -145,7 +141,6 @@
         "Emergency Medicine",
         "Internal Medicine",
         "Hospital Medicine",
-        "Critical Care",
         "Case Management"
       ],
       "last_updated": "2022-06-29",
@@ -154,43 +149,41 @@
         "disposition",
         "transfer",
         "non-member",
-        "critical-care",
         "quality-safety",
         "escalation",
         "ownership"
       ],
       "summary_bullets": [
-        "Agreement purpose: To provide all patients high quality inpatient level care while waiting for transfer from our ED to their contracted hospital.",
-        "Scope focus: EM-IM Agreement for medical nonmember management in the Emergency Department.",
-        "Scope focus: Non-member management in the Emergency Department.",
-        "Escalation note: The patient will formally be handed off to the IM physician team when the initial attending emergency physician goes off shift. For the sake of timely.",
-        "Escalation note: If there is concern about a particular case being inappropriately deemed unstable for transfer, it may be escalated in real time to the administrative physician on.",
-        "Disposition/ownership: To keep stable patients stable and safe for transfer to avoid unnecessary admissions to our facility while optimizing their care.",
-        "Disposition/ownership: If patient is accepted and bed is available, emergency physician will sign transfer paperwork and will endorse to oncoming emergency physician if their shift is ending."
+        "Purpose: To provide all patients high quality inpatient level care while waiting for transfer from our ED to their contracted hospital.",
+        "Use this pathway when: In the event that a medical nonmember patient is in the ED and the emergency physician determines the patient is unstable for transfer, they will consult.",
+        "Use this pathway when: EM-IM Agreement for medical nonmember management in the Emergency Department.",
+        "Immediate ED action: If patient is accepted and bed is available, emergency physician will sign transfer paperwork and will endorse to oncoming emergency physician if their shift is ending.",
+        "Immediate ED action: If the patient is accepted but NO bed is available and no timeline is provided, the emergency physician MAY endorse to oncoming emergency physician OR depending.",
+        "Escalation: If there is concern about a particular case being inappropriately deemed unstable for transfer, it may be escalated in real time to the administrative physician on.",
+        "Escalation: The patient will formally be handed off to the IM physician team when the initial attending emergency physician goes off shift. For the sake of timely.",
+        "Ownership/disposition: The managing physician will be responsible for signing transfer paperwork and the physician-to-physician discussion with outside hospital staff.",
+        "Ownership/disposition: If the anticipated wait or current wait for transfer is > 4-6 hours, again depending on the complexity and acuity of the case, the emergency physician."
       ],
       "ed_actions": [
         "ED action: If patient is accepted and bed is available, emergency physician will sign transfer paperwork and will endorse to oncoming emergency physician if their shift.",
+        "ED action: In the event that a medical nonmember patient is in the ED and the emergency physician determines the patient is unstable for transfer, they.",
         "ED action: If the patient is accepted but NO bed is available and no timeline is provided, the emergency physician MAY endorse to oncoming emergency physician.",
         "ED action: If the anticipated wait or current wait for transfer is > 4-6 hours, again depending on the complexity and acuity of the case, the.",
-        "ED action: The patient will formally be handed off to the IM physician team when the initial attending emergency physician goes off shift. For the sake.",
-        "ED action: In the event that a patient is in the ED and the Emergency physician is UNSURE if they are stable for transfer, IM may.",
-        "ED should: If there is concern about a particular case being inappropriately deemed unstable for transfer, it may be escalated in real time to the administrative."
+        "ED action: In the event that a patient is in the ED and the Emergency physician is UNSURE if they are stable for transfer, IM may."
       ],
       "consults_and_escalation": [
+        "Consult flow: In the event that a medical nonmember patient is in the ED and the emergency physician determines the patient is unstable for transfer, they.",
         "Consult flow: If the patient is accepted but NO bed is available and no timeline is provided, the emergency physician MAY endorse to oncoming emergency physician.",
         "Consult flow: If the anticipated wait or current wait for transfer is > 4-6 hours, again depending on the complexity and acuity of the case, the.",
-        "Consult flow: In the event that a medical nonmember patient is in the ED and the emergency physician determines the patient is unstable for transfer, they.",
         "Consult flow: If there is concern about a particular case being inappropriately deemed unstable for transfer, it may be escalated in real time to the administrative.",
-        "Escalation: The patient will formally be handed off to the IM physician team when the initial attending emergency physician goes off shift. For the sake.",
-        "Escalation: Chief of Service, Emergency Medicine Chief of Service, Hospital Medicine.",
-        "Escalation: Assistant Chief of Service, Emergency Medicine Director, Care Without Delay."
+        "Escalation: The patient will formally be handed off to the IM physician team when the initial attending emergency physician goes off shift. For the sake."
       ],
       "disposition_or_ownership": [
-        "Ownership/disposition: To provide all patients high quality inpatient level care while waiting for transfer from our ED to their contracted hospital.",
-        "Ownership/disposition: To keep stable patients stable and safe for transfer to avoid unnecessary admissions to our facility while optimizing their care.",
         "Ownership/disposition: If patient is accepted and bed is available, emergency physician will sign transfer paperwork and will endorse to oncoming emergency physician if their shift.",
+        "Ownership/disposition: The managing physician will be responsible for signing transfer paperwork and the physician-to-physician discussion with outside hospital staff.",
+        "Ownership/disposition: In the event that a medical nonmember patient is in the ED and the emergency physician determines the patient is unstable for transfer, they.",
         "Ownership/disposition: If the anticipated wait or current wait for transfer is > 4-6 hours, again depending on the complexity and acuity of the case, the.",
-        "Ownership/disposition: There should be a clear verbal discussion and clear timely documentation by the managing physicians regarding who will be responsible for follow up and."
+        "Ownership/disposition: In the event that a patient is in the ED and the Emergency physician is UNSURE if they are stable for transfer, IM may."
       ],
       "timing_targets": [
         "Timing expectation: If the anticipated wait or current wait for transfer is > 4-6 hours, again depending on the complexity and acuity."
@@ -218,37 +211,33 @@
         "ownership"
       ],
       "summary_bullets": [
-        "Agreement purpose: To expedite the transfer of septic patients with refractory shock requiring a central line to the appropriate inpatient setting.",
-        "Agreement purpose: ED clerk will call operator to initiate a Code Sepsis alert as per the Operational Telecommunication policy.",
-        "Scope focus: ED physician shall identify a patient with septic shock requiring pressors.",
-        "Scope focus: The patient is identified as having septic shock, unresponsive to fluid bolus.",
-        "Workflow detail: IM physician shall respond to Code Sepsis with admit order to be placed in 30 min.",
-        "Escalation note: Chief of Service Emergency Medicine.",
-        "Escalation note: Assistant Chief of Service Emergency Medicine.",
-        "Disposition/ownership: The ED physician will continue to manage the patient until the admit order is placed and is responsible for placing the central line, ordering pressors and."
+        "Purpose: ED clerk will call operator to initiate a Code Sepsis alert as per the Operational Telecommunication policy.",
+        "Purpose: To expedite the transfer of septic patients with refractory shock requiring a central line to the appropriate inpatient setting.",
+        "Use this pathway when: ED physician shall identify a patient with septic shock requiring pressors.",
+        "Use this pathway when: The patient is identified as having septic shock, unresponsive to fluid bolus.",
+        "Immediate ED action: ED physician will call for \"Code Sepsis\" while preparing to place a central line.",
+        "Immediate ED action: The ED physician will continue to manage the patient until the admit order is placed and is responsible for placing the central line, ordering pressors and.",
+        "ED workflow: IM physician shall respond to Code Sepsis with admit order to be placed in 30 min.",
+        "ED workflow: Appropriate antibiotics will be ordered by the ED physician during the initial evaluation and work-up."
       ],
       "ed_actions": [
-        "ED action: ED physician shall identify a patient with septic shock requiring pressors.",
         "ED action: ED physician will call for \"Code Sepsis\" while preparing to place a central line.",
         "ED action: ED clerk will call operator to initiate a Code Sepsis alert as per the Operational Telecommunication policy.",
+        "ED action: The ED physician will continue to manage the patient until the admit order is placed and is responsible for placing the central line, ordering.",
         "ED action: The identified patient will have a central line placed by the ED physician with the expectation of needing pressor support.",
         "ED action: Appropriate antibiotics will be ordered by the ED physician during the initial evaluation and work-up.",
-        "ED should: IM physician shall respond to Code Sepsis with admit order to be placed in 30 min.",
-        "ED should: The ED physician will continue to manage the patient until the admit order is placed and is responsible for placing the central line, ordering.",
+        "ED should: ED physician shall identify a patient with septic shock requiring pressors.",
         "Coordinate transfer logistics early when criteria indicate external placement is likely."
       ],
       "consults_and_escalation": [
         "Consult flow: ED physician will call for \"Code Sepsis\" while preparing to place a central line.",
         "Consult flow: ED clerk will call operator to initiate a Code Sepsis alert as per the Operational Telecommunication policy.",
-        "Consult flow: IM physician shall respond to Code Sepsis with admit order to be placed in 30 min.",
-        "Escalation: Chief of Service Emergency Medicine.",
-        "Escalation: Assistant Chief of Service Emergency Medicine.",
-        "Escalation: Assistant Chief of Service Internal Medicine."
+        "Consult flow: IM physician shall respond to Code Sepsis with admit order to be placed in 30 min."
       ],
       "disposition_or_ownership": [
+        "Ownership/disposition: The ED physician will continue to manage the patient until the admit order is placed and is responsible for placing the central line, ordering.",
         "Ownership/disposition: To expedite the transfer of septic patients with refractory shock requiring a central line to the appropriate inpatient setting.",
-        "Ownership/disposition: IM physician shall respond to Code Sepsis with admit order to be placed in 30 min.",
-        "Ownership/disposition: The ED physician will continue to manage the patient until the admit order is placed and is responsible for placing the central line, ordering."
+        "Ownership/disposition: IM physician shall respond to Code Sepsis with admit order to be placed in 30 min."
       ],
       "timing_targets": [
         "Timing expectation: IM physician shall respond to Code Sepsis with admit order to be placed in 30 min."
@@ -264,7 +253,6 @@
       "departments": [
         "Emergency Medicine",
         "Internal Medicine",
-        "Critical Care",
         "Case Management"
       ],
       "last_updated": null,
@@ -274,45 +262,43 @@
         "disposition",
         "transfer",
         "non-member",
-        "critical-care",
         "quality-safety",
         "escalation"
       ],
       "summary_bullets": [
-        "Agreement purpose: To provide all patients high quality inpatient level care while waiting for transfer from our ED to their contracted hospital.",
-        "Scope focus: EM-IM Agreement for medical nonmember management in the Emergency Department.",
-        "Escalation note: the IM and EM attending physicians assigned to the case who is going.",
-        "Escalation note: If there is concern about a particular case being inappropriately deemed unstable for transfer, it may be escalated in real time to the administrative physician on.",
-        "Disposition/ownership: To keep stable patients stable and safe for transfer to avoid unnecessary admissions to our facility while optimizing their care.",
-        "Disposition/ownership: If patient is accepted and bed is available, emergency physician will sign transfer paperwork and will endorse to oncoming emergency physician if their shift is ending.",
+        "Purpose: To provide all patients high quality inpatient level care while waiting for transfer from our ED to their contracted hospital.",
+        "Use this pathway when: EM-IM Agreement for medical nonmember management in the Emergency Department.",
+        "Immediate ED action: If patient is accepted and bed is available, emergency physician will sign transfer paperwork and will endorse to oncoming emergency physician if their shift is ending.",
+        "Immediate ED action: If the patient is accepted but NO bed is available and no timeline is provided, the emergency physician MAY endorse to oncoming emergency physician OR consult.",
+        "Escalation: If there is concern about a particular case being inappropriately deemed unstable for transfer, it may be escalated in real time to the administrative physician on.",
+        "Escalation: the IM and EM attending physicians assigned to the case who is going.",
+        "Ownership/disposition: If the anticipated wait or current wait for transfer is >4 hours, the emergency physician may consult IM for ongoing management and potential admission to KP.",
+        "Ownership/disposition: In the event that a patient is in the ED and the Emergency physician is UNSURE if they are stable for transfer, IM may be consulted.",
         "Focuses on non-member medical patients boarding in the ED while transfer destination is arranged.",
-        "Defines circumstances where IM supports ongoing inpatient-style management during prolonged ED stay.",
-        "Clarifies which physician team follows pending studies and active treatment tasks during boarding.",
-        "Establishes real-time escalation when transfer stability determinations are disputed."
+        "Defines circumstances where IM supports ongoing inpatient-style management during prolonged ED stay."
       ],
       "ed_actions": [
         "ED action: If patient is accepted and bed is available, emergency physician will sign transfer paperwork and will endorse to oncoming emergency physician if their shift.",
         "ED action: If the patient is accepted but NO bed is available and no timeline is provided, the emergency physician MAY endorse to oncoming emergency physician.",
         "ED action: If the anticipated wait or current wait for transfer is >4 hours, the emergency physician may consult IM for ongoing management and potential admission.",
         "ED action: In the event that a patient is in the ED and the Emergency physician is UNSURE if they are stable for transfer, IM may.",
-        "ED should: If there is concern about a particular case being inappropriately deemed unstable for transfer, it may be escalated in real time to the administrative.",
         "Place transfer/discharge-planning workflows early for non-member patients.",
         "Keep transfer paperwork and physician-to-physician communication current across shift changes."
       ],
       "consults_and_escalation": [
         "Consult flow: If the patient is accepted but NO bed is available and no timeline is provided, the emergency physician MAY endorse to oncoming emergency physician.",
         "Consult flow: If the anticipated wait or current wait for transfer is >4 hours, the emergency physician may consult IM for ongoing management and potential admission.",
-        "Consult flow: documented in the consult note AND verbally agreed upon by both.",
         "Consult flow: If there is concern about a particular case being inappropriately deemed unstable for transfer, it may be escalated in real time to the administrative.",
+        "Consult flow: documented in the consult note AND verbally agreed upon by both.",
         "Escalation: the IM and EM attending physicians assigned to the case who is going.",
         "Escalate questionable transfer stability decisions to EM/IM physician leadership."
       ],
       "disposition_or_ownership": [
-        "Ownership/disposition: To provide all patients high quality inpatient level care while waiting for transfer from our ED to their contracted hospital.",
-        "Ownership/disposition: To keep stable patients stable and safe for transfer to avoid unnecessary admissions to our facility while optimizing their care.",
         "Ownership/disposition: If patient is accepted and bed is available, emergency physician will sign transfer paperwork and will endorse to oncoming emergency physician if their shift.",
         "Ownership/disposition: If the anticipated wait or current wait for transfer is >4 hours, the emergency physician may consult IM for ongoing management and potential admission.",
-        "Ownership/disposition: continue ongoing care and follow up on the tests and studies they.",
+        "Ownership/disposition: In the event that a patient is in the ED and the Emergency physician is UNSURE if they are stable for transfer, IM may.",
+        "Ownership/disposition: patient will be handed off to oncoming IM and EM physician teams, but in this case with IM taking responsibility for ongoing orders, management.",
+        "Ownership/disposition: If there is concern about a particular case being inappropriately deemed unstable for transfer, it may be escalated in real time to the administrative.",
         "Responsibility for transfer paperwork and physician-to-physician communication must be explicit."
       ],
       "timing_targets": [
@@ -328,8 +314,7 @@
       "file_type": "docx",
       "departments": [
         "Emergency Medicine",
-        "Cardiology",
-        "Urology"
+        "Cardiology"
       ],
       "last_updated": null,
       "tags": [
@@ -341,13 +326,13 @@
         "ownership"
       ],
       "summary_bullets": [
-        "Clinical criteria: If CHA2DS2VASc score ≥ 1, consider warfarin.",
-        "Key pathway point: Arrange outpatient echocardiography if first episode.",
-        "Key provision: Consult cardiology for possible pharmacologic vs electrical cardioversion if indicated.",
-        "Key provision: Exclusion: Acute comorbidities – CVA, MI, Significant CHF, PE, Sepsis, etc.",
-        "Key provision: If Heart Rate > 100-110 bpm.",
-        "Key provision: Metoprolol IV (5 mg doses every 15 min); convert to oral Metoprolol 25-50 mg BID if heart rate < 100 bpm.",
-        "Key provision: If onset is clear and < 48 hr, Pharmacologic or electrical cardioversion is safe."
+        "Decision points: If CHA2DS2VASc score ≥ 1, consider warfarin.",
+        "Key rule: Arrange outpatient echocardiography if first episode.",
+        "Practical note: Consult cardiology for possible pharmacologic vs electrical cardioversion if indicated.",
+        "Practical note: If Heart Rate > 100-110 bpm.",
+        "Practical note: Metoprolol IV (5 mg doses every 15 min); convert to oral Metoprolol 25-50 mg BID if heart rate < 100 bpm.",
+        "Practical note: If onset is clear and < 48 hr, Pharmacologic or electrical cardioversion is safe.",
+        "Practical note: Home within 1 hour after receiving oral medication and HR remains controlled (<110)."
       ],
       "ed_actions": [
         "Stabilize immediate threats and document objective severity findings before handoff.",
@@ -362,8 +347,8 @@
         "Document closed-loop communication for each escalation step."
       ],
       "disposition_or_ownership": [
-        "Ownership/disposition: Discharge home on diltiazem (or metoprolol).",
         "Ownership/disposition: Arrange outpatient echocardiography if first episode.",
+        "Ownership/disposition: Discharge home on diltiazem (or metoprolol).",
         "ED retains active ownership until receiving service acceptance is explicitly documented.",
         "Receiving service assumes ongoing plan after acceptance criteria are satisfied.",
         "If status changes before transfer/admission, disposition should be re-evaluated under ED oversight."
@@ -388,7 +373,6 @@
       ],
       "last_updated": null,
       "tags": [
-        "pregnancy",
         "surgical",
         "quality-safety",
         "consult-workflow",
@@ -396,13 +380,13 @@
         "ownership"
       ],
       "summary_bullets": [
-        "Workflow detail: The protocol for CT scanning patients after bariatric surgery falls into two basic groups.",
-        "Workflow detail: CT Tech > CT Scout Chest/Abdomen/Pelvis, with the chest portion being an actual PE protocol.",
-        "Key provision: Early Postop: Within the first 30 days after surgery, when the patient cannot drink much and the suspicion for leak and PE are highest.",
-        "Key provision: Provide 100 mL oral contrast and have the patient consume it over one hour.",
-        "Key provision: CT Tech > Protocol set-up PE Protocol, then at 70 sec. post-iv injection, scan routine Abd/Pelvis.",
-        "Key provision: Late Postop: More than 30 days after surgery.",
-        "Key provision: Provide the usual volume of oral contrast, and allow a full 3 hours to consume it."
+        "ED workflow: The protocol for CT scanning patients after bariatric surgery falls into two basic groups.",
+        "ED workflow: CT Tech > CT Scout Chest/Abdomen/Pelvis, with the chest portion being an actual PE protocol.",
+        "Practical note: Early Postop: Within the first 30 days after surgery, when the patient cannot drink much and the suspicion for leak and PE are highest.",
+        "Practical note: Provide 100 mL oral contrast and have the patient consume it over one hour.",
+        "Practical note: CT Tech > Protocol set-up PE Protocol, then at 70 sec. post-iv injection, scan routine Abd/Pelvis.",
+        "Practical note: Late Postop: More than 30 days after surgery.",
+        "Practical note: Provide the usual volume of oral contrast, and allow a full 3 hours to consume it."
       ],
       "ed_actions": [
         "Stabilize immediate threats and document objective severity findings before handoff.",
@@ -441,30 +425,28 @@
       "tags": [
         "disposition",
         "behavioral-health",
-        "pregnancy",
         "quality-safety",
         "consult-workflow",
         "escalation",
         "ownership"
       ],
       "summary_bullets": [
-        "Agreement purpose: Goal is to allow patient to sleep.",
-        "Escalation note: Call psychiatrist on call immediately.",
-        "Key provision: Alleviate sx for discharge. Refer to psych if discharged.",
-        "Key provision: If patient is calm and has been on medications in the past, obtain list of medications and start at lowest dose in ED.",
-        "Key provision: Always offer least restrictive method first- PO meds when possible.",
-        "Key provision: Usually 3 tiered approach with antipsychotic, BZD and mood stabilizer. Psychiatrist would recommend mood stabilizer.",
-        "Key provision: Medication Recommendations for Emergency Psychiatry."
+        "Purpose: Goal is to allow patient to sleep.",
+        "Immediate ED action: If patient is calm and has been on medications in the past, obtain list of medications and start at lowest dose in ED.",
+        "Immediate ED action: Call psychiatrist on call immediately.",
+        "Practical note: Alleviate sx for discharge. Refer to psych if discharged.",
+        "Practical note: Always offer least restrictive method first- PO meds when possible.",
+        "Practical note: Usually 3 tiered approach with antipsychotic, BZD and mood stabilizer. Psychiatrist would recommend mood stabilizer.",
+        "Practical note: Medication Recommendations for Emergency Psychiatry."
       ],
       "ed_actions": [
-        "ED should: Call psychiatrist on call immediately.",
         "Stabilize immediate threats and document objective severity findings before handoff.",
         "Initiate pathway-specific treatment and diagnostics before consultant transfer of ownership.",
         "Record all consultant communication and explicit ownership in the chart."
       ],
       "consults_and_escalation": [
-        "Consult flow: Usually 3 tiered approach with antipsychotic, BZD and mood stabilizer. Psychiatrist would recommend mood stabilizer.",
         "Consult flow: Call psychiatrist on call immediately.",
+        "Consult flow: Usually 3 tiered approach with antipsychotic, BZD and mood stabilizer. Psychiatrist would recommend mood stabilizer.",
         "Engage the designated specialty once inclusion criteria are met.",
         "Escalate to attending/chief pathways when callback is delayed or recommendations conflict.",
         "Document closed-loop communication for each escalation step."
@@ -485,38 +467,36 @@
       "source_filename": "Service agreements/Kaiser Emergency Release & Hemorrhage Protocol - Urgent Need - 7-2013.doc",
       "file_type": "other",
       "departments": [
-        "Emergency Medicine",
-        "Internal Medicine",
-        "Neurology"
+        "Emergency Medicine"
       ],
       "last_updated": null,
       "tags": [
-        "pregnancy",
         "quality-safety",
         "consult-workflow",
         "escalation",
         "ownership"
       ],
       "summary_bullets": [
-        "Agreement purpose: Ensures that the policy and procedures are followed.",
-        "Workflow detail: Attachment 1: Emergency Release / Hemorrhage Protocol Form.",
-        "Workflow detail: This document defines Emergency Release and Hemorrhage Protocol and describes the responsibilities of the departments when blood products are needed urgently. Detailed processes and procedures will.",
-        "Clinical criteria: The clinical situation of the patient is sufficiently urgent to require release of blood before completion of compatibility testing.",
-        "Clinical criteria: Title: Emergency Release and Hemorrhage Protocol: Urgent Need for Blood Products.",
-        "Escalation note: Attending physician, surgeon, or designee.",
-        "Disposition/ownership: Updates nursing or responsible team of blood product needs."
+        "Purpose: Ensures that the policy and procedures are followed.",
+        "Immediate ED action: Recognizes the need to activate the hemorrhage protocol and ensures its immediate activation.",
+        "Immediate ED action: The authorized call to the BLOOD BANK for a Hemorrhage Protocol constitutes a physician order for RBCs, thawed Plasma and platelets.",
+        "ED workflow: This document defines Emergency Release and Hemorrhage Protocol and describes the responsibilities of the departments when blood products are needed urgently. Detailed processes and procedures will.",
+        "ED workflow: If the Hemorrhage Protocol was initiated, the physician will cancel the Hemorrhage Protocol when the patient has stabilized and the immediate hemorrhage situation has subsided.",
+        "Decision points: The clinical situation of the patient is sufficiently urgent to require release of blood before completion of compatibility testing.",
+        "Decision points: Title: Emergency Release and Hemorrhage Protocol: Urgent Need for Blood Products.",
+        "Escalation: Attending physician, surgeon, or designee.",
+        "Ownership/disposition: Updates nursing or responsible team of blood product needs."
       ],
       "ed_actions": [
         "ED should: This document defines Emergency Release and Hemorrhage Protocol and describes the responsibilities of the departments when blood products are needed urgently. Detailed processes and.",
-        "ED should: The authorized call to the BLOOD BANK for a Hemorrhage Protocol constitutes a physician order for RBCs, thawed Plasma and platelets.",
-        "ED should: Recognizes the need to activate the hemorrhage protocol and ensures its immediate activation.",
-        "ED should: Confirm that the order is for 4 units of RBCs, 4 units of thawed plasma and one unit of platelets."
+        "ED should: Complete this form and take with you to blood bank. This form will act as a order/release in an emergency.",
+        "ED should: Initiates the emergency release or Hemorrhage protocol as soon as the call is made to the Blood Bank."
       ],
       "consults_and_escalation": [
         "Consult flow: The authorized call to the BLOOD BANK for a Hemorrhage Protocol constitutes a physician order for RBCs, thawed Plasma and platelets.",
-        "Consult flow: Attending physician, surgeon, or designee.",
+        "Consult flow: Initiates the emergency release or Hemorrhage protocol as soon as the call is made to the Blood Bank.",
         "Consult flow: Maintains communication with the physician, surgeon or designee.",
-        "Consult flow: Initiates the emergency release or Hemorrhage protocol as soon as the call is made to the Blood Bank."
+        "Consult flow: Attending physician, surgeon, or designee."
       ],
       "disposition_or_ownership": [
         "Ownership/disposition: Updates nursing or responsible team of blood product needs.",
@@ -539,8 +519,6 @@
       "file_type": "other",
       "departments": [
         "Emergency Medicine",
-        "Internal Medicine",
-        "Urology",
         "Case Management"
       ],
       "last_updated": null,
@@ -552,16 +530,17 @@
         "ownership"
       ],
       "summary_bullets": [
-        "Agreement purpose: Provide the highest quality of service to our patients.",
-        "Workflow detail: EMERGENCY DEPT FIRST TRIMESTER BLEEDING PROTOCOL.",
-        "Workflow detail: > 30 days – ED workup and consult Gyn as needed.",
-        "Disposition/ownership: Kaiser non members - If + IUP then patient to follow up with outside.",
-        "Disposition/ownership: Can follow up with Ob provider.",
-        "Key pathway point: If patients have never been seen by a an Ob/Gyn provider in Fontana then send an referral (Tapestry).",
-        "Key pathway point: If patients have never been seen by a Provider in Ontario then send referral."
+        "Purpose: Provide the highest quality of service to our patients.",
+        "Immediate ED action: If heavy bleeding or severe abdominal or adnexal pain then call Ob/Gyn.",
+        "Immediate ED action: > 20 weeks - If unstable Call Gyn to assess patient in ED.",
+        "ED workflow: > 30 days – ED workup and consult Gyn as needed.",
+        "ED workflow: EMERGENCY DEPT FIRST TRIMESTER BLEEDING PROTOCOL.",
+        "Ownership/disposition: Can follow up with Ob provider.",
+        "Ownership/disposition: Kaiser non members - If + IUP then patient to follow up with outside.",
+        "Key rule: If patients have never been seen by a an Ob/Gyn provider in Fontana then send an referral (Tapestry).",
+        "Key rule: If patients have never been seen by a Provider in Ontario then send referral."
       ],
       "ed_actions": [
-        "ED should: If heavy bleeding or severe abdominal or adnexal pain then call Ob/Gyn.",
         "ED should: > 20 weeks - If unstable Call Gyn to assess patient in ED.",
         "Stabilize immediate threats and document objective severity findings before handoff.",
         "Initiate pathway-specific treatment and diagnostics before consultant transfer of ownership.",
@@ -569,15 +548,15 @@
       ],
       "consults_and_escalation": [
         "Consult flow: If heavy bleeding or severe abdominal or adnexal pain then call Ob/Gyn.",
-        "Consult flow: Consult GYN as needed.",
         "Consult flow: > 20 weeks - If unstable Call Gyn to assess patient in ED.",
         "Consult flow: < 30 days – consult Gyn.",
         "Consult flow: > 30 days – ED workup and consult Gyn as needed.",
+        "Consult flow: Consult GYN as needed.",
         "Escalation: If stable and no specific OB complaints (i.e. vaginal bleeding."
       ],
       "disposition_or_ownership": [
-        "Ownership/disposition: Kaiser non members - If + IUP then patient to follow up with outside.",
         "Ownership/disposition: Can follow up with Ob provider.",
+        "Ownership/disposition: Kaiser non members - If + IUP then patient to follow up with outside.",
         "ED retains active ownership until receiving service acceptance is explicitly documented.",
         "Receiving service assumes ongoing plan after acceptance criteria are satisfied.",
         "If status changes before transfer/admission, disposition should be re-evaluated under ED oversight."
@@ -598,39 +577,33 @@
         "Emergency Medicine",
         "Internal Medicine",
         "OB/GYN",
-        "Pediatrics",
-        "Urology"
+        "Pediatrics"
       ],
       "last_updated": "2016-06-06",
       "tags": [
-        "consult-workflow",
         "pregnancy",
         "pediatric",
-        "quality-safety",
+        "consult-workflow",
         "escalation",
         "ownership"
       ],
       "summary_bullets": [
-        "Workflow detail: KP Protocol can also be found at HYPERLINK \"http://kpnet.kp.org/california/scpmg/kpid/guidelines/occupexposure_SCPMG_Protocol.html\" http://kpnet.kp.org/california/scpmg/kpid/guidelines/occupexposure_SCPMG_Protocol.html.",
-        "Key provision: Pregnancy test if female and of child-bearing potential.",
-        "Key provision: HIV post-exposure prophylaxis can potentially be beneficial if given ASAP and no later than 72 hrs from time of exposure.",
-        "Key provision: Consider prompt (within 1-2 hours) HIV prophylaxis If SOURCE PATIENT is HIV infected.",
-        "Key provision: Fixed dose Rilpivirine-tenofovir-emtricitabline (Complera®) one tablet daily with food for 28 days for all patients with Clcr >50ml/min.",
-        "Key provision: x 150 mg, then 100 mg q24h.",
-        "Key provision: x 150 mg, then 50 mg q24h."
+        "Practical note: Pregnancy test if female and of child-bearing potential.",
+        "Practical note: Order the following labs for.",
+        "Practical note: HIV post-exposure prophylaxis can potentially be beneficial if given ASAP and no later than 72 hrs from time of exposure.",
+        "Practical note: Consider prompt (within 1-2 hours) HIV prophylaxis If SOURCE PATIENT is HIV infected.",
+        "Practical note: Fixed dose Rilpivirine-tenofovir-emtricitabline (Complera®) one tablet daily with food for 28 days for all patients with Clcr >50ml/min.",
+        "Practical note: x 150 mg, then 100 mg q24h.",
+        "Practical note: x 150 mg, then 50 mg q24h."
       ],
       "ed_actions": [
-        "ED should: Order the following labs for.",
         "Stabilize immediate threats and document objective severity findings before handoff.",
         "Initiate pathway-specific treatment and diagnostics before consultant transfer of ownership.",
         "Record all consultant communication and explicit ownership in the chart."
       ],
       "consults_and_escalation": [
         "Escalation: HIV post-exposure prophylaxis can potentially be beneficial if given ASAP and no later than 72 hrs from time of exposure.",
-        "Escalation: If tests demonstrate adequate immunity or prior Hepatitis B no further vaccination required.",
-        "Engage the designated specialty once inclusion criteria are met.",
-        "Escalate to attending/chief pathways when callback is delayed or recommendations conflict.",
-        "Document closed-loop communication for each escalation step."
+        "Escalation: If tests demonstrate adequate immunity or prior Hepatitis B no further vaccination required."
       ],
       "disposition_or_ownership": [
         "ED retains active ownership until receiving service acceptance is explicitly documented.",
@@ -658,15 +631,12 @@
       "departments": [
         "Emergency Medicine",
         "Internal Medicine",
-        "Cardiology",
         "Neurology",
-        "Urology",
         "Surgery"
       ],
       "last_updated": "2014-01-16",
       "tags": [
         "disposition",
-        "pregnancy",
         "surgical",
         "quality-safety",
         "consult-workflow",
@@ -674,33 +644,28 @@
         "ownership"
       ],
       "summary_bullets": [
-        "Agreement purpose: If patient does receive first dose of warfarin in ED, ED physician and/or nurse needs to make sure patient’s baseline INR is available. This is to.",
-        "Workflow detail: INCLUSION AND EXCLUSION CRITERIA FOR OUTPATIENT ANTICOAGULATION SERVICE (OACS) PHARMACIST TO MANAGE OUTPATIENT TREATMENT of DVT PATIENTS with ENOXAPARIN (Lovenox®) or Fondaparinux (Arixtra®) PER PROTOCOL.",
-        "Workflow detail: Patient will be referred to OACS via Tapestry if eligible for Outpatient Anticoagulation DVT Protocol. Length of treatment with warfarin for DVT will also be indicated.",
-        "Escalation note: Margaret Mou, DO, Assistant Chief of Internal Medicine.",
-        "Disposition/ownership: UM or MOD speaks to Patient and gives disposition to Patient / Sonographer.",
-        "Key pathway point: Appendix A. Fontana Medical Center Outpatient DVT Workflow.",
-        "Key pathway point: FONTANA MEDICAL CENTER OUTPATIENT DVT WORKFLOW."
+        "Purpose: If patient does receive first dose of warfarin in ED, ED physician and/or nurse needs to make sure patient’s baseline INR is available. This is to.",
+        "Immediate ED action: Call Ontario Inpatient pharmacy for dosing recommendation if needed.",
+        "ED workflow: Patient will be referred to OACS via Tapestry if eligible for Outpatient Anticoagulation DVT Protocol. Length of treatment with warfarin for DVT will also be indicated.",
+        "ED workflow: INCLUSION AND EXCLUSION CRITERIA FOR OUTPATIENT ANTICOAGULATION SERVICE (OACS) PHARMACIST TO MANAGE OUTPATIENT TREATMENT of DVT PATIENTS with ENOXAPARIN (Lovenox®) or Fondaparinux (Arixtra®) PER PROTOCOL.",
+        "Decision points: If the patient has any of the above exclusion criteria, consider hospitalizing the patient and using standard IV heparin, if anticoagulation is still desired.",
+        "Ownership/disposition: UM or MOD speaks to Patient and gives disposition to Patient / Sonographer.",
+        "Key rule: On Fridays or Saturdays, physician will also place tapestry referral for next day Home health visit."
       ],
       "ed_actions": [
         "ED action: ED physician to dose patient through Monday and order INR for Monday.",
-        "ED action: If patient does receive first dose of warfarin in ED, ED physician and/or nurse needs to make sure patient’s baseline INR is available. This.",
-        "ED should: INCLUSION AND EXCLUSION CRITERIA FOR OUTPATIENT ANTICOAGULATION SERVICE (OACS) PHARMACIST TO MANAGE OUTPATIENT TREATMENT of DVT PATIENTS with ENOXAPARIN (Lovenox®) or Fondaparinux (Arixtra®) PER.",
-        "ED should: Physician to place STAT ultrasound order to rule out DVT.",
-        "ED should: If the patient is sent home prematurely with a DVT and found to have positive ultrasound results the next morning, radiologist will call UM.",
-        "ED should: Call Ontario Inpatient pharmacy for dosing recommendation if needed."
+        "ED action: If patient does receive first dose of warfarin in ED, ED physician and/or nurse needs to make sure patient’s baseline INR is available. This."
       ],
       "consults_and_escalation": [
-        "Consult flow: If the patient is sent home prematurely with a DVT and found to have positive ultrasound results the next morning, radiologist will call UM.",
         "Consult flow: Call Ontario Inpatient pharmacy for dosing recommendation if needed.",
-        "Escalation: Margaret Mou, DO, Assistant Chief of Internal Medicine."
+        "Consult flow: If the patient is sent home prematurely with a DVT and found to have positive ultrasound results the next morning, radiologist will call UM."
       ],
       "disposition_or_ownership": [
-        "Ownership/disposition: INCLUSION AND EXCLUSION CRITERIA FOR OUTPATIENT ANTICOAGULATION SERVICE (OACS) PHARMACIST TO MANAGE OUTPATIENT TREATMENT of DVT PATIENTS with ENOXAPARIN (Lovenox®) or Fondaparinux (Arixtra®) PER.",
         "Ownership/disposition: Patient will be referred to OACS via Tapestry if eligible for Outpatient Anticoagulation DVT Protocol. Length of treatment with warfarin for DVT will also.",
-        "Ownership/disposition: Appendix A. Fontana Medical Center Outpatient DVT Workflow.",
-        "Ownership/disposition: FONTANA MEDICAL CENTER OUTPATIENT DVT WORKFLOW.",
-        "Ownership/disposition: UM or MOD Physician to place warfarin and Enoxaparin (Lovenox®) orders in HealthConnect and send tapestry referral to Outpatient Anticoagulation Service (OACS) to follow."
+        "Ownership/disposition: INCLUSION AND EXCLUSION CRITERIA FOR OUTPATIENT ANTICOAGULATION SERVICE (OACS) PHARMACIST TO MANAGE OUTPATIENT TREATMENT of DVT PATIENTS with ENOXAPARIN (Lovenox®) or Fondaparinux (Arixtra®) PER.",
+        "Ownership/disposition: Instruct patient to pick up Warfarin and Enoxaparin (Lovenox®)from outpatient pharmacy.",
+        "Ownership/disposition: UM or MOD speaks to Patient and gives disposition to Patient / Sonographer.",
+        "Ownership/disposition: Physician to put in tapestry referral for Outpatient Anti-Coagulation Service (OACS)."
       ],
       "timing_targets": [
         "Timing expectation: mg/kg (actual body weight) Q 12 hr.",
@@ -716,9 +681,7 @@
       "file_type": "docx",
       "departments": [
         "Emergency Medicine",
-        "Internal Medicine",
         "Cardiology",
-        "Urology",
         "Surgery"
       ],
       "last_updated": null,
@@ -729,13 +692,13 @@
         "ownership"
       ],
       "summary_bullets": [
-        "Clinical criteria: Praxbind is indicated when rapid reversal is needed before emergency surgery/urgent procedures, or in life-threatening or uncontrolled bleeding only for patients on Dabigatran.",
-        "Clinical criteria: Additional 5 g dose of PRAXBIND may be considered if clinically significant bleeding or for emergency surgery/urgent procedure.",
-        "Key provision: Hold all anticoagulants and antiplatelet agents including ASA – Consult cardiology if patient had recent cardiac stent before stopping ASA.",
-        "Key provision: If bleeding persists, or the patient becomes hemodynamically unstable, follow the algorithm for severe bleeding.",
-        "Key provision: Binds to dabigatran and its acylglucuronide metabolites and completely reverses dabigatran effect in four hours in 89% of patients.",
-        "Key provision: Max infusion rate of 8.4 mL/minute.",
-        "Key provision: Due to their short half- lives, much of their anticoagulant effects should dissipate within 24 hours in patients with normal renal function."
+        "Decision points: Praxbind is indicated when rapid reversal is needed before emergency surgery/urgent procedures, or in life-threatening or uncontrolled bleeding only for patients on Dabigatran.",
+        "Decision points: Additional 5 g dose of PRAXBIND may be considered if clinically significant bleeding or for emergency surgery/urgent procedure.",
+        "Practical note: Hold all anticoagulants and antiplatelet agents including ASA – Consult cardiology if patient had recent cardiac stent before stopping ASA.",
+        "Practical note: If bleeding persists, or the patient becomes hemodynamically unstable, follow the algorithm for severe bleeding.",
+        "Practical note: Binds to dabigatran and its acylglucuronide metabolites and completely reverses dabigatran effect in four hours in 89% of patients.",
+        "Practical note: Max infusion rate of 8.4 mL/minute.",
+        "Practical note: Due to their short half- lives, much of their anticoagulant effects should dissipate within 24 hours in patients with normal renal function."
       ],
       "ed_actions": [
         "Stabilize immediate threats and document objective severity findings before handoff.",
@@ -772,13 +735,11 @@
       "departments": [
         "Emergency Medicine",
         "Cardiology",
-        "Urology",
         "Surgery"
       ],
       "last_updated": null,
       "tags": [
         "sepsis",
-        "pregnancy",
         "surgical",
         "quality-safety",
         "consult-workflow",
@@ -786,13 +747,13 @@
         "ownership"
       ],
       "summary_bullets": [
-        "Scope focus: Septic shock with SVO2 < 70%.",
-        "Key provision: If merely history of CAD or CHF, transfusion not appropriate; need to discuss with Cardiology.",
-        "Key provision: Acute renal failure (discuss with nephrologist for CKD).",
-        "Key provision: Acute hemorrhage with symptoms (such as tachycardia).",
-        "Key provision: Generally not indicated with few exceptions such as acute hemorrhagic shock.",
-        "Key provision: Surgical candidates - seek anesthesia input on pre-op hemoglobin goals.",
-        "Key provision: Clinical judgment is critical at any hemoglobin level."
+        "Use this pathway when: Septic shock with SVO2 < 70%.",
+        "Practical note: If merely history of CAD or CHF, transfusion not appropriate; need to discuss with Cardiology.",
+        "Practical note: Acute renal failure (discuss with nephrologist for CKD).",
+        "Practical note: Acute hemorrhage with symptoms (such as tachycardia).",
+        "Practical note: Generally not indicated with few exceptions such as acute hemorrhagic shock.",
+        "Practical note: Surgical candidates - seek anesthesia input on pre-op hemoglobin goals.",
+        "Practical note: Clinical judgment is critical at any hemoglobin level."
       ],
       "ed_actions": [
         "Stabilize immediate threats and document objective severity findings before handoff.",
@@ -821,9 +782,7 @@
       "file_type": "other",
       "departments": [
         "Emergency Medicine",
-        "Internal Medicine",
-        "Cardiology",
-        "Neurology"
+        "Cardiology"
       ],
       "last_updated": null,
       "tags": [
@@ -833,17 +792,16 @@
         "ownership"
       ],
       "summary_bullets": [
-        "Clinical criteria: After careful review of the literature, the Cardiology department is implementing changes to the stress testing screening criteria.",
-        "Clinical criteria: Example: “Pain started last night”, patient is in ED at 9am. Documentation meets criteria.",
-        "Key pathway point: For patients seen in the ED and discharged with an order/referral for a treadmill/stress test.",
-        "Key provision: One (1) normal troponin three (3) hours or more from clearly defined/documented onset of chest pain.",
-        "Key provision: If Troponin #1 is indeterminate or positive, a second troponin is to be done six (6) hours from onset of chest pain.",
-        "Key provision: If onset of chest pain is not defined or not documented, two (2) troponins six (6) hours apart are required.",
-        "Key provision: Potassium is to be 3.5 - 5.0. Exception: patients on dialysis a Potassium up to 5.5 is acceptable. If the Potassium is low, please correct and."
+        "Decision points: After careful review of the literature, the Cardiology department is implementing changes to the stress testing screening criteria.",
+        "Decision points: Example: “Pain started last night”, patient is in ED at 9am. Documentation meets criteria.",
+        "Key rule: For patients seen in the ED and discharged with an order/referral for a treadmill/stress test.",
+        "Practical note: One (1) normal troponin three (3) hours or more from clearly defined/documented onset of chest pain.",
+        "Practical note: Example: “Pain started tonight”, patient is in ED at 9pm. Documentation does not meet criteria.",
+        "Practical note: Example: “Pain started at 6pm”, patient in ED at 8pm and troponin drawn on arrival-which is less than 3 hours. 2nd troponin will need to be.",
+        "Practical note: If Troponin #1 is indeterminate or positive, a second troponin is to be done six (6) hours from onset of chest pain."
       ],
       "ed_actions": [
         "ED should: For patients seen in the ED and discharged with an order/referral for a treadmill/stress test.",
-        "ED should: Patients with a LBBB or paced rhythm are not eligible for exercise stress testing as stress ischemia cannot be assessed. Please order PNL Lexiscan.",
         "Stabilize immediate threats and document objective severity findings before handoff.",
         "Initiate pathway-specific treatment and diagnostics before consultant transfer of ownership.",
         "Record all consultant communication and explicit ownership in the chart."
@@ -870,8 +828,7 @@
       "source_filename": "Service agreements/Kaiser Work-up of infectious diarrhea for adults.docx",
       "file_type": "docx",
       "departments": [
-        "Emergency Medicine",
-        "Internal Medicine"
+        "Emergency Medicine"
       ],
       "last_updated": null,
       "tags": [
@@ -880,14 +837,13 @@
         "ownership"
       ],
       "summary_bullets": [
-        "Workflow detail: Work-up of infectious diarrhea for adults.",
-        "Key provision: → Diarrhea is defined as at least 3 liquid stools in 24 hours. Acute diarrhea is almost exclusively a self-limited disease that only needs supportive care.",
-        "Defines shared expectations between Emergency Medicine, Internal Medicine for this pathway.",
+        "Immediate ED action: → For patients who are immunocompromised (e.g., HIV, biological immunosuppressant or chemotherapy), call ID on-call to discuss appropriate lab tests and next step(s) in patient management.",
+        "ED workflow: Work-up of infectious diarrhea for adults.",
+        "Defines shared expectations between Emergency Medicine and consulting services for this pathway.",
         "Defines consult and handoff expectations for kaiser work-up of infectious diarrhea for adults.",
-        "Clarifies when ED-led management continues versus transition to receiving service."
+        "Review source document for full operational details not captured in this summary."
       ],
       "ed_actions": [
-        "ED should: → For patients who are immunocompromised (e.g., HIV, biological immunosuppressant or chemotherapy), call ID on-call to discuss appropriate lab tests and next step(s) in.",
         "Stabilize immediate threats and document objective severity findings before handoff.",
         "Initiate pathway-specific treatment and diagnostics before consultant transfer of ownership.",
         "Record all consultant communication and explicit ownership in the chart."
@@ -917,29 +873,22 @@
       "file_type": "docx",
       "departments": [
         "Emergency Medicine",
-        "Internal Medicine",
-        "Neurosurgery",
-        "Ophthalmology",
-        "Urology",
-        "Surgery"
+        "Neurosurgery"
       ],
       "last_updated": null,
       "tags": [
-        "pregnancy",
-        "surgical",
         "consult-workflow",
         "escalation",
         "ownership"
       ],
       "summary_bullets": [
-        "Workflow detail: The above rules were created to identify patients at risk for requiring neurosurgical intervention. However, criteria specifically created to find possible CT abnormalities included the following.",
-        "Key provision: This decision aid is not applicable if.",
-        "Key provision: Amnesia before impact > 30 minutes.",
-        "Key provision: Injury occurred > 24 hours ago.",
-        "Key provision: Patients over the age of 65 do not all require a CT scan, but there are no validated decision rules to guide decision making in this."
+        "ED workflow: The above rules were created to identify patients at risk for requiring neurosurgical intervention. However, criteria specifically created to find possible CT abnormalities included the following.",
+        "Practical note: This decision aid is not applicable if.",
+        "Practical note: Amnesia before impact > 30 minutes.",
+        "Practical note: Injury occurred > 24 hours ago.",
+        "Review source document for full operational details not captured in this summary."
       ],
       "ed_actions": [
-        "ED should: The above rules were created to identify patients at risk for requiring neurosurgical intervention. However, criteria specifically created to find possible CT abnormalities included.",
         "Stabilize immediate threats and document objective severity findings before handoff.",
         "Initiate pathway-specific treatment and diagnostics before consultant transfer of ownership.",
         "Record all consultant communication and explicit ownership in the chart."
@@ -969,11 +918,7 @@
       "file_type": "docx",
       "departments": [
         "Emergency Medicine",
-        "Internal Medicine",
-        "Cardiology",
         "Critical Care",
-        "Neurology",
-        "Urology",
         "Surgery"
       ],
       "last_updated": null,
@@ -982,7 +927,6 @@
         "disposition",
         "sepsis",
         "necrotizing-fasciitis",
-        "pregnancy",
         "critical-care",
         "surgical",
         "quality-safety",
@@ -990,38 +934,41 @@
         "ownership"
       ],
       "summary_bullets": [
-        "Agreement purpose: It is always appropriate for one surgical service to request the assistance another surgical service in the operating room for decision-making and surgical debridement in this.",
-        "Scope focus: Necrotizing soft tissue infections (NSTI) are rare but life-threatening conditions associated with severe systemic toxicity and can be rapidly fatal unless diagnosed promptly and treated aggressively.",
-        "Workflow detail: For cases where the diagnosis of NSTI is being considered but the patient is more hemodynamically stable, then the Emergency Department will perform a minimum necessary.",
-        "Workflow detail: Once initial formal workup is completed by the Emergency Department or Inpatient Medical team if already admitted, they will consult General Surgery regardless of anatomic location.",
-        "Clinical criteria: Vital Signs (Temperature, Heart Rate, Respiratory Rate, Blood Pressure) • LRINEC Score.",
-        "Clinical criteria: o Score > 6 very concerning for NSTI, score < 5 can help rule out if exam and imaging correlate and reassuring. Score cannot be used.",
-        "Treats suspected necrotizing infection as a time-critical surgical emergency requiring immediate multidisciplinary coordination.",
-        "Prioritizes early recognition, broad empiric treatment, and definitive source-control planning.",
-        "Supports rapid escalation to operative evaluation when progression or exam findings are concerning.",
-        "Frames disposition around deterioration risk and need for higher-acuity monitoring."
+        "NSTI is a life-threatening emergency; delayed debridement increases mortality.",
+        "If NSTI is clinically obvious, do not delay operative escalation for scoring or additional diagnostics.",
+        "Start immediate resuscitation, broad-spectrum IV antibiotics, analgesia, and OR preparation.",
+        "If stable and diagnosis is uncertain, perform minimum ED workup: risk factors, full vital signs, and LRINEC-related labs.",
+        "LRINEC >= 6 is strongly concerning; LRINEC < 5 is only reassuring when exam and imaging are also reassuring.",
+        "LRINEC cannot be used alone to rule out NSTI.",
+        "In stable patients, ultrasound can be used early but has higher false-negative risk than CT.",
+        "CT with IV contrast showing soft-tissue gas should prompt immediate surgical intervention; fascial edema/fluid collections also increase concern.",
+        "Upload a clinical photo to the chart when feasible to support consultant assessment and serial comparison.",
+        "Primary consult is General Surgery after initial workup, with location-based subspecialty involvement and post-stabilization ownership transitions."
       ],
       "ed_actions": [
-        "ED should: The General Surgeon will be primary and manage the patient in the ICU.",
-        "ED should: If there is involvement BOTH proximal and distal to the elbow or knee, then the consulting services will use their judgement as to which.",
-        "Escalate immediately to surgery when exam or progression raises concern for necrotizing process.",
-        "Initiate resuscitation and broad-spectrum therapy without waiting for prolonged serial observation.",
-        "Complete sepsis bundle steps and reassess perfusion while disposition is being arranged."
+        "Do not delay operative escalation when exam is clearly consistent with NSTI.",
+        "Initiate IV fluids, broad-spectrum antibiotics, analgesia, and sepsis-focused resuscitation immediately.",
+        "If diagnosis is uncertain and the patient is stable, order CBC, BMP, CRP, glucose, creatinine, hemoglobin, sodium, and calculate LRINEC.",
+        "Obtain CT with IV contrast in stable patients when diagnosis remains uncertain after initial assessment.",
+        "Upload a clinical photo of the affected extremity in the chart when possible.",
+        "Consult General Surgery early regardless of anatomic location once initial workup is complete."
       ],
       "consults_and_escalation": [
-        "Consult flow: If the general surgeon sees the patient and decides the patient does not have necrotizing fasciitis then the guidelines for non necrotizing soft tissue.",
-        "Consult flow: Once initial formal workup is completed by the Emergency Department or Inpatient Medical team if already admitted, they will consult General Surgery regardless of.",
-        "Consult flow: The Orthopedic Surgeon/Hand Surgeon who operates on the patient with the General Surgeon will continue to round on the patient, help decide if reoperation.",
-        "Consult flow: The General Surgeon will be primary and manage the patient in the ICU.",
-        "Use urgent attending-level escalation if operative evaluation is delayed."
+        "Primary consult: General Surgery.",
+        "Below elbow involvement: Hand Surgery assists and can assume primary floor management after stabilization.",
+        "Below knee involvement: Orthopedics assists and can assume primary floor management after stabilization.",
+        "Above elbow or knee involvement: General Surgery remains primary.",
+        "When infection crosses elbow/knee boundaries, services co-manage based on predominant involvement and urgency.",
+        "Consult Plastic Surgery for graft/flap coverage after stabilization and wound control when needed."
       ],
       "disposition_or_ownership": [
-        "Disposition should favor higher-acuity monitoring when rapid deterioration risk is present.",
-        "ED retains active ownership until receiving service acceptance is explicitly documented.",
-        "Receiving service assumes ongoing plan after acceptance criteria are satisfied.",
-        "If status changes before transfer/admission, disposition should be re-evaluated under ED oversight."
+        "General Surgery is primary during ICU-level management after operative source control.",
+        "Post-stabilization ownership transitions by anatomic location per the service agreement.",
+        "If NSTI is excluded, revert to non-necrotizing limb-infection consultation pathways by location."
       ],
-      "timing_targets": [],
+      "timing_targets": [
+        "Timing expectation: Immediate surgical consultation and debridement when NSTI is clinically apparent."
+      ],
       "redaction_notes": "Potential contact details or identifiers were intentionally excluded from published fields.",
       "sharepoint_url": null
     },
@@ -1032,10 +979,8 @@
       "file_type": "docx",
       "departments": [
         "Emergency Medicine",
-        "Internal Medicine",
         "Critical Care",
         "Neurosurgery",
-        "Surgery",
         "Case Management"
       ],
       "last_updated": null,
@@ -1043,46 +988,43 @@
         "disposition",
         "transfer",
         "critical-care",
-        "surgical",
         "consult-workflow",
         "escalation",
         "ownership"
       ],
       "summary_bullets": [
-        "Agreement purpose: To facilitate rapid transfer of life or limb threatening neurosurgical patients in the ED at OMC to the Neurosurgical ICU or ED at FMC without delay.",
-        "Workflow detail: IF neurosurgeon answers “yes” - activate emergent neurosurgical transfer process and inform the neurosurgeon to expect patient in FMC ED within 20-30 minutes.",
-        "Workflow detail: Emergent Neurosurgical Transfer Process.",
-        "Clinical criteria: Examples include: life threatening intracranial hemorrhage, etc.",
-        "Clinical criteria: Examples include: Hold patient at OMC ED with admit order placed to FMC ICU until bed available, admit to ICU at OMC, transfer to another facility.",
-        "Escalation note: ED physician contacts Neurosurgeon on call immediately.",
-        "Escalation note: IF neurosurgeon answers “no” - a discussion and decision on final disposition will be made jointly by the ED physician and on call Neurosurgeon.",
-        "Disposition/ownership: OMC to FMC Acute Neurosurgical Emergency Transfer Agreement.",
-        "Disposition/ownership: This will not delay transfer to FMC or 911 call."
+        "Purpose: To facilitate rapid transfer of life or limb threatening neurosurgical patients in the ED at OMC to the Neurosurgical ICU or ED at FMC without delay.",
+        "Immediate ED action: IF neurosurgeon answers “yes” - activate emergent neurosurgical transfer process and inform the neurosurgeon to expect patient in FMC ED within 20-30 minutes.",
+        "Immediate ED action: IF neurosurgeon answers “no” - a discussion and decision on final disposition will be made jointly by the ED physician and on call Neurosurgeon.",
+        "ED workflow: Emergent Neurosurgical Transfer Process.",
+        "Decision points: Examples include: Hold patient at OMC ED with admit order placed to FMC ICU until bed available, admit to ICU at OMC, transfer to another facility.",
+        "Decision points: Examples include: life threatening intracranial hemorrhage, etc.",
+        "Escalation: ED physician contacts Neurosurgeon on call immediately.",
+        "Ownership/disposition: This will not delay transfer to FMC or 911 call.",
+        "Ownership/disposition: OMC to FMC Acute Neurosurgical Emergency Transfer Agreement."
       ],
       "ed_actions": [
-        "ED action: ED Physician at OMC identifies an acute neurosurgical emergency.",
+        "ED action: IF neurosurgeon answers “no” - a discussion and decision on final disposition will be made jointly by the ED physician and on call Neurosurgeon.",
         "ED action: ED physician contacts Neurosurgeon on call immediately.",
         "ED action: ED physician specifically asks neurosurgeon “Does this patient require or may potentially require an immediate life or limb saving neurosurgical intervention?”.",
-        "ED action: IF neurosurgeon answers “no” - a discussion and decision on final disposition will be made jointly by the ED physician and on call Neurosurgeon.",
+        "ED action: ED Physician at OMC identifies an acute neurosurgical emergency.",
         "ED action: Activation by ED physician at OMC.",
         "ED should: IF neurosurgeon answers “yes” - activate emergent neurosurgical transfer process and inform the neurosurgeon to expect patient in FMC ED within 20-30 minutes.",
-        "ED should: Examples include: Hold patient at OMC ED with admit order placed to FMC ICU until bed available, admit to ICU at OMC, transfer to.",
-        "ED should: This will not delay transfer to FMC or 911 call."
+        "ED should: Examples include: Hold patient at OMC ED with admit order placed to FMC ICU until bed available, admit to ICU at OMC, transfer to."
       ],
       "consults_and_escalation": [
-        "Consult flow: ED physician contacts Neurosurgeon on call immediately.",
-        "Consult flow: ED physician specifically asks neurosurgeon “Does this patient require or may potentially require an immediate life or limb saving neurosurgical intervention?”.",
         "Consult flow: IF neurosurgeon answers “yes” - activate emergent neurosurgical transfer process and inform the neurosurgeon to expect patient in FMC ED within 20-30 minutes.",
         "Consult flow: IF neurosurgeon answers “no” - a discussion and decision on final disposition will be made jointly by the ED physician and on call Neurosurgeon.",
         "Consult flow: This will not delay transfer to FMC or 911 call.",
-        "Escalation: Chief of Service Chief of Service."
+        "Consult flow: ED physician contacts Neurosurgeon on call immediately.",
+        "Consult flow: ED physician specifically asks neurosurgeon “Does this patient require or may potentially require an immediate life or limb saving neurosurgical intervention?”."
       ],
       "disposition_or_ownership": [
-        "Ownership/disposition: OMC to FMC Acute Neurosurgical Emergency Transfer Agreement.",
-        "Ownership/disposition: To facilitate rapid transfer of life or limb threatening neurosurgical patients in the ED at OMC to the Neurosurgical ICU or ED at FMC.",
         "Ownership/disposition: IF neurosurgeon answers “yes” - activate emergent neurosurgical transfer process and inform the neurosurgeon to expect patient in FMC ED within 20-30 minutes.",
         "Ownership/disposition: IF neurosurgeon answers “no” - a discussion and decision on final disposition will be made jointly by the ED physician and on call Neurosurgeon.",
-        "Ownership/disposition: Examples include: Hold patient at OMC ED with admit order placed to FMC ICU until bed available, admit to ICU at OMC, transfer to."
+        "Ownership/disposition: This will not delay transfer to FMC or 911 call.",
+        "Ownership/disposition: Examples include: Hold patient at OMC ED with admit order placed to FMC ICU until bed available, admit to ICU at OMC, transfer to.",
+        "Ownership/disposition: Emergent Neurosurgical Transfer Process."
       ],
       "timing_targets": [
         "Timing expectation: IF neurosurgeon answers “yes” - activate emergent neurosurgical transfer process and inform the neurosurgeon to expect patient in FMC ED.",
@@ -1098,25 +1040,22 @@
       "file_type": "docx",
       "departments": [
         "Emergency Medicine",
-        "Internal Medicine",
         "Ophthalmology"
       ],
       "last_updated": null,
       "tags": [
         "consult-workflow",
         "non-member",
-        "pregnancy",
         "escalation",
         "ownership"
       ],
       "summary_bullets": [
-        "Agreement purpose: Due to recent increases in membership and growing non-member ER visits The Department of Ophthalmology and the Emergency Room Department want to work more collaboratively to.",
-        "Agreement purpose: There is always an Ophthalmologist on call 24/7/365 for any Emergency Room physician to consult regarding any patient. There may be occasions for the Ophthalmologist to.",
-        "Clinical criteria: The true ophthalmic emergencies that require immediate attention include.",
-        "Disposition/ownership: If a patient is uninsured, they may be seen in the clinic with administrative exemption. If the patient has coverage other than KP, ideally the ED.",
-        "Key provision: Ruptured globe, suspected endophthalmitis, and acute angle closure glaucoma.",
-        "Key provision: Flashes, Floaters, Red eyes / iritis, Corneal Foreign body, Possible Detached Retina, Diabetic patient with vitreous hemorrhage, etc.",
-        "Key provision: An eyelid laceration is not an emergency and repair may be delayed for 24-48 hours so that we can ensure that the repair is done in."
+        "Purpose: There is always an Ophthalmologist on call 24/7/365 for any Emergency Room physician to consult regarding any patient. There may be occasions for the Ophthalmologist to.",
+        "Purpose: Due to recent increases in membership and growing non-member ER visits The Department of Ophthalmology and the Emergency Room Department want to work more collaboratively to.",
+        "Immediate ED action: The true ophthalmic emergencies that require immediate attention include.",
+        "Ownership/disposition: If a patient is uninsured, they may be seen in the clinic with administrative exemption. If the patient has coverage other than KP, ideally the ED.",
+        "Practical note: Ruptured globe, suspected endophthalmitis, and acute angle closure glaucoma.",
+        "Practical note: Flashes, Floaters, Red eyes / iritis, Corneal Foreign body, Possible Detached Retina, Diabetic patient with vitreous hemorrhage, etc."
       ],
       "ed_actions": [
         "ED should: There is always an Ophthalmologist on call 24/7/365 for any Emergency Room physician to consult regarding any patient. There may be occasions for the.",
@@ -1125,8 +1064,8 @@
         "Record all consultant communication and explicit ownership in the chart."
       ],
       "consults_and_escalation": [
-        "Consult flow: An eyelid laceration is not an emergency and repair may be delayed for 24-48 hours so that we can ensure that the repair is.",
         "Consult flow: There is always an Ophthalmologist on call 24/7/365 for any Emergency Room physician to consult regarding any patient. There may be occasions for the.",
+        "Consult flow: An eyelid laceration is not an emergency and repair may be delayed for 24-48 hours so that we can ensure that the repair is.",
         "Engage the designated specialty once inclusion criteria are met.",
         "Escalate to attending/chief pathways when callback is delayed or recommendations conflict.",
         "Document closed-loop communication for each escalation step."
@@ -1150,10 +1089,8 @@
       "file_type": "docx",
       "departments": [
         "Emergency Medicine",
-        "Internal Medicine",
         "Urgent Care",
         "Pediatrics",
-        "Neurology",
         "Surgery",
         "Case Management"
       ],
@@ -1163,26 +1100,21 @@
         "transfer",
         "appendicitis",
         "pediatric",
-        "surgical",
         "quality-safety",
         "consult-workflow",
         "escalation",
         "ownership"
       ],
       "summary_bullets": [
-        "Agreement purpose: To expedite the evaluation and inter-facility transfer of these patients, while minimizing the transfer of patients who do not have appendicitis.",
-        "Scope focus: Kaiser Permanente Children’s Care Network Service Line Agreement – Appendicitis/Abdominal Pain.",
-        "Scope focus: Pediatric Patients aged 0-13 years with Possible Appendicitis Presenting to Facilities without Inpatient Pediatrics Ward.",
-        "Workflow detail: Note: There is a Pediatric Protocol for CT scanning which can be requested at the time that the order is placed and this will reduce the.",
-        "Clinical criteria: Pediatric Patient with abdominal pain presents to ED or Pediatric Urgent Care in GMC.",
-        "Escalation note: Surgeon on Duty (SOD): Surgeon on call for the designated medical center.",
-        "Disposition/ownership: Once transfer is confirmed, SOD in STMC should create the case on the STMC grease board to lessen the OR wait time in the STMC. The.",
-        "Key pathway point: Score of 7 or higher is highly suspicious for appendicitis.",
-        "Key pathway point: Score below 5 is unlikely to be appendicitis."
+        "Purpose: To expedite the evaluation and inter-facility transfer of these patients, while minimizing the transfer of patients who do not have appendicitis.",
+        "Use this pathway when: Note: There is a Pediatric Protocol for CT scanning which can be requested at the time that the order is placed and this will reduce the.",
+        "Use this pathway when: Pediatric Patient with abdominal pain presents to ED or Pediatric Urgent Care in GMC.",
+        "Immediate ED action: Surgeon on Duty (SOD): Surgeon on call for the designated medical center.",
+        "Decision points: Score of 7 or higher is highly suspicious for appendicitis.",
+        "Decision points: Score below 5 is unlikely to be appendicitis.",
+        "Ownership/disposition: Once transfer is confirmed, SOD in STMC should create the case on the STMC grease board to lessen the OR wait time in the STMC. The."
       ],
       "ed_actions": [
-        "ED should: Surgeon on Duty (SOD): Surgeon on call for the designated medical center.",
-        "ED should: Note: There is a Pediatric Protocol for CT scanning which can be requested at the time that the order is placed and this will.",
         "Stabilize immediate threats and document objective severity findings before handoff.",
         "Initiate pathway-specific treatment and diagnostics before consultant transfer of ownership.",
         "Record all consultant communication and explicit ownership in the chart."
@@ -1195,8 +1127,8 @@
         "Document closed-loop communication for each escalation step."
       ],
       "disposition_or_ownership": [
-        "Ownership/disposition: To expedite the evaluation and inter-facility transfer of these patients, while minimizing the transfer of patients who do not have appendicitis.",
         "Ownership/disposition: Once transfer is confirmed, SOD in STMC should create the case on the STMC grease board to lessen the OR wait time in the.",
+        "Ownership/disposition: To expedite the evaluation and inter-facility transfer of these patients, while minimizing the transfer of patients who do not have appendicitis.",
         "ED retains active ownership until receiving service acceptance is explicitly documented.",
         "Receiving service assumes ongoing plan after acceptance criteria are satisfied.",
         "If status changes before transfer/admission, disposition should be re-evaluated under ED oversight."
@@ -1225,16 +1157,15 @@
         "ownership"
       ],
       "summary_bullets": [
-        "Scope focus: If septic/ill appearing notify accepting hospital physician to add Vancomycin.",
-        "Scope focus: When labs resulted please page pediatric hematologist on call.",
-        "Workflow detail: All febrile sickle cell patients require workup and parenteral antibiotics.",
-        "Disposition/ownership: Admit for any of the following reasons.",
-        "Key pathway point: Outpatient management of the febrile sickle cell patient (SS, SC, S0 or S+ thalassemia).",
-        "Key provision: History (attention to medical history and compliance with prophylactic amox/pcn if <5 y/o).",
-        "Key provision: Give Ceftriaxone 50mg/kg IV/IM (max 1g). Should be given ideally within 1 hour of presentation – do not wait for lab results."
+        "Use this pathway when: When labs resulted please page pediatric hematologist on call.",
+        "Use this pathway when: If septic/ill appearing notify accepting hospital physician to add Vancomycin.",
+        "Immediate ED action: If wheezing, hypoxic or CXR positive start Azithromycin (1st dose 10mg/kg PO/IV -max 500mg).",
+        "ED workflow: All febrile sickle cell patients require workup and parenteral antibiotics.",
+        "Ownership/disposition: Admit for any of the following reasons.",
+        "Key rule: Outpatient management of the febrile sickle cell patient (SS, SC, S0 or S+ thalassemia).",
+        "Practical note: History (attention to medical history and compliance with prophylactic amox/pcn if <5 y/o)."
       ],
       "ed_actions": [
-        "ED should: When labs resulted please page pediatric hematologist on call.",
         "Stabilize immediate threats and document objective severity findings before handoff.",
         "Initiate pathway-specific treatment and diagnostics before consultant transfer of ownership.",
         "Record all consultant communication and explicit ownership in the chart.",
@@ -1247,8 +1178,8 @@
         "Document closed-loop communication for each escalation step."
       ],
       "disposition_or_ownership": [
-        "Ownership/disposition: Outpatient management of the febrile sickle cell patient (SS, SC, S0 or S+ thalassemia).",
         "Ownership/disposition: Admit for any of the following reasons.",
+        "Ownership/disposition: Outpatient management of the febrile sickle cell patient (SS, SC, S0 or S+ thalassemia).",
         "ED retains active ownership until receiving service acceptance is explicitly documented.",
         "Receiving service assumes ongoing plan after acceptance criteria are satisfied.",
         "If status changes before transfer/admission, disposition should be re-evaluated under ED oversight."
@@ -1266,11 +1197,7 @@
       "file_type": "docx",
       "departments": [
         "Emergency Medicine",
-        "Internal Medicine",
-        "Cardiology",
-        "Critical Care",
         "Pediatrics",
-        "Urology",
         "Surgery",
         "Case Management"
       ],
@@ -1279,8 +1206,6 @@
         "consult-workflow",
         "disposition",
         "transfer",
-        "pregnancy",
-        "critical-care",
         "pediatric",
         "surgical",
         "quality-safety",
@@ -1288,16 +1213,15 @@
         "ownership"
       ],
       "summary_bullets": [
-        "Scope focus: Pediatric patients: 20 ml/kg.",
-        "Scope focus: No adjustment for pediatric patients.",
-        "Workflow detail: Pit Viper Snake Envenomation Management Protocol using antivenin Crofab.",
-        "Disposition/ownership: Admit to the MICU or PICU : Transfer when stable.",
-        "Key provision: If “dry” bite (no signs of envenomation): Do not give Crofab, draw labs, and observe for 8 hours. Repeat labs prior to discharge from the Emergency.",
-        "Key provision: Head CT if altered mental status or severe headache evaluating for intracranial hemorrhage.",
-        "Key provision: Routine skin care for bite site: if necrotic tissue or infection develop, surgical consultation may be required."
+        "Use this pathway when: If a pediatric patient is up to date on immunizations, tetanus booster should not be required.",
+        "Use this pathway when: Pediatric patients: 20 ml/kg.",
+        "Immediate ED action: Start peripheral IV access; 2 sites if possible.",
+        "Immediate ED action: Start first infusion slowly and monitor for allergic reaction at 50 ml/hr for the first 10 minutes.",
+        "ED workflow: Pit Viper Snake Envenomation Management Protocol using antivenin Crofab.",
+        "ED workflow: Repeat protocol steps as previously outlined until control is achieved.",
+        "Ownership/disposition: Admit to the MICU or PICU : Transfer when stable."
       ],
       "ed_actions": [
-        "ED should: Consultation with Orthopedics or Plastic surgery depending on location/call.",
         "Stabilize immediate threats and document objective severity findings before handoff.",
         "Initiate pathway-specific treatment and diagnostics before consultant transfer of ownership.",
         "Record all consultant communication and explicit ownership in the chart."
@@ -1309,8 +1233,8 @@
         "Document closed-loop communication for each escalation step."
       ],
       "disposition_or_ownership": [
-        "Ownership/disposition: If “dry” bite (no signs of envenomation): Do not give Crofab, draw labs, and observe for 8 hours. Repeat labs prior to discharge from.",
         "Ownership/disposition: Admit to the MICU or PICU : Transfer when stable.",
+        "Ownership/disposition: If “dry” bite (no signs of envenomation): Do not give Crofab, draw labs, and observe for 8 hours. Repeat labs prior to discharge from.",
         "ED retains active ownership until receiving service acceptance is explicitly documented.",
         "Receiving service assumes ongoing plan after acceptance criteria are satisfied.",
         "If status changes before transfer/admission, disposition should be re-evaluated under ED oversight."
@@ -1340,18 +1264,16 @@
       "last_updated": null,
       "tags": [
         "disposition",
-        "pregnancy",
         "consult-workflow",
         "escalation",
         "ownership"
       ],
       "summary_bullets": [
-        "Workflow detail: headache not relieved with Tylenol after 1-hour (see HTN plus headache pathway).",
-        "Key provision: The following orders will be at discretion of admitting physician based on clinical findings).",
-        "Key provision: recheck BP after 20 minutes.",
-        "Key provision: NOTE: If headache NOT relieved with Tylenol after 1-hour, consider admission.",
-        "Key provision: If headache improves, move to number 5.",
-        "Key provision: Check BP every hour for 4 hours."
+        "Immediate ED action: If BP remains NON-severe, start or up titrate PO maintenance antihypertensive.",
+        "ED workflow: headache not relieved with Tylenol after 1-hour (see HTN plus headache pathway).",
+        "Practical note: The following orders will be at discretion of admitting physician based on clinical findings).",
+        "Practical note: recheck BP after 20 minutes.",
+        "Review source document for full operational details not captured in this summary."
       ],
       "ed_actions": [
         "Stabilize immediate threats and document objective severity findings before handoff.",
@@ -1388,8 +1310,6 @@
         "Internal Medicine",
         "Hospital Medicine",
         "Psychiatry",
-        "Neurology",
-        "Urology",
         "Skilled Nursing Facility",
         "Case Management"
       ],
@@ -1400,48 +1320,47 @@
         "disposition",
         "transfer",
         "behavioral-health",
-        "pregnancy",
         "quality-safety",
         "ownership"
       ],
       "summary_bullets": [
-        "Agreement purpose: This purpose of this agreement is to outline the coordination of services provided by the Emergency and Psychiatry Departments in the treatment and disposition of psychiatric.",
-        "Scope focus: Medical and psychiatric treatment of suspected psychiatric patients will begin immediately by the ED team per usual department protocols.",
-        "Scope focus: A Psychiatrist will be available at all times for a telephone consult during medical clearance for questions regarding psychiatric medications.",
-        "Workflow detail: This document serves to identify the minimum baseline service level and should be supplemented by local operational policies and clinical protocols.",
-        "Clinical criteria: Medication management consultations by Psychiatry should be requested in cases where symptoms are present. These may include, but are not limited to, severe anxiety, severe depression.",
-        "Clinical criteria: “Psych Treatment Team” – refers to the local area specific Psychiatry providers who cover the Emergency Department. This could include Psychiatrists, Therapists, Case Managers, Nurses, and.",
-        "Escalation note: After hours, the on call Psych Treatment Team/PET will be available for consultation.",
-        "Escalation note: The attending ED Physician and consulting Psychiatrist should follow a local escalation process to notify the ED Chief and Psych Chief or Behavioral Health Quality Management.",
-        "Disposition/ownership: The ED Treatment Team (or CDU Provider) will sign out medical care of psychiatric patients to the next ED Treatment Team (or CDU Provider) at the.",
-        "Disposition/ownership: Psychotropic medications dispensed upon discharge should be provided with rapid internal follow up or referral to community mental health if the patient is not a KP."
+        "Purpose: This purpose of this agreement is to outline the coordination of services provided by the Emergency and Psychiatry Departments in the treatment and disposition of psychiatric.",
+        "Use this pathway when: Medical and psychiatric treatment of suspected psychiatric patients will begin immediately by the ED team per usual department protocols.",
+        "Use this pathway when: A Psychiatrist will be available at all times for a telephone consult during medical clearance for questions regarding psychiatric medications.",
+        "Immediate ED action: After hours, the on call Psych Treatment Team/PET will be available for consultation.",
+        "Immediate ED action: The Psych Treatment Team will document daily assessments in the patient’s chart and notify the ED Physician of any update in treatment plan.",
+        "ED workflow: This document serves to identify the minimum baseline service level and should be supplemented by local operational policies and clinical protocols.",
+        "ED workflow: The Psych Treatment Team will document an initial comprehensive assessment and treatment recommendations in the chart.",
+        "Decision points: Medication management consultations by Psychiatry should be requested in cases where symptoms are present. These may include, but are not limited to, severe anxiety, severe depression.",
+        "Decision points: “Psych Treatment Team” – refers to the local area specific Psychiatry providers who cover the Emergency Department. This could include Psychiatrists, Therapists, Case Managers, Nurses, and.",
+        "Escalation: Medication initiation, documentation and ordering related to the psychiatric treatment will be managed by the ED Physician, medical consultant or Psychiatrist on call based on local."
       ],
       "ed_actions": [
         "ED action: Medical and psychiatric treatment of suspected psychiatric patients will begin immediately by the ED team per usual department protocols.",
+        "ED action: The Psych Treatment Team will document daily assessments in the patient’s chart and notify the ED Physician of any update in treatment plan.",
+        "ED action: Medication initiation, documentation and ordering related to the psychiatric treatment will be managed by the ED Physician, medical consultant or Psychiatrist on call based.",
         "ED action: The ED Treatment Team (or CDU Provider) will sign out medical care of psychiatric patients to the next ED Treatment Team (or CDU Provider).",
-        "ED action: The ED Physician, Psych Treatment Team, and Security officers and supervisors will work in collaboration to ensure sufficient coverage for patient care and department.",
-        "ED action: For geriatric psych, dementia, and Alzheimer’s patients, the ED Physician and Psych Treatment Team will engage ED case management and social medicine to identify.",
-        "ED action: The ED treatment team or ED case manager will update the Psych Treatment Team daily of patients in need of new consults or rounding.",
-        "ED should: This document serves to identify the minimum baseline service level and should be supplemented by local operational policies and clinical protocols.",
+        "ED action: The ED Treatment Team will sign out medical care of psychiatric patients to the next ED Treatment Team at the end of each shift.",
         "ED should: The ED physicians will order labs as needed per local/county facility requirements when they feel the patient will most likely be admitted to a.",
-        "ED should: After hours, the on call Psych Treatment Team/PET will be available for consultation."
+        "ED should: For geriatric psych, dementia, and Alzheimer’s patients, the ED Physician and Psych Treatment Team will engage ED case management and social medicine to identify.",
+        "Coordinate transfer logistics early when criteria indicate external placement is likely."
       ],
       "consults_and_escalation": [
         "Consult flow: A Psychiatrist will be available at all times for a telephone consult during medical clearance for questions regarding psychiatric medications.",
-        "Consult flow: If a patient is acutely intoxicated from alcohol/drugs and does not have the capacity to undergo a psychiatric assessment, a psych consult can be.",
-        "Consult flow: Consistent with other local area specialty consultation agreements, ideally, a face to face assessment by the Psych Treatment Team/PET should be performed within 2-4.",
         "Consult flow: During daytime hours, the on duty Psychiatrist will be available for consult.",
         "Consult flow: After hours, the on call Psych Treatment Team/PET will be available for consultation.",
+        "Consult flow: Medication initiation, documentation and ordering related to the psychiatric treatment will be managed by the ED Physician, medical consultant or Psychiatrist on call based.",
+        "Consult flow: A Psychiatrist will be available at all times for a telephone consult for questions regarding psychiatric medications.",
         "Escalation: The attending ED Physician and consulting Psychiatrist should follow a local escalation process to notify the ED Chief and Psych Chief or Behavioral Health.",
         "Escalation: “ED Physician” – refers to the attending emergency department physician.",
         "Escalation: Regional Coordinating Chief, Emergency Medicine."
       ],
       "disposition_or_ownership": [
-        "Ownership/disposition: This purpose of this agreement is to outline the coordination of services provided by the Emergency and Psychiatry Departments in the treatment and disposition.",
         "Ownership/disposition: The ED Treatment Team (or CDU Provider) will sign out medical care of psychiatric patients to the next ED Treatment Team (or CDU Provider).",
-        "Ownership/disposition: Patients discharged to home may be given a prescription for no more than 7 days of psychiatric medication until medication management can be assumed.",
         "Ownership/disposition: Psychotropic medications dispensed upon discharge should be provided with rapid internal follow up or referral to community mental health if the patient is not.",
-        "Ownership/disposition: Transfer to Psychiatric Inpatient."
+        "Ownership/disposition: Local area processes should be followed to secure bed placement as soon as the determination has been made to discharge to an inpatient psychiatric.",
+        "Ownership/disposition: The discharge plan should be communicated, at the patient’s request, to a family member/friend including which hospital the patient is being transferred to.",
+        "Ownership/disposition: The local Behavioral Health Intensive Care Coordinator (ICC) or case manager, will monitor for patients booked into post hospitalization (POSH) intensive outpatient visits and."
       ],
       "timing_targets": [
         "Timing expectation: Consistent with other local area specialty consultation agreements, ideally, a face to face assessment by the Psych Treatment Team/PET should.",
@@ -1474,38 +1393,34 @@
         "ownership"
       ],
       "summary_bullets": [
-        "Scope focus: Psychiatric Patients who are medically cleared and are waiting for disposition while in the Emergency Department.",
-        "Scope focus: Initiates call to ER Charge Nurse and/or Emergency Physician at 12 hours for psychiatric patients who are medically cleared and waiting for disposition while in the.",
-        "Workflow detail: Escalation Process to move the patient out of the Emergency Department at 24hours.",
-        "Workflow detail: The psychiatry social worker will re-assesses patient every shift and document findings of assessment and disposition status. If the patient passes the 24 hour mark, the.",
-        "Escalation note: Psychiatry Chief of Service.",
-        "Escalation note: Emergency Med Chief of Service.",
-        "Disposition/ownership: Continues until patient disposition is complete and out of the Emergency Department.",
-        "Disposition/ownership: Manages psychiatric medication reconciliation until disposition out of the Emergency Department."
+        "Use this pathway when: Initiates call to Psychiatrist on duty at 24 hours mark or sooner if requested by the ER Physician for Psychiatric Medication Management.",
+        "Use this pathway when: Initiates call to ER Charge Nurse and/or Emergency Physician at 12 hours for psychiatric patients who are medically cleared and waiting for disposition while in the.",
+        "Immediate ED action: The psychiatry social worker will re-assesses patient every shift and document findings of assessment and disposition status. If the patient passes the 24 hour mark, the.",
+        "Immediate ED action: Initiates call to Internal Medicine Hospitalist.",
+        "ED workflow: Escalation Process to move the patient out of the Emergency Department at 24hours.",
+        "Ownership/disposition: Psychiatric Patients who are medically cleared and are waiting for disposition while in the Emergency Department.",
+        "Ownership/disposition: Continues until patient disposition is complete and out of the Emergency Department."
       ],
       "ed_actions": [
         "ED action: Initiates call to ER Charge Nurse and/or Emergency Physician at 12 hours for psychiatric patients who are medically cleared and waiting for disposition while.",
         "ED action: ED Physician – Name of last physician assigned to the patient in KPHC.",
-        "ED should: Initiates call to Psychiatrist on duty at 24 hours mark or sooner if requested by the ER Physician for Psychiatric Medication Management.",
-        "ED should: Reviews patient chart in order to determine if IM Hospitalist should be called for medical medication management.",
-        "ED should: Initiates call to Internal Medicine Hospitalist.",
-        "ED should: The psychiatry social worker will re-assesses patient every shift and document findings of assessment and disposition status. If the patient passes the 24 hour."
+        "Stabilize immediate threats and document objective severity findings before handoff.",
+        "Initiate pathway-specific treatment and diagnostics before consultant transfer of ownership.",
+        "Record all consultant communication and explicit ownership in the chart."
       ],
       "consults_and_escalation": [
-        "Consult flow: Initiates call to ER Charge Nurse and/or Emergency Physician at 12 hours for psychiatric patients who are medically cleared and waiting for disposition while.",
         "Consult flow: Initiates call to Psychiatrist on duty at 24 hours mark or sooner if requested by the ER Physician for Psychiatric Medication Management.",
-        "Consult flow: Psychiatrist reviews and handles psychiatric Medication Management.",
         "Consult flow: Reviews patient chart in order to determine if IM Hospitalist should be called for medical medication management.",
-        "Consult flow: Initiates call to Internal Medicine Hospitalist.",
-        "Escalation: Psychiatry Chief of Service.",
-        "Escalation: Emergency Med Chief of Service."
+        "Consult flow: Initiates call to ER Charge Nurse and/or Emergency Physician at 12 hours for psychiatric patients who are medically cleared and waiting for disposition while.",
+        "Consult flow: The psychiatry social worker will re-assesses patient every shift and document findings of assessment and disposition status. If the patient passes the 24 hour.",
+        "Consult flow: Initiates call to Internal Medicine Hospitalist."
       ],
       "disposition_or_ownership": [
+        "Ownership/disposition: Initiates call to ER Charge Nurse and/or Emergency Physician at 12 hours for psychiatric patients who are medically cleared and waiting for disposition while.",
+        "Ownership/disposition: The psychiatry social worker will re-assesses patient every shift and document findings of assessment and disposition status. If the patient passes the 24 hour.",
         "Ownership/disposition: Psychiatric Patients who are medically cleared and are waiting for disposition while in the Emergency Department.",
         "Ownership/disposition: Continues until patient disposition is complete and out of the Emergency Department.",
-        "Ownership/disposition: Initiates call to ER Charge Nurse and/or Emergency Physician at 12 hours for psychiatric patients who are medically cleared and waiting for disposition while.",
-        "Ownership/disposition: Manages psychiatric medication reconciliation until disposition out of the Emergency Department.",
-        "Ownership/disposition: Manages medical medication reconciliation and diet until disposition out of the Emergency Department."
+        "Ownership/disposition: Manages psychiatric medication reconciliation until disposition out of the Emergency Department."
       ],
       "timing_targets": [
         "Timing expectation: Length of stay has reached 12 hours or earlier if felt to be clinically appropriate by the treating physician(s).",
@@ -1524,8 +1439,6 @@
       "file_type": "docx",
       "departments": [
         "Emergency Medicine",
-        "Internal Medicine",
-        "Critical Care",
         "Urology",
         "Surgery"
       ],
@@ -1533,25 +1446,23 @@
       "tags": [
         "consult-workflow",
         "sepsis",
-        "pregnancy",
-        "critical-care",
         "surgical",
         "escalation",
         "ownership"
       ],
       "summary_bullets": [
-        "Disposition/ownership: Hospital Medicine admit and no need to call Urologic Surgery overnight (7 pm- 7am).",
-        "Key pathway point: Obstructive ureteral stone with fever (>38C).",
-        "Key provision: Acute epididymo-orchitis with sepsis and no abscess or gangrene.",
-        "Key provision: Fournier's gangrene of scrotum and penis (if perirectal involvement or not sure, call general surgery).",
-        "Key provision: No need to call Urologist and out-patient Urologic Surgery referral.",
-        "Key provision: No Urologic Surgery referral and follow-up with PCP.",
-        "Key provision: Difficult catheterization in acute urinary retention."
+        "Immediate ED action: Fournier's gangrene of scrotum and penis (if perirectal involvement or not sure, call general surgery).",
+        "Immediate ED action: Hospital Medicine admit and no need to call Urologic Surgery overnight (7 pm- 7am).",
+        "Key rule: No need to call Urologist and out-patient Urologic Surgery referral.",
+        "Key rule: Obstructive ureteral stone with fever (>38C).",
+        "Practical note: Acute urinary retention s/p Foley placement (start pt on Flomax).",
+        "Practical note: Acute epididymo-orchitis with sepsis and no abscess or gangrene.",
+        "Practical note: No Urologic Surgery referral and follow-up with PCP."
       ],
       "ed_actions": [
-        "ED should: Fournier's gangrene of scrotum and penis (if perirectal involvement or not sure, call general surgery).",
-        "ED should: Hospital Medicine admit and no need to call Urologic Surgery overnight (7 pm- 7am).",
-        "ED should: No need to call Urologist and out-patient Urologic Surgery referral.",
+        "Stabilize immediate threats and document objective severity findings before handoff.",
+        "Initiate pathway-specific treatment and diagnostics before consultant transfer of ownership.",
+        "Record all consultant communication and explicit ownership in the chart.",
         "Complete sepsis bundle steps and reassess perfusion while disposition is being arranged."
       ],
       "consults_and_escalation": [
@@ -1579,8 +1490,6 @@
       "file_type": "docx",
       "departments": [
         "Emergency Medicine",
-        "Internal Medicine",
-        "Critical Care",
         "Urology",
         "Surgery"
       ],
@@ -1588,24 +1497,21 @@
       "tags": [
         "consult-workflow",
         "disposition",
-        "pregnancy",
-        "critical-care",
         "surgical",
         "escalation",
         "ownership"
       ],
       "summary_bullets": [
-        "Agreement purpose: In order to provide consistent support to the Emergency Department, the Department of Urology has provided a list of common urological pathologies seen in the ED.",
-        "Key pathway point: Obstructive urinary stone with fever (>38C) or intractable pain or intractable vomiting.",
-        "Key provision: Fournier's gangrene of scrotum and penis (if perirectal involvement or not sure, call general surgery).",
-        "Key provision: Urological Evaluation of Emergency Department Patients.",
-        "Key provision: Difficult catheterization and acute post-op surgical complications.",
-        "Key provision: Acute urinary retention s/p Foley placement.",
-        "Key provision: No Urology referral and followup with PCP."
+        "Purpose: In order to provide consistent support to the Emergency Department, the Department of Urology has provided a list of common urological pathologies seen in the ED.",
+        "Immediate ED action: Fournier's gangrene of scrotum and penis (if perirectal involvement or not sure, call general surgery).",
+        "Key rule: Obstructive urinary stone with fever (>38C) or intractable pain or intractable vomiting.",
+        "Key rule: Obstructive urinary stone in solitary kidney.",
+        "Practical note: Urological Evaluation of Emergency Department Patients.",
+        "Practical note: Difficult catheterization and acute post-op surgical complications.",
+        "Practical note: Acute urinary retention s/p Foley placement."
       ],
       "ed_actions": [
         "ED should: In order to provide consistent support to the Emergency Department, the Department of Urology has provided a list of common urological pathologies seen in.",
-        "ED should: Fournier's gangrene of scrotum and penis (if perirectal involvement or not sure, call general surgery).",
         "Stabilize immediate threats and document objective severity findings before handoff.",
         "Initiate pathway-specific treatment and diagnostics before consultant transfer of ownership.",
         "Record all consultant communication and explicit ownership in the chart."

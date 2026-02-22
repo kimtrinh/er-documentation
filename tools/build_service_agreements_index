@@ -29,7 +29,7 @@ SOURCE_CANDIDATES = [ROOT / "service-agreements", ROOT / "Service agreements"]
 DEFAULT_CONFIG = {
     "department_keywords": {
         "Emergency Medicine": ["emergency medicine", "emergency department", "ed", "er"],
-        "Internal Medicine": ["internal medicine", "hospitalist", "im"],
+        "Internal Medicine": ["internal medicine", "hospitalist"],
         "Hospital Medicine": ["hospitalist"],
         "Cardiology": ["cardiology", "cardiologist", "stemi", "acs"],
         "Critical Care": ["intensivist", "icu", "critical care"],
@@ -41,7 +41,7 @@ DEFAULT_CONFIG = {
         "Neurosurgery": ["neurosurgery", "neurosurg"],
         "Neurology": ["neurology", "stroke", "ich"],
         "Ophthalmology": ["ophthalmology", "ocular", "eye"],
-        "Urology": ["urology", "urinary", "gu"],
+        "Urology": ["urology", "urinary"],
         "Surgery": ["surgery", "surgical", "appendicitis", "necrotizing"],
         "Skilled Nursing Facility": ["snf", "skilled nursing"],
         "Case Management": ["case manager", "discharge planning", "transfer"],
@@ -57,7 +57,7 @@ DEFAULT_CONFIG = {
         "appendicitis": ["appendicitis"],
         "necrotizing-fasciitis": ["necrotizing", "fasciitis"],
         "behavioral-health": ["psychiat", "behavioral", "medical clearance"],
-        "pregnancy": ["pregnancy", "ob", "gyn"],
+        "pregnancy": ["pregnancy", "ob-gyn", "obgyn", "gyne"],
         "critical-care": ["icu", "intensivist", "critical care"],
         "pediatric": ["pediatric", "child", "peds"],
         "surgical": ["surgery", "surgical", "operative"],
@@ -123,7 +123,13 @@ SUMMARY_KEYWORDS = [
 
 LOW_VALUE_LINE_RE = re.compile(
     r"^(service agreement|memorandum|location of service|key customers|definitions?|"
-    r"department of|fontana|ontario|kaiser|final version|overview|proposed service)\b",
+    r"department of|fontana|ontario|kaiser|final version|overview|proposed service|"
+    r"references?|appendix|attachment|southern california permanente)\b",
+    re.I,
+)
+
+NON_PRACTICAL_RE = re.compile(
+    r"(http[s]?://|www\.|appendix|attachment|references?|copyright|all rights reserved)",
     re.I,
 )
 
@@ -250,6 +256,47 @@ TITLE_SPECIFIC_HINTS: Dict[str, Dict[str, List[str]]] = {
         ],
         "disposition": [
             "Disposition plans should include explicit return-to-SNF readiness criteria when applicable.",
+        ],
+    },
+}
+
+PRACTICAL_FIELD_OVERRIDES: Dict[str, Dict[str, List[str]]] = {
+    "necrotizing-fasciitis-service-agreement": {
+        "summary_bullets": [
+            "NSTI is a life-threatening emergency; delayed debridement increases mortality.",
+            "If NSTI is clinically obvious, do not delay operative escalation for scoring or additional diagnostics.",
+            "Start immediate resuscitation, broad-spectrum IV antibiotics, analgesia, and OR preparation.",
+            "If stable and diagnosis is uncertain, perform minimum ED workup: risk factors, full vital signs, and LRINEC-related labs.",
+            "LRINEC >= 6 is strongly concerning; LRINEC < 5 is only reassuring when exam and imaging are also reassuring.",
+            "LRINEC cannot be used alone to rule out NSTI.",
+            "In stable patients, ultrasound can be used early but has higher false-negative risk than CT.",
+            "CT with IV contrast showing soft-tissue gas should prompt immediate surgical intervention; fascial edema/fluid collections also increase concern.",
+            "Upload a clinical photo to the chart when feasible to support consultant assessment and serial comparison.",
+            "Primary consult is General Surgery after initial workup, with location-based subspecialty involvement and post-stabilization ownership transitions.",
+        ],
+        "ed_actions": [
+            "Do not delay operative escalation when exam is clearly consistent with NSTI.",
+            "Initiate IV fluids, broad-spectrum antibiotics, analgesia, and sepsis-focused resuscitation immediately.",
+            "If diagnosis is uncertain and the patient is stable, order CBC, BMP, CRP, glucose, creatinine, hemoglobin, sodium, and calculate LRINEC.",
+            "Obtain CT with IV contrast in stable patients when diagnosis remains uncertain after initial assessment.",
+            "Upload a clinical photo of the affected extremity in the chart when possible.",
+            "Consult General Surgery early regardless of anatomic location once initial workup is complete.",
+        ],
+        "consults_and_escalation": [
+            "Primary consult: General Surgery.",
+            "Below elbow involvement: Hand Surgery assists and can assume primary floor management after stabilization.",
+            "Below knee involvement: Orthopedics assists and can assume primary floor management after stabilization.",
+            "Above elbow or knee involvement: General Surgery remains primary.",
+            "When infection crosses elbow/knee boundaries, services co-manage based on predominant involvement and urgency.",
+            "Consult Plastic Surgery for graft/flap coverage after stabilization and wound control when needed.",
+        ],
+        "disposition_or_ownership": [
+            "General Surgery is primary during ICU-level management after operative source control.",
+            "Post-stabilization ownership transitions by anatomic location per the service agreement.",
+            "If NSTI is excluded, revert to non-necrotizing limb-infection consultation pathways by location.",
+        ],
+        "timing_targets": [
+            "Timing expectation: Immediate surgical consultation and debridement when NSTI is clinically apparent.",
         ],
     },
 }
@@ -664,10 +711,27 @@ def extract_text(path: Path) -> Tuple[str, List[dt.date], List[str]]:
     return extract_doc(path)
 
 
+def keyword_hit(lookup_text: str, keyword: str) -> bool:
+    key = keyword.strip().lower()
+    if not key:
+        return False
+
+    # Multi-word and punctuation-containing keys are treated as exact phrases.
+    if re.search(r"[^a-z0-9]", key):
+        return key in lookup_text
+
+    # Very short keys must match whole tokens to avoid accidental substring hits.
+    if len(key) <= 3:
+        return re.search(rf"(?<![a-z0-9]){re.escape(key)}(?![a-z0-9])", lookup_text) is not None
+
+    # Treat longer single-token keys as stems that must start at a word boundary.
+    return re.search(rf"(?<![a-z0-9]){re.escape(key)}[a-z0-9-]*", lookup_text) is not None
+
+
 def infer_departments(lookup_text: str, cfg: Dict[str, Dict[str, List[str]]]) -> List[str]:
     hits: List[str] = []
     for dept, keywords in cfg["department_keywords"].items():
-        if any(keyword in lookup_text for keyword in keywords):
+        if any(keyword_hit(lookup_text, keyword) for keyword in keywords):
             hits.append(dept)
     if "Emergency Medicine" not in hits:
         hits.insert(0, "Emergency Medicine")
@@ -681,7 +745,7 @@ def infer_departments(lookup_text: str, cfg: Dict[str, Dict[str, List[str]]]) ->
 def infer_tags(lookup_text: str, cfg: Dict[str, Dict[str, List[str]]]) -> List[str]:
     tags: List[str] = []
     for tag, keywords in cfg["tag_keywords"].items():
-        if any(keyword in lookup_text for keyword in keywords):
+        if any(keyword_hit(lookup_text, keyword) for keyword in keywords):
             tags.append(tag)
     for base in ("consult-workflow", "escalation", "ownership"):
         if base not in tags:
@@ -726,6 +790,10 @@ def redact_and_filter_lines(text: str) -> Tuple[List[str], bool]:
             had_redaction = True
             continue
         if re.fullmatch(r"[\W_]+", line):
+            continue
+        if LOW_VALUE_LINE_RE.search(line) and len(line.split()) <= 7:
+            continue
+        if NON_PRACTICAL_RE.search(line) and len(line.split()) <= 20:
             continue
         if looks_like_noise_line(line):
             continue
@@ -773,6 +841,19 @@ def as_statement(prefix: str, line: str, max_words: int = 26) -> str:
     lower_clause = clause.lower()
     if "scanned document" in lower_clause:
         return ""
+    if any(
+        marker in lower_clause
+        for marker in (
+            "chief of service",
+            "assistant chief",
+            "references",
+            "appendix",
+            "attachment",
+            "http://",
+            "https://",
+        )
+    ):
+        return ""
     for label in ("purpose:", "goal:", "policy:", "process:", "definitions:"):
         if lower_clause.startswith(label):
             clause = clause[len(label):].strip()
@@ -785,17 +866,40 @@ def as_statement(prefix: str, line: str, max_words: int = 26) -> str:
     return clean_spaces(out)
 
 
+def rank_candidate_line(line: str) -> int:
+    lower = line.lower()
+    score = 0
+    if 6 <= len(line.split()) <= 32:
+        score += 2
+    if re.search(r"\b(if|when|should|must|will|within|immediate|urgent|emergent)\b", lower):
+        score += 3
+    if re.search(r"\b(call|consult|activate|transfer|admit|order|start|begin|document)\b", lower):
+        score += 3
+    if re.search(r"\b(score|criteria|threshold|include)\b", lower):
+        score += 1
+    if NON_PRACTICAL_RE.search(line):
+        score -= 5
+    if LOW_VALUE_LINE_RE.search(line):
+        score -= 5
+    return score
+
+
 def pick_lines(lines: Sequence[str], patterns: Sequence[str], used: Set[str], limit: int) -> List[str]:
     picks: List[str] = []
     regexes = [re.compile(p, re.I) for p in patterns]
-    for line in lines:
+    candidates: List[Tuple[int, int, str]] = []
+    for idx, line in enumerate(lines):
         if line in used:
             continue
         if any(r.search(line) for r in regexes):
-            picks.append(line)
-            used.add(line)
-            if len(picks) >= limit:
-                break
+            candidates.append((rank_candidate_line(line), idx, line))
+
+    candidates.sort(key=lambda item: (-item[0], item[1]))
+    for _, _, line in candidates:
+        picks.append(line)
+        used.add(line)
+        if len(picks) >= limit:
+            break
     return picks
 
 
@@ -821,6 +925,8 @@ def fill_from_lines(
 def line_score_for_summary(line: str) -> int:
     if LOW_VALUE_LINE_RE.search(line):
         return -20
+    if NON_PRACTICAL_RE.search(line):
+        return -18
 
     words = line.split()
     if len(words) < 4:
@@ -836,13 +942,19 @@ def line_score_for_summary(line: str) -> int:
     score += sum(2 for token in SUMMARY_KEYWORDS if token in lowered)
 
     if re.search(r"\b(should|must|will|if|then|when|within|hours?|minutes?|days?)\b", lowered):
-        score += 3
-    if re.search(r"\b(consult|escalat|transfer|admit|discharge|follow up|handoff|responsible)\b", lowered):
         score += 4
+    if re.search(r"\b(call|consult|escalat|activate|transfer|admit|discharge|follow up|handoff|responsible|prepare|order|start|begin)\b", lowered):
+        score += 5
     if re.search(r"\b(acute|unstable|critical|emergent|urgent|shock|septic|hemorrhage)\b", lowered):
+        score += 2
+    if re.search(r"\b(score|criteria|include|threshold|> |< |greater than|less than)\b", lowered):
         score += 2
     if re.search(r"\d", line):
         score += 1
+    if len(words) > 34:
+        score -= 2
+    if re.search(r"\b(chief of service|assistant chief|signature|date effective)\b", lowered):
+        score -= 5
     return score
 
 
@@ -889,7 +1001,7 @@ def build_summary_bullets(
         lines,
         used,
         [r"\bpurpose\b", r"\bgoal\b", r"\bpolicy\b", r"to\s+(facilitate|expedite|provide|outline|standardize)"],
-        "Agreement purpose:",
+        "Purpose:",
         bullets,
         limit=2,
     )
@@ -897,7 +1009,15 @@ def build_summary_bullets(
         lines,
         used,
         [r"\b(nonmember|non-member|septic|appendicitis|psychiatric|urolog|ophthalm|neurosurg|snf|pregnan|pediatric)\b"],
-        "Scope focus:",
+        "Use this pathway when:",
+        bullets,
+        limit=2,
+    )
+    fill_from_lines(
+        lines,
+        used,
+        [r"\b(ed physician|emergency physician|ed team|immediate|do not delay|call|activate|initiat|begin|start|prepare)\b"],
+        "Immediate ED action:",
         bullets,
         limit=2,
     )
@@ -905,7 +1025,7 @@ def build_summary_bullets(
         lines,
         used,
         [r"\b(process|identify|activate|initiat|work-?up|prepare|manage|assessment|respond|pathway|protocol)\b"],
-        "Workflow detail:",
+        "ED workflow:",
         bullets,
         limit=2,
     )
@@ -913,7 +1033,7 @@ def build_summary_bullets(
         lines,
         used,
         [r"\b(criteria|urgent|emergent|include|examples|score|suspicious|unlikely)\b"],
-        "Clinical criteria:",
+        "Decision points:",
         bullets,
         limit=2,
     )
@@ -921,7 +1041,7 @@ def build_summary_bullets(
         lines,
         used,
         [r"\b(escalat|attending|chief|on call|no response|concern)\b"],
-        "Escalation note:",
+        "Escalation:",
         bullets,
         limit=2,
     )
@@ -929,7 +1049,7 @@ def build_summary_bullets(
         lines,
         used,
         [r"\b(transfer|admit|disposition|handoff|follow up|responsible|ownership)\b"],
-        "Disposition/ownership:",
+        "Ownership/disposition:",
         bullets,
         limit=2,
     )
@@ -941,7 +1061,7 @@ def build_summary_bullets(
             r"\b(urgent|emergent|no need to call|out-?patient|referral|fournier|torsion|obstructive)\b",
             r"\b(score of|highly suspicious|unlikely)\b",
         ],
-        "Key pathway point:",
+        "Key rule:",
         bullets,
         limit=2,
     )
@@ -954,14 +1074,18 @@ def build_summary_bullets(
             lines,
             used,
             bullets,
-            prefix="Key provision:",
+            prefix="Practical note:",
             limit=7,
             min_score=6,
             max_words=26,
         )
 
     if len(bullets) < 5:
-        joined_depts = ", ".join(departments[:3]) if departments else "involved services"
+        joined_depts = (
+            ", ".join(departments[:3])
+            if len(departments) >= 2
+            else "Emergency Medicine and consulting services"
+        )
         bullets.append(f"Defines shared expectations between {joined_depts} for this pathway.")
     if len(bullets) < 5 and flags.get("transfer"):
         bullets.append("Includes transfer-readiness and handoff expectations for interfacility movement.")
@@ -972,7 +1096,7 @@ def build_summary_bullets(
     if len(bullets) < 5:
         bullets.append(f"Defines consult and handoff expectations for {title.lower()}.")
     if len(bullets) < 5:
-        bullets.append("Clarifies when ED-led management continues versus transition to receiving service.")
+        bullets.append("Review source document for full operational details not captured in this summary.")
 
     bullets = unique_keep_order(bullets)
     return bullets[:10]
@@ -998,7 +1122,10 @@ def build_ed_actions(
     fill_from_lines(
         lines,
         used,
-        [r"\b(order|initiat|identify|call|activate|manage|document|re-evaluat|sign transfer)\b"],
+        [
+            r"\b(ed|emergency)\b.*\b(order|initiat|identify|call|activate|manage|document|re-evaluat|sign transfer)\b",
+            r"\b(order|initiat|identify|call|activate|manage|document|re-evaluat|sign transfer)\b.*\b(ed|emergency)\b",
+        ],
         "ED should:",
         bullets,
         limit=4,
@@ -1145,9 +1272,25 @@ def build_agreement(path: Path, cfg: Dict[str, Dict[str, List[str]]]) -> Dict[st
     disposition = build_disposition_or_ownership(agreement_id, lines, flags)
     timing_targets = extract_timing_targets(lines)
 
+    override = PRACTICAL_FIELD_OVERRIDES.get(agreement_id)
+    if override:
+        summary_bullets = override.get("summary_bullets", summary_bullets)
+        ed_actions = override.get("ed_actions", ed_actions)
+        consults = override.get("consults_and_escalation", consults)
+        disposition = override.get("disposition_or_ownership", disposition)
+        timing_targets = override.get("timing_targets", timing_targets)
+
     if len(summary_bullets) < 5:
-        while len(summary_bullets) < 5:
-            summary_bullets.append("Use the source policy to confirm implementation details for local practice.")
+        fallback_pool = [
+            "Review source document for full operational details not captured in this summary.",
+            "Confirm local activation criteria and consult expectations before implementation.",
+            "Use attending-to-attending escalation when ownership or disposition is uncertain.",
+        ]
+        for fallback in fallback_pool:
+            if len(summary_bullets) >= 5:
+                break
+            summary_bullets.append(fallback)
+    summary_bullets = unique_keep_order(summary_bullets)
 
     agreement = {
         "id": agreement_id,
