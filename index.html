@@ -20,10 +20,10 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
 
 /* NAV - compact, links only */
 .sitenav{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
-.sitenav-inner{max-width:1200px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:8px;height:46px}
+.sitenav-inner{max-width:1200px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:8px;height:46px;overflow:hidden}
 .nav-logo{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--blue);white-space:nowrap;flex-shrink:0;text-decoration:none;margin-right:6px}
 .nav-logo span{color:var(--text3)}
-.nav-links{display:flex;gap:1px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.nav-links{display:flex;flex:1;min-width:0;gap:1px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;white-space:nowrap;padding-right:10px}
 .nav-links::-webkit-scrollbar{display:none}
 .nav-link{padding:5px 10px;border-radius:6px;font-size:12px;font-weight:600;color:var(--text2);text-decoration:none;white-space:nowrap;transition:all .15s}
 .nav-link:hover{background:var(--surface2);color:var(--text)}
