@@ -48,15 +48,44 @@
           ]
         },
         {
-          id: 'risk',
-          type: 'select',
-          label: 'Risk Factors',
-          options: [
-            { value: '', label: 'Select risk factors...' },
-            { value: '0', label: 'No known risk factors (0)' },
-            { value: '1', label: '1-2 risk factors (1)' },
-            { value: '2', label: '>=3 risk factors or known CAD (2)' }
-          ]
+          id: 'risk_heading',
+          type: 'heading',
+          label: 'R Component: Click Risk Factors'
+        },
+        {
+          id: 'risk_known_athero',
+          type: 'checkbox',
+          label: 'Known CAD / PAD / CVA (+2)'
+        },
+        {
+          id: 'risk_htn',
+          type: 'checkbox',
+          label: 'Hypertension'
+        },
+        {
+          id: 'risk_hld',
+          type: 'checkbox',
+          label: 'Hyperlipidemia'
+        },
+        {
+          id: 'risk_dm',
+          type: 'checkbox',
+          label: 'Diabetes'
+        },
+        {
+          id: 'risk_smoker',
+          type: 'checkbox',
+          label: 'Current smoker'
+        },
+        {
+          id: 'risk_family_history',
+          type: 'checkbox',
+          label: 'Family history of CAD'
+        },
+        {
+          id: 'risk_obesity',
+          type: 'checkbox',
+          label: 'Obesity (BMI >30)'
         },
         {
           id: 'troponin',
@@ -332,6 +361,9 @@
 
     const defaults = {};
     schema.fields.forEach((field) => {
+      if (field.type === 'heading') {
+        return;
+      }
       if (typeof field.default !== 'undefined') {
         defaults[field.id] = field.default;
         return;
@@ -384,19 +416,34 @@
   }
 
   function evaluateHeartCalculator(values) {
-    const fields = ['history', 'ecg', 'age', 'risk', 'troponin'];
-    const pts = fields.map((field) => toInteger(values[field]));
-    if (pts.some((n) => Number.isNaN(n))) {
+    const coreFields = ['history', 'ecg', 'age', 'troponin'];
+    const corePts = coreFields.map((field) => toInteger(values[field]));
+    if (corePts.some((n) => Number.isNaN(n))) {
       return {
         ready: false,
         className: CALC_NEUTRAL,
-        preview: 'HEART: complete all 5 categories',
+        preview: 'HEART: complete History/ECG/Age/Troponin',
         scoreText: '[incomplete]',
         interpretation: 'incomplete',
         details: 'HEART calculator incomplete.'
       };
     }
 
+    const knownAthero = Boolean(values.risk_known_athero);
+    const riskFactorCount = [
+      values.risk_htn,
+      values.risk_hld,
+      values.risk_dm,
+      values.risk_smoker,
+      values.risk_family_history,
+      values.risk_obesity
+    ].filter(Boolean).length;
+
+    let riskPts = 0;
+    if (knownAthero || riskFactorCount >= 3) riskPts = 2;
+    else if (riskFactorCount >= 1) riskPts = 1;
+
+    const pts = [corePts[0], corePts[1], corePts[2], riskPts, corePts[3]];
     const total = pts.reduce((sum, n) => sum + n, 0);
     let interpretation = 'low risk';
     let className = CALC_LOW;
@@ -414,7 +461,7 @@
       preview: `HEART ${total}/10 (${interpretation})`,
       scoreText: `${total}/10`,
       interpretation,
-      details: `H/E/A/R/T = ${pts.join('/')}.`
+      details: `H/E/A/R/T = ${pts.join('/')}. R component: ${knownAthero ? 'known atherosclerotic disease' : `${riskFactorCount} selected risk factor${riskFactorCount === 1 ? '' : 's'}`} = ${riskPts}.`
     };
   }
 
@@ -835,6 +882,10 @@
       const fieldId = `risk-calc-${toggle.id}-${field.id}`;
       const currentValue = values[field.id];
 
+      if (field.type === 'heading') {
+        return `<div class="risk-calc-subhead">${escapeHtml(field.label)}</div>`;
+      }
+
       if (field.type === 'checkbox') {
         const checked = Boolean(currentValue) ? 'checked' : '';
         return `
@@ -871,11 +922,16 @@
       `;
     }).join('');
 
+    const helperLink = calcType === 'heart'
+      ? '<a class="risk-calc-link" href="calculators.html#calc-heart">Open full HEART calculator</a>'
+      : '';
+
     return `
       <div class="risk-calc-wrap">
         <div class="risk-calc-title">${escapeHtml(schema.title)} Calculator</div>
         <div class="risk-calc-grid">${fieldsHtml}</div>
         <div class="risk-calc-result ${escapeHtml(evaluation.className)}">${escapeHtml(evaluation.preview)}</div>
+        ${helperLink}
       </div>
     `;
   }

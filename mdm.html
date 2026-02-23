@@ -30,7 +30,7 @@ header{background:linear-gradient(135deg,#1e293b,#0f172a);border-bottom:1px soli
 .pack-chip:hover{border-color:#3b82f6;color:#bfdbfe}
 .pack-chip.active{background:#1d4ed8;border-color:#2563eb;color:#fff}
 .quick-actions{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
-.quick-btn{padding:7px 10px;border-radius:8px;border:1px solid #334155;background:#0f172a;color:#cbd5e1;font-size:11px;font-weight:700;cursor:pointer;transition:all .15s}
+.quick-btn{padding:7px 10px;border-radius:8px;border:1px solid #334155;background:#0f172a;color:#cbd5e1;font-size:11px;font-weight:700;cursor:pointer;transition:all .15s;text-decoration:none;display:inline-flex;align-items:center}
 .quick-btn:hover{border-color:#3b82f6;color:#bfdbfe}
 
 main{max-width:1100px;margin:0 auto;padding:18px 24px 64px}
@@ -58,11 +58,14 @@ main{max-width:1100px;margin:0 auto;padding:18px 24px 64px}
 .risk-calc-grid{display:grid;grid-template-columns:1fr;gap:8px}
 .risk-calc-field{margin:0}
 .risk-calc-check{background:#0b1322}
+.risk-calc-subhead{font-size:11px;font-weight:700;color:#93c5fd;letter-spacing:.04em;margin-top:2px}
 .risk-calc-result{margin-top:8px;border-radius:8px;border:1px solid #334155;padding:8px 10px;font-size:12px;color:#cbd5e1}
 .risk-calc-result.calc-neutral{background:#0f172a;border-color:#334155;color:#94a3b8}
 .risk-calc-result.calc-low{background:#052e16;border-color:#16a34a;color:#86efac}
 .risk-calc-result.calc-moderate{background:#1c1917;border-color:#ca8a04;color:#fde047}
 .risk-calc-result.calc-high{background:#1f0707;border-color:#dc2626;color:#fca5a5}
+.risk-calc-link{display:inline-flex;margin-top:8px;font-size:11px;color:#93c5fd;text-decoration:none;border-bottom:1px dotted #1d4ed8}
+.risk-calc-link:hover{color:#bfdbfe}
 
 .preview-wrap{display:flex;flex-direction:column;gap:10px}
 .preview{width:100%;min-height:500px;resize:vertical;background:#0f172a;border:1px solid #334155;border-radius:10px;color:#e2e8f0;padding:12px;font:13px/1.55 'JetBrains Mono',monospace;outline:none}
@@ -98,18 +101,13 @@ main{max-width:1100px;margin:0 auto;padding:18px 24px 64px}
     <a class="nav-logo" href="index.html">⚡ KP<span>/</span>ER</a>
     <div class="nav-links">
       <a class="nav-link" href="index.html">🏠 Home</a>
-      <a class="nav-link" href="dotphrase.html">📋 Phrases</a>
-      <a class="nav-link active" href="mdm.html">🧾 MDM</a>
-      <a class="nav-link" href="calculators.html">🧮 Calcs</a>
-      <a class="nav-link" href="vasopressors.html">💊 Vasopressors</a>
-      <a class="nav-link" href="rsi.html">🫁 RSI</a>
+      <a class="nav-link active" href="mdm.html">🧾 Documentation</a>
+      <a class="nav-link" href="calculators.html">🧮 Decision Support</a>
+      <a class="nav-link" href="rsi.html">🚨 Resuscitation</a>
       <a class="nav-link" href="algorithms.html">🔀 Algorithms</a>
-      <a class="nav-link" href="neurohub.html">🧠 Neuro Hub</a>
-      <a class="nav-link" href="pedsfever.html">🌡️ Peds Fever</a>
       <a class="nav-link" href="service-agreements.html">📑 Service Agreements</a>
       <a class="nav-link" href="ed-phone-directory.html">📞 Directory</a>
       <a class="nav-link" href="links.html">🔗 Links</a>
-      <a class="nav-link" href="roadmap.html">🗺️ Roadmap</a>
     </div>
   </div>
 </nav>
@@ -117,7 +115,7 @@ main{max-width:1100px;margin:0 auto;padding:18px 24px 64px}
 <header>
   <div class="header-inner">
     <div class="logo"><span>🧾</span><h1>Chief Complaint MDM Builder</h1></div>
-    <p class="subtitle">Build defensible MDM text with DDx, risk stratification, and linked rule-outs.</p>
+    <p class="subtitle">Build defensible MDM text with DDx, in-line risk calculators, and linked rule-outs.</p>
     <div class="disclaimer"><strong>⚠️ Clinical Disclaimer:</strong> Generated text is a documentation aid. Review and tailor to the patient, diagnostics, and ED course before use.</div>
 
     <div class="controls">
@@ -143,6 +141,8 @@ main{max-width:1100px;margin:0 auto;padding:18px 24px 64px}
       <button class="quick-btn" id="resetPackBtn" type="button">Reset Pack Defaults</button>
       <button class="quick-btn" id="lifeThreatsBtn" type="button">Life-Threats Only</button>
       <button class="quick-btn" id="clearAllBtn" type="button">Clear All</button>
+      <a class="quick-btn" href="dotphrase.html">Open Dotphrase Library</a>
+      <a class="quick-btn" href="calculators.html#calc-heart">Open Full HEART Calc</a>
     </div>
   </div>
 </header>
