@@ -63,7 +63,23 @@ main{max-width:1280px;margin:0 auto;padding:20px}
 .result-count{font-size:13px;color:var(--text2)}
 .small-note{font-size:11px;color:var(--text3)}
 
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(390px,1fr));gap:12px}
+.workspace{display:grid;grid-template-columns:340px minmax(0,1fr);gap:12px;align-items:start}
+.result-list{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;position:sticky;top:62px;max-height:calc(100vh - 80px);display:flex;flex-direction:column}
+.result-list-head{padding:10px 12px;border-bottom:1px solid var(--border);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text3)}
+.result-list-items{overflow:auto;padding:8px;display:flex;flex-direction:column;gap:6px}
+.result-row{width:100%;text-align:left;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:9px 10px;cursor:pointer;display:flex;flex-direction:column;gap:4px}
+.result-row:hover{border-color:var(--border2)}
+.result-row.active{border-color:var(--blue);box-shadow:0 0 0 1px rgba(59,130,246,.35);background:#10203a}
+.result-row-title{font-size:12px;font-weight:700;color:var(--text);line-height:1.35}
+.result-row-meta{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.result-row-date{font-size:10px;color:var(--text3)}
+.result-row-badge{font-size:10px;font-weight:700;border-radius:999px;padding:2px 8px;border:1px solid transparent}
+.result-row-badge.green{background:var(--greenSoft);border-color:var(--greenBorder);color:#86efac}
+.result-row-badge.yellow{background:var(--amberSoft);border-color:var(--amberBorder);color:#fcd34d}
+.result-row-badge.red{background:var(--redSoft);border-color:var(--redBorder);color:#fca5a5}
+.result-row-snippet{font-size:11px;color:var(--text2);line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
+.detail-pane{min-width:0}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px}
 .card:hover{border-color:var(--border2)}
 .card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
@@ -105,9 +121,10 @@ main{max-width:1280px;margin:0 auto;padding:20px}
   .controls{grid-template-columns:1fr}
   .right-controls{justify-content:flex-start}
   .filters{grid-template-columns:1fr}
+  .workspace{grid-template-columns:1fr}
+  .result-list{position:static;max-height:none}
 }
 @media(max-width:500px){
-  .grid{grid-template-columns:1fr}
   h1{font-size:24px}
   .card-head{flex-direction:column}
   .decision{align-self:flex-start}
@@ -178,7 +195,7 @@ main{max-width:1280px;margin:0 auto;padding:20px}
     <div class="small-note">Use checkboxes as placeholders for future automation. Open Document remains disabled until SharePoint URLs are added.</div>
   </div>
 
-  <section id="results" class="grid" aria-live="polite"></section>
+  <section id="results" class="workspace" aria-live="polite"></section>
 </main>
 
 <script>
@@ -383,7 +400,8 @@ const state = {
   selectedDepts: new Set(),
   selectedTags: new Set(),
   olderThanFiveYears: false,
-  sort: "relevance"
+  sort: "relevance",
+  activeAgreementKey: ""
 };
 
 function escapeHtml(value) {
@@ -658,14 +676,14 @@ function sectionHtml(title, lines, opts = {}) {
   return `<details class="section"${openAttr}><summary>${escapeHtml(title)}</summary><div class="section-body">${listHtml}</div></details>`;
 }
 
-function documentationSectionHtml(item, idx) {
+function documentationSectionHtml(item) {
   const documentation = item.card.documentation || "Documentation guidance not provided in source.";
   return `
     <details class="section">
       <summary>Documentation</summary>
       <div class="section-body">
         <p class="doc-text">${escapeHtml(documentation)}</p>
-        <button class="btn section-copy js-copy-doc" data-idx="${idx}">Copy Documentation</button>
+        <button class="btn section-copy js-copy-doc" type="button">Copy Documentation</button>
       </div>
     </details>
   `;
@@ -677,6 +695,61 @@ function workflowText(item) {
   return `${title} - Workflow\n${bullets}`;
 }
 
+function agreementKey(item) {
+  const raw = item.id || item.source_filename || item.title || "";
+  return normalize(raw).replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+}
+
+function listSnippet(item) {
+  const lines = dedupeClean([...(item.card.when_to_use || []), ...(item.card.workflow || [])]);
+  return lines[0] || "Open to view practical workflow details.";
+}
+
+function detailCardHtml(item) {
+  const updated = item.last_updated ? item.last_updated : "unknown";
+  const deptBadges = (item.departments || []).map((d) => `<span class="badge b-dept">${escapeHtml(d)}</span>`).join("");
+  const tagBadges = (item.tags || []).map((t) => `<span class="badge b-tag">${escapeHtml(t)}</span>`).join("");
+  const docButton = item.sharepoint_url
+    ? `<a class="btn btn-primary" href="${escapeHtml(item.sharepoint_url)}" target="_blank" rel="noopener">Open Document</a>`
+    : `<button class="btn btn-primary" disabled>Open Document</button>`;
+  const sourceTitleLine = item.card.title !== item.title
+    ? `<div class="card-sub">Source title: ${escapeHtml(item.title)}</div>`
+    : "";
+  const bannerLevel = item.card.banner && item.card.banner.level ? item.card.banner.level : "yellow";
+  const bannerLabel = item.card.banner && item.card.banner.label ? item.card.banner.label : "Consider Admission";
+
+  return `
+    <article class="card">
+      <div class="card-head">
+        <div>
+          <div class="card-title">${escapeHtml(displayTitle(item))}</div>
+          ${sourceTitleLine}
+          <div class="card-sub">Source: ${escapeHtml(item.source_filename || "")}</div>
+        </div>
+        <div class="decision ${escapeHtml(bannerLevel)}">${escapeHtml(bannerLabel)}</div>
+      </div>
+      <div class="badges">
+        <span class="badge b-date">Updated: ${escapeHtml(updated)}</span>
+        ${deptBadges}
+        ${tagBadges}
+      </div>
+      ${sectionHtml("Purpose", item.card.purpose, { open: true })}
+      ${sectionHtml("When to Use", item.card.when_to_use, { open: false })}
+      ${sectionHtml("Exclusions / Red Flags", item.card.red_flags, { open: false })}
+      ${sectionHtml("Workflow", item.card.workflow, { open: false, checkable: true })}
+      ${sectionHtml("Treatment", item.card.treatment, { open: false, checkable: true })}
+      ${sectionHtml("Disposition", item.card.disposition, { open: false, checkable: true })}
+      ${documentationSectionHtml(item)}
+      ${sectionHtml("Automation Placeholders", item.card.automation_checks, { open: false, checkable: true })}
+      <div class="actions">
+        <button class="btn js-copy-workflow" type="button">Copy Workflow</button>
+        <button class="btn js-copy-doc" type="button">Copy Documentation</button>
+        ${docButton}
+      </div>
+    </article>
+  `;
+}
+
 function renderResults() {
   const container = document.getElementById("results");
   const resultCount = document.getElementById("resultCount");
@@ -685,70 +758,62 @@ function renderResults() {
   resultCount.textContent = `${rows.length} agreement${rows.length === 1 ? "" : "s"} found`;
 
   if (!rows.length) {
+    state.activeAgreementKey = "";
     container.innerHTML = '<div class="empty">No agreements match your current search/filter settings.</div>';
     return;
   }
 
-  container.innerHTML = rows.map(({ item }, idx) => {
-    const updated = item.last_updated ? item.last_updated : "unknown";
-    const deptBadges = (item.departments || []).map((d) => `<span class="badge b-dept">${escapeHtml(d)}</span>`).join("");
-    const tagBadges = (item.tags || []).map((t) => `<span class="badge b-tag">${escapeHtml(t)}</span>`).join("");
-    const docButton = item.sharepoint_url
-      ? `<a class="btn btn-primary" href="${escapeHtml(item.sharepoint_url)}" target="_blank" rel="noopener">Open Document</a>`
-      : `<button class="btn btn-primary" disabled>Open Document</button>`;
-    const sourceTitleLine = item.card.title !== item.title
-      ? `<div class="card-sub">Source title: ${escapeHtml(item.title)}</div>`
-      : "";
-    const bannerLevel = item.card.banner && item.card.banner.level ? item.card.banner.level : "yellow";
-    const bannerLabel = item.card.banner && item.card.banner.label ? item.card.banner.label : "Consider Admission";
+  const keys = rows.map(({ item }) => agreementKey(item));
+  if (!keys.includes(state.activeAgreementKey)) {
+    state.activeAgreementKey = keys[0];
+  }
 
+  const activeRow = rows.find(({ item }) => agreementKey(item) === state.activeAgreementKey) || rows[0];
+  const activeItem = activeRow.item;
+
+  const listHtml = rows.map(({ item }) => {
+    const key = agreementKey(item);
+    const active = key === state.activeAgreementKey ? " active" : "";
+    const updated = item.last_updated ? item.last_updated : "unknown";
+    const banner = item.card.banner || { level: "yellow", label: "Consider Admission" };
     return `
-      <article class="card">
-        <div class="card-head">
-          <div>
-            <div class="card-title">${escapeHtml(displayTitle(item))}</div>
-            ${sourceTitleLine}
-            <div class="card-sub">Source: ${escapeHtml(item.source_filename || "")}</div>
-          </div>
-          <div class="decision ${escapeHtml(bannerLevel)}">${escapeHtml(bannerLabel)}</div>
+      <button class="result-row${active}" type="button" data-role="pick-agreement" data-key="${escapeHtml(key)}">
+        <div class="result-row-title">${escapeHtml(displayTitle(item))}</div>
+        <div class="result-row-snippet">${escapeHtml(listSnippet(item))}</div>
+        <div class="result-row-meta">
+          <span class="result-row-date">${escapeHtml(updated)}</span>
+          <span class="result-row-badge ${escapeHtml(banner.level || "yellow")}">${escapeHtml(banner.label || "Consider Admission")}</span>
         </div>
-        <div class="badges">
-          <span class="badge b-date">Updated: ${escapeHtml(updated)}</span>
-          ${deptBadges}
-          ${tagBadges}
-        </div>
-        ${sectionHtml("Purpose", item.card.purpose, { open: true })}
-        ${sectionHtml("When to Use", item.card.when_to_use, { open: false })}
-        ${sectionHtml("Exclusions / Red Flags", item.card.red_flags, { open: false })}
-        ${sectionHtml("Workflow", item.card.workflow, { open: false, checkable: true })}
-        ${sectionHtml("Treatment", item.card.treatment, { open: false, checkable: true })}
-        ${sectionHtml("Disposition", item.card.disposition, { open: false, checkable: true })}
-        ${documentationSectionHtml(item, idx)}
-        ${sectionHtml("Automation Placeholders", item.card.automation_checks, { open: false, checkable: true })}
-        <div class="actions">
-          <button class="btn js-copy-workflow" data-idx="${idx}">Copy Workflow</button>
-          <button class="btn js-copy-doc" data-idx="${idx}">Copy Documentation</button>
-          ${docButton}
-        </div>
-      </article>
+      </button>
     `;
   }).join("");
 
+  container.innerHTML = `
+    <aside class="result-list">
+      <div class="result-list-head">Agreements</div>
+      <div class="result-list-items">${listHtml}</div>
+    </aside>
+    <section class="detail-pane">${detailCardHtml(activeItem)}</section>
+  `;
+
+  container.querySelectorAll('[data-role="pick-agreement"]').forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const key = btn.getAttribute("data-key") || "";
+      if (!key || key === state.activeAgreementKey) return;
+      state.activeAgreementKey = key;
+      renderResults();
+    });
+  });
+
   container.querySelectorAll(".js-copy-workflow").forEach((btn) => {
     btn.addEventListener("click", () => {
-      const idx = Number(btn.getAttribute("data-idx"));
-      const row = rows[idx];
-      if (!row) return;
-      copyText(workflowText(row.item));
+      copyText(workflowText(activeItem));
     });
   });
 
   container.querySelectorAll(".js-copy-doc").forEach((btn) => {
     btn.addEventListener("click", () => {
-      const idx = Number(btn.getAttribute("data-idx"));
-      const row = rows[idx];
-      if (!row) return;
-      copyText(row.item.card.documentation || "");
+      copyText(activeItem.card.documentation || "");
     });
   });
 }

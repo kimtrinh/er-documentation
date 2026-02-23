@@ -1249,7 +1249,6 @@ function buildEntry(item, section, hospital, idx, isCustom = false) {
   const numberText = String(item.number || '');
   const numberMeta = buildNumberPresentation(numberText, item.type, hospital, section);
   const numberDisplayText = numberMeta.display || numberText;
-  const numberCopyText = numberMeta.copy || numberText;
   const numberSearchText = numberMeta.search || numberText;
   const noteRaw = String(item.note || '');
   const noteText = noteRaw.toLowerCase();
@@ -1257,7 +1256,6 @@ function buildEntry(item, section, hospital, idx, isCustom = false) {
   const searchHaystack = `${nameText} ${numberSearchText} ${noteText} ${sectionText}`.toLowerCase();
   const safeName = escapeHtml(nameText);
   const safeNumberDisplay = escapeHtml(numberDisplayText);
-  const safeNumberCopy = escapeHtml(numberCopyText);
   const safeNote = escapeHtml(noteRaw);
   const safeHospital = escapeHtml(hospital);
   const typeClass = item.type === 'pager' ? 'pager' : item.type === 'phone' ? 'phone' : 'ext';
@@ -1281,7 +1279,7 @@ function buildEntry(item, section, hospital, idx, isCustom = false) {
   } else if (dialLinks) {
     numberDisplay = `<span class="entry-number-wrap">${dialLinks}</span>`;
   } else {
-    numberDisplay = `<button type="button" class="entry-number ${typeClass} js-copy-num" data-number="${safeNumberCopy}" title="Click to copy">${safeNumberDisplay}</button>`;
+    numberDisplay = `<span class="entry-number ${typeClass} entry-number-static">${safeNumberDisplay}</span>`;
   }
 
   return `
@@ -1344,12 +1342,6 @@ renderAll();
 exportPhoneDirectoryIndex();
 
 document.addEventListener('click', e => {
-  const copyBtn = e.target.closest('.js-copy-num');
-  if (copyBtn) {
-    copyNum(copyBtn, copyBtn.dataset.number || '');
-    return;
-  }
-
   const deleteBtn = e.target.closest('.js-delete-custom');
   if (deleteBtn) {
     const hospital = deleteBtn.dataset.hospital;
@@ -1469,14 +1461,6 @@ function deleteCustom(hospital, idx) {
   renderHospital(hospital);
   exportPhoneDirectoryIndex();
   showToast('Entry removed.');
-}
-
-function copyNum(el, num) {
-  navigator.clipboard.writeText(num).then(() => {
-    const orig = el.textContent;
-    el.textContent = 'copied!';
-    setTimeout(() => el.textContent = orig, 1200);
-  });
 }
 
 function showToast(msg) {

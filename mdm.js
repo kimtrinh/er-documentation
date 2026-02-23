@@ -209,6 +209,8 @@
     copyFullBtn: document.getElementById('copyFullBtn'),
     copyDdxBtn: document.getElementById('copyDdxBtn'),
     copyRuleoutsBtn: document.getElementById('copyRuleoutsBtn'),
+    qualityContainer: document.getElementById('qualityContainer'),
+    qualityCount: document.getElementById('qualityCount'),
     dotphraseSearchInput: document.getElementById('dotphraseSearchInput'),
     dotphraseQuickList: document.getElementById('dotphraseQuickList'),
     dotphraseMatchCount: document.getElementById('dotphraseMatchCount')
@@ -804,6 +806,118 @@
     els.preview.value = buildMdmText(state.activePack);
   }
 
+  function evaluateQualityChecks(pack) {
+    const checks = [];
+    const selectedDdx = getSelectedDdxItems(pack);
+    const hasLifeThreat = selectedDdx.some((item) => String(item.group || '').toLowerCase() === 'life-threatening');
+
+    if (!selectedDdx.length) {
+      checks.push({
+        level: 'warn',
+        title: 'DDx not selected',
+        detail: 'Select at least one likely diagnosis before copying MDM text.'
+      });
+    } else if (!hasLifeThreat) {
+      checks.push({
+        level: 'warn',
+        title: 'No life-threatening diagnosis selected',
+        detail: 'Add at least one life-threatening DDx when clinically appropriate to strengthen defensibility.'
+      });
+    } else {
+      checks.push({
+        level: 'ok',
+        title: 'DDx scope documented',
+        detail: `${selectedDdx.length} DDx selected with life-threatening coverage.`
+      });
+    }
+
+    const availableRuleouts = state.availableRuleoutIds || [];
+    const selectedRuleouts = getSelectedRuleoutIds();
+    if (!availableRuleouts.length && selectedDdx.length) {
+      checks.push({
+        level: 'warn',
+        title: 'No linked rule-outs available',
+        detail: 'This DDx combination has no linked rule-out phrases configured yet.'
+      });
+    } else if (!selectedRuleouts.length) {
+      checks.push({
+        level: 'warn',
+        title: 'Rule-outs not selected',
+        detail: 'Select rule-out phrases to document what was considered and excluded.'
+      });
+    } else {
+      checks.push({
+        level: 'ok',
+        title: 'Rule-outs selected',
+        detail: `${selectedRuleouts.length} rule-out phrase${selectedRuleouts.length === 1 ? '' : 's'} included.`
+      });
+    }
+
+    const missingRuleouts = selectedRuleouts.filter((id) => !phraseLookup(id).exists);
+    if (missingRuleouts.length) {
+      const label = missingRuleouts.map((id) => formatDotphrase(id)).join(', ');
+      checks.push({
+        level: 'warn',
+        title: 'Missing dotphrase definitions',
+        detail: `Missing in dotphrase library: ${label}. Output will fall back to ID text.`
+      });
+    }
+
+    const visibleRisks = getVisibleRiskToggles(pack);
+    const selectedRiskToggles = visibleRisks.filter((toggle) => state.selectedRisks.has(toggle.id));
+    if (visibleRisks.length && !selectedRiskToggles.length) {
+      checks.push({
+        level: 'warn',
+        title: 'Risk tools not documented',
+        detail: 'Select at least one relevant risk tool when available for this complaint.'
+      });
+    } else if (selectedRiskToggles.length) {
+      checks.push({
+        level: 'ok',
+        title: 'Risk modifiers included',
+        detail: `${selectedRiskToggles.length} risk tool${selectedRiskToggles.length === 1 ? '' : 's'} selected.`
+      });
+    }
+
+    const incompleteCalcs = selectedRiskToggles
+      .filter((toggle) => toggle.calculator && toggle.calculator.type)
+      .filter((toggle) => !evaluateRiskCalculator(toggle).ready)
+      .map((toggle) => toggle.label);
+
+    if (incompleteCalcs.length) {
+      checks.push({
+        level: 'warn',
+        title: 'Calculator entries incomplete',
+        detail: `Complete calculator inputs for: ${incompleteCalcs.join('; ')}.`
+      });
+    }
+
+    return checks;
+  }
+
+  function renderQualityChecks() {
+    if (!els.qualityContainer || !els.qualityCount) return;
+    if (!state.activePack) {
+      els.qualityCount.textContent = '0 warnings';
+      els.qualityContainer.innerHTML = '<p class="empty-block">No pack selected.</p>';
+      return;
+    }
+
+    const checks = evaluateQualityChecks(state.activePack);
+    const warnings = checks.filter((item) => item.level === 'warn').length;
+    els.qualityCount.textContent = `${warnings} warning${warnings === 1 ? '' : 's'}`;
+
+    els.qualityContainer.innerHTML = checks.map((item) => {
+      const levelClass = item.level === 'warn' ? 'warn' : 'ok';
+      return `
+        <div class="quality-item ${levelClass}">
+          <span class="quality-title">${escapeHtml(item.title)}</span>
+          ${escapeHtml(item.detail)}
+        </div>
+      `;
+    }).join('');
+  }
+
   function renderPackSelect() {
     els.packSelect.innerHTML = state.packs.map((pack) => (
       `<option value="${escapeHtml(pack.id)}">${escapeHtml(pack.title)} (${escapeHtml(pack.id)})</option>`
@@ -1131,6 +1245,7 @@
     renderDdx();
     renderRuleouts();
     renderRiskToggles();
+    renderQualityChecks();
     renderCounts();
     renderDotphraseLookup();
     setPreview();
@@ -1544,6 +1659,9 @@
       els.ddxContainer.innerHTML = `<p class="empty-block">${escapeHtml(error.message)}</p>`;
       els.ruleoutContainer.innerHTML = '<p class="empty-block">Unavailable.</p>';
       els.riskContainer.innerHTML = '<p class="empty-block">Unavailable.</p>';
+      if (els.qualityContainer) {
+        els.qualityContainer.innerHTML = '<p class="empty-block">Unavailable.</p>';
+      }
       return;
     }
 
