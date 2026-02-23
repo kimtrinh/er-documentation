@@ -20,16 +20,25 @@ header{background:linear-gradient(135deg,#1e293b,#0f172a);border-bottom:1px soli
 .control label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#8fa8c8;font-weight:700}
 .control select,.control input[type="text"]{width:100%;padding:10px 12px;background:#1e293b;border:1px solid #334155;border-radius:10px;color:#f1f5f9;font-size:14px;outline:none}
 .control select:focus,.control input[type="text"]:focus{border-color:#3b82f6}
+.control input[type="text"].invalid{border-color:#ef4444;box-shadow:0 0 0 3px rgba(239,68,68,.15)}
 .mode-toggle{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .mode-pill{display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #334155;background:#1e293b;border-radius:999px;color:#cbd5e1;font-size:13px;font-weight:600;cursor:pointer}
 .mode-pill input{accent-color:#3b82f6}
 .alias-hint{margin-top:8px;font-size:11px;color:#64748b}
+.pack-shortcuts{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
+.pack-chip{padding:6px 10px;border-radius:999px;border:1px solid #334155;background:#1e293b;color:#cbd5e1;font-size:11px;font-weight:700;cursor:pointer;transition:all .15s}
+.pack-chip:hover{border-color:#3b82f6;color:#bfdbfe}
+.pack-chip.active{background:#1d4ed8;border-color:#2563eb;color:#fff}
+.quick-actions{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
+.quick-btn{padding:7px 10px;border-radius:8px;border:1px solid #334155;background:#0f172a;color:#cbd5e1;font-size:11px;font-weight:700;cursor:pointer;transition:all .15s}
+.quick-btn:hover{border-color:#3b82f6;color:#bfdbfe}
 
 main{max-width:1100px;margin:0 auto;padding:18px 24px 64px}
 .grid{display:grid;grid-template-columns:1.1fr 1fr;gap:16px;align-items:start}
 .panel{background:#1e293b;border:1px solid #334155;border-radius:12px;overflow:hidden}
 .panel-head{padding:12px 14px;border-bottom:1px solid #334155;background:#172235}
-.panel-head h2{font-size:13px;color:#f1f5f9;font-weight:700;letter-spacing:.02em}
+.panel-head h2{font-size:13px;color:#f1f5f9;font-weight:700;letter-spacing:.02em;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.head-count{font-size:10px;padding:2px 8px;border-radius:999px;background:#0f172a;border:1px solid #27364d;color:#93c5fd}
 .panel-body{padding:14px}
 .section-subgroup + .section-subgroup{margin-top:14px}
 .section-subgroup h4{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#8fa8c8;margin-bottom:8px}
@@ -44,6 +53,16 @@ main{max-width:1100px;margin:0 auto;padding:18px 24px 64px}
 .risk-input-wrap span{font-size:11px;color:#94a3b8;min-width:54px}
 .risk-input-wrap input,.risk-input-wrap select{background:#0f172a;border:1px solid #334155;border-radius:8px;color:#e2e8f0;font-size:12px;padding:6px 8px;min-width:120px}
 .risk-input-wrap input:disabled,.risk-input-wrap select:disabled{opacity:.5}
+.risk-calc-wrap{margin:8px 2px 0 28px;padding:10px;border:1px solid #334155;border-radius:10px;background:#111827}
+.risk-calc-title{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#8fa8c8;font-weight:700;margin-bottom:8px}
+.risk-calc-grid{display:grid;grid-template-columns:1fr;gap:8px}
+.risk-calc-field{margin:0}
+.risk-calc-check{background:#0b1322}
+.risk-calc-result{margin-top:8px;border-radius:8px;border:1px solid #334155;padding:8px 10px;font-size:12px;color:#cbd5e1}
+.risk-calc-result.calc-neutral{background:#0f172a;border-color:#334155;color:#94a3b8}
+.risk-calc-result.calc-low{background:#052e16;border-color:#16a34a;color:#86efac}
+.risk-calc-result.calc-moderate{background:#1c1917;border-color:#ca8a04;color:#fde047}
+.risk-calc-result.calc-high{background:#1f0707;border-color:#dc2626;color:#fca5a5}
 
 .preview-wrap{display:flex;flex-direction:column;gap:10px}
 .preview{width:100%;min-height:500px;resize:vertical;background:#0f172a;border:1px solid #334155;border-radius:10px;color:#e2e8f0;padding:12px;font:13px/1.55 'JetBrains Mono',monospace;outline:none}
@@ -119,6 +138,12 @@ main{max-width:1100px;margin:0 auto;padding:18px 24px 64px}
       </div>
     </div>
     <div id="aliasHint" class="alias-hint"></div>
+    <div class="pack-shortcuts" id="quickPackButtons"></div>
+    <div class="quick-actions">
+      <button class="quick-btn" id="resetPackBtn" type="button">Reset Pack Defaults</button>
+      <button class="quick-btn" id="lifeThreatsBtn" type="button">Life-Threats Only</button>
+      <button class="quick-btn" id="clearAllBtn" type="button">Clear All</button>
+    </div>
   </div>
 </header>
 
@@ -126,17 +151,17 @@ main{max-width:1100px;margin:0 auto;padding:18px 24px 64px}
   <div class="grid">
     <div>
       <section class="panel">
-        <div class="panel-head"><h2>DDx</h2></div>
+        <div class="panel-head"><h2>DDx <span id="ddxCount" class="head-count">0 selected</span></h2></div>
         <div class="panel-body" id="ddxContainer"></div>
       </section>
 
       <section class="panel" style="margin-top:14px">
-        <div class="panel-head"><h2>Rule-outs</h2></div>
+        <div class="panel-head"><h2>Rule-outs <span id="ruleoutCount" class="head-count">0 selected</span></h2></div>
         <div class="panel-body" id="ruleoutContainer"></div>
       </section>
 
       <section class="panel" style="margin-top:14px">
-        <div class="panel-head"><h2>Risk Tools</h2></div>
+        <div class="panel-head"><h2>Risk Tools <span id="riskCount" class="head-count">0 selected</span></h2></div>
         <div class="panel-body" id="riskContainer"></div>
       </section>
     </div>

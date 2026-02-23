@@ -17,11 +17,11 @@
       ],
       "risk_toggles": [
         {
-          "id": "ccp_heart_score",
-          "label": "HEART score documented",
+          "id": "ccp_heart_calculator",
+          "label": "HEART score calculator",
           "tags_required": ["acs"],
-          "input": { "type": "number", "label": "Score", "placeholder": "0-10", "min": 0, "max": 10 },
-          "sentence_template": "HEART score = {value}; risk stratification discussed and disposition determined accordingly."
+          "calculator": { "type": "heart" },
+          "sentence_template": "HEART score = {score} ({interpretation}); risk stratification discussed and disposition determined accordingly."
         },
         {
           "id": "ccp_trop_reassuring",
@@ -46,6 +46,13 @@
           "label": "Wells low + D-dimer negative",
           "tags_required": ["pe"],
           "sentence_template": "PE considered; Wells low risk and D-dimer negative, so PE effectively excluded without imaging."
+        },
+        {
+          "id": "ccp_years_calculator",
+          "label": "YEARS algorithm",
+          "tags_required": ["pe"],
+          "calculator": { "type": "years" },
+          "sentence_template": "YEARS algorithm applied: {details}."
         },
         {
           "id": "ccp_cta_pe_not_indicated",
@@ -92,6 +99,13 @@
           "label": "Wells low + D-dimer negative",
           "tags_required": ["pe"],
           "sentence_template": "PE considered; Wells low risk and D-dimer negative, so PE effectively excluded without imaging."
+        },
+        {
+          "id": "sob_years_calculator",
+          "label": "YEARS algorithm",
+          "tags_required": ["pe"],
+          "calculator": { "type": "years" },
+          "sentence_template": "YEARS algorithm applied: {details}."
         },
         {
           "id": "sob_cta_pe_not_indicated",
@@ -162,15 +176,17 @@
     },
     {
       "id": "mdmha",
-      "aliases": ["mdm-headache", "headache"],
+      "aliases": ["mdm-headache", "headache", "mdmtia", "mdmafib"],
       "title": "Headache / Neuro",
       "base_mdm_template": "Patient evaluated for headache/neuro complaint with focused exclusion of intracranial and infectious emergencies.",
       "ddx": [
         { "label": "SAH", "group": "Life-threatening", "tags": ["sah"], "ruleouts": ["nosah"], "default_checked": true },
         { "label": "Meningitis/encephalitis", "group": "Life-threatening", "tags": ["meningitis"], "ruleouts": ["nomeningitis"], "default_checked": true },
         { "label": "Stroke/ICH", "group": "Life-threatening", "tags": ["stroke_ich"], "ruleouts": ["nostroke"], "default_checked": true },
+        { "label": "TIA", "group": "Life-threatening", "tags": ["tia"], "ruleouts": ["notia"], "default_checked": false },
         { "label": "Temporal arteritis", "group": "Other", "tags": ["gca"], "ruleouts": ["nogca"], "default_checked": false },
-        { "label": "Migraine/tension", "group": "Common", "tags": ["primary_ha"], "ruleouts": [], "default_checked": false }
+        { "label": "Migraine/tension", "group": "Common", "tags": ["primary_ha"], "ruleouts": [], "default_checked": false },
+        { "label": "AFib-related embolic risk", "group": "Other", "tags": ["afib"], "ruleouts": [], "default_checked": false }
       ],
       "risk_toggles": [
         {
@@ -196,6 +212,20 @@
           "label": "SAH rule negative",
           "tags_required": ["sah"],
           "sentence_template": "Low suspicion for SAH based on history/exam and decision rule criteria."
+        },
+        {
+          "id": "ha_abcd2_calculator",
+          "label": "ABCD2 score calculator",
+          "tags_required": ["tia"],
+          "calculator": { "type": "abcd2" },
+          "sentence_template": "ABCD2 score = {score} ({interpretation}); {details}"
+        },
+        {
+          "id": "ha_cha2ds2vasc_calculator",
+          "label": "CHA2DS2-VASc score calculator",
+          "tags_required": ["afib"],
+          "calculator": { "type": "cha2ds2_vasc" },
+          "sentence_template": "CHA2DS2-VASc score = {score} ({interpretation}); anticoagulation/shared decision-making discussed."
         }
       ]
     },

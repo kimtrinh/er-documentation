@@ -109,7 +109,7 @@ main{max-width:980px;margin:0 auto;padding:24px}
 <header>
   <div class="header-inner">
     <div class="logo"><span>🧮</span><h1>ER Clinical Calculators</h1></div>
-    <p class="subtitle">Wells PE · PERC · Wells DVT · HEART Score · Canadian CT Head — tap score to copy documentation</p>
+    <p class="subtitle">Wells PE · PERC · HEART · YEARS · ABCD2 · CHA2DS2-VASc · and more — tap score to copy documentation</p>
   </div>
 </header>
 
@@ -119,7 +119,10 @@ main{max-width:980px;margin:0 auto;padding:24px}
   <div class="calc-tabs">
     <button class="calc-tab active" onclick="showCalc('wellspe')">🫁 Wells PE + PERC</button>
     <button class="calc-tab" onclick="showCalc('heart')">❤️ HEART Score</button>
+    <button class="calc-tab" onclick="showCalc('years')">🫁 YEARS</button>
     <button class="calc-tab" onclick="showCalc('wellsdvt')">🦵 Wells DVT</button>
+    <button class="calc-tab" onclick="showCalc('abcd2')">🧠 ABCD2</button>
+    <button class="calc-tab" onclick="showCalc('cha2ds2vasc')">❤️ CHA2DS2-VASc</button>
     <button class="calc-tab" onclick="showCalc('cthead')">🧠 Canadian CT Head</button>
     <button class="calc-tab" onclick="showCalc('softtissue')">🦠 Soft Tissue & Sepsis</button>
     <button class="calc-tab" onclick="showCalc('centor')">🦠 Centor</button>
@@ -255,6 +258,157 @@ main{max-width:980px;margin:0 auto;padding:24px}
           <p><span style="color:#fca5a5;font-weight:700">7–10 — High Risk</span><br/>MACE ~50–65%. Early invasive strategy indicated. Cardiology consult, admission, likely catheterization.</p>
           <br/>
           <p style="font-size:12px;color:#475569;border-top:1px solid #334155;padding-top:10px">⚠️ HEART score does <strong style="color:#94a3b8">not</strong> replace clinical judgment. Patients with STEMI, new LBBB, or hemodynamic instability require immediate intervention regardless of score.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       YEARS
+  ══════════════════════════════════════════ -->
+  <div id="calc-years" style="display:none">
+    <div class="calc-grid">
+
+      <div class="card">
+        <div class="card-title">🫁 YEARS Algorithm <span style="font-size:12px;font-weight:400;color:#64748b">— PE CT reduction strategy</span></div>
+        <div class="card-body">
+          <p style="font-size:12px;color:#64748b;margin-bottom:12px">Select YEARS criteria and enter D-dimer (ng/mL FEU).</p>
+          <div id="years-criteria">
+            <div class="criterion" onclick="toggleYEARS(0)"><input type="checkbox" id="years0"><span class="criterion-label">Clinical signs of DVT</span></div>
+            <div class="criterion" onclick="toggleYEARS(1)"><input type="checkbox" id="years1"><span class="criterion-label">Hemoptysis</span></div>
+            <div class="criterion" onclick="toggleYEARS(2)"><input type="checkbox" id="years2"><span class="criterion-label">PE most likely diagnosis</span></div>
+          </div>
+          <div style="margin-top:12px">
+            <label style="display:block;font-size:12px;color:#64748b;font-weight:600;margin-bottom:6px">D-dimer (ng/mL FEU)</label>
+            <input id="years-ddimer" class="input" type="number" inputmode="decimal" min="0" placeholder="e.g., 420" oninput="updateYEARS()"/>
+          </div>
+
+          <div id="years-result" class="result neutral">
+            <div class="result-score">—</div>
+            <div class="result-label">Select criteria + D-dimer</div>
+            <div class="result-action">0 criteria: D-dimer &lt;1000 rules out PE. ≥1 criterion: D-dimer &lt;500 rules out PE.</div>
+          </div>
+          <button id="years-copy-btn" class="copy-doc-btn" onclick="copyDoc('years')">📋 Copy Documentation</button>
+          <button class="reset-btn" onclick="resetYEARS()">Reset</button>
+        </div>
+      </div>
+
+      <div class="card" style="align-self:start">
+        <div class="card-title">📊 YEARS Interpretation</div>
+        <div class="card-body" style="font-size:13px;line-height:1.85;color:#cbd5e1">
+          <p><span style="color:#86efac;font-weight:700">0 YEARS criteria</span><br/>Use D-dimer cutoff of <strong>&lt;1000</strong> ng/mL FEU to rule out PE.</p>
+          <br/>
+          <p><span style="color:#fde047;font-weight:700">1 or more YEARS criteria</span><br/>Use D-dimer cutoff of <strong>&lt;500</strong> ng/mL FEU to rule out PE.</p>
+          <br/>
+          <p style="font-size:12px;color:#64748b">Use in low/intermediate pre-test probability patients with clinical judgment and local protocol alignment.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       ABCD2
+  ══════════════════════════════════════════ -->
+  <div id="calc-abcd2" style="display:none">
+    <div class="calc-grid">
+
+      <div class="card">
+        <div class="card-title">🧠 ABCD2 Score <span style="font-size:12px;font-weight:400;color:#64748b">— TIA early stroke risk</span></div>
+        <div class="card-body">
+          <div id="abcd2-criteria">
+            <div class="criterion" onclick="toggleABCD2('age')"><input type="checkbox" id="abcd2-age"><span class="criterion-label">Age ≥60 years</span><span class="criterion-pts">+1</span></div>
+            <div class="criterion" onclick="toggleABCD2('bp')"><input type="checkbox" id="abcd2-bp"><span class="criterion-label">Initial BP ≥140 systolic or ≥90 diastolic</span><span class="criterion-pts">+1</span></div>
+          </div>
+
+          <div class="radio-group" style="margin-top:14px">
+            <label>Clinical features</label>
+            <div class="radio-option" onclick="setABCD2Clinical('weakness',this)"><input type="radio" name="abcd2-clinical" value="weakness"><span>Unilateral weakness</span><span class="radio-pts">+2</span></div>
+            <div class="radio-option" onclick="setABCD2Clinical('speech',this)"><input type="radio" name="abcd2-clinical" value="speech"><span>Speech disturbance without weakness</span><span class="radio-pts">+1</span></div>
+            <div class="radio-option" onclick="setABCD2Clinical('other',this)"><input type="radio" name="abcd2-clinical" value="other"><span>Other symptoms</span><span class="radio-pts">0</span></div>
+          </div>
+
+          <div class="radio-group" style="margin-top:12px">
+            <label>Duration</label>
+            <div class="radio-option" onclick="setABCD2Duration('ge60',this)"><input type="radio" name="abcd2-duration" value="ge60"><span>≥60 minutes</span><span class="radio-pts">+2</span></div>
+            <div class="radio-option" onclick="setABCD2Duration('10to59',this)"><input type="radio" name="abcd2-duration" value="10to59"><span>10–59 minutes</span><span class="radio-pts">+1</span></div>
+            <div class="radio-option" onclick="setABCD2Duration('lt10',this)"><input type="radio" name="abcd2-duration" value="lt10"><span>&lt;10 minutes</span><span class="radio-pts">0</span></div>
+          </div>
+
+          <div id="abcd2-diabetes" style="margin-top:8px">
+            <div class="criterion" onclick="toggleABCD2('diabetes')"><input type="checkbox" id="abcd2-diabetes-box"><span class="criterion-label">Diabetes</span><span class="criterion-pts">+1</span></div>
+          </div>
+
+          <div id="abcd2-result" class="result neutral">
+            <div class="result-score">—</div>
+            <div class="result-label">Complete clinical feature + duration</div>
+            <div class="result-action">ABCD2 helps estimate early stroke risk after suspected TIA.</div>
+          </div>
+          <button id="abcd2-copy-btn" class="copy-doc-btn" onclick="copyDoc('abcd2')">📋 Copy Documentation</button>
+          <button class="reset-btn" onclick="resetABCD2()">Reset</button>
+        </div>
+      </div>
+
+      <div class="card" style="align-self:start">
+        <div class="card-title">📊 ABCD2 Interpretation</div>
+        <div class="card-body" style="font-size:13px;line-height:1.85;color:#cbd5e1">
+          <p><span style="color:#86efac;font-weight:700">0–3 Low risk</span><br/>Often outpatient pathway if evaluation is otherwise reassuring and follow-up is rapid.</p>
+          <br/>
+          <p><span style="color:#fde047;font-weight:700">4–5 Moderate risk</span><br/>Consider admission vs expedited stroke/TIA clinic based on resources and exam/imaging.</p>
+          <br/>
+          <p><span style="color:#fca5a5;font-weight:700">6–7 High risk</span><br/>High early stroke risk; admission/urgent stroke pathway strongly favored.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       CHA2DS2-VASc
+  ══════════════════════════════════════════ -->
+  <div id="calc-cha2ds2vasc" style="display:none">
+    <div class="calc-grid">
+
+      <div class="card">
+        <div class="card-title">❤️ CHA2DS2-VASc <span style="font-size:12px;font-weight:400;color:#64748b">— AF stroke risk</span></div>
+        <div class="card-body">
+          <div class="radio-group">
+            <label>Sex</label>
+            <div class="radio-option" onclick="setCHA2Sex('male',this)"><input type="radio" name="cha2-sex" value="male"><span>Male</span><span class="radio-pts">0</span></div>
+            <div class="radio-option" onclick="setCHA2Sex('female',this)"><input type="radio" name="cha2-sex" value="female"><span>Female</span><span class="radio-pts">+1</span></div>
+          </div>
+
+          <div class="radio-group" style="margin-top:8px">
+            <label>Age</label>
+            <div class="radio-option" onclick="setCHA2Age('ge75',this)"><input type="radio" name="cha2-age" value="ge75"><span>≥75 years</span><span class="radio-pts">+2</span></div>
+            <div class="radio-option" onclick="setCHA2Age('65to74',this)"><input type="radio" name="cha2-age" value="65to74"><span>65–74 years</span><span class="radio-pts">+1</span></div>
+            <div class="radio-option" onclick="setCHA2Age('lt65',this)"><input type="radio" name="cha2-age" value="lt65"><span>&lt;65 years</span><span class="radio-pts">0</span></div>
+          </div>
+
+          <div id="cha2-criteria" style="margin-top:10px">
+            <div class="criterion" onclick="toggleCHA2('chf')"><input type="checkbox" id="cha2-chf"><span class="criterion-label">Congestive heart failure/LV dysfunction</span><span class="criterion-pts">+1</span></div>
+            <div class="criterion" onclick="toggleCHA2('htn')"><input type="checkbox" id="cha2-htn"><span class="criterion-label">Hypertension</span><span class="criterion-pts">+1</span></div>
+            <div class="criterion" onclick="toggleCHA2('diabetes')"><input type="checkbox" id="cha2-diabetes"><span class="criterion-label">Diabetes mellitus</span><span class="criterion-pts">+1</span></div>
+            <div class="criterion" onclick="toggleCHA2('stroke')"><input type="checkbox" id="cha2-stroke"><span class="criterion-label">Prior stroke/TIA/thromboembolism</span><span class="criterion-pts">+2</span></div>
+            <div class="criterion" onclick="toggleCHA2('vascular')"><input type="checkbox" id="cha2-vascular"><span class="criterion-label">Vascular disease (MI/PAD/aortic plaque)</span><span class="criterion-pts">+1</span></div>
+          </div>
+
+          <div id="cha2-result" class="result neutral">
+            <div class="result-score">—</div>
+            <div class="result-label">Select sex + age + risk factors</div>
+            <div class="result-action">Use with AF documentation and shared decision-making around anticoagulation.</div>
+          </div>
+          <button id="cha2ds2vasc-copy-btn" class="copy-doc-btn" onclick="copyDoc('cha2ds2vasc')">📋 Copy Documentation</button>
+          <button class="reset-btn" onclick="resetCHA2()">Reset</button>
+        </div>
+      </div>
+
+      <div class="card" style="align-self:start">
+        <div class="card-title">📊 CHA2DS2-VASc Thresholds</div>
+        <div class="card-body" style="font-size:13px;line-height:1.85;color:#cbd5e1">
+          <p><span style="color:#86efac;font-weight:700">Lower risk</span><br/>Men 0 / Women 1: anticoagulation usually not indicated.</p>
+          <br/>
+          <p><span style="color:#fde047;font-weight:700">Intermediate</span><br/>Men 1 / Women 2: consider anticoagulation based on bleeding risk and shared decision-making.</p>
+          <br/>
+          <p><span style="color:#fca5a5;font-weight:700">Higher risk</span><br/>Men ≥2 / Women ≥3: anticoagulation generally recommended unless contraindicated.</p>
         </div>
       </div>
     </div>
@@ -657,13 +811,23 @@ main{max-width:980px;margin:0 auto;padding:24px}
 <script src="search-index.js"></script>
 <script>
 // ── CALC TAB SWITCHING ───────────────────────────────────────
+const CALC_IDS = ['wellspe','heart','years','wellsdvt','abcd2','cha2ds2vasc','cthead','softtissue','centor','pecarn','pedsfever'];
 function showCalc(id) {
-  ['wellspe','heart','wellsdvt','cthead','softtissue','centor','pecarn','pedsfever'].forEach(c => {
+  CALC_IDS.forEach(c => {
     document.getElementById('calc-'+c).style.display = c===id ? '' : 'none';
   });
   document.querySelectorAll('.calc-tab').forEach((btn,i) => {
-    btn.classList.toggle('active', ['wellspe','heart','wellsdvt','cthead','softtissue','centor','pecarn','pedsfever'][i]===id);
+    btn.classList.toggle('active', CALC_IDS[i]===id);
   });
+}
+
+function showCalcFromHash() {
+  const hash = window.location.hash.replace(/^#/, '');
+  if (!hash.startsWith('calc-')) return false;
+  const id = hash.slice(5);
+  if (!CALC_IDS.includes(id)) return false;
+  showCalc(id);
+  return true;
 }
 
 // ── COPY DOCUMENTATION ───────────────────────────────────────
@@ -801,6 +965,50 @@ function copyDoc(type) {
       `- Risk factors: ${heartScores['r']}/2 (${rDesc})`,
       `- Troponin: ${heartScores['t']}/2 (${tDesc})`,
       `Recommendation: ${plan}`
+    ]);
+  }
+
+  // ----- YEARS -----
+  else if (type === 'years') {
+    if (!window.yearsDetail || window.yearsDetail.incomplete) {
+      alert('Complete YEARS criteria and D-dimer first.');
+      return;
+    }
+    const d = window.yearsDetail;
+    text = fmtLines([
+      `YEARS algorithm: ${d.criteriaCount} criteria; D-dimer ${d.dDimer} ng/mL FEU.`,
+      `Interpretation: ${d.interpretation}.`,
+      `Recommendation: ${d.reco}`
+    ]);
+  }
+
+  // ----- ABCD2 -----
+  else if (type === 'abcd2') {
+    if (!window.abcd2Detail || window.abcd2Detail.incomplete) {
+      alert('Complete ABCD2 clinical feature and duration first.');
+      return;
+    }
+    const d = window.abcd2Detail;
+    text = fmtLines([
+      `ABCD2 score: ${d.total}/7 (${d.riskLabel}).`,
+      'Points:',
+      ...d.items.map(x => `- ${x}`),
+      `Recommendation: ${d.reco}`
+    ]);
+  }
+
+  // ----- CHA2DS2-VASc -----
+  else if (type === 'cha2ds2vasc') {
+    if (!window.cha2Detail || window.cha2Detail.incomplete) {
+      alert('Select sex and age for CHA2DS2-VASc first.');
+      return;
+    }
+    const d = window.cha2Detail;
+    text = fmtLines([
+      `CHA2DS2-VASc score: ${d.total} (${d.interpretation}).`,
+      'Points:',
+      ...d.items.map(x => `- ${x}`),
+      `Recommendation: ${d.reco}`
     ]);
   }
 
@@ -1102,6 +1310,284 @@ function resetHEART() {
   updateHEART();
 }
 
+// ── YEARS ─────────────────────────────────────────────────────
+const yearsChecked = [false,false,false];
+function toggleYEARS(i) {
+  yearsChecked[i] = !yearsChecked[i];
+  const box = document.getElementById('years'+i);
+  if (box) box.checked = yearsChecked[i];
+  updateYEARS();
+}
+function updateYEARS() {
+  const criteriaCount = yearsChecked.filter(Boolean).length;
+  const dDimer = parseFloat(document.getElementById('years-ddimer').value);
+  const hasDimer = Number.isFinite(dDimer) && dDimer >= 0;
+  const threshold = criteriaCount === 0 ? 1000 : 500;
+  const r = document.getElementById('years-result');
+  const btn = document.getElementById('years-copy-btn');
+
+  if (!hasDimer) {
+    r.className='result neutral';
+    r.innerHTML=`<div class="result-score">${criteriaCount}</div><div class="result-label">${criteriaCount} YEARS criteria selected</div><div class="result-action">Enter D-dimer to complete YEARS interpretation. Threshold = ${threshold} ng/mL FEU.</div>`;
+    btn.classList.toggle('show', criteriaCount > 0);
+    window.yearsDetail = { incomplete: true };
+    return;
+  }
+
+  const ruledOut = dDimer < threshold;
+  const cls = ruledOut ? 'low' : 'high';
+  const label = ruledOut ? 'PE ruled out by YEARS' : 'PE not excluded by YEARS';
+  const action = ruledOut
+    ? `D-dimer ${dDimer} is below threshold ${threshold} for ${criteriaCount} YEARS criteria.`
+    : `D-dimer ${dDimer} is at/above threshold ${threshold}; CTPA (or equivalent imaging) is indicated.`;
+
+  r.className='result '+cls;
+  r.innerHTML=`<div class="result-score">${criteriaCount} criteria</div><div class="result-label">${label}</div><div class="result-action">${action}</div>`;
+  btn.classList.add('show');
+
+  window.yearsDetail = {
+    incomplete: false,
+    criteriaCount,
+    dDimer: dDimer,
+    threshold,
+    interpretation: label,
+    reco: ruledOut
+      ? 'In low/intermediate risk context, PE can be excluded without CTA by YEARS threshold.'
+      : 'PE cannot be excluded by YEARS; proceed with definitive imaging as clinically indicated.'
+  };
+}
+function resetYEARS() {
+  yearsChecked.fill(false);
+  for (let i = 0; i < 3; i++) {
+    const box = document.getElementById('years'+i);
+    if (box) box.checked = false;
+  }
+  const d = document.getElementById('years-ddimer');
+  if (d) d.value = '';
+  const btn = document.getElementById('years-copy-btn');
+  if (btn) btn.classList.remove('show');
+  updateYEARS();
+}
+
+// ── ABCD2 ─────────────────────────────────────────────────────
+const abcd2State = {
+  age: false,
+  bp: false,
+  diabetes: false,
+  clinical: '',
+  duration: ''
+};
+
+function toggleABCD2(key) {
+  if (!Object.prototype.hasOwnProperty.call(abcd2State, key)) return;
+  abcd2State[key] = !abcd2State[key];
+  if (key === 'age') document.getElementById('abcd2-age').checked = abcd2State[key];
+  if (key === 'bp') document.getElementById('abcd2-bp').checked = abcd2State[key];
+  if (key === 'diabetes') document.getElementById('abcd2-diabetes-box').checked = abcd2State[key];
+  updateABCD2();
+}
+
+function setABCD2Clinical(value) {
+  abcd2State.clinical = value;
+  document.querySelectorAll('input[name=\"abcd2-clinical\"]').forEach((r) => { r.checked = (r.value === value); });
+  updateABCD2();
+}
+
+function setABCD2Duration(value) {
+  abcd2State.duration = value;
+  document.querySelectorAll('input[name=\"abcd2-duration\"]').forEach((r) => { r.checked = (r.value === value); });
+  updateABCD2();
+}
+
+function updateABCD2() {
+  const clinicalPointsMap = { other: 0, speech: 1, weakness: 2 };
+  const durationPointsMap = { lt10: 0, '10to59': 1, ge60: 2 };
+  const clinicalPts = clinicalPointsMap[abcd2State.clinical];
+  const durationPts = durationPointsMap[abcd2State.duration];
+  const btn = document.getElementById('abcd2-copy-btn');
+  const r = document.getElementById('abcd2-result');
+
+  if (typeof clinicalPts === 'undefined' || typeof durationPts === 'undefined') {
+    r.className='result neutral';
+    r.innerHTML='<div class=\"result-score\">—</div><div class=\"result-label\">Complete clinical feature + duration</div><div class=\"result-action\">ABCD2 requires clinical feature and duration selections.</div>';
+    btn.classList.remove('show');
+    window.abcd2Detail = { incomplete: true };
+    return;
+  }
+
+  const agePts = abcd2State.age ? 1 : 0;
+  const bpPts = abcd2State.bp ? 1 : 0;
+  const dmPts = abcd2State.diabetes ? 1 : 0;
+  const total = agePts + bpPts + dmPts + clinicalPts + durationPts;
+  let cls = 'low';
+  let riskLabel = 'Low risk';
+  let reco = 'Low early stroke risk tier; disposition depends on full stroke/TIA assessment and follow-up access.';
+  if (total >= 6) {
+    cls = 'high';
+    riskLabel = 'High risk';
+    reco = 'High early stroke risk tier; admission/urgent stroke pathway strongly considered.';
+  } else if (total >= 4) {
+    cls = 'moderate';
+    riskLabel = 'Moderate risk';
+    reco = 'Moderate early stroke risk tier; consider admission versus expedited stroke clinic pathway.';
+  }
+
+  r.className='result '+cls;
+  r.innerHTML=`<div class=\"result-score\">${total}/7</div><div class=\"result-label\">${riskLabel}</div><div class=\"result-action\">${reco}</div>`;
+  btn.classList.add('show');
+
+  const items = [
+    `Age >=60: ${agePts}`,
+    `BP >=140/90: ${bpPts}`,
+    `Clinical feature (${abcd2State.clinical}): ${clinicalPts}`,
+    `Duration (${abcd2State.duration}): ${durationPts}`,
+    `Diabetes: ${dmPts}`
+  ];
+
+  window.abcd2Detail = {
+    incomplete: false,
+    total,
+    riskLabel,
+    items,
+    reco
+  };
+}
+
+function resetABCD2() {
+  abcd2State.age = false;
+  abcd2State.bp = false;
+  abcd2State.diabetes = false;
+  abcd2State.clinical = '';
+  abcd2State.duration = '';
+  document.getElementById('abcd2-age').checked = false;
+  document.getElementById('abcd2-bp').checked = false;
+  document.getElementById('abcd2-diabetes-box').checked = false;
+  document.querySelectorAll('input[name=\"abcd2-clinical\"]').forEach((r) => { r.checked = false; });
+  document.querySelectorAll('input[name=\"abcd2-duration\"]').forEach((r) => { r.checked = false; });
+  document.getElementById('abcd2-copy-btn').classList.remove('show');
+  updateABCD2();
+}
+
+// ── CHA2DS2-VASc ──────────────────────────────────────────────
+const cha2State = {
+  sex: '',
+  age: '',
+  chf: false,
+  htn: false,
+  diabetes: false,
+  stroke: false,
+  vascular: false
+};
+
+function setCHA2Sex(value) {
+  cha2State.sex = value;
+  document.querySelectorAll('input[name=\"cha2-sex\"]').forEach((r) => { r.checked = (r.value === value); });
+  updateCHA2();
+}
+
+function setCHA2Age(value) {
+  cha2State.age = value;
+  document.querySelectorAll('input[name=\"cha2-age\"]').forEach((r) => { r.checked = (r.value === value); });
+  updateCHA2();
+}
+
+function toggleCHA2(key) {
+  if (!Object.prototype.hasOwnProperty.call(cha2State, key)) return;
+  cha2State[key] = !cha2State[key];
+  const map = {
+    chf: 'cha2-chf',
+    htn: 'cha2-htn',
+    diabetes: 'cha2-diabetes',
+    stroke: 'cha2-stroke',
+    vascular: 'cha2-vascular'
+  };
+  const id = map[key];
+  if (id) document.getElementById(id).checked = cha2State[key];
+  updateCHA2();
+}
+
+function updateCHA2() {
+  const r = document.getElementById('cha2-result');
+  const btn = document.getElementById('cha2ds2vasc-copy-btn');
+  const agePtsMap = { lt65: 0, '65to74': 1, ge75: 2 };
+
+  if (!cha2State.sex || typeof agePtsMap[cha2State.age] === 'undefined') {
+    r.className='result neutral';
+    r.innerHTML='<div class=\"result-score\">—</div><div class=\"result-label\">Select sex + age</div><div class=\"result-action\">CHA2DS2-VASc requires sex and age category before interpretation.</div>';
+    btn.classList.remove('show');
+    window.cha2Detail = { incomplete: true };
+    return;
+  }
+
+  const sexPts = cha2State.sex === 'female' ? 1 : 0;
+  const agePts = agePtsMap[cha2State.age];
+  const chfPts = cha2State.chf ? 1 : 0;
+  const htnPts = cha2State.htn ? 1 : 0;
+  const dmPts = cha2State.diabetes ? 1 : 0;
+  const strokePts = cha2State.stroke ? 2 : 0;
+  const vascularPts = cha2State.vascular ? 1 : 0;
+  const total = sexPts + agePts + chfPts + htnPts + dmPts + strokePts + vascularPts;
+
+  let cls = 'low';
+  let interpretation = 'No anticoagulation usually indicated';
+  if (cha2State.sex === 'male') {
+    if (total >= 2) {
+      cls = 'high';
+      interpretation = 'Anticoagulation recommended';
+    } else if (total === 1) {
+      cls = 'moderate';
+      interpretation = 'Consider anticoagulation';
+    }
+  } else {
+    if (total >= 3) {
+      cls = 'high';
+      interpretation = 'Anticoagulation recommended';
+    } else if (total >= 2) {
+      cls = 'moderate';
+      interpretation = 'Consider anticoagulation';
+    }
+  }
+
+  const reco = interpretation + ' after bleeding-risk and shared decision-making discussion.';
+  r.className='result '+cls;
+  r.innerHTML=`<div class=\"result-score\">${total}</div><div class=\"result-label\">${interpretation}</div><div class=\"result-action\">${reco}</div>`;
+  btn.classList.add('show');
+
+  window.cha2Detail = {
+    incomplete: false,
+    total,
+    interpretation,
+    items: [
+      `Sex (${cha2State.sex}): ${sexPts}`,
+      `Age (${cha2State.age}): ${agePts}`,
+      `CHF/LV dysfunction: ${chfPts}`,
+      `Hypertension: ${htnPts}`,
+      `Diabetes: ${dmPts}`,
+      `Prior stroke/TIA/thromboembolism: ${strokePts}`,
+      `Vascular disease: ${vascularPts}`
+    ],
+    reco
+  };
+}
+
+function resetCHA2() {
+  cha2State.sex = '';
+  cha2State.age = '';
+  cha2State.chf = false;
+  cha2State.htn = false;
+  cha2State.diabetes = false;
+  cha2State.stroke = false;
+  cha2State.vascular = false;
+  document.querySelectorAll('input[name=\"cha2-sex\"]').forEach((r) => { r.checked = false; });
+  document.querySelectorAll('input[name=\"cha2-age\"]').forEach((r) => { r.checked = false; });
+  ['cha2-chf','cha2-htn','cha2-diabetes','cha2-stroke','cha2-vascular'].forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) el.checked = false;
+  });
+  document.getElementById('cha2ds2vasc-copy-btn').classList.remove('show');
+  updateCHA2();
+}
+
 // ── WELLS DVT ─────────────────────────────────────────────────
 const wdvtPoints = [1,1,1,1,1,1,1,1,-2];
 const wdvtChecked = Array(9).fill(false);
@@ -1202,23 +1688,17 @@ function calcLRINEC() {
   if (!filledAny) {
     setResult('lrinec-result', 'neutral', '—', 'Enter labs above', 'LRINEC: ≤5 low, 6–7 intermediate, ≥8 high (risk stratification only).');
     if(btn) btn.classList.remove('show');
-    window.fgsiDetail = { incomplete:true };
+    window.lrinecDetail = { incomplete:true };
     return;
   }
 
-  let score = 0;
-  if (!Number.isNaN(crp) && crp >= 150) score += 4;
-  if (!Number.isNaN(wbc)) {
-    if (wbc > 25) score += 2;
-    else if (wbc >= 15) score += 1;
-  }
-  if (!Number.isNaN(hgb)) {
-    if (hgb < 11) score += 2;
-    else if (hgb <= 13.5) score += 1;
-  }
-  if (!Number.isNaN(na) && na < 135) score += 2;
-  if (!Number.isNaN(cr) && cr > 1.6) score += 2;
-  if (!Number.isNaN(glu) && glu > 180) score += 1;
+  const crpPts = (!Number.isNaN(crp) && crp >= 150) ? 4 : 0;
+  const wbcPts = Number.isNaN(wbc) ? 0 : (wbc > 25 ? 2 : (wbc >= 15 ? 1 : 0));
+  const hgbPts = Number.isNaN(hgb) ? 0 : (hgb < 11 ? 2 : (hgb <= 13.5 ? 1 : 0));
+  const naPts = (!Number.isNaN(na) && na < 135) ? 2 : 0;
+  const crPts = (!Number.isNaN(cr) && cr > 1.6) ? 2 : 0;
+  const gluPts = (!Number.isNaN(glu) && glu > 180) ? 1 : 0;
+  const score = crpPts + wbcPts + hgbPts + naPts + crPts + gluPts;
 
   const missingNames = [];
   if (Number.isNaN(crp)) missingNames.push('CRP');
@@ -1253,7 +1733,6 @@ function calcLRINEC() {
       {name:'Creatinine', value: (Number.isNaN(cr)?'—':cr)+' mg/dL', points: crPts, rule:'>1.6 = 2'},
       {name:'Glucose', value: (Number.isNaN(glu)?'—':glu)+' mg/dL', points: gluPts, rule:'>180 = 1'},
     ],
-    interpretation: (total > 9 ? 'High mortality risk (FGSI > 9)' : 'Lower mortality risk (FGSI ≤ 9)'),
     reco: action
   };
 
@@ -1295,7 +1774,7 @@ function calcFGSI() {
   if (!filledAny) {
     setResult('fgsi-result', 'neutral', '—', 'Enter vitals/labs above', 'FGSI is prognostic. A commonly used threshold is >9 (high mortality risk).');
     if(btn) btn.classList.remove('show');
-    window.lrinecDetail = { incomplete:true };
+    window.fgsiDetail = { incomplete:true };
     return;
   }
 
@@ -1543,6 +2022,11 @@ function resetShockIndex(){
 }
 
 // Initialize defaults
+window.addEventListener('hashchange', showCalcFromHash);
+showCalcFromHash();
+updateYEARS();
+updateABCD2();
+updateCHA2();
 updateSIRS();
 updateQSOFA();
 
