@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Service Agreements Library - KP SBC ER</title>
+<title>Service Agreements & Protocols - KP SBC ER</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=DM+Sans:wght@400;500;600;700;800&display=swap');
 *{box-sizing:border-box;margin:0;padding:0}
@@ -12,7 +12,9 @@
   --border:#1a2d48;--border2:#243d5c;
   --text:#e8f0fc;--text2:#8fa8c8;--text3:#4a6280;
   --blue:#3b82f6;--blue2:#1d4ed8;--blue3:#0d2038;
-  --green:#22c55e;--amber:#f59e0b;--purple:#a78bfa;
+  --green:#16a34a;--greenSoft:#052e16;--greenBorder:#15803d;
+  --amber:#f59e0b;--amberSoft:#2b1f0a;--amberBorder:#b45309;
+  --red:#ef4444;--redSoft:#2f1114;--redBorder:#b91c1c;
   --mono:'JetBrains Mono',monospace;--sans:'DM Sans',system-ui,sans-serif;
 }
 body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh}
@@ -30,9 +32,14 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
 header{background:linear-gradient(160deg,#0f1e38 0%,#080f1a 100%);border-bottom:1px solid var(--border);padding:22px 20px}
 .header-inner{max-width:1280px;margin:0 auto}
 .kicker{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.9px;font-weight:700}
-h1{font-size:28px;line-height:1.15;margin-top:6px}
+h1{font-size:29px;line-height:1.15;margin-top:6px}
 .subtitle{font-size:13px;color:var(--text2);margin-top:8px}
 .banner{margin-top:14px;background:#2d1f0d;border:1px solid #a16207;color:#fcd34d;padding:10px 12px;border-radius:10px;font-size:13px;font-weight:600}
+.legend{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
+.legend-pill{font-size:11px;font-weight:700;border-radius:999px;padding:5px 10px;border:1px solid transparent}
+.legend-green{background:var(--greenSoft);border-color:var(--greenBorder);color:#86efac}
+.legend-yellow{background:var(--amberSoft);border-color:var(--amberBorder);color:#fcd34d}
+.legend-red{background:var(--redSoft);border-color:var(--redBorder);color:#fca5a5}
 
 main{max-width:1280px;margin:0 auto;padding:20px}
 .controls{display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-bottom:14px}
@@ -56,11 +63,16 @@ main{max-width:1280px;margin:0 auto;padding:20px}
 .result-count{font-size:13px;color:var(--text2)}
 .small-note{font-size:11px;color:var(--text3)}
 
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(350px,1fr));gap:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(390px,1fr));gap:12px}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px}
 .card:hover{border-color:var(--border2)}
-.card-title{font-size:16px;font-weight:700;line-height:1.3}
-.card-sub{font-size:11px;color:var(--text3);font-family:var(--mono)}
+.card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.card-title{font-size:17px;font-weight:700;line-height:1.25}
+.card-sub{font-size:11px;color:var(--text3);font-family:var(--mono);margin-top:4px}
+.decision{font-size:11px;font-weight:700;border-radius:999px;padding:6px 10px;border:1px solid transparent;white-space:nowrap}
+.decision.green{background:var(--greenSoft);border-color:var(--greenBorder);color:#86efac}
+.decision.yellow{background:var(--amberSoft);border-color:var(--amberBorder);color:#fcd34d}
+.decision.red{background:var(--redSoft);border-color:var(--redBorder);color:#fca5a5}
 .badges{display:flex;flex-wrap:wrap;gap:6px}
 .badge{font-size:10px;padding:3px 8px;border-radius:14px;font-weight:700;border:1px solid transparent}
 .b-dept{background:#0d2038;color:#93c5fd;border-color:#1d4ed8}
@@ -69,9 +81,18 @@ main{max-width:1280px;margin:0 auto;padding:20px}
 .section{border:1px solid var(--border);border-radius:10px;overflow:hidden}
 .section summary{cursor:pointer;list-style:none;padding:9px 10px;background:var(--surface2);font-size:12px;font-weight:700;color:var(--text2)}
 .section summary::-webkit-details-marker{display:none}
-.section ul{padding:9px 20px 11px 24px}
-.section li{font-size:12px;color:var(--text2);line-height:1.5;margin-bottom:4px}
-.section li:last-child{margin-bottom:0}
+.section-body{padding:9px 10px 11px}
+.list{padding-left:17px}
+.list li{font-size:12px;color:var(--text2);line-height:1.45;margin-bottom:5px}
+.list li:last-child{margin-bottom:0}
+.checklist{list-style:none;padding-left:0}
+.checklist li{margin-bottom:6px}
+.checklist li:last-child{margin-bottom:0}
+.check-row{display:flex;align-items:flex-start;gap:8px}
+.check-row input{margin-top:2px;accent-color:var(--blue);width:15px;height:15px}
+.check-row span{display:block;font-size:12px;color:var(--text2);line-height:1.45}
+.doc-text{font-size:12px;color:var(--text2);line-height:1.45;white-space:pre-wrap}
+.section-copy{margin-top:10px}
 .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:2px}
 .btn{padding:8px 10px;border-radius:8px;border:1px solid var(--border2);background:var(--surface2);color:var(--text);font-size:12px;cursor:pointer;font-family:var(--sans)}
 .btn:hover{border-color:#41628a}
@@ -85,9 +106,11 @@ main{max-width:1280px;margin:0 auto;padding:20px}
   .right-controls{justify-content:flex-start}
   .filters{grid-template-columns:1fr}
 }
-@media(max-width:420px){
+@media(max-width:500px){
   .grid{grid-template-columns:1fr}
-  h1{font-size:23px}
+  h1{font-size:24px}
+  .card-head{flex-direction:column}
+  .decision{align-self:flex-start}
 }
 </style>
 <link rel="stylesheet" href="mobile.css">
@@ -112,9 +135,14 @@ main{max-width:1280px;margin:0 auto;padding:20px}
 <header>
   <div class="header-inner">
     <div class="kicker">Policy Reference Library</div>
-    <h1>Service Agreements</h1>
-    <div class="subtitle">Searchable, redacted summaries of agreement scope, ED actions, escalation, ownership, and timing cues.</div>
-    <div class="banner">Internal reference summaries. Verify the most current policy.</div>
+    <h1>Service Agreements & Protocols</h1>
+    <div class="subtitle">Practical, bedside-first workflow summaries from the service agreement library (DOC/DOCX only).</div>
+    <div class="banner">Internal reference summaries. Verify the most current policy before final disposition decisions.</div>
+    <div class="legend">
+      <span class="legend-pill legend-green">GREEN = Outpt OK</span>
+      <span class="legend-pill legend-yellow">YELLOW = Consider Admission</span>
+      <span class="legend-pill legend-red">RED = Send to ED / Transfer</span>
+    </div>
   </div>
 </header>
 
@@ -122,7 +150,7 @@ main{max-width:1280px;margin:0 auto;padding:20px}
   <section class="controls">
     <div class="search-wrap">
       <span class="search-icon">🔍</span>
-      <input id="searchInput" class="search-input" type="text" placeholder="Search by keyword, title, tags, actions, escalation, ownership..." autocomplete="off"/>
+      <input id="searchInput" class="search-input" type="text" placeholder="Search title, workflow steps, red flags, treatment, disposition..." autocomplete="off"/>
     </div>
     <div class="right-controls">
       <label class="toggle"><input id="olderToggle" type="checkbox"/> older than 5 years</label>
@@ -147,50 +175,259 @@ main{max-width:1280px;margin:0 auto;padding:20px}
 
   <div class="meta-row">
     <div id="resultCount" class="result-count">Loading...</div>
-    <div class="small-note">Open Document stays disabled until a SharePoint URL is added in data.</div>
+    <div class="small-note">Use checkboxes as placeholders for future automation. Open Document remains disabled until SharePoint URLs are added.</div>
   </div>
 
   <section id="results" class="grid" aria-live="polite"></section>
 </main>
 
 <script>
+const DEFAULT_AUTOMATION_CHECKS = [
+  "Eligibility criteria reviewed",
+  "Consult/escalation pathway completed",
+  "Disposition and follow-up plan confirmed",
+  "Documentation finalized"
+];
+
+const PROTOCOL_OVERRIDES = {
+  "kaiser-outpatient-anticoagulation-dvt-protocol-1-16-14": {
+    title: "Outpatient DVT Management",
+    banner: { level: "green", label: "Outpt OK" },
+    purpose: [
+      "Standardize outpatient treatment of confirmed DVT with anticoagulation and coordinated follow-up."
+    ],
+    when_to_use: [
+      "Acute upper or lower extremity DVT.",
+      "Age 18 years or older.",
+      "Hemodynamically stable.",
+      "Subtherapeutic INR if already on warfarin."
+    ],
+    red_flags: [
+      "Active bleeding risk.",
+      "Hemodynamic instability.",
+      "Symptoms concerning for pulmonary embolism.",
+      "Platelets below 75,000.",
+      "Stroke within 6 weeks.",
+      "Recent surgery (under 2 weeks).",
+      "Pregnancy.",
+      "Heparin allergy or HIT.",
+      "Weight 150 kg or higher.",
+      "Age over 75.",
+      "Therapeutic INR."
+    ],
+    workflow: [
+      "Wells score 3 or higher: CBC, creatinine, INR, and immediate ultrasound.",
+      "Wells score 0 to 2: D-dimer first; ultrasound if positive.",
+      "If ultrasound positive: nurse visit, first dose administered, patient education, outpatient anticoagulation referral.",
+      "If after hours: ED manages dosing and referral pathway.",
+      "Follow-up expected in 2 to 3 days with return precautions."
+    ],
+    treatment: [
+      "Preferred enoxaparin: CrCl above 30 -> 1 mg/kg every 12 hours (or 1.5 mg/kg daily for home health support).",
+      "CrCl below 30 -> enoxaparin 1 mg/kg daily.",
+      "Avoid enoxaparin if weight is over 150 kg.",
+      "Fondaparinux alternative: avoid if CrCl below 80, or age over 75 and weight under 50 kg.",
+      "Fondaparinux dosing: under 50 kg -> 5 mg daily; 50 to 100 kg -> 7.5 mg daily; over 100 kg -> 10 mg daily."
+    ],
+    disposition: [
+      "Outpatient anticoagulation pathway if inclusion criteria met.",
+      "Hospitalize and use standard IV heparin if exclusion criteria are present and anticoagulation is still indicated.",
+      "Document return precautions and explicit follow-up plan."
+    ],
+    documentation: "Ultrasound positive for DVT. Patient stable and meets outpatient anticoagulation criteria. First dose administered and anticoagulation referral placed.",
+    automation_checks: [
+      "Wells score pathway selected",
+      "Ultrasound result reviewed",
+      "First anticoagulant dose documented",
+      "Outpatient anticoagulation referral submitted"
+    ],
+    tags_add: ["dvt", "anticoagulation", "outpatient"]
+  },
+  "kaiser-afib-protocol": {
+    title: "Atrial Fibrillation / Flutter Protocol",
+    banner: { level: "yellow", label: "Consider Admission" },
+    purpose: [
+      "Provide an ED alternative to admission for uncomplicated atrial fibrillation/flutter with rapid rate control and safe discharge criteria."
+    ],
+    when_to_use: [
+      "Hemodynamically stable AF/flutter.",
+      "Heart rate above about 100 to 110 bpm.",
+      "Keep NPO initially in case cardioversion is needed."
+    ],
+    red_flags: [
+      "Stroke or TIA.",
+      "Myocardial infarction or active ischemia.",
+      "Significant CHF exacerbation.",
+      "Pulmonary embolism.",
+      "Sepsis or other acute critical illness."
+    ],
+    workflow: [
+      "Troponin is not required unless chest pain, ischemic symptoms, or concerning ST changes are present.",
+      "Use IV rate control first, then convert to oral once rate is controlled.",
+      "If symptom onset is clearly under 48 hours, pharmacologic or electrical cardioversion is generally acceptable (with cardiology input as needed).",
+      "Assess discharge only after sustained control on oral medication."
+    ],
+    treatment: [
+      "Diltiazem: 0.25 mg/kg IV over 10 minutes, then 0.35 mg/kg repeat if needed, then oral conversion.",
+      "Metoprolol: 5 mg IV every 15 minutes as needed, then oral conversion when heart rate under 100.",
+      "If CHA2DS2-VASc is 1 or higher, consider anticoagulation plan."
+    ],
+    disposition: [
+      "Discharge if heart rate below 110 and patient remains clinically stable on oral regimen.",
+      "Discharge plan should include rate-control medication, antithrombotic strategy, echocardiography for first episode, and cardiology follow-up.",
+      "Admit if exclusion criteria or ongoing instability are present."
+    ],
+    documentation: "Stable atrial fibrillation/flutter with rate control achieved. No evidence of acute ischemia, decompensated heart failure, PE, or sepsis. Discharge plan and follow-up reviewed.",
+    automation_checks: [
+      "Rate control endpoint met",
+      "Stroke risk (CHA2DS2-VASc) addressed",
+      "Cardioversion window assessed",
+      "Cardiology follow-up arranged"
+    ],
+    tags_add: ["afib", "atrial-flutter", "rate-control", "cardioversion"]
+  },
+  "pp-severe-htn-algorithm": {
+    title: "Postpartum Severe Hypertension",
+    banner: { level: "yellow", label: "Consider Admission" },
+    purpose: [
+      "Rapidly identify and treat severe postpartum hypertension and escalate early when severe features or organ involvement appear."
+    ],
+    when_to_use: [
+      "Postpartum patient with systolic BP 160 or higher or diastolic BP 110 or higher on 2 readings 15 minutes apart.",
+      "Postpartum headache with elevated blood pressure.",
+      "Concern for preeclampsia/eclampsia spectrum symptoms."
+    ],
+    red_flags: [
+      "Headache not improved after 1 hour of treatment.",
+      "Vision changes, refractory headache, or hyperreflexia.",
+      "Shortness of breath, chest pain, edema, or hypoxia.",
+      "RUQ pain, nausea, or vomiting concerning for HELLP.",
+      "Seizure activity."
+    ],
+    workflow: [
+      "If headache plus HTN: give acetaminophen 650 mg PO and nifedipine IR 10 mg PO; recheck BP in 20 minutes.",
+      "Observe and recheck BP hourly for 4 hours.",
+      "For concerning GI symptoms, obtain HELLP-focused labs (CBC, LFTs, creatinine, DIC panel).",
+      "Treat seizures with magnesium sulfate.",
+      "Most eclampsia occurs by postpartum day 6; magnesium prophylaxis is not routine unless clinically indicated."
+    ],
+    treatment: [
+      "Nifedipine IR for acute BP reduction in the protocol pathway.",
+      "Supportive symptom treatment (for example, acetaminophen for headache).",
+      "Targeted lab and cardiopulmonary evaluation when severe features are present."
+    ],
+    disposition: [
+      "Discharge only if BP is controlled, workup is reassuring, and next-day BP check is arranged.",
+      "Admit when severe features persist, headache is refractory, or cardiopulmonary/neurologic concerns are present."
+    ],
+    documentation: "Postpartum severe hypertension treated per protocol with serial reassessment. Blood pressure response, severe feature screen, and follow-up plan documented.",
+    automation_checks: [
+      "Two severe BP readings documented",
+      "20-minute BP recheck completed",
+      "Severe feature screen documented",
+      "Next-day BP follow-up arranged"
+    ],
+    tags_add: ["postpartum", "hypertension", "preeclampsia", "eclampsia"]
+  },
+  "pediatric-appendicitis-service-line-agreement-with-appendicitis": {
+    title: "Pediatric Appendicitis Transfer (GMC -> STMC)",
+    banner: { level: "red", label: "Send to ED / Transfer" },
+    purpose: [
+      "Expedite diagnosis and inter-facility transfer for pediatric appendicitis while minimizing unnecessary transfer."
+    ],
+    when_to_use: [
+      "Age 0 to 13 years with suspected appendicitis at GMC without inpatient pediatric floor.",
+      "Initial ED or Pediatric Urgent Care evaluation where definitive management site is STMC.",
+      "Age is the key branch point for accepting surgical service.",
+      "Definitions: GMC = site without pediatric floor; STMC = receiving site with pediatric floor; SOD = Surgeon on Duty; PTAC = Pediatric Treatment & Advice Center."
+    ],
+    red_flags: [
+      "Unavailable local Surgeon on Duty (SOD) with CT-positive appendicitis requiring physician-initiated transfer.",
+      "Delays in surgeon-to-surgeon handoff or transfer acceptance.",
+      "Equivocal imaging that does not match clinical concern."
+    ],
+    workflow: [
+      "Initial evaluation at GMC: abdominal pain concerning for appendicitis.",
+      "Call GMC/local SOD to confirm suspected appendicitis.",
+      "If appendicitis suspected, local SOD contacts PTAC for transfer coordination and surgeon-to-surgeon communication.",
+      "Age 0 to 5 years -> Pediatric Surgery accepting service.",
+      "Age 6 to 13 years -> Adult General Surgery accepting service.",
+      "If local SOD unavailable and CT is positive, ED physician may initiate transfer via PTAC and speak with accepting STMC SOD directly.",
+      "Once transfer confirmed, STMC SOD creates case on grease board to reduce OR wait time: search by MRN, select 'search my region,' import chart, create case."
+    ],
+    treatment: [
+      "Use pediatric CT protocol when CT is required to reduce radiation exposure.",
+      "Recognize pediatric CT protocol may increase equivocal reads due to lower resolution.",
+      "PAS scoring: RLQ tenderness (2), cough/percussion/hopping tenderness (2), migration of pain (1), anorexia (1), fever (1), nausea/vomiting (1), leukocytosis 10,000 or higher (1), neutrophilia (1).",
+      "PAS interpretation: score 7 or higher is highly suspicious; below 5 is less likely appendicitis."
+    ],
+    disposition: [
+      "Transfer confirmed through PTAC with explicit accepting surgeon and service.",
+      "Document accepting service by age branch and closed-loop handoff.",
+      "Maintain ED ownership until accepting service confirmation is complete."
+    ],
+    documentation: "Suspected appendicitis in pediatric patient age 0-13 at GMC without inpatient pediatrics. SOD consulted, PTAC contacted, and transfer arranged with accepting service based on age.",
+    automation_checks: [
+      "Age branch applied (0-5 vs 6-13)",
+      "SOD contacted",
+      "PTAC transfer initiated",
+      "Accepting STMC service documented"
+    ],
+    tags_add: ["appendicitis", "pediatric-transfer", "ptac", "gmc", "stmc"]
+  }
+};
+
 const state = {
   agreements: [],
-  query: '',
+  query: "",
   selectedDepts: new Set(),
   selectedTags: new Set(),
   olderThanFiveYears: false,
-  sort: 'relevance'
+  sort: "relevance"
 };
 
 function escapeHtml(value) {
-  return String(value ?? '').replace(/[&<>"']/g, (ch) => (
-    ch === '&' ? '&amp;' :
-    ch === '<' ? '&lt;' :
-    ch === '>' ? '&gt;' :
-    ch === '"' ? '&quot;' : '&#39;'
+  return String(value ?? "").replace(/[&<>"']/g, (ch) => (
+    ch === "&" ? "&amp;" :
+    ch === "<" ? "&lt;" :
+    ch === ">" ? "&gt;" :
+    ch === "\"" ? "&quot;" : "&#39;"
   ));
 }
 
 function normalize(value) {
-  return String(value || '').toLowerCase();
+  return String(value || "").toLowerCase();
 }
 
 function tokenize(value) {
   return normalize(value)
-    .replace(/[^a-z0-9]+/g, ' ')
+    .replace(/[^a-z0-9]+/g, " ")
     .trim()
     .split(/\s+/)
     .filter(Boolean);
 }
 
+function dedupeClean(values) {
+  const out = [];
+  const seen = new Set();
+  (values || []).forEach((value) => {
+    const clean = String(value || "").trim();
+    if (!clean) return;
+    const key = normalize(clean);
+    if (seen.has(key)) return;
+    seen.add(key);
+    out.push(clean);
+  });
+  return out;
+}
+
 function parseDate(value) {
   if (!value) return null;
-  const d = new Date(value + 'T00:00:00');
+  const d = new Date(value + "T00:00:00");
   return Number.isNaN(d.getTime()) ? null : d;
 }
 
-function olderThanFiveYears(value) {
+function isOlderThanFiveYears(value) {
   const d = parseDate(value);
   if (!d) return false;
   const cutoff = new Date();
@@ -198,35 +435,136 @@ function olderThanFiveYears(value) {
   return d < cutoff;
 }
 
+function inferBanner(item) {
+  const tagSet = new Set((item.tags || []).map((t) => normalize(t)));
+  if (tagSet.has("transfer") || tagSet.has("surgical") || tagSet.has("pediatric-transfer")) {
+    return { level: "red", label: "Send to ED / Transfer" };
+  }
+  if (tagSet.has("disposition") || tagSet.has("escalation") || tagSet.has("consult-workflow")) {
+    return { level: "yellow", label: "Consider Admission" };
+  }
+  return { level: "green", label: "Outpt OK" };
+}
+
+function toArray(value) {
+  return Array.isArray(value) ? value : [];
+}
+
+function fallbackCardModel(item) {
+  const summary = dedupeClean(toArray(item.summary_bullets));
+  const actions = dedupeClean(toArray(item.ed_actions));
+  const consults = dedupeClean(toArray(item.consults_and_escalation));
+  const disposition = dedupeClean([...toArray(item.disposition_or_ownership), ...toArray(item.timing_targets)]);
+
+  const purpose = summary.slice(0, 2);
+  const whenToUse = summary.filter((line) => /use|criteria|eligible|age|stable|when/i.test(line)).slice(0, 4);
+  const redFlags = dedupeClean(
+    [...summary, ...consults].filter((line) => /exclude|unstable|severe|transfer|escalat|bleed|critical|red flag|call/i.test(line))
+  ).slice(0, 6);
+  const workflow = dedupeClean([...actions, ...consults]).slice(0, 8);
+  const treatment = dedupeClean(
+    summary.filter((line) => /\bmg\b|dose|dosing|iv|po|medication|antibiotic|anticoag|cardioversion|treat/i.test(line))
+  ).slice(0, 6);
+
+  return {
+    title: item.title,
+    banner: inferBanner(item),
+    purpose: purpose.length ? purpose : ["Operational summary available in source agreement."],
+    when_to_use: whenToUse.length ? whenToUse : ["Use for scenarios covered by this service agreement and department scope."],
+    red_flags: redFlags.length ? redFlags : ["Escalate to specialty or attending pathway for instability or conflicting recommendations."],
+    workflow: workflow.length ? workflow : ["Follow source agreement workflow and document consultant communication."],
+    treatment: treatment.length ? treatment : ["No medication-specific treatment details extracted; review source document."],
+    disposition: disposition.length ? disposition : ["Disposition should be based on source agreement criteria and current reassessment."],
+    documentation: "Reviewed service agreement and applied ED workflow, consultant communication, and disposition plan per protocol.",
+    automation_checks: DEFAULT_AUTOMATION_CHECKS
+  };
+}
+
+function buildCardModel(item) {
+  const override = PROTOCOL_OVERRIDES[item.id];
+  if (!override) return fallbackCardModel(item);
+  return {
+    title: override.title || item.title,
+    banner: override.banner || inferBanner(item),
+    purpose: dedupeClean(override.purpose),
+    when_to_use: dedupeClean(override.when_to_use),
+    red_flags: dedupeClean(override.red_flags),
+    workflow: dedupeClean(override.workflow),
+    treatment: dedupeClean(override.treatment),
+    disposition: dedupeClean(override.disposition),
+    documentation: String(override.documentation || "").trim(),
+    automation_checks: dedupeClean(override.automation_checks).length ? dedupeClean(override.automation_checks) : DEFAULT_AUTOMATION_CHECKS
+  };
+}
+
+function prepareAgreement(agreement) {
+  const override = PROTOCOL_OVERRIDES[agreement.id] || null;
+  const mergedTags = dedupeClean([...toArray(agreement.tags), ...(override ? toArray(override.tags_add) : [])]);
+  const card = buildCardModel({ ...agreement, tags: mergedTags });
+  const searchText = normalize([
+    agreement.title,
+    card.title,
+    agreement.source_filename,
+    mergedTags.join(" "),
+    toArray(agreement.departments).join(" "),
+    card.purpose.join(" "),
+    card.when_to_use.join(" "),
+    card.red_flags.join(" "),
+    card.workflow.join(" "),
+    card.treatment.join(" "),
+    card.disposition.join(" "),
+    card.documentation
+  ].join(" "));
+
+  return {
+    ...agreement,
+    tags: mergedTags,
+    card,
+    _searchText: searchText
+  };
+}
+
+function displayTitle(item) {
+  return (item.card && item.card.title) ? item.card.title : item.title;
+}
+
 function scoreAgreement(item, tokens) {
   if (!tokens.length) return 1;
-  const title = tokenize(item.title).join(' ');
-  const tags = tokenize((item.tags || []).join(' ')).join(' ');
-  const depts = tokenize((item.departments || []).join(' ')).join(' ');
-  const summary = tokenize((item.summary_bullets || []).join(' ')).join(' ');
-  const actions = tokenize((item.ed_actions || []).join(' ')).join(' ');
-  const consult = tokenize((item.consults_and_escalation || []).join(' ')).join(' ');
-  const ownership = tokenize((item.disposition_or_ownership || []).join(' ')).join(' ');
-  const timing = tokenize((item.timing_targets || []).join(' ')).join(' ');
-  const source = tokenize(item.source_filename || '').join(' ');
-  const notes = tokenize(item.redaction_notes || '').join(' ');
-  const all = [title, tags, depts, summary, actions, consult, ownership, timing, source, notes].join(' ');
+  const titleText = normalize(displayTitle(item));
+  const sourceTitleText = normalize(item.title);
+  const tagsText = normalize((item.tags || []).join(" "));
+  const deptText = normalize((item.departments || []).join(" "));
+  const searchText = item._searchText || "";
 
   let matchedTokens = 0;
   let score = 0;
   tokens.forEach((token) => {
     let matched = false;
-    if (title.includes(token)) score += 8;
-    if (title.includes(token)) matched = true;
-    if (tags.includes(token)) { score += 5; matched = true; }
-    if (depts.includes(token)) { score += 3; matched = true; }
-    if (summary.includes(token)) { score += 2; matched = true; }
-    if (actions.includes(token) || consult.includes(token) || ownership.includes(token) || timing.includes(token)) { score += 1; matched = true; }
-    if (source.includes(token)) { score += 2; matched = true; }
-  if (matched) matchedTokens += 1;
+    if (titleText.includes(token)) {
+      score += 10;
+      matched = true;
+    }
+    if (sourceTitleText.includes(token)) {
+      score += 7;
+      matched = true;
+    }
+    if (tagsText.includes(token)) {
+      score += 6;
+      matched = true;
+    }
+    if (deptText.includes(token)) {
+      score += 4;
+      matched = true;
+    }
+    if (searchText.includes(token)) {
+      score += 2;
+      matched = true;
+    }
+    if (matched) matchedTokens += 1;
   });
+
   if (!matchedTokens) return 0;
-  score += Math.round((matchedTokens / tokens.length) * 4);
+  score += Math.round((matchedTokens / tokens.length) * 5);
   return score;
 }
 
@@ -239,7 +577,7 @@ function matchFilters(item) {
     const hasTag = (item.tags || []).some((t) => state.selectedTags.has(t));
     if (!hasTag) return false;
   }
-  if (state.olderThanFiveYears && !olderThanFiveYears(item.last_updated)) {
+  if (state.olderThanFiveYears && !isOlderThanFiveYears(item.last_updated)) {
     return false;
   }
   return true;
@@ -257,16 +595,20 @@ function getFilteredRows() {
   });
 
   rows.sort((a, b) => {
-    if (state.sort === 'title') {
-      return a.item.title.localeCompare(b.item.title);
+    const titleA = displayTitle(a.item);
+    const titleB = displayTitle(b.item);
+
+    if (state.sort === "title") {
+      return titleA.localeCompare(titleB);
     }
-    if (state.sort === 'last_updated') {
+
+    if (state.sort === "last_updated") {
       const ad = parseDate(a.item.last_updated);
       const bd = parseDate(b.item.last_updated);
       if (ad && bd) return bd - ad;
       if (bd) return 1;
       if (ad) return -1;
-      return a.item.title.localeCompare(b.item.title);
+      return titleA.localeCompare(titleB);
     }
 
     if (b.relevance !== a.relevance) return b.relevance - a.relevance;
@@ -275,38 +617,72 @@ function getFilteredRows() {
     if (ad && bd && bd.getTime() !== ad.getTime()) return bd - ad;
     if (bd && !ad) return 1;
     if (ad && !bd) return -1;
-    return a.item.title.localeCompare(b.item.title);
+    return titleA.localeCompare(titleB);
   });
 
   return rows;
 }
 
-async function copyBullets(title, bullets) {
-  const text = `${title}\n${(bullets || []).map((b) => `- ${b}`).join('\n')}`;
+async function copyText(value) {
+  const text = String(value || "");
   try {
     await navigator.clipboard.writeText(text);
   } catch (_) {
-    const ta = document.createElement('textarea');
+    const ta = document.createElement("textarea");
     ta.value = text;
     document.body.appendChild(ta);
     ta.select();
-    document.execCommand('copy');
+    document.execCommand("copy");
     ta.remove();
   }
 }
 
-function sectionHtml(title, bullets, openDefault) {
-  const openAttr = openDefault ? ' open' : '';
-  const lis = (bullets || []).map((b) => `<li>${escapeHtml(b)}</li>`).join('');
-  return `<details class="section"${openAttr}><summary>${escapeHtml(title)}</summary><ul>${lis || '<li>No items</li>'}</ul></details>`;
+function sectionHtml(title, lines, opts = {}) {
+  const openAttr = opts.open ? " open" : "";
+  const checkable = !!opts.checkable;
+  const items = dedupeClean(lines);
+  const emptyLine = checkable
+    ? '<p class="doc-text">No checklist items currently defined.</p>'
+    : '<p class="doc-text">No details listed.</p>';
+
+  const listHtml = items.length ? `
+    <ul class="${checkable ? "list checklist" : "list"}">
+      ${items.map((line) => (
+        checkable
+          ? `<li><label class="check-row"><input type="checkbox"/><span>${escapeHtml(line)}</span></label></li>`
+          : `<li>${escapeHtml(line)}</li>`
+      )).join("")}
+    </ul>
+  ` : emptyLine;
+
+  return `<details class="section"${openAttr}><summary>${escapeHtml(title)}</summary><div class="section-body">${listHtml}</div></details>`;
+}
+
+function documentationSectionHtml(item, idx) {
+  const documentation = item.card.documentation || "Documentation guidance not provided in source.";
+  return `
+    <details class="section">
+      <summary>Documentation</summary>
+      <div class="section-body">
+        <p class="doc-text">${escapeHtml(documentation)}</p>
+        <button class="btn section-copy js-copy-doc" data-idx="${idx}">Copy Documentation</button>
+      </div>
+    </details>
+  `;
+}
+
+function workflowText(item) {
+  const title = displayTitle(item);
+  const bullets = dedupeClean(item.card.workflow).map((line) => `- ${line}`).join("\n");
+  return `${title} - Workflow\n${bullets}`;
 }
 
 function renderResults() {
-  const container = document.getElementById('results');
-  const resultCount = document.getElementById('resultCount');
+  const container = document.getElementById("results");
+  const resultCount = document.getElementById("resultCount");
   const rows = getFilteredRows();
 
-  resultCount.textContent = `${rows.length} agreement${rows.length === 1 ? '' : 's'} found`;
+  resultCount.textContent = `${rows.length} agreement${rows.length === 1 ? "" : "s"} found`;
 
   if (!rows.length) {
     container.innerHTML = '<div class="empty">No agreements match your current search/filter settings.</div>';
@@ -314,52 +690,65 @@ function renderResults() {
   }
 
   container.innerHTML = rows.map(({ item }, idx) => {
-    const updated = item.last_updated ? item.last_updated : 'unknown';
-    const deptBadges = (item.departments || []).map((d) => `<span class="badge b-dept">${escapeHtml(d)}</span>`).join('');
-    const tagBadges = (item.tags || []).map((t) => `<span class="badge b-tag">${escapeHtml(t)}</span>`).join('');
+    const updated = item.last_updated ? item.last_updated : "unknown";
+    const deptBadges = (item.departments || []).map((d) => `<span class="badge b-dept">${escapeHtml(d)}</span>`).join("");
+    const tagBadges = (item.tags || []).map((t) => `<span class="badge b-tag">${escapeHtml(t)}</span>`).join("");
     const docButton = item.sharepoint_url
       ? `<a class="btn btn-primary" href="${escapeHtml(item.sharepoint_url)}" target="_blank" rel="noopener">Open Document</a>`
       : `<button class="btn btn-primary" disabled>Open Document</button>`;
+    const sourceTitleLine = item.card.title !== item.title
+      ? `<div class="card-sub">Source title: ${escapeHtml(item.title)}</div>`
+      : "";
+    const bannerLevel = item.card.banner && item.card.banner.level ? item.card.banner.level : "yellow";
+    const bannerLabel = item.card.banner && item.card.banner.label ? item.card.banner.label : "Consider Admission";
 
     return `
       <article class="card">
-        <div class="card-title">${escapeHtml(item.title)}</div>
-        <div class="card-sub">Source: ${escapeHtml(item.source_filename || '')}</div>
+        <div class="card-head">
+          <div>
+            <div class="card-title">${escapeHtml(displayTitle(item))}</div>
+            ${sourceTitleLine}
+            <div class="card-sub">Source: ${escapeHtml(item.source_filename || "")}</div>
+          </div>
+          <div class="decision ${escapeHtml(bannerLevel)}">${escapeHtml(bannerLabel)}</div>
+        </div>
         <div class="badges">
           <span class="badge b-date">Updated: ${escapeHtml(updated)}</span>
           ${deptBadges}
           ${tagBadges}
         </div>
-        ${sectionHtml('Summary Bullets', item.summary_bullets, true)}
-        ${sectionHtml('ED Actions', item.ed_actions, false)}
-        ${sectionHtml('Consults and Escalation', item.consults_and_escalation, false)}
-        ${sectionHtml('Disposition or Ownership', item.disposition_or_ownership, false)}
-        ${sectionHtml('Timing Targets', item.timing_targets, false)}
-        <div class="small-note">${escapeHtml(item.redaction_notes || '')}</div>
+        ${sectionHtml("Purpose", item.card.purpose, { open: true })}
+        ${sectionHtml("When to Use", item.card.when_to_use, { open: false })}
+        ${sectionHtml("Exclusions / Red Flags", item.card.red_flags, { open: false })}
+        ${sectionHtml("Workflow", item.card.workflow, { open: false, checkable: true })}
+        ${sectionHtml("Treatment", item.card.treatment, { open: false, checkable: true })}
+        ${sectionHtml("Disposition", item.card.disposition, { open: false, checkable: true })}
+        ${documentationSectionHtml(item, idx)}
+        ${sectionHtml("Automation Placeholders", item.card.automation_checks, { open: false, checkable: true })}
         <div class="actions">
-          <button class="btn js-copy-ed" data-idx="${idx}">Copy ED Actions</button>
-          <button class="btn js-copy-summary" data-idx="${idx}">Copy Summary</button>
+          <button class="btn js-copy-workflow" data-idx="${idx}">Copy Workflow</button>
+          <button class="btn js-copy-doc" data-idx="${idx}">Copy Documentation</button>
           ${docButton}
         </div>
       </article>
     `;
-  }).join('');
+  }).join("");
 
-  container.querySelectorAll('.js-copy-ed').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const idx = Number(btn.getAttribute('data-idx'));
+  container.querySelectorAll(".js-copy-workflow").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const idx = Number(btn.getAttribute("data-idx"));
       const row = rows[idx];
       if (!row) return;
-      copyBullets(row.item.title, row.item.ed_actions || []);
+      copyText(workflowText(row.item));
     });
   });
 
-  container.querySelectorAll('.js-copy-summary').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const idx = Number(btn.getAttribute('data-idx'));
+  container.querySelectorAll(".js-copy-doc").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const idx = Number(btn.getAttribute("data-idx"));
       const row = rows[idx];
       if (!row) return;
-      copyBullets(row.item.title, row.item.summary_bullets || []);
+      copyText(row.item.card.documentation || "");
     });
   });
 }
@@ -371,12 +760,12 @@ function renderFilterChips(containerId, values, selectedSet, onToggle) {
     return;
   }
   container.innerHTML = values.map((value) => {
-    const active = selectedSet.has(value) ? ' on' : '';
+    const active = selectedSet.has(value) ? " on" : "";
     return `<button class="chip${active}" data-value="${escapeHtml(value)}">${escapeHtml(value)}</button>`;
-  }).join('');
+  }).join("");
 
-  container.querySelectorAll('.chip').forEach((chip) => {
-    chip.addEventListener('click', () => onToggle(chip.dataset.value || ''));
+  container.querySelectorAll(".chip").forEach((chip) => {
+    chip.addEventListener("click", () => onToggle(chip.dataset.value || ""));
   });
 }
 
@@ -389,12 +778,12 @@ function renderFiltersAndResults() {
   const deptValues = Array.from(new Set(state.agreements.flatMap((a) => a.departments || []))).sort((a, b) => a.localeCompare(b));
   const tagValues = Array.from(new Set(state.agreements.flatMap((a) => a.tags || []))).sort((a, b) => a.localeCompare(b));
 
-  renderFilterChips('deptChips', deptValues, state.selectedDepts, (value) => {
+  renderFilterChips("deptChips", deptValues, state.selectedDepts, (value) => {
     toggleSetValue(state.selectedDepts, value);
     renderFiltersAndResults();
   });
 
-  renderFilterChips('tagChips', tagValues, state.selectedTags, (value) => {
+  renderFilterChips("tagChips", tagValues, state.selectedTags, (value) => {
     toggleSetValue(state.selectedTags, value);
     renderFiltersAndResults();
   });
@@ -403,45 +792,46 @@ function renderFiltersAndResults() {
 }
 
 function applyPresetQueryFromUrl() {
-  const params = new URLSearchParams(window.location.search || '');
-  const preset = (params.get('q') || params.get('query') || '').trim();
+  const params = new URLSearchParams(window.location.search || "");
+  const preset = (params.get("q") || params.get("query") || "").trim();
   if (!preset) return;
   state.query = preset;
-  const input = document.getElementById('searchInput');
+  const input = document.getElementById("searchInput");
   if (input) input.value = preset;
 }
 
 async function init() {
   try {
-    const res = await fetch('./data/service_agreements_index.json', { cache: 'no-store' });
+    const res = await fetch("./data/service_agreements_index.json", { cache: "no-store" });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const payload = await res.json();
     const agreements = Array.isArray(payload.agreements) ? payload.agreements : [];
-    state.agreements = agreements.filter((agreement) => {
-      const src = String((agreement && agreement.source_filename) || '').toLowerCase();
-      return src.endsWith('.doc') || src.endsWith('.docx');
+    const docOnly = agreements.filter((agreement) => {
+      const src = String((agreement && agreement.source_filename) || "").toLowerCase();
+      return src.endsWith(".doc") || src.endsWith(".docx");
     });
+    state.agreements = docOnly.map(prepareAgreement);
   } catch (err) {
-    document.getElementById('resultCount').textContent = 'Failed to load agreement index';
-    const note = location.protocol === 'file:'
-      ? ' This page must be served via HTTP (for example: python3 -m http.server) to load JSON data.'
-      : '';
-    document.getElementById('results').innerHTML = `<div class="empty">Could not load data/service_agreements_index.json (${escapeHtml(err.message)}).${escapeHtml(note)}</div>`;
+    document.getElementById("resultCount").textContent = "Failed to load agreement index";
+    const note = location.protocol === "file:"
+      ? " This page must be served via HTTP (for example: python3 -m http.server) to load JSON data."
+      : "";
+    document.getElementById("results").innerHTML = `<div class="empty">Could not load data/service_agreements_index.json (${escapeHtml(err.message)}).${escapeHtml(note)}</div>`;
     return;
   }
 
-  document.getElementById('searchInput').addEventListener('input', (e) => {
-    state.query = e.target.value || '';
+  document.getElementById("searchInput").addEventListener("input", (e) => {
+    state.query = e.target.value || "";
     renderResults();
   });
 
-  document.getElementById('olderToggle').addEventListener('change', (e) => {
+  document.getElementById("olderToggle").addEventListener("change", (e) => {
     state.olderThanFiveYears = !!e.target.checked;
     renderResults();
   });
 
-  document.getElementById('sortSelect').addEventListener('change', (e) => {
-    state.sort = e.target.value || 'relevance';
+  document.getElementById("sortSelect").addEventListener("change", (e) => {
+    state.sort = e.target.value || "relevance";
     renderResults();
   });
 
