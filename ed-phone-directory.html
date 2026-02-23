@@ -277,7 +277,14 @@
   .entry-number:hover { background: rgba(88,166,255,0.1); }
   .entry-number:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-  .entry-number.ext { color: var(--text-muted); font-weight: 400; }
+  .entry-number.ext {
+    color: var(--text-muted);
+    font-weight: 400;
+    white-space: normal;
+    text-align: right;
+    max-width: 360px;
+    line-height: 1.35;
+  }
 
   .entry-type {
     font-family: 'IBM Plex Mono', monospace;
@@ -1051,6 +1058,50 @@ function iconFromType(type) {
   return '📞';
 }
 
+function fullNumberPrefixForHospital(hospital) {
+  if (hospital === 'omc') return '(909) 724-';
+  if (hospital === 'fmc') return '(909) 302-';
+  return '';
+}
+
+function extensionToFullNumber(extValue, hospital) {
+  const ext = String(extValue || '').trim();
+  const prefix = fullNumberPrefixForHospital(hospital);
+  if (!prefix) return null;
+  if (!/^\d{5}$/.test(ext)) return null;
+  return `${prefix}${ext.slice(1)}`;
+}
+
+function buildNumberPresentation(numberValue, type, hospital, section) {
+  const numberText = String(numberValue || '').trim();
+  if (!numberText) return { display: '', copy: '', search: '' };
+
+  const isImagingSection = String(section || '').startsWith('IMAGING');
+  const isExtType = type === 'ext' && !isImagingSection;
+  const alreadyHasFull = /\(909\)|\b909[-\s]/.test(numberText);
+  if (!isExtType || alreadyHasFull) {
+    return { display: numberText, copy: numberText, search: numberText };
+  }
+
+  const extMatches = numberText.match(/\b\d{5}\b/g) || [];
+  const fullNumbers = [];
+  extMatches.forEach((ext) => {
+    const converted = extensionToFullNumber(ext, hospital);
+    if (converted && !fullNumbers.includes(converted)) fullNumbers.push(converted);
+  });
+
+  if (!fullNumbers.length) {
+    return { display: numberText, copy: numberText, search: numberText };
+  }
+
+  const display = `${numberText} · ${fullNumbers.join(' / ')}`;
+  const copy = fullNumbers.length === 1
+    ? `${fullNumbers[0]} (ext ${extMatches[0]})`
+    : `${numberText} · ${fullNumbers.join(' / ')}`;
+  const search = `${numberText} ${fullNumbers.join(' ')}`;
+  return { display, copy, search };
+}
+
 function exportPhoneDirectoryIndex() {
   const out = [];
   ['omc', 'fmc'].forEach(hospital => {
@@ -1060,8 +1111,9 @@ function exportPhoneDirectoryIndex() {
       const type = entryTypeFromSection(section);
       const group = groupFromSection(hospital, section);
       entries.forEach(item => {
+        const numberMeta = buildNumberPresentation(item.number || '', item.type, hospital, section);
         const subtitleParts = [
-          item.number || '',
+          numberMeta.display || item.number || '',
           item.note || '',
           (section || '').toLowerCase(),
           hospital
@@ -1082,8 +1134,9 @@ function exportPhoneDirectoryIndex() {
       const section = item.category || 'CUSTOM';
       const type = entryTypeFromSection(section);
       const group = groupFromSection(hospital, section);
+      const numberMeta = buildNumberPresentation(item.number || '', item.type, hospital, section);
       const subtitleParts = [
-        item.number || '',
+        numberMeta.display || item.number || '',
         item.note || '',
         section.toLowerCase(),
         'custom entry',
@@ -1122,21 +1175,26 @@ function buildEntry(item, section, hospital, idx, isCustom = false) {
   const id = `${hospital}-${slugify(section)}-${idx}`;
   const nameText = String(item.name || '');
   const numberText = String(item.number || '');
+  const numberMeta = buildNumberPresentation(numberText, item.type, hospital, section);
+  const numberDisplayText = numberMeta.display || numberText;
+  const numberCopyText = numberMeta.copy || numberText;
+  const numberSearchText = numberMeta.search || numberText;
   const noteRaw = String(item.note || '');
   const noteText = noteRaw.toLowerCase();
   const sectionText = String(section || '').toLowerCase();
-  const searchHaystack = `${nameText} ${numberText} ${noteText} ${sectionText}`.toLowerCase();
+  const searchHaystack = `${nameText} ${numberSearchText} ${noteText} ${sectionText}`.toLowerCase();
   const safeName = escapeHtml(nameText);
-  const safeNumber = escapeHtml(numberText);
+  const safeNumberDisplay = escapeHtml(numberDisplayText);
+  const safeNumberCopy = escapeHtml(numberCopyText);
   const safeNote = escapeHtml(noteRaw);
   const safeHospital = escapeHtml(hospital);
   const typeClass = item.type === 'pager' ? 'pager' : item.type === 'phone' ? 'phone' : 'ext';
   const numberDisplay = isImaging(section)
-    ? `<span class="imaging-code">${safeNumber}</span>`
-    : `<button type="button" class="entry-number ${typeClass} js-copy-num" data-number="${safeNumber}" title="Click to copy">${safeNumber}</button>`;
+    ? `<span class="imaging-code">${safeNumberDisplay}</span>`
+    : `<button type="button" class="entry-number ${typeClass} js-copy-num" data-number="${safeNumberCopy}" title="Click to copy">${safeNumberDisplay}</button>`;
 
   return `
-    <div class="entry${isCustom ? ' custom' : ''}" id="${id}" data-name="${escapeHtml(nameText.toLowerCase())}" data-number="${escapeHtml(numberText.toLowerCase())}" data-section="${escapeHtml(sectionText)}" data-note="${escapeHtml(noteText)}" data-search="${escapeHtml(searchHaystack)}">
+    <div class="entry${isCustom ? ' custom' : ''}" id="${id}" data-name="${escapeHtml(nameText.toLowerCase())}" data-number="${escapeHtml(numberSearchText.toLowerCase())}" data-section="${escapeHtml(sectionText)}" data-note="${escapeHtml(noteText)}" data-search="${escapeHtml(searchHaystack)}">
       <div class="entry-name">
         ${safeName}
         ${noteRaw ? `<span class="entry-note">${safeNote}</span>` : ''}
