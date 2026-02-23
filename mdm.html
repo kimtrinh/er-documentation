@@ -75,10 +75,30 @@ main{max-width:1100px;margin:0 auto;padding:18px 24px 64px}
 .copy-btn.copied{background:#14532d;border-color:#22c55e;color:#bbf7d0}
 .empty-block{font-size:12px;color:#64748b;padding:6px 2px}
 
+.dotphrase-panel{margin-top:16px;border-color:#1d4ed8;box-shadow:0 0 0 1px rgba(29,78,216,.2)}
+.dotphrase-panel .panel-head{background:linear-gradient(90deg,#172235,#10213f)}
+.dotphrase-tools{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;margin-bottom:10px}
+.dotphrase-search{width:100%;padding:10px 12px;background:#0f172a;border:1px solid #334155;border-radius:10px;color:#e2e8f0;font-size:13px;outline:none}
+.dotphrase-search:focus{border-color:#3b82f6}
+.dotphrase-helper{font-size:11px;color:#94a3b8;margin-bottom:10px}
+.dotphrase-list{display:grid;grid-template-columns:1fr;gap:8px}
+.dotphrase-item{border:1px solid #334155;background:#0f172a;border-radius:10px;padding:10px}
+.dotphrase-item.linked{border-color:#2563eb;background:#0d1b34}
+.dotphrase-meta{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}
+.dotphrase-dot{font:700 12px/1.2 'JetBrains Mono',monospace;color:#bfdbfe;background:#12284a;border:1px solid #1d4ed8;border-radius:999px;padding:3px 8px}
+.dotphrase-cat{font-size:10px;color:#93c5fd;border:1px solid #1e3a8a;background:#0b1730;border-radius:999px;padding:3px 8px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.dotphrase-cond{font-size:12px;font-weight:700;color:#e2e8f0}
+.dotphrase-snippet{font-size:12px;color:#94a3b8;line-height:1.45;margin-top:4px}
+.dotphrase-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.dotphrase-btn{padding:6px 9px;border-radius:8px;border:1px solid #334155;background:#1e293b;color:#e2e8f0;font-size:11px;font-weight:700;cursor:pointer}
+.dotphrase-btn:hover{border-color:#3b82f6;color:#bfdbfe}
+.dotphrase-empty{font-size:12px;color:#64748b;padding:10px;border:1px dashed #334155;border-radius:10px}
+
 @media(max-width:980px){
   .controls{grid-template-columns:1fr}
   .grid{grid-template-columns:1fr}
   .preview{min-height:320px}
+  .dotphrase-tools{grid-template-columns:1fr}
 }
 
 /* ===== SHARED NEW NAV ===== */
@@ -179,6 +199,22 @@ main{max-width:1100px;margin:0 auto;padding:18px 24px 64px}
       </div>
     </section>
   </div>
+  <section class="panel dotphrase-panel">
+    <div class="panel-head">
+      <h2>
+        Dotphrase Library Quick Lookup
+        <span id="dotphraseMatchCount" class="head-count">0 shown</span>
+      </h2>
+    </div>
+    <div class="panel-body">
+      <div class="dotphrase-tools">
+        <input id="dotphraseSearchInput" class="dotphrase-search" type="text" placeholder="Search dotphrase ID, condition, category, or phrase text..." autocomplete="off" spellcheck="false" aria-label="Search dotphrase library">
+        <a class="quick-btn" href="dotphrase.html">Open Full Dotphrase Library</a>
+      </div>
+      <p class="dotphrase-helper">Linked rule-outs for the selected DDx are highlighted first for faster bedside documentation.</p>
+      <div id="dotphraseQuickList" class="dotphrase-list"></div>
+    </div>
+  </section>
 </main>
 
 <script src="search-index.js"></script>

@@ -9,6 +9,8 @@
   const CALC_LOW = 'calc-low';
   const CALC_MODERATE = 'calc-moderate';
   const CALC_HIGH = 'calc-high';
+  const DOTPHRASE_DEFAULT_LIMIT = 18;
+  const DOTPHRASE_SEARCH_LIMIT = 28;
 
   const CALCULATOR_SCHEMAS = Object.freeze({
     heart: {
@@ -206,7 +208,10 @@
     preview: document.getElementById('mdmPreview'),
     copyFullBtn: document.getElementById('copyFullBtn'),
     copyDdxBtn: document.getElementById('copyDdxBtn'),
-    copyRuleoutsBtn: document.getElementById('copyRuleoutsBtn')
+    copyRuleoutsBtn: document.getElementById('copyRuleoutsBtn'),
+    dotphraseSearchInput: document.getElementById('dotphraseSearchInput'),
+    dotphraseQuickList: document.getElementById('dotphraseQuickList'),
+    dotphraseMatchCount: document.getElementById('dotphraseMatchCount')
   };
 
   function normalizeId(id) {
@@ -349,6 +354,12 @@
 
   function normalizeLabel(text) {
     return String(text || '').replace(/\s+/g, ' ').trim();
+  }
+
+  function truncateText(text, maxLength) {
+    const clean = normalizeLabel(text);
+    if (!clean || clean.length <= maxLength) return clean;
+    return `${clean.slice(0, Math.max(0, maxLength - 1)).trimEnd()}…`;
   }
 
   function getCalculatorSchema(type) {
@@ -1017,6 +1028,103 @@
     els.riskCount.textContent = `${riskCount} selected`;
   }
 
+  function getDotphraseRows() {
+    const all = Array.isArray(window.KP_DOTPHRASES) ? window.KP_DOTPHRASES : [];
+    const queryRaw = normalizeLabel(els.dotphraseSearchInput ? els.dotphraseSearchInput.value : '').toLowerCase();
+    const tokens = queryRaw ? queryRaw.split(/\s+/).filter(Boolean) : [];
+    const linkedRuleouts = new Set(state.availableRuleoutIds || []);
+
+    const rows = [];
+    all.forEach((item) => {
+      const id = normalizeId(item && item.dot);
+      if (!id) return;
+      const cond = normalizeLabel(item && item.cond);
+      const cat = normalizeLabel(item && item.cat);
+      const text = normalizeLabel(item && item.text);
+      const searchable = `${id} ${cond} ${cat} ${text}`.toLowerCase();
+
+      let score = linkedRuleouts.has(id) ? 100 : 0;
+      let matched = true;
+
+      if (tokens.length) {
+        tokens.forEach((token) => {
+          if (!searchable.includes(token)) {
+            matched = false;
+            return;
+          }
+          if (id.includes(token)) score += 10;
+          else if (cond.toLowerCase().includes(token)) score += 6;
+          else if (cat.toLowerCase().includes(token)) score += 4;
+          else score += 1;
+        });
+      }
+
+      if (!matched) return;
+
+      rows.push({
+        id,
+        cond,
+        cat,
+        text,
+        linked: linkedRuleouts.has(id),
+        selected: state.selectedRuleouts.has(id),
+        score
+      });
+    });
+
+    rows.sort((a, b) => {
+      if (b.score !== a.score) return b.score - a.score;
+      if (a.linked !== b.linked) return a.linked ? -1 : 1;
+      return a.cond.localeCompare(b.cond);
+    });
+
+    if (!tokens.length) {
+      const linked = rows.filter((row) => row.linked);
+      const others = rows.filter((row) => !row.linked);
+      const keep = Math.max(DOTPHRASE_DEFAULT_LIMIT - linked.length, 8);
+      return linked.concat(others.slice(0, keep));
+    }
+
+    return rows.slice(0, DOTPHRASE_SEARCH_LIMIT);
+  }
+
+  function renderDotphraseLookup() {
+    if (!els.dotphraseQuickList || !els.dotphraseMatchCount) return;
+
+    const rows = getDotphraseRows();
+    els.dotphraseMatchCount.textContent = `${rows.length} shown`;
+
+    if (!rows.length) {
+      els.dotphraseQuickList.innerHTML = '<div class="dotphrase-empty">No dotphrases match this search. Try a shorter keyword.</div>';
+      return;
+    }
+
+    els.dotphraseQuickList.innerHTML = rows.map((row) => {
+      const dotTag = formatDotphrase(row.id);
+      const linkedClass = row.linked ? ' linked' : '';
+      const snippet = truncateText(row.text, 200);
+      const toggleButton = row.linked
+        ? `<button class="dotphrase-btn" type="button" data-role="toggle-linked-ruleout" data-dot-id="${escapeHtml(row.id)}">${row.selected ? 'Remove from Rule-outs' : 'Add to Rule-outs'}</button>`
+        : '';
+
+      return `
+        <article class="dotphrase-item${linkedClass}">
+          <div class="dotphrase-meta">
+            <span class="dotphrase-dot">${escapeHtml(dotTag)}</span>
+            <span class="dotphrase-cat">${escapeHtml(row.cat || 'General')}</span>
+          </div>
+          <div class="dotphrase-cond">${escapeHtml(row.cond || 'Untitled Dotphrase')}</div>
+          <div class="dotphrase-snippet">${escapeHtml(snippet || 'No phrase text available.')}</div>
+          <div class="dotphrase-actions">
+            <button class="dotphrase-btn" type="button" data-role="copy-dot-id" data-dot-id="${escapeHtml(row.id)}">Copy ${escapeHtml(dotTag)}</button>
+            <button class="dotphrase-btn" type="button" data-role="copy-dot-text" data-dot-id="${escapeHtml(row.id)}">Copy Expanded Text</button>
+            ${toggleButton}
+          </div>
+        </article>
+      `;
+    }).join('');
+  }
+
   function renderAll() {
     renderAliasHint();
     renderQuickPackButtons();
@@ -1024,6 +1132,7 @@
     renderRuleouts();
     renderRiskToggles();
     renderCounts();
+    renderDotphraseLookup();
     setPreview();
   }
 
@@ -1352,6 +1461,48 @@
       setPreview();
       persistActivePackState();
     });
+
+    if (els.dotphraseSearchInput) {
+      els.dotphraseSearchInput.addEventListener('input', () => {
+        renderDotphraseLookup();
+      });
+    }
+
+    if (els.dotphraseQuickList) {
+      els.dotphraseQuickList.addEventListener('click', (event) => {
+        const target = event.target;
+        if (!(target instanceof Element)) return;
+        const btn = target.closest('button[data-role]');
+        if (!btn) return;
+
+        const role = btn.getAttribute('data-role') || '';
+        const dotId = normalizeId(btn.getAttribute('data-dot-id') || '');
+        if (!dotId) return;
+
+        if (role === 'copy-dot-id') {
+          copyTextWithFeedback(formatDotphrase(dotId), btn);
+          return;
+        }
+
+        if (role === 'copy-dot-text') {
+          const lookup = phraseLookup(dotId);
+          const text = lookup && lookup.exists && lookup.text ? lookup.text : formatDotphrase(dotId);
+          copyTextWithFeedback(text, btn);
+          return;
+        }
+
+        if (role === 'toggle-linked-ruleout') {
+          if (!state.availableRuleoutIds.includes(dotId)) return;
+          if (state.selectedRuleouts.has(dotId)) state.selectedRuleouts.delete(dotId);
+          else state.selectedRuleouts.add(dotId);
+          renderRuleouts();
+          renderCounts();
+          renderDotphraseLookup();
+          setPreview();
+          persistActivePackState();
+        }
+      });
+    }
 
     els.copyFullBtn.addEventListener('click', () => {
       copyTextWithFeedback(els.preview.value, els.copyFullBtn);
