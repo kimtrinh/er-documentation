@@ -1343,26 +1343,7 @@ loadCustomEntries();
 renderAll();
 exportPhoneDirectoryIndex();
 
-function startCallFromUserTap(telHref) {
-  const href = String(telHref || '').trim();
-  if (!/^tel:/i.test(href)) return;
-  // Keep this synchronous in the click event stack for iOS Safari.
-  try {
-    window.location.assign(href);
-  } catch (e) {
-    window.location.href = href;
-  }
-}
-
 document.addEventListener('click', e => {
-  const callLink = e.target.closest('.js-call-num');
-  if (callLink) {
-    e.preventDefault();
-    e.stopPropagation();
-    startCallFromUserTap(callLink.getAttribute('href') || '');
-    return;
-  }
-
   const copyBtn = e.target.closest('.js-copy-num');
   if (copyBtn) {
     copyNum(copyBtn, copyBtn.dataset.number || '');
