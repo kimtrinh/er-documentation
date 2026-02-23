@@ -287,6 +287,16 @@ code {
     width: auto !important;
   }
 
+  .entry-number.ext {
+    max-width: 100% !important;
+    text-align: left !important;
+  }
+
+  .entry-number-wrap {
+    justify-content: flex-start !important;
+    max-width: 100% !important;
+  }
+
   .panel-header {
     padding: 12px !important;
   }

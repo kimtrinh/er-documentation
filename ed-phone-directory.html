@@ -272,6 +272,9 @@
     background: transparent;
     -webkit-appearance: none;
     appearance: none;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
   }
 
   .entry-number:hover { background: rgba(88,166,255,0.1); }
@@ -284,6 +287,36 @@
     text-align: right;
     max-width: 360px;
     line-height: 1.35;
+  }
+
+  .entry-number-wrap {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 4px;
+    max-width: 360px;
+  }
+
+  .entry-number-static {
+    cursor: default;
+    border: 1px solid rgba(139,148,158,0.35);
+    background: rgba(110,118,129,0.12);
+  }
+
+  .entry-num-sep {
+    color: var(--text-dim);
+    font-size: 12px;
+    margin: 0 2px;
+  }
+
+  .js-call-num {
+    border: 1px solid rgba(88,166,255,0.35);
+    background: rgba(88,166,255,0.1);
+  }
+
+  .js-call-num:hover {
+    background: rgba(88,166,255,0.22);
   }
 
   .entry-type {
@@ -1072,15 +1105,45 @@ function extensionToFullNumber(extValue, hospital) {
   return `${prefix}${ext.slice(1)}`;
 }
 
+function toTelUri(numberValue) {
+  const digits = String(numberValue || '').replace(/\D/g, '');
+  if (digits.length === 10) return `+1${digits}`;
+  if (digits.length === 11 && digits.startsWith('1')) return `+${digits}`;
+  return '';
+}
+
+function extractDialableNumbers(text) {
+  const source = String(text || '');
+  const matches = source.match(/(?:\+?1[\s.-]?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}/g) || [];
+  const out = [];
+  matches.forEach((match) => {
+    const label = String(match || '').trim();
+    const tel = toTelUri(label);
+    if (!tel) return;
+    if (out.some(item => item.tel === tel)) return;
+    out.push({ label, tel });
+  });
+  return out;
+}
+
 function buildNumberPresentation(numberValue, type, hospital, section) {
   const numberText = String(numberValue || '').trim();
-  if (!numberText) return { display: '', copy: '', search: '' };
+  if (!numberText) {
+    return { display: '', copy: '', search: '', extensionText: '', dialNumbers: [] };
+  }
 
   const isImagingSection = String(section || '').startsWith('IMAGING');
   const isExtType = type === 'ext' && !isImagingSection;
   const alreadyHasFull = /\(909\)|\b909[-\s]/.test(numberText);
   if (!isExtType || alreadyHasFull) {
-    return { display: numberText, copy: numberText, search: numberText };
+    const dialNumbers = extractDialableNumbers(numberText);
+    return {
+      display: numberText,
+      copy: numberText,
+      search: numberText,
+      extensionText: '',
+      dialNumbers
+    };
   }
 
   const extMatches = numberText.match(/\b\d{5}\b/g) || [];
@@ -1091,7 +1154,13 @@ function buildNumberPresentation(numberValue, type, hospital, section) {
   });
 
   if (!fullNumbers.length) {
-    return { display: numberText, copy: numberText, search: numberText };
+    return {
+      display: numberText,
+      copy: numberText,
+      search: numberText,
+      extensionText: '',
+      dialNumbers: []
+    };
   }
 
   const display = `${numberText} · ${fullNumbers.join(' / ')}`;
@@ -1099,7 +1168,10 @@ function buildNumberPresentation(numberValue, type, hospital, section) {
     ? `${fullNumbers[0]} (ext ${extMatches[0]})`
     : `${numberText} · ${fullNumbers.join(' / ')}`;
   const search = `${numberText} ${fullNumbers.join(' ')}`;
-  return { display, copy, search };
+  const dialNumbers = fullNumbers
+    .map(label => ({ label, tel: toTelUri(label) }))
+    .filter(item => item.tel);
+  return { display, copy, search, extensionText: numberText, dialNumbers };
 }
 
 function exportPhoneDirectoryIndex() {
@@ -1189,9 +1261,28 @@ function buildEntry(item, section, hospital, idx, isCustom = false) {
   const safeNote = escapeHtml(noteRaw);
   const safeHospital = escapeHtml(hospital);
   const typeClass = item.type === 'pager' ? 'pager' : item.type === 'phone' ? 'phone' : 'ext';
-  const numberDisplay = isImaging(section)
-    ? `<span class="imaging-code">${safeNumberDisplay}</span>`
-    : `<button type="button" class="entry-number ${typeClass} js-copy-num" data-number="${safeNumberCopy}" title="Click to copy">${safeNumberDisplay}</button>`;
+  const dialLinks = (numberMeta.dialNumbers || []).map((dial, i) => {
+    const safeLabel = escapeHtml(dial.label || '');
+    const safeTel = escapeHtml(dial.tel || '');
+    const sep = i > 0 ? '<span class="entry-num-sep">/</span>' : '';
+    return `${sep}<a class="entry-number ${typeClass} js-call-num" href="tel:${safeTel}" title="Tap to call">${safeLabel}</a>`;
+  }).join('');
+
+  let numberDisplay = '';
+  if (isImaging(section)) {
+    numberDisplay = `<span class="imaging-code">${safeNumberDisplay}</span>`;
+  } else if (numberMeta.extensionText && dialLinks) {
+    numberDisplay = `
+      <span class="entry-number-wrap">
+        <span class="entry-number ${typeClass} entry-number-static">${escapeHtml(numberMeta.extensionText)}</span>
+        <span class="entry-num-sep">·</span>
+        ${dialLinks}
+      </span>`;
+  } else if (dialLinks) {
+    numberDisplay = `<span class="entry-number-wrap">${dialLinks}</span>`;
+  } else {
+    numberDisplay = `<button type="button" class="entry-number ${typeClass} js-copy-num" data-number="${safeNumberCopy}" title="Click to copy">${safeNumberDisplay}</button>`;
+  }
 
   return `
     <div class="entry${isCustom ? ' custom' : ''}" id="${id}" data-name="${escapeHtml(nameText.toLowerCase())}" data-number="${escapeHtml(numberSearchText.toLowerCase())}" data-section="${escapeHtml(sectionText)}" data-note="${escapeHtml(noteText)}" data-search="${escapeHtml(searchHaystack)}">
