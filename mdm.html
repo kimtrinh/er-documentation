@@ -81,12 +81,16 @@ main{max-width:1100px;margin:0 auto;padding:18px 24px 64px}
 .quality-item .quality-title{display:block;font-weight:700;margin-bottom:2px}
 
 .dotphrase-panel{margin-top:16px;border-color:#1d4ed8;box-shadow:0 0 0 1px rgba(29,78,216,.2)}
+.dotphrase-panel.prominent{margin:0 0 16px;border:2px solid #3b82f6;box-shadow:0 14px 28px rgba(2,6,23,.45),0 0 0 1px rgba(59,130,246,.35)}
 .dotphrase-panel .panel-head{background:linear-gradient(90deg,#172235,#10213f)}
+.dotphrase-panel.prominent .panel-head{background:linear-gradient(90deg,#0f2a4f,#10213f)}
+.dotphrase-panel.prominent .panel-head h2{font-size:15px;letter-spacing:.02em}
+.dotphrase-intro{font-size:12px;color:#bfdbfe;line-height:1.45;margin-bottom:10px}
 .dotphrase-tools{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;margin-bottom:10px}
-.dotphrase-search{width:100%;padding:10px 12px;background:#0f172a;border:1px solid #334155;border-radius:10px;color:#e2e8f0;font-size:13px;outline:none}
+.dotphrase-search{width:100%;padding:12px 14px;background:#0f172a;border:1px solid #334155;border-radius:10px;color:#e2e8f0;font-size:14px;outline:none}
 .dotphrase-search:focus{border-color:#3b82f6}
 .dotphrase-helper{font-size:11px;color:#94a3b8;margin-bottom:10px}
-.dotphrase-list{display:grid;grid-template-columns:1fr;gap:8px}
+.dotphrase-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;max-height:560px;overflow:auto;padding-right:2px}
 .dotphrase-item{border:1px solid #334155;background:#0f172a;border-radius:10px;padding:10px}
 .dotphrase-item.linked{border-color:#2563eb;background:#0d1b34}
 .dotphrase-meta{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}
@@ -104,6 +108,7 @@ main{max-width:1100px;margin:0 auto;padding:18px 24px 64px}
   .grid{grid-template-columns:1fr}
   .preview{min-height:320px}
   .dotphrase-tools{grid-template-columns:1fr}
+  .dotphrase-list{grid-template-columns:1fr;max-height:none}
 }
 
 /* ===== SHARED NEW NAV ===== */
@@ -174,6 +179,24 @@ main{max-width:1100px;margin:0 auto;padding:18px 24px 64px}
 </header>
 
 <main>
+  <section class="panel dotphrase-panel prominent">
+    <div class="panel-head">
+      <h2>
+        Dotphrase Library Quick Lookup
+        <span id="dotphraseMatchCount" class="head-count">0 shown</span>
+      </h2>
+    </div>
+    <div class="panel-body">
+      <p class="dotphrase-intro"><strong>Primary documentation tool:</strong> search dotphrases first, then toggle linked rule-outs into your MDM output.</p>
+      <div class="dotphrase-tools">
+        <input id="dotphraseSearchInput" class="dotphrase-search" type="text" placeholder="Search dotphrase ID, condition, category, or phrase text..." autocomplete="off" spellcheck="false" aria-label="Search dotphrase library">
+        <a class="quick-btn" href="dotphrase.html">Open Full Dotphrase Library</a>
+      </div>
+      <p class="dotphrase-helper">Linked rule-outs for the selected DDx are highlighted first for faster bedside documentation.</p>
+      <div id="dotphraseQuickList" class="dotphrase-list"></div>
+    </div>
+  </section>
+
   <div class="grid">
     <div>
       <section class="panel">
@@ -211,22 +234,6 @@ main{max-width:1100px;margin:0 auto;padding:18px 24px 64px}
       </div>
     </section>
   </div>
-  <section class="panel dotphrase-panel">
-    <div class="panel-head">
-      <h2>
-        Dotphrase Library Quick Lookup
-        <span id="dotphraseMatchCount" class="head-count">0 shown</span>
-      </h2>
-    </div>
-    <div class="panel-body">
-      <div class="dotphrase-tools">
-        <input id="dotphraseSearchInput" class="dotphrase-search" type="text" placeholder="Search dotphrase ID, condition, category, or phrase text..." autocomplete="off" spellcheck="false" aria-label="Search dotphrase library">
-        <a class="quick-btn" href="dotphrase.html">Open Full Dotphrase Library</a>
-      </div>
-      <p class="dotphrase-helper">Linked rule-outs for the selected DDx are highlighted first for faster bedside documentation.</p>
-      <div id="dotphraseQuickList" class="dotphrase-list"></div>
-    </div>
-  </section>
 </main>
 
 <script src="search-index.js"></script>
