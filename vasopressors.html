@@ -16,6 +16,11 @@ header{background:linear-gradient(135deg,#1e293b,#0f172a);border-bottom:1px soli
 main{max-width:960px;margin:0 auto;padding:20px 24px 60px}
 .disclaimer{background:#1e3a5f;border:1px solid #2563eb;border-radius:8px;padding:10px 14px;margin-bottom:20px;font-size:12px;color:#93c5fd;line-height:1.5}
 .disclaimer strong{color:#bfdbfe}
+.embed-mode body{background:transparent}
+.embed-mode .sitenav,.embed-mode header{display:none}
+.embed-mode main{max-width:100%;padding:0}
+.embed-mode .layout{grid-template-columns:1fr}
+.embed-mode .ind-card{position:static}
 
 /* WEIGHT INPUT */
 .weight-bar{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
@@ -342,6 +347,18 @@ main{max-width:960px;margin:0 auto;padding:20px 24px 60px}
   </div>
 </main>
 
+<script>
+(function () {
+  const params = new URLSearchParams(window.location.search || '');
+  if (params.get('embed') === '1') {
+    document.documentElement.classList.add('embed-mode');
+    const nav = document.querySelector('.sitenav');
+    const header = document.querySelector('header');
+    if (nav) nav.remove();
+    if (header) header.remove();
+  }
+})();
+</script>
 <script src="search-index.js"></script>
 <script>
 function mcgToRate(mcgPerKgMin, weightKg, concMcgPerMl) {

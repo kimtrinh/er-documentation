@@ -379,7 +379,7 @@
     packById: new Map(),
     commandMap: new Map(),
     activePack: null,
-    outputMode: OUTPUT_DOTPHRASE,
+    outputMode: OUTPUT_EXPANDED,
     selectedDdx: new Set(),
     selectedRuleouts: new Set(),
     availableRuleoutIds: [],
@@ -399,6 +399,10 @@
     resetPackBtn: document.getElementById('resetPackBtn'),
     lifeThreatsBtn: document.getElementById('lifeThreatsBtn'),
     clearAllBtn: document.getElementById('clearAllBtn'),
+    openMdmBuilderBtn: document.getElementById('openMdmBuilderBtn'),
+    openDotphraseBtn: document.getElementById('openDotphraseBtn'),
+    panelMdmBuilder: document.getElementById('panel-mdm-builder'),
+    panelDotphrase: document.getElementById('panel-dotphrase'),
     ddxContainer: document.getElementById('ddxContainer'),
     ruleoutContainer: document.getElementById('ruleoutContainer'),
     riskContainer: document.getElementById('riskContainer'),
@@ -494,9 +498,7 @@
       const parsed = JSON.parse(raw);
       if (!parsed || typeof parsed !== 'object') return;
 
-      if (parsed.outputMode === OUTPUT_DOTPHRASE || parsed.outputMode === OUTPUT_EXPANDED) {
-        state.outputMode = parsed.outputMode;
-      }
+      // Keep expanded mode as default on load.
 
       if (typeof parsed.activePackId === 'string') {
         state.savedActivePackId = parsed.activePackId;
@@ -527,7 +529,6 @@
 
     try {
       const payload = {
-        outputMode: state.outputMode,
         activePackId: state.activePack ? state.activePack.id : state.savedActivePackId,
         packs: state.savedByPack
       };
@@ -2053,6 +2054,29 @@
     return false;
   }
 
+  function openPanel(panel, anchorId) {
+    if (!panel) return;
+    panel.open = true;
+    if (anchorId) {
+      const target = document.getElementById(anchorId) || panel;
+      if (target && typeof target.scrollIntoView === 'function') {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+  }
+
+  function applyPanelHash() {
+    const hash = normalizeCommand(window.location.hash.replace(/^#/, ''));
+    if (!hash) return;
+    if (hash === 'mdmbuilder' || hash === 'panelmdmbuilder') {
+      openPanel(els.panelMdmBuilder, 'panel-mdm-builder');
+      return;
+    }
+    if (hash === 'dotphraselibrary' || hash === 'paneldotphrase' || hash === 'dotphrase') {
+      openPanel(els.panelDotphrase, 'panel-dotphrase');
+    }
+  }
+
   function bindEvents() {
     els.packSelect.addEventListener('change', () => {
       selectPack(els.packSelect.value);
@@ -2096,6 +2120,16 @@
     els.resetPackBtn.addEventListener('click', resetCurrentPackToDefaults);
     els.lifeThreatsBtn.addEventListener('click', applyLifeThreatsOnly);
     els.clearAllBtn.addEventListener('click', clearAllSelections);
+    if (els.openMdmBuilderBtn) {
+      els.openMdmBuilderBtn.addEventListener('click', () => {
+        openPanel(els.panelMdmBuilder, 'panel-mdm-builder');
+      });
+    }
+    if (els.openDotphraseBtn) {
+      els.openDotphraseBtn.addEventListener('click', () => {
+        openPanel(els.panelDotphrase, 'panel-dotphrase');
+      });
+    }
 
     els.ddxContainer.addEventListener('change', (event) => {
       const target = event.target;
@@ -2250,27 +2284,30 @@
     loadSavedState();
     renderPackSelect();
 
-    if (state.outputMode === OUTPUT_EXPANDED) {
-      els.modeExpanded.checked = true;
-      els.modeDot.checked = false;
-    } else {
+    if (state.outputMode === OUTPUT_DOTPHRASE) {
       els.modeDot.checked = true;
       els.modeExpanded.checked = false;
-      state.outputMode = OUTPUT_DOTPHRASE;
+    } else {
+      els.modeExpanded.checked = true;
+      els.modeDot.checked = false;
+      state.outputMode = OUTPUT_EXPANDED;
     }
 
     const hashCmd = normalizeCommand(window.location.hash.replace(/^#/, ''));
     if (hashCmd && state.commandMap.has(hashCmd)) {
       selectPack(state.commandMap.get(hashCmd), { skipPersist: true });
+      applyPanelHash();
       return;
     }
 
     if (state.savedActivePackId && state.packById.has(state.savedActivePackId)) {
       selectPack(state.savedActivePackId, { skipPersist: true });
+      applyPanelHash();
       return;
     }
 
     selectPack(state.packs[0].id, { skipPersist: true });
+    applyPanelHash();
   }
 
   init();

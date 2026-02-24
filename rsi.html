@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>RSI Calculator</title>
+<title>Resuscitation Calculators</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Inter',system-ui,sans-serif;background:#0f172a;color:#e2e8f0;min-height:100vh}
@@ -16,6 +16,16 @@ header{background:linear-gradient(135deg,#1e293b,#0f172a);border-bottom:1px soli
 main{max-width:960px;margin:0 auto;padding:20px 24px 60px}
 .disclaimer{background:#1e3a5f;border:1px solid #2563eb;border-radius:8px;padding:10px 14px;margin-bottom:20px;font-size:12px;color:#93c5fd;line-height:1.5}
 .disclaimer strong{color:#bfdbfe}
+.resus-accordion{display:grid;gap:14px}
+.resus-panel{background:#1e293b;border:1px solid #334155;border-radius:12px;overflow:hidden}
+.resus-panel > summary{list-style:none;cursor:pointer;padding:14px 16px;background:#172235;border-bottom:1px solid #334155;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.resus-panel > summary::-webkit-details-marker{display:none}
+.resus-title{font-weight:700;font-size:14px;color:#f1f5f9}
+.resus-meta{font-size:11px;color:#94a3b8}
+.resus-panel > summary::after{content:'+';font-size:18px;line-height:1;color:#93c5fd;font-weight:700}
+.resus-panel[open] > summary::after{content:'−'}
+.resus-content{padding:14px 14px 16px}
+.resus-frame{width:100%;border:1px solid #334155;border-radius:10px;background:#0f172a;min-height:900px}
 
 /* WEIGHT BAR */
 .weight-bar{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
@@ -118,12 +128,19 @@ main{max-width:960px;margin:0 auto;padding:20px 24px 60px}
 </nav>
 <header>
   <div class="header-inner">
-    <div class="logo"><span>🫁</span><h1>RSI Calculator</h1></div>
-    <p class="subtitle">Enter weight → get doses. Flag special conditions for dose adjustments.</p>
+    <div class="logo"><span>🚨</span><h1>Resuscitation Calculators</h1></div>
+    <p class="subtitle">RSI and Vasopressors are collapsed by default. Expand either section to use the calculator.</p>
   </div>
 </header>
 
 <main>
+  <div class="resus-accordion">
+    <details class="resus-panel" id="panel-rsi">
+      <summary>
+        <span class="resus-title">🫁 RSI Calculator</span>
+        <span class="resus-meta">Pretreatment, induction, paralytics, post-intubation</span>
+      </summary>
+      <div class="resus-content">
   <div class="disclaimer"><strong>⚠️ Clinical Disclaimer:</strong> Verify all doses with pharmacy. Doses are guidelines only — clinical judgment required. All weights should be actual body weight unless noted.</div>
 
   <!-- WEIGHT + FLAGS -->
@@ -367,6 +384,25 @@ main{max-width:960px;margin:0 auto;padding:20px 24px 60px}
 
     </div>
   </div>
+      </div>
+    </details>
+
+    <details class="resus-panel" id="panel-vasopressors">
+      <summary>
+        <span class="resus-title">💊 Vasopressor & Inotrope Calculator</span>
+        <span class="resus-meta">Weight-based drips, push-dose epi, shock guidance</span>
+      </summary>
+      <div class="resus-content">
+        <iframe
+          id="vasoFrame"
+          class="resus-frame"
+          src="vasopressors.html?embed=1"
+          title="Vasopressor and Inotrope Calculator"
+          loading="lazy"
+        ></iframe>
+      </div>
+    </details>
+  </div>
 </main>
 
 <script src="search-index.js"></script>
@@ -459,6 +495,52 @@ function set(id, val) {
   if(el) el.textContent = val;
 }
 
+function resizeVasoFrame() {
+  const frame = document.getElementById('vasoFrame');
+  if (!frame) return;
+  try {
+    const doc = frame.contentDocument || (frame.contentWindow && frame.contentWindow.document);
+    if (!doc) return;
+    const h = Math.max(
+      doc.body ? doc.body.scrollHeight : 0,
+      doc.documentElement ? doc.documentElement.scrollHeight : 0,
+      900
+    );
+    frame.style.height = h + 'px';
+  } catch (_) {
+    // Ignore cross-frame sizing issues.
+  }
+}
+
+function initResusPanels() {
+  const vasoPanel = document.getElementById('panel-vasopressors');
+  const frame = document.getElementById('vasoFrame');
+  if (frame) {
+    frame.addEventListener('load', () => {
+      resizeVasoFrame();
+      setTimeout(resizeVasoFrame, 150);
+      setTimeout(resizeVasoFrame, 500);
+    });
+  }
+  if (vasoPanel) {
+    vasoPanel.addEventListener('toggle', () => {
+      if (vasoPanel.open) {
+        setTimeout(resizeVasoFrame, 60);
+      }
+    });
+  }
+  window.addEventListener('resize', resizeVasoFrame);
+
+  const hash = String(window.location.hash || '').replace(/^#/, '').toLowerCase();
+  if (hash === 'rsi') {
+    const rsiPanel = document.getElementById('panel-rsi');
+    if (rsiPanel) rsiPanel.open = true;
+  } else if (hash === 'vasopressors' || hash === 'pressors') {
+    if (vasoPanel) vasoPanel.open = true;
+  }
+}
+
+initResusPanels();
 update();
 </script>
 

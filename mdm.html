@@ -32,8 +32,21 @@ header{background:linear-gradient(135deg,#1e293b,#0f172a);border-bottom:1px soli
 .quick-actions{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
 .quick-btn{padding:7px 10px;border-radius:8px;border:1px solid #334155;background:#0f172a;color:#cbd5e1;font-size:11px;font-weight:700;cursor:pointer;transition:all .15s;text-decoration:none;display:inline-flex;align-items:center}
 .quick-btn:hover{border-color:#3b82f6;color:#bfdbfe}
+.quick-btn.primary{background:#1d4ed8;border-color:#2563eb;color:#eff6ff}
+.quick-btn.primary:hover{background:#2563eb;color:#fff}
 
 main{max-width:1100px;margin:0 auto;padding:18px 24px 64px}
+.doc-accordion{display:grid;gap:14px}
+.doc-panel{background:#1e293b;border:1px solid #334155;border-radius:12px;overflow:hidden}
+.doc-panel > summary{list-style:none;cursor:pointer;padding:14px 16px;background:#172235;border-bottom:1px solid #334155;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.doc-panel > summary::-webkit-details-marker{display:none}
+.doc-title{font-size:14px;font-weight:700;color:#f1f5f9}
+.doc-meta{font-size:11px;color:#94a3b8}
+.doc-panel > summary::after{content:'+';font-size:18px;line-height:1;color:#93c5fd;font-weight:700}
+.doc-panel[open] > summary::after{content:'−'}
+.doc-content{padding:14px}
+.doc-content .grid{margin:0}
+.doc-content .dotphrase-panel{margin:0}
 .grid{display:grid;grid-template-columns:1.1fr 1fr;gap:16px;align-items:start}
 .panel{background:#1e293b;border:1px solid #334155;border-radius:12px;overflow:hidden}
 .panel-head{padding:12px 14px;border-bottom:1px solid #334155;background:#172235}
@@ -159,10 +172,10 @@ main{max-width:1100px;margin:0 auto;padding:18px 24px 64px}
         <input id="commandInput" type="text" placeholder="Type mdmccp, mdmsob, mdmabd..." autocomplete="off" spellcheck="false" aria-label="Quick Command Alias">
       </div>
       <div class="control">
-        <label>Output Mode</label>
-        <div class="mode-toggle">
-          <label class="mode-pill"><input id="modeDotphrase" name="outputMode" type="radio" value="dotphrase" checked>Dotphrase</label>
-          <label class="mode-pill"><input id="modeExpanded" name="outputMode" type="radio" value="expanded">Expanded</label>
+          <label>Output Mode</label>
+          <div class="mode-toggle">
+          <label class="mode-pill"><input id="modeDotphrase" name="outputMode" type="radio" value="dotphrase">Dotphrase</label>
+          <label class="mode-pill"><input id="modeExpanded" name="outputMode" type="radio" value="expanded" checked>Expanded</label>
         </div>
       </div>
     </div>
@@ -172,67 +185,87 @@ main{max-width:1100px;margin:0 auto;padding:18px 24px 64px}
       <button class="quick-btn" id="resetPackBtn" type="button">Reset Pack Defaults</button>
       <button class="quick-btn" id="lifeThreatsBtn" type="button">Life-Threats Only</button>
       <button class="quick-btn" id="clearAllBtn" type="button">Clear All</button>
-      <a class="quick-btn" href="dotphrase.html">Open Dotphrase Library</a>
+      <button class="quick-btn" id="openMdmBuilderBtn" type="button">MDM Builder</button>
+      <button class="quick-btn primary" id="openDotphraseBtn" type="button">Dotphrase Library</button>
+      <a class="quick-btn" href="dotphrase.html">Open Full Dotphrase Library</a>
       <a class="quick-btn" href="calculators.html#calc-heart">Open Full HEART Calc</a>
     </div>
   </div>
 </header>
 
 <main>
-  <section class="panel dotphrase-panel prominent">
-    <div class="panel-head">
-      <h2>
-        Dotphrase Library Quick Lookup
-        <span id="dotphraseMatchCount" class="head-count">0 shown</span>
-      </h2>
-    </div>
-    <div class="panel-body">
-      <p class="dotphrase-intro"><strong>Primary documentation tool:</strong> search dotphrases first, then toggle linked rule-outs into your MDM output.</p>
-      <div class="dotphrase-tools">
-        <input id="dotphraseSearchInput" class="dotphrase-search" type="text" placeholder="Search dotphrase ID, condition, category, or phrase text..." autocomplete="off" spellcheck="false" aria-label="Search dotphrase library">
-        <a class="quick-btn" href="dotphrase.html">Open Full Dotphrase Library</a>
-      </div>
-      <p class="dotphrase-helper">Linked rule-outs for the selected DDx are highlighted first for faster bedside documentation.</p>
-      <div id="dotphraseQuickList" class="dotphrase-list"></div>
-    </div>
-  </section>
+  <div class="doc-accordion">
+    <details class="doc-panel" id="panel-mdm-builder">
+      <summary>
+        <span class="doc-title">🧾 MDM Builder</span>
+        <span class="doc-meta">Chief complaint packs, DDx, risk tools, and live output</span>
+      </summary>
+      <div class="doc-content">
+        <div class="grid" id="mdm-builder">
+          <div>
+            <section class="panel">
+              <div class="panel-head"><h2>DDx <span id="ddxCount" class="head-count">0 selected</span></h2></div>
+              <div class="panel-body" id="ddxContainer"></div>
+            </section>
 
-  <div class="grid">
-    <div>
-      <section class="panel">
-        <div class="panel-head"><h2>DDx <span id="ddxCount" class="head-count">0 selected</span></h2></div>
-        <div class="panel-body" id="ddxContainer"></div>
-      </section>
+            <section class="panel" style="margin-top:14px">
+              <div class="panel-head"><h2>Rule-outs <span id="ruleoutCount" class="head-count">0 selected</span></h2></div>
+              <div class="panel-body" id="ruleoutContainer"></div>
+            </section>
 
-      <section class="panel" style="margin-top:14px">
-        <div class="panel-head"><h2>Rule-outs <span id="ruleoutCount" class="head-count">0 selected</span></h2></div>
-        <div class="panel-body" id="ruleoutContainer"></div>
-      </section>
+            <section class="panel" style="margin-top:14px">
+              <div class="panel-head"><h2>Risk Tools <span id="riskCount" class="head-count">0 selected</span></h2></div>
+              <div class="panel-body" id="riskContainer"></div>
+            </section>
 
-      <section class="panel" style="margin-top:14px">
-        <div class="panel-head"><h2>Risk Tools <span id="riskCount" class="head-count">0 selected</span></h2></div>
-        <div class="panel-body" id="riskContainer"></div>
-      </section>
+            <section class="panel" style="margin-top:14px">
+              <div class="panel-head"><h2>Documentation Quality Checks <span id="qualityCount" class="head-count">0 warnings</span></h2></div>
+              <div class="panel-body">
+                <div id="qualityContainer" class="quality-list"></div>
+              </div>
+            </section>
+          </div>
 
-      <section class="panel" style="margin-top:14px">
-        <div class="panel-head"><h2>Documentation Quality Checks <span id="qualityCount" class="head-count">0 warnings</span></h2></div>
-        <div class="panel-body">
-          <div id="qualityContainer" class="quality-list"></div>
+          <section class="panel">
+            <div class="panel-head"><h2>Live Preview</h2></div>
+            <div class="panel-body preview-wrap">
+              <div class="copy-row">
+                <button id="copyFullBtn" class="copy-btn" type="button">Copy Full MDM</button>
+                <button id="copyDdxBtn" class="copy-btn" type="button">Copy DDx only</button>
+                <button id="copyRuleoutsBtn" class="copy-btn" type="button">Copy Rule-outs only</button>
+              </div>
+              <textarea id="mdmPreview" class="preview" spellcheck="false" aria-label="MDM output preview"></textarea>
+            </div>
+          </section>
         </div>
-      </section>
-    </div>
-
-    <section class="panel">
-      <div class="panel-head"><h2>Live Preview</h2></div>
-      <div class="panel-body preview-wrap">
-        <div class="copy-row">
-          <button id="copyFullBtn" class="copy-btn" type="button">Copy Full MDM</button>
-          <button id="copyDdxBtn" class="copy-btn" type="button">Copy DDx only</button>
-          <button id="copyRuleoutsBtn" class="copy-btn" type="button">Copy Rule-outs only</button>
-        </div>
-        <textarea id="mdmPreview" class="preview" spellcheck="false" aria-label="MDM output preview"></textarea>
       </div>
-    </section>
+    </details>
+
+    <details class="doc-panel" id="panel-dotphrase">
+      <summary>
+        <span class="doc-title">📚 Dotphrase Library</span>
+        <span class="doc-meta">Search and add linked rule-out phrases</span>
+      </summary>
+      <div class="doc-content">
+        <section class="panel dotphrase-panel prominent" id="dotphrase-library">
+          <div class="panel-head">
+            <h2>
+              Dotphrase Library Quick Lookup
+              <span id="dotphraseMatchCount" class="head-count">0 shown</span>
+            </h2>
+          </div>
+          <div class="panel-body">
+            <p class="dotphrase-intro"><strong>Primary documentation tool:</strong> search dotphrases first, then toggle linked rule-outs into your MDM output.</p>
+            <div class="dotphrase-tools">
+              <input id="dotphraseSearchInput" class="dotphrase-search" type="text" placeholder="Search dotphrase ID, condition, category, or phrase text..." autocomplete="off" spellcheck="false" aria-label="Search dotphrase library">
+              <a class="quick-btn" href="dotphrase.html">Open Full Dotphrase Library</a>
+            </div>
+            <p class="dotphrase-helper">Linked rule-outs for the selected DDx are highlighted first for faster bedside documentation.</p>
+            <div id="dotphraseQuickList" class="dotphrase-list"></div>
+          </div>
+        </section>
+      </div>
+    </details>
   </div>
 </main>
 
