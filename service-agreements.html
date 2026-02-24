@@ -401,7 +401,8 @@ const state = {
   selectedTags: new Set(),
   olderThanFiveYears: false,
   sort: "relevance",
-  activeAgreementKey: ""
+  activeAgreementKey: "",
+  presetAgreementId: ""
 };
 
 function escapeHtml(value) {
@@ -763,6 +764,17 @@ function renderResults() {
     return;
   }
 
+  if (state.presetAgreementId) {
+    const target = rows.find(({ item }) => {
+      const itemId = String(item.id || "").trim().toLowerCase();
+      return itemId === state.presetAgreementId || agreementKey(item) === state.presetAgreementId;
+    });
+    if (target) {
+      state.activeAgreementKey = agreementKey(target.item);
+      state.presetAgreementId = "";
+    }
+  }
+
   const keys = rows.map(({ item }) => agreementKey(item));
   if (!keys.includes(state.activeAgreementKey)) {
     state.activeAgreementKey = keys[0];
@@ -859,10 +871,15 @@ function renderFiltersAndResults() {
 function applyPresetQueryFromUrl() {
   const params = new URLSearchParams(window.location.search || "");
   const preset = (params.get("q") || params.get("query") || "").trim();
-  if (!preset) return;
-  state.query = preset;
-  const input = document.getElementById("searchInput");
-  if (input) input.value = preset;
+  const presetId = (params.get("id") || params.get("agreement") || "").trim();
+  if (preset) {
+    state.query = preset;
+    const input = document.getElementById("searchInput");
+    if (input) input.value = preset;
+  }
+  if (presetId) {
+    state.presetAgreementId = normalize(presetId).replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+  }
 }
 
 async function init() {

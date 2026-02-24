@@ -11,6 +11,17 @@
   const CALC_HIGH = 'calc-high';
   const DOTPHRASE_DEFAULT_LIMIT = 18;
   const DOTPHRASE_SEARCH_LIMIT = 28;
+  const CALC_HELPER_LINKS = Object.freeze({
+    heart: 'calculators.html#calc-heart',
+    years: 'calculators.html#calc-years',
+    wells_pe: 'calculators.html#calc-wellspe',
+    perc: 'calculators.html#calc-wellspe',
+    abcd2: 'calculators.html#calc-abcd2',
+    cha2ds2_vasc: 'calculators.html#calc-cha2ds2vasc',
+    qsofa: 'calculators.html#calc-softtissue',
+    canadian_ct_head: 'calculators.html#calc-cthead',
+    pecarn: 'calculators.html#calc-pecarn'
+  });
 
   const CALCULATOR_SCHEMAS = Object.freeze({
     heart: {
@@ -170,6 +181,195 @@
         { id: 'diabetes', type: 'checkbox', label: 'Diabetes (+1)' },
         { id: 'stroke_tia_thromboembolism', type: 'checkbox', label: 'Prior stroke/TIA/thromboembolism (+2)' },
         { id: 'vascular', type: 'checkbox', label: 'Vascular disease (+1)' }
+      ]
+    },
+    wells_pe: {
+      title: 'Wells PE',
+      fields: [
+        { id: 'dvt_signs', type: 'checkbox', label: 'Clinical signs/symptoms of DVT (+3)' },
+        { id: 'pe_most_likely', type: 'checkbox', label: 'PE most likely diagnosis (+3)' },
+        { id: 'hr_gt_100', type: 'checkbox', label: 'HR >100 bpm (+1.5)' },
+        { id: 'immobilization_or_recent_surgery', type: 'checkbox', label: 'Immobilization >=3 days or recent surgery (+1.5)' },
+        { id: 'prior_pe_dvt', type: 'checkbox', label: 'Prior PE/DVT (+1.5)' },
+        { id: 'hemoptysis', type: 'checkbox', label: 'Hemoptysis (+1)' },
+        { id: 'malignancy', type: 'checkbox', label: 'Active malignancy (+1)' }
+      ]
+    },
+    perc: {
+      title: 'PERC',
+      fields: [
+        { id: 'age_ge_50', type: 'checkbox', label: 'Age >=50' },
+        { id: 'hr_ge_100', type: 'checkbox', label: 'HR >=100 bpm' },
+        { id: 'spo2_lt_95', type: 'checkbox', label: 'SpO2 <95% on room air' },
+        { id: 'unilateral_leg_swelling', type: 'checkbox', label: 'Unilateral leg swelling' },
+        { id: 'hemoptysis', type: 'checkbox', label: 'Hemoptysis' },
+        { id: 'recent_surgery_trauma', type: 'checkbox', label: 'Recent surgery/trauma' },
+        { id: 'prior_pe_dvt', type: 'checkbox', label: 'Prior PE/DVT' },
+        { id: 'estrogen_use', type: 'checkbox', label: 'Estrogen use' }
+      ]
+    },
+    curb65: {
+      title: 'CURB-65',
+      fields: [
+        { id: 'confusion', type: 'checkbox', label: 'Confusion (+1)' },
+        { id: 'bun_ge_20', type: 'checkbox', label: 'BUN >=20 mg/dL (+1)' },
+        { id: 'rr_ge_30', type: 'checkbox', label: 'Respiratory rate >=30 (+1)' },
+        { id: 'low_bp', type: 'checkbox', label: 'SBP <90 or DBP <=60 (+1)' },
+        { id: 'age_ge_65', type: 'checkbox', label: 'Age >=65 (+1)' }
+      ]
+    },
+    qsofa: {
+      title: 'qSOFA',
+      fields: [
+        { id: 'rr_ge_22', type: 'checkbox', label: 'Respiratory rate >=22 (+1)' },
+        { id: 'sbp_le_100', type: 'checkbox', label: 'SBP <=100 (+1)' },
+        { id: 'altered_mentation', type: 'checkbox', label: 'Altered mentation (GCS <15) (+1)' }
+      ]
+    },
+    alvarado: {
+      title: 'Alvarado',
+      fields: [
+        { id: 'migration', type: 'checkbox', label: 'Migration of pain (+1)' },
+        { id: 'anorexia', type: 'checkbox', label: 'Anorexia (+1)' },
+        { id: 'nausea_vomiting', type: 'checkbox', label: 'Nausea/vomiting (+1)' },
+        { id: 'rlq_tenderness', type: 'checkbox', label: 'RLQ tenderness (+2)' },
+        { id: 'rebound', type: 'checkbox', label: 'Rebound/peritoneal irritation (+1)' },
+        { id: 'fever', type: 'checkbox', label: 'Fever (+1)' },
+        { id: 'leukocytosis', type: 'checkbox', label: 'Leukocytosis (+2)' },
+        { id: 'left_shift', type: 'checkbox', label: 'Left shift/neutrophilia (+1)' }
+      ]
+    },
+    glasgow_blatchford: {
+      title: 'Glasgow-Blatchford',
+      fields: [
+        {
+          id: 'bun_points',
+          type: 'select',
+          label: 'BUN category',
+          options: [
+            { value: '', label: 'Select BUN category...' },
+            { value: '0', label: '<18.2 mg/dL (0)' },
+            { value: '2', label: '18.2-22.3 mg/dL (+2)' },
+            { value: '3', label: '22.4-27.9 mg/dL (+3)' },
+            { value: '4', label: '28-69.9 mg/dL (+4)' },
+            { value: '6', label: '>=70 mg/dL (+6)' }
+          ]
+        },
+        {
+          id: 'hgb_points',
+          type: 'select',
+          label: 'Hemoglobin category (sex-adjusted)',
+          options: [
+            { value: '', label: 'Select Hgb category...' },
+            { value: '0', label: 'No Hgb points (0)' },
+            { value: '1', label: 'Lower-mild Hgb points (+1)' },
+            { value: '3', label: 'Moderate Hgb points (+3, male only)' },
+            { value: '6', label: 'Severe low Hgb points (+6)' }
+          ]
+        },
+        {
+          id: 'sbp_points',
+          type: 'select',
+          label: 'Systolic BP category',
+          options: [
+            { value: '', label: 'Select SBP category...' },
+            { value: '0', label: '>=110 mmHg (0)' },
+            { value: '1', label: '100-109 mmHg (+1)' },
+            { value: '2', label: '90-99 mmHg (+2)' },
+            { value: '3', label: '<90 mmHg (+3)' }
+          ]
+        },
+        { id: 'pulse_ge_100', type: 'checkbox', label: 'Pulse >=100 (+1)' },
+        { id: 'melena', type: 'checkbox', label: 'Melena (+1)' },
+        { id: 'syncope', type: 'checkbox', label: 'Syncope (+2)' },
+        { id: 'hepatic_disease', type: 'checkbox', label: 'Hepatic disease (+2)' },
+        { id: 'heart_failure', type: 'checkbox', label: 'Heart failure (+2)' }
+      ]
+    },
+    canadian_syncope: {
+      title: 'Canadian Syncope Risk',
+      fields: [
+        { id: 'predisposition_vasovagal', type: 'checkbox', label: 'Predisposition to vasovagal symptoms (-1)' },
+        { id: 'history_heart_disease', type: 'checkbox', label: 'History of heart disease (+1)' },
+        { id: 'sbp_lt90_or_gt180', type: 'checkbox', label: 'Any SBP <90 or >180 (+2)' },
+        { id: 'troponin_elevated', type: 'checkbox', label: 'Troponin above 99th percentile (+2)' },
+        { id: 'qrs_axis_abnormal', type: 'checkbox', label: 'QRS axis < -30 or >100 (+1)' },
+        { id: 'qrs_gt_130', type: 'checkbox', label: 'QRS duration >130 ms (+1)' },
+        { id: 'qtc_gt_480', type: 'checkbox', label: 'QTc >480 ms (+2)' },
+        {
+          id: 'ed_diagnosis',
+          type: 'select',
+          label: 'ED diagnosis impression',
+          default: 'other',
+          options: [
+            { value: 'other', label: 'Other / unclear (0)' },
+            { value: 'vasovagal', label: 'Vasovagal syncope (-2)' },
+            { value: 'cardiac', label: 'Cardiac syncope (+2)' }
+          ]
+        }
+      ]
+    },
+    canadian_ct_head: {
+      title: 'Canadian CT Head Rule',
+      fields: [
+        {
+          id: 'eligible',
+          type: 'select',
+          label: 'Rule eligible?',
+          options: [
+            { value: '', label: 'Select eligibility...' },
+            { value: 'yes', label: 'Yes, eligible' },
+            { value: 'no', label: 'No, not eligible' }
+          ]
+        },
+        { id: 'gcs_lt_15_2h', type: 'checkbox', label: 'GCS <15 at 2 hours' },
+        { id: 'suspected_open_depressed_skull', type: 'checkbox', label: 'Suspected open/depressed skull fracture' },
+        { id: 'basilar_skull_signs', type: 'checkbox', label: 'Signs of basilar skull fracture' },
+        { id: 'vomiting_ge_2', type: 'checkbox', label: 'Vomiting >=2 episodes' },
+        { id: 'age_ge_65', type: 'checkbox', label: 'Age >=65 years' },
+        { id: 'amnesia_ge_30m', type: 'checkbox', label: 'Amnesia >=30 minutes before impact' },
+        { id: 'dangerous_mechanism', type: 'checkbox', label: 'Dangerous mechanism' }
+      ]
+    },
+    pecarn: {
+      title: 'PECARN',
+      fields: [
+        {
+          id: 'age_group',
+          type: 'select',
+          label: 'Age group',
+          options: [
+            { value: '', label: 'Select age group...' },
+            { value: 'u2', label: '<2 years' },
+            { value: 'ge2', label: '>=2 years' }
+          ]
+        },
+        { id: 'heading_u2', type: 'heading', label: 'Age <2 years criteria' },
+        { id: 'u2_gcs_lt_15', type: 'checkbox', label: 'GCS <15' },
+        { id: 'u2_altered_mental_status', type: 'checkbox', label: 'Altered mental status' },
+        { id: 'u2_palpable_skull_fracture', type: 'checkbox', label: 'Palpable skull fracture' },
+        { id: 'u2_nonfrontal_scalp_hematoma', type: 'checkbox', label: 'Non-frontal scalp hematoma' },
+        { id: 'u2_loc_ge_5s', type: 'checkbox', label: 'Loss of consciousness >=5 seconds' },
+        { id: 'u2_severe_mechanism', type: 'checkbox', label: 'Severe mechanism' },
+        { id: 'u2_not_acting_normal', type: 'checkbox', label: 'Not acting normally per parent' },
+        { id: 'heading_ge2', type: 'heading', label: 'Age >=2 years criteria' },
+        { id: 'ge2_gcs_lt_15', type: 'checkbox', label: 'GCS <15' },
+        { id: 'ge2_altered_mental_status', type: 'checkbox', label: 'Altered mental status' },
+        { id: 'ge2_basilar_skull_signs', type: 'checkbox', label: 'Signs of basilar skull fracture' },
+        { id: 'ge2_history_loc', type: 'checkbox', label: 'History of loss of consciousness' },
+        { id: 'ge2_vomiting', type: 'checkbox', label: 'Vomiting' },
+        { id: 'ge2_severe_mechanism', type: 'checkbox', label: 'Severe mechanism' },
+        { id: 'ge2_severe_headache', type: 'checkbox', label: 'Severe headache' }
+      ]
+    },
+    nexus_cspine: {
+      title: 'NEXUS C-Spine',
+      fields: [
+        { id: 'midline_tenderness', type: 'checkbox', label: 'Posterior midline cervical tenderness present' },
+        { id: 'focal_neuro_deficit', type: 'checkbox', label: 'Focal neurologic deficit present' },
+        { id: 'altered_alertness', type: 'checkbox', label: 'Altered level of alertness present' },
+        { id: 'intoxication', type: 'checkbox', label: 'Intoxication present' },
+        { id: 'distracting_injury', type: 'checkbox', label: 'Painful distracting injury present' }
       ]
     }
   });
@@ -610,6 +810,367 @@
     };
   }
 
+  function evaluateWellsPeCalculator(values) {
+    const score = (values.dvt_signs ? 3 : 0)
+      + (values.pe_most_likely ? 3 : 0)
+      + (values.hr_gt_100 ? 1.5 : 0)
+      + (values.immobilization_or_recent_surgery ? 1.5 : 0)
+      + (values.prior_pe_dvt ? 1.5 : 0)
+      + (values.hemoptysis ? 1 : 0)
+      + (values.malignancy ? 1 : 0);
+
+    let interpretation = 'low pre-test probability';
+    let className = CALC_LOW;
+    let details = 'Wells <=1: if PERC negative, additional PE testing often not indicated.';
+    if (score >= 7) {
+      interpretation = 'high pre-test probability';
+      className = CALC_HIGH;
+      details = 'Wells >=7: high probability; proceed directly to definitive imaging/treatment pathway.';
+    } else if (score >= 2) {
+      interpretation = 'intermediate pre-test probability';
+      className = CALC_MODERATE;
+      details = 'Wells 2-6: intermediate probability; D-dimer and/or CT-PA based on full clinical context.';
+    }
+
+    return {
+      ready: true,
+      className,
+      preview: `Wells PE ${formatNumber(score, 1)} (${interpretation})`,
+      scoreText: formatNumber(score, 1),
+      interpretation,
+      details
+    };
+  }
+
+  function evaluatePercCalculator(values) {
+    const positiveCount = [
+      values.age_ge_50,
+      values.hr_ge_100,
+      values.spo2_lt_95,
+      values.unilateral_leg_swelling,
+      values.hemoptysis,
+      values.recent_surgery_trauma,
+      values.prior_pe_dvt,
+      values.estrogen_use
+    ].filter(Boolean).length;
+
+    const negative = positiveCount === 0;
+    return {
+      ready: true,
+      className: negative ? CALC_LOW : CALC_HIGH,
+      preview: `PERC ${positiveCount}/8 positive (${negative ? 'negative rule' : 'positive rule'})`,
+      scoreText: `${positiveCount}/8`,
+      interpretation: negative ? 'PERC negative' : 'PERC positive',
+      details: negative
+        ? 'All eight PERC criteria absent; in low pre-test probability patients, PE can be ruled out without further PE testing.'
+        : 'One or more PERC criteria present; PERC alone cannot exclude PE.'
+    };
+  }
+
+  function evaluateCurb65Calculator(values) {
+    const score = [
+      values.confusion,
+      values.bun_ge_20,
+      values.rr_ge_30,
+      values.low_bp,
+      values.age_ge_65
+    ].filter(Boolean).length;
+
+    let interpretation = 'low mortality risk';
+    let className = CALC_LOW;
+    let details = 'CURB-65 0-1 generally supports outpatient treatment when otherwise clinically appropriate.';
+    if (score >= 3) {
+      interpretation = 'high mortality risk';
+      className = CALC_HIGH;
+      details = 'CURB-65 >=3 supports inpatient/critical care level management.';
+    } else if (score === 2) {
+      interpretation = 'moderate mortality risk';
+      className = CALC_MODERATE;
+      details = 'CURB-65 =2 supports admission or very close monitored follow-up.';
+    }
+
+    return {
+      ready: true,
+      className,
+      preview: `CURB-65 ${score}/5 (${interpretation})`,
+      scoreText: `${score}/5`,
+      interpretation,
+      details
+    };
+  }
+
+  function evaluateQsofaCalculator(values) {
+    const score = [
+      values.rr_ge_22,
+      values.sbp_le_100,
+      values.altered_mentation
+    ].filter(Boolean).length;
+
+    const highRisk = score >= 2;
+    return {
+      ready: true,
+      className: highRisk ? CALC_HIGH : CALC_LOW,
+      preview: `qSOFA ${score}/3 (${highRisk ? 'higher risk' : 'lower risk'})`,
+      scoreText: `${score}/3`,
+      interpretation: highRisk ? 'higher risk for poor outcome' : 'lower risk by qSOFA',
+      details: highRisk
+        ? 'qSOFA >=2 suggests higher risk and supports close monitoring/escalation.'
+        : 'qSOFA <2 does not exclude serious infection; integrate with full clinical assessment.'
+    };
+  }
+
+  function evaluateAlvaradoCalculator(values) {
+    const score = (values.migration ? 1 : 0)
+      + (values.anorexia ? 1 : 0)
+      + (values.nausea_vomiting ? 1 : 0)
+      + (values.rlq_tenderness ? 2 : 0)
+      + (values.rebound ? 1 : 0)
+      + (values.fever ? 1 : 0)
+      + (values.leukocytosis ? 2 : 0)
+      + (values.left_shift ? 1 : 0);
+
+    let interpretation = 'low appendicitis probability';
+    let className = CALC_LOW;
+    let details = 'Alvarado <=4 generally supports low likelihood of appendicitis.';
+    if (score >= 7) {
+      interpretation = 'high appendicitis probability';
+      className = CALC_HIGH;
+      details = 'Alvarado >=7 is strongly concerning for appendicitis and supports urgent surgical pathway.';
+    } else if (score >= 5) {
+      interpretation = 'intermediate appendicitis probability';
+      className = CALC_MODERATE;
+      details = 'Alvarado 5-6 supports further imaging/serial reassessment.';
+    }
+
+    return {
+      ready: true,
+      className,
+      preview: `Alvarado ${score}/10 (${interpretation})`,
+      scoreText: `${score}/10`,
+      interpretation,
+      details
+    };
+  }
+
+  function evaluateGlasgowBlatchfordCalculator(values) {
+    const bunPts = toInteger(values.bun_points);
+    const hgbPts = toInteger(values.hgb_points);
+    const sbpPts = toInteger(values.sbp_points);
+
+    if (Number.isNaN(bunPts) || Number.isNaN(hgbPts) || Number.isNaN(sbpPts)) {
+      return {
+        ready: false,
+        className: CALC_NEUTRAL,
+        preview: 'Glasgow-Blatchford: complete BUN/Hgb/SBP categories',
+        scoreText: '[incomplete]',
+        interpretation: 'incomplete',
+        details: 'Glasgow-Blatchford calculator incomplete.'
+      };
+    }
+
+    const score = bunPts + hgbPts + sbpPts
+      + (values.pulse_ge_100 ? 1 : 0)
+      + (values.melena ? 1 : 0)
+      + (values.syncope ? 2 : 0)
+      + (values.hepatic_disease ? 2 : 0)
+      + (values.heart_failure ? 2 : 0);
+
+    let interpretation = 'low risk for intervention';
+    let className = CALC_LOW;
+    let details = 'GBS 0 supports very low risk and potential outpatient management when otherwise appropriate.';
+    if (score >= 13) {
+      interpretation = 'very high risk';
+      className = CALC_HIGH;
+      details = 'Very high GBS supports urgent GI intervention/admission.';
+    } else if (score >= 6) {
+      interpretation = 'high risk';
+      className = CALC_HIGH;
+      details = 'High GBS supports inpatient management and urgent GI planning.';
+    } else if (score >= 1) {
+      interpretation = 'non-low risk';
+      className = CALC_MODERATE;
+      details = 'GBS >0 suggests higher risk than outpatient low-risk pathway.';
+    }
+
+    return {
+      ready: true,
+      className,
+      preview: `Glasgow-Blatchford ${score} (${interpretation})`,
+      scoreText: String(score),
+      interpretation,
+      details
+    };
+  }
+
+  function evaluateCanadianSyncopeCalculator(values) {
+    const dx = String(values.ed_diagnosis || '').trim();
+    if (!dx) {
+      return {
+        ready: false,
+        className: CALC_NEUTRAL,
+        preview: 'Canadian Syncope Risk: select ED diagnosis impression',
+        scoreText: '[incomplete]',
+        interpretation: 'incomplete',
+        details: 'Canadian Syncope Risk calculator incomplete.'
+      };
+    }
+
+    let score = 0;
+    score += values.predisposition_vasovagal ? -1 : 0;
+    score += values.history_heart_disease ? 1 : 0;
+    score += values.sbp_lt90_or_gt180 ? 2 : 0;
+    score += values.troponin_elevated ? 2 : 0;
+    score += values.qrs_axis_abnormal ? 1 : 0;
+    score += values.qrs_gt_130 ? 1 : 0;
+    score += values.qtc_gt_480 ? 2 : 0;
+    if (dx === 'vasovagal') score += -2;
+    if (dx === 'cardiac') score += 2;
+
+    let interpretation = 'low short-term serious outcome risk';
+    let className = CALC_LOW;
+    let details = 'Score <=0 typically supports low-risk disposition if no other concerning features.';
+    if (score >= 6) {
+      interpretation = 'very high short-term serious outcome risk';
+      className = CALC_HIGH;
+      details = 'Very high score supports admission/urgent monitored pathway.';
+    } else if (score >= 4) {
+      interpretation = 'high short-term serious outcome risk';
+      className = CALC_HIGH;
+      details = 'High score supports monitored admission and urgent cardiac evaluation.';
+    } else if (score >= 1) {
+      interpretation = 'intermediate short-term serious outcome risk';
+      className = CALC_MODERATE;
+      details = 'Intermediate score supports cautious disposition and close follow-up.';
+    }
+
+    return {
+      ready: true,
+      className,
+      preview: `Canadian Syncope Risk ${score} (${interpretation})`,
+      scoreText: String(score),
+      interpretation,
+      details
+    };
+  }
+
+  function evaluateCanadianCtHeadCalculator(values) {
+    const eligible = String(values.eligible || '').trim();
+    if (!eligible) {
+      return {
+        ready: false,
+        className: CALC_NEUTRAL,
+        preview: 'Canadian CT Head: select rule eligibility',
+        scoreText: '[incomplete]',
+        interpretation: 'incomplete',
+        details: 'Canadian CT Head calculator incomplete.'
+      };
+    }
+
+    if (eligible === 'no') {
+      return {
+        ready: true,
+        className: CALC_NEUTRAL,
+        preview: 'Canadian CT Head: not eligible',
+        scoreText: 'N/A',
+        interpretation: 'rule not applicable',
+        details: 'Rule inclusion criteria not met; use clinical judgment.'
+      };
+    }
+
+    const highRisk = [
+      values.gcs_lt_15_2h,
+      values.suspected_open_depressed_skull,
+      values.basilar_skull_signs,
+      values.vomiting_ge_2,
+      values.age_ge_65
+    ].filter(Boolean).length;
+    const mediumRisk = [
+      values.amnesia_ge_30m,
+      values.dangerous_mechanism
+    ].filter(Boolean).length;
+    const indicated = highRisk > 0 || mediumRisk > 0;
+
+    return {
+      ready: true,
+      className: indicated ? CALC_HIGH : CALC_LOW,
+      preview: `Canadian CT Head: ${indicated ? 'CT indicated' : 'CT not required by rule'}`,
+      scoreText: `${highRisk + mediumRisk} criteria`,
+      interpretation: indicated ? 'rule-positive for CT imaging' : 'rule-negative for CT imaging',
+      details: indicated
+        ? `High-risk criteria: ${highRisk}; medium-risk criteria: ${mediumRisk}.`
+        : 'No high- or medium-risk criteria identified by rule.'
+    };
+  }
+
+  function evaluatePecarnCalculator(values) {
+    const group = String(values.age_group || '').trim();
+    if (!group) {
+      return {
+        ready: false,
+        className: CALC_NEUTRAL,
+        preview: 'PECARN: select age group',
+        scoreText: '[incomplete]',
+        interpretation: 'incomplete',
+        details: 'PECARN calculator incomplete.'
+      };
+    }
+
+    let highRiskCount = 0;
+    let intermediateCount = 0;
+
+    if (group === 'u2') {
+      highRiskCount = [values.u2_gcs_lt_15, values.u2_altered_mental_status, values.u2_palpable_skull_fracture].filter(Boolean).length;
+      intermediateCount = [values.u2_nonfrontal_scalp_hematoma, values.u2_loc_ge_5s, values.u2_severe_mechanism, values.u2_not_acting_normal].filter(Boolean).length;
+    } else {
+      highRiskCount = [values.ge2_gcs_lt_15, values.ge2_altered_mental_status, values.ge2_basilar_skull_signs].filter(Boolean).length;
+      intermediateCount = [values.ge2_history_loc, values.ge2_vomiting, values.ge2_severe_mechanism, values.ge2_severe_headache].filter(Boolean).length;
+    }
+
+    let interpretation = 'very low risk by PECARN';
+    let className = CALC_LOW;
+    let details = 'No high- or intermediate-risk PECARN criteria selected.';
+    if (highRiskCount > 0) {
+      interpretation = 'high risk by PECARN';
+      className = CALC_HIGH;
+      details = 'High-risk PECARN features present; CT generally recommended in appropriate context.';
+    } else if (intermediateCount > 0) {
+      interpretation = 'intermediate risk by PECARN';
+      className = CALC_MODERATE;
+      details = 'Intermediate-risk PECARN features present; CT vs observation based on shared decision-making and clinical course.';
+    }
+
+    return {
+      ready: true,
+      className,
+      preview: `PECARN (${group === 'u2' ? '<2y' : '>=2y'}): ${interpretation}`,
+      scoreText: `H${highRiskCount}/I${intermediateCount}`,
+      interpretation,
+      details
+    };
+  }
+
+  function evaluateNexusCspineCalculator(values) {
+    const positiveCount = [
+      values.midline_tenderness,
+      values.focal_neuro_deficit,
+      values.altered_alertness,
+      values.intoxication,
+      values.distracting_injury
+    ].filter(Boolean).length;
+    const nexusNegative = positiveCount === 0;
+
+    return {
+      ready: true,
+      className: nexusNegative ? CALC_LOW : CALC_HIGH,
+      preview: `NEXUS C-spine ${positiveCount}/5 positive (${nexusNegative ? 'negative rule' : 'positive rule'})`,
+      scoreText: `${positiveCount}/5`,
+      interpretation: nexusNegative ? 'NEXUS negative' : 'NEXUS positive',
+      details: nexusNegative
+        ? 'No NEXUS high-risk criteria present; cervical spine imaging may be unnecessary by rule.'
+        : 'One or more NEXUS criteria present; cervical spine imaging indicated by rule.'
+    };
+  }
+
   function evaluateRiskCalculator(toggle) {
     const calcType = toggle && toggle.calculator ? toggle.calculator.type : '';
     const values = ensureCalculatorInputState(toggle);
@@ -623,6 +1184,26 @@
         return evaluateAbcd2Calculator(values);
       case 'cha2ds2_vasc':
         return evaluateCha2ds2VascCalculator(values);
+      case 'wells_pe':
+        return evaluateWellsPeCalculator(values);
+      case 'perc':
+        return evaluatePercCalculator(values);
+      case 'curb65':
+        return evaluateCurb65Calculator(values);
+      case 'qsofa':
+        return evaluateQsofaCalculator(values);
+      case 'alvarado':
+        return evaluateAlvaradoCalculator(values);
+      case 'glasgow_blatchford':
+        return evaluateGlasgowBlatchfordCalculator(values);
+      case 'canadian_syncope':
+        return evaluateCanadianSyncopeCalculator(values);
+      case 'canadian_ct_head':
+        return evaluateCanadianCtHeadCalculator(values);
+      case 'pecarn':
+        return evaluatePecarnCalculator(values);
+      case 'nexus_cspine':
+        return evaluateNexusCspineCalculator(values);
       default:
         return {
           ready: false,
@@ -1047,8 +1628,9 @@
       `;
     }).join('');
 
-    const helperLink = calcType === 'heart'
-      ? '<a class="risk-calc-link" href="calculators.html#calc-heart">Open full HEART calculator</a>'
+    const helperHref = CALC_HELPER_LINKS[calcType] || '';
+    const helperLink = helperHref
+      ? `<a class="risk-calc-link" href="${escapeHtml(helperHref)}">Open full calculator</a>`
       : '';
 
     return `

@@ -36,16 +36,18 @@
           "sentence_template": "ECG reviewed without acute ischemic changes."
         },
         {
-          "id": "ccp_perc_negative",
-          "label": "PERC negative",
+          "id": "ccp_wells_pe_calculator",
+          "label": "Wells PE score calculator",
           "tags_required": ["pe"],
-          "sentence_template": "PE considered; patient is PERC negative and low risk, so further PE testing not indicated."
+          "calculator": { "type": "wells_pe" },
+          "sentence_template": "Wells PE score = {score} ({interpretation}); {details}"
         },
         {
-          "id": "ccp_wells_ddimer",
-          "label": "Wells low + D-dimer negative",
+          "id": "ccp_perc_calculator",
+          "label": "PERC calculator",
           "tags_required": ["pe"],
-          "sentence_template": "PE considered; Wells low risk and D-dimer negative, so PE effectively excluded without imaging."
+          "calculator": { "type": "perc" },
+          "sentence_template": "PERC applied: {details}"
         },
         {
           "id": "ccp_years_calculator",
@@ -89,16 +91,18 @@
       ],
       "risk_toggles": [
         {
-          "id": "sob_perc_negative",
-          "label": "PERC negative",
+          "id": "sob_wells_pe_calculator",
+          "label": "Wells PE score calculator",
           "tags_required": ["pe"],
-          "sentence_template": "PE considered; patient is PERC negative and low risk, so further PE testing not indicated."
+          "calculator": { "type": "wells_pe" },
+          "sentence_template": "Wells PE score = {score} ({interpretation}); {details}"
         },
         {
-          "id": "sob_wells_ddimer",
-          "label": "Wells low + D-dimer negative",
+          "id": "sob_perc_calculator",
+          "label": "PERC calculator",
           "tags_required": ["pe"],
-          "sentence_template": "PE considered; Wells low risk and D-dimer negative, so PE effectively excluded without imaging."
+          "calculator": { "type": "perc" },
+          "sentence_template": "PERC applied: {details}"
         },
         {
           "id": "sob_years_calculator",
@@ -112,6 +116,13 @@
           "label": "CTA PE considered / not indicated",
           "tags_required": ["pe"],
           "sentence_template": "CT pulmonary angiography considered; not indicated given low clinical suspicion and reassuring evaluation."
+        },
+        {
+          "id": "sob_curb65_calculator",
+          "label": "CURB-65 calculator",
+          "tags_required": ["pna"],
+          "calculator": { "type": "curb65" },
+          "sentence_template": "CURB-65 score = {score} ({interpretation}); {details}"
         },
         {
           "id": "sob_cxr_no_consolidation",
@@ -145,9 +156,24 @@
         { "label": "Pancreatitis", "group": "Common", "tags": ["panc"], "ruleouts": ["noepigastric"], "default_checked": false },
         { "label": "Diverticulitis", "group": "Common", "tags": ["divert"], "ruleouts": [], "default_checked": false },
         { "label": "AAA", "group": "Life-threatening", "tags": ["aaa"], "ruleouts": ["noaaa"], "default_checked": false },
-        { "label": "Mesenteric ischemia", "group": "Life-threatening", "tags": ["mes_isch"], "ruleouts": ["nomesischemia"], "default_checked": false }
+        { "label": "Mesenteric ischemia", "group": "Life-threatening", "tags": ["mes_isch"], "ruleouts": ["nomesischemia"], "default_checked": false },
+        { "label": "Upper GI bleed", "group": "Life-threatening", "tags": ["gi_bleed"], "ruleouts": ["nogibleed"], "default_checked": false }
       ],
       "risk_toggles": [
+        {
+          "id": "abd_alvarado_calculator",
+          "label": "Alvarado score calculator",
+          "tags_required": ["appy"],
+          "calculator": { "type": "alvarado" },
+          "sentence_template": "Alvarado score = {score} ({interpretation}); {details}"
+        },
+        {
+          "id": "abd_gbs_calculator",
+          "label": "Glasgow-Blatchford score calculator",
+          "tags_required": ["gi_bleed"],
+          "calculator": { "type": "glasgow_blatchford" },
+          "sentence_template": "Glasgow-Blatchford score = {score} ({interpretation}); {details}"
+        },
         {
           "id": "abd_ct_not_indicated",
           "label": "CT A/P considered / not indicated",
@@ -176,14 +202,18 @@
     },
     {
       "id": "mdmha",
-      "aliases": ["mdm-headache", "headache", "mdmtia", "mdmafib"],
+      "aliases": ["mdm-headache", "headache", "mdmtia", "mdmafib", "mdmsyncope", "mdmtrauma"],
       "title": "Headache / Neuro",
-      "base_mdm_template": "Patient evaluated for headache/neuro complaint with focused exclusion of intracranial and infectious emergencies.",
+      "base_mdm_template": "Patient evaluated for headache/neuro complaint with focused exclusion of intracranial, infectious, syncope, and trauma emergencies.",
       "ddx": [
         { "label": "SAH", "group": "Life-threatening", "tags": ["sah"], "ruleouts": ["nosah"], "default_checked": true },
         { "label": "Meningitis/encephalitis", "group": "Life-threatening", "tags": ["meningitis"], "ruleouts": ["nomeningitis"], "default_checked": true },
         { "label": "Stroke/ICH", "group": "Life-threatening", "tags": ["stroke_ich"], "ruleouts": ["nostroke"], "default_checked": true },
         { "label": "TIA", "group": "Life-threatening", "tags": ["tia"], "ruleouts": ["notia"], "default_checked": false },
+        { "label": "Syncope", "group": "Common", "tags": ["syncope"], "ruleouts": ["nosyncope"], "default_checked": false },
+        { "label": "Minor head injury (adult)", "group": "Common", "tags": ["cth_rule"], "ruleouts": ["noich"], "default_checked": false },
+        { "label": "Minor head injury (peds)", "group": "Common", "tags": ["pecarn"], "ruleouts": ["nopectbi"], "default_checked": false },
+        { "label": "Cervical spine injury", "group": "Life-threatening", "tags": ["cspine"], "ruleouts": ["nocspine"], "default_checked": false },
         { "label": "Temporal arteritis", "group": "Other", "tags": ["gca"], "ruleouts": ["nogca"], "default_checked": false },
         { "label": "Migraine/tension", "group": "Common", "tags": ["primary_ha"], "ruleouts": [], "default_checked": false },
         { "label": "AFib-related embolic risk", "group": "Other", "tags": ["afib"], "ruleouts": [], "default_checked": false }
@@ -226,6 +256,34 @@
           "tags_required": ["afib"],
           "calculator": { "type": "cha2ds2_vasc" },
           "sentence_template": "CHA2DS2-VASc score = {score} ({interpretation}); anticoagulation/shared decision-making discussed."
+        },
+        {
+          "id": "ha_canadian_syncope_calculator",
+          "label": "Canadian Syncope Risk calculator",
+          "tags_required": ["syncope"],
+          "calculator": { "type": "canadian_syncope" },
+          "sentence_template": "Canadian Syncope Risk Score = {score} ({interpretation}); {details}"
+        },
+        {
+          "id": "ha_canadian_ct_head_calculator",
+          "label": "Canadian CT Head Rule calculator",
+          "tags_required": ["cth_rule"],
+          "calculator": { "type": "canadian_ct_head" },
+          "sentence_template": "Canadian CT Head Rule applied: {interpretation}; {details}"
+        },
+        {
+          "id": "ha_pecarn_calculator",
+          "label": "PECARN calculator",
+          "tags_required": ["pecarn"],
+          "calculator": { "type": "pecarn" },
+          "sentence_template": "PECARN applied: {interpretation}; {details}"
+        },
+        {
+          "id": "ha_nexus_cspine_calculator",
+          "label": "NEXUS C-spine calculator",
+          "tags_required": ["cspine"],
+          "calculator": { "type": "nexus_cspine" },
+          "sentence_template": "NEXUS C-spine applied: {interpretation}; {details}"
         }
       ]
     },
@@ -242,6 +300,20 @@
         { "label": "SSTI", "group": "Common", "tags": ["ssti"], "ruleouts": ["nossti"], "default_checked": false }
       ],
       "risk_toggles": [
+        {
+          "id": "fever_qsofa_calculator",
+          "label": "qSOFA calculator",
+          "tags_required": ["sepsis"],
+          "calculator": { "type": "qsofa" },
+          "sentence_template": "qSOFA score = {score} ({interpretation}); {details}"
+        },
+        {
+          "id": "fever_curb65_calculator",
+          "label": "CURB-65 calculator",
+          "tags_required": ["pna"],
+          "calculator": { "type": "curb65" },
+          "sentence_template": "CURB-65 score = {score} ({interpretation}); {details}"
+        },
         {
           "id": "fever_sepsis_screen",
           "label": "Sepsis screen considered",

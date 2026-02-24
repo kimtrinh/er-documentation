@@ -377,7 +377,16 @@ function escapeHtml(value) {
 
 function safeHref(href) {
   const trimmed = String(href || '').trim();
-  return /^[A-Za-z0-9._/-]+\.html(?:#[A-Za-z0-9._:-]+)?$/.test(trimmed) ? trimmed : 'index.html';
+  return /^[A-Za-z0-9._/-]+\.html(?:\?[A-Za-z0-9._%=&:+-]+)?(?:#[A-Za-z0-9._:-]+)?$/.test(trimmed) ? trimmed : 'index.html';
+}
+
+function resolveResultHref(item, query) {
+  const base = safeHref(item && item.u);
+  const q = String(query || '').trim();
+  if (base === 'service-agreements.html' && q) {
+    return `service-agreements.html?q=${encodeURIComponent(q)}`;
+  }
+  return base;
 }
 
 function setSearchExpanded(open) {
@@ -494,7 +503,7 @@ function doSearch(q) {
     html += `<div class="sdrop-group">${escapeHtml(grp)}</div>`;
     groups[grp].forEach(item => {
       const rowId = `srow-${rowIdx++}`;
-      html += `<a class="sdrop-row" id="${rowId}" role="option" aria-selected="false" href="${safeHref(item.u)}">
+      html += `<a class="sdrop-row" id="${rowId}" role="option" aria-selected="false" href="${resolveResultHref(item, q)}">
         <span class="sdrop-ico">${escapeHtml(item.i)}</span>
         <div class="sdrop-body">
           <div class="sdrop-title">${escapeHtml(item.t)}</div>

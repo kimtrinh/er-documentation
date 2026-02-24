@@ -447,6 +447,10 @@ function kpNormalizeAgreementSearchItem(agreement) {
   if (!agreement || typeof agreement !== 'object') return null;
   const title = String(agreement.title || '').trim();
   if (!title) return null;
+  const agreementId = String(agreement.id || '').trim();
+  const href = agreementId
+    ? `service-agreements.html?id=${encodeURIComponent(agreementId)}`
+    : `service-agreements.html?q=${encodeURIComponent(title)}`;
   return kpNormalizeSearchItem({
     type: 'page',
     i: '📑',
@@ -454,7 +458,7 @@ function kpNormalizeAgreementSearchItem(agreement) {
     s: kpBuildAgreementSearchSubtitle(agreement),
     g: 'Service Agreements',
     gc: 't-algo',
-    u: 'service-agreements.html',
+    u: href,
   });
 }
 
@@ -627,9 +631,17 @@ if (typeof window !== 'undefined') {
 
   const safeHref = (href) => {
     const trimmed = String(href || '').trim();
-    return /^[A-Za-z0-9._/-]+\.html(?:#[A-Za-z0-9._:-]+)?$/.test(trimmed)
+    return /^[A-Za-z0-9._/-]+\.html(?:\?[A-Za-z0-9._%=&:+-]+)?(?:#[A-Za-z0-9._:-]+)?$/.test(trimmed)
       ? trimmed
       : 'index.html';
+  };
+  const resultHref = (item, query) => {
+    const base = safeHref(item && item.u);
+    const q = String(query || '').trim();
+    if (base === 'service-agreements.html' && q) {
+      return `service-agreements.html?q=${encodeURIComponent(q)}`;
+    }
+    return base;
   };
   const setExpanded = (open) => input.setAttribute('aria-expanded', open ? 'true' : 'false');
   const clearActiveDescendant = () => input.removeAttribute('aria-activedescendant');
@@ -714,7 +726,7 @@ if (typeof window !== 'undefined') {
       html += `<div class="kp-sg">${escapeHtml(groupName)}</div>`;
       grouped[groupName].forEach((item) => {
         const rowId = `kp-sr-${rowIndex++}`;
-        html += `<a class="kp-sr" id="${rowId}" role="option" aria-selected="false" href="${safeHref(item.u)}">
+        html += `<a class="kp-sr" id="${rowId}" role="option" aria-selected="false" href="${resultHref(item, query)}">
   <span class="kp-si">${escapeHtml(item.i)}</span>
   <div class="kp-sb">
     <div class="kp-st">${escapeHtml(item.t)}</div>
