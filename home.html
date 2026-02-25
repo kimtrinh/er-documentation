@@ -430,13 +430,8 @@ function setFilter(f, el) {
   activeFilter = f;
   document.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
   el.classList.add('on');
-  const q = document.getElementById('si').value;
-  if (q.trim()) {
-    doSearch(q);
-    return;
-  }
 
-  // With an empty query, chips behave as quick links.
+  // Chips are primary quick links.
   const quickRoutes = {
     phrase: 'dotphrase.html',
     calc: 'calculators.html',
@@ -445,8 +440,16 @@ function setFilter(f, el) {
     neuro: 'neurohub.html',
     phone: 'ed-phone-directory.html'
   };
+
   if (f !== 'all' && quickRoutes[f]) {
-    window.location.href = quickRoutes[f];
+    window.location.assign(quickRoutes[f]);
+    return;
+  }
+
+  // "All" keeps search on this page.
+  const q = document.getElementById('si').value;
+  if (q.trim()) {
+    doSearch(q);
   }
 }
 

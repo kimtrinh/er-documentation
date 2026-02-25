@@ -429,6 +429,7 @@
     panelDischargeBuilder: document.getElementById('panel-discharge-builder'),
     panelDotphrase: document.getElementById('panel-dotphrase'),
     ddxContainer: document.getElementById('ddxContainer'),
+    ddxSelectAllBtn: document.getElementById('ddxSelectAllBtn'),
     ruleoutContainer: document.getElementById('ruleoutContainer'),
     riskContainer: document.getElementById('riskContainer'),
     ddxCount: document.getElementById('ddxCount'),
@@ -2265,6 +2266,16 @@
     persistActivePackState();
   }
 
+  function selectAllDdx() {
+    if (!state.activePack) return;
+    const labels = (state.activePack.ddx || []).map((item) => item.label);
+    state.selectedDdx = new Set(labels);
+    syncRuleouts(state.activePack, { autoSelectNew: true });
+    syncRiskToggles(state.activePack);
+    renderAll();
+    persistActivePackState();
+  }
+
   function clearDdxSelections() {
     if (!state.activePack) return;
     state.selectedDdx.clear();
@@ -2442,6 +2453,9 @@
 
     els.resetPackBtn.addEventListener('click', resetCurrentPackToDefaults);
     els.lifeThreatsBtn.addEventListener('click', applyLifeThreatsOnly);
+    if (els.ddxSelectAllBtn) {
+      els.ddxSelectAllBtn.addEventListener('click', selectAllDdx);
+    }
     els.clearDdxBtn.addEventListener('click', clearDdxSelections);
     els.clearAllBtn.addEventListener('click', clearAllSelections);
     if (els.stickyCopyFullBtn) {

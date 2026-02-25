@@ -75,6 +75,9 @@ main{max-width:1100px;margin:0 auto;padding:18px 24px 64px}
 .panel-body{padding:14px}
 .section-subgroup + .section-subgroup{margin-top:14px}
 .section-subgroup h4{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#8fa8c8;margin-bottom:8px}
+.ddx-actions{display:flex;justify-content:flex-end;gap:8px;margin-bottom:10px}
+.ddx-action-btn{padding:6px 10px;border-radius:8px;border:1px solid #334155;background:#111827;color:#cbd5e1;font-size:11px;font-weight:700;cursor:pointer}
+.ddx-action-btn:hover{border-color:#3b82f6;color:#bfdbfe}
 .check-grid{display:grid;grid-template-columns:1fr;gap:8px}
 .check-row{display:flex;align-items:flex-start;gap:8px;padding:9px 10px;background:#0f172a;border:1px solid #27364d;border-radius:9px;font-size:13px;color:#cbd5e1}
 .check-row input{margin-top:2px;accent-color:#3b82f6}
@@ -267,7 +270,12 @@ main{max-width:1100px;margin:0 auto;padding:18px 24px 64px}
           <div>
             <section class="panel">
               <div class="panel-head"><h2>DDx <span id="ddxCount" class="head-count">0 selected</span></h2></div>
-              <div class="panel-body" id="ddxContainer"></div>
+              <div class="panel-body">
+                <div class="ddx-actions">
+                  <button id="ddxSelectAllBtn" class="ddx-action-btn" type="button">Select All DDx</button>
+                </div>
+                <div id="ddxContainer"></div>
+              </div>
             </section>
 
             <section class="panel" style="margin-top:14px">
