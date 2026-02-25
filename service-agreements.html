@@ -94,6 +94,9 @@ main{max-width:1280px;margin:0 auto;padding:20px}
 .badge{font-size:10px;padding:3px 8px;border-radius:14px;font-weight:700;border:1px solid transparent}
 .b-dept{background:#0d2038;color:#93c5fd;border-color:#1d4ed8}
 .b-tag{background:#10281d;color:#86efac;border-color:#15803d}
+.b-new{background:#1e1040;color:#c4b5fd;border-color:#7c3aed;text-transform:uppercase;letter-spacing:.06em;animation:newPulse 2.4s ease-in-out 3}
+@keyframes newPulse{0%,100%{box-shadow:none}50%{box-shadow:0 0 8px rgba(167,139,250,.6)}}
+.rr-new{display:inline-block;font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#c4b5fd;background:#1e1040;border:1px solid #7c3aed;border-radius:4px;padding:1px 5px;vertical-align:middle;margin-right:2px}
 .b-date{background:#27170d;color:#fbbf24;border-color:#a16207}
 .section{border:1px solid var(--border);border-radius:10px;overflow:hidden}
 .section summary{cursor:pointer;list-style:none;padding:9px 10px;background:var(--surface2);font-size:12px;font-weight:700;color:var(--text2)}
@@ -184,7 +187,7 @@ main>*:nth-child(4){animation-delay:.15s}
       <select id="sortSelect" class="select" aria-label="Sort results">
         <option value="relevance">Sort: relevance</option>
         <option value="title">Sort: title</option>
-        <option value="last_updated">Sort: last updated</option>
+        <option value="last_updated" selected>Sort: last updated</option>
       </select>
     </div>
   </section>
@@ -217,6 +220,60 @@ const DEFAULT_AUTOMATION_CHECKS = [
 ];
 
 const PROTOCOL_OVERRIDES = {
+  "prolonged-ed-los-sla": {
+    title: "Prolonged ED LOS (PLOS) — Service Line Agreement",
+    banner: { level: "yellow", label: "Consider Admission" },
+    purpose: [
+      "Provide consistent, safe care for non-admitted ED patients with LOS ≥24 hours who cannot be safely discharged due to disposition barriers.",
+      "Agreement between Emergency Medicine, Hospital Medicine, Care Without Delay, AAMD, and Area Medical Director at Ontario and Fontana medical centers."
+    ],
+    when_to_use: [
+      "Patient has been in the ED for ≥24 hours (total LOS).",
+      "No medical indication for hospital admission.",
+      "Safe discharge is not possible due to social, logistical, or other disposition barriers.",
+      "Applies at Ontario and Fontana medical centers — members and non-members.",
+      "Exclusions: admitted patients awaiting bed assignment, psychiatric patients with no medical need, pediatric patients."
+    ],
+    red_flags: [
+      "No case management or social services consult placed at 24+ hours — escalate immediately.",
+      "No CWD physician discussion when no disposition plan exists within 12 hours of the 24-hour threshold.",
+      "Patient decompensates at any point — revert to standard ED-to-HM consult workflow.",
+      "Weekend or no local CWD coverage — ED case manager must contact CWD on-call physician."
+    ],
+    workflow: [
+      "All patients with ED LOS ≥24 hours and no discharge plan discussed in daily morning CWD huddle.",
+      "If no disposition secured within 12 hours of the 24-hour mark, discuss with local CWD physician.",
+      "CWD physician confirms criteria → ED physician requests hospital medicine consult.",
+      "Hospital medicine consultation completed during daytime hours, 7 days a week (avoid after-hours unless medically indicated).",
+      "Hospital medicine accepts as primary team and admits patient to observation status.",
+      "ED physician signs off but remains available for acute decompensation (airway emergencies, code blue) per current practice.",
+      "AAMD and AMD notified during daytime hours when patient is admitted for disposition barriers.",
+      "On weekends or days with no local CWD coverage, ED case manager contacts CWD on-call — this workflow is valid 7 days a week."
+    ],
+    treatment: [
+      "No specific medication protocol — this is a disposition and care-coordination agreement.",
+      "Appropriate ED medical workup and treatment continue per ED physician judgment.",
+      "Involve multidisciplinary team early: medical social worker, case manager, CWD physician, geriatrician, hospice liaison as indicated."
+    ],
+    disposition: [
+      "Admit to observation status under hospital medicine service when PLOS criteria are met.",
+      "Hospital medicine assumes physician-level continuity of care, family communication, and MDT coordination.",
+      "If patient decompensates and meets inpatient admission criteria, follow standard ED-to-HM consult workflow.",
+      "ED physician retains responsibility for acute decompensation even after sign-off to hospital medicine."
+    ],
+    documentation: "Patient has been in ED for [X] hours with no medical indication for inpatient admission. Disposition barriers include [describe]. Case management and social services consulted. Discussed in CWD huddle on [date]. CWD physician [name] agrees patient meets PLOS criteria. Hospital medicine consult placed. Patient to be admitted to OBS under hospital medicine service. AAMD/AMD notified.",
+    automation_checks: [
+      "ED LOS ≥24 hours confirmed and documented",
+      "No medical indication for inpatient admission documented",
+      "Case management consult placed",
+      "Social services consult placed",
+      "CWD huddle discussion documented",
+      "CWD physician reviewed and approved PLOS pathway",
+      "Hospital medicine consult placed during daytime hours",
+      "AAMD and AMD notified"
+    ],
+    tags_add: ["prolonged-los", "observation", "length-of-stay", "disposition-barrier", "hospital-medicine", "plos"]
+  },
   "kaiser-outpatient-anticoagulation-dvt-protocol-1-16-14": {
     title: "Outpatient DVT Management",
     banner: { level: "green", label: "Outpt OK" },
@@ -410,7 +467,7 @@ const state = {
   selectedDepts: new Set(),
   selectedTags: new Set(),
   olderThanFiveYears: false,
-  sort: "relevance",
+  sort: "last_updated",
   activeAgreementKey: "",
   presetAgreementId: ""
 };
@@ -719,7 +776,7 @@ function listSnippet(item) {
 function detailCardHtml(item) {
   const updated = item.last_updated ? item.last_updated : "unknown";
   const deptBadges = (item.departments || []).map((d) => `<span class="badge b-dept">${escapeHtml(d)}</span>`).join("");
-  const tagBadges = (item.tags || []).map((t) => `<span class="badge b-tag">${escapeHtml(t)}</span>`).join("");
+  const tagBadges = (item.tags || []).map((t) => `<span class="badge ${t === 'new' ? 'b-new' : 'b-tag'}">${escapeHtml(t)}</span>`).join("");
   const docButton = item.sharepoint_url
     ? `<a class="btn btn-primary" href="${escapeHtml(item.sharepoint_url)}" target="_blank" rel="noopener">Open Document</a>`
     : `<button class="btn btn-primary" disabled>Open Document</button>`;
@@ -798,9 +855,10 @@ function renderResults() {
     const active = key === state.activeAgreementKey ? " active" : "";
     const updated = item.last_updated ? item.last_updated : "unknown";
     const banner = item.card.banner || { level: "yellow", label: "Consider Admission" };
+    const isNew = (item.tags || []).includes('new');
     return `
       <button class="result-row${active}" type="button" data-role="pick-agreement" data-key="${escapeHtml(key)}">
-        <div class="result-row-title">${escapeHtml(displayTitle(item))}</div>
+        <div class="result-row-title">${isNew ? '<span class="rr-new">NEW</span> ' : ''}${escapeHtml(displayTitle(item))}</div>
         <div class="result-row-snippet">${escapeHtml(listSnippet(item))}</div>
         <div class="result-row-meta">
           <span class="result-row-date">${escapeHtml(updated)}</span>
@@ -824,6 +882,11 @@ function renderResults() {
       if (!key || key === state.activeAgreementKey) return;
       state.activeAgreementKey = key;
       renderResults();
+      // On narrow viewports the detail pane renders below the list — scroll to it
+      if (window.innerWidth <= 900) {
+        const pane = document.querySelector(".detail-pane");
+        if (pane) pane.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
     });
   });
 
@@ -934,7 +997,7 @@ async function init() {
 init();
 </script>
 <button id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">☀️</button>
-<script src="theme.js?v=2"></script>
+<script src="theme.js?v=3"></script>
 <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
 </body>
 </html>

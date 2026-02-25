@@ -195,6 +195,12 @@ function copyText(i) {
   }
 }
 
+// Pre-fill search from URL ?q= param
+(function() {
+  var q = new URLSearchParams(window.location.search).get('q');
+  if (q) { document.getElementById('search').value = q; }
+})();
+
 render();
 </script>
 
@@ -202,7 +208,7 @@ render();
 </script>
 
 <button id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">☀️</button>
-<script src="theme.js?v=2"></script>
+<script src="theme.js?v=3"></script>
 <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
 </body>
 </html>

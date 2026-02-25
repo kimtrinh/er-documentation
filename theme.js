@@ -18,9 +18,6 @@ applyTheme(getTheme());
 
 /* ── Feedback bubble injection ─────────────────────────────────────── */
 (function () {
-  // Don't show the bubble on the feedback page itself
-  if (window.location.pathname.indexOf('feedback.html') !== -1) return;
-
   function injectFeedback() {
     if (document.getElementById('feedback-bubble')) return;
 
