@@ -412,7 +412,7 @@
     aliasHint: document.getElementById('aliasHint'),
     quickPackButtons: document.getElementById('quickPackButtons'),
     stickyCopyFullBtn: document.getElementById('stickyCopyFullBtn'),
-    stickyClearDdxBtn: document.getElementById('stickyClearDdxBtn'),
+    stickyLifeThreatsBtn: document.getElementById('stickyLifeThreatsBtn'),
     stickyResetPackBtn: document.getElementById('stickyResetPackBtn'),
     completenessIndicators: document.getElementById('completenessIndicators'),
     tabMdmBuilder: document.getElementById('tabMdmBuilder'),
@@ -430,6 +430,7 @@
     panelDotphrase: document.getElementById('panel-dotphrase'),
     ddxContainer: document.getElementById('ddxContainer'),
     ddxSelectAllBtn: document.getElementById('ddxSelectAllBtn'),
+    ddxClearAllBtn: document.getElementById('ddxClearAllBtn'),
     ruleoutContainer: document.getElementById('ruleoutContainer'),
     riskContainer: document.getElementById('riskContainer'),
     ddxCount: document.getElementById('ddxCount'),
@@ -2270,6 +2271,8 @@
     if (!state.activePack) return;
     const labels = (state.activePack.ddx || []).map((item) => item.label);
     state.selectedDdx = new Set(labels);
+    // Select-all should affect DDx only; keep risk tools unchecked.
+    state.selectedRisks.clear();
     syncRuleouts(state.activePack, { autoSelectNew: true });
     syncRiskToggles(state.activePack);
     renderAll();
@@ -2451,20 +2454,31 @@
       panel.addEventListener('toggle', syncDocTabFromOpenPanels);
     });
 
-    els.resetPackBtn.addEventListener('click', resetCurrentPackToDefaults);
-    els.lifeThreatsBtn.addEventListener('click', applyLifeThreatsOnly);
+    if (els.resetPackBtn) {
+      els.resetPackBtn.addEventListener('click', resetCurrentPackToDefaults);
+    }
+    if (els.lifeThreatsBtn) {
+      els.lifeThreatsBtn.addEventListener('click', applyLifeThreatsOnly);
+    }
     if (els.ddxSelectAllBtn) {
       els.ddxSelectAllBtn.addEventListener('click', selectAllDdx);
     }
-    els.clearDdxBtn.addEventListener('click', clearDdxSelections);
-    els.clearAllBtn.addEventListener('click', clearAllSelections);
+    if (els.ddxClearAllBtn) {
+      els.ddxClearAllBtn.addEventListener('click', clearDdxSelections);
+    }
+    if (els.clearDdxBtn) {
+      els.clearDdxBtn.addEventListener('click', clearDdxSelections);
+    }
+    if (els.clearAllBtn) {
+      els.clearAllBtn.addEventListener('click', clearAllSelections);
+    }
     if (els.stickyCopyFullBtn) {
       els.stickyCopyFullBtn.addEventListener('click', () => {
         copyTextWithFeedback(els.preview.value, els.stickyCopyFullBtn);
       });
     }
-    if (els.stickyClearDdxBtn) {
-      els.stickyClearDdxBtn.addEventListener('click', clearDdxSelections);
+    if (els.stickyLifeThreatsBtn) {
+      els.stickyLifeThreatsBtn.addEventListener('click', applyLifeThreatsOnly);
     }
     if (els.stickyResetPackBtn) {
       els.stickyResetPackBtn.addEventListener('click', resetCurrentPackToDefaults);
@@ -2614,9 +2628,11 @@
       els.dischargeBuilder.addEventListener('change', handleDischargeInput);
     }
 
-    els.copyFullBtn.addEventListener('click', () => {
-      copyTextWithFeedback(els.preview.value, els.copyFullBtn);
-    });
+    if (els.copyFullBtn) {
+      els.copyFullBtn.addEventListener('click', () => {
+        copyTextWithFeedback(els.preview.value, els.copyFullBtn);
+      });
+    }
 
     els.copyDdxBtn.addEventListener('click', () => {
       if (!state.activePack) return;

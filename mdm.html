@@ -225,17 +225,6 @@ main{max-width:1100px;margin:0 auto;padding:18px 24px 64px}
     </div>
     <div id="aliasHint" class="alias-hint"></div>
     <div class="pack-shortcuts" id="quickPackButtons"></div>
-    <div class="quick-actions">
-      <button class="quick-btn" id="resetPackBtn" type="button">Reset Pack Defaults</button>
-      <button class="quick-btn" id="lifeThreatsBtn" type="button">Life-Threats Only</button>
-      <button class="quick-btn" id="clearDdxBtn" type="button">Clear DDx</button>
-      <button class="quick-btn danger" id="clearAllBtn" type="button">Clear All</button>
-      <button class="quick-btn" id="openMdmBuilderBtn" type="button">MDM Builder</button>
-      <button class="quick-btn" id="openDischargeBuilderBtn" type="button">Discharge Builder</button>
-      <button class="quick-btn primary" id="openDotphraseBtn" type="button">Dotphrase Library</button>
-      <a class="quick-btn" href="dotphrase.html">Open Full Dotphrase Library</a>
-      <a class="quick-btn" href="calculators.html#calc-heart">Open Full HEART Calc</a>
-    </div>
   </div>
 </header>
 
@@ -243,7 +232,7 @@ main{max-width:1100px;margin:0 auto;padding:18px 24px 64px}
   <section class="doc-toolbar" aria-label="Quick Documentation Actions">
     <div class="toolbar-left">
       <button id="stickyCopyFullBtn" class="toolbar-btn primary" type="button">Copy Full MDM</button>
-      <button id="stickyClearDdxBtn" class="toolbar-btn" type="button">Clear DDx</button>
+      <button id="stickyLifeThreatsBtn" class="toolbar-btn" type="button">Life-Threats Only</button>
       <button id="stickyResetPackBtn" class="toolbar-btn" type="button">Reset Pack</button>
     </div>
     <div id="completenessIndicators" class="status-badges" aria-live="polite">
@@ -273,6 +262,7 @@ main{max-width:1100px;margin:0 auto;padding:18px 24px 64px}
               <div class="panel-body">
                 <div class="ddx-actions">
                   <button id="ddxSelectAllBtn" class="ddx-action-btn" type="button">Select All DDx</button>
+                  <button id="ddxClearAllBtn" class="ddx-action-btn" type="button">Clear All DDx</button>
                 </div>
                 <div id="ddxContainer"></div>
               </div>
@@ -300,7 +290,6 @@ main{max-width:1100px;margin:0 auto;padding:18px 24px 64px}
             <div class="panel-head"><h2>Live Preview</h2></div>
             <div class="panel-body preview-wrap">
               <div class="copy-row">
-                <button id="copyFullBtn" class="copy-btn" type="button">Copy Full MDM</button>
                 <button id="copyDdxBtn" class="copy-btn" type="button">Copy DDx only</button>
                 <button id="copyRuleoutsBtn" class="copy-btn" type="button">Copy Rule-outs only</button>
               </div>
