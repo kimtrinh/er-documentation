@@ -3,19 +3,21 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="stylesheet" href="theme.css"/>
 <title>Vasopressor Calculator</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',system-ui,sans-serif;background:#0f172a;color:#e2e8f0;min-height:100vh}
+:root{--bg:#080f1a;--surface:#0d1829;--surface2:#111f35;--surface3:#162540;--border:#1a2d48;--border2:#243d5c;--text:#e8f0fc;--text2:#8fa8c8;--text3:#4a6280;--text-blue:#93c5fd;--text-blue-bright:#bfdbfe;--blue:#3b82f6;--blue2:#1d4ed8;--blue3:#0d2038;--green:#22c55e;--green2:#15803d;--green3:#0d2d1f;--amber:#f59e0b;--red:#ef4444;--purple:#a78bfa;--cyan:#22d3ee;}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
 
-header{background:linear-gradient(135deg,#1e293b,#0f172a);border-bottom:1px solid #1e3a5f;padding:20px 24px}
+header{background:linear-gradient(135deg,var(--surface),var(--bg));border-bottom:1px solid var(--border2);padding:20px 24px}
 .header-inner{max-width:960px;margin:0 auto}
 .logo{display:flex;align-items:center;gap:10px;margin-bottom:4px}
-.logo span{font-size:22px}.logo h1{font-size:20px;font-weight:700;color:#f1f5f9}
-.subtitle{font-size:13px;color:#64748b;margin-left:32px}
+.logo span{font-size:22px}.logo h1{font-size:20px;font-weight:700;color:var(--text)}
+.subtitle{font-size:13px;color:var(--text3);margin-left:32px}
 main{max-width:960px;margin:0 auto;padding:20px 24px 60px}
-.disclaimer{background:#1e3a5f;border:1px solid #2563eb;border-radius:8px;padding:10px 14px;margin-bottom:20px;font-size:12px;color:#93c5fd;line-height:1.5}
-.disclaimer strong{color:#bfdbfe}
+.disclaimer{background:var(--border2);border:1px solid #2563eb;border-radius:8px;padding:10px 14px;margin-bottom:20px;font-size:12px;color:var(--text-blue);line-height:1.5}
+.disclaimer strong{color:var(--text-blue-bright)}
 .embed-mode body{background:transparent}
 .embed-mode .sitenav,.embed-mode header{display:none}
 .embed-mode main{max-width:100%;padding:0}
@@ -23,81 +25,83 @@ main{max-width:960px;margin:0 auto;padding:20px 24px 60px}
 .embed-mode .ind-card{position:static}
 
 /* WEIGHT INPUT */
-.weight-bar{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
-.weight-bar label{font-size:14px;font-weight:600;color:#f1f5f9;white-space:nowrap}
-.weight-bar input{width:100px;padding:8px 12px;background:#0f172a;border:1px solid #334155;border-radius:8px;color:#38bdf8;font-size:18px;font-weight:700;outline:none;text-align:center}
+.weight-bar{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.weight-bar label{font-size:14px;font-weight:600;color:var(--text);white-space:nowrap}
+.weight-bar input{width:100px;padding:8px 12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:#38bdf8;font-size:18px;font-weight:700;outline:none;text-align:center}
 .weight-bar input:focus{border-color:#3b82f6}
-.weight-bar .unit{font-size:14px;color:#64748b}
-.weight-bar .ibw{font-size:12px;color:#64748b;margin-left:8px}
+.weight-bar .unit{font-size:14px;color:var(--text3)}
+.weight-bar .ibw{font-size:12px;color:var(--text3);margin-left:8px}
 
 /* LAYOUT */
 .layout{display:grid;grid-template-columns:1fr 300px;gap:16px}
 @media(max-width:768px){.layout{grid-template-columns:1fr}}
 
 /* DRUG CARDS */
-.drug-card{background:#1e293b;border:1px solid #334155;border-radius:12px;margin-bottom:12px;overflow:hidden}
-.drug-header{padding:12px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #334155}
-.drug-name{font-weight:700;font-size:15px;color:#f1f5f9}
+.drug-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;overflow:hidden}
+.drug-header{padding:12px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+.drug-name{font-weight:700;font-size:15px;color:var(--text)}
 .drug-class{font-size:11px;padding:2px 8px;border-radius:20px;font-weight:600}
-.class-vasopressor{background:#1e3a5f;color:#93c5fd}
+.class-vasopressor{background:var(--border2);color:var(--text-blue)}
 .class-inotrope{background:#1a2e1a;color:#86efac}
 .class-both{background:#2d1b4e;color:#c4b5fd}
 .class-push{background:#3b1f00;color:#fdba74}
 .drug-body{padding:0}
-.drug-row{display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:1px solid #0f172a}
+.drug-row{display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:1px solid var(--bg)}
 .drug-row:last-child{border-bottom:none}
 .drug-cell{padding:10px 14px}
 .cell-label{font-size:10px;color:#475569;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
-.cell-value{font-size:13px;color:#e2e8f0;font-weight:500;line-height:1.4}
+.cell-value{font-size:13px;color:var(--text);font-weight:500;line-height:1.4}
 .cell-value.highlight{color:#38bdf8;font-weight:700;font-size:14px}
 .cell-value.rate{color:#a78bfa;font-weight:700}
-.drug-note{padding:8px 14px;font-size:11px;color:#64748b;background:#0f172a;border-top:1px solid #1e293b;line-height:1.5}
+.drug-note{padding:8px 14px;font-size:11px;color:var(--text3);background:var(--bg);border-top:1px solid var(--surface);line-height:1.5}
 
 /* PUSH DOSE */
-.push-card{background:#1e293b;border:1px solid #334155;border-radius:12px;margin-bottom:12px;overflow:hidden}
-.push-header{padding:12px 16px;border-bottom:1px solid #334155;display:flex;align-items:center;justify-content:space-between}
+.push-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;overflow:hidden}
+.push-header{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
 .push-body{padding:14px 16px}
-.push-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #1e293b;font-size:13px}
+.push-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--surface);font-size:13px}
 .push-row:last-child{border-bottom:none}
-.push-label{color:#94a3b8}
+.push-label{color:var(--text2)}
 .push-value{color:#f59e0b;font-weight:700}
 
 /* INDICATIONS */
-.ind-card{background:#1e293b;border:1px solid #334155;border-radius:12px;overflow:hidden;position:sticky;top:16px}
-.ind-header{padding:12px 16px;border-bottom:1px solid #334155;font-weight:700;font-size:14px;color:#f1f5f9}
-.ind-item{padding:12px 16px;border-bottom:1px solid #0f172a}
+.ind-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;position:sticky;top:16px}
+.ind-header{padding:12px 16px;border-bottom:1px solid var(--border);font-weight:700;font-size:14px;color:var(--text)}
+.ind-item{padding:12px 16px;border-bottom:1px solid var(--bg)}
 .ind-item:last-child{border-bottom:none}
 .ind-shock{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
 .shock-septic{color:#f87171}
 .shock-cardio{color:#fb923c}
 .shock-neuro{color:#facc15}
 .shock-anaph{color:#a78bfa}
-.shock-refrac{color:#94a3b8}
-.ind-drugs{font-size:12px;color:#cbd5e1;line-height:1.7}
+.shock-refrac{color:var(--text2)}
+.ind-drugs{font-size:12px;color:var(--text2);line-height:1.7}
 .ind-first{color:#38bdf8;font-weight:600}
-.ind-second{color:#94a3b8}
+.ind-second{color:var(--text2)}
 
 /* MAP target */
-.map-bar{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:14px 16px;margin-bottom:12px}
-.map-title{font-size:12px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
-.map-row{display:flex;justify-content:space-between;font-size:12px;padding:5px 0;border-bottom:1px solid #0f172a;color:#cbd5e1}
+.map-bar{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:12px}
+.map-title{font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.map-row{display:flex;justify-content:space-between;font-size:12px;padding:5px 0;border-bottom:1px solid var(--bg);color:var(--text2)}
 .map-row:last-child{border-bottom:none}
 .map-target{color:#38bdf8;font-weight:700}
 
 /* ===== SHARED NEW NAV ===== */
 @media(max-width:640px){}
-.sitenav{background:#0d1829;border-bottom:1px solid #1a2d48;position:sticky;top:0;z-index:100;font-family:'DM Sans',system-ui,sans-serif}
+.sitenav{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;font-family:'DM Sans',system-ui,sans-serif}
 .sitenav-inner{max-width:1200px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:6px;height:46px;overflow:hidden}
 .nav-logo{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:#3b82f6;white-space:nowrap;flex-shrink:0;text-decoration:none;margin-right:6px}
-.nav-logo span{color:#4a6280}
+.nav-logo span{color:var(--text3)}
 .nav-links{display:flex;flex:1;min-width:0;gap:1px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;white-space:nowrap;padding-right:10px}
 .nav-links::-webkit-scrollbar{display:none}
-.nav-link{padding:5px 10px;border-radius:6px;font-size:12px;font-weight:600;color:#8fa8c8;text-decoration:none;white-space:nowrap;transition:all .15s}
-.nav-link:hover{background:#111f35;color:#e8f0fc}
+.nav-link{padding:5px 10px;border-radius:6px;font-size:12px;font-weight:600;color:var(--text2);text-decoration:none;white-space:nowrap;transition:all .15s}
+.nav-link:hover{background:var(--surface2);color:var(--text)}
 .nav-link.active{background:#1d4ed8;color:#fff}
 @media(max-width:640px){.nav-link{font-size:11px;padding:4px 8px}}
 </style>
 <link rel="stylesheet" href="mobile.css">
+<script>document.documentElement.setAttribute('data-theme',localStorage.getItem('theme')||'dark');</script>
+<link rel="manifest" href="/manifest.json">
 </head>
 <body>
 <nav class="sitenav">
@@ -141,7 +145,7 @@ main{max-width:960px;margin:0 auto;padding:20px 24px 60px}
       <!-- NOREPINEPHRINE -->
       <div class="drug-card">
         <div class="drug-header">
-          <span class="drug-name">Norepinephrine <span style="font-size:12px;color:#64748b;font-weight:400">(Levophed)</span></span>
+          <span class="drug-name">Norepinephrine <span style="font-size:12px;color:var(--text3);font-weight:400">(Levophed)</span></span>
           <span class="drug-class class-vasopressor">Vasopressor</span>
         </div>
         <div class="drug-body">
@@ -151,7 +155,7 @@ main{max-width:960px;margin:0 auto;padding:20px 24px 60px}
             <div class="drug-cell"><div class="cell-label">Max</div><div class="cell-value" id="norepi-max">—</div></div>
           </div>
           <div class="drug-row">
-            <div class="drug-cell"><div class="cell-label">Std Concentration</div><div class="cell-value">4mg / 250mL NS<br/><span style="color:#64748b;font-size:11px">= 16 mcg/mL</span></div></div>
+            <div class="drug-cell"><div class="cell-label">Std Concentration</div><div class="cell-value">4mg / 250mL NS<br/><span style="color:var(--text3);font-size:11px">= 16 mcg/mL</span></div></div>
             <div class="drug-cell"><div class="cell-label">Start Rate</div><div class="cell-value rate" id="norepi-rate-start">—</div></div>
             <div class="drug-cell"><div class="cell-label">Max Rate</div><div class="cell-value rate" id="norepi-rate-max">—</div></div>
           </div>
@@ -172,7 +176,7 @@ main{max-width:960px;margin:0 auto;padding:20px 24px 60px}
             <div class="drug-cell"><div class="cell-label">Max</div><div class="cell-value" id="epi-max">—</div></div>
           </div>
           <div class="drug-row">
-            <div class="drug-cell"><div class="cell-label">Std Concentration</div><div class="cell-value">4mg / 250mL NS<br/><span style="color:#64748b;font-size:11px">= 16 mcg/mL</span></div></div>
+            <div class="drug-cell"><div class="cell-label">Std Concentration</div><div class="cell-value">4mg / 250mL NS<br/><span style="color:var(--text3);font-size:11px">= 16 mcg/mL</span></div></div>
             <div class="drug-cell"><div class="cell-label">Start Rate</div><div class="cell-value rate" id="epi-rate-start">—</div></div>
             <div class="drug-cell"><div class="cell-label">Max Rate</div><div class="cell-value rate" id="epi-rate-max">—</div></div>
           </div>
@@ -193,7 +197,7 @@ main{max-width:960px;margin:0 auto;padding:20px 24px 60px}
             <div class="drug-cell"><div class="cell-label">Max</div><div class="cell-value" id="dopa-max">—</div></div>
           </div>
           <div class="drug-row">
-            <div class="drug-cell"><div class="cell-label">Std Concentration</div><div class="cell-value">400mg / 250mL NS<br/><span style="color:#64748b;font-size:11px">= 1600 mcg/mL</span></div></div>
+            <div class="drug-cell"><div class="cell-label">Std Concentration</div><div class="cell-value">400mg / 250mL NS<br/><span style="color:var(--text3);font-size:11px">= 1600 mcg/mL</span></div></div>
             <div class="drug-cell"><div class="cell-label">Start Rate</div><div class="cell-value rate" id="dopa-rate-start">—</div></div>
             <div class="drug-cell"><div class="cell-label">Max Rate</div><div class="cell-value rate" id="dopa-rate-max">—</div></div>
           </div>
@@ -211,10 +215,10 @@ main{max-width:960px;margin:0 auto;padding:20px 24px 60px}
           <div class="drug-row">
             <div class="drug-cell"><div class="cell-label">Standard Dose</div><div class="cell-value highlight">0.03–0.04 units/min</div></div>
             <div class="drug-cell"><div class="cell-label">Max Dose</div><div class="cell-value">0.04 units/min</div></div>
-            <div class="drug-cell"><div class="cell-label">Not Weight-Based</div><div class="cell-value" style="color:#64748b;font-size:12px">Fixed dose only</div></div>
+            <div class="drug-cell"><div class="cell-label">Not Weight-Based</div><div class="cell-value" style="color:var(--text3);font-size:12px">Fixed dose only</div></div>
           </div>
           <div class="drug-row">
-            <div class="drug-cell"><div class="cell-label">Std Concentration</div><div class="cell-value">20 units / 100mL NS<br/><span style="color:#64748b;font-size:11px">= 0.2 units/mL</span></div></div>
+            <div class="drug-cell"><div class="cell-label">Std Concentration</div><div class="cell-value">20 units / 100mL NS<br/><span style="color:var(--text3);font-size:11px">= 0.2 units/mL</span></div></div>
             <div class="drug-cell"><div class="cell-label">Rate (0.03 u/min)</div><div class="cell-value rate">9 mL/hr</div></div>
             <div class="drug-cell"><div class="cell-label">Rate (0.04 u/min)</div><div class="cell-value rate">12 mL/hr</div></div>
           </div>
@@ -225,7 +229,7 @@ main{max-width:960px;margin:0 auto;padding:20px 24px 60px}
       <!-- PHENYLEPHRINE -->
       <div class="drug-card">
         <div class="drug-header">
-          <span class="drug-name">Phenylephrine <span style="font-size:12px;color:#64748b;font-weight:400">(Neo-Synephrine)</span></span>
+          <span class="drug-name">Phenylephrine <span style="font-size:12px;color:var(--text3);font-weight:400">(Neo-Synephrine)</span></span>
           <span class="drug-class class-vasopressor">Vasopressor</span>
         </div>
         <div class="drug-body">
@@ -235,7 +239,7 @@ main{max-width:960px;margin:0 auto;padding:20px 24px 60px}
             <div class="drug-cell"><div class="cell-label">Max</div><div class="cell-value" id="phen-max">—</div></div>
           </div>
           <div class="drug-row">
-            <div class="drug-cell"><div class="cell-label">Std Concentration</div><div class="cell-value">100mg / 250mL NS<br/><span style="color:#64748b;font-size:11px">= 400 mcg/mL</span></div></div>
+            <div class="drug-cell"><div class="cell-label">Std Concentration</div><div class="cell-value">100mg / 250mL NS<br/><span style="color:var(--text3);font-size:11px">= 400 mcg/mL</span></div></div>
             <div class="drug-cell"><div class="cell-label">Start Rate</div><div class="cell-value rate" id="phen-rate-start">—</div></div>
             <div class="drug-cell"><div class="cell-label">Max Rate</div><div class="cell-value rate" id="phen-rate-max">—</div></div>
           </div>
@@ -256,7 +260,7 @@ main{max-width:960px;margin:0 auto;padding:20px 24px 60px}
             <div class="drug-cell"><div class="cell-label">Max</div><div class="cell-value" id="dobu-max">—</div></div>
           </div>
           <div class="drug-row">
-            <div class="drug-cell"><div class="cell-label">Std Concentration</div><div class="cell-value">250mg / 250mL NS<br/><span style="color:#64748b;font-size:11px">= 1000 mcg/mL</span></div></div>
+            <div class="drug-cell"><div class="cell-label">Std Concentration</div><div class="cell-value">250mg / 250mL NS<br/><span style="color:var(--text3);font-size:11px">= 1000 mcg/mL</span></div></div>
             <div class="drug-cell"><div class="cell-label">Start Rate</div><div class="cell-value rate" id="dobu-rate-start">—</div></div>
             <div class="drug-cell"><div class="cell-label">Max Rate</div><div class="cell-value rate" id="dobu-rate-max">—</div></div>
           </div>
@@ -271,12 +275,12 @@ main{max-width:960px;margin:0 auto;padding:20px 24px 60px}
           <span class="drug-class class-push">Bolus / Peri-intubation</span>
         </div>
         <div class="push-body">
-          <p style="font-size:12px;color:#64748b;margin-bottom:12px">For peri-intubation hypotension, transient hemodynamic instability while setting up drip. <strong style="color:#fdba74">Preparation: dilute 1mg/10mL (0.1mg/mL) → draw 1mL into 9mL NS syringe → 10 mcg/mL solution.</strong></p>
+          <p style="font-size:12px;color:var(--text3);margin-bottom:12px">For peri-intubation hypotension, transient hemodynamic instability while setting up drip. <strong style="color:#fdba74">Preparation: dilute 1mg/10mL (0.1mg/mL) → draw 1mL into 9mL NS syringe → 10 mcg/mL solution.</strong></p>
           <div class="push-row"><span class="push-label">Standard bolus dose</span><span class="push-value" id="pushd-std">—</span></div>
           <div class="push-row"><span class="push-label">Volume to give (10 mcg/mL solution)</span><span class="push-value" id="pushd-vol">—</span></div>
           <div class="push-row"><span class="push-label">Repeat interval</span><span class="push-value">Every 2–5 min PRN</span></div>
           <div class="push-row"><span class="push-label">Max per bolus</span><span class="push-value">20 mcg (2 mL)</span></div>
-          <p style="font-size:11px;color:#64748b;margin-top:10px">⚠️ Bridge only — start drip immediately. Onset 1 min, duration 5–10 min.</p>
+          <p style="font-size:11px;color:var(--text3);margin-top:10px">⚠️ Bridge only — start drip immediately. Onset 1 min, duration 5–10 min.</p>
         </div>
       </div>
 
@@ -426,5 +430,8 @@ update();
 <script id="shared-nav-search">
 </script>
 
+<button id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">☀️</button>
+<script src="theme.js"></script>
+<script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
 </body>
 </html>

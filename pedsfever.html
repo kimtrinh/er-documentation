@@ -3,25 +3,27 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="stylesheet" href="theme.css"/>
 <title>Peds Fever — CA FIRST</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',system-ui,sans-serif;background:#0f172a;color:#e2e8f0;min-height:100vh}
+:root{--bg:#080f1a;--surface:#0d1829;--surface2:#111f35;--surface3:#162540;--border:#1a2d48;--border2:#243d5c;--text:#e8f0fc;--text2:#8fa8c8;--text3:#4a6280;--text-blue:#93c5fd;--text-blue-bright:#bfdbfe;--blue:#3b82f6;--blue2:#1d4ed8;--blue3:#0d2038;--green:#22c55e;--green2:#15803d;--green3:#0d2d1f;--amber:#f59e0b;--red:#ef4444;--purple:#a78bfa;--cyan:#22d3ee;}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
 
-header{background:linear-gradient(135deg,#1e293b,#0f172a);border-bottom:1px solid #1e3a5f;padding:20px 24px}
+header{background:linear-gradient(135deg,var(--surface),var(--bg));border-bottom:1px solid var(--border2);padding:20px 24px}
 .header-inner{max-width:960px;margin:0 auto}
 .logo{display:flex;align-items:center;gap:10px;margin-bottom:4px}
-.logo span{font-size:22px}.logo h1{font-size:20px;font-weight:700;color:#f1f5f9}
-.subtitle{font-size:13px;color:#64748b;margin-left:32px}
+.logo span{font-size:22px}.logo h1{font-size:20px;font-weight:700;color:var(--text)}
+.subtitle{font-size:13px;color:var(--text3);margin-left:32px}
 main{max-width:960px;margin:0 auto;padding:20px 24px 60px}
-.disclaimer{background:#1e3a5f;border:1px solid #2563eb;border-radius:8px;padding:10px 14px;margin-bottom:20px;font-size:12px;color:#93c5fd;line-height:1.5}
-.disclaimer strong{color:#bfdbfe}
+.disclaimer{background:var(--border2);border:1px solid #2563eb;border-radius:8px;padding:10px 14px;margin-bottom:20px;font-size:12px;color:var(--text-blue);line-height:1.5}
+.disclaimer strong{color:var(--text-blue-bright)}
 
 /* AGE TABS */
 .age-tabs{display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap}
-.age-tab{padding:9px 20px;border-radius:10px;border:1px solid #334155;cursor:pointer;font-size:13px;font-weight:700;background:#1e293b;color:#94a3b8;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:2px}
-.age-tab .age-days{font-size:16px;color:#f1f5f9}
-.age-tab.active{border-color:#3b82f6;background:#1e3a5f;color:#93c5fd}
+.age-tab{padding:9px 20px;border-radius:10px;border:1px solid var(--border);cursor:pointer;font-size:13px;font-weight:700;background:var(--surface);color:var(--text2);transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:2px}
+.age-tab .age-days{font-size:16px;color:var(--text)}
+.age-tab.active{border-color:#3b82f6;background:var(--border2);color:var(--text-blue)}
 .age-tab.active .age-days{color:#38bdf8}
 
 /* EXCLUSIONS BAR */
@@ -34,9 +36,9 @@ main{max-width:960px;margin:0 auto;padding:20px 24px 60px}
 @media(max-width:700px){.grid,.grid-3{grid-template-columns:1fr}}
 
 /* CARDS */
-.card{background:#1e293b;border:1px solid #334155;border-radius:12px;overflow:hidden}
-.card-head{padding:11px 16px;border-bottom:1px solid #334155;font-weight:700;font-size:13px;display:flex;align-items:center;gap:8px}
-.card-body{padding:13px 16px;font-size:12.5px;line-height:1.8;color:#cbd5e1}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.card-head{padding:11px 16px;border-bottom:1px solid var(--border);font-weight:700;font-size:13px;display:flex;align-items:center;gap:8px}
+.card-body{padding:13px 16px;font-size:12.5px;line-height:1.8;color:var(--text2)}
 
 /* RISK BANDS */
 .risk-high{background:#1f0707;border-color:#dc2626}
@@ -45,8 +47,8 @@ main{max-width:960px;margin:0 auto;padding:20px 24px 60px}
 .risk-mod .card-head{color:#fbbf24}
 .risk-low{background:#052e16;border-color:#16a34a}
 .risk-low .card-head{color:#86efac}
-.risk-neutral{background:#1e293b;border-color:#334155}
-.risk-neutral .card-head{color:#94a3b8}
+.risk-neutral{background:var(--surface);border-color:var(--border)}
+.risk-neutral .card-head{color:var(--text2)}
 
 /* STEP LISTS */
 .step{display:flex;gap:10px;margin-bottom:8px;align-items:flex-start}
@@ -57,8 +59,8 @@ main{max-width:960px;margin:0 auto;padding:20px 24px 60px}
 
 /* IM MARKER TABLE */
 .im-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px}
-.im-table th{text-align:left;color:#64748b;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;padding:6px 10px;border-bottom:1px solid #334155}
-.im-table td{padding:7px 10px;border-bottom:1px solid #0f172a;color:#cbd5e1}
+.im-table th{text-align:left;color:var(--text3);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;padding:6px 10px;border-bottom:1px solid var(--border)}
+.im-table td{padding:7px 10px;border-bottom:1px solid var(--bg);color:var(--text2)}
 .im-table tr:last-child td{border-bottom:none}
 .im-table .val{color:#38bdf8;font-weight:700}
 .im-table .pos{color:#f87171;font-weight:700}
@@ -68,7 +70,7 @@ main{max-width:960px;margin:0 auto;padding:20px 24px 60px}
 .pill-red{background:#1f0707;color:#f87171;border:1px solid #dc2626}
 .pill-green{background:#052e16;color:#86efac;border:1px solid #16a34a}
 .pill-yellow{background:#1c1400;color:#fbbf24;border:1px solid #ca8a04}
-.pill-blue{background:#1e3a5f;color:#93c5fd;border:1px solid #2563eb}
+.pill-blue{background:var(--border2);color:var(--text-blue);border:1px solid #2563eb}
 
 /* DIVIDER */
 .section-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#475569;margin:20px 0 8px;padding-left:2px}
@@ -94,18 +96,20 @@ main{max-width:960px;margin:0 auto;padding:20px 24px 60px}
 
 /* ===== SHARED NEW NAV ===== */
 @media(max-width:640px){}
-.sitenav{background:#0d1829;border-bottom:1px solid #1a2d48;position:sticky;top:0;z-index:100;font-family:'DM Sans',system-ui,sans-serif}
+.sitenav{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;font-family:'DM Sans',system-ui,sans-serif}
 .sitenav-inner{max-width:1200px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:6px;height:46px;overflow:hidden}
 .nav-logo{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:#3b82f6;white-space:nowrap;flex-shrink:0;text-decoration:none;margin-right:6px}
-.nav-logo span{color:#4a6280}
+.nav-logo span{color:var(--text3)}
 .nav-links{display:flex;flex:1;min-width:0;gap:1px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;white-space:nowrap;padding-right:10px}
 .nav-links::-webkit-scrollbar{display:none}
-.nav-link{padding:5px 10px;border-radius:6px;font-size:12px;font-weight:600;color:#8fa8c8;text-decoration:none;white-space:nowrap;transition:all .15s}
-.nav-link:hover{background:#111f35;color:#e8f0fc}
+.nav-link{padding:5px 10px;border-radius:6px;font-size:12px;font-weight:600;color:var(--text2);text-decoration:none;white-space:nowrap;transition:all .15s}
+.nav-link:hover{background:var(--surface2);color:var(--text)}
 .nav-link.active{background:#1d4ed8;color:#fff}
 @media(max-width:640px){.nav-link{font-size:11px;padding:4px 8px}}
 </style>
 <link rel="stylesheet" href="mobile.css">
+<script>document.documentElement.setAttribute('data-theme',localStorage.getItem('theme')||'dark');</script>
+<link rel="manifest" href="/manifest.json">
 </head>
 <body>
 <nav class="sitenav">
@@ -206,7 +210,7 @@ main{max-width:960px;margin:0 auto;padding:20px 24px 60px}
           <div class="step"><div class="step-num red">B</div><div><strong>Gentamicin</strong> 4 mg/kg IV q24h OR <strong>Cefotaxime</strong> 50 mg/kg IV q8h (if gentamicin unavailable)</div></div>
           <div class="step"><div class="step-num red">C</div><div>If CSF pleocytosis or HSV concern: Add <strong>Acyclovir</strong> 20 mg/kg IV q8h</div></div>
           <div class="step"><div class="step-num red">D</div><div><strong>Admit to hospital</strong> — all infants 7–21 days regardless of IM results</div></div>
-          <div style="margin-top:10px;padding:8px;background:#0f172a;border-radius:8px;font-size:11px;color:#64748b">
+          <div style="margin-top:10px;padding:8px;background:var(--bg);border-radius:8px;font-size:11px;color:var(--text3)">
             ⚠️ Do NOT use ceftriaxone in first 28 days (bilirubin displacement risk)
           </div>
         </div>
@@ -268,7 +272,7 @@ main{max-width:960px;margin:0 auto;padding:20px 24px 60px}
             <span class="pill pill-green">All IMs Normal — LP Obtained + Normal CSF</span>
             <div style="margin-top:6px">Lower threshold to discharge with close 24h follow-up if well-appearing and reliable family</div>
           </div>
-          <div style="margin-top:10px;padding:8px;background:#0f172a;border-radius:8px;font-size:11px;color:#64748b">
+          <div style="margin-top:10px;padding:8px;background:var(--bg);border-radius:8px;font-size:11px;color:var(--text3)">
             ⚠️ Do NOT use ceftriaxone in first 28 days (bilirubin displacement)
           </div>
         </div>
@@ -305,7 +309,7 @@ main{max-width:960px;margin:0 auto;padding:20px 24px 60px}
           <div class="step"><div class="step-num red">2</div><div>UA by catheter + urine culture</div></div>
           <div class="step"><div class="step-num red">3</div><div>LP: CSF cell count, culture, Gram stain, glucose, protein, enterovirus PCR</div></div>
           <div class="step"><div class="step-num red">4</div><div>CXR if respiratory symptoms</div></div>
-          <hr style="border-color:#334155;margin:10px 0"/>
+          <hr style="border-color:var(--border);margin:10px 0"/>
           <div style="margin-bottom:6px"><strong style="color:#f87171">Treatment:</strong></div>
           <div class="step"><div class="step-num red">A</div><div><strong>Ceftriaxone</strong> 50 mg/kg IV q24h (safe after 28 days)</div></div>
           <div class="step"><div class="step-num red">B</div><div>Consider ampicillin if Listeria concern (rare)</div></div>
@@ -322,7 +326,7 @@ main{max-width:960px;margin:0 auto;padding:20px 24px 60px}
           <div class="step"><div class="step-num green">2</div><div>UA by catheter + urine culture</div></div>
           <div class="step"><div class="step-num green">3</div><div>LP: <em>Not required</em> if all IMs normal and well-appearing</div></div>
           <div class="step"><div class="step-num green">4</div><div>CXR only if respiratory symptoms</div></div>
-          <hr style="border-color:#334155;margin:10px 0"/>
+          <hr style="border-color:var(--border);margin:10px 0"/>
           <div style="margin-bottom:6px"><strong style="color:#86efac">Disposition:</strong></div>
           <div class="step"><div class="step-num green">A</div><div>No antibiotics required</div></div>
           <div class="step"><div class="step-num green">B</div><div><strong>Discharge home</strong> if reliable family + reliable phone + transportation</div></div>
@@ -343,8 +347,8 @@ main{max-width:960px;margin:0 auto;padding:20px 24px 60px}
           <tr><td>UA</td><td class="pos">+ LE, nitrites, or pyuria</td><td>Abnormal UA = high risk regardless of other IMs</td></tr>
           <tr><td>Temp</td><td class="pos">&gt; 38.5°C</td><td>Use as IM surrogate when PCT not available</td></tr>
         </table>
-        <div style="margin-top:10px;padding:8px;background:#0f172a;border-radius:8px;font-size:11px;color:#64748b">
-          <strong style="color:#94a3b8">If PCT unavailable:</strong> Use CRP + ANC + temperature (&gt;38.5°C counts as elevated IM). Any single abnormal = high risk.
+        <div style="margin-top:10px;padding:8px;background:var(--bg);border-radius:8px;font-size:11px;color:var(--text3)">
+          <strong style="color:var(--text2)">If PCT unavailable:</strong> Use CRP + ANC + temperature (&gt;38.5°C counts as elevated IM). Any single abnormal = high risk.
         </div>
       </div>
     </div>
@@ -362,7 +366,7 @@ main{max-width:960px;margin:0 auto;padding:20px 24px 60px}
           <span class="pill pill-green">Agrees to 24h f/u</span>
           <span class="pill pill-blue">Blood cx sent before discharge</span>
         </div>
-        <div style="margin-top:10px;font-size:11px;color:#64748b">Return precautions: worsening fever, poor feeding, color change, decreased activity, any parental concern</div>
+        <div style="margin-top:10px;font-size:11px;color:var(--text3)">Return precautions: worsening fever, poor feeding, color change, decreased activity, any parental concern</div>
       </div>
     </div>
   </div>
@@ -392,7 +396,7 @@ main{max-width:960px;margin:0 auto;padding:20px 24px 60px}
             <span class="pill pill-red">CRP &gt; 20 mg/L</span>
             <span class="pill pill-red">Temp &gt; 38.5°C + any abnormal IM</span>
           </div>
-          <hr style="border-color:#334155;margin:10px 0"/>
+          <hr style="border-color:var(--border);margin:10px 0"/>
           <div class="step"><div class="step-num red">A</div><div>Full workup: blood cx, UA/ucx, CBC, CMP, IMs</div></div>
           <div class="step"><div class="step-num red">B</div><div>LP at clinician discretion — lower meningitis risk at this age</div></div>
           <div class="step"><div class="step-num red">C</div><div>Ceftriaxone 50 mg/kg IV/IM</div></div>
@@ -409,7 +413,7 @@ main{max-width:960px;margin:0 auto;padding:20px 24px 60px}
             <span class="pill pill-green">Normal UA</span>
             <span class="pill pill-green">All IMs normal</span>
           </div>
-          <hr style="border-color:#334155;margin:10px 0"/>
+          <hr style="border-color:var(--border);margin:10px 0"/>
           <div class="step"><div class="step-num green">A</div><div>Blood culture + UA at minimum</div></div>
           <div class="step"><div class="step-num green">B</div><div>LP generally not required</div></div>
           <div class="step"><div class="step-num green">C</div><div>Discharge home without antibiotics</div></div>
@@ -480,5 +484,8 @@ function showAge(age) {
 <script id="shared-nav-search">
 </script>
 
+<button id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">☀️</button>
+<script src="theme.js"></script>
+<script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
 </body>
 </html>

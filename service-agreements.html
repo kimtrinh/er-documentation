@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="stylesheet" href="theme.css"/>
 <title>Service Agreements & Protocols - KP SBC ER</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=DM+Sans:wght@400;500;600;700;800&display=swap');
@@ -10,7 +11,7 @@
 :root{
   --bg:#080f1a;--surface:#0d1829;--surface2:#111f35;--surface3:#162540;
   --border:#1a2d48;--border2:#243d5c;
-  --text:#e8f0fc;--text2:#8fa8c8;--text3:#4a6280;
+  --text:#e8f0fc;--text2:#8fa8c8;--text3:#4a6280;--text-blue:#93c5fd;--text-blue-bright:#bfdbfe;
   --blue:#3b82f6;--blue2:#1d4ed8;--blue3:#0d2038;
   --green:#16a34a;--greenSoft:#052e16;--greenBorder:#15803d;
   --amber:#f59e0b;--amberSoft:#2b1f0a;--amberBorder:#b45309;
@@ -18,14 +19,14 @@
   --mono:'JetBrains Mono',monospace;--sans:'DM Sans',system-ui,sans-serif;
 }
 body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh}
-.sitenav{background:#0d1829;border-bottom:1px solid #1a2d48;position:sticky;top:0;z-index:100;font-family:'DM Sans',system-ui,sans-serif}
+.sitenav{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;font-family:'DM Sans',system-ui,sans-serif}
 .sitenav-inner{max-width:1200px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:6px;height:46px;overflow:hidden}
 .nav-logo{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:#3b82f6;white-space:nowrap;flex-shrink:0;text-decoration:none;margin-right:6px}
-.nav-logo span{color:#4a6280}
+.nav-logo span{color:var(--text3)}
 .nav-links{display:flex;flex:1;min-width:0;gap:1px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;white-space:nowrap;padding-right:10px}
 .nav-links::-webkit-scrollbar{display:none}
-.nav-link{padding:5px 10px;border-radius:6px;font-size:12px;font-weight:600;color:#8fa8c8;text-decoration:none;white-space:nowrap;transition:all .15s}
-.nav-link:hover{background:#111f35;color:#e8f0fc}
+.nav-link{padding:5px 10px;border-radius:6px;font-size:12px;font-weight:600;color:var(--text2);text-decoration:none;white-space:nowrap;transition:all .15s}
+.nav-link:hover{background:var(--surface2);color:var(--text)}
 .nav-link.active{background:#1d4ed8;color:#fff}
 @media(max-width:640px){.nav-link{font-size:11px;padding:4px 8px}}
 
@@ -131,6 +132,8 @@ main{max-width:1280px;margin:0 auto;padding:20px}
 }
 </style>
 <link rel="stylesheet" href="mobile.css">
+<script>document.documentElement.setAttribute('data-theme',localStorage.getItem('theme')||'dark');</script>
+<link rel="manifest" href="/manifest.json">
 </head>
 <body>
 <nav class="sitenav">
@@ -924,5 +927,8 @@ async function init() {
 
 init();
 </script>
+<button id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">☀️</button>
+<script src="theme.js"></script>
+<script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
 </body>
 </html>
