@@ -82,6 +82,17 @@ main{max-width:1100px;margin:0 auto;padding:18px 24px 64px}
 
 .preview-wrap{display:flex;flex-direction:column;gap:10px}
 .preview{width:100%;min-height:500px;resize:vertical;background:#0f172a;border:1px solid #334155;border-radius:10px;color:#e2e8f0;padding:12px;font:13px/1.55 'JetBrains Mono',monospace;outline:none}
+.discharge-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
+.discharge-form{display:grid;gap:10px}
+.discharge-checks{display:flex;flex-wrap:wrap;gap:8px}
+.discharge-check{display:flex;align-items:center;gap:6px;padding:7px 9px;background:#0f172a;border:1px solid #27364d;border-radius:8px;font-size:12px;color:#cbd5e1}
+.discharge-check input{accent-color:#3b82f6}
+.discharge-field{display:flex;flex-direction:column;gap:6px}
+.discharge-field label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#8fa8c8;font-weight:700}
+.discharge-field input,.discharge-field textarea{width:100%;padding:9px 10px;background:#0f172a;border:1px solid #334155;border-radius:8px;color:#e2e8f0;font-size:13px;outline:none;font-family:inherit}
+.discharge-field input:focus,.discharge-field textarea:focus{border-color:#3b82f6}
+.discharge-field textarea{min-height:72px;resize:vertical}
+.discharge-preview{min-height:360px}
 .copy-row{display:flex;gap:8px;flex-wrap:wrap}
 .copy-btn{padding:8px 12px;border-radius:8px;border:1px solid #334155;background:#1e293b;color:#e2e8f0;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s}
 .copy-btn:hover{border-color:#3b82f6;color:#bfdbfe}
@@ -119,6 +130,7 @@ main{max-width:1100px;margin:0 auto;padding:18px 24px 64px}
 @media(max-width:980px){
   .controls{grid-template-columns:1fr}
   .grid{grid-template-columns:1fr}
+  .discharge-grid{grid-template-columns:1fr}
   .preview{min-height:320px}
   .dotphrase-tools{grid-template-columns:1fr}
   .dotphrase-list{grid-template-columns:1fr;max-height:none}
@@ -187,6 +199,7 @@ main{max-width:1100px;margin:0 auto;padding:18px 24px 64px}
       <button class="quick-btn" id="lifeThreatsBtn" type="button">Life-Threats Only</button>
       <button class="quick-btn" id="clearAllBtn" type="button">Clear All</button>
       <button class="quick-btn" id="openMdmBuilderBtn" type="button">MDM Builder</button>
+      <button class="quick-btn" id="openDischargeBuilderBtn" type="button">Discharge Builder</button>
       <button class="quick-btn primary" id="openDotphraseBtn" type="button">Dotphrase Library</button>
       <a class="quick-btn" href="dotphrase.html">Open Full Dotphrase Library</a>
       <a class="quick-btn" href="calculators.html#calc-heart">Open Full HEART Calc</a>
@@ -239,6 +252,69 @@ main{max-width:1100px;margin:0 auto;padding:18px 24px 64px}
             </div>
           </section>
         </div>
+      </div>
+    </details>
+
+    <details class="doc-panel" id="panel-discharge-builder">
+      <summary>
+        <span class="doc-title">🏁 Discharge Instruction Builder</span>
+        <span class="doc-meta">Diagnostic uncertainty, return precautions, and shared decision-making</span>
+      </summary>
+      <div class="doc-content">
+        <section class="panel">
+          <div class="panel-head"><h2>Discharge Text (separate from MDM)</h2></div>
+          <div class="panel-body discharge-grid" id="discharge-builder">
+            <div class="discharge-form">
+              <div class="discharge-checks">
+                <label class="discharge-check"><input id="dischargeIncludeUncertainty" data-discharge-field="include_uncertainty" type="checkbox">Diagnostic uncertainty</label>
+                <label class="discharge-check"><input id="dischargeIncludeReturn" data-discharge-field="include_return_precautions" type="checkbox">Return precautions</label>
+                <label class="discharge-check"><input id="dischargeIncludeSdm" data-discharge-field="include_shared_decision" type="checkbox">Shared decision-making</label>
+              </div>
+
+              <div class="discharge-field">
+                <label for="dischargeComplaintInput">Chief Complaint / Symptom</label>
+                <input id="dischargeComplaintInput" data-discharge-field="complaint" type="text" placeholder="e.g., chest pain">
+              </div>
+
+              <div class="discharge-field">
+                <label for="dischargeDxInput">Working Diagnosis Today</label>
+                <input id="dischargeDxInput" data-discharge-field="working_diagnosis" type="text" placeholder="e.g., low-risk chest pain">
+              </div>
+
+              <div class="discharge-field">
+                <label for="dischargeSeriousInput">Serious Conditions Considered</label>
+                <input id="dischargeSeriousInput" data-discharge-field="serious_conditions" type="text" placeholder="e.g., ACS, PE, aortic dissection">
+              </div>
+
+              <div class="discharge-field">
+                <label for="dischargeReturnInput">Return Triggers</label>
+                <textarea id="dischargeReturnInput" data-discharge-field="return_triggers" placeholder="e.g., worsening pain, dyspnea, syncope, fever, new neurologic symptoms"></textarea>
+              </div>
+
+              <div class="discharge-field">
+                <label for="dischargeFollowWithInput">Follow-Up With</label>
+                <input id="dischargeFollowWithInput" data-discharge-field="followup_with" type="text" placeholder="e.g., PCP / cardiology">
+              </div>
+
+              <div class="discharge-field">
+                <label for="dischargeFollowTimeInput">Follow-Up Timeframe</label>
+                <input id="dischargeFollowTimeInput" data-discharge-field="followup_timeframe" type="text" placeholder="e.g., within 24-48 hours">
+              </div>
+
+              <div class="discharge-field">
+                <label for="dischargeNotesInput">Additional Instructions (Optional)</label>
+                <textarea id="dischargeNotesInput" data-discharge-field="additional_notes" placeholder="e.g., medication or activity-specific instructions"></textarea>
+              </div>
+            </div>
+
+            <div class="preview-wrap">
+              <div class="copy-row">
+                <button id="copyDischargeBtn" class="copy-btn" type="button">Copy Discharge Instructions</button>
+              </div>
+              <textarea id="dischargePreview" class="preview discharge-preview" spellcheck="false" aria-label="Discharge instructions preview"></textarea>
+            </div>
+          </div>
+        </section>
       </div>
     </details>
 

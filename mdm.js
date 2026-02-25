@@ -11,6 +11,18 @@
   const CALC_HIGH = 'calc-high';
   const DOTPHRASE_DEFAULT_LIMIT = 18;
   const DOTPHRASE_SEARCH_LIMIT = 28;
+  const DEFAULT_DISCHARGE_STATE = Object.freeze({
+    include_uncertainty: true,
+    include_return_precautions: true,
+    include_shared_decision: true,
+    complaint: '',
+    working_diagnosis: '',
+    serious_conditions: '',
+    return_triggers: 'worsening symptoms, persistent symptoms, new concerning symptoms, chest pain, shortness of breath, syncope, fever, neurologic change, inability to tolerate oral intake/medications, or any other concern',
+    followup_with: 'primary care physician and/or relevant specialty',
+    followup_timeframe: '24-48 hours',
+    additional_notes: ''
+  });
   const CALC_HELPER_LINKS = Object.freeze({
     heart: 'calculators.html#calc-heart',
     years: 'calculators.html#calc-years',
@@ -386,7 +398,8 @@
     selectedRisks: new Set(),
     riskInputs: Object.create(null),
     savedByPack: Object.create(null),
-    savedActivePackId: ''
+    savedActivePackId: '',
+    discharge: { ...DEFAULT_DISCHARGE_STATE }
   };
 
   const els = {
@@ -400,8 +413,10 @@
     lifeThreatsBtn: document.getElementById('lifeThreatsBtn'),
     clearAllBtn: document.getElementById('clearAllBtn'),
     openMdmBuilderBtn: document.getElementById('openMdmBuilderBtn'),
+    openDischargeBuilderBtn: document.getElementById('openDischargeBuilderBtn'),
     openDotphraseBtn: document.getElementById('openDotphraseBtn'),
     panelMdmBuilder: document.getElementById('panel-mdm-builder'),
+    panelDischargeBuilder: document.getElementById('panel-discharge-builder'),
     panelDotphrase: document.getElementById('panel-dotphrase'),
     ddxContainer: document.getElementById('ddxContainer'),
     ruleoutContainer: document.getElementById('ruleoutContainer'),
@@ -415,6 +430,9 @@
     copyRuleoutsBtn: document.getElementById('copyRuleoutsBtn'),
     qualityContainer: document.getElementById('qualityContainer'),
     qualityCount: document.getElementById('qualityCount'),
+    dischargeBuilder: document.getElementById('discharge-builder'),
+    dischargePreview: document.getElementById('dischargePreview'),
+    copyDischargeBtn: document.getElementById('copyDischargeBtn'),
     dotphraseSearchInput: document.getElementById('dotphraseSearchInput'),
     dotphraseQuickList: document.getElementById('dotphraseQuickList'),
     dotphraseMatchCount: document.getElementById('dotphraseMatchCount')
@@ -488,6 +506,41 @@
     }
   }
 
+  function defaultDischargeState() {
+    return { ...DEFAULT_DISCHARGE_STATE };
+  }
+
+  function sanitizeDischargeState(raw) {
+    const next = defaultDischargeState();
+    if (!raw || typeof raw !== 'object') return next;
+
+    [
+      'include_uncertainty',
+      'include_return_precautions',
+      'include_shared_decision'
+    ].forEach((key) => {
+      if (typeof raw[key] === 'boolean') {
+        next[key] = raw[key];
+      }
+    });
+
+    [
+      'complaint',
+      'working_diagnosis',
+      'serious_conditions',
+      'return_triggers',
+      'followup_with',
+      'followup_timeframe',
+      'additional_notes'
+    ].forEach((key) => {
+      if (typeof raw[key] === 'string') {
+        next[key] = raw[key];
+      }
+    });
+
+    return next;
+  }
+
   function loadSavedState() {
     const storage = safeLocalStorage();
     if (!storage) return;
@@ -503,6 +556,8 @@
       if (typeof parsed.activePackId === 'string') {
         state.savedActivePackId = parsed.activePackId;
       }
+
+      state.discharge = sanitizeDischargeState(parsed.discharge);
 
       const packs = parsed.packs;
       if (packs && typeof packs === 'object') {
@@ -530,7 +585,8 @@
     try {
       const payload = {
         activePackId: state.activePack ? state.activePack.id : state.savedActivePackId,
-        packs: state.savedByPack
+        packs: state.savedByPack,
+        discharge: state.discharge
       };
       storage.setItem(STORAGE_KEY, JSON.stringify(payload));
     } catch (e) {
@@ -1337,7 +1393,7 @@
       .filter(Boolean);
 
     if (!lines.length) {
-      return 'Risk stratification:\n- No additional risk modifiers documented.';
+      return '';
     }
 
     return ['Risk stratification:', ...lines.map((line) => `- ${line}`)].join('\n');
@@ -1369,15 +1425,74 @@
 
   function buildMdmText(pack) {
     const lead = String(pack.base_mdm_template || 'Focused emergency evaluation performed with consideration of life-threatening and common etiologies, risk stratification, and disposition planning.').trim();
-    return [
+    const sections = [
       `MDM – ${pack.title}: ${lead}`,
-      '',
-      buildDdxText(pack),
-      '',
-      buildRiskText(pack),
-      '',
-      buildRuleoutsText()
-    ].join('\n');
+      buildDdxText(pack)
+    ];
+
+    const riskText = buildRiskText(pack);
+    if (riskText) {
+      sections.push(riskText);
+    }
+
+    sections.push(buildRuleoutsText());
+    return sections.join('\n\n');
+  }
+
+  function buildDischargeText() {
+    const complaint = normalizeLabel(state.discharge.complaint) || '[chief complaint]';
+    const diagnosis = normalizeLabel(state.discharge.working_diagnosis) || '[working diagnosis]';
+    const serious = normalizeLabel(state.discharge.serious_conditions) || '[serious conditions considered]';
+    const returnTriggers = normalizeLabel(state.discharge.return_triggers) || '[specific return precautions]';
+    const followWith = normalizeLabel(state.discharge.followup_with) || '[follow-up provider/clinic]';
+    const followTime = normalizeLabel(state.discharge.followup_timeframe) || '[follow-up timeframe]';
+    const additional = normalizeLabel(state.discharge.additional_notes);
+
+    const lines = [
+      `Discharge diagnosis today: ${diagnosis}.`
+    ];
+
+    if (state.discharge.include_uncertainty) {
+      lines.push(`I discussed with the patient that today's ED evaluation did not identify a definitive life-threatening cause of ${complaint}, and diagnostic uncertainty remains. Serious conditions including ${serious} currently have low suspicion but cannot be excluded with 100% certainty on a single ED visit.`);
+    }
+
+    if (state.discharge.include_shared_decision) {
+      lines.push('Shared decision-making discussion was completed regarding discharge versus additional observation/testing. Patient verbalized understanding of the low but non-zero residual risk and agrees with this plan.');
+    }
+
+    if (state.discharge.include_return_precautions) {
+      lines.push(`Patient instructed to return to the ED immediately for: ${returnTriggers}.`);
+    }
+
+    lines.push(`Follow up with ${followWith} within ${followTime} for reassessment and continued evaluation.`);
+
+    if (additional) {
+      lines.push(additional);
+    }
+
+    return lines.join('\n\n');
+  }
+
+  function setDischargePreview() {
+    if (!els.dischargePreview) return;
+    els.dischargePreview.value = buildDischargeText();
+  }
+
+  function renderDischargeBuilder() {
+    if (!els.dischargeBuilder) return;
+    const fields = els.dischargeBuilder.querySelectorAll('[data-discharge-field]');
+    fields.forEach((field) => {
+      const key = field.dataset.dischargeField;
+      if (!key || !Object.prototype.hasOwnProperty.call(state.discharge, key)) return;
+      if (field instanceof HTMLInputElement && field.type === 'checkbox') {
+        field.checked = Boolean(state.discharge[key]);
+        return;
+      }
+      if (field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement || field instanceof HTMLSelectElement) {
+        field.value = String(state.discharge[key] || '');
+      }
+    });
+    setDischargePreview();
   }
 
   function setPreview() {
@@ -2072,6 +2187,10 @@
       openPanel(els.panelMdmBuilder, 'panel-mdm-builder');
       return;
     }
+    if (hash === 'discharge' || hash === 'dischargebuilder' || hash === 'paneldischargebuilder') {
+      openPanel(els.panelDischargeBuilder, 'panel-discharge-builder');
+      return;
+    }
     if (hash === 'dotphraselibrary' || hash === 'paneldotphrase' || hash === 'dotphrase') {
       openPanel(els.panelDotphrase, 'panel-dotphrase');
     }
@@ -2123,6 +2242,11 @@
     if (els.openMdmBuilderBtn) {
       els.openMdmBuilderBtn.addEventListener('click', () => {
         openPanel(els.panelMdmBuilder, 'panel-mdm-builder');
+      });
+    }
+    if (els.openDischargeBuilderBtn) {
+      els.openDischargeBuilderBtn.addEventListener('click', () => {
+        openPanel(els.panelDischargeBuilder, 'panel-discharge-builder');
       });
     }
     if (els.openDotphraseBtn) {
@@ -2235,6 +2359,26 @@
       });
     }
 
+    if (els.dischargeBuilder) {
+      const handleDischargeInput = (event) => {
+        const target = event.target;
+        if (!(target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement || target instanceof HTMLSelectElement)) return;
+        const key = target.dataset.dischargeField || '';
+        if (!key || !Object.prototype.hasOwnProperty.call(state.discharge, key)) return;
+
+        if (target instanceof HTMLInputElement && target.type === 'checkbox') {
+          state.discharge[key] = target.checked;
+        } else {
+          state.discharge[key] = target.value;
+        }
+        setDischargePreview();
+        saveState();
+      };
+
+      els.dischargeBuilder.addEventListener('input', handleDischargeInput);
+      els.dischargeBuilder.addEventListener('change', handleDischargeInput);
+    }
+
     els.copyFullBtn.addEventListener('click', () => {
       copyTextWithFeedback(els.preview.value, els.copyFullBtn);
     });
@@ -2248,6 +2392,12 @@
       if (!state.activePack) return;
       copyTextWithFeedback(buildRuleoutsText(), els.copyRuleoutsBtn);
     });
+
+    if (els.copyDischargeBtn && els.dischargePreview) {
+      els.copyDischargeBtn.addEventListener('click', () => {
+        copyTextWithFeedback(els.dischargePreview.value, els.copyDischargeBtn);
+      });
+    }
   }
 
   async function loadPacks() {
@@ -2278,10 +2428,12 @@
       if (els.qualityContainer) {
         els.qualityContainer.innerHTML = '<p class="empty-block">Unavailable.</p>';
       }
+      renderDischargeBuilder();
       return;
     }
 
     loadSavedState();
+    renderDischargeBuilder();
     renderPackSelect();
 
     if (state.outputMode === OUTPUT_DOTPHRASE) {
