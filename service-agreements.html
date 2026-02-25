@@ -747,7 +747,7 @@ function sectionHtml(title, lines, opts = {}) {
 function documentationSectionHtml(item) {
   const documentation = item.card.documentation || "Documentation guidance not provided in source.";
   return `
-    <details class="section">
+    <details class="section" open>
       <summary>Documentation</summary>
       <div class="section-body">
         <p class="doc-text">${escapeHtml(documentation)}</p>
@@ -802,13 +802,13 @@ function detailCardHtml(item) {
         ${tagBadges}
       </div>
       ${sectionHtml("Purpose", item.card.purpose, { open: true })}
-      ${sectionHtml("When to Use", item.card.when_to_use, { open: false })}
-      ${sectionHtml("Exclusions / Red Flags", item.card.red_flags, { open: false })}
-      ${sectionHtml("Workflow", item.card.workflow, { open: false, checkable: true })}
-      ${sectionHtml("Treatment", item.card.treatment, { open: false, checkable: true })}
-      ${sectionHtml("Disposition", item.card.disposition, { open: false, checkable: true })}
+      ${sectionHtml("When to Use", item.card.when_to_use, { open: true })}
+      ${sectionHtml("Exclusions / Red Flags", item.card.red_flags, { open: true })}
+      ${sectionHtml("Workflow", item.card.workflow, { open: true, checkable: true })}
+      ${sectionHtml("Treatment", item.card.treatment, { open: true, checkable: true })}
+      ${sectionHtml("Disposition", item.card.disposition, { open: true, checkable: true })}
       ${documentationSectionHtml(item)}
-      ${sectionHtml("Automation Placeholders", item.card.automation_checks, { open: false, checkable: true })}
+      ${sectionHtml("Automation Placeholders", item.card.automation_checks, { open: true, checkable: true })}
       <div class="actions">
         <button class="btn js-copy-workflow" type="button">Copy Workflow</button>
         <button class="btn js-copy-doc" type="button">Copy Documentation</button>
@@ -991,7 +991,15 @@ async function init() {
   });
 
   applyPresetQueryFromUrl();
+  const hadPresetId = !!state.presetAgreementId;
   renderFiltersAndResults();
+  if (hadPresetId) {
+    // Came from a deep link (?id=…) — scroll straight to the detail card
+    setTimeout(() => {
+      const pane = document.querySelector(".detail-pane");
+      if (pane) pane.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 80);
+  }
 }
 
 init();
