@@ -288,6 +288,86 @@
       ]
     },
     {
+      "id": "mdmpregvb",
+      "aliases": ["mdm-pregvb", "pregvb", "mdmobbleed", "obbleed", "mdmvbip"],
+      "title": "Pregnant Vaginal Bleeding",
+      "base_mdm_template": "Patient evaluated for vaginal bleeding in pregnancy with focused assessment for ectopic pregnancy, hemorrhage/instability, and pregnancy viability.",
+      "ddx": [
+        { "label": "Ectopic pregnancy", "group": "Life-threatening", "tags": ["ectopic"], "ruleouts": ["noectopic"], "default_checked": true },
+        { "label": "Pregnancy hemorrhage/instability", "group": "Life-threatening", "tags": ["preg_heme"], "ruleouts": ["nopregvbhemorrhage"], "default_checked": true },
+        { "label": "Placental abruption", "group": "Life-threatening", "tags": ["abruption"], "ruleouts": ["noabruption"], "default_checked": false },
+        { "label": "Threatened miscarriage / viable IUP", "group": "Common", "tags": ["threatened_iup"], "ruleouts": ["nothreatenedmiscarriage"], "default_checked": true },
+        { "label": "Failed early IUP", "group": "Common", "tags": ["failed_iup"], "ruleouts": ["nofailediup"], "default_checked": true },
+        { "label": "Pregnancy of unknown location", "group": "Life-threatening", "tags": ["pul"], "ruleouts": ["nopul"], "default_checked": true },
+        { "label": "Preeclampsia/HELLP spectrum", "group": "Other", "tags": ["htn_preg"], "ruleouts": ["noeclampsia", "nohellp"], "default_checked": false },
+        { "label": "Cervical/vaginal source", "group": "Other", "tags": ["cervical_source"], "ruleouts": [], "default_checked": false }
+      ],
+      "risk_toggles": [
+        {
+          "id": "pregvb_hemodynamic_stable",
+          "label": "Hemodynamically stable",
+          "tags_required": ["preg_heme"],
+          "sentence_template": "Hemodynamics remained stable without signs of active hemorrhagic shock during ED course."
+        },
+        {
+          "id": "pregvb_tvus_reviewed",
+          "label": "Transvaginal ultrasound reviewed",
+          "tags_required": [],
+          "sentence_template": "Transvaginal ultrasound findings reviewed and integrated into disposition."
+        },
+        {
+          "id": "pregvb_quant_hcg",
+          "label": "Quant beta-hCG reviewed",
+          "tags_required": [],
+          "input": {
+            "type": "text",
+            "label": "Value",
+            "placeholder": "e.g. 2400 mIU/mL"
+          },
+          "sentence_template": "Quantitative beta-hCG reviewed: {value}."
+        },
+        {
+          "id": "pregvb_rh_status",
+          "label": "ABO/Rh status reviewed",
+          "tags_required": [],
+          "sentence_template": "ABO/Rh status reviewed."
+        },
+        {
+          "id": "pregvb_rhogam",
+          "label": "Anti-D immunoglobulin (Rhogam) addressed",
+          "tags_required": [],
+          "input": {
+            "type": "select",
+            "default": "not indicated",
+            "options": [
+              { "label": "Not indicated", "value": "not indicated" },
+              { "label": "Indicated and given", "value": "indicated and given" },
+              { "label": "Indicated and arranged/deferred", "value": "indicated and arranged/deferred" }
+            ]
+          },
+          "sentence_template": "Anti-D immunoglobulin status: {value}."
+        },
+        {
+          "id": "pregvb_ob_consult",
+          "label": "OB/GYN consulted or expedited follow-up arranged",
+          "tags_required": ["ectopic", "pul", "abruption"],
+          "sentence_template": "OB/GYN pathway addressed with consult and/or expedited follow-up."
+        },
+        {
+          "id": "pregvb_no_peritoneal_signs",
+          "label": "No peritoneal signs",
+          "tags_required": ["ectopic", "pul"],
+          "sentence_template": "Abdominal exam without peritoneal signs."
+        },
+        {
+          "id": "pregvb_short_interval_followup",
+          "label": "Short-interval recheck plan",
+          "tags_required": [],
+          "sentence_template": "Short-interval repeat beta-hCG/ultrasound follow-up plan documented."
+        }
+      ]
+    },
+    {
       "id": "mdmfever",
       "aliases": ["mdm-sepsis", "fever"],
       "title": "Fever / Sepsis Evaluation",
