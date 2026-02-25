@@ -9,8 +9,6 @@
   const CALC_LOW = 'calc-low';
   const CALC_MODERATE = 'calc-moderate';
   const CALC_HIGH = 'calc-high';
-  const DOTPHRASE_DEFAULT_LIMIT = 18;
-  const DOTPHRASE_SEARCH_LIMIT = 28;
   const DEFAULT_DISCHARGE_STATE = Object.freeze({
     include_uncertainty: true,
     include_return_precautions: true,
@@ -2010,14 +2008,7 @@
       return a.cond.localeCompare(b.cond);
     });
 
-    if (!tokens.length) {
-      const linked = rows.filter((row) => row.linked);
-      const others = rows.filter((row) => !row.linked);
-      const keep = Math.max(DOTPHRASE_DEFAULT_LIMIT - linked.length, 8);
-      return linked.concat(others.slice(0, keep));
-    }
-
-    return rows.slice(0, DOTPHRASE_SEARCH_LIMIT);
+    return rows;
   }
 
   function getFavoriteDotphraseRows() {
