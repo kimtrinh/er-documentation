@@ -391,11 +391,13 @@
     packById: new Map(),
     commandMap: new Map(),
     activePack: null,
+    activeDocTab: 'mdm',
     outputMode: OUTPUT_EXPANDED,
     selectedDdx: new Set(),
     selectedRuleouts: new Set(),
     availableRuleoutIds: [],
     selectedRisks: new Set(),
+    dotphraseFavorites: new Set(),
     riskInputs: Object.create(null),
     savedByPack: Object.create(null),
     savedActivePackId: '',
@@ -409,8 +411,16 @@
     modeExpanded: document.getElementById('modeExpanded'),
     aliasHint: document.getElementById('aliasHint'),
     quickPackButtons: document.getElementById('quickPackButtons'),
+    stickyCopyFullBtn: document.getElementById('stickyCopyFullBtn'),
+    stickyClearDdxBtn: document.getElementById('stickyClearDdxBtn'),
+    stickyResetPackBtn: document.getElementById('stickyResetPackBtn'),
+    completenessIndicators: document.getElementById('completenessIndicators'),
+    tabMdmBuilder: document.getElementById('tabMdmBuilder'),
+    tabDotphrase: document.getElementById('tabDotphrase'),
+    tabDischarge: document.getElementById('tabDischarge'),
     resetPackBtn: document.getElementById('resetPackBtn'),
     lifeThreatsBtn: document.getElementById('lifeThreatsBtn'),
+    clearDdxBtn: document.getElementById('clearDdxBtn'),
     clearAllBtn: document.getElementById('clearAllBtn'),
     openMdmBuilderBtn: document.getElementById('openMdmBuilderBtn'),
     openDischargeBuilderBtn: document.getElementById('openDischargeBuilderBtn'),
@@ -434,6 +444,8 @@
     dischargePreview: document.getElementById('dischargePreview'),
     copyDischargeBtn: document.getElementById('copyDischargeBtn'),
     dotphraseSearchInput: document.getElementById('dotphraseSearchInput'),
+    dotphraseFavoritesList: document.getElementById('dotphraseFavoritesList'),
+    dotphraseFavoritesCount: document.getElementById('dotphraseFavoritesCount'),
     dotphraseQuickList: document.getElementById('dotphraseQuickList'),
     dotphraseMatchCount: document.getElementById('dotphraseMatchCount')
   };
@@ -557,6 +569,12 @@
         state.savedActivePackId = parsed.activePackId;
       }
 
+      if (Array.isArray(parsed.dotphraseFavorites)) {
+        state.dotphraseFavorites = new Set(
+          parsed.dotphraseFavorites.map((id) => normalizeId(id)).filter(Boolean)
+        );
+      }
+
       state.discharge = sanitizeDischargeState(parsed.discharge);
 
       const packs = parsed.packs;
@@ -586,6 +604,7 @@
       const payload = {
         activePackId: state.activePack ? state.activePack.id : state.savedActivePackId,
         packs: state.savedByPack,
+        dotphraseFavorites: [...state.dotphraseFavorites],
         discharge: state.discharge
       };
       storage.setItem(STORAGE_KEY, JSON.stringify(payload));
@@ -1321,6 +1340,9 @@
   }
 
   function getVisibleRiskToggles(pack) {
+    if (!getSelectedDdxItems(pack).length) {
+      return [];
+    }
     const activeTags = getActiveTags(pack);
     return (pack.risk_toggles || []).filter((toggle) => {
       const required = Array.isArray(toggle.tags_required) ? toggle.tags_required : [];
@@ -1408,10 +1430,6 @@
     if (!ids.length) return 'Rule-outs:\n- none selected';
 
     const lines = ids.map((id) => {
-      if (state.outputMode === OUTPUT_DOTPHRASE) {
-        return `- ${formatDotphrase(id)}`;
-      }
-
       const lookup = phraseLookup(id);
       if (lookup.exists && lookup.text) {
         return `- ${lookup.text}`;
@@ -1424,9 +1442,8 @@
   }
 
   function buildMdmText(pack) {
-    const lead = String(pack.base_mdm_template || 'Focused emergency evaluation performed with consideration of life-threatening and common etiologies, risk stratification, and disposition planning.').trim();
     const sections = [
-      `MDM – ${pack.title}: ${lead}`,
+      'MDM',
       buildDdxText(pack)
     ];
 
@@ -1766,6 +1783,12 @@
       return;
     }
 
+    const selectedDdxCount = getSelectedDdxItems(pack).length;
+    if (!selectedDdxCount) {
+      els.riskContainer.innerHTML = '<p class="empty-block">Select DDx items to show context-aware risk tools.</p>';
+      return;
+    }
+
     const visible = getVisibleRiskToggles(pack);
     if (!visible.length) {
       els.riskContainer.innerHTML = '<p class="empty-block">No risk tools for current DDx selection.</p>';
@@ -1830,6 +1853,99 @@
     els.aliasHint.textContent = `Commands: ${aliases.join(', ')}`;
   }
 
+  function getDocTabMap() {
+    return {
+      mdm: els.panelMdmBuilder,
+      dotphrase: els.panelDotphrase,
+      discharge: els.panelDischargeBuilder
+    };
+  }
+
+  function updateDocTabButtons(activeTab) {
+    const tabs = [
+      { el: els.tabMdmBuilder, id: 'mdm' },
+      { el: els.tabDotphrase, id: 'dotphrase' },
+      { el: els.tabDischarge, id: 'discharge' }
+    ];
+    tabs.forEach((tab) => {
+      if (!tab.el) return;
+      const isActive = tab.id === activeTab;
+      tab.el.classList.toggle('active', isActive);
+      tab.el.setAttribute('aria-selected', isActive ? 'true' : 'false');
+    });
+  }
+
+  function activateDocTab(tabId, options = {}) {
+    const map = getDocTabMap();
+    if (!Object.prototype.hasOwnProperty.call(map, tabId)) return;
+    state.activeDocTab = tabId;
+
+    Object.entries(map).forEach(([id, panel]) => {
+      if (!panel) return;
+      panel.open = id === tabId;
+    });
+    updateDocTabButtons(tabId);
+
+    if (options.scroll === false) return;
+    const target = map[tabId];
+    if (target && typeof target.scrollIntoView === 'function') {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  function syncDocTabFromOpenPanels() {
+    const map = getDocTabMap();
+    const order = ['mdm', 'dotphrase', 'discharge'];
+    const openId = order.find((id) => map[id] && map[id].open) || state.activeDocTab || 'mdm';
+    state.activeDocTab = openId;
+    updateDocTabButtons(openId);
+  }
+
+  function renderCompletenessIndicators() {
+    if (!els.completenessIndicators) return;
+    if (!state.activePack) {
+      els.completenessIndicators.innerHTML = [
+        '<span class="status-pill neutral">DDx: 0</span>',
+        '<span class="status-pill neutral">Rule-outs: 0</span>',
+        '<span class="status-pill neutral">Risk: 0</span>'
+      ].join('');
+      return;
+    }
+
+    const selectedDdx = getSelectedDdxItems(state.activePack);
+    const ddxCount = selectedDdx.length;
+    const availableRuleouts = state.availableRuleoutIds.length;
+    const selectedRuleouts = getSelectedRuleoutIds().length;
+    const visibleRisks = getVisibleRiskToggles(state.activePack);
+    const selectedRisks = visibleRisks.filter((toggle) => state.selectedRisks.has(toggle.id)).length;
+
+    const ddxStatus = ddxCount > 0 ? 'ok' : 'warn';
+
+    let ruleStatus = 'neutral';
+    let ruleText = 'Rule-outs: N/A';
+    if (availableRuleouts > 0) {
+      ruleStatus = selectedRuleouts > 0 ? 'ok' : 'warn';
+      ruleText = `Rule-outs: ${selectedRuleouts}/${availableRuleouts}`;
+    }
+
+    let riskStatus = 'neutral';
+    let riskText = 'Risk: hidden';
+    if (ddxCount > 0) {
+      if (visibleRisks.length > 0) {
+        riskStatus = selectedRisks > 0 ? 'ok' : 'warn';
+        riskText = `Risk: ${selectedRisks}/${visibleRisks.length}`;
+      } else {
+        riskText = 'Risk: N/A';
+      }
+    }
+
+    els.completenessIndicators.innerHTML = [
+      `<span class="status-pill ${ddxStatus}">DDx: ${ddxCount}</span>`,
+      `<span class="status-pill ${ruleStatus}">${ruleText}</span>`,
+      `<span class="status-pill ${riskStatus}">${riskText}</span>`
+    ].join('');
+  }
+
   function renderCounts() {
     const ddxCount = state.selectedDdx.size;
     const ruleoutCount = getSelectedRuleoutIds().length;
@@ -1838,6 +1954,7 @@
     els.ddxCount.textContent = `${ddxCount} selected`;
     els.ruleoutCount.textContent = `${ruleoutCount} selected`;
     els.riskCount.textContent = `${riskCount} selected`;
+    renderCompletenessIndicators();
   }
 
   function getDotphraseRows() {
@@ -1880,6 +1997,7 @@
         text,
         linked: linkedRuleouts.has(id),
         selected: state.selectedRuleouts.has(id),
+        favorite: state.dotphraseFavorites.has(id),
         score
       });
     });
@@ -1900,27 +2018,61 @@
     return rows.slice(0, DOTPHRASE_SEARCH_LIMIT);
   }
 
-  function renderDotphraseLookup() {
-    if (!els.dotphraseQuickList || !els.dotphraseMatchCount) return;
+  function getFavoriteDotphraseRows() {
+    const all = Array.isArray(window.KP_DOTPHRASES) ? window.KP_DOTPHRASES : [];
+    const favorites = state.dotphraseFavorites || new Set();
+    const queryRaw = normalizeLabel(els.dotphraseSearchInput ? els.dotphraseSearchInput.value : '').toLowerCase();
+    const tokens = queryRaw ? queryRaw.split(/\s+/).filter(Boolean) : [];
+    const linkedRuleouts = new Set(state.availableRuleoutIds || []);
 
-    const rows = getDotphraseRows();
-    els.dotphraseMatchCount.textContent = `${rows.length} shown`;
+    const rows = [];
+    all.forEach((item) => {
+      const id = normalizeId(item && item.dot);
+      if (!id || !favorites.has(id)) return;
 
+      const cond = normalizeLabel(item && item.cond);
+      const cat = normalizeLabel(item && item.cat);
+      const text = normalizeLabel(item && item.text);
+      const searchable = `${id} ${cond} ${cat} ${text}`.toLowerCase();
+
+      if (tokens.length && !tokens.every((token) => searchable.includes(token))) {
+        return;
+      }
+
+      rows.push({
+        id,
+        cond,
+        cat,
+        text,
+        linked: linkedRuleouts.has(id),
+        selected: state.selectedRuleouts.has(id),
+        favorite: true
+      });
+    });
+
+    rows.sort((a, b) => {
+      if (a.linked !== b.linked) return a.linked ? -1 : 1;
+      return a.cond.localeCompare(b.cond);
+    });
+    return rows;
+  }
+
+  function renderDotphraseCards(rows, emptyMessage) {
     if (!rows.length) {
-      els.dotphraseQuickList.innerHTML = '<div class="dotphrase-empty">No dotphrases match this search. Try a shorter keyword.</div>';
-      return;
+      return `<div class="dotphrase-empty">${escapeHtml(emptyMessage)}</div>`;
     }
 
-    els.dotphraseQuickList.innerHTML = rows.map((row) => {
+    return rows.map((row) => {
       const dotTag = formatDotphrase(row.id);
       const linkedClass = row.linked ? ' linked' : '';
-      const snippet = truncateText(row.text, 200);
+      const favoriteClass = row.favorite ? ' favorite' : '';
+      const snippet = truncateText(row.text, 180);
       const toggleButton = row.linked
         ? `<button class="dotphrase-btn" type="button" data-role="toggle-linked-ruleout" data-dot-id="${escapeHtml(row.id)}">${row.selected ? 'Remove from Rule-outs' : 'Add to Rule-outs'}</button>`
         : '';
 
       return `
-        <article class="dotphrase-item${linkedClass}">
+        <article class="dotphrase-item${linkedClass}${favoriteClass}">
           <div class="dotphrase-meta">
             <span class="dotphrase-dot">${escapeHtml(dotTag)}</span>
             <span class="dotphrase-cat">${escapeHtml(row.cat || 'General')}</span>
@@ -1928,13 +2080,50 @@
           <div class="dotphrase-cond">${escapeHtml(row.cond || 'Untitled Dotphrase')}</div>
           <div class="dotphrase-snippet">${escapeHtml(snippet || 'No phrase text available.')}</div>
           <div class="dotphrase-actions">
-            <button class="dotphrase-btn" type="button" data-role="copy-dot-id" data-dot-id="${escapeHtml(row.id)}">Copy ${escapeHtml(dotTag)}</button>
             <button class="dotphrase-btn" type="button" data-role="copy-dot-text" data-dot-id="${escapeHtml(row.id)}">Copy Expanded Text</button>
+            <button class="dotphrase-btn favorite ${row.favorite ? 'active' : ''}" type="button" data-role="toggle-favorite" data-dot-id="${escapeHtml(row.id)}">${row.favorite ? 'Unpin' : 'Pin'}</button>
             ${toggleButton}
           </div>
         </article>
       `;
     }).join('');
+  }
+
+  function toggleDotphraseFavorite(dotId) {
+    const clean = normalizeId(dotId);
+    if (!clean) return;
+    if (state.dotphraseFavorites.has(clean)) {
+      state.dotphraseFavorites.delete(clean);
+    } else {
+      state.dotphraseFavorites.add(clean);
+    }
+    renderDotphraseLookup();
+    saveState();
+  }
+
+  function renderDotphraseLookup() {
+    if (!els.dotphraseQuickList || !els.dotphraseMatchCount) return;
+
+    const rows = getDotphraseRows();
+    const favoriteRows = getFavoriteDotphraseRows();
+    const favoriteIds = new Set(favoriteRows.map((row) => row.id));
+    const mainRows = rows.filter((row) => !favoriteIds.has(row.id));
+
+    els.dotphraseMatchCount.textContent = `${mainRows.length} shown`;
+    if (els.dotphraseFavoritesCount) {
+      els.dotphraseFavoritesCount.textContent = String(favoriteRows.length);
+    }
+    if (els.dotphraseFavoritesList) {
+      els.dotphraseFavoritesList.innerHTML = renderDotphraseCards(
+        favoriteRows,
+        'No pinned dotphrases yet. Use Pin on any phrase you use often.'
+      );
+    }
+
+    els.dotphraseQuickList.innerHTML = renderDotphraseCards(
+      mainRows,
+      'No dotphrases match this search. Try a shorter keyword.'
+    );
   }
 
   function renderAll() {
@@ -2076,6 +2265,17 @@
     persistActivePackState();
   }
 
+  function clearDdxSelections() {
+    if (!state.activePack) return;
+    state.selectedDdx.clear();
+    state.selectedRuleouts.clear();
+    state.availableRuleoutIds = [];
+    syncRuleouts(state.activePack, { autoSelectNew: false });
+    syncRiskToggles(state.activePack);
+    renderAll();
+    persistActivePackState();
+  }
+
   function resetCurrentPackToDefaults() {
     if (!state.activePack) return;
     delete state.savedByPack[state.activePack.id];
@@ -2169,30 +2369,19 @@
     return false;
   }
 
-  function openPanel(panel, anchorId) {
-    if (!panel) return;
-    panel.open = true;
-    if (anchorId) {
-      const target = document.getElementById(anchorId) || panel;
-      if (target && typeof target.scrollIntoView === 'function') {
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    }
-  }
-
   function applyPanelHash() {
     const hash = normalizeCommand(window.location.hash.replace(/^#/, ''));
     if (!hash) return;
     if (hash === 'mdmbuilder' || hash === 'panelmdmbuilder') {
-      openPanel(els.panelMdmBuilder, 'panel-mdm-builder');
+      activateDocTab('mdm');
       return;
     }
     if (hash === 'discharge' || hash === 'dischargebuilder' || hash === 'paneldischargebuilder') {
-      openPanel(els.panelDischargeBuilder, 'panel-discharge-builder');
+      activateDocTab('discharge');
       return;
     }
     if (hash === 'dotphraselibrary' || hash === 'paneldotphrase' || hash === 'dotphrase') {
-      openPanel(els.panelDotphrase, 'panel-dotphrase');
+      activateDocTab('dotphrase');
     }
   }
 
@@ -2236,22 +2425,49 @@
       if (packId) selectPack(packId);
     });
 
+    if (els.tabMdmBuilder) {
+      els.tabMdmBuilder.addEventListener('click', () => activateDocTab('mdm'));
+    }
+    if (els.tabDotphrase) {
+      els.tabDotphrase.addEventListener('click', () => activateDocTab('dotphrase'));
+    }
+    if (els.tabDischarge) {
+      els.tabDischarge.addEventListener('click', () => activateDocTab('discharge'));
+    }
+
+    [els.panelMdmBuilder, els.panelDotphrase, els.panelDischargeBuilder].forEach((panel) => {
+      if (!panel) return;
+      panel.addEventListener('toggle', syncDocTabFromOpenPanels);
+    });
+
     els.resetPackBtn.addEventListener('click', resetCurrentPackToDefaults);
     els.lifeThreatsBtn.addEventListener('click', applyLifeThreatsOnly);
+    els.clearDdxBtn.addEventListener('click', clearDdxSelections);
     els.clearAllBtn.addEventListener('click', clearAllSelections);
+    if (els.stickyCopyFullBtn) {
+      els.stickyCopyFullBtn.addEventListener('click', () => {
+        copyTextWithFeedback(els.preview.value, els.stickyCopyFullBtn);
+      });
+    }
+    if (els.stickyClearDdxBtn) {
+      els.stickyClearDdxBtn.addEventListener('click', clearDdxSelections);
+    }
+    if (els.stickyResetPackBtn) {
+      els.stickyResetPackBtn.addEventListener('click', resetCurrentPackToDefaults);
+    }
     if (els.openMdmBuilderBtn) {
       els.openMdmBuilderBtn.addEventListener('click', () => {
-        openPanel(els.panelMdmBuilder, 'panel-mdm-builder');
+        activateDocTab('mdm');
       });
     }
     if (els.openDischargeBuilderBtn) {
       els.openDischargeBuilderBtn.addEventListener('click', () => {
-        openPanel(els.panelDischargeBuilder, 'panel-discharge-builder');
+        activateDocTab('discharge');
       });
     }
     if (els.openDotphraseBtn) {
       els.openDotphraseBtn.addEventListener('click', () => {
-        openPanel(els.panelDotphrase, 'panel-dotphrase');
+        activateDocTab('dotphrase');
       });
     }
 
@@ -2323,40 +2539,45 @@
       });
     }
 
+    const handleDotphraseAction = (event) => {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      const btn = target.closest('button[data-role]');
+      if (!btn) return;
+
+      const role = btn.getAttribute('data-role') || '';
+      const dotId = normalizeId(btn.getAttribute('data-dot-id') || '');
+      if (!dotId) return;
+
+      if (role === 'copy-dot-text') {
+        const lookup = phraseLookup(dotId);
+        const text = lookup && lookup.exists && lookup.text ? lookup.text : formatDotphrase(dotId);
+        copyTextWithFeedback(text, btn);
+        return;
+      }
+
+      if (role === 'toggle-favorite') {
+        toggleDotphraseFavorite(dotId);
+        return;
+      }
+
+      if (role === 'toggle-linked-ruleout') {
+        if (!state.availableRuleoutIds.includes(dotId)) return;
+        if (state.selectedRuleouts.has(dotId)) state.selectedRuleouts.delete(dotId);
+        else state.selectedRuleouts.add(dotId);
+        renderRuleouts();
+        renderCounts();
+        renderDotphraseLookup();
+        setPreview();
+        persistActivePackState();
+      }
+    };
+
     if (els.dotphraseQuickList) {
-      els.dotphraseQuickList.addEventListener('click', (event) => {
-        const target = event.target;
-        if (!(target instanceof Element)) return;
-        const btn = target.closest('button[data-role]');
-        if (!btn) return;
-
-        const role = btn.getAttribute('data-role') || '';
-        const dotId = normalizeId(btn.getAttribute('data-dot-id') || '');
-        if (!dotId) return;
-
-        if (role === 'copy-dot-id') {
-          copyTextWithFeedback(formatDotphrase(dotId), btn);
-          return;
-        }
-
-        if (role === 'copy-dot-text') {
-          const lookup = phraseLookup(dotId);
-          const text = lookup && lookup.exists && lookup.text ? lookup.text : formatDotphrase(dotId);
-          copyTextWithFeedback(text, btn);
-          return;
-        }
-
-        if (role === 'toggle-linked-ruleout') {
-          if (!state.availableRuleoutIds.includes(dotId)) return;
-          if (state.selectedRuleouts.has(dotId)) state.selectedRuleouts.delete(dotId);
-          else state.selectedRuleouts.add(dotId);
-          renderRuleouts();
-          renderCounts();
-          renderDotphraseLookup();
-          setPreview();
-          persistActivePackState();
-        }
-      });
+      els.dotphraseQuickList.addEventListener('click', handleDotphraseAction);
+    }
+    if (els.dotphraseFavoritesList) {
+      els.dotphraseFavoritesList.addEventListener('click', handleDotphraseAction);
     }
 
     if (els.dischargeBuilder) {
@@ -2435,31 +2656,27 @@
     loadSavedState();
     renderDischargeBuilder();
     renderPackSelect();
-
-    if (state.outputMode === OUTPUT_DOTPHRASE) {
-      els.modeDot.checked = true;
-      els.modeExpanded.checked = false;
-    } else {
-      els.modeExpanded.checked = true;
-      els.modeDot.checked = false;
-      state.outputMode = OUTPUT_EXPANDED;
-    }
+    state.outputMode = OUTPUT_EXPANDED;
+    activateDocTab('mdm', { scroll: false });
 
     const hashCmd = normalizeCommand(window.location.hash.replace(/^#/, ''));
     if (hashCmd && state.commandMap.has(hashCmd)) {
       selectPack(state.commandMap.get(hashCmd), { skipPersist: true });
       applyPanelHash();
+      syncDocTabFromOpenPanels();
       return;
     }
 
     if (state.savedActivePackId && state.packById.has(state.savedActivePackId)) {
       selectPack(state.savedActivePackId, { skipPersist: true });
       applyPanelHash();
+      syncDocTabFromOpenPanels();
       return;
     }
 
     selectPack(state.packs[0].id, { skipPersist: true });
     applyPanelHash();
+    syncDocTabFromOpenPanels();
   }
 
   init();

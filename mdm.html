@@ -25,6 +25,7 @@ header{background:linear-gradient(135deg,#1e293b,#0f172a);border-bottom:1px soli
 .mode-pill{display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #334155;background:#1e293b;border-radius:999px;color:#cbd5e1;font-size:13px;font-weight:600;cursor:pointer}
 .mode-pill input{accent-color:#3b82f6}
 .alias-hint{margin-top:8px;font-size:11px;color:#64748b}
+.controls,.alias-hint{display:none}
 .pack-shortcuts{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
 .pack-chip{padding:6px 10px;border-radius:999px;border:1px solid #334155;background:#1e293b;color:#cbd5e1;font-size:11px;font-weight:700;cursor:pointer;transition:all .15s}
 .pack-chip:hover{border-color:#3b82f6;color:#bfdbfe}
@@ -34,8 +35,27 @@ header{background:linear-gradient(135deg,#1e293b,#0f172a);border-bottom:1px soli
 .quick-btn:hover{border-color:#3b82f6;color:#bfdbfe}
 .quick-btn.primary{background:#1d4ed8;border-color:#2563eb;color:#eff6ff}
 .quick-btn.primary:hover{background:#2563eb;color:#fff}
+.quick-btn.danger{background:#7f1d1d;border-color:#b91c1c;color:#fee2e2;font-size:12px;font-weight:800;letter-spacing:.02em}
+.quick-btn.danger:hover{background:#991b1b;border-color:#dc2626;color:#fff}
 
 main{max-width:1100px;margin:0 auto;padding:18px 24px 64px}
+.doc-toolbar{position:sticky;top:46px;z-index:60;background:rgba(15,23,42,.92);backdrop-filter:blur(10px);border:1px solid #334155;border-radius:12px;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.toolbar-left{display:flex;gap:8px;flex-wrap:wrap}
+.toolbar-btn{padding:8px 11px;border-radius:8px;border:1px solid #334155;background:#1e293b;color:#e2e8f0;font-size:12px;font-weight:700;cursor:pointer}
+.toolbar-btn:hover{border-color:#3b82f6;color:#bfdbfe}
+.toolbar-btn.primary{background:#1d4ed8;border-color:#2563eb;color:#eff6ff}
+.toolbar-btn.primary:hover{background:#2563eb;color:#fff}
+.status-badges{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.status-pill{font-size:11px;font-weight:700;border-radius:999px;padding:4px 8px;border:1px solid #334155;background:#0f172a;color:#94a3b8}
+.status-pill.ok{background:#052e16;border-color:#166534;color:#86efac}
+.status-pill.warn{background:#2b1f0a;border-color:#b45309;color:#fcd34d}
+.status-pill.neutral{background:#0f172a;border-color:#334155;color:#94a3b8}
+.doc-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.doc-tab{padding:8px 12px;border-radius:10px;border:1px solid #334155;background:#111827;color:#9fb0c6;font-size:12px;font-weight:700;cursor:pointer}
+.doc-tab.primary{background:#10213f;border-color:#1e3a8a;color:#bfdbfe}
+.doc-tab.secondary{background:#111827;color:#a7b8ce}
+.doc-tab:hover{border-color:#3b82f6;color:#e2e8f0}
+.doc-tab.active{box-shadow:0 0 0 1px rgba(59,130,246,.35),0 0 16px rgba(37,99,235,.25);border-color:#2563eb;color:#fff}
 .doc-accordion{display:grid;gap:14px}
 .doc-panel{background:#1e293b;border:1px solid #334155;border-radius:12px;overflow:hidden}
 .doc-panel > summary{list-style:none;cursor:pointer;padding:14px 16px;background:#172235;border-bottom:1px solid #334155;display:flex;align-items:center;justify-content:space-between;gap:10px}
@@ -114,9 +134,13 @@ main{max-width:1100px;margin:0 auto;padding:18px 24px 64px}
 .dotphrase-search{width:100%;padding:12px 14px;background:#0f172a;border:1px solid #334155;border-radius:10px;color:#e2e8f0;font-size:14px;outline:none}
 .dotphrase-search:focus{border-color:#3b82f6}
 .dotphrase-helper{font-size:11px;color:#94a3b8;margin-bottom:10px}
+.dotphrase-favorites{margin-bottom:12px;padding:10px;border:1px solid #334155;border-radius:10px;background:#111827}
+.dotphrase-favorites-head{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#93c5fd;font-weight:700;margin-bottom:8px}
+.dotphrase-favorites-count{font-size:10px;padding:2px 8px;border-radius:999px;background:#0f172a;border:1px solid #27364d;color:#93c5fd}
 .dotphrase-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;max-height:560px;overflow:auto;padding-right:2px}
 .dotphrase-item{border:1px solid #334155;background:#0f172a;border-radius:10px;padding:10px}
 .dotphrase-item.linked{border-color:#2563eb;background:#0d1b34}
+.dotphrase-item.favorite{border-color:#d97706;background:#2b1f0a}
 .dotphrase-meta{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}
 .dotphrase-dot{font:700 12px/1.2 'JetBrains Mono',monospace;color:#bfdbfe;background:#12284a;border:1px solid #1d4ed8;border-radius:999px;padding:3px 8px}
 .dotphrase-cat{font-size:10px;color:#93c5fd;border:1px solid #1e3a8a;background:#0b1730;border-radius:999px;padding:3px 8px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
@@ -125,6 +149,8 @@ main{max-width:1100px;margin:0 auto;padding:18px 24px 64px}
 .dotphrase-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .dotphrase-btn{padding:6px 9px;border-radius:8px;border:1px solid #334155;background:#1e293b;color:#e2e8f0;font-size:11px;font-weight:700;cursor:pointer}
 .dotphrase-btn:hover{border-color:#3b82f6;color:#bfdbfe}
+.dotphrase-btn.favorite{background:#1f2937;border-color:#4b5563;color:#d1d5db}
+.dotphrase-btn.favorite.active{background:#92400e;border-color:#b45309;color:#fde68a}
 .dotphrase-empty{font-size:12px;color:#64748b;padding:10px;border:1px dashed #334155;border-radius:10px}
 
 @media(max-width:980px){
@@ -134,6 +160,8 @@ main{max-width:1100px;margin:0 auto;padding:18px 24px 64px}
   .preview{min-height:320px}
   .dotphrase-tools{grid-template-columns:1fr}
   .dotphrase-list{grid-template-columns:1fr;max-height:none}
+  .doc-toolbar{top:46px;flex-direction:column;align-items:stretch}
+  .status-badges{justify-content:flex-start}
 }
 
 /* ===== SHARED NEW NAV ===== */
@@ -197,7 +225,8 @@ main{max-width:1100px;margin:0 auto;padding:18px 24px 64px}
     <div class="quick-actions">
       <button class="quick-btn" id="resetPackBtn" type="button">Reset Pack Defaults</button>
       <button class="quick-btn" id="lifeThreatsBtn" type="button">Life-Threats Only</button>
-      <button class="quick-btn" id="clearAllBtn" type="button">Clear All</button>
+      <button class="quick-btn" id="clearDdxBtn" type="button">Clear DDx</button>
+      <button class="quick-btn danger" id="clearAllBtn" type="button">Clear All</button>
       <button class="quick-btn" id="openMdmBuilderBtn" type="button">MDM Builder</button>
       <button class="quick-btn" id="openDischargeBuilderBtn" type="button">Discharge Builder</button>
       <button class="quick-btn primary" id="openDotphraseBtn" type="button">Dotphrase Library</button>
@@ -208,6 +237,25 @@ main{max-width:1100px;margin:0 auto;padding:18px 24px 64px}
 </header>
 
 <main>
+  <section class="doc-toolbar" aria-label="Quick Documentation Actions">
+    <div class="toolbar-left">
+      <button id="stickyCopyFullBtn" class="toolbar-btn primary" type="button">Copy Full MDM</button>
+      <button id="stickyClearDdxBtn" class="toolbar-btn" type="button">Clear DDx</button>
+      <button id="stickyResetPackBtn" class="toolbar-btn" type="button">Reset Pack</button>
+    </div>
+    <div id="completenessIndicators" class="status-badges" aria-live="polite">
+      <span class="status-pill neutral">DDx: 0</span>
+      <span class="status-pill neutral">Rule-outs: 0</span>
+      <span class="status-pill neutral">Risk: 0</span>
+    </div>
+  </section>
+
+  <div class="doc-tabs" role="tablist" aria-label="Documentation Sections">
+    <button id="tabMdmBuilder" class="doc-tab primary active" type="button" role="tab" aria-selected="true" data-tab-target="mdm">MDM Builder</button>
+    <button id="tabDotphrase" class="doc-tab primary" type="button" role="tab" aria-selected="false" data-tab-target="dotphrase">Dotphrase Library</button>
+    <button id="tabDischarge" class="doc-tab secondary" type="button" role="tab" aria-selected="false" data-tab-target="discharge">Discharge Builder</button>
+  </div>
+
   <div class="doc-accordion">
     <details class="doc-panel" id="panel-mdm-builder">
       <summary>
@@ -338,6 +386,13 @@ main{max-width:1100px;margin:0 auto;padding:18px 24px 64px}
               <a class="quick-btn" href="dotphrase.html">Open Full Dotphrase Library</a>
             </div>
             <p class="dotphrase-helper">Linked rule-outs for the selected DDx are highlighted first for faster bedside documentation.</p>
+            <section class="dotphrase-favorites">
+              <div class="dotphrase-favorites-head">
+                <span>Pinned Favorites</span>
+                <span id="dotphraseFavoritesCount" class="dotphrase-favorites-count">0</span>
+              </div>
+              <div id="dotphraseFavoritesList" class="dotphrase-list"></div>
+            </section>
             <div id="dotphraseQuickList" class="dotphrase-list"></div>
           </div>
         </section>
