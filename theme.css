@@ -319,3 +319,107 @@ html[data-theme="light"] .kp-tag.t-neuro  { background:#fdf4ff; color:#a21caf; b
 #theme-toggle:hover {
   transform: scale(1.1);
 }
+
+/* ── Feedback bubble + popup ──────────────────────────────────────────── */
+#feedback-bubble {
+  position: fixed;
+  bottom: 20px;
+  right: 16px;
+  z-index: 9997;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  background: var(--blue, #3b82f6);
+  color: #fff;
+  cursor: pointer;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(59,130,246,.45);
+  transition: transform .2s, box-shadow .2s;
+  animation: fbPulse 3s ease-in-out 2s 3;
+}
+@keyframes fbPulse {
+  0%,100% { box-shadow: 0 4px 16px rgba(59,130,246,.45); }
+  50%      { box-shadow: 0 4px 28px rgba(59,130,246,.8); transform: scale(1.08); }
+}
+#feedback-bubble:hover {
+  transform: scale(1.12);
+  box-shadow: 0 6px 24px rgba(59,130,246,.65);
+}
+#feedback-bubble.active {
+  background: var(--blue2, #1d4ed8);
+  animation: none;
+}
+
+#feedback-popup {
+  position: fixed;
+  bottom: 74px;
+  right: 16px;
+  z-index: 9997;
+  width: 252px;
+  background: var(--surface, #0d1829);
+  border: 1px solid var(--border2, #243d5c);
+  border-radius: 14px;
+  box-shadow: 0 8px 36px rgba(0,0,0,.5);
+  padding: 18px 16px 14px;
+  opacity: 0;
+  transform: translateY(10px) scale(.96);
+  pointer-events: none;
+  transition: opacity .22s, transform .22s;
+}
+#feedback-popup.open {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: all;
+}
+#feedback-popup::after {
+  content: '';
+  position: absolute;
+  bottom: -7px;
+  right: 18px;
+  width: 13px;
+  height: 13px;
+  background: var(--surface, #0d1829);
+  border-right: 1px solid var(--border2, #243d5c);
+  border-bottom: 1px solid var(--border2, #243d5c);
+  transform: rotate(45deg);
+}
+.fb-popup-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text, #e8f0fc);
+  margin-bottom: 5px;
+}
+.fb-popup-body {
+  font-size: 12px;
+  color: var(--text2, #8fa8c8);
+  line-height: 1.55;
+  margin-bottom: 13px;
+}
+.fb-popup-btn {
+  display: block;
+  text-align: center;
+  padding: 8px 14px;
+  background: var(--blue, #3b82f6);
+  color: #fff;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  letter-spacing: .02em;
+  transition: background .15s;
+}
+.fb-popup-btn:hover {
+  background: var(--blue2, #1d4ed8);
+  color: #fff;
+}
+/* light-mode popup */
+html[data-theme="light"] #feedback-popup {
+  box-shadow: 0 8px 36px rgba(0,0,0,.15);
+}
+html[data-theme="light"] #feedback-popup::after {
+  background: var(--surface);
+}
