@@ -1,0 +1,38 @@
+{
+  "department_keywords": {
+    "Emergency Medicine": ["emergency medicine", "emergency department", "ed", "er"],
+    "Internal Medicine": ["internal medicine", "hospitalist", "im"],
+    "Hospital Medicine": ["hospitalist"],
+    "Cardiology": ["cardiology", "cardiologist", "stemi", "acs"],
+    "Critical Care": ["intensivist", "icu", "critical care"],
+    "Primary Care": ["primary care"],
+    "OB/GYN": ["ob-gyn", "obgyn", "ob gyn", "pregnancy", "gyne"],
+    "Urgent Care": ["urgent care"],
+    "Pediatrics": ["pediatric", "pediatrics", "peds", "child"],
+    "Psychiatry": ["psychiat", "behavioral health", "psych"],
+    "Neurosurgery": ["neurosurgery", "neurosurg"],
+    "Neurology": ["neurology", "stroke", "ich"],
+    "Ophthalmology": ["ophthalmology", "ocular", "eye"],
+    "Urology": ["urology", "urinary", "gu"],
+    "Surgery": ["surgery", "surgical", "appendicitis", "necrotizing"],
+    "Skilled Nursing Facility": ["snf", "skilled nursing"],
+    "Case Management": ["case manager", "discharge planning", "transfer"]
+  },
+  "tag_keywords": {
+    "consult-workflow": ["consult", "service agreement", "coverage"],
+    "escalation": ["escalation", "chain of command", "no response"],
+    "ownership": ["ownership", "acceptance", "responsibility"],
+    "disposition": ["disposition", "admission", "discharge", "transfer"],
+    "transfer": ["transfer", "lateral transfer", "outside facility"],
+    "non-member": ["nonmember", "non-member"],
+    "sepsis": ["sepsis", "septic", "lactate"],
+    "appendicitis": ["appendicitis"],
+    "necrotizing-fasciitis": ["necrotizing", "fasciitis"],
+    "behavioral-health": ["psychiat", "behavioral", "medical clearance"],
+    "pregnancy": ["pregnancy", "ob", "gyn"],
+    "critical-care": ["icu", "intensivist", "critical care"],
+    "pediatric": ["pediatric", "child", "peds"],
+    "surgical": ["surgery", "surgical", "operative"],
+    "quality-safety": ["stabilize", "reassess", "protocol", "safety"]
+  }
+}

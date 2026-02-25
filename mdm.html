@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MDM Builder</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',system-ui,sans-serif;background:#0f172a;color:#e2e8f0;min-height:100vh}
+header{background:linear-gradient(135deg,#1e293b,#0f172a);border-bottom:1px solid #1e3a5f;padding:20px 24px}
+.header-inner{max-width:1100px;margin:0 auto}
+.logo{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.logo span{font-size:22px}.logo h1{font-size:20px;font-weight:700;color:#f1f5f9}
+.subtitle{font-size:13px;color:#64748b;margin-left:32px;margin-bottom:12px}
+.disclaimer{background:#1e3a5f;border:1px solid #2563eb;border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:12px;color:#93c5fd;line-height:1.5}
+.disclaimer strong{color:#bfdbfe}
+
+.controls{display:grid;grid-template-columns:2fr 1.2fr 1.5fr;gap:12px;align-items:end}
+.control{display:flex;flex-direction:column;gap:6px}
+.control label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#8fa8c8;font-weight:700}
+.control select,.control input[type="text"]{width:100%;padding:10px 12px;background:#1e293b;border:1px solid #334155;border-radius:10px;color:#f1f5f9;font-size:14px;outline:none}
+.control select:focus,.control input[type="text"]:focus{border-color:#3b82f6}
+.control input[type="text"].invalid{border-color:#ef4444;box-shadow:0 0 0 3px rgba(239,68,68,.15)}
+.mode-toggle{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.mode-pill{display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #334155;background:#1e293b;border-radius:999px;color:#cbd5e1;font-size:13px;font-weight:600;cursor:pointer}
+.mode-pill input{accent-color:#3b82f6}
+.alias-hint{margin-top:8px;font-size:11px;color:#64748b}
+.pack-shortcuts{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
+.pack-chip{padding:6px 10px;border-radius:999px;border:1px solid #334155;background:#1e293b;color:#cbd5e1;font-size:11px;font-weight:700;cursor:pointer;transition:all .15s}
+.pack-chip:hover{border-color:#3b82f6;color:#bfdbfe}
+.pack-chip.active{background:#1d4ed8;border-color:#2563eb;color:#fff}
+.quick-actions{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
+.quick-btn{padding:7px 10px;border-radius:8px;border:1px solid #334155;background:#0f172a;color:#cbd5e1;font-size:11px;font-weight:700;cursor:pointer;transition:all .15s;text-decoration:none;display:inline-flex;align-items:center}
+.quick-btn:hover{border-color:#3b82f6;color:#bfdbfe}
+.quick-btn.primary{background:#1d4ed8;border-color:#2563eb;color:#eff6ff}
+.quick-btn.primary:hover{background:#2563eb;color:#fff}
+
+main{max-width:1100px;margin:0 auto;padding:18px 24px 64px}
+.doc-accordion{display:grid;gap:14px}
+.doc-panel{background:#1e293b;border:1px solid #334155;border-radius:12px;overflow:hidden}
+.doc-panel > summary{list-style:none;cursor:pointer;padding:14px 16px;background:#172235;border-bottom:1px solid #334155;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.doc-panel > summary::-webkit-details-marker{display:none}
+.doc-title{font-size:14px;font-weight:700;color:#f1f5f9}
+.doc-meta{font-size:11px;color:#94a3b8}
+.doc-panel > summary::after{content:'+';font-size:18px;line-height:1;color:#93c5fd;font-weight:700}
+.doc-panel[open] > summary::after{content:'−'}
+.doc-content{padding:14px}
+.doc-content .grid{margin:0}
+.doc-content .dotphrase-panel{margin:0}
+.grid{display:grid;grid-template-columns:1.1fr 1fr;gap:16px;align-items:start}
+.panel{background:#1e293b;border:1px solid #334155;border-radius:12px;overflow:hidden}
+.panel-head{padding:12px 14px;border-bottom:1px solid #334155;background:#172235}
+.panel-head h2{font-size:13px;color:#f1f5f9;font-weight:700;letter-spacing:.02em;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.head-count{font-size:10px;padding:2px 8px;border-radius:999px;background:#0f172a;border:1px solid #27364d;color:#93c5fd}
+.panel-body{padding:14px}
+.section-subgroup + .section-subgroup{margin-top:14px}
+.section-subgroup h4{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#8fa8c8;margin-bottom:8px}
+.check-grid{display:grid;grid-template-columns:1fr;gap:8px}
+.check-row{display:flex;align-items:flex-start;gap:8px;padding:9px 10px;background:#0f172a;border:1px solid #27364d;border-radius:9px;font-size:13px;color:#cbd5e1}
+.check-row input{margin-top:2px;accent-color:#3b82f6}
+.ruleout-label{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.missing-tag{font-size:11px;color:#fca5a5;border:1px solid #7f1d1d;background:#2d1b1b;padding:1px 6px;border-radius:20px}
+
+.risk-row + .risk-row{margin-top:10px}
+.risk-input-wrap{display:flex;align-items:center;gap:8px;margin:8px 2px 0 28px}
+.risk-input-wrap span{font-size:11px;color:#94a3b8;min-width:54px}
+.risk-input-wrap input,.risk-input-wrap select{background:#0f172a;border:1px solid #334155;border-radius:8px;color:#e2e8f0;font-size:12px;padding:6px 8px;min-width:120px}
+.risk-input-wrap input:disabled,.risk-input-wrap select:disabled{opacity:.5}
+.risk-calc-wrap{margin:8px 2px 0 28px;padding:10px;border:1px solid #334155;border-radius:10px;background:#111827}
+.risk-calc-title{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#8fa8c8;font-weight:700;margin-bottom:8px}
+.risk-calc-grid{display:grid;grid-template-columns:1fr;gap:8px}
+.risk-calc-field{margin:0}
+.risk-calc-check{background:#0b1322}
+.risk-calc-subhead{font-size:11px;font-weight:700;color:#93c5fd;letter-spacing:.04em;margin-top:2px}
+.risk-calc-result{margin-top:8px;border-radius:8px;border:1px solid #334155;padding:8px 10px;font-size:12px;color:#cbd5e1}
+.risk-calc-result.calc-neutral{background:#0f172a;border-color:#334155;color:#94a3b8}
+.risk-calc-result.calc-low{background:#052e16;border-color:#16a34a;color:#86efac}
+.risk-calc-result.calc-moderate{background:#1c1917;border-color:#ca8a04;color:#fde047}
+.risk-calc-result.calc-high{background:#1f0707;border-color:#dc2626;color:#fca5a5}
+.risk-calc-link{display:inline-flex;margin-top:8px;font-size:11px;color:#93c5fd;text-decoration:none;border-bottom:1px dotted #1d4ed8}
+.risk-calc-link:hover{color:#bfdbfe}
+
+.preview-wrap{display:flex;flex-direction:column;gap:10px}
+.preview{width:100%;min-height:500px;resize:vertical;background:#0f172a;border:1px solid #334155;border-radius:10px;color:#e2e8f0;padding:12px;font:13px/1.55 'JetBrains Mono',monospace;outline:none}
+.discharge-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
+.discharge-form{display:grid;gap:10px}
+.discharge-checks{display:flex;flex-wrap:wrap;gap:8px}
+.discharge-check{display:flex;align-items:center;gap:6px;padding:7px 9px;background:#0f172a;border:1px solid #27364d;border-radius:8px;font-size:12px;color:#cbd5e1}
+.discharge-check input{accent-color:#3b82f6}
+.discharge-field{display:flex;flex-direction:column;gap:6px}
+.discharge-field label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#8fa8c8;font-weight:700}
+.discharge-field input,.discharge-field textarea{width:100%;padding:9px 10px;background:#0f172a;border:1px solid #334155;border-radius:8px;color:#e2e8f0;font-size:13px;outline:none;font-family:inherit}
+.discharge-field input:focus,.discharge-field textarea:focus{border-color:#3b82f6}
+.discharge-field textarea{min-height:72px;resize:vertical}
+.discharge-preview{min-height:360px}
+.copy-row{display:flex;gap:8px;flex-wrap:wrap}
+.copy-btn{padding:8px 12px;border-radius:8px;border:1px solid #334155;background:#1e293b;color:#e2e8f0;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s}
+.copy-btn:hover{border-color:#3b82f6;color:#bfdbfe}
+.copy-btn.copied{background:#14532d;border-color:#22c55e;color:#bbf7d0}
+.empty-block{font-size:12px;color:#64748b;padding:6px 2px}
+.quality-list{display:grid;grid-template-columns:1fr;gap:8px}
+.quality-item{border:1px solid #27364d;background:#0f172a;border-radius:9px;padding:9px 10px;font-size:12px;line-height:1.45;color:#cbd5e1}
+.quality-item.ok{border-color:#166534;background:#052215;color:#86efac}
+.quality-item.warn{border-color:#b45309;background:#2b1f0a;color:#fcd34d}
+.quality-item .quality-title{display:block;font-weight:700;margin-bottom:2px}
+
+.dotphrase-panel{margin-top:16px;border-color:#1d4ed8;box-shadow:0 0 0 1px rgba(29,78,216,.2)}
+.dotphrase-panel.prominent{margin:0 0 16px;border:2px solid #3b82f6;box-shadow:0 14px 28px rgba(2,6,23,.45),0 0 0 1px rgba(59,130,246,.35)}
+.dotphrase-panel .panel-head{background:linear-gradient(90deg,#172235,#10213f)}
+.dotphrase-panel.prominent .panel-head{background:linear-gradient(90deg,#0f2a4f,#10213f)}
+.dotphrase-panel.prominent .panel-head h2{font-size:15px;letter-spacing:.02em}
+.dotphrase-intro{font-size:12px;color:#bfdbfe;line-height:1.45;margin-bottom:10px}
+.dotphrase-tools{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;margin-bottom:10px}
+.dotphrase-search{width:100%;padding:12px 14px;background:#0f172a;border:1px solid #334155;border-radius:10px;color:#e2e8f0;font-size:14px;outline:none}
+.dotphrase-search:focus{border-color:#3b82f6}
+.dotphrase-helper{font-size:11px;color:#94a3b8;margin-bottom:10px}
+.dotphrase-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;max-height:560px;overflow:auto;padding-right:2px}
+.dotphrase-item{border:1px solid #334155;background:#0f172a;border-radius:10px;padding:10px}
+.dotphrase-item.linked{border-color:#2563eb;background:#0d1b34}
+.dotphrase-meta{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}
+.dotphrase-dot{font:700 12px/1.2 'JetBrains Mono',monospace;color:#bfdbfe;background:#12284a;border:1px solid #1d4ed8;border-radius:999px;padding:3px 8px}
+.dotphrase-cat{font-size:10px;color:#93c5fd;border:1px solid #1e3a8a;background:#0b1730;border-radius:999px;padding:3px 8px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.dotphrase-cond{font-size:12px;font-weight:700;color:#e2e8f0}
+.dotphrase-snippet{font-size:12px;color:#94a3b8;line-height:1.45;margin-top:4px}
+.dotphrase-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.dotphrase-btn{padding:6px 9px;border-radius:8px;border:1px solid #334155;background:#1e293b;color:#e2e8f0;font-size:11px;font-weight:700;cursor:pointer}
+.dotphrase-btn:hover{border-color:#3b82f6;color:#bfdbfe}
+.dotphrase-empty{font-size:12px;color:#64748b;padding:10px;border:1px dashed #334155;border-radius:10px}
+
+@media(max-width:980px){
+  .controls{grid-template-columns:1fr}
+  .grid{grid-template-columns:1fr}
+  .discharge-grid{grid-template-columns:1fr}
+  .preview{min-height:320px}
+  .dotphrase-tools{grid-template-columns:1fr}
+  .dotphrase-list{grid-template-columns:1fr;max-height:none}
+}
+
+/* ===== SHARED NEW NAV ===== */
+@media(max-width:640px){}
+.sitenav{background:#0d1829;border-bottom:1px solid #1a2d48;position:sticky;top:0;z-index:100;font-family:'DM Sans',system-ui,sans-serif}
+.sitenav-inner{max-width:1200px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:6px;height:46px;overflow:hidden}
+.nav-logo{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:#3b82f6;white-space:nowrap;flex-shrink:0;text-decoration:none;margin-right:6px}
+.nav-logo span{color:#4a6280}
+.nav-links{display:flex;flex:1;min-width:0;gap:1px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;white-space:nowrap;padding-right:10px}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-link{padding:5px 10px;border-radius:6px;font-size:12px;font-weight:600;color:#8fa8c8;text-decoration:none;white-space:nowrap;transition:all .15s}
+.nav-link:hover{background:#111f35;color:#e8f0fc}
+.nav-link.active{background:#1d4ed8;color:#fff}
+@media(max-width:640px){.nav-link{font-size:11px;padding:4px 8px}}
+</style>
+<link rel="stylesheet" href="mobile.css">
+</head>
+<body>
+<nav class="sitenav">
+  <div class="sitenav-inner">
+    <a class="nav-logo" href="index.html">⚡</a>
+    <div class="nav-links">
+      <a class="nav-link" href="index.html">🏠 Home</a>
+      <a class="nav-link active" href="mdm.html">🧾 Documentation</a>
+      <a class="nav-link" href="calculators.html">🧮 Decision Support</a>
+      <a class="nav-link" href="rsi.html">🚨 Resuscitation</a>
+      <a class="nav-link" href="algorithms.html">🔀 Algorithms</a>
+      <a class="nav-link" href="neurohub.html">🧠 Neuro Hub</a>
+      <a class="nav-link" href="service-agreements.html">📑 Service Agreements</a>
+      <a class="nav-link" href="ed-phone-directory.html">📞 Directory</a>
+      <a class="nav-link" href="links.html">🔗 Links</a>
+    </div>
+  </div>
+</nav>
+
+<header>
+  <div class="header-inner">
+    <div class="logo"><span>🧾</span><h1>Chief Complaint MDM Builder</h1></div>
+    <p class="subtitle">Build defensible MDM text with DDx, in-line risk calculators, and linked rule-outs.</p>
+    <div class="disclaimer"><strong>⚠️ Clinical Disclaimer:</strong> Generated text is a documentation aid. Review and tailor to the patient, diagnostics, and ED course before use.</div>
+
+    <div class="controls">
+      <div class="control">
+        <label for="packSelect">Chief Complaint Pack</label>
+        <select id="packSelect" aria-label="Chief Complaint Pack"></select>
+      </div>
+      <div class="control">
+        <label for="commandInput">Quick Command</label>
+        <input id="commandInput" type="text" placeholder="Type mdmccp, mdmsob, mdmabd..." autocomplete="off" spellcheck="false" aria-label="Quick Command Alias">
+      </div>
+      <div class="control">
+          <label>Output Mode</label>
+          <div class="mode-toggle">
+          <label class="mode-pill"><input id="modeDotphrase" name="outputMode" type="radio" value="dotphrase">Dotphrase</label>
+          <label class="mode-pill"><input id="modeExpanded" name="outputMode" type="radio" value="expanded" checked>Expanded</label>
+        </div>
+      </div>
+    </div>
+    <div id="aliasHint" class="alias-hint"></div>
+    <div class="pack-shortcuts" id="quickPackButtons"></div>
+    <div class="quick-actions">
+      <button class="quick-btn" id="resetPackBtn" type="button">Reset Pack Defaults</button>
+      <button class="quick-btn" id="lifeThreatsBtn" type="button">Life-Threats Only</button>
+      <button class="quick-btn" id="clearAllBtn" type="button">Clear All</button>
+      <button class="quick-btn" id="openMdmBuilderBtn" type="button">MDM Builder</button>
+      <button class="quick-btn" id="openDischargeBuilderBtn" type="button">Discharge Builder</button>
+      <button class="quick-btn primary" id="openDotphraseBtn" type="button">Dotphrase Library</button>
+      <a class="quick-btn" href="dotphrase.html">Open Full Dotphrase Library</a>
+      <a class="quick-btn" href="calculators.html#calc-heart">Open Full HEART Calc</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="doc-accordion">
+    <details class="doc-panel" id="panel-mdm-builder">
+      <summary>
+        <span class="doc-title">🧾 MDM Builder</span>
+        <span class="doc-meta">Chief complaint packs, DDx, risk tools, and live output</span>
+      </summary>
+      <div class="doc-content">
+        <div class="grid" id="mdm-builder">
+          <div>
+            <section class="panel">
+              <div class="panel-head"><h2>DDx <span id="ddxCount" class="head-count">0 selected</span></h2></div>
+              <div class="panel-body" id="ddxContainer"></div>
+            </section>
+
+            <section class="panel" style="margin-top:14px">
+              <div class="panel-head"><h2>Rule-outs <span id="ruleoutCount" class="head-count">0 selected</span></h2></div>
+              <div class="panel-body" id="ruleoutContainer"></div>
+            </section>
+
+            <section class="panel" style="margin-top:14px">
+              <div class="panel-head"><h2>Risk Tools <span id="riskCount" class="head-count">0 selected</span></h2></div>
+              <div class="panel-body" id="riskContainer"></div>
+            </section>
+
+            <section class="panel" style="margin-top:14px">
+              <div class="panel-head"><h2>Documentation Quality Checks <span id="qualityCount" class="head-count">0 warnings</span></h2></div>
+              <div class="panel-body">
+                <div id="qualityContainer" class="quality-list"></div>
+              </div>
+            </section>
+          </div>
+
+          <section class="panel">
+            <div class="panel-head"><h2>Live Preview</h2></div>
+            <div class="panel-body preview-wrap">
+              <div class="copy-row">
+                <button id="copyFullBtn" class="copy-btn" type="button">Copy Full MDM</button>
+                <button id="copyDdxBtn" class="copy-btn" type="button">Copy DDx only</button>
+                <button id="copyRuleoutsBtn" class="copy-btn" type="button">Copy Rule-outs only</button>
+              </div>
+              <textarea id="mdmPreview" class="preview" spellcheck="false" aria-label="MDM output preview"></textarea>
+            </div>
+          </section>
+        </div>
+      </div>
+    </details>
+
+    <details class="doc-panel" id="panel-discharge-builder">
+      <summary>
+        <span class="doc-title">🏁 Discharge Instruction Builder</span>
+        <span class="doc-meta">Diagnostic uncertainty, return precautions, and shared decision-making</span>
+      </summary>
+      <div class="doc-content">
+        <section class="panel">
+          <div class="panel-head"><h2>Discharge Text (separate from MDM)</h2></div>
+          <div class="panel-body discharge-grid" id="discharge-builder">
+            <div class="discharge-form">
+              <div class="discharge-checks">
+                <label class="discharge-check"><input id="dischargeIncludeUncertainty" data-discharge-field="include_uncertainty" type="checkbox">Diagnostic uncertainty</label>
+                <label class="discharge-check"><input id="dischargeIncludeReturn" data-discharge-field="include_return_precautions" type="checkbox">Return precautions</label>
+                <label class="discharge-check"><input id="dischargeIncludeSdm" data-discharge-field="include_shared_decision" type="checkbox">Shared decision-making</label>
+              </div>
+
+              <div class="discharge-field">
+                <label for="dischargeComplaintInput">Chief Complaint / Symptom</label>
+                <input id="dischargeComplaintInput" data-discharge-field="complaint" type="text" placeholder="e.g., chest pain">
+              </div>
+
+              <div class="discharge-field">
+                <label for="dischargeDxInput">Working Diagnosis Today</label>
+                <input id="dischargeDxInput" data-discharge-field="working_diagnosis" type="text" placeholder="e.g., low-risk chest pain">
+              </div>
+
+              <div class="discharge-field">
+                <label for="dischargeSeriousInput">Serious Conditions Considered</label>
+                <input id="dischargeSeriousInput" data-discharge-field="serious_conditions" type="text" placeholder="e.g., ACS, PE, aortic dissection">
+              </div>
+
+              <div class="discharge-field">
+                <label for="dischargeReturnInput">Return Triggers</label>
+                <textarea id="dischargeReturnInput" data-discharge-field="return_triggers" placeholder="e.g., worsening pain, dyspnea, syncope, fever, new neurologic symptoms"></textarea>
+              </div>
+
+              <div class="discharge-field">
+                <label for="dischargeFollowWithInput">Follow-Up With</label>
+                <input id="dischargeFollowWithInput" data-discharge-field="followup_with" type="text" placeholder="e.g., PCP / cardiology">
+              </div>
+
+              <div class="discharge-field">
+                <label for="dischargeFollowTimeInput">Follow-Up Timeframe</label>
+                <input id="dischargeFollowTimeInput" data-discharge-field="followup_timeframe" type="text" placeholder="e.g., within 24-48 hours">
+              </div>
+
+              <div class="discharge-field">
+                <label for="dischargeNotesInput">Additional Instructions (Optional)</label>
+                <textarea id="dischargeNotesInput" data-discharge-field="additional_notes" placeholder="e.g., medication or activity-specific instructions"></textarea>
+              </div>
+            </div>
+
+            <div class="preview-wrap">
+              <div class="copy-row">
+                <button id="copyDischargeBtn" class="copy-btn" type="button">Copy Discharge Instructions</button>
+              </div>
+              <textarea id="dischargePreview" class="preview discharge-preview" spellcheck="false" aria-label="Discharge instructions preview"></textarea>
+            </div>
+          </div>
+        </section>
+      </div>
+    </details>
+
+    <details class="doc-panel" id="panel-dotphrase">
+      <summary>
+        <span class="doc-title">📚 Dotphrase Library</span>
+        <span class="doc-meta">Search and add linked rule-out phrases</span>
+      </summary>
+      <div class="doc-content">
+        <section class="panel dotphrase-panel prominent" id="dotphrase-library">
+          <div class="panel-head">
+            <h2>
+              Dotphrase Library Quick Lookup
+              <span id="dotphraseMatchCount" class="head-count">0 shown</span>
+            </h2>
+          </div>
+          <div class="panel-body">
+            <p class="dotphrase-intro"><strong>Primary documentation tool:</strong> search dotphrases first, then toggle linked rule-outs into your MDM output.</p>
+            <div class="dotphrase-tools">
+              <input id="dotphraseSearchInput" class="dotphrase-search" type="text" placeholder="Search dotphrase ID, condition, category, or phrase text..." autocomplete="off" spellcheck="false" aria-label="Search dotphrase library">
+              <a class="quick-btn" href="dotphrase.html">Open Full Dotphrase Library</a>
+            </div>
+            <p class="dotphrase-helper">Linked rule-outs for the selected DDx are highlighted first for faster bedside documentation.</p>
+            <div id="dotphraseQuickList" class="dotphrase-list"></div>
+          </div>
+        </section>
+      </div>
+    </details>
+  </div>
+</main>
+
+<script src="search-index.js"></script>
+<script src="data/dotphrases.js"></script>
+<script src="mdm.js"></script>
+
+<script id="shared-nav-search">
+</script>
+</body>
+</html>

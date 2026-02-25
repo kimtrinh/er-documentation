@@ -1,0 +1,1413 @@
+#!/usr/bin/env python3
+# Build command:
+#   python3 tools/build_service_agreements_index
+#
+# What this does:
+# - Scans service agreements files in ./service-agreements/ or ./Service agreements/
+# - Extracts local text from DOCX/DOC files only (PDFs are ignored)
+# - Generates redacted, paraphrased summaries in ./data/service_agreements_index.json
+# - Never writes back to source documents and never logs extracted text
+
+from __future__ import annotations
+
+import datetime as dt
+import json
+import re
+import subprocess
+import unicodedata
+import xml.etree.ElementTree as ET
+import zipfile
+import zlib
+from pathlib import Path
+from typing import Dict, Iterable, List, Optional, Sequence, Set, Tuple
+
+ROOT = Path(__file__).resolve().parent.parent
+OUTPUT_PATH = ROOT / "data" / "service_agreements_index.json"
+CONFIG_PATH = ROOT / "tools" / "agreement_config.json"
+OVERRIDES_MD_PATH = ROOT / "tools" / "service_agreements_index.md"
+SOURCE_CANDIDATES = [ROOT / "service-agreements", ROOT / "Service agreements"]
+
+DEFAULT_CONFIG = {
+    "department_keywords": {
+        "Emergency Medicine": ["emergency medicine", "emergency department", "ed", "er"],
+        "Internal Medicine": ["internal medicine", "hospitalist"],
+        "Hospital Medicine": ["hospitalist"],
+        "Cardiology": ["cardiology", "cardiologist", "stemi", "acs"],
+        "Critical Care": ["intensivist", "icu", "critical care"],
+        "Primary Care": ["primary care"],
+        "OB/GYN": ["ob-gyn", "obgyn", "ob gyn", "pregnancy", "gyne"],
+        "Urgent Care": ["urgent care"],
+        "Pediatrics": ["pediatric", "pediatrics", "peds", "child"],
+        "Psychiatry": ["psychiat", "behavioral health", "psych"],
+        "Neurosurgery": ["neurosurgery", "neurosurg"],
+        "Neurology": ["neurology", "stroke", "ich"],
+        "Ophthalmology": ["ophthalmology", "ocular", "eye"],
+        "Urology": ["urology", "urinary"],
+        "Surgery": ["surgery", "surgical", "appendicitis", "necrotizing"],
+        "Skilled Nursing Facility": ["snf", "skilled nursing"],
+        "Case Management": ["case manager", "discharge planning", "transfer"],
+    },
+    "tag_keywords": {
+        "consult-workflow": ["consult", "service agreement", "coverage"],
+        "escalation": ["escalation", "chain of command", "no response", "chief"],
+        "ownership": ["ownership", "acceptance", "responsibility", "hand off", "handoff"],
+        "disposition": ["disposition", "admission", "discharge", "transfer", "follow up"],
+        "transfer": ["transfer", "lateral transfer", "outside facility"],
+        "non-member": ["nonmember", "non-member"],
+        "sepsis": ["sepsis", "septic", "lactate"],
+        "appendicitis": ["appendicitis"],
+        "necrotizing-fasciitis": ["necrotizing", "fasciitis"],
+        "behavioral-health": ["psychiat", "behavioral", "medical clearance"],
+        "pregnancy": ["pregnancy", "ob-gyn", "obgyn", "gyne"],
+        "critical-care": ["icu", "intensivist", "critical care"],
+        "pediatric": ["pediatric", "child", "peds"],
+        "surgical": ["surgery", "surgical", "operative"],
+        "quality-safety": ["stabilize", "reassess", "protocol", "safety"],
+    },
+}
+
+SUPPORTED_SUFFIXES = {".docx", ".doc"}
+OVERRIDE_FIELDS = {
+    "summary_bullets",
+    "ed_actions",
+    "consults_and_escalation",
+    "disposition_or_ownership",
+    "timing_targets",
+}
+PHONE_RE = re.compile(r"\b(?:\+?1[-.\s]?)?(?:\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}|\d{5,6})\b")
+EMAIL_RE = re.compile(r"\b[\w.+-]+@[\w.-]+\.[A-Za-z]{2,}\b")
+CONTACT_WORD_RE = re.compile(r"\b(phone|pager|extension|ext\.?|vocera|email|call\s*back|contact)\b", re.I)
+IDENTIFIER_RE = re.compile(r"\b(mrn|medical record|dob|date of birth|address|ssn|social security)\b", re.I)
+DATE_LITERAL_RE = re.compile(r"\b(\d{1,2})[/-](\d{1,2})[/-](\d{2,4})\b")
+DATE_ISO_RE = re.compile(r"\b(20\d{2}|19\d{2})-(\d{2})-(\d{2})\b")
+MONTH_DATE_RE = re.compile(
+    r"\b(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\s+(\d{1,2})(?:,)?\s+(20\d{2}|19\d{2})\b",
+    re.I,
+)
+TIMING_RE = re.compile(
+    r"(\bwithin\s+\d{1,3}\s*(?:minutes?|mins?|hours?|hrs?|days?)\b|"
+    r"\b\d{1,3}\s*(?:minutes?|mins?|hours?|hrs?|days?)\b|"
+    r"\b\d{1,2}\s*(?:am|pm)\s*[-–]\s*\d{1,2}\s*(?:am|pm)\b|"
+    r"\b\d{1,3}\s*[-–]\s*\d{1,3}\s*(?:minutes?|hours?|days?)\b|"
+    r"\bq\d+h\b)",
+    re.I,
+)
+
+NOISE_MARKERS = {
+    "mit_license",
+    "layout logic software",
+    "http://en.wikipedia.org/wiki/mit_license",
+    "adobe",
+    "microsoft",
+    "scanned document",
+}
+
+SUMMARY_KEYWORDS = [
+    "purpose",
+    "goal",
+    "workflow",
+    "transfer",
+    "admit",
+    "disposition",
+    "handoff",
+    "responsible",
+    "ownership",
+    "consult",
+    "escalat",
+    "urgent",
+    "emergent",
+    "criteria",
+    "stable",
+    "unstable",
+    "sepsis",
+    "appendic",
+    "neurosurg",
+    "urolog",
+    "ophthalm",
+    "pregnan",
+    "psychi",
+    "snf",
+]
+
+LOW_VALUE_LINE_RE = re.compile(
+    r"^(service agreement|memorandum|location of service|key customers|definitions?|"
+    r"department of|fontana|ontario|kaiser|final version|overview|proposed service|"
+    r"references?|appendix|attachment|southern california permanente)\b",
+    re.I,
+)
+
+NON_PRACTICAL_RE = re.compile(
+    r"(http[s]?://|www\.|appendix|attachment|references?|copyright|all rights reserved)",
+    re.I,
+)
+
+TITLE_SPECIFIC_HINTS: Dict[str, Dict[str, List[str]]] = {
+    "adult-primary-care-and-emergency-medicine-service-agreement": {
+        "summary": [
+            "Defines how ED and adult primary care coordinate when primary-care-sensitive issues present after hours.",
+            "Clarifies when cases can be routed to urgent outpatient follow-up versus maintained in ED pathways.",
+            "Sets expectations for reducing avoidable admissions when outpatient-capable patients can be safely redirected.",
+            "Supports shared documentation standards to avoid ownership ambiguity during transitions.",
+        ],
+        "ed_actions": [
+            "Document why ED management is required versus deferred outpatient follow-up.",
+            "Use shared criteria when deciding if primary-care handoff is appropriate.",
+            "Escalate unresolved placement/ownership disagreements early to designated physician leadership.",
+        ],
+        "consults": [
+            "Escalate to designated medicine leadership when PCP/ED ownership is unclear.",
+        ],
+        "disposition": [
+            "Disposition decisions should explicitly state whether ownership transitions to PCP workflow or remains ED-based.",
+        ],
+    },
+    "hospitalist-intensivist-cardiologist-and-emergency-medicine": {
+        "summary": [
+            "Outlines cross-service expectations among hospitalist, intensivist, cardiology, and ED teams for high-acuity patients.",
+            "Targets rapid alignment on level-of-care decisions when patients may need telemetry, ICU, or subspecialty escalation.",
+            "Emphasizes clear division of responsibilities during unstable transitions in care.",
+            "Reinforces escalation pathways for delayed response or conflicting recommendations.",
+        ],
+        "ed_actions": [
+            "Escalate early when cardiopulmonary instability suggests need for ICU/cardiology input.",
+            "Document the reason for requested level of care when handoff destination is uncertain.",
+        ],
+        "consults": [
+            "If parallel specialty recommendations conflict, use attending-to-attending resolution.",
+        ],
+        "disposition": [
+            "Final placement should reflect the highest anticipated level of monitoring/intervention.",
+        ],
+    },
+    "im-and-er-nonmember-service-agreement": {
+        "summary": [
+            "Focuses on non-member medical patients boarding in the ED while transfer destination is arranged.",
+            "Defines circumstances where IM supports ongoing inpatient-style management during prolonged ED stay.",
+            "Clarifies which physician team follows pending studies and active treatment tasks during boarding.",
+            "Establishes real-time escalation when transfer stability determinations are disputed.",
+        ],
+        "ed_actions": [
+            "Place transfer/discharge-planning workflows early for non-member patients.",
+            "Keep transfer paperwork and physician-to-physician communication current across shift changes.",
+        ],
+        "consults": [
+            "Escalate questionable transfer stability decisions to EM/IM physician leadership.",
+        ],
+        "disposition": [
+            "Responsibility for transfer paperwork and physician-to-physician communication must be explicit.",
+        ],
+    },
+    "necrotizing-fasciitis-service-agreement": {
+        "summary": [
+            "Treats suspected necrotizing infection as a time-critical surgical emergency requiring immediate multidisciplinary coordination.",
+            "Prioritizes early recognition, broad empiric treatment, and definitive source-control planning.",
+            "Supports rapid escalation to operative evaluation when progression or exam findings are concerning.",
+            "Frames disposition around deterioration risk and need for higher-acuity monitoring.",
+        ],
+        "ed_actions": [
+            "Escalate immediately to surgery when exam or progression raises concern for necrotizing process.",
+            "Initiate resuscitation and broad-spectrum therapy without waiting for prolonged serial observation.",
+        ],
+        "consults": [
+            "Use urgent attending-level escalation if operative evaluation is delayed.",
+        ],
+        "disposition": [
+            "Disposition should favor higher-acuity monitoring when rapid deterioration risk is present.",
+        ],
+    },
+    "ob-gyn-urgent-care-and-emergency-medicine-service-agreement": {
+        "summary": [
+            "Defines OB/GYN versus urgent-care versus ED responsibilities for pregnancy-related and gynecologic presentations.",
+            "Standardizes which scenarios require immediate specialty involvement versus expedited clinic pathway.",
+            "Improves handoff consistency for time-sensitive obstetric/gynecologic complications.",
+            "Clarifies route selection between outpatient follow-up, ED observation, and inpatient escalation.",
+        ],
+        "ed_actions": [
+            "Stabilize maternal risk first and document pregnancy-specific red flags driving escalation.",
+        ],
+        "consults": [
+            "Escalate promptly to OB/GYN when emergent pregnancy complications are suspected.",
+        ],
+        "disposition": [
+            "Disposition should state whether ongoing care is ED, OB/GYN inpatient, or urgent specialty follow-up.",
+        ],
+    },
+    "pediatrics-and-emergency-medicine-service-agreement-transfer-from-omc-to-fmc": {
+        "summary": [
+            "Addresses transfer workflow for pediatric patients requiring FMC-level pediatric resources.",
+            "Aims to reduce transfer delays by defining clinical triggers and receiving-team expectations.",
+            "Standardizes communication between sending and receiving facilities during pediatric escalation.",
+            "Encourages early receiving-team awareness when operative or ICU resources may be needed.",
+        ],
+        "ed_actions": [
+            "Initiate pediatric transfer coordination early once tertiary pediatric resources are anticipated.",
+        ],
+        "consults": [
+            "Maintain direct ED-to-receiving-team communication during transfer activation.",
+        ],
+        "disposition": [
+            "Document accepting pediatric destination and handoff completion before departure.",
+        ],
+    },
+    "snf-to-emergency-medicine-service-agreement-final": {
+        "summary": [
+            "Defines transfer expectations from SNF settings into ED care and return-path communication requirements.",
+            "Emphasizes baseline-function context and reason-for-transfer clarity to improve ED triage and throughput.",
+            "Highlights care-transition documentation needed to support safe return disposition when feasible.",
+            "Clarifies coordination points among ED, case management, and SNF teams during prolonged placement decisions.",
+        ],
+        "ed_actions": [
+            "Document key SNF handoff details that influence ED diagnostics and disposition decisions.",
+        ],
+        "consults": [
+            "Escalate unresolved placement barriers through case-management/physician leadership pathways.",
+        ],
+        "disposition": [
+            "Disposition plans should include explicit return-to-SNF readiness criteria when applicable.",
+        ],
+    },
+}
+
+PRACTICAL_FIELD_OVERRIDES: Dict[str, Dict[str, List[str]]] = {
+    "necrotizing-fasciitis-service-agreement": {
+        "summary_bullets": [
+            "NSTI is a life-threatening emergency; delayed debridement increases mortality.",
+            "If NSTI is clinically obvious, do not delay operative escalation for scoring or additional diagnostics.",
+            "Start immediate resuscitation, broad-spectrum IV antibiotics, analgesia, and OR preparation.",
+            "If stable and diagnosis is uncertain, perform minimum ED workup: risk factors, full vital signs, and LRINEC-related labs.",
+            "LRINEC >= 6 is strongly concerning; LRINEC < 5 is only reassuring when exam and imaging are also reassuring.",
+            "LRINEC cannot be used alone to rule out NSTI.",
+            "In stable patients, ultrasound can be used early but has higher false-negative risk than CT.",
+            "CT with IV contrast showing soft-tissue gas should prompt immediate surgical intervention; fascial edema/fluid collections also increase concern.",
+            "Upload a clinical photo to the chart when feasible to support consultant assessment and serial comparison.",
+            "Primary consult is General Surgery after initial workup, with location-based subspecialty involvement and post-stabilization ownership transitions.",
+        ],
+        "ed_actions": [
+            "Do not delay operative escalation when exam is clearly consistent with NSTI.",
+            "Initiate IV fluids, broad-spectrum antibiotics, analgesia, and sepsis-focused resuscitation immediately.",
+            "If diagnosis is uncertain and the patient is stable, order CBC, BMP, CRP, glucose, creatinine, hemoglobin, sodium, and calculate LRINEC.",
+            "Obtain CT with IV contrast in stable patients when diagnosis remains uncertain after initial assessment.",
+            "Upload a clinical photo of the affected extremity in the chart when possible.",
+            "Consult General Surgery early regardless of anatomic location once initial workup is complete.",
+        ],
+        "consults_and_escalation": [
+            "Primary consult: General Surgery.",
+            "Below elbow involvement: Hand Surgery assists and can assume primary floor management after stabilization.",
+            "Below knee involvement: Orthopedics assists and can assume primary floor management after stabilization.",
+            "Above elbow or knee involvement: General Surgery remains primary.",
+            "When infection crosses elbow/knee boundaries, services co-manage based on predominant involvement and urgency.",
+            "Consult Plastic Surgery for graft/flap coverage after stabilization and wound control when needed.",
+        ],
+        "disposition_or_ownership": [
+            "General Surgery is primary during ICU-level management after operative source control.",
+            "Post-stabilization ownership transitions by anatomic location per the service agreement.",
+            "If NSTI is excluded, revert to non-necrotizing limb-infection consultation pathways by location.",
+        ],
+        "timing_targets": [
+            "Timing expectation: Immediate surgical consultation and debridement when NSTI is clinically apparent.",
+        ],
+    },
+}
+
+
+def load_config() -> Dict[str, Dict[str, List[str]]]:
+    config = json.loads(json.dumps(DEFAULT_CONFIG))
+    if CONFIG_PATH.exists():
+        try:
+            user_cfg = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
+            for section in ("department_keywords", "tag_keywords"):
+                if isinstance(user_cfg.get(section), dict):
+                    for key, values in user_cfg[section].items():
+                        if isinstance(values, list):
+                            config[section][str(key)] = [str(v).lower() for v in values]
+        except Exception:
+            pass
+    for section in ("department_keywords", "tag_keywords"):
+        for key, values in list(config[section].items()):
+            config[section][key] = [str(v).lower() for v in values]
+    return config
+
+
+def _sanitize_override_block(raw: object) -> Dict[str, List[str]]:
+    if not isinstance(raw, dict):
+        return {}
+    out: Dict[str, List[str]] = {}
+    for field, values in raw.items():
+        if field not in OVERRIDE_FIELDS or not isinstance(values, list):
+            continue
+        cleaned = [clean_spaces(str(v)) for v in values if clean_spaces(str(v))]
+        if cleaned:
+            out[field] = cleaned
+    return out
+
+
+def load_markdown_overrides() -> Dict[str, Dict[str, List[str]]]:
+    if not OVERRIDES_MD_PATH.exists():
+        return {}
+
+    text = OVERRIDES_MD_PATH.read_text(encoding="utf-8")
+    overrides: Dict[str, Dict[str, List[str]]] = {}
+    section_re = re.compile(r"^##\s+([a-z0-9][a-z0-9-]*)\s*$", re.M)
+    matches = list(section_re.finditer(text))
+    for idx, match in enumerate(matches):
+        agreement_id = match.group(1).strip()
+        start = match.end()
+        end = matches[idx + 1].start() if idx + 1 < len(matches) else len(text)
+        body = text[start:end]
+
+        block_match = re.search(r"```json\s*([\s\S]*?)```", body, re.I)
+        if not block_match:
+            continue
+
+        try:
+            parsed = json.loads(block_match.group(1))
+        except json.JSONDecodeError:
+            continue
+        sanitized = _sanitize_override_block(parsed)
+        if sanitized:
+            overrides[agreement_id] = sanitized
+
+    return overrides
+
+
+def load_practical_overrides() -> Dict[str, Dict[str, List[str]]]:
+    merged = json.loads(json.dumps(PRACTICAL_FIELD_OVERRIDES))
+    md_overrides = load_markdown_overrides()
+    for agreement_id, block in md_overrides.items():
+        if agreement_id not in merged:
+            merged[agreement_id] = {}
+        merged[agreement_id].update(block)
+    return merged
+
+
+def find_source_dir() -> Path:
+    for candidate in SOURCE_CANDIDATES:
+        if candidate.exists() and candidate.is_dir():
+            return candidate
+    raise FileNotFoundError(
+        "No source folder found. Expected ./service-agreements/ or ./Service agreements/"
+    )
+
+
+def clean_spaces(text: str) -> str:
+    text = unicodedata.normalize("NFKC", text)
+    text = text.replace("\u00a0", " ")
+    text = re.sub(r"[\t\r\f]+", " ", text)
+    text = re.sub(r"\s+", " ", text)
+    return text.strip()
+
+
+def slugify(name: str) -> str:
+    base = Path(name).stem.lower()
+    base = re.sub(r"[^a-z0-9]+", "-", base)
+    base = re.sub(r"-+", "-", base).strip("-")
+    return base or "agreement"
+
+
+def normalize_title(filename: str) -> str:
+    title = Path(filename).stem
+    title = title.replace("_", " ")
+    title = re.sub(r"\s+", " ", title).strip()
+    return title
+
+
+def should_skip_file(path: Path, sibling_names: Set[str]) -> bool:
+    name = path.name
+    if name.startswith("._"):
+        return True
+    if name.startswith("~$"):
+        return True
+    if name.startswith("_") and name[1:] in sibling_names:
+        return True
+    return False
+
+
+def file_type_for(path: Path) -> str:
+    ext = path.suffix.lower()
+    if ext == ".pdf":
+        return "pdf"
+    if ext == ".docx":
+        return "docx"
+    return "other"
+
+
+def parse_core_xml_dates(zip_file: zipfile.ZipFile) -> List[dt.date]:
+    out: List[dt.date] = []
+    try:
+        raw = zip_file.read("docProps/core.xml")
+    except KeyError:
+        return out
+    try:
+        root = ET.fromstring(raw)
+    except ET.ParseError:
+        return out
+    for elem in root.iter():
+        tag = elem.tag.split("}")[-1].lower()
+        if tag in {"created", "modified"} and elem.text:
+            parsed = parse_known_date(elem.text.strip())
+            if parsed:
+                out.append(parsed)
+    return out
+
+
+def docx_text_from_xml(xml_bytes: bytes) -> str:
+    text = xml_bytes.decode("utf-8", errors="ignore")
+    text = re.sub(r"</w:p>", "\n", text)
+    text = re.sub(r"</w:tr>", "\n", text)
+    text = re.sub(r"<w:tab[^>]*/>", "\t", text)
+    text = re.sub(r"<w:br[^>]*/>", "\n", text)
+    text = re.sub(r"<[^>]+>", "", text)
+    text = text.replace("&amp;", "&").replace("&lt;", "<").replace("&gt;", ">")
+    lines = [clean_spaces(line) for line in text.splitlines()]
+    return "\n".join(line for line in lines if line)
+
+
+def extract_docx(path: Path) -> Tuple[str, List[dt.date], List[str]]:
+    dates: List[dt.date] = []
+    chunks: List[str] = []
+    try:
+        with zipfile.ZipFile(path, "r") as zf:
+            dates.extend(parse_core_xml_dates(zf))
+            xml_members = [
+                n
+                for n in zf.namelist()
+                if n.startswith("word/")
+                and n.endswith(".xml")
+                and (
+                    n == "word/document.xml"
+                    or n.startswith("word/header")
+                    or n.startswith("word/footer")
+                )
+            ]
+            for member in sorted(xml_members):
+                try:
+                    chunks.append(docx_text_from_xml(zf.read(member)))
+                except Exception:
+                    continue
+    except Exception:
+        return "", [], ["DOCX parse fallback used; text extraction failed."]
+    return "\n".join(chunk for chunk in chunks if chunk), dates, []
+
+
+def extract_doc(path: Path) -> Tuple[str, List[dt.date], List[str]]:
+    cmd = ["textutil", "-convert", "txt", "-stdout", str(path)]
+    try:
+        result = subprocess.run(cmd, capture_output=True, text=True, check=False)
+        if result.returncode != 0:
+            return "", [], ["DOC extraction fallback failed."]
+        return result.stdout or "", [], []
+    except Exception:
+        return "", [], ["DOC extraction fallback unavailable."]
+
+
+def compile_pdf_text_extractor() -> bool:
+    if not PDF_TEXT_EXTRACTOR_SOURCE.exists():
+        return False
+
+    try:
+        PDF_TEXT_EXTRACTOR_BIN.parent.mkdir(parents=True, exist_ok=True)
+    except Exception:
+        return False
+
+    needs_build = True
+    if PDF_TEXT_EXTRACTOR_BIN.exists():
+        try:
+            needs_build = PDF_TEXT_EXTRACTOR_BIN.stat().st_mtime < PDF_TEXT_EXTRACTOR_SOURCE.stat().st_mtime
+        except Exception:
+            needs_build = True
+
+    if not needs_build:
+        return True
+
+    cmd = [
+        "clang",
+        "-fobjc-arc",
+        "-framework",
+        "Foundation",
+        "-framework",
+        "PDFKit",
+        str(PDF_TEXT_EXTRACTOR_SOURCE),
+        "-o",
+        str(PDF_TEXT_EXTRACTOR_BIN),
+    ]
+    try:
+        result = subprocess.run(cmd, capture_output=True, text=True, check=False)
+    except Exception:
+        return False
+    return result.returncode == 0 and PDF_TEXT_EXTRACTOR_BIN.exists()
+
+
+def extract_pdf_with_pdfkit(path: Path) -> Tuple[str, List[str]]:
+    if not compile_pdf_text_extractor():
+        return "", ["PDFKit extractor unavailable; used fallback parser."]
+
+    cmd = [str(PDF_TEXT_EXTRACTOR_BIN), str(path)]
+    try:
+        result = subprocess.run(cmd, capture_output=True, text=True, check=False)
+    except Exception:
+        return "", ["PDFKit extraction command failed; used fallback parser."]
+
+    if result.returncode != 0:
+        return "", ["PDFKit extraction returned non-zero status; used fallback parser."]
+    return result.stdout or "", []
+
+
+def _pdf_unescape(data: bytes) -> bytes:
+    data = data.replace(b"\\(", b"(").replace(b"\\)", b")")
+    data = data.replace(b"\\n", b" ").replace(b"\\r", b" ").replace(b"\\t", b" ")
+    data = data.replace(b"\\\\", b"\\")
+
+    def repl(match: re.Match[bytes]) -> bytes:
+        try:
+            return bytes([int(match.group(1), 8)])
+        except Exception:
+            return b""
+
+    return re.sub(rb"\\([0-7]{3})", repl, data)
+
+
+def _normalize_pdf_literal_bytes(raw: bytes) -> str:
+    raw = _pdf_unescape(raw)
+    if b"\x00" in raw:
+        raw = raw.replace(b"\x00", b"")
+    text = raw.decode("latin-1", errors="ignore")
+    return clean_spaces(text)
+
+
+def looks_like_noise_line(line: str) -> bool:
+    if not line:
+        return True
+    lowered = line.lower()
+    if any(marker in lowered for marker in NOISE_MARKERS):
+        return True
+    if any(ord(ch) < 32 and ch not in "\t\n\r" for ch in line):
+        return True
+
+    length = len(line)
+    if length > 0:
+        alpha = sum(ch.isalpha() for ch in line)
+        alnum = sum(ch.isalnum() for ch in line)
+        ascii_printable = sum(32 <= ord(ch) <= 126 for ch in line)
+        non_ascii = sum(ord(ch) > 126 for ch in line)
+        noisy = sum(
+            not (ch.isalnum() or ch.isspace() or ch in ".,;:!?()[]/%+-'\"&<>=")
+            for ch in line
+        )
+
+        if length > 14 and ascii_printable / length < 0.58:
+            return True
+        if length > 14 and alpha / length < 0.26:
+            return True
+        if length > 12 and noisy / length > 0.2:
+            return True
+        if length > 12 and non_ascii / length > 0.28:
+            return True
+        if length > 12 and alnum / length < 0.35:
+            return True
+
+    words = [w for w in re.split(r"\s+", line) if w]
+    if len(words) == 1 and len(words[0]) > 24:
+        return True
+    if re.search(r"[A-Za-z]{0,2}\d{4,}", line):
+        return True
+    return False
+
+
+def _extract_pdf_literals(blob: bytes) -> List[str]:
+    out: List[str] = []
+    patterns = [
+        rb"\(([^\)\r\n]{3,220})\)\s*T[Jj]",
+        rb"\(([^\)\r\n]{8,220})\)",
+    ]
+    for pat in patterns:
+        for match in re.finditer(pat, blob):
+            text = _normalize_pdf_literal_bytes(match.group(1))
+            if len(text) < 5:
+                continue
+            if sum(ch.isalpha() for ch in text) < 4:
+                continue
+            if looks_like_noise_line(text):
+                continue
+            out.append(text)
+            if len(out) >= 600:
+                return out
+    return out
+
+
+def _iter_pdf_streams(raw: bytes) -> Iterable[bytes]:
+    stream_re = re.compile(rb"<<(.*?)>>\s*stream\r?\n", re.S)
+    yielded = 0
+    for match in stream_re.finditer(raw):
+        if yielded >= 180:
+            break
+        start = match.end()
+        end = raw.find(b"endstream", start)
+        if end == -1:
+            continue
+        stream = raw[start:end].strip(b"\r\n")
+        dictionary = match.group(1)
+        if b"FlateDecode" in dictionary:
+            for wbits in (zlib.MAX_WBITS, -zlib.MAX_WBITS):
+                try:
+                    decoded = zlib.decompress(stream, wbits)
+                    if decoded:
+                        yielded += 1
+                        yield decoded
+                    break
+                except Exception:
+                    continue
+        elif stream:
+            yielded += 1
+            yield stream
+
+
+def parse_pdf_creation_date(raw: bytes) -> Optional[dt.date]:
+    m = re.search(rb"/CreationDate\s*\(D:(\d{4})(\d{2})(\d{2})", raw)
+    if not m:
+        return None
+    try:
+        return dt.date(int(m.group(1)), int(m.group(2)), int(m.group(3)))
+    except Exception:
+        return None
+
+
+def extract_pdf(path: Path) -> Tuple[str, List[dt.date], List[str]]:
+    try:
+        raw = path.read_bytes()
+    except Exception:
+        return "", [], ["PDF read failed."]
+
+    dates: List[dt.date] = []
+    creation_date = parse_pdf_creation_date(raw)
+    if creation_date:
+        dates.append(creation_date)
+
+    chunks: List[str] = []
+    chunks.extend(_extract_pdf_literals(raw[:1_200_000]))
+    for stream in _iter_pdf_streams(raw[:7_000_000]):
+        chunks.extend(_extract_pdf_literals(stream[:900_000]))
+        if len(chunks) >= 900:
+            break
+
+    text = "\n".join(unique_keep_order(chunks))
+    flags: List[str] = []
+    if len(clean_spaces(text)) < 180:
+        flags.append("Limited machine-readable PDF text; summary partly inferred from filename and sparse metadata.")
+    return text, dates, flags
+
+
+def parse_known_date(text: str) -> Optional[dt.date]:
+    text = clean_spaces(text)
+
+    m = DATE_ISO_RE.search(text)
+    if m:
+        try:
+            return dt.date(int(m.group(1)), int(m.group(2)), int(m.group(3)))
+        except Exception:
+            pass
+
+    m = DATE_LITERAL_RE.search(text)
+    if m:
+        a, b, c = int(m.group(1)), int(m.group(2)), int(m.group(3))
+        if c < 100:
+            c += 2000 if c < 70 else 1900
+        try:
+            return dt.date(c, a, b)
+        except Exception:
+            try:
+                return dt.date(c, b, a)
+            except Exception:
+                pass
+
+    m = MONTH_DATE_RE.search(text)
+    if m:
+        month_name = m.group(1).lower()[:3]
+        month_map = {
+            "jan": 1,
+            "feb": 2,
+            "mar": 3,
+            "apr": 4,
+            "may": 5,
+            "jun": 6,
+            "jul": 7,
+            "aug": 8,
+            "sep": 9,
+            "oct": 10,
+            "nov": 11,
+            "dec": 12,
+        }
+        try:
+            return dt.date(int(m.group(3)), month_map[month_name], int(m.group(2)))
+        except Exception:
+            pass
+    return None
+
+
+def collect_text_dates(text: str) -> List[dt.date]:
+    dates: List[dt.date] = []
+    for line in text.splitlines()[:220]:
+        parsed = parse_known_date(line)
+        if parsed:
+            dates.append(parsed)
+    return dates
+
+
+def infer_last_updated(path: Path, text: str, metadata_dates: Sequence[dt.date]) -> Optional[str]:
+    candidates: List[dt.date] = list(metadata_dates)
+    filename_date = parse_known_date(path.name)
+    if filename_date:
+        candidates.append(filename_date)
+    candidates.extend(collect_text_dates(text))
+    sane = [d for d in candidates if 1990 <= d.year <= 2100]
+    if not sane:
+        return None
+    return max(sane).isoformat()
+
+
+def extract_text(path: Path) -> Tuple[str, List[dt.date], List[str]]:
+    suffix = path.suffix.lower()
+    if suffix == ".docx":
+        return extract_docx(path)
+    return extract_doc(path)
+
+
+def keyword_hit(lookup_text: str, keyword: str) -> bool:
+    key = keyword.strip().lower()
+    if not key:
+        return False
+
+    # Multi-word and punctuation-containing keys are treated as exact phrases.
+    if re.search(r"[^a-z0-9]", key):
+        return key in lookup_text
+
+    # Very short keys must match whole tokens to avoid accidental substring hits.
+    if len(key) <= 3:
+        return re.search(rf"(?<![a-z0-9]){re.escape(key)}(?![a-z0-9])", lookup_text) is not None
+
+    # Treat longer single-token keys as stems that must start at a word boundary.
+    return re.search(rf"(?<![a-z0-9]){re.escape(key)}[a-z0-9-]*", lookup_text) is not None
+
+
+def infer_departments(lookup_text: str, cfg: Dict[str, Dict[str, List[str]]]) -> List[str]:
+    hits: List[str] = []
+    for dept, keywords in cfg["department_keywords"].items():
+        if any(keyword_hit(lookup_text, keyword) for keyword in keywords):
+            hits.append(dept)
+    if "Emergency Medicine" not in hits:
+        hits.insert(0, "Emergency Medicine")
+    deduped: List[str] = []
+    for dept in hits:
+        if dept not in deduped:
+            deduped.append(dept)
+    return deduped[:8]
+
+
+def infer_tags(lookup_text: str, cfg: Dict[str, Dict[str, List[str]]]) -> List[str]:
+    tags: List[str] = []
+    for tag, keywords in cfg["tag_keywords"].items():
+        if any(keyword_hit(lookup_text, keyword) for keyword in keywords):
+            tags.append(tag)
+    for base in ("consult-workflow", "escalation", "ownership"):
+        if base not in tags:
+            tags.append(base)
+    return unique_keep_order(tags)[:10]
+
+
+def infer_flags(lookup_text: str) -> Dict[str, bool]:
+    return {
+        "transfer": any(k in lookup_text for k in ["transfer", "outside facility", "nonmember", "non-member"]),
+        "sepsis": "sepsis" in lookup_text or "septic" in lookup_text,
+        "appendicitis": "appendicitis" in lookup_text,
+        "necrotizing": "necrotizing" in lookup_text or "fasciitis" in lookup_text,
+        "psych": "psychi" in lookup_text or "behavioral" in lookup_text,
+        "neuro": "neurosurg" in lookup_text or "neurosurgery" in lookup_text or "neurology" in lookup_text,
+        "ophtho": "ophthalm" in lookup_text or "ocular" in lookup_text,
+        "obgyn": any(k in lookup_text for k in ["ob-gyn", "obgyn", "pregnan", "gyne"]),
+        "urology": "urology" in lookup_text or "urinary" in lookup_text,
+        "snf": "snf" in lookup_text or "skilled nursing" in lookup_text,
+        "cardiology": "cardiology" in lookup_text or "cardiologist" in lookup_text,
+        "peds": "pediatric" in lookup_text or "peds" in lookup_text,
+    }
+
+
+def redact_and_filter_lines(text: str) -> Tuple[List[str], bool]:
+    had_redaction = False
+    lines: List[str] = []
+    for raw in text.splitlines():
+        line = clean_spaces(raw)
+        if not line or len(line) < 10:
+            continue
+        if EMAIL_RE.search(line) or PHONE_RE.search(line) or CONTACT_WORD_RE.search(line):
+            had_redaction = True
+            continue
+        if IDENTIFIER_RE.search(line):
+            had_redaction = True
+            continue
+        if re.search(r"\b(to|from|cc)\s*:", line, re.I):
+            had_redaction = True
+            continue
+        if re.search(r"\b(dr\.?|m\.d\.|md|rn|np|pa-c)\b", line, re.I):
+            had_redaction = True
+            continue
+        if re.fullmatch(r"[\W_]+", line):
+            continue
+        if LOW_VALUE_LINE_RE.search(line) and len(line.split()) <= 7:
+            continue
+        if NON_PRACTICAL_RE.search(line) and len(line.split()) <= 20:
+            continue
+        if looks_like_noise_line(line):
+            continue
+        lines.append(line)
+    return lines, had_redaction
+
+
+def unique_keep_order(items: Iterable[str]) -> List[str]:
+    out: List[str] = []
+    seen: Set[str] = set()
+    for item in items:
+        if not item:
+            continue
+        if item in seen:
+            continue
+        seen.add(item)
+        out.append(item)
+    return out
+
+
+def compact_phrase(line: str, max_words: int = 26) -> str:
+    line = clean_spaces(line)
+    line = re.sub(r"^[\-*•\d\)\(\s]+", "", line)
+    line = re.sub(r"^(purpose|goal|policy|process|definitions|service agreement)\s*:\s*", "", line, flags=re.I)
+    line = re.sub(r"^(re|date)\s*:\s*", "", line, flags=re.I)
+    line = re.sub(r"\s*[_]{2,}\s*", " ", line)
+    line = line.strip(" -;:,.")
+    words = line.split()
+    if len(words) > max_words:
+        line = " ".join(words[:max_words]).rstrip(" -;:,") + "..."
+    return line
+
+
+def clauseify(line: str, max_words: int = 26) -> str:
+    text = compact_phrase(line, max_words=max_words)
+    if not text:
+        return ""
+    return text.rstrip(".")
+
+
+def as_statement(prefix: str, line: str, max_words: int = 26) -> str:
+    clause = clauseify(line, max_words=max_words)
+    if not clause:
+        return ""
+    lower_clause = clause.lower()
+    if "scanned document" in lower_clause:
+        return ""
+    if any(
+        marker in lower_clause
+        for marker in (
+            "chief of service",
+            "assistant chief",
+            "references",
+            "appendix",
+            "attachment",
+            "http://",
+            "https://",
+        )
+    ):
+        return ""
+    for label in ("purpose:", "goal:", "policy:", "process:", "definitions:"):
+        if lower_clause.startswith(label):
+            clause = clause[len(label):].strip()
+            lower_clause = clause.lower()
+            break
+    if len(clause.split()) < 4:
+        return ""
+    out = f"{prefix} {clause}."
+    out = out[0].upper() + out[1:]
+    return clean_spaces(out)
+
+
+def rank_candidate_line(line: str) -> int:
+    lower = line.lower()
+    score = 0
+    if 6 <= len(line.split()) <= 32:
+        score += 2
+    if re.search(r"\b(if|when|should|must|will|within|immediate|urgent|emergent)\b", lower):
+        score += 3
+    if re.search(r"\b(call|consult|activate|transfer|admit|order|start|begin|document)\b", lower):
+        score += 3
+    if re.search(r"\b(score|criteria|threshold|include)\b", lower):
+        score += 1
+    if NON_PRACTICAL_RE.search(line):
+        score -= 5
+    if LOW_VALUE_LINE_RE.search(line):
+        score -= 5
+    return score
+
+
+def pick_lines(lines: Sequence[str], patterns: Sequence[str], used: Set[str], limit: int) -> List[str]:
+    picks: List[str] = []
+    regexes = [re.compile(p, re.I) for p in patterns]
+    candidates: List[Tuple[int, int, str]] = []
+    for idx, line in enumerate(lines):
+        if line in used:
+            continue
+        if any(r.search(line) for r in regexes):
+            candidates.append((rank_candidate_line(line), idx, line))
+
+    candidates.sort(key=lambda item: (-item[0], item[1]))
+    for _, _, line in candidates:
+        picks.append(line)
+        used.add(line)
+        if len(picks) >= limit:
+            break
+    return picks
+
+
+def title_hints(agreement_id: str, section: str) -> List[str]:
+    return TITLE_SPECIFIC_HINTS.get(agreement_id, {}).get(section, [])
+
+
+def fill_from_lines(
+    lines: Sequence[str],
+    used: Set[str],
+    patterns: Sequence[str],
+    prefix: str,
+    out: List[str],
+    limit: int,
+    max_words: int = 26,
+) -> None:
+    for line in pick_lines(lines, patterns, used, limit):
+        bullet = as_statement(prefix, line, max_words=max_words)
+        if bullet:
+            out.append(bullet)
+
+
+def line_score_for_summary(line: str) -> int:
+    if LOW_VALUE_LINE_RE.search(line):
+        return -20
+    if NON_PRACTICAL_RE.search(line):
+        return -18
+
+    words = line.split()
+    if len(words) < 4:
+        return -10
+
+    score = 0
+    if 5 <= len(words) <= 30:
+        score += 4
+    elif len(words) <= 40:
+        score += 2
+
+    lowered = line.lower()
+    score += sum(2 for token in SUMMARY_KEYWORDS if token in lowered)
+
+    if re.search(r"\b(should|must|will|if|then|when|within|hours?|minutes?|days?)\b", lowered):
+        score += 4
+    if re.search(r"\b(call|consult|escalat|activate|transfer|admit|discharge|follow up|handoff|responsible|prepare|order|start|begin)\b", lowered):
+        score += 5
+    if re.search(r"\b(acute|unstable|critical|emergent|urgent|shock|septic|hemorrhage)\b", lowered):
+        score += 2
+    if re.search(r"\b(score|criteria|include|threshold|> |< |greater than|less than)\b", lowered):
+        score += 2
+    if re.search(r"\d", line):
+        score += 1
+    if len(words) > 34:
+        score -= 2
+    if re.search(r"\b(chief of service|assistant chief|signature|date effective)\b", lowered):
+        score -= 5
+    return score
+
+
+def fill_from_scored_lines(
+    lines: Sequence[str],
+    used: Set[str],
+    out: List[str],
+    prefix: str,
+    limit: int,
+    min_score: int = 6,
+    max_words: int = 26,
+) -> None:
+    candidates: List[Tuple[int, int, str]] = []
+    for idx, line in enumerate(lines):
+        if line in used:
+            continue
+        score = line_score_for_summary(line)
+        if score < min_score:
+            continue
+        candidates.append((score, idx, line))
+
+    candidates.sort(key=lambda item: (-item[0], item[1]))
+    for _, _, line in candidates:
+        bullet = as_statement(prefix, line, max_words=max_words)
+        if not bullet:
+            continue
+        out.append(bullet)
+        used.add(line)
+        if len(out) >= limit:
+            break
+
+
+def build_summary_bullets(
+    agreement_id: str,
+    title: str,
+    lines: Sequence[str],
+    departments: Sequence[str],
+    flags: Dict[str, bool],
+) -> List[str]:
+    used: Set[str] = set()
+    bullets: List[str] = []
+
+    fill_from_lines(
+        lines,
+        used,
+        [r"\bpurpose\b", r"\bgoal\b", r"\bpolicy\b", r"to\s+(facilitate|expedite|provide|outline|standardize)"],
+        "Purpose:",
+        bullets,
+        limit=2,
+    )
+    fill_from_lines(
+        lines,
+        used,
+        [r"\b(nonmember|non-member|septic|appendicitis|psychiatric|urolog|ophthalm|neurosurg|snf|pregnan|pediatric)\b"],
+        "Use this pathway when:",
+        bullets,
+        limit=2,
+    )
+    fill_from_lines(
+        lines,
+        used,
+        [r"\b(ed physician|emergency physician|ed team|immediate|do not delay|call|activate|initiat|begin|start|prepare)\b"],
+        "Immediate ED action:",
+        bullets,
+        limit=2,
+    )
+    fill_from_lines(
+        lines,
+        used,
+        [r"\b(process|identify|activate|initiat|work-?up|prepare|manage|assessment|respond|pathway|protocol)\b"],
+        "ED workflow:",
+        bullets,
+        limit=2,
+    )
+    fill_from_lines(
+        lines,
+        used,
+        [r"\b(criteria|urgent|emergent|include|examples|score|suspicious|unlikely)\b"],
+        "Decision points:",
+        bullets,
+        limit=2,
+    )
+    fill_from_lines(
+        lines,
+        used,
+        [r"\b(escalat|attending|chief|on call|no response|concern)\b"],
+        "Escalation:",
+        bullets,
+        limit=2,
+    )
+    fill_from_lines(
+        lines,
+        used,
+        [r"\b(transfer|admit|disposition|handoff|follow up|responsible|ownership)\b"],
+        "Ownership/disposition:",
+        bullets,
+        limit=2,
+    )
+
+    fill_from_lines(
+        lines,
+        used,
+        [
+            r"\b(urgent|emergent|no need to call|out-?patient|referral|fournier|torsion|obstructive)\b",
+            r"\b(score of|highly suspicious|unlikely)\b",
+        ],
+        "Key rule:",
+        bullets,
+        limit=2,
+    )
+
+    for hint in title_hints(agreement_id, "summary"):
+        bullets.append(clean_spaces(hint).rstrip(".") + ".")
+
+    if len(bullets) < 7:
+        fill_from_scored_lines(
+            lines,
+            used,
+            bullets,
+            prefix="Practical note:",
+            limit=7,
+            min_score=6,
+            max_words=26,
+        )
+
+    if len(bullets) < 5:
+        joined_depts = (
+            ", ".join(departments[:3])
+            if len(departments) >= 2
+            else "Emergency Medicine and consulting services"
+        )
+        bullets.append(f"Defines shared expectations between {joined_depts} for this pathway.")
+    if len(bullets) < 5 and flags.get("transfer"):
+        bullets.append("Includes transfer-readiness and handoff expectations for interfacility movement.")
+    if len(bullets) < 5 and flags.get("sepsis"):
+        bullets.append("Prioritizes early sepsis identification, source control planning, and escalation.")
+    if len(bullets) < 5 and flags.get("psych"):
+        bullets.append("Separates medical clearance responsibilities from psychiatric disposition steps.")
+    if len(bullets) < 5:
+        bullets.append(f"Defines consult and handoff expectations for {title.lower()}.")
+    if len(bullets) < 5:
+        bullets.append("Review source document for full operational details not captured in this summary.")
+
+    bullets = unique_keep_order(bullets)
+    return bullets[:10]
+
+
+def build_ed_actions(
+    agreement_id: str,
+    lines: Sequence[str],
+    flags: Dict[str, bool],
+) -> List[str]:
+    used: Set[str] = set()
+    bullets: List[str] = []
+
+    fill_from_lines(
+        lines,
+        used,
+        [r"\b(ed physician|emergency physician|ed treatment team|ed team|ed clerk|ed charge nurse)\b"],
+        "ED action:",
+        bullets,
+        limit=5,
+        max_words=24,
+    )
+    fill_from_lines(
+        lines,
+        used,
+        [
+            r"\b(ed|emergency)\b.*\b(order|initiat|identify|call|activate|manage|document|re-evaluat|sign transfer)\b",
+            r"\b(order|initiat|identify|call|activate|manage|document|re-evaluat|sign transfer)\b.*\b(ed|emergency)\b",
+        ],
+        "ED should:",
+        bullets,
+        limit=4,
+        max_words=24,
+    )
+
+    for hint in title_hints(agreement_id, "ed_actions"):
+        bullets.append(clean_spaces(hint).rstrip(".") + ".")
+
+    if len(bullets) < 3:
+        bullets.append("Stabilize immediate threats and document objective severity findings before handoff.")
+        bullets.append("Initiate pathway-specific treatment and diagnostics before consultant transfer of ownership.")
+        bullets.append("Record all consultant communication and explicit ownership in the chart.")
+
+    if flags.get("sepsis") and not any("sepsis" in b.lower() for b in bullets):
+        bullets.append("Complete sepsis bundle steps and reassess perfusion while disposition is being arranged.")
+    if flags.get("transfer") and not any("transfer" in b.lower() for b in bullets):
+        bullets.append("Coordinate transfer logistics early when criteria indicate external placement is likely.")
+
+    return unique_keep_order(bullets)[:8]
+
+
+def build_consults_and_escalation(
+    agreement_id: str,
+    lines: Sequence[str],
+    flags: Dict[str, bool],
+) -> List[str]:
+    used: Set[str] = set()
+    bullets: List[str] = []
+
+    fill_from_lines(
+        lines,
+        used,
+        [r"\b(consult|contact|call|respond|on call|psychiatrist|neurosurgeon|urolog|ophthalm|hospitalist|surgeon)\b"],
+        "Consult flow:",
+        bullets,
+        limit=5,
+        max_words=24,
+    )
+    fill_from_lines(
+        lines,
+        used,
+        [r"\b(escalat|chief|attending|if .* no|if .* concern|chain)\b"],
+        "Escalation:",
+        bullets,
+        limit=3,
+        max_words=24,
+    )
+
+    for hint in title_hints(agreement_id, "consults"):
+        bullets.append(clean_spaces(hint).rstrip(".") + ".")
+
+    if len(bullets) < 3:
+        bullets.append("Engage the designated specialty once inclusion criteria are met.")
+        bullets.append("Escalate to attending/chief pathways when callback is delayed or recommendations conflict.")
+        bullets.append("Document closed-loop communication for each escalation step.")
+
+    if flags.get("neuro") and not any("neuro" in b.lower() or "neurosurg" in b.lower() for b in bullets):
+        bullets.append("For neurologic deterioration, use immediate attending-level escalation rather than routine callback flow.")
+    if flags.get("necrotizing") and not any("necrotizing" in b.lower() for b in bullets):
+        bullets.append("Suspected necrotizing infection should trigger immediate surgical escalation.")
+
+    return unique_keep_order(bullets)[:8]
+
+
+def build_disposition_or_ownership(
+    agreement_id: str,
+    lines: Sequence[str],
+    flags: Dict[str, bool],
+) -> List[str]:
+    used: Set[str] = set()
+    bullets: List[str] = []
+
+    fill_from_lines(
+        lines,
+        used,
+        [r"\b(transfer|admit|disposition|handoff|responsible|ownership|follow up|out-patient|outpatient|discharge)\b"],
+        "Ownership/disposition:",
+        bullets,
+        limit=5,
+        max_words=24,
+    )
+
+    for hint in title_hints(agreement_id, "disposition"):
+        bullets.append(clean_spaces(hint).rstrip(".") + ".")
+
+    if len(bullets) < 3:
+        bullets.append("ED retains active ownership until receiving service acceptance is explicitly documented.")
+        bullets.append("Receiving service assumes ongoing plan after acceptance criteria are satisfied.")
+        bullets.append("If status changes before transfer/admission, disposition should be re-evaluated under ED oversight.")
+
+    if flags.get("psych") and not any("psych" in b.lower() for b in bullets):
+        bullets.append("Psychiatric placement proceeds only after documented medical clearance milestones are met.")
+
+    return unique_keep_order(bullets)[:6]
+
+
+def extract_timing_targets(lines: Sequence[str]) -> List[str]:
+    targets: List[str] = []
+    for line in lines:
+        if CONTACT_WORD_RE.search(line) and PHONE_RE.search(line):
+            continue
+        if not TIMING_RE.search(line):
+            continue
+        clause = compact_phrase(line, max_words=20)
+        if not clause:
+            continue
+        targets.append(f"Timing expectation: {clause.rstrip('.')}.")
+    return unique_keep_order(targets)[:8]
+
+
+def build_redaction_notes(
+    had_redaction: bool,
+    extraction_flags: Sequence[str],
+    extracted_text: str,
+) -> str:
+    notes: List[str] = []
+    if had_redaction:
+        notes.append("Potential contact details or identifiers were intentionally excluded from published fields.")
+    notes.extend(extraction_flags)
+    if len(clean_spaces(extracted_text)) < 150:
+        notes.append("Summary confidence is lower due to limited machine-readable source text.")
+    if not notes:
+        notes.append("No explicit sensitive fields were carried into output; summaries are intentionally high-level.")
+    return " ".join(unique_keep_order(notes))
+
+
+def build_agreement(
+    path: Path,
+    cfg: Dict[str, Dict[str, List[str]]],
+    overrides: Dict[str, Dict[str, List[str]]],
+) -> Dict[str, object]:
+    agreement_id = slugify(path.name)
+    title = normalize_title(path.name)
+
+    text_raw, metadata_dates, extraction_flags = extract_text(path)
+    lines, had_redaction = redact_and_filter_lines(text_raw)
+    sanitized_text = "\n".join(lines)
+
+    lookup_text = f"{title}\n{sanitized_text}".lower()
+    departments = infer_departments(lookup_text, cfg)
+    tags = infer_tags(lookup_text, cfg)
+    flags = infer_flags(lookup_text)
+
+    summary_bullets = build_summary_bullets(agreement_id, title, lines, departments, flags)
+    ed_actions = build_ed_actions(agreement_id, lines, flags)
+    consults = build_consults_and_escalation(agreement_id, lines, flags)
+    disposition = build_disposition_or_ownership(agreement_id, lines, flags)
+    timing_targets = extract_timing_targets(lines)
+
+    override = overrides.get(agreement_id)
+    if override:
+        summary_bullets = override.get("summary_bullets", summary_bullets)
+        ed_actions = override.get("ed_actions", ed_actions)
+        consults = override.get("consults_and_escalation", consults)
+        disposition = override.get("disposition_or_ownership", disposition)
+        timing_targets = override.get("timing_targets", timing_targets)
+
+    if len(summary_bullets) < 5:
+        fallback_pool = [
+            "Review source document for full operational details not captured in this summary.",
+            "Confirm local activation criteria and consult expectations before implementation.",
+            "Use attending-to-attending escalation when ownership or disposition is uncertain.",
+        ]
+        for fallback in fallback_pool:
+            if len(summary_bullets) >= 5:
+                break
+            summary_bullets.append(fallback)
+    summary_bullets = unique_keep_order(summary_bullets)
+
+    agreement = {
+        "id": agreement_id,
+        "title": title,
+        "source_filename": str(path.relative_to(ROOT)).replace("\\", "/"),
+        "file_type": file_type_for(path),
+        "departments": departments,
+        "last_updated": infer_last_updated(path, sanitized_text, metadata_dates),
+        "tags": tags,
+        "summary_bullets": summary_bullets[:10],
+        "ed_actions": ed_actions,
+        "consults_and_escalation": consults,
+        "disposition_or_ownership": disposition,
+        "timing_targets": timing_targets,
+        "redaction_notes": build_redaction_notes(had_redaction, extraction_flags, sanitized_text),
+        "sharepoint_url": None,
+    }
+    return agreement
+
+
+def main() -> int:
+    cfg = load_config()
+    overrides = load_practical_overrides()
+    source_dir = find_source_dir()
+    OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
+
+    file_paths = [p for p in sorted(source_dir.iterdir(), key=lambda p: p.name.lower()) if p.is_file()]
+    sibling_names = {p.name for p in file_paths}
+    files = [
+        p
+        for p in file_paths
+        if p.suffix.lower() in SUPPORTED_SUFFIXES and not should_skip_file(p, sibling_names)
+    ]
+
+    if not files:
+        print("No agreement files found.")
+        return 1
+
+    agreements: List[Dict[str, object]] = []
+    for path in files:
+        print(f"Processing: {path.name}")
+        agreements.append(build_agreement(path, cfg, overrides))
+
+    payload = {
+        "version": 1,
+        "generated_at": dt.datetime.now(dt.timezone.utc).isoformat(),
+        "agreements": agreements,
+    }
+
+    OUTPUT_PATH.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    print(f"Wrote {OUTPUT_PATH.relative_to(ROOT)} with {len(agreements)} agreements.")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
