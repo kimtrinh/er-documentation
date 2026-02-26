@@ -403,7 +403,9 @@
     historyQuestions: null,
     historyAnswers: Object.create(null),
     historyLoaded: false,
-    historyExpandedDdx: new Set()
+    historyExpandedDdx: new Set(),
+    historyLoading: false,
+    historyLoadError: ''
   };
 
   const els = {
@@ -2135,25 +2137,47 @@
   // ── History Helper ──────────────────────────────────────────────
 
   async function loadHistoryQuestionsIfNeeded() {
-    if (state.historyLoaded) return;
+    if (state.historyLoaded || state.historyLoading) return;
+    state.historyLoading = true;
+    state.historyLoadError = '';
     try {
       var response = await fetch('history_helper.json', { cache: 'no-store' });
       if (!response.ok) throw new Error('Failed to load history_helper.json');
       state.historyQuestions = await response.json();
       state.historyLoaded = true;
     } catch (e) {
-      if (els.historyHelperContainer) {
-        els.historyHelperContainer.innerHTML = '<p class="empty-block">Failed to load history questions.</p>';
-      }
+      state.historyLoadError = 'History helper data failed to load. Ensure history_helper.json is present and uploaded.';
+    } finally {
+      state.historyLoading = false;
+      renderHistoryHelper();
     }
   }
 
   function renderHistoryHelper() {
     if (!els.historyHelperContainer) return;
     var pack = state.activePack;
-    if (!pack || !state.historyLoaded || !state.historyQuestions) {
+    if (!pack) {
       els.historyHelperContainer.innerHTML = '';
       if (els.historyHelperEmpty) els.historyHelperEmpty.style.display = '';
+      if (els.historyHelperCount) els.historyHelperCount.textContent = '0 answered';
+      return;
+    }
+
+    if (els.historyHelperEmpty) els.historyHelperEmpty.style.display = 'none';
+    if (state.historyLoading) {
+      els.historyHelperContainer.innerHTML = '<p class="empty-block">Loading history questions...</p>';
+      if (els.historyHelperCount) els.historyHelperCount.textContent = '0 answered';
+      return;
+    }
+
+    if (state.historyLoadError) {
+      els.historyHelperContainer.innerHTML = '<p class="empty-block">' + escapeHtml(state.historyLoadError) + '</p>';
+      if (els.historyHelperCount) els.historyHelperCount.textContent = '0 answered';
+      return;
+    }
+
+    if (!state.historyLoaded || !state.historyQuestions) {
+      els.historyHelperContainer.innerHTML = '<p class="empty-block">History helper data is unavailable.</p>';
       if (els.historyHelperCount) els.historyHelperCount.textContent = '0 answered';
       return;
     }
@@ -2161,12 +2185,9 @@
     var packData = state.historyQuestions.packs[pack.id];
     if (!packData || !packData.ddx_questions) {
       els.historyHelperContainer.innerHTML = '<p class="empty-block">No history questions for this pack yet.</p>';
-      if (els.historyHelperEmpty) els.historyHelperEmpty.style.display = 'none';
       if (els.historyHelperCount) els.historyHelperCount.textContent = '0 answered';
       return;
     }
-
-    if (els.historyHelperEmpty) els.historyHelperEmpty.style.display = 'none';
 
     var ddxItems = pack.ddx || [];
     var groups = Object.create(null);
