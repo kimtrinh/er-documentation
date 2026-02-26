@@ -399,7 +399,11 @@
     riskInputs: Object.create(null),
     savedByPack: Object.create(null),
     savedActivePackId: '',
-    discharge: { ...DEFAULT_DISCHARGE_STATE }
+    discharge: { ...DEFAULT_DISCHARGE_STATE },
+    historyQuestions: null,
+    historyAnswers: Object.create(null),
+    historyLoaded: false,
+    historyExpandedDdx: new Set()
   };
 
   const els = {
@@ -447,7 +451,14 @@
     dotphraseFavoritesList: document.getElementById('dotphraseFavoritesList'),
     dotphraseFavoritesCount: document.getElementById('dotphraseFavoritesCount'),
     dotphraseQuickList: document.getElementById('dotphraseQuickList'),
-    dotphraseMatchCount: document.getElementById('dotphraseMatchCount')
+    dotphraseMatchCount: document.getElementById('dotphraseMatchCount'),
+    tabHistoryHelper: document.getElementById('tabHistoryHelper'),
+    panelHistoryHelper: document.getElementById('panel-history-helper'),
+    historyHelperContainer: document.getElementById('historyHelperContainer'),
+    historyHelperEmpty: document.getElementById('historyHelperEmpty'),
+    historyHelperCount: document.getElementById('historyHelperCount'),
+    historyHelperCopyBtn: document.getElementById('historyHelperCopyBtn'),
+    historyHelperResetBtn: document.getElementById('historyHelperResetBtn')
   };
 
   function normalizeId(id) {
@@ -1857,7 +1868,8 @@
     return {
       mdm: els.panelMdmBuilder,
       dotphrase: els.panelDotphrase,
-      discharge: els.panelDischargeBuilder
+      discharge: els.panelDischargeBuilder,
+      history: els.panelHistoryHelper
     };
   }
 
@@ -1865,7 +1877,8 @@
     const tabs = [
       { el: els.tabMdmBuilder, id: 'mdm' },
       { el: els.tabDotphrase, id: 'dotphrase' },
-      { el: els.tabDischarge, id: 'discharge' }
+      { el: els.tabDischarge, id: 'discharge' },
+      { el: els.tabHistoryHelper, id: 'history' }
     ];
     tabs.forEach((tab) => {
       if (!tab.el) return;
@@ -1895,7 +1908,7 @@
 
   function syncDocTabFromOpenPanels() {
     const map = getDocTabMap();
-    const order = ['mdm', 'dotphrase', 'discharge'];
+    const order = ['mdm', 'dotphrase', 'discharge', 'history'];
     const openId = order.find((id) => map[id] && map[id].open) || state.activeDocTab || 'mdm';
     state.activeDocTab = openId;
     updateDocTabButtons(openId);
@@ -2119,6 +2132,146 @@
     );
   }
 
+  // ── History Helper ──────────────────────────────────────────────
+
+  async function loadHistoryQuestionsIfNeeded() {
+    if (state.historyLoaded) return;
+    try {
+      var response = await fetch('history_helper.json', { cache: 'no-store' });
+      if (!response.ok) throw new Error('Failed to load history_helper.json');
+      state.historyQuestions = await response.json();
+      state.historyLoaded = true;
+    } catch (e) {
+      if (els.historyHelperContainer) {
+        els.historyHelperContainer.innerHTML = '<p class="empty-block">Failed to load history questions.</p>';
+      }
+    }
+  }
+
+  function renderHistoryHelper() {
+    if (!els.historyHelperContainer) return;
+    var pack = state.activePack;
+    if (!pack || !state.historyLoaded || !state.historyQuestions) {
+      els.historyHelperContainer.innerHTML = '';
+      if (els.historyHelperEmpty) els.historyHelperEmpty.style.display = '';
+      if (els.historyHelperCount) els.historyHelperCount.textContent = '0 answered';
+      return;
+    }
+
+    var packData = state.historyQuestions.packs[pack.id];
+    if (!packData || !packData.ddx_questions) {
+      els.historyHelperContainer.innerHTML = '<p class="empty-block">No history questions for this pack yet.</p>';
+      if (els.historyHelperEmpty) els.historyHelperEmpty.style.display = 'none';
+      if (els.historyHelperCount) els.historyHelperCount.textContent = '0 answered';
+      return;
+    }
+
+    if (els.historyHelperEmpty) els.historyHelperEmpty.style.display = 'none';
+
+    var ddxItems = pack.ddx || [];
+    var groups = Object.create(null);
+    ddxItems.forEach(function (item) {
+      var g = item.group || 'Other';
+      if (!groups[g]) groups[g] = [];
+      groups[g].push(item);
+    });
+
+    var orderedGroups = [
+      ...GROUP_ORDER.filter(function (g) { return groups[g]; }),
+      ...Object.keys(groups).filter(function (g) { return !GROUP_ORDER.includes(g); })
+    ];
+
+    var totalAnswered = 0;
+    var totalQuestions = 0;
+
+    var html = orderedGroups.map(function (group) {
+      var items = groups[group] || [];
+      var ddxSections = items.map(function (ddxItem) {
+        var questions = packData.ddx_questions[ddxItem.label];
+        if (!questions || !questions.length) return '';
+
+        totalQuestions += questions.length;
+        var answeredForDdx = 0;
+        var questionRows = questions.map(function (q) {
+          var answer = state.historyAnswers[q.id] || '';
+          if (answer && answer !== '') {
+            totalAnswered++;
+            answeredForDdx++;
+          }
+
+          var rowClass = answer === 'yes' ? 'answered-yes' :
+                         answer === 'no' ? 'answered-no' :
+                         answer === 'skip' ? 'answered-skip' : '';
+
+          var yesActive = answer === 'yes' ? ' active-yes' : '';
+          var noActive = answer === 'no' ? ' active-no' : '';
+          var skipActive = answer === 'skip' ? ' active-skip' : '';
+
+          var catTag = q.category
+            ? ' <span class="hh-category-tag">' + escapeHtml(q.category) + '</span>'
+            : '';
+
+          return '<div class="hh-question ' + rowClass + '">' +
+            '<span class="hh-question-text">' + escapeHtml(q.text) + catTag + '</span>' +
+            '<div class="hh-actions">' +
+              '<button class="hh-btn' + yesActive + '" data-question-id="' + escapeHtml(q.id) + '" data-answer="yes" type="button">Yes</button>' +
+              '<button class="hh-btn' + noActive + '" data-question-id="' + escapeHtml(q.id) + '" data-answer="no" type="button">No</button>' +
+              '<button class="hh-btn' + skipActive + '" data-question-id="' + escapeHtml(q.id) + '" data-answer="skip" type="button">Skip</button>' +
+            '</div>' +
+          '</div>';
+        }).join('');
+
+        var ddxKey = String(ddxItem.label || '');
+        var isOpen = state.historyExpandedDdx.has(ddxKey);
+        return '<details class="hh-ddx-section" data-history-ddx="' + escapeHtml(ddxKey) + '"' + (isOpen ? ' open' : '') + '>' +
+          '<summary class="hh-ddx-summary">' +
+            '<span class="hh-ddx-label">' + escapeHtml(ddxItem.label) + '</span>' +
+            '<span class="hh-ddx-count">' + answeredForDdx + '/' + questions.length + ' answered</span>' +
+          '</summary>' +
+          '<div class="hh-ddx-body">' + questionRows + '</div>' +
+        '</details>';
+      }).filter(Boolean).join('');
+
+      if (!ddxSections) return '';
+      return '<div class="section-subgroup"><h4>' + escapeHtml(group) + '</h4>' + ddxSections + '</div>';
+    }).filter(Boolean).join('');
+
+    els.historyHelperContainer.innerHTML = html || '<p class="empty-block">No questions available.</p>';
+    if (els.historyHelperCount) {
+      els.historyHelperCount.textContent = totalAnswered + '/' + totalQuestions + ' answered';
+    }
+  }
+
+  function buildHistorySummaryText() {
+    if (!state.activePack || !state.historyLoaded || !state.historyQuestions) return '';
+    var packData = state.historyQuestions.packs[state.activePack.id];
+    if (!packData || !packData.ddx_questions) return '';
+
+    var lines = [];
+    var ddxItems = state.activePack.ddx || [];
+    ddxItems.forEach(function (ddxItem) {
+      var questions = packData.ddx_questions[ddxItem.label];
+      if (!questions || !questions.length) return;
+
+      var answered = questions.filter(function (q) {
+        return state.historyAnswers[q.id] && state.historyAnswers[q.id] !== 'skip';
+      });
+      if (!answered.length) return;
+
+      lines.push(ddxItem.label + ':');
+      answered.forEach(function (q) {
+        var ans = state.historyAnswers[q.id];
+        var prefix = ans === 'yes' ? '[+]' : '[-]';
+        lines.push('  ' + prefix + ' ' + q.text);
+      });
+      lines.push('');
+    });
+
+    return lines.join('\n').trim() || 'No history questions answered.';
+  }
+
+  // ── End History Helper ────────────────────────────────────────
+
   function renderAll() {
     renderAliasHint();
     renderQuickPackButtons();
@@ -2129,6 +2282,7 @@
     renderCounts();
     renderDotphraseLookup();
     setPreview();
+    renderHistoryHelper();
   }
 
   function getDefaultDdxSet(pack) {
@@ -2147,6 +2301,7 @@
     state.selectedRisks.clear();
     state.riskInputs = Object.create(null);
     syncRiskToggles(pack);
+    state.historyAnswers = Object.create(null);
   }
 
   function applySavedPackState(pack, saved) {
@@ -2165,6 +2320,16 @@
     state.availableRuleoutIds = [];
     syncRuleouts(pack, { autoSelectNew: false });
     syncRiskToggles(pack);
+
+    state.historyAnswers = Object.create(null);
+    if (saved.historyAnswers && typeof saved.historyAnswers === 'object') {
+      Object.keys(saved.historyAnswers).forEach((qId) => {
+        var val = saved.historyAnswers[qId];
+        if (val === 'yes' || val === 'no' || val === 'skip') {
+          state.historyAnswers[qId] = val;
+        }
+      });
+    }
   }
 
   function snapshotActivePackState() {
@@ -2173,7 +2338,8 @@
       selectedDdx: [...state.selectedDdx],
       selectedRuleouts: getSelectedRuleoutIds(),
       selectedRisks: [...state.selectedRisks],
-      riskInputs: serializedInputs
+      riskInputs: serializedInputs,
+      historyAnswers: Object.assign(Object.create(null), state.historyAnswers)
     };
   }
 
@@ -2194,6 +2360,7 @@
     }
 
     state.activePack = pack;
+    state.historyExpandedDdx = new Set();
     els.packSelect.value = pack.id;
     els.commandInput.value = pack.id;
     updateCommandValidity(pack.id);
@@ -2387,6 +2554,10 @@
     }
     if (hash === 'dotphraselibrary' || hash === 'paneldotphrase' || hash === 'dotphrase') {
       activateDocTab('dotphrase');
+      return;
+    }
+    if (hash === 'history' || hash === 'historyhelper' || hash === 'panelhistoryhelper') {
+      activateDocTab('history');
     }
   }
 
@@ -2439,11 +2610,62 @@
     if (els.tabDischarge) {
       els.tabDischarge.addEventListener('click', () => activateDocTab('discharge'));
     }
+    if (els.tabHistoryHelper) {
+      els.tabHistoryHelper.addEventListener('click', () => {
+        activateDocTab('history');
+        loadHistoryQuestionsIfNeeded().then(() => renderHistoryHelper());
+      });
+    }
 
-    [els.panelMdmBuilder, els.panelDotphrase, els.panelDischargeBuilder].forEach((panel) => {
+    [els.panelMdmBuilder, els.panelDotphrase, els.panelDischargeBuilder, els.panelHistoryHelper].forEach((panel) => {
       if (!panel) return;
       panel.addEventListener('toggle', syncDocTabFromOpenPanels);
     });
+
+    if (els.historyHelperContainer) {
+      els.historyHelperContainer.addEventListener('toggle', (event) => {
+        var target = event.target;
+        if (!(target instanceof HTMLDetailsElement)) return;
+        if (!target.matches('.hh-ddx-section[data-history-ddx]')) return;
+        var ddxKey = target.dataset.historyDdx;
+        if (!ddxKey) return;
+        if (target.open) state.historyExpandedDdx.add(ddxKey);
+        else state.historyExpandedDdx.delete(ddxKey);
+      }, true);
+
+      els.historyHelperContainer.addEventListener('click', (event) => {
+        var target = event.target;
+        if (!(target instanceof Element)) return;
+        var btn = target.closest('.hh-btn[data-question-id]');
+        if (!btn) return;
+        var qId = btn.dataset.questionId;
+        var answer = btn.dataset.answer;
+        if (!qId || !answer) return;
+
+        if (state.historyAnswers[qId] === answer) {
+          delete state.historyAnswers[qId];
+        } else {
+          state.historyAnswers[qId] = answer;
+        }
+        renderHistoryHelper();
+        persistActivePackState();
+      });
+    }
+
+    if (els.historyHelperCopyBtn) {
+      els.historyHelperCopyBtn.addEventListener('click', () => {
+        var text = buildHistorySummaryText();
+        copyTextWithFeedback(text, els.historyHelperCopyBtn);
+      });
+    }
+
+    if (els.historyHelperResetBtn) {
+      els.historyHelperResetBtn.addEventListener('click', () => {
+        state.historyAnswers = Object.create(null);
+        renderHistoryHelper();
+        persistActivePackState();
+      });
+    }
 
     if (els.resetPackBtn) {
       els.resetPackBtn.addEventListener('click', resetCurrentPackToDefaults);
@@ -2659,6 +2881,9 @@
 
   async function init() {
     bindEvents();
+
+    // Load both packs and history questions in parallel
+    loadHistoryQuestionsIfNeeded();
 
     try {
       await loadPacks();

@@ -187,6 +187,30 @@ main>*{animation:pgFade .3s ease both}
 main>*:nth-child(2){animation-delay:.05s}
 main>*:nth-child(3){animation-delay:.1s}
 main>*:nth-child(4){animation-delay:.15s}
+
+/* History Helper */
+.hh-ddx-section{border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--surface)}
+.hh-ddx-section+.hh-ddx-section{margin-top:10px}
+.hh-ddx-summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;background:var(--surface2);border-bottom:1px solid var(--border)}
+.hh-ddx-summary::-webkit-details-marker{display:none}
+.hh-ddx-summary::after{content:'+';font-size:16px;line-height:1;color:var(--text-blue);font-weight:700}
+.hh-ddx-section[open] .hh-ddx-summary::after{content:'−'}
+.hh-ddx-label{font-size:12px;font-weight:700;color:var(--text)}
+.hh-ddx-count{font-size:10px;padding:2px 8px;border-radius:999px;background:var(--bg);border:1px solid var(--border);color:var(--text2);font-weight:700;white-space:nowrap}
+.hh-ddx-body{padding:10px;background:var(--surface)}
+.hh-question{display:flex;align-items:center;gap:8px;padding:9px 10px;background:var(--bg);border:1px solid var(--border);border-radius:9px;font-size:13px;color:var(--text2);transition:border-color .15s,background .15s}
+.hh-question+.hh-question{margin-top:6px}
+.hh-question.answered-yes{border-color:#166534;background:#052215;color:#86efac}
+.hh-question.answered-no{border-color:#b45309;background:#2b1f0a;color:#fcd34d}
+.hh-question.answered-skip{opacity:.4}
+.hh-question-text{flex:1;font-size:13px;line-height:1.4}
+.hh-actions{display:flex;gap:4px;flex-shrink:0}
+.hh-btn{padding:4px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text2);font-size:11px;font-weight:700;cursor:pointer;transition:all .15s}
+.hh-btn:hover{border-color:#3b82f6;color:var(--text-blue-bright)}
+.hh-btn.active-yes{background:#14532d;border-color:#22c55e;color:#bbf7d0}
+.hh-btn.active-no{background:#7f1d1d;border-color:#b91c1c;color:#fee2e2}
+.hh-btn.active-skip{background:var(--surface2);border-color:var(--border2);color:var(--text3)}
+.hh-category-tag{font-size:10px;color:var(--text-blue);border:1px solid #1e3a8a;background:#0b1730;border-radius:999px;padding:2px 7px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-left:4px;white-space:nowrap}
 </style>
 <link rel="stylesheet" href="mobile.css">
 <script>document.documentElement.setAttribute('data-theme',localStorage.getItem('theme')||'dark');</script>
@@ -254,12 +278,38 @@ main>*:nth-child(4){animation-delay:.15s}
   </section>
 
   <div class="doc-tabs" role="tablist" aria-label="Documentation Sections">
+    <button id="tabHistoryHelper" class="doc-tab secondary" type="button" role="tab" aria-selected="false" data-tab-target="history">History Helper</button>
     <button id="tabMdmBuilder" class="doc-tab primary active" type="button" role="tab" aria-selected="true" data-tab-target="mdm">MDM Builder</button>
     <button id="tabDotphrase" class="doc-tab primary" type="button" role="tab" aria-selected="false" data-tab-target="dotphrase">Dotphrase Library</button>
     <button id="tabDischarge" class="doc-tab secondary" type="button" role="tab" aria-selected="false" data-tab-target="discharge">Discharge Builder</button>
   </div>
 
   <div class="doc-accordion">
+    <details class="doc-panel" id="panel-history-helper">
+      <summary>
+        <span class="doc-title">History Helper</span>
+        <span class="doc-meta">Targeted history questions by differential diagnosis</span>
+      </summary>
+      <div class="doc-content">
+        <section class="panel">
+          <div class="panel-head">
+            <h2>
+              History Questions
+              <span id="historyHelperCount" class="head-count">0 answered</span>
+            </h2>
+          </div>
+          <div class="panel-body">
+            <div id="historyHelperToolbar" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+              <button id="historyHelperCopyBtn" class="copy-btn" type="button">Copy History Summary</button>
+              <button id="historyHelperResetBtn" class="ddx-action-btn" type="button">Reset Answers</button>
+            </div>
+            <p id="historyHelperEmpty" class="empty-block">Select a chief complaint pack to see history questions.</p>
+            <div id="historyHelperContainer"></div>
+          </div>
+        </section>
+      </div>
+    </details>
+
     <details class="doc-panel" id="panel-mdm-builder">
       <summary>
         <span class="doc-title">🧾 MDM Builder</span>
@@ -407,6 +457,7 @@ main>*:nth-child(4){animation-delay:.15s}
         </section>
       </div>
     </details>
+
   </div>
 </main>
 

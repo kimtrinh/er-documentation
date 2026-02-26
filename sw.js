@@ -1,4 +1,4 @@
-const CACHE = 'em-toolkit-v2';
+const CACHE = 'em-toolkit-v3';
 
 const ASSETS = [
   '/index.html',
@@ -21,6 +21,7 @@ const ASSETS = [
   '/theme.js',
   '/search-index.js',
   '/mdm.js',
+  '/history_helper.json',
   '/data/dotphrases.js',
   '/mdm_packs.json',
   '/data/service_agreements_index.json',

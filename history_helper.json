@@ -1,0 +1,530 @@
+{
+  "version": 1,
+  "packs": {
+    "mdmccp": {
+      "ddx_questions": {
+        "ACS": [
+          { "id": "ccp_acs_q1", "text": "Substernal or pressure-like quality?", "category": "character" },
+          { "id": "ccp_acs_q2", "text": "Radiation to jaw, left arm, or back?", "category": "character" },
+          { "id": "ccp_acs_q3", "text": "Exertional component or worse with activity?", "category": "character" },
+          { "id": "ccp_acs_q4", "text": "Associated diaphoresis, nausea, or dyspnea?", "category": "associated" },
+          { "id": "ccp_acs_q5", "text": "Known CAD, prior MI, stent, or CABG?", "category": "risk_factor" },
+          { "id": "ccp_acs_q6", "text": "Hypertension, diabetes, hyperlipidemia, or smoking?", "category": "risk_factor" },
+          { "id": "ccp_acs_q7", "text": "Cocaine or stimulant use?", "category": "risk_factor" }
+        ],
+        "PE": [
+          { "id": "ccp_pe_q1", "text": "Pleuritic chest pain (sharp, worse with breathing)?", "category": "character" },
+          { "id": "ccp_pe_q2", "text": "Acute onset dyspnea?", "category": "associated" },
+          { "id": "ccp_pe_q3", "text": "Recent surgery, immobilization, or long travel (>4 hrs)?", "category": "risk_factor" },
+          { "id": "ccp_pe_q4", "text": "On OCPs, HRT, or estrogen therapy?", "category": "risk_factor" },
+          { "id": "ccp_pe_q5", "text": "History of prior DVT or PE?", "category": "risk_factor" },
+          { "id": "ccp_pe_q6", "text": "Active malignancy or recent chemotherapy?", "category": "risk_factor" },
+          { "id": "ccp_pe_q7", "text": "Unilateral leg swelling, pain, or redness?", "category": "associated" },
+          { "id": "ccp_pe_q8", "text": "Hemoptysis?", "category": "associated" }
+        ],
+        "Aortic dissection": [
+          { "id": "ccp_dis_q1", "text": "Sudden onset (maximal at onset)?", "category": "character" },
+          { "id": "ccp_dis_q2", "text": "Tearing or ripping quality?", "category": "character" },
+          { "id": "ccp_dis_q3", "text": "Radiation to back (interscapular)?", "category": "character" },
+          { "id": "ccp_dis_q4", "text": "History of Marfan syndrome or connective tissue disorder?", "category": "risk_factor" },
+          { "id": "ccp_dis_q5", "text": "Uncontrolled hypertension?", "category": "risk_factor" },
+          { "id": "ccp_dis_q6", "text": "Known aortic aneurysm or bicuspid aortic valve?", "category": "risk_factor" }
+        ],
+        "Pneumothorax": [
+          { "id": "ccp_ptx_q1", "text": "Sudden onset pleuritic pain with dyspnea?", "category": "character" },
+          { "id": "ccp_ptx_q2", "text": "Tall, thin body habitus?", "category": "risk_factor" },
+          { "id": "ccp_ptx_q3", "text": "History of COPD, asthma, or prior pneumothorax?", "category": "risk_factor" },
+          { "id": "ccp_ptx_q4", "text": "Recent trauma, procedure, or mechanical ventilation?", "category": "context" }
+        ],
+        "Pericarditis": [
+          { "id": "ccp_per_q1", "text": "Sharp pain worse lying flat, better sitting forward?", "category": "character" },
+          { "id": "ccp_per_q2", "text": "Recent viral illness (1-4 weeks prior)?", "category": "context" },
+          { "id": "ccp_per_q3", "text": "History of autoimmune disease or renal failure?", "category": "risk_factor" },
+          { "id": "ccp_per_q4", "text": "Fever or pleuritic component?", "category": "associated" }
+        ],
+        "Pneumonia": [
+          { "id": "ccp_pna_q1", "text": "Productive cough or purulent sputum?", "category": "associated" },
+          { "id": "ccp_pna_q2", "text": "Fever, chills, or rigors?", "category": "associated" },
+          { "id": "ccp_pna_q3", "text": "Pleuritic chest pain component?", "category": "character" }
+        ],
+        "Esophageal rupture": [
+          { "id": "ccp_eso_q1", "text": "Preceded by forceful vomiting or retching?", "category": "context" },
+          { "id": "ccp_eso_q2", "text": "Severe pain with subcutaneous emphysema?", "category": "associated" }
+        ],
+        "GERD/MSK": [
+          { "id": "ccp_msk_q1", "text": "Reproducible with palpation or movement?", "category": "character" },
+          { "id": "ccp_msk_q2", "text": "Burning quality, postprandial, or positional?", "category": "character" },
+          { "id": "ccp_msk_q3", "text": "History of GERD, PUD, or similar prior episodes?", "category": "risk_factor" }
+        ]
+      }
+    },
+    "mdmsob": {
+      "ddx_questions": {
+        "PE": [
+          { "id": "sob_pe_q1", "text": "Acute onset dyspnea without clear trigger?", "category": "character" },
+          { "id": "sob_pe_q2", "text": "On OCPs, HRT, or estrogen therapy?", "category": "risk_factor" },
+          { "id": "sob_pe_q3", "text": "Recent surgery, immobilization, or long travel?", "category": "risk_factor" },
+          { "id": "sob_pe_q4", "text": "History of DVT or PE?", "category": "risk_factor" },
+          { "id": "sob_pe_q5", "text": "Active malignancy?", "category": "risk_factor" },
+          { "id": "sob_pe_q6", "text": "Pleuritic chest pain or hemoptysis?", "category": "associated" },
+          { "id": "sob_pe_q7", "text": "Unilateral leg swelling?", "category": "associated" }
+        ],
+        "Pneumonia": [
+          { "id": "sob_pna_q1", "text": "Productive cough or purulent sputum?", "category": "associated" },
+          { "id": "sob_pna_q2", "text": "Fever, chills, or rigors?", "category": "associated" },
+          { "id": "sob_pna_q3", "text": "Pleuritic chest pain?", "category": "associated" },
+          { "id": "sob_pna_q4", "text": "Immunocompromised or recent hospitalization?", "category": "risk_factor" }
+        ],
+        "CHF/pulmonary edema": [
+          { "id": "sob_chf_q1", "text": "Orthopnea or paroxysmal nocturnal dyspnea (PND)?", "category": "character" },
+          { "id": "sob_chf_q2", "text": "Bilateral lower extremity edema?", "category": "associated" },
+          { "id": "sob_chf_q3", "text": "Weight gain or dietary indiscretion (salt)?", "category": "context" },
+          { "id": "sob_chf_q4", "text": "Known CHF or cardiomyopathy?", "category": "risk_factor" },
+          { "id": "sob_chf_q5", "text": "Medication non-adherence (diuretics)?", "category": "context" }
+        ],
+        "COPD/asthma exacerbation": [
+          { "id": "sob_copd_q1", "text": "Known COPD/asthma with worsening wheeze or cough?", "category": "character" },
+          { "id": "sob_copd_q2", "text": "Recent URI or environmental trigger?", "category": "context" },
+          { "id": "sob_copd_q3", "text": "Using rescue inhaler more frequently?", "category": "context" },
+          { "id": "sob_copd_q4", "text": "Prior intubation or ICU admission for exacerbation?", "category": "risk_factor" }
+        ],
+        "Pneumothorax": [
+          { "id": "sob_ptx_q1", "text": "Sudden onset with pleuritic chest pain?", "category": "character" },
+          { "id": "sob_ptx_q2", "text": "History of COPD or prior pneumothorax?", "category": "risk_factor" },
+          { "id": "sob_ptx_q3", "text": "Recent trauma or procedure?", "category": "context" }
+        ],
+        "ACS atypical": [
+          { "id": "sob_acs_q1", "text": "Exertional dyspnea with diaphoresis or nausea?", "category": "character" },
+          { "id": "sob_acs_q2", "text": "Known CAD or cardiac risk factors?", "category": "risk_factor" },
+          { "id": "sob_acs_q3", "text": "Diabetic, elderly, or female (atypical presentation)?", "category": "risk_factor" }
+        ]
+      }
+    },
+    "mdmabd": {
+      "ddx_questions": {
+        "Appendicitis": [
+          { "id": "abd_app_q1", "text": "Pain migrating from periumbilical to RLQ?", "category": "character" },
+          { "id": "abd_app_q2", "text": "Anorexia, nausea, or vomiting?", "category": "associated" },
+          { "id": "abd_app_q3", "text": "Fever or chills?", "category": "associated" },
+          { "id": "abd_app_q4", "text": "RLQ tenderness on exam?", "category": "character" }
+        ],
+        "Biliary colic/cholecystitis": [
+          { "id": "abd_bil_q1", "text": "RUQ or epigastric pain, especially postprandial?", "category": "character" },
+          { "id": "abd_bil_q2", "text": "Pain worse with fatty foods?", "category": "context" },
+          { "id": "abd_bil_q3", "text": "Nausea, vomiting, or referred right shoulder pain?", "category": "associated" },
+          { "id": "abd_bil_q4", "text": "Prior gallstone history or similar prior episodes?", "category": "risk_factor" },
+          { "id": "abd_bil_q5", "text": "Fever or jaundice (concern for cholangitis)?", "category": "associated" }
+        ],
+        "SBO/ileus": [
+          { "id": "abd_sbo_q1", "text": "Prior abdominal surgery (adhesions)?", "category": "risk_factor" },
+          { "id": "abd_sbo_q2", "text": "Obstipation (no flatus or BMs)?", "category": "associated" },
+          { "id": "abd_sbo_q3", "text": "Bilious or feculent vomiting?", "category": "associated" },
+          { "id": "abd_sbo_q4", "text": "Crampy, intermittent abdominal pain?", "category": "character" },
+          { "id": "abd_sbo_q5", "text": "Abdominal distension?", "category": "associated" }
+        ],
+        "Pancreatitis": [
+          { "id": "abd_pan_q1", "text": "Epigastric pain radiating to back?", "category": "character" },
+          { "id": "abd_pan_q2", "text": "Worse after eating, better leaning forward?", "category": "character" },
+          { "id": "abd_pan_q3", "text": "Alcohol use or gallstone history?", "category": "risk_factor" },
+          { "id": "abd_pan_q4", "text": "Nausea and persistent vomiting?", "category": "associated" }
+        ],
+        "Diverticulitis": [
+          { "id": "abd_div_q1", "text": "LLQ pain?", "category": "character" },
+          { "id": "abd_div_q2", "text": "Fever or chills?", "category": "associated" },
+          { "id": "abd_div_q3", "text": "Change in bowel habits?", "category": "associated" },
+          { "id": "abd_div_q4", "text": "History of diverticulosis or prior episodes?", "category": "risk_factor" }
+        ],
+        "AAA": [
+          { "id": "abd_aaa_q1", "text": "Sudden onset back or flank pain?", "category": "character" },
+          { "id": "abd_aaa_q2", "text": "Age >65 with cardiovascular risk factors?", "category": "risk_factor" },
+          { "id": "abd_aaa_q3", "text": "Known aortic aneurysm?", "category": "risk_factor" },
+          { "id": "abd_aaa_q4", "text": "Pulsatile abdominal mass?", "category": "associated" },
+          { "id": "abd_aaa_q5", "text": "Smoking history?", "category": "risk_factor" }
+        ],
+        "Mesenteric ischemia": [
+          { "id": "abd_mes_q1", "text": "Pain out of proportion to exam?", "category": "character" },
+          { "id": "abd_mes_q2", "text": "History of atrial fibrillation?", "category": "risk_factor" },
+          { "id": "abd_mes_q3", "text": "Postprandial pain pattern (intestinal angina)?", "category": "character" },
+          { "id": "abd_mes_q4", "text": "Recent weight loss or food fear?", "category": "associated" },
+          { "id": "abd_mes_q5", "text": "Peripheral vascular disease or atherosclerosis?", "category": "risk_factor" }
+        ],
+        "Upper GI bleed": [
+          { "id": "abd_ugi_q1", "text": "Hematemesis, coffee-ground emesis, or melena?", "category": "associated" },
+          { "id": "abd_ugi_q2", "text": "NSAID, aspirin, or anticoagulant use?", "category": "risk_factor" },
+          { "id": "abd_ugi_q3", "text": "History of peptic ulcer disease or varices?", "category": "risk_factor" },
+          { "id": "abd_ugi_q4", "text": "Heavy alcohol use?", "category": "risk_factor" }
+        ]
+      }
+    },
+    "mdmha": {
+      "ddx_questions": {
+        "SAH": [
+          { "id": "ha_sah_q1", "text": "Thunderclap onset (worst headache of life)?", "category": "character" },
+          { "id": "ha_sah_q2", "text": "Maximal intensity at onset (seconds)?", "category": "character" },
+          { "id": "ha_sah_q3", "text": "Neck stiffness or photophobia?", "category": "associated" },
+          { "id": "ha_sah_q4", "text": "Sentinel headache in past 2-4 weeks?", "category": "context" },
+          { "id": "ha_sah_q5", "text": "Onset during exertion, Valsalva, or coitus?", "category": "context" },
+          { "id": "ha_sah_q6", "text": "Family history of aneurysm or SAH?", "category": "risk_factor" }
+        ],
+        "Meningitis/encephalitis": [
+          { "id": "ha_men_q1", "text": "Fever with headache?", "category": "associated" },
+          { "id": "ha_men_q2", "text": "Neck stiffness or photophobia?", "category": "associated" },
+          { "id": "ha_men_q3", "text": "Altered mental status or confusion?", "category": "associated" },
+          { "id": "ha_men_q4", "text": "Recent sick contact or immunocompromised?", "category": "risk_factor" },
+          { "id": "ha_men_q5", "text": "Petechial or purpuric rash?", "category": "associated" }
+        ],
+        "Stroke/ICH": [
+          { "id": "ha_str_q1", "text": "Acute focal neurologic deficit (weakness, speech, vision)?", "category": "associated" },
+          { "id": "ha_str_q2", "text": "Sudden onset?", "category": "character" },
+          { "id": "ha_str_q3", "text": "On anticoagulation or bleeding disorder?", "category": "risk_factor" },
+          { "id": "ha_str_q4", "text": "History of hypertension or atrial fibrillation?", "category": "risk_factor" },
+          { "id": "ha_str_q5", "text": "Last known normal time identified?", "category": "context" }
+        ],
+        "TIA": [
+          { "id": "ha_tia_q1", "text": "Transient focal deficit now fully resolved?", "category": "character" },
+          { "id": "ha_tia_q2", "text": "Duration of symptoms (<1 hour typical)?", "category": "character" },
+          { "id": "ha_tia_q3", "text": "History of atrial fibrillation, carotid stenosis, or prior TIA/stroke?", "category": "risk_factor" },
+          { "id": "ha_tia_q4", "text": "Diabetes or hypertension?", "category": "risk_factor" }
+        ],
+        "Syncope": [
+          { "id": "ha_syn_q1", "text": "Loss of consciousness with spontaneous recovery?", "category": "character" },
+          { "id": "ha_syn_q2", "text": "Prodromal lightheadedness, warmth, or diaphoresis?", "category": "associated" },
+          { "id": "ha_syn_q3", "text": "Palpitations or chest pain preceding event?", "category": "associated" },
+          { "id": "ha_syn_q4", "text": "Witnessed seizure activity or postictal state?", "category": "context" }
+        ],
+        "Minor head injury (adult)": [
+          { "id": "ha_chi_q1", "text": "Mechanism of injury (fall, assault, MVC)?", "category": "context" },
+          { "id": "ha_chi_q2", "text": "Loss of consciousness or amnesia?", "category": "associated" },
+          { "id": "ha_chi_q3", "text": "On anticoagulants or antiplatelets?", "category": "risk_factor" },
+          { "id": "ha_chi_q4", "text": "Age >65?", "category": "risk_factor" },
+          { "id": "ha_chi_q5", "text": "Vomiting (>1 episode)?", "category": "associated" }
+        ],
+        "Minor head injury (peds)": [
+          { "id": "ha_ped_q1", "text": "Mechanism of injury and height of fall?", "category": "context" },
+          { "id": "ha_ped_q2", "text": "Loss of consciousness?", "category": "associated" },
+          { "id": "ha_ped_q3", "text": "Vomiting?", "category": "associated" },
+          { "id": "ha_ped_q4", "text": "Altered behavior or acting abnormally per caregiver?", "category": "associated" },
+          { "id": "ha_ped_q5", "text": "Palpable skull fracture or large scalp hematoma?", "category": "associated" }
+        ],
+        "Cervical spine injury": [
+          { "id": "ha_csp_q1", "text": "Midline cervical tenderness?", "category": "character" },
+          { "id": "ha_csp_q2", "text": "Focal neurologic deficit or paresthesias?", "category": "associated" },
+          { "id": "ha_csp_q3", "text": "Dangerous mechanism (fall >3ft, axial load, MVC >60mph)?", "category": "context" },
+          { "id": "ha_csp_q4", "text": "Age >65?", "category": "risk_factor" },
+          { "id": "ha_csp_q5", "text": "Able to rotate neck 45 degrees bilaterally?", "category": "character" }
+        ],
+        "Temporal arteritis": [
+          { "id": "ha_gca_q1", "text": "Age >50 with new-onset headache?", "category": "character" },
+          { "id": "ha_gca_q2", "text": "Jaw claudication?", "category": "associated" },
+          { "id": "ha_gca_q3", "text": "Vision changes (amaurosis, diplopia)?", "category": "associated" },
+          { "id": "ha_gca_q4", "text": "Scalp tenderness or temporal artery tenderness?", "category": "associated" },
+          { "id": "ha_gca_q5", "text": "Constitutional symptoms (weight loss, malaise, fever)?", "category": "associated" }
+        ],
+        "Migraine/tension": [
+          { "id": "ha_mig_q1", "text": "Similar to prior headache episodes?", "category": "character" },
+          { "id": "ha_mig_q2", "text": "Unilateral, pulsating quality?", "category": "character" },
+          { "id": "ha_mig_q3", "text": "Aura (visual, sensory) preceding headache?", "category": "associated" },
+          { "id": "ha_mig_q4", "text": "Photophobia, phonophobia, or nausea?", "category": "associated" }
+        ],
+        "AFib-related embolic risk": [
+          { "id": "ha_afib_q1", "text": "Known or new atrial fibrillation?", "category": "risk_factor" },
+          { "id": "ha_afib_q2", "text": "On anticoagulation? Compliant?", "category": "risk_factor" },
+          { "id": "ha_afib_q3", "text": "Palpitations or irregular pulse?", "category": "associated" }
+        ]
+      }
+    },
+    "mdmpregvb": {
+      "ddx_questions": {
+        "Ectopic pregnancy": [
+          { "id": "preg_ect_q1", "text": "Unilateral pelvic or adnexal pain?", "category": "character" },
+          { "id": "preg_ect_q2", "text": "History of prior ectopic, tubal surgery, or PID?", "category": "risk_factor" },
+          { "id": "preg_ect_q3", "text": "IUD in place?", "category": "risk_factor" },
+          { "id": "preg_ect_q4", "text": "Vaginal bleeding with abdominal pain?", "category": "associated" },
+          { "id": "preg_ect_q5", "text": "Lightheadedness, syncope, or shoulder pain?", "category": "associated" }
+        ],
+        "Pregnancy hemorrhage/instability": [
+          { "id": "preg_hem_q1", "text": "Heavy vaginal bleeding (soaking pads)?", "category": "character" },
+          { "id": "preg_hem_q2", "text": "Lightheadedness, dizziness, or syncope?", "category": "associated" },
+          { "id": "preg_hem_q3", "text": "Passage of tissue or clots?", "category": "associated" },
+          { "id": "preg_hem_q4", "text": "Hemodynamic instability (tachycardia, hypotension)?", "category": "associated" }
+        ],
+        "Placental abruption": [
+          { "id": "preg_abr_q1", "text": "Sudden onset painful vaginal bleeding (2nd/3rd trimester)?", "category": "character" },
+          { "id": "preg_abr_q2", "text": "Trauma or recent cocaine use?", "category": "risk_factor" },
+          { "id": "preg_abr_q3", "text": "Hypertension or preeclampsia?", "category": "risk_factor" },
+          { "id": "preg_abr_q4", "text": "Uterine tenderness or rigidity?", "category": "associated" }
+        ],
+        "Threatened miscarriage / viable IUP": [
+          { "id": "preg_thr_q1", "text": "Light vaginal bleeding or spotting?", "category": "character" },
+          { "id": "preg_thr_q2", "text": "Cramping or mild pelvic discomfort?", "category": "associated" },
+          { "id": "preg_thr_q3", "text": "Confirmed IUP on prior ultrasound?", "category": "context" },
+          { "id": "preg_thr_q4", "text": "Gestational age estimated?", "category": "context" }
+        ],
+        "Failed early IUP": [
+          { "id": "preg_fail_q1", "text": "Bleeding with cramping in early pregnancy?", "category": "character" },
+          { "id": "preg_fail_q2", "text": "Passage of products of conception?", "category": "associated" },
+          { "id": "preg_fail_q3", "text": "Prior ultrasound showing IUP?", "category": "context" }
+        ],
+        "Pregnancy of unknown location": [
+          { "id": "preg_pul_q1", "text": "Positive pregnancy test but no IUP on ultrasound?", "category": "context" },
+          { "id": "preg_pul_q2", "text": "Quantitative beta-hCG level known?", "category": "context" },
+          { "id": "preg_pul_q3", "text": "Abdominal or pelvic pain?", "category": "associated" },
+          { "id": "preg_pul_q4", "text": "Vaginal bleeding present?", "category": "associated" }
+        ],
+        "Preeclampsia/HELLP spectrum": [
+          { "id": "preg_pre_q1", "text": "Hypertension (>140/90)?", "category": "associated" },
+          { "id": "preg_pre_q2", "text": "Headache, visual changes, or RUQ pain?", "category": "associated" },
+          { "id": "preg_pre_q3", "text": "Gestational age >20 weeks?", "category": "context" },
+          { "id": "preg_pre_q4", "text": "History of preeclampsia in prior pregnancy?", "category": "risk_factor" }
+        ],
+        "Cervical/vaginal source": [
+          { "id": "preg_cer_q1", "text": "Recent intercourse or cervical manipulation?", "category": "context" },
+          { "id": "preg_cer_q2", "text": "Light spotting without pain?", "category": "character" },
+          { "id": "preg_cer_q3", "text": "Known cervical pathology (polyp, ectropion)?", "category": "risk_factor" }
+        ]
+      }
+    },
+    "mdmsyncope": {
+      "ddx_questions": {
+        "Arrhythmic syncope": [
+          { "id": "syn_arr_q1", "text": "Sudden LOC without prodrome?", "category": "character" },
+          { "id": "syn_arr_q2", "text": "Palpitations before or after event?", "category": "associated" },
+          { "id": "syn_arr_q3", "text": "Syncope during exertion?", "category": "context" },
+          { "id": "syn_arr_q4", "text": "Family history of sudden cardiac death or arrhythmia?", "category": "risk_factor" },
+          { "id": "syn_arr_q5", "text": "Known cardiac history (cardiomyopathy, valve disease)?", "category": "risk_factor" },
+          { "id": "syn_arr_q6", "text": "On QT-prolonging medications?", "category": "risk_factor" }
+        ],
+        "Pulmonary embolism": [
+          { "id": "syn_pe_q1", "text": "Acute dyspnea before or after syncope?", "category": "associated" },
+          { "id": "syn_pe_q2", "text": "Pleuritic chest pain?", "category": "associated" },
+          { "id": "syn_pe_q3", "text": "Recent immobilization, surgery, or travel?", "category": "risk_factor" },
+          { "id": "syn_pe_q4", "text": "Active malignancy or estrogen use?", "category": "risk_factor" },
+          { "id": "syn_pe_q5", "text": "Unilateral leg swelling?", "category": "associated" }
+        ],
+        "ACS / ischemia equivalent": [
+          { "id": "syn_acs_q1", "text": "Chest pain or dyspnea with syncope?", "category": "associated" },
+          { "id": "syn_acs_q2", "text": "Known CAD or cardiac risk factors?", "category": "risk_factor" },
+          { "id": "syn_acs_q3", "text": "Diaphoresis or nausea associated?", "category": "associated" }
+        ],
+        "Seizure/postictal event": [
+          { "id": "syn_sei_q1", "text": "Witnessed tonic-clonic activity?", "category": "associated" },
+          { "id": "syn_sei_q2", "text": "Tongue bite (lateral)?", "category": "associated" },
+          { "id": "syn_sei_q3", "text": "Urinary incontinence?", "category": "associated" },
+          { "id": "syn_sei_q4", "text": "Prolonged confusion or postictal state?", "category": "associated" },
+          { "id": "syn_sei_q5", "text": "History of seizure disorder?", "category": "risk_factor" }
+        ],
+        "TIA/Stroke mimic": [
+          { "id": "syn_tia_q1", "text": "Focal neurologic deficit before or after syncope?", "category": "associated" },
+          { "id": "syn_tia_q2", "text": "History of atrial fibrillation or carotid disease?", "category": "risk_factor" },
+          { "id": "syn_tia_q3", "text": "Speech difficulty, vision changes, or weakness?", "category": "associated" }
+        ],
+        "GI bleed/anemia contribution": [
+          { "id": "syn_gib_q1", "text": "Melena, hematemesis, or rectal bleeding?", "category": "associated" },
+          { "id": "syn_gib_q2", "text": "On NSAIDs or anticoagulants?", "category": "risk_factor" },
+          { "id": "syn_gib_q3", "text": "Pallor or fatigue preceding event?", "category": "associated" }
+        ],
+        "Vasovagal/orthostatic syncope": [
+          { "id": "syn_vvs_q1", "text": "Clear trigger (prolonged standing, heat, pain, emotional)?", "category": "context" },
+          { "id": "syn_vvs_q2", "text": "Prodromal warmth, nausea, diaphoresis, tunnel vision?", "category": "associated" },
+          { "id": "syn_vvs_q3", "text": "Rapid recovery without confusion?", "category": "character" },
+          { "id": "syn_vvs_q4", "text": "Dehydration, poor oral intake, or new diuretic?", "category": "risk_factor" }
+        ]
+      }
+    },
+    "mdmdizzy": {
+      "ddx_questions": {
+        "Posterior circulation stroke": [
+          { "id": "diz_str_q1", "text": "Acute onset vertigo with any focal neuro deficit?", "category": "character" },
+          { "id": "diz_str_q2", "text": "Gait instability or inability to walk?", "category": "associated" },
+          { "id": "diz_str_q3", "text": "Diplopia, dysarthria, or dysphagia?", "category": "associated" },
+          { "id": "diz_str_q4", "text": "New-onset headache (especially occipital)?", "category": "associated" },
+          { "id": "diz_str_q5", "text": "Vascular risk factors (HTN, DM, AFib, age >60)?", "category": "risk_factor" }
+        ],
+        "Cervical artery dissection": [
+          { "id": "diz_dis_q1", "text": "Recent neck trauma or manipulation (chiropractic)?", "category": "context" },
+          { "id": "diz_dis_q2", "text": "Ipsilateral neck pain or headache?", "category": "associated" },
+          { "id": "diz_dis_q3", "text": "Horner syndrome (ptosis, miosis, anhidrosis)?", "category": "associated" },
+          { "id": "diz_dis_q4", "text": "Young patient with connective tissue disorder?", "category": "risk_factor" }
+        ],
+        "Arrhythmia/cardiac presyncope": [
+          { "id": "diz_arr_q1", "text": "Palpitations or irregular heartbeat?", "category": "associated" },
+          { "id": "diz_arr_q2", "text": "Near-syncope or lightheadedness (not spinning)?", "category": "character" },
+          { "id": "diz_arr_q3", "text": "Known cardiac disease or on QT-prolonging meds?", "category": "risk_factor" }
+        ],
+        "Metabolic derangement": [
+          { "id": "diz_met_q1", "text": "Poor oral intake, dehydration, or recent illness?", "category": "context" },
+          { "id": "diz_met_q2", "text": "Diabetic with possible hypoglycemia?", "category": "risk_factor" },
+          { "id": "diz_met_q3", "text": "Recent medication change (antihypertensives, sedatives)?", "category": "context" }
+        ],
+        "Peripheral vestibular etiology (BPPV/neuritis)": [
+          { "id": "diz_bppv_q1", "text": "Episodes triggered by head position changes?", "category": "character" },
+          { "id": "diz_bppv_q2", "text": "Brief episodes (seconds) vs sustained (hours-days)?", "category": "character" },
+          { "id": "diz_bppv_q3", "text": "Nausea/vomiting with vertigo?", "category": "associated" },
+          { "id": "diz_bppv_q4", "text": "Recent viral URI (vestibular neuritis)?", "category": "context" },
+          { "id": "diz_bppv_q5", "text": "Hearing loss or tinnitus (Meniere)?", "category": "associated" }
+        ],
+        "TIA": [
+          { "id": "diz_tia_q1", "text": "Transient focal deficit now resolved?", "category": "character" },
+          { "id": "diz_tia_q2", "text": "History of atrial fibrillation or carotid disease?", "category": "risk_factor" },
+          { "id": "diz_tia_q3", "text": "Diabetes or hypertension?", "category": "risk_factor" }
+        ]
+      }
+    },
+    "mdmlbp": {
+      "ddx_questions": {
+        "Cauda equina syndrome": [
+          { "id": "lbp_ces_q1", "text": "Saddle anesthesia (perineal numbness)?", "category": "associated" },
+          { "id": "lbp_ces_q2", "text": "Urinary retention or incontinence?", "category": "associated" },
+          { "id": "lbp_ces_q3", "text": "Fecal incontinence or decreased rectal tone?", "category": "associated" },
+          { "id": "lbp_ces_q4", "text": "Bilateral leg weakness or progressive deficit?", "category": "associated" },
+          { "id": "lbp_ces_q5", "text": "Severe or rapidly progressive radiculopathy?", "category": "character" }
+        ],
+        "Spinal epidural abscess": [
+          { "id": "lbp_sea_q1", "text": "IVDU history?", "category": "risk_factor" },
+          { "id": "lbp_sea_q2", "text": "Fever with focal back pain?", "category": "associated" },
+          { "id": "lbp_sea_q3", "text": "Recent spinal procedure or epidural?", "category": "risk_factor" },
+          { "id": "lbp_sea_q4", "text": "Immunocompromised (diabetes, HIV, steroids)?", "category": "risk_factor" },
+          { "id": "lbp_sea_q5", "text": "Point tenderness over spine with percussion?", "category": "character" }
+        ],
+        "Spinal cord compression": [
+          { "id": "lbp_cord_q1", "text": "Progressive bilateral weakness?", "category": "associated" },
+          { "id": "lbp_cord_q2", "text": "Sensory level on exam?", "category": "associated" },
+          { "id": "lbp_cord_q3", "text": "Known malignancy (metastatic disease)?", "category": "risk_factor" },
+          { "id": "lbp_cord_q4", "text": "Bowel or bladder dysfunction?", "category": "associated" }
+        ],
+        "Vertebral fracture": [
+          { "id": "lbp_frac_q1", "text": "Trauma or significant mechanism?", "category": "context" },
+          { "id": "lbp_frac_q2", "text": "Osteoporosis, chronic steroid use, or age >70?", "category": "risk_factor" },
+          { "id": "lbp_frac_q3", "text": "Point tenderness on palpation of spine?", "category": "character" },
+          { "id": "lbp_frac_q4", "text": "Pain worse with weight bearing?", "category": "character" }
+        ],
+        "AAA / aortic emergency": [
+          { "id": "lbp_aaa_q1", "text": "Sudden onset back or flank pain?", "category": "character" },
+          { "id": "lbp_aaa_q2", "text": "Age >60 with cardiovascular risk factors?", "category": "risk_factor" },
+          { "id": "lbp_aaa_q3", "text": "Known aortic aneurysm?", "category": "risk_factor" },
+          { "id": "lbp_aaa_q4", "text": "Hypotension or syncope?", "category": "associated" }
+        ],
+        "Mechanical low back pain (no red flags)": [
+          { "id": "lbp_msk_q1", "text": "Activity-related or positional pain?", "category": "character" },
+          { "id": "lbp_msk_q2", "text": "No neurologic symptoms (weakness, numbness, bowel/bladder)?", "category": "character" },
+          { "id": "lbp_msk_q3", "text": "No fever, weight loss, or night pain?", "category": "character" },
+          { "id": "lbp_msk_q4", "text": "Age 18-50 without red flags?", "category": "risk_factor" }
+        ]
+      }
+    },
+    "mdmams": {
+      "ddx_questions": {
+        "Hypoglycemia": [
+          { "id": "ams_hypo_q1", "text": "Diabetic on insulin or sulfonylurea?", "category": "risk_factor" },
+          { "id": "ams_hypo_q2", "text": "Missed meals or medication error?", "category": "context" },
+          { "id": "ams_hypo_q3", "text": "Diaphoresis, tremor, or palpitations?", "category": "associated" },
+          { "id": "ams_hypo_q4", "text": "Symptoms improve with glucose administration?", "category": "context" }
+        ],
+        "Stroke/ICH": [
+          { "id": "ams_str_q1", "text": "Acute focal neurologic deficit?", "category": "associated" },
+          { "id": "ams_str_q2", "text": "On anticoagulation?", "category": "risk_factor" },
+          { "id": "ams_str_q3", "text": "Sudden onset of altered consciousness?", "category": "character" },
+          { "id": "ams_str_q4", "text": "Hypertension or atrial fibrillation?", "category": "risk_factor" }
+        ],
+        "Seizure/postictal state": [
+          { "id": "ams_sei_q1", "text": "Witnessed seizure activity?", "category": "associated" },
+          { "id": "ams_sei_q2", "text": "Tongue bite or urinary incontinence?", "category": "associated" },
+          { "id": "ams_sei_q3", "text": "Known seizure disorder or missed anticonvulsants?", "category": "risk_factor" },
+          { "id": "ams_sei_q4", "text": "Gradual improvement in mental status (postictal)?", "category": "character" }
+        ],
+        "Toxicologic/medication effect": [
+          { "id": "ams_tox_q1", "text": "Polypharmacy or new medication started?", "category": "risk_factor" },
+          { "id": "ams_tox_q2", "text": "Access to pills, alcohol, or substances?", "category": "risk_factor" },
+          { "id": "ams_tox_q3", "text": "Toxidrome findings (pupils, skin, secretions)?", "category": "associated" },
+          { "id": "ams_tox_q4", "text": "Opioid use (consider naloxone trial)?", "category": "risk_factor" }
+        ],
+        "Metabolic encephalopathy": [
+          { "id": "ams_met_q1", "text": "Liver disease (hepatic encephalopathy)?", "category": "risk_factor" },
+          { "id": "ams_met_q2", "text": "Renal failure (uremia)?", "category": "risk_factor" },
+          { "id": "ams_met_q3", "text": "Electrolyte abnormality suspected (Na, Ca)?", "category": "risk_factor" },
+          { "id": "ams_met_q4", "text": "Gradual onset with waxing/waning course?", "category": "character" }
+        ],
+        "Sepsis-associated encephalopathy": [
+          { "id": "ams_sep_q1", "text": "Fever, hypothermia, or recent infection?", "category": "associated" },
+          { "id": "ams_sep_q2", "text": "Tachycardia, hypotension, or tachypnea?", "category": "associated" },
+          { "id": "ams_sep_q3", "text": "Immunocompromised or elderly?", "category": "risk_factor" },
+          { "id": "ams_sep_q4", "text": "UTI symptoms, cough, or skin infection source?", "category": "associated" }
+        ],
+        "Carbon monoxide exposure": [
+          { "id": "ams_co_q1", "text": "Exposure to fire, gas heater, or enclosed space?", "category": "context" },
+          { "id": "ams_co_q2", "text": "Multiple household members symptomatic?", "category": "context" },
+          { "id": "ams_co_q3", "text": "Headache, nausea, or cherry-red skin?", "category": "associated" },
+          { "id": "ams_co_q4", "text": "Winter season with indoor heating?", "category": "context" }
+        ]
+      }
+    },
+    "mdmgibleed": {
+      "ddx_questions": {
+        "Upper GI bleed source": [
+          { "id": "gib_ugi_q1", "text": "Hematemesis or coffee-ground emesis?", "category": "associated" },
+          { "id": "gib_ugi_q2", "text": "Melena (black tarry stool)?", "category": "associated" },
+          { "id": "gib_ugi_q3", "text": "NSAID, aspirin, or anticoagulant use?", "category": "risk_factor" },
+          { "id": "gib_ugi_q4", "text": "History of peptic ulcer disease?", "category": "risk_factor" },
+          { "id": "gib_ugi_q5", "text": "Epigastric or abdominal pain?", "category": "associated" }
+        ],
+        "Lower GI bleed source": [
+          { "id": "gib_lgi_q1", "text": "Hematochezia (bright red rectal bleeding)?", "category": "associated" },
+          { "id": "gib_lgi_q2", "text": "History of hemorrhoids, diverticulosis, or IBD?", "category": "risk_factor" },
+          { "id": "gib_lgi_q3", "text": "Recent colonoscopy or polypectomy?", "category": "context" },
+          { "id": "gib_lgi_q4", "text": "Change in bowel habits or weight loss?", "category": "associated" }
+        ],
+        "Variceal source": [
+          { "id": "gib_var_q1", "text": "Known liver cirrhosis or portal hypertension?", "category": "risk_factor" },
+          { "id": "gib_var_q2", "text": "Heavy alcohol use history?", "category": "risk_factor" },
+          { "id": "gib_var_q3", "text": "Large-volume hematemesis?", "category": "character" },
+          { "id": "gib_var_q4", "text": "Ascites, jaundice, or spider angiomata?", "category": "associated" }
+        ],
+        "Bowel perforation/peritonitis mimic": [
+          { "id": "gib_perf_q1", "text": "Sudden severe abdominal pain with rigidity?", "category": "character" },
+          { "id": "gib_perf_q2", "text": "Peritoneal signs on exam?", "category": "associated" },
+          { "id": "gib_perf_q3", "text": "Recent procedure or foreign body ingestion?", "category": "context" }
+        ],
+        "Aortic catastrophe mimic": [
+          { "id": "gib_aaa_q1", "text": "Sudden onset back/abdominal pain with GI bleeding?", "category": "character" },
+          { "id": "gib_aaa_q2", "text": "Known aortic aneurysm or prior aortic graft?", "category": "risk_factor" },
+          { "id": "gib_aaa_q3", "text": "Hemodynamic instability out of proportion?", "category": "associated" }
+        ]
+      }
+    },
+    "mdmfever": {
+      "ddx_questions": {
+        "Pneumonia": [
+          { "id": "fev_pna_q1", "text": "Cough (productive or dry)?", "category": "associated" },
+          { "id": "fev_pna_q2", "text": "Dyspnea or pleuritic chest pain?", "category": "associated" },
+          { "id": "fev_pna_q3", "text": "Rigors or shaking chills?", "category": "associated" },
+          { "id": "fev_pna_q4", "text": "Immunocompromised or chronic lung disease?", "category": "risk_factor" }
+        ],
+        "UTI/pyelonephritis": [
+          { "id": "fev_uti_q1", "text": "Dysuria, frequency, or urgency?", "category": "associated" },
+          { "id": "fev_uti_q2", "text": "Flank pain or CVA tenderness?", "category": "associated" },
+          { "id": "fev_uti_q3", "text": "Female, pregnant, or urinary catheter?", "category": "risk_factor" },
+          { "id": "fev_uti_q4", "text": "Nausea, vomiting, or unable to tolerate PO?", "category": "associated" }
+        ],
+        "Viral syndrome": [
+          { "id": "fev_vir_q1", "text": "Myalgias, fatigue, or generalized malaise?", "category": "associated" },
+          { "id": "fev_vir_q2", "text": "Sick contacts or recent exposure?", "category": "context" },
+          { "id": "fev_vir_q3", "text": "URI symptoms (rhinorrhea, sore throat, cough)?", "category": "associated" },
+          { "id": "fev_vir_q4", "text": "Self-limited course expected?", "category": "context" }
+        ],
+        "Bacteremia/sepsis": [
+          { "id": "fev_sep_q1", "text": "Rigors or shaking chills (true bacteremia marker)?", "category": "associated" },
+          { "id": "fev_sep_q2", "text": "Tachycardia, hypotension, or altered mental status?", "category": "associated" },
+          { "id": "fev_sep_q3", "text": "Immunocompromised (chemo, transplant, HIV, steroids)?", "category": "risk_factor" },
+          { "id": "fev_sep_q4", "text": "Indwelling device (catheter, port, prosthetic)?", "category": "risk_factor" },
+          { "id": "fev_sep_q5", "text": "Recent hospitalization or antibiotics?", "category": "risk_factor" }
+        ],
+        "SSTI": [
+          { "id": "fev_ssti_q1", "text": "Erythema, warmth, swelling, or tenderness?", "category": "associated" },
+          { "id": "fev_ssti_q2", "text": "Wound, abscess, or skin break?", "category": "context" },
+          { "id": "fev_ssti_q3", "text": "IVDU or diabetes?", "category": "risk_factor" },
+          { "id": "fev_ssti_q4", "text": "Rapidly spreading or crepitus (necrotizing concern)?", "category": "associated" }
+        ]
+      }
+    }
+  }
+}
