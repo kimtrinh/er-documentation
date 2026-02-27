@@ -119,6 +119,8 @@ main{max-width:1100px;margin:0 auto;padding:18px 24px 64px}
 .discharge-field input:focus,.discharge-field textarea:focus{border-color:#3b82f6}
 .discharge-field textarea{min-height:72px;resize:vertical}
 .discharge-preview{min-height:360px}
+.discharge-mdm-preview{min-height:220px}
+.discharge-preview-label{font-size:11px;color:var(--text2);margin-bottom:2px}
 .copy-row{display:flex;gap:8px;flex-wrap:wrap}
 .copy-btn{padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s}
 .copy-btn:hover{border-color:#3b82f6;color:var(--text-blue-bright)}
@@ -189,6 +191,9 @@ main>*:nth-child(3){animation-delay:.1s}
 main>*:nth-child(4){animation-delay:.15s}
 
 /* History Helper */
+.history-grid{display:grid;grid-template-columns:1.15fr 1fr;gap:14px;align-items:start}
+.history-preview{min-height:420px}
+.history-preview-hint{font-size:11px;color:var(--text2);margin-bottom:8px}
 .hh-ddx-section{border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--surface)}
 .hh-ddx-section+.hh-ddx-section{margin-top:10px}
 .hh-ddx-summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;background:var(--surface2);border-bottom:1px solid var(--border)}
@@ -211,6 +216,10 @@ main>*:nth-child(4){animation-delay:.15s}
 .hh-btn.active-no{background:#7f1d1d;border-color:#b91c1c;color:#fee2e2}
 .hh-btn.active-skip{background:var(--surface2);border-color:var(--border2);color:var(--text3)}
 .hh-category-tag{font-size:10px;color:var(--text-blue);border:1px solid #1e3a8a;background:#0b1730;border-radius:999px;padding:2px 7px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-left:4px;white-space:nowrap}
+@media(max-width:980px){
+  .history-grid{grid-template-columns:1fr}
+  .history-preview{min-height:280px}
+}
 </style>
 <link rel="stylesheet" href="mobile.css">
 <script>document.documentElement.setAttribute('data-theme',localStorage.getItem('theme')||'dark');</script>
@@ -298,14 +307,23 @@ main>*:nth-child(4){animation-delay:.15s}
               <span id="historyHelperCount" class="head-count">0 answered</span>
             </h2>
           </div>
-          <div class="panel-body">
-            <div id="historyHelperToolbar" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
-              <button id="historyHelperCopyBtn" class="copy-btn" type="button">Copy History Summary</button>
-              <button id="historyHelperResetBtn" class="ddx-action-btn" type="button">Reset Answers</button>
+          <div class="panel-body history-grid">
+            <div>
+              <div id="historyHelperToolbar" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+                <button id="historyHelperCopyBtn" class="copy-btn" type="button">Copy History Summary</button>
+                <button id="historyHelperResetBtn" class="ddx-action-btn" type="button">Reset Answers</button>
+              </div>
+              <p class="empty-block" style="margin-bottom:8px">Tap a diagnosis to expand its question set.</p>
+              <p id="historyHelperEmpty" class="empty-block">Select a chief complaint pack to see history questions.</p>
+              <div id="historyHelperContainer"></div>
             </div>
-            <p class="empty-block" style="margin-bottom:8px">Tap a diagnosis to expand its question set.</p>
-            <p id="historyHelperEmpty" class="empty-block">Select a chief complaint pack to see history questions.</p>
-            <div id="historyHelperContainer"></div>
+            <div class="preview-wrap">
+              <div class="history-preview-hint">Live preview updates as History Helper, MDM, or risk tools change.</div>
+              <div class="copy-row">
+                <button id="historyCopyFullBtn" class="copy-btn" type="button">Copy Full MDM</button>
+              </div>
+              <textarea id="historyPreview" class="preview history-preview" spellcheck="false" aria-label="History helper MDM live preview"></textarea>
+            </div>
           </div>
         </section>
       </div>
@@ -416,6 +434,12 @@ main>*:nth-child(4){animation-delay:.15s}
             </div>
 
             <div class="preview-wrap">
+              <div class="discharge-preview-label">MDM Live Preview</div>
+              <div class="copy-row">
+                <button id="dischargeCopyFullMdmBtn" class="copy-btn" type="button">Copy Full MDM</button>
+              </div>
+              <textarea id="dischargeMdmPreview" class="preview discharge-mdm-preview" spellcheck="false" aria-label="Shared MDM output preview"></textarea>
+              <div class="discharge-preview-label">Discharge Instructions Preview</div>
               <div class="copy-row">
                 <button id="copyDischargeBtn" class="copy-btn" type="button">Copy Discharge Instructions</button>
               </div>

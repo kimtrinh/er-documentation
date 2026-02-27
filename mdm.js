@@ -401,6 +401,7 @@
     savedActivePackId: '',
     discharge: { ...DEFAULT_DISCHARGE_STATE },
     historyQuestions: null,
+    historyQuestionMeta: Object.create(null),
     historyAnswers: Object.create(null),
     historyLoaded: false,
     historyExpandedDdx: new Set(),
@@ -448,6 +449,8 @@
     qualityCount: document.getElementById('qualityCount'),
     dischargeBuilder: document.getElementById('discharge-builder'),
     dischargePreview: document.getElementById('dischargePreview'),
+    dischargeMdmPreview: document.getElementById('dischargeMdmPreview'),
+    dischargeCopyFullMdmBtn: document.getElementById('dischargeCopyFullMdmBtn'),
     copyDischargeBtn: document.getElementById('copyDischargeBtn'),
     dotphraseSearchInput: document.getElementById('dotphraseSearchInput'),
     dotphraseFavoritesList: document.getElementById('dotphraseFavoritesList'),
@@ -459,6 +462,8 @@
     historyHelperContainer: document.getElementById('historyHelperContainer'),
     historyHelperEmpty: document.getElementById('historyHelperEmpty'),
     historyHelperCount: document.getElementById('historyHelperCount'),
+    historyPreview: document.getElementById('historyPreview'),
+    historyCopyFullBtn: document.getElementById('historyCopyFullBtn'),
     historyHelperCopyBtn: document.getElementById('historyHelperCopyBtn'),
     historyHelperResetBtn: document.getElementById('historyHelperResetBtn')
   };
@@ -600,7 +605,8 @@
             selectedDdx: Array.isArray(entry.selectedDdx) ? entry.selectedDdx.map(String) : [],
             selectedRuleouts: Array.isArray(entry.selectedRuleouts) ? entry.selectedRuleouts.map((x) => normalizeId(x)) : [],
             selectedRisks: Array.isArray(entry.selectedRisks) ? entry.selectedRisks.map(String) : [],
-            riskInputs: entry.riskInputs && typeof entry.riskInputs === 'object' ? entry.riskInputs : {}
+            riskInputs: entry.riskInputs && typeof entry.riskInputs === 'object' ? entry.riskInputs : {},
+            historyAnswers: entry.historyAnswers && typeof entry.historyAnswers === 'object' ? entry.historyAnswers : {}
           };
         });
       }
@@ -1526,11 +1532,19 @@
   }
 
   function setPreview() {
-    if (!state.activePack) {
-      els.preview.value = '';
-      return;
+    var previewText = '';
+    if (state.activePack) {
+      previewText = buildMdmText(state.activePack);
     }
-    els.preview.value = buildMdmText(state.activePack);
+    if (els.preview) {
+      els.preview.value = previewText;
+    }
+    if (els.historyPreview) {
+      els.historyPreview.value = previewText;
+    }
+    if (els.dischargeMdmPreview) {
+      els.dischargeMdmPreview.value = previewText;
+    }
   }
 
   function evaluateQualityChecks(pack) {
@@ -2144,13 +2158,175 @@
       var response = await fetch('history_helper.json', { cache: 'no-store' });
       if (!response.ok) throw new Error('Failed to load history_helper.json');
       state.historyQuestions = await response.json();
+      indexHistoryQuestions();
       state.historyLoaded = true;
     } catch (e) {
       state.historyLoadError = 'History helper data failed to load. Ensure history_helper.json is present and uploaded.';
+      state.historyQuestionMeta = Object.create(null);
     } finally {
       state.historyLoading = false;
       renderHistoryHelper();
     }
+  }
+
+  function indexHistoryQuestions() {
+    state.historyQuestionMeta = Object.create(null);
+    var packs = state.historyQuestions && state.historyQuestions.packs && typeof state.historyQuestions.packs === 'object'
+      ? state.historyQuestions.packs
+      : {};
+
+    Object.keys(packs).forEach(function (packId) {
+      var packData = packs[packId];
+      if (!packData || typeof packData !== 'object' || !packData.ddx_questions) return;
+
+      Object.keys(packData.ddx_questions).forEach(function (ddxLabel) {
+        var questions = packData.ddx_questions[ddxLabel];
+        if (!Array.isArray(questions)) return;
+
+        questions.forEach(function (q) {
+          if (!q || typeof q !== 'object') return;
+          var qId = String(q.id || '').trim();
+          if (!qId) return;
+          state.historyQuestionMeta[qId] = {
+            id: qId,
+            packId: packId,
+            ddxLabel: String(ddxLabel || ''),
+            text: String(q.text || ''),
+            category: String(q.category || '')
+          };
+        });
+      });
+    });
+  }
+
+  function inferHistoryRiskMappings(meta) {
+    var mappings = [];
+    var seen = new Set();
+    function add(calcType, fieldId) {
+      if (!calcType || !fieldId) return;
+      var key = calcType + ':' + fieldId;
+      if (seen.has(key)) return;
+      seen.add(key);
+      mappings.push({ calcType: calcType, fieldId: fieldId });
+    }
+
+    if (!meta) return mappings;
+    var ddx = normalizeLabel(meta.ddxLabel).toLowerCase();
+    var text = normalizeLabel(meta.text).toLowerCase();
+    var qId = String(meta.id || '').toLowerCase();
+
+    var peContext = ddx === 'pe' || ddx.includes('pulmonary embol') || qId.includes('_pe_');
+    if (peContext) {
+      if (/(history|prior).{0,20}\b(dvt|pe)\b|\b(dvt|pe)\b.{0,20}(history|prior)/.test(text)) {
+        add('wells_pe', 'prior_pe_dvt');
+        add('perc', 'prior_pe_dvt');
+      }
+      if (/\b(estrogen|ocp|hrt)\b/.test(text)) {
+        add('perc', 'estrogen_use');
+      }
+      if (/\b(surgery|immobil|travel)\b/.test(text)) {
+        add('wells_pe', 'immobilization_or_recent_surgery');
+        add('perc', 'recent_surgery_trauma');
+      }
+      if (/unilateral leg swelling|leg swelling|leg pain|leg redness|signs? of dvt/.test(text)) {
+        add('wells_pe', 'dvt_signs');
+        add('perc', 'unilateral_leg_swelling');
+        add('years', 'dvt_signs');
+      }
+      if (/\bhemoptysis\b/.test(text)) {
+        add('wells_pe', 'hemoptysis');
+        add('perc', 'hemoptysis');
+        add('years', 'hemoptysis');
+      }
+      if (/\bmalignan|chemotherap/.test(text)) {
+        add('wells_pe', 'malignancy');
+      }
+    }
+
+    var acsContext = ddx.includes('acs') || qId.includes('_acs_');
+    if (acsContext) {
+      if (/(known cad|prior mi|stent|cabg|atherosclerotic|history of heart disease)/.test(text)) {
+        add('heart', 'risk_known_athero');
+      }
+      if (/family history/.test(text) && /\b(cad|mi|heart)\b/.test(text)) {
+        add('heart', 'risk_family_history');
+      }
+    }
+
+    return mappings;
+  }
+
+  function setHistorySyncedCalculatorField(pack, calcType, fieldId, value) {
+    if (!pack || !calcType || !fieldId) return false;
+    var visibleToggles = getVisibleRiskToggles(pack);
+    var nextValue = Boolean(value);
+    var changed = false;
+
+    visibleToggles.forEach(function (toggle) {
+      if (!toggle.calculator || toggle.calculator.type !== calcType) return;
+      var inputs = ensureCalculatorInputState(toggle);
+      if (Boolean(inputs[fieldId]) !== nextValue) {
+        inputs[fieldId] = nextValue;
+        changed = true;
+      }
+      if (nextValue) {
+        state.selectedRisks.add(toggle.id);
+      }
+    });
+
+    return changed;
+  }
+
+  function syncHistoryAnswerToMdm(questionId, answer) {
+    if (!state.activePack || !questionId) return;
+    var meta = state.historyQuestionMeta[questionId];
+    if (!meta || meta.packId !== state.activePack.id) return;
+
+    if (answer === 'yes' && meta.ddxLabel) {
+      var hasDdx = (state.activePack.ddx || []).some(function (item) {
+        return item.label === meta.ddxLabel;
+      });
+      if (hasDdx) {
+        state.selectedDdx.add(meta.ddxLabel);
+      }
+    }
+
+    syncRuleouts(state.activePack, { autoSelectNew: true });
+    syncRiskToggles(state.activePack);
+
+    var mappings = inferHistoryRiskMappings(meta);
+    if (!mappings.length) return;
+    var nextValue = answer === 'yes';
+    mappings.forEach(function (mapping) {
+      setHistorySyncedCalculatorField(state.activePack, mapping.calcType, mapping.fieldId, nextValue);
+    });
+  }
+
+  function clearHistorySyncedRiskInputsForActivePack() {
+    if (!state.activePack || !state.historyLoaded || !state.historyQuestions) return;
+    var packData = state.historyQuestions.packs[state.activePack.id];
+    if (!packData || !packData.ddx_questions) return;
+
+    var seen = new Set();
+    Object.keys(packData.ddx_questions).forEach(function (ddxLabel) {
+      var questions = packData.ddx_questions[ddxLabel];
+      if (!Array.isArray(questions)) return;
+      questions.forEach(function (q) {
+        if (!q || typeof q !== 'object') return;
+        var meta = {
+          id: String(q.id || ''),
+          ddxLabel: ddxLabel,
+          text: String(q.text || ''),
+          category: String(q.category || '')
+        };
+        inferHistoryRiskMappings(meta).forEach(function (mapping) {
+          var key = mapping.calcType + ':' + mapping.fieldId;
+          if (seen.has(key)) return;
+          seen.add(key);
+          setHistorySyncedCalculatorField(state.activePack, mapping.calcType, mapping.fieldId, false);
+        });
+      });
+    });
   }
 
   function renderHistoryHelper() {
@@ -2235,9 +2411,9 @@
           return '<div class="hh-question ' + rowClass + '">' +
             '<span class="hh-question-text">' + escapeHtml(q.text) + catTag + '</span>' +
             '<div class="hh-actions">' +
-              '<button class="hh-btn' + yesActive + '" data-question-id="' + escapeHtml(q.id) + '" data-answer="yes" type="button">Yes</button>' +
-              '<button class="hh-btn' + noActive + '" data-question-id="' + escapeHtml(q.id) + '" data-answer="no" type="button">No</button>' +
-              '<button class="hh-btn' + skipActive + '" data-question-id="' + escapeHtml(q.id) + '" data-answer="skip" type="button">Skip</button>' +
+              '<button class="hh-btn' + yesActive + '" data-question-id="' + escapeHtml(q.id) + '" data-ddx-label="' + escapeHtml(ddxItem.label) + '" data-answer="yes" type="button">Yes</button>' +
+              '<button class="hh-btn' + noActive + '" data-question-id="' + escapeHtml(q.id) + '" data-ddx-label="' + escapeHtml(ddxItem.label) + '" data-answer="no" type="button">No</button>' +
+              '<button class="hh-btn' + skipActive + '" data-question-id="' + escapeHtml(q.id) + '" data-ddx-label="' + escapeHtml(ddxItem.label) + '" data-answer="skip" type="button">Skip</button>' +
             '</div>' +
           '</div>';
         }).join('');
@@ -2663,13 +2839,19 @@
         var answer = btn.dataset.answer;
         if (!qId || !answer) return;
 
-        if (state.historyAnswers[qId] === answer) {
-          delete state.historyAnswers[qId];
-        } else {
-          state.historyAnswers[qId] = answer;
-        }
-        renderHistoryHelper();
+        var nextAnswer = state.historyAnswers[qId] === answer ? '' : answer;
+        if (nextAnswer) state.historyAnswers[qId] = nextAnswer;
+        else delete state.historyAnswers[qId];
+
+        syncHistoryAnswerToMdm(qId, nextAnswer);
+        renderAll();
         persistActivePackState();
+      });
+    }
+
+    if (els.historyCopyFullBtn) {
+      els.historyCopyFullBtn.addEventListener('click', () => {
+        copyTextWithFeedback(els.preview.value, els.historyCopyFullBtn);
       });
     }
 
@@ -2683,7 +2865,8 @@
     if (els.historyHelperResetBtn) {
       els.historyHelperResetBtn.addEventListener('click', () => {
         state.historyAnswers = Object.create(null);
-        renderHistoryHelper();
+        clearHistorySyncedRiskInputsForActivePack();
+        renderAll();
         persistActivePackState();
       });
     }
@@ -2881,6 +3064,12 @@
     if (els.copyDischargeBtn && els.dischargePreview) {
       els.copyDischargeBtn.addEventListener('click', () => {
         copyTextWithFeedback(els.dischargePreview.value, els.copyDischargeBtn);
+      });
+    }
+
+    if (els.dischargeCopyFullMdmBtn) {
+      els.dischargeCopyFullMdmBtn.addEventListener('click', () => {
+        copyTextWithFeedback(els.preview.value, els.dischargeCopyFullMdmBtn);
       });
     }
   }
