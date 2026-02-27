@@ -32,6 +32,22 @@
     canadian_ct_head: 'calculators.html#calc-cthead',
     pecarn: 'calculators.html#calc-pecarn'
   });
+  const HISTORY_RISK_TOOL_LABELS = Object.freeze({
+    wells_pe: { short: 'WELLS', full: 'Wells PE' },
+    perc: { short: 'PERC', full: 'PERC' },
+    years: { short: 'YEARS', full: 'YEARS Algorithm' },
+    heart: { short: 'HEART', full: 'HEART Score' },
+    abcd2: { short: 'ABCD2', full: 'ABCD2 Score' },
+    cha2ds2_vasc: { short: 'CHA2DS2-VASc', full: 'CHA2DS2-VASc Score' },
+    qsofa: { short: 'qSOFA', full: 'qSOFA' },
+    canadian_ct_head: { short: 'CCTHR', full: 'Canadian CT Head Rule' },
+    pecarn: { short: 'PECARN', full: 'PECARN' },
+    nexus_cspine: { short: 'NEXUS', full: 'NEXUS C-spine' },
+    curb65: { short: 'CURB-65', full: 'CURB-65' },
+    canadian_syncope: { short: 'CSRS', full: 'Canadian Syncope Risk Score' },
+    alvarado: { short: 'ALVARADO', full: 'Alvarado Score' },
+    glasgow_blatchford: { short: 'GBS', full: 'Glasgow-Blatchford Score' }
+  });
 
   const CALCULATOR_SCHEMAS = Object.freeze({
     heart: {
@@ -1460,11 +1476,37 @@
     return ['Rule-outs:', ...lines].join('\n');
   }
 
+  function buildHistoryForMdmText() {
+    const summary = buildHistorySummaryText();
+    if (!summary || summary === 'No history questions answered.') {
+      return '';
+    }
+
+    const lines = [];
+    summary.split('\n').forEach((line) => {
+      const clean = String(line || '').trim();
+      if (!clean) return;
+      if (clean.endsWith(':') && !clean.startsWith('[')) {
+        lines.push(clean);
+        return;
+      }
+      lines.push(`- ${clean}`);
+    });
+
+    if (!lines.length) return '';
+    return ['History highlights:', ...lines].join('\n');
+  }
+
   function buildMdmText(pack) {
     const sections = [
       'MDM',
       buildDdxText(pack)
     ];
+
+    const historyText = buildHistoryForMdmText();
+    if (historyText) {
+      sections.push(historyText);
+    }
 
     const riskText = buildRiskText(pack);
     if (riskText) {
@@ -2165,7 +2207,12 @@
       state.historyQuestionMeta = Object.create(null);
     } finally {
       state.historyLoading = false;
-      renderHistoryHelper();
+      if (state.historyLoaded && state.activePack) {
+        syncAllHistoryAnswersToMdm();
+        renderAll();
+      } else {
+        renderHistoryHelper();
+      }
     }
   }
 
@@ -2256,13 +2303,34 @@
     return mappings;
   }
 
+  function getHistoryRiskToolTags(meta) {
+    var mappings = inferHistoryRiskMappings(meta);
+    if (!mappings.length) return [];
+
+    var seen = new Set();
+    var tags = [];
+    mappings.forEach(function (mapping) {
+      var calcType = String(mapping.calcType || '').trim();
+      if (!calcType || seen.has(calcType)) return;
+      seen.add(calcType);
+      var label = HISTORY_RISK_TOOL_LABELS[calcType];
+      if (label && label.short) {
+        tags.push({ short: label.short, title: label.full || label.short });
+        return;
+      }
+      var fallback = calcType.toUpperCase().replace(/_/g, '-');
+      tags.push({ short: fallback, title: fallback });
+    });
+    return tags;
+  }
+
   function setHistorySyncedCalculatorField(pack, calcType, fieldId, value) {
     if (!pack || !calcType || !fieldId) return false;
-    var visibleToggles = getVisibleRiskToggles(pack);
+    var packToggles = Array.isArray(pack.risk_toggles) ? pack.risk_toggles : [];
     var nextValue = Boolean(value);
     var changed = false;
 
-    visibleToggles.forEach(function (toggle) {
+    packToggles.forEach(function (toggle) {
       if (!toggle.calculator || toggle.calculator.type !== calcType) return;
       var inputs = ensureCalculatorInputState(toggle);
       if (Boolean(inputs[fieldId]) !== nextValue) {
@@ -2275,6 +2343,20 @@
     });
 
     return changed;
+  }
+
+  function syncAllHistoryAnswersToMdm() {
+    if (!state.activePack || !state.historyLoaded || !state.historyQuestions) return;
+
+    clearHistorySyncedRiskInputsForActivePack();
+    Object.keys(state.historyAnswers || {}).forEach(function (qId) {
+      var answer = state.historyAnswers[qId];
+      if (answer === 'yes' || answer === 'no') {
+        syncHistoryAnswerToMdm(qId, answer);
+      } else {
+        syncHistoryAnswerToMdm(qId, '');
+      }
+    });
   }
 
   function syncHistoryAnswerToMdm(questionId, answer) {
@@ -2407,9 +2489,19 @@
           var catTag = q.category
             ? ' <span class="hh-category-tag">' + escapeHtml(q.category) + '</span>'
             : '';
+          var questionMeta = {
+            id: String(q.id || ''),
+            ddxLabel: String(ddxItem.label || ''),
+            text: String(q.text || ''),
+            category: String(q.category || '')
+          };
+          var riskToolTags = getHistoryRiskToolTags(questionMeta);
+          var riskTag = riskToolTags.map(function (tag) {
+            return ' <span class="hh-risk-tag" title="' + escapeHtml(tag.title) + '">' + escapeHtml(tag.short) + '</span>';
+          }).join('');
 
           return '<div class="hh-question ' + rowClass + '">' +
-            '<span class="hh-question-text">' + escapeHtml(q.text) + catTag + '</span>' +
+            '<span class="hh-question-text">' + escapeHtml(q.text) + catTag + riskTag + '</span>' +
             '<div class="hh-actions">' +
               '<button class="hh-btn' + yesActive + '" data-question-id="' + escapeHtml(q.id) + '" data-ddx-label="' + escapeHtml(ddxItem.label) + '" data-answer="yes" type="button">Yes</button>' +
               '<button class="hh-btn' + noActive + '" data-question-id="' + escapeHtml(q.id) + '" data-ddx-label="' + escapeHtml(ddxItem.label) + '" data-answer="no" type="button">No</button>' +
@@ -2527,6 +2619,10 @@
         }
       });
     }
+
+    if (state.historyLoaded) {
+      syncAllHistoryAnswersToMdm();
+    }
   }
 
   function snapshotActivePackState() {
@@ -2567,6 +2663,9 @@
       applySavedPackState(pack, saved);
     } else {
       applyDefaultPackState(pack);
+      if (state.historyLoaded) {
+        syncAllHistoryAnswersToMdm();
+      }
     }
 
     renderAll();
@@ -2839,9 +2938,8 @@
         var answer = btn.dataset.answer;
         if (!qId || !answer) return;
 
-        var nextAnswer = state.historyAnswers[qId] === answer ? '' : answer;
-        if (nextAnswer) state.historyAnswers[qId] = nextAnswer;
-        else delete state.historyAnswers[qId];
+        var nextAnswer = answer;
+        state.historyAnswers[qId] = nextAnswer;
 
         syncHistoryAnswerToMdm(qId, nextAnswer);
         renderAll();
