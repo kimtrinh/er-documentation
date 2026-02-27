@@ -27,7 +27,9 @@ header{background:linear-gradient(135deg,var(--surface),var(--bg));border-bottom
 .mode-pill{display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--border);background:var(--surface);border-radius:999px;color:var(--text2);font-size:13px;font-weight:600;cursor:pointer}
 .mode-pill input{accent-color:#3b82f6}
 .alias-hint{margin-top:8px;font-size:11px;color:var(--text3)}
-.controls,.alias-hint{display:none}
+.controls{display:grid;grid-template-columns:minmax(280px,420px);gap:12px;align-items:end}
+.control.secondary{display:none}
+.alias-hint{display:none}
 .pack-shortcuts-label{margin-top:10px;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--text2);font-weight:700}
 .pack-shortcuts{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
 .pack-chip{padding:6px 10px;border-radius:999px;border:1px solid var(--border);background:var(--surface);color:var(--text2);font-size:11px;font-weight:700;cursor:pointer;transition:all .15s}
@@ -41,8 +43,8 @@ header{background:linear-gradient(135deg,var(--surface),var(--bg));border-bottom
 .quick-btn.danger{background:#7f1d1d;border-color:#b91c1c;color:#fee2e2;font-size:12px;font-weight:800;letter-spacing:.02em}
 .quick-btn.danger:hover{background:#991b1b;border-color:#dc2626;color:#fff}
 
-main{max-width:1100px;margin:0 auto;padding:18px 24px 64px}
-.doc-toolbar{position:sticky;top:46px;z-index:60;background:var(--surface);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:12px;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+main{max-width:1240px;margin:0 auto;padding:18px 24px 64px}
+.doc-toolbar{position:sticky;top:46px;z-index:60;background:var(--surface);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:12px;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
 .toolbar-left{display:flex;gap:8px;flex-wrap:wrap}
 .toolbar-btn{padding:8px 11px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;font-weight:700;cursor:pointer}
 .toolbar-btn:hover{border-color:#3b82f6;color:var(--text-blue-bright)}
@@ -53,12 +55,15 @@ main{max-width:1100px;margin:0 auto;padding:18px 24px 64px}
 .status-pill.ok{background:#052e16;border-color:#166534;color:#86efac}
 .status-pill.warn{background:#2b1f0a;border-color:#b45309;color:#fcd34d}
 .status-pill.neutral{background:var(--bg);border-color:var(--border);color:var(--text2)}
-.doc-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
-.doc-tab{padding:8px 12px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);color:var(--text2);font-size:12px;font-weight:700;cursor:pointer}
-.doc-tab.primary{background:#10213f;border-color:#1e3a8a;color:var(--text-blue-bright)}
-.doc-tab.secondary{background:var(--surface2);color:var(--text2)}
-.doc-tab:hover{border-color:#3b82f6;color:var(--text)}
-.doc-tab.active{box-shadow:0 0 0 1px rgba(59,130,246,.35),0 0 16px rgba(37,99,235,.25);border-color:#2563eb;color:#fff}
+.doc-tabs{display:none}
+.workspace-shell{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(340px,.8fr);gap:14px;align-items:start}
+.workspace-left{display:grid;gap:14px}
+.workspace-right{position:relative}
+.preview-panel-sticky{position:sticky;top:112px}
+.jump-preview{display:inline-flex;text-decoration:none}
+.advanced-actions{border:1px solid var(--border);border-radius:10px;background:var(--surface2);padding:8px 10px}
+.advanced-actions summary{cursor:pointer;font-size:12px;font-weight:700;color:var(--text2)}
+.advanced-actions[open] summary{margin-bottom:10px}
 .doc-accordion{display:grid;gap:14px}
 .doc-panel{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
 .doc-panel > summary{list-style:none;cursor:pointer;padding:14px 16px;background:var(--surface2);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px}
@@ -87,7 +92,18 @@ main{max-width:1100px;margin:0 auto;padding:18px 24px 64px}
 .ruleout-label{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .missing-tag{font-size:11px;color:#fca5a5;border:1px solid #7f1d1d;background:#2d1b1b;padding:1px 6px;border-radius:20px}
 
-.risk-row + .risk-row{margin-top:10px}
+/* Collapsible risk rows */
+details.risk-row{margin-top:10px;list-style:none}
+details.risk-row + details.risk-row{margin-top:10px}
+details.risk-row > summary{list-style:none;display:flex;align-items:center;justify-content:space-between;cursor:pointer;padding:4px 2px;border-radius:6px;user-select:none}
+details.risk-row > summary::-webkit-details-marker{display:none}
+details.risk-row > summary:hover{background:var(--surface2)}
+.risk-row-summary{display:flex;align-items:center;justify-content:space-between;width:100%;gap:6px}
+.risk-row-chevron{flex-shrink:0;width:14px;height:14px;display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:10px;transition:transform .18s ease}
+.risk-row-chevron::after{content:'▸'}
+details.risk-row[open] .risk-row-chevron{transform:rotate(90deg)}
+@keyframes risk-highlight-pulse{0%{box-shadow:0 0 0 0 rgba(251,191,36,.55)}60%{box-shadow:0 0 0 6px rgba(251,191,36,0)}100%{box-shadow:none}}
+.risk-row-highlight{animation:risk-highlight-pulse .7s ease 2;border-radius:8px;outline:2px solid #f59e0b;outline-offset:2px}
 .risk-input-wrap{display:flex;align-items:center;gap:8px;margin:8px 2px 0 28px}
 .risk-input-wrap span{font-size:11px;color:var(--text2);min-width:54px}
 .risk-input-wrap input,.risk-input-wrap select{background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:12px;padding:6px 8px;min-width:120px}
@@ -161,6 +177,8 @@ main{max-width:1100px;margin:0 auto;padding:18px 24px 64px}
 
 @media(max-width:980px){
   .controls{grid-template-columns:1fr}
+  .workspace-shell{grid-template-columns:1fr}
+  .preview-panel-sticky{position:static;top:auto}
   .grid{grid-template-columns:1fr}
   .discharge-grid{grid-template-columns:1fr}
   .preview{min-height:320px}
@@ -214,7 +232,10 @@ main>*:nth-child(4){animation-delay:.15s}
 .hh-btn.active-no{background:#7f1d1d;border-color:#b91c1c;color:#fee2e2}
 .hh-btn.active-skip{background:var(--surface2);border-color:var(--border2);color:var(--text3)}
 .hh-category-tag{font-size:10px;color:var(--text-blue);border:1px solid #1e3a8a;background:#0b1730;border-radius:999px;padding:2px 7px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-left:4px;white-space:nowrap}
-.hh-risk-tag{font-size:10px;color:#fde68a;border:1px solid #b45309;background:#2b1f0a;border-radius:999px;padding:2px 7px;font-weight:800;letter-spacing:.04em;margin-left:4px;white-space:nowrap}
+.hh-risk-tag{font-size:10px;color:#fde68a;border:1px solid #b45309;background:#2b1f0a;border-radius:999px;padding:2px 7px;font-weight:800;letter-spacing:.04em;margin-left:4px;white-space:nowrap;cursor:pointer;transition:background .15s,border-color .15s}
+.hh-risk-tag:hover{background:#3d2c0e;border-color:#d97706;color:#fef3c7}
+.risk-criteria-list{margin:4px 0 6px 18px;padding:0;list-style:disc;display:flex;flex-direction:column;gap:2px}
+.risk-criteria-list li{font-size:11px;color:var(--text3);line-height:1.35}
 @media(max-width:980px){
   .history-grid{grid-template-columns:1fr}
   .history-preview{min-height:280px}
@@ -224,7 +245,7 @@ main>*:nth-child(4){animation-delay:.15s}
 <script>document.documentElement.setAttribute('data-theme',localStorage.getItem('theme')||'dark');</script>
 <link rel="manifest" href="/manifest.json">
 </head>
-<body>
+<body class="mdm-page">
 <nav class="sitenav">
   <div class="sitenav-inner">
     <a class="nav-logo" href="index.html">⚡</a>
@@ -253,11 +274,11 @@ main>*:nth-child(4){animation-delay:.15s}
         <label for="packSelect">Chief Complaint Pack</label>
         <select id="packSelect" aria-label="Chief Complaint Pack"></select>
       </div>
-      <div class="control">
+      <div class="control secondary">
         <label for="commandInput">Quick Command</label>
         <input id="commandInput" type="text" placeholder="Type mdmccp, mdmsob, mdmabd, mdmpregvb..." autocomplete="off" spellcheck="false" aria-label="Quick Command Alias">
       </div>
-      <div class="control">
+      <div class="control secondary">
           <label>Output Mode</label>
           <div class="mode-toggle">
           <label class="mode-pill"><input id="modeDotphrase" name="outputMode" type="radio" value="dotphrase">Dotphrase</label>
@@ -274,9 +295,7 @@ main>*:nth-child(4){animation-delay:.15s}
 <main>
   <section class="doc-toolbar" aria-label="Quick Documentation Actions">
     <div class="toolbar-left">
-      <button id="stickyCopyFullBtn" class="toolbar-btn primary" type="button">Copy Full MDM</button>
-      <button id="stickyLifeThreatsBtn" class="toolbar-btn" type="button">Life-Threats Only</button>
-      <button id="stickyResetPackBtn" class="toolbar-btn" type="button">Reset Pack</button>
+      <a id="jumpToPreviewBtn" href="#unified-preview-panel" class="toolbar-btn jump-preview">Jump to Preview</a>
     </div>
     <div id="completenessIndicators" class="status-badges" aria-live="polite">
       <span class="status-pill neutral">DDx: 0</span>
@@ -285,15 +304,9 @@ main>*:nth-child(4){animation-delay:.15s}
     </div>
   </section>
 
-  <div class="doc-tabs" role="tablist" aria-label="Documentation Sections">
-    <button id="tabHistoryHelper" class="doc-tab secondary" type="button" role="tab" aria-selected="false" data-tab-target="history">History Helper</button>
-    <button id="tabMdmBuilder" class="doc-tab primary active" type="button" role="tab" aria-selected="true" data-tab-target="mdm">MDM Builder</button>
-    <button id="tabDotphrase" class="doc-tab primary" type="button" role="tab" aria-selected="false" data-tab-target="dotphrase">Dotphrase Library</button>
-    <button id="tabDischarge" class="doc-tab secondary" type="button" role="tab" aria-selected="false" data-tab-target="discharge">Discharge Builder</button>
-  </div>
-
-  <div class="doc-accordion">
-    <details class="doc-panel" id="panel-history-helper">
+  <section class="workspace-shell">
+    <div class="workspace-left doc-accordion">
+    <details class="doc-panel" id="panel-history-helper" open>
       <summary>
         <span class="doc-title">History Helper</span>
         <span class="doc-meta">Targeted history questions by differential diagnosis</span>
@@ -306,77 +319,51 @@ main>*:nth-child(4){animation-delay:.15s}
               <span id="historyHelperCount" class="head-count">0 answered</span>
             </h2>
           </div>
-          <div class="panel-body history-grid">
-            <div>
-              <div id="historyHelperToolbar" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
-                <button id="historyHelperCopyBtn" class="copy-btn" type="button">Copy History Summary</button>
-                <button id="historyHelperResetBtn" class="ddx-action-btn" type="button">Reset Answers</button>
-              </div>
-              <p class="empty-block" style="margin-bottom:8px">Tap a diagnosis to expand its question set.</p>
-              <p id="historyHelperEmpty" class="empty-block">Select a chief complaint pack to see history questions.</p>
-              <div id="historyHelperContainer"></div>
+          <div class="panel-body">
+            <div id="historyHelperToolbar" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+              <button id="historyHelperResetBtn" class="ddx-action-btn" type="button">Reset Answers</button>
             </div>
-            <div class="preview-wrap">
-              <div class="history-preview-hint">Unified live preview updates across History, MDM, and Discharge.</div>
-              <div class="copy-row">
-                <button id="historyCopyFullBtn" class="copy-btn" type="button">Copy Full MDM</button>
-              </div>
-              <textarea id="historyPreview" class="preview history-preview" spellcheck="false" aria-label="History helper MDM live preview"></textarea>
-            </div>
+            <p class="empty-block" style="margin-bottom:8px">Tap a diagnosis to expand its question set.</p>
+            <p id="historyHelperEmpty" class="empty-block">Select a chief complaint pack to see history questions.</p>
+            <div id="historyHelperContainer"></div>
           </div>
         </section>
       </div>
     </details>
 
-    <details class="doc-panel" id="panel-mdm-builder">
+    <details class="doc-panel" id="panel-mdm-builder" open>
       <summary>
         <span class="doc-title">🧾 MDM Builder</span>
         <span class="doc-meta">Chief complaint packs, DDx, risk tools, and live output</span>
       </summary>
       <div class="doc-content">
-        <div class="grid" id="mdm-builder">
-          <div>
-            <section class="panel">
-              <div class="panel-head"><h2>DDx <span id="ddxCount" class="head-count">0 selected</span></h2></div>
-              <div class="panel-body">
-                <div class="ddx-actions">
-                  <button id="ddxSelectAllBtn" class="ddx-action-btn" type="button">Select All DDx</button>
-                  <button id="ddxClearAllBtn" class="ddx-action-btn" type="button">Clear All DDx</button>
-                </div>
-                <div id="ddxContainer"></div>
-              </div>
-            </section>
-
-            <section class="panel" style="margin-top:14px">
-              <div class="panel-head"><h2>Rule-outs <span id="ruleoutCount" class="head-count">0 selected</span></h2></div>
-              <div class="panel-body" id="ruleoutContainer"></div>
-            </section>
-
-            <section class="panel" style="margin-top:14px">
-              <div class="panel-head"><h2>Risk Tools <span id="riskCount" class="head-count">0 selected</span></h2></div>
-              <div class="panel-body" id="riskContainer"></div>
-            </section>
-
-            <section class="panel" style="margin-top:14px">
-              <div class="panel-head"><h2>Documentation Quality Checks <span id="qualityCount" class="head-count">0 warnings</span></h2></div>
-              <div class="panel-body">
-                <div id="qualityContainer" class="quality-list"></div>
-              </div>
-            </section>
-          </div>
-
-          <section class="panel">
-            <div class="panel-head"><h2>Unified Live Preview</h2></div>
-            <div class="panel-body preview-wrap">
-              <div class="copy-row">
-                <button id="copyFullBtn" class="copy-btn" type="button">Copy Full MDM</button>
-                <button id="copyDdxBtn" class="copy-btn" type="button">Copy DDx only</button>
-                <button id="copyRuleoutsBtn" class="copy-btn" type="button">Copy Rule-outs only</button>
-              </div>
-              <textarea id="mdmPreview" class="preview" spellcheck="false" aria-label="MDM output preview"></textarea>
+        <section class="panel">
+          <div class="panel-head"><h2>DDx <span id="ddxCount" class="head-count">0 selected</span></h2></div>
+          <div class="panel-body">
+            <div class="ddx-actions">
+              <button id="ddxSelectAllBtn" class="ddx-action-btn" type="button">Select All DDx</button>
+              <button id="ddxClearAllBtn" class="ddx-action-btn" type="button">Clear All DDx</button>
             </div>
-          </section>
-        </div>
+            <div id="ddxContainer"></div>
+          </div>
+        </section>
+
+        <section class="panel" style="margin-top:14px">
+          <div class="panel-head"><h2>Rule-outs <span id="ruleoutCount" class="head-count">0 selected</span></h2></div>
+          <div class="panel-body" id="ruleoutContainer"></div>
+        </section>
+
+        <section class="panel" style="margin-top:14px">
+          <div class="panel-head"><h2>Risk Tools <span id="riskCount" class="head-count">0 selected</span></h2></div>
+          <div class="panel-body" id="riskContainer"></div>
+        </section>
+
+        <section class="panel" style="margin-top:14px">
+          <div class="panel-head"><h2>Documentation Quality Checks <span id="qualityCount" class="head-count">0 warnings</span></h2></div>
+          <div class="panel-body">
+            <div id="qualityContainer" class="quality-list"></div>
+          </div>
+        </section>
       </div>
     </details>
 
@@ -387,7 +374,7 @@ main>*:nth-child(4){animation-delay:.15s}
       </summary>
       <div class="doc-content">
         <section class="panel">
-          <div class="panel-head"><h2>Discharge Text (separate from MDM)</h2></div>
+          <div class="panel-head"><h2>Discharge Inputs</h2></div>
           <div class="panel-body discharge-grid" id="discharge-builder">
             <div class="discharge-form">
               <div class="discharge-checks">
@@ -425,14 +412,6 @@ main>*:nth-child(4){animation-delay:.15s}
                 <label for="dischargeNotesInput">Additional Instructions (Optional)</label>
                 <textarea id="dischargeNotesInput" data-discharge-field="additional_notes" placeholder="e.g., medication or activity-specific instructions"></textarea>
               </div>
-            </div>
-
-            <div class="preview-wrap">
-              <div class="copy-row">
-                <button id="dischargeCopyFullMdmBtn" class="copy-btn" type="button">Copy Full MDM</button>
-                <button id="copyDischargeBtn" class="copy-btn" type="button">Copy Discharge Instructions</button>
-              </div>
-              <textarea id="dischargePreview" class="preview discharge-preview" spellcheck="false" aria-label="Unified output preview"></textarea>
             </div>
           </div>
         </section>
@@ -472,7 +451,31 @@ main>*:nth-child(4){animation-delay:.15s}
       </div>
     </details>
 
-  </div>
+    </div>
+
+    <aside class="workspace-right" id="unified-preview-panel">
+      <section class="panel preview-panel-sticky">
+        <div class="panel-head"><h2>Unified Live Preview</h2></div>
+        <div class="panel-body preview-wrap">
+          <div class="copy-row">
+            <button id="copyFullBtn" class="copy-btn" type="button">Copy Full MDM</button>
+            <button id="copyDischargeBtn" class="copy-btn" type="button">Copy Discharge Instructions</button>
+            <button id="resetPackBtn" class="ddx-action-btn" type="button">Reset Pack</button>
+          </div>
+          <details class="advanced-actions">
+            <summary>Advanced Actions</summary>
+            <div class="copy-row">
+              <button id="copyDdxBtn" class="copy-btn" type="button">Copy DDx only</button>
+              <button id="copyRuleoutsBtn" class="copy-btn" type="button">Copy Rule-outs only</button>
+              <button id="historyHelperCopyBtn" class="copy-btn" type="button">Copy History Summary</button>
+              <button id="lifeThreatsBtn" class="ddx-action-btn" type="button">Life-Threats Only</button>
+            </div>
+          </details>
+          <textarea id="mdmPreview" class="preview discharge-preview" spellcheck="false" aria-label="Unified output preview"></textarea>
+        </div>
+      </section>
+    </aside>
+  </section>
 </main>
 
 <script src="search-index.js"></script>

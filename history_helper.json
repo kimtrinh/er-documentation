@@ -28,7 +28,10 @@
           { "id": "ccp_dis_q3", "text": "Radiation to back (interscapular)?", "category": "character" },
           { "id": "ccp_dis_q4", "text": "History of Marfan syndrome or connective tissue disorder?", "category": "risk_factor" },
           { "id": "ccp_dis_q5", "text": "Uncontrolled hypertension?", "category": "risk_factor" },
-          { "id": "ccp_dis_q6", "text": "Known aortic aneurysm or bicuspid aortic valve?", "category": "risk_factor" }
+          { "id": "ccp_dis_q6", "text": "Known aortic aneurysm or bicuspid aortic valve?", "category": "risk_factor" },
+          { "id": "ccp_dis_q7", "text": "Prior aortic surgery or family history of aortic dissection/aneurysm?", "category": "risk_factor" },
+          { "id": "ccp_dis_q8", "text": "Pulse deficit, unequal pulses, or BP differential between arms?", "category": "associated" },
+          { "id": "ccp_dis_q9", "text": "Focal neurologic deficit (limb ischemia, syncope, stroke-like)?", "category": "associated" }
         ],
         "Pneumothorax": [
           { "id": "ccp_ptx_q1", "text": "Sudden onset pleuritic pain with dyspnea?", "category": "character" },
@@ -78,9 +81,10 @@
         "CHF/pulmonary edema": [
           { "id": "sob_chf_q1", "text": "Orthopnea or paroxysmal nocturnal dyspnea (PND)?", "category": "character" },
           { "id": "sob_chf_q2", "text": "Bilateral lower extremity edema?", "category": "associated" },
-          { "id": "sob_chf_q3", "text": "Weight gain or dietary indiscretion (salt)?", "category": "context" },
+          { "id": "sob_chf_q3", "text": "Weight gain (>2–3 lbs/day or >5 lbs/week)?", "category": "context" },
           { "id": "sob_chf_q4", "text": "Known CHF or cardiomyopathy?", "category": "risk_factor" },
-          { "id": "sob_chf_q5", "text": "Medication non-adherence (diuretics)?", "category": "context" }
+          { "id": "sob_chf_q5", "text": "Medication non-adherence (diuretics)?", "category": "context" },
+          { "id": "sob_chf_q6", "text": "Recent dietary indiscretion (high sodium) or missed doses?", "category": "context" }
         ],
         "COPD/asthma exacerbation": [
           { "id": "sob_copd_q1", "text": "Known COPD/asthma with worsening wheeze or cough?", "category": "character" },
@@ -126,7 +130,10 @@
           { "id": "abd_pan_q1", "text": "Epigastric pain radiating to back?", "category": "character" },
           { "id": "abd_pan_q2", "text": "Worse after eating, better leaning forward?", "category": "character" },
           { "id": "abd_pan_q3", "text": "Alcohol use or gallstone history?", "category": "risk_factor" },
-          { "id": "abd_pan_q4", "text": "Nausea and persistent vomiting?", "category": "associated" }
+          { "id": "abd_pan_q4", "text": "Nausea and persistent vomiting?", "category": "associated" },
+          { "id": "abd_pan_q5", "text": "Shortness of breath or difficulty breathing (BISAP: SIRS/pleural effusion)?", "category": "associated" },
+          { "id": "abd_pan_q6", "text": "Age >60?", "category": "risk_factor" },
+          { "id": "abd_pan_q7", "text": "Confusion or altered mental status?", "category": "associated" }
         ],
         "Diverticulitis": [
           { "id": "abd_div_q1", "text": "LLQ pain?", "category": "character" },
@@ -159,12 +166,15 @@
     "mdmha": {
       "ddx_questions": {
         "SAH": [
-          { "id": "ha_sah_q1", "text": "Thunderclap onset (worst headache of life)?", "category": "character" },
-          { "id": "ha_sah_q2", "text": "Maximal intensity at onset (seconds)?", "category": "character" },
-          { "id": "ha_sah_q3", "text": "Neck stiffness or photophobia?", "category": "associated" },
-          { "id": "ha_sah_q4", "text": "Sentinel headache in past 2-4 weeks?", "category": "context" },
-          { "id": "ha_sah_q5", "text": "Onset during exertion, Valsalva, or coitus?", "category": "context" },
-          { "id": "ha_sah_q6", "text": "Family history of aneurysm or SAH?", "category": "risk_factor" }
+          { "id": "ha_sah_q1", "text": "Thunderclap onset — maximal intensity at onset within seconds? [Ottawa #5]", "category": "character" },
+          { "id": "ha_sah_q2", "text": "Age ≥ 40? [Ottawa #1]", "category": "risk_factor" },
+          { "id": "ha_sah_q3", "text": "Neck pain or stiffness? [Ottawa #2]", "category": "associated" },
+          { "id": "ha_sah_q4", "text": "Witnessed loss of consciousness? [Ottawa #3]", "category": "associated" },
+          { "id": "ha_sah_q5", "text": "Onset during exertion, Valsalva, or sexual activity? [Ottawa #4]", "category": "context" },
+          { "id": "ha_sah_q6", "text": "Limited neck flexion on exam? [Ottawa #6]", "category": "associated" },
+          { "id": "ha_sah_q7", "text": "Sentinel (warning) headache in past 2–4 weeks?", "category": "context" },
+          { "id": "ha_sah_q8", "text": "Family history of aneurysm or SAH?", "category": "risk_factor" },
+          { "id": "ha_sah_q9", "text": "Photophobia or phonophobia with this headache?", "category": "associated" }
         ],
         "Meningitis/encephalitis": [
           { "id": "ha_men_q1", "text": "Fever with headache?", "category": "associated" },
@@ -338,7 +348,8 @@
           { "id": "diz_str_q2", "text": "Gait instability or inability to walk?", "category": "associated" },
           { "id": "diz_str_q3", "text": "Diplopia, dysarthria, or dysphagia?", "category": "associated" },
           { "id": "diz_str_q4", "text": "New-onset headache (especially occipital)?", "category": "associated" },
-          { "id": "diz_str_q5", "text": "Vascular risk factors (HTN, DM, AFib, age >60)?", "category": "risk_factor" }
+          { "id": "diz_str_q5", "text": "Vascular risk factors (HTN, DM, AFib, age >60)?", "category": "risk_factor" },
+          { "id": "diz_str_q6", "text": "Continuous vertigo at rest, not triggered by position change? (Acute Vestibular Syndrome — HINTS indicated)", "category": "character" }
         ],
         "Cervical artery dissection": [
           { "id": "diz_dis_q1", "text": "Recent neck trauma or manipulation (chiropractic)?", "category": "context" },
@@ -358,10 +369,11 @@
         ],
         "Peripheral vestibular etiology (BPPV/neuritis)": [
           { "id": "diz_bppv_q1", "text": "Episodes triggered by head position changes?", "category": "character" },
-          { "id": "diz_bppv_q2", "text": "Brief episodes (seconds) vs sustained (hours-days)?", "category": "character" },
+          { "id": "diz_bppv_q2", "text": "Brief (seconds = BPPV) vs sustained vertigo (hours-days = neuritis/Meniere)?", "category": "character" },
           { "id": "diz_bppv_q3", "text": "Nausea/vomiting with vertigo?", "category": "associated" },
-          { "id": "diz_bppv_q4", "text": "Recent viral URI (vestibular neuritis)?", "category": "context" },
-          { "id": "diz_bppv_q5", "text": "Hearing loss or tinnitus (Meniere)?", "category": "associated" }
+          { "id": "diz_bppv_q4", "text": "Recent viral URI (suggests vestibular neuritis)?", "category": "context" },
+          { "id": "diz_bppv_q5", "text": "Hearing loss or tinnitus (suggests Meniere's disease)?", "category": "associated" },
+          { "id": "diz_bppv_q6", "text": "Able to walk (even unsteady)? — if cannot walk, raises concern for central cause", "category": "character" }
         ],
         "TIA": [
           { "id": "diz_tia_q1", "text": "Transient focal deficit now resolved?", "category": "character" },
@@ -436,7 +448,9 @@
           { "id": "ams_tox_q1", "text": "Polypharmacy or new medication started?", "category": "risk_factor" },
           { "id": "ams_tox_q2", "text": "Access to pills, alcohol, or substances?", "category": "risk_factor" },
           { "id": "ams_tox_q3", "text": "Toxidrome findings (pupils, skin, secretions)?", "category": "associated" },
-          { "id": "ams_tox_q4", "text": "Opioid use (consider naloxone trial)?", "category": "risk_factor" }
+          { "id": "ams_tox_q4", "text": "Opioid use (consider naloxone trial)?", "category": "risk_factor" },
+          { "id": "ams_tox_q5", "text": "Heavy alcohol use? Last drink and typical daily intake? (CIWA-Ar needed if withdrawal risk)", "category": "risk_factor" },
+          { "id": "ams_tox_q6", "text": "Prior alcohol withdrawal seizures or delirium tremens?", "category": "risk_factor" }
         ],
         "Metabolic encephalopathy": [
           { "id": "ams_met_q1", "text": "Liver disease (hepatic encephalopathy)?", "category": "risk_factor" },
@@ -464,14 +478,18 @@
           { "id": "gib_ugi_q1", "text": "Hematemesis or coffee-ground emesis?", "category": "associated" },
           { "id": "gib_ugi_q2", "text": "Melena (black tarry stool)?", "category": "associated" },
           { "id": "gib_ugi_q3", "text": "NSAID, aspirin, or anticoagulant use?", "category": "risk_factor" },
-          { "id": "gib_ugi_q4", "text": "History of peptic ulcer disease?", "category": "risk_factor" },
-          { "id": "gib_ugi_q5", "text": "Epigastric or abdominal pain?", "category": "associated" }
+          { "id": "gib_ugi_q4", "text": "History of peptic ulcer disease or prior GI bleed?", "category": "risk_factor" },
+          { "id": "gib_ugi_q5", "text": "Epigastric or abdominal pain?", "category": "associated" },
+          { "id": "gib_ugi_q6", "text": "Hemodynamic symptoms (dizziness, pre-syncope, palpitations)? (Rockall: shock component)", "category": "associated" },
+          { "id": "gib_ugi_q7", "text": "Age >65 or significant comorbidities (hepatic, renal, cardiac failure, malignancy)? (Rockall: age + comorbidity components)", "category": "risk_factor" }
         ],
         "Lower GI bleed source": [
           { "id": "gib_lgi_q1", "text": "Hematochezia (bright red rectal bleeding)?", "category": "associated" },
           { "id": "gib_lgi_q2", "text": "History of hemorrhoids, diverticulosis, or IBD?", "category": "risk_factor" },
           { "id": "gib_lgi_q3", "text": "Recent colonoscopy or polypectomy?", "category": "context" },
-          { "id": "gib_lgi_q4", "text": "Change in bowel habits or weight loss?", "category": "associated" }
+          { "id": "gib_lgi_q4", "text": "Change in bowel habits or weight loss?", "category": "associated" },
+          { "id": "gib_lgi_q5", "text": "Prior hospital admission for lower GI bleed? (Oakland score component)", "category": "risk_factor" },
+          { "id": "gib_lgi_q6", "text": "Hemodynamic symptoms (dizziness, near-syncope)? (Oakland score: BP and HR components)", "category": "associated" }
         ],
         "Variceal source": [
           { "id": "gib_var_q1", "text": "Known liver cirrhosis or portal hypertension?", "category": "risk_factor" },
@@ -516,13 +534,17 @@
           { "id": "fev_sep_q2", "text": "Tachycardia, hypotension, or altered mental status?", "category": "associated" },
           { "id": "fev_sep_q3", "text": "Immunocompromised (chemo, transplant, HIV, steroids)?", "category": "risk_factor" },
           { "id": "fev_sep_q4", "text": "Indwelling device (catheter, port, prosthetic)?", "category": "risk_factor" },
-          { "id": "fev_sep_q5", "text": "Recent hospitalization or antibiotics?", "category": "risk_factor" }
+          { "id": "fev_sep_q5", "text": "Recent hospitalization or antibiotics?", "category": "risk_factor" },
+          { "id": "fev_sep_q6", "text": "Confusion or acute change in mental status? (SOFA: GCS component)", "category": "associated" },
+          { "id": "fev_sep_q7", "text": "Decreased urine output or acute kidney injury concern? (SOFA: renal component)", "category": "associated" }
         ],
         "SSTI": [
           { "id": "fev_ssti_q1", "text": "Erythema, warmth, swelling, or tenderness?", "category": "associated" },
           { "id": "fev_ssti_q2", "text": "Wound, abscess, or skin break?", "category": "context" },
           { "id": "fev_ssti_q3", "text": "IVDU or diabetes?", "category": "risk_factor" },
-          { "id": "fev_ssti_q4", "text": "Rapidly spreading or crepitus (necrotizing concern)?", "category": "associated" }
+          { "id": "fev_ssti_q4", "text": "Rapidly spreading erythema or crepitus on palpation (necrotizing fasciitis)?", "category": "associated" },
+          { "id": "fev_ssti_q5", "text": "Pain out of proportion to visible skin findings? (classic NF finding — LRINEC)", "category": "character" },
+          { "id": "fev_ssti_q6", "text": "Skin blistering, dusky discoloration, or necrosis? (late NF sign — high LRINEC risk)", "category": "associated" }
         ]
       }
     }

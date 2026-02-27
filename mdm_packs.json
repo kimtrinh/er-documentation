@@ -73,6 +73,13 @@
           "label": "CTA aorta considered / not indicated",
           "tags_required": ["dissection"],
           "sentence_template": "CTA aorta considered; not indicated given low clinical suspicion and reassuring evaluation."
+        },
+        {
+          "id": "ccp_addrs_score",
+          "label": "ADD-RS (Aortic Dissection Detection Risk Score)",
+          "tags_required": ["dissection"],
+          "calculator": { "type": "add_rs" },
+          "sentence_template": "ADD-RS score {score}: {interpretation}."
         }
       ]
     },
@@ -137,6 +144,17 @@
           "sentence_template": "No clinical evidence of volume overload on exam."
         },
         {
+          "id": "sob_bnp_reviewed",
+          "label": "BNP / NT-proBNP reviewed",
+          "tags_required": ["chf"],
+          "input": {
+            "type": "text",
+            "label": "Value",
+            "placeholder": "e.g. 420 pg/mL (elevated) or 68 pg/mL (reassuring)"
+          },
+          "sentence_template": "BNP/NT-proBNP reviewed: {value}."
+        },
+        {
           "id": "sob_improved",
           "label": "Improved with treatment in ED",
           "tags_required": [],
@@ -188,9 +206,30 @@
         },
         {
           "id": "abd_lipase_reassuring",
-          "label": "Lipase reassuring",
+          "label": "Lipase reviewed",
           "tags_required": ["panc"],
-          "sentence_template": "Lipase reviewed and not consistent with pancreatitis."
+          "input": {
+            "type": "text",
+            "label": "Value",
+            "placeholder": "e.g. 45 U/L (normal) or 1,240 U/L (elevated)"
+          },
+          "sentence_template": "Lipase reviewed: {value}."
+        },
+        {
+          "id": "abd_bisap_score",
+          "label": "BISAP score (pancreatitis severity)",
+          "tags_required": ["panc"],
+          "input": {
+            "type": "select",
+            "label": "Score",
+            "default": "0–2 (low risk)",
+            "options": [
+              { "label": "0–2 — low risk (<2% mortality)", "value": "0–2 (low risk, <2% in-hospital mortality)" },
+              { "label": "3 — moderate risk (~5% mortality)", "value": "3 (moderate risk, ~5% in-hospital mortality; close monitoring warranted)" },
+              { "label": "4–5 — high risk (>15% mortality)", "value": "4–5 (high risk, >15% in-hospital mortality; ICU-level care indicated)" }
+            ]
+          },
+          "sentence_template": "BISAP score: {value}."
         },
         {
           "id": "abd_no_peritonitis",
@@ -238,10 +277,11 @@
           "sentence_template": "CT head reviewed without acute intracranial abnormality."
         },
         {
-          "id": "ha_sah_rule_negative",
-          "label": "SAH rule negative",
+          "id": "ha_ottawa_sah_rule",
+          "label": "Ottawa SAH Rule applied",
           "tags_required": ["sah"],
-          "sentence_template": "Low suspicion for SAH based on history/exam and decision rule criteria."
+          "calculator": { "type": "ottawa_sah" },
+          "sentence_template": "Ottawa SAH Rule: {interpretation}."
         },
         {
           "id": "ha_abcd2_calculator",
@@ -479,6 +519,38 @@
           "label": "Glucose/metabolic screen reassuring",
           "tags_required": ["metabolic"],
           "sentence_template": "Glucose and key metabolic data reviewed without severe derangement explaining symptoms."
+        },
+        {
+          "id": "diz_hints_exam",
+          "label": "HINTS exam performed",
+          "tags_required": ["stroke_ich", "peripheral_vertigo"],
+          "input": {
+            "type": "select",
+            "label": "Result",
+            "default": "not performed",
+            "options": [
+              { "label": "Not applicable (episodic, non-AVS presentation)", "value": "not performed — episodic presentation; HINTS indicated for acute vestibular syndrome only" },
+              { "label": "HINTS-safe — peripheral pattern", "value": "HINTS-safe — positive head impulse test, unidirectional nystagmus, no skew; peripheral pattern favored" },
+              { "label": "HINTS+ — central features present", "value": "HINTS+ — negative head impulse test, direction-changing nystagmus, or vertical skew present; central etiology cannot be excluded; advanced imaging indicated" }
+            ]
+          },
+          "sentence_template": "HINTS exam: {value}."
+        },
+        {
+          "id": "diz_dix_hallpike",
+          "label": "Dix-Hallpike test performed",
+          "tags_required": ["peripheral_vertigo"],
+          "input": {
+            "type": "select",
+            "label": "Result",
+            "default": "not performed",
+            "options": [
+              { "label": "Not performed", "value": "not performed" },
+              { "label": "Positive — posterior canal BPPV", "value": "positive — upbeat-torsional nystagmus with geotropic pattern; posterior canal BPPV confirmed; Epley maneuver performed" },
+              { "label": "Negative — BPPV not supported", "value": "negative — no diagnostic nystagmus; posterior canal BPPV not supported" }
+            ]
+          },
+          "sentence_template": "Dix-Hallpike: {value}."
         }
       ]
     },
@@ -584,6 +656,34 @@
           "label": "Serial reassessment documented",
           "tags_required": [],
           "sentence_template": "Serial reassessment documented mental status trajectory and hemodynamic stability."
+        },
+        {
+          "id": "ams_gcs_score",
+          "label": "GCS documented",
+          "tags_required": [],
+          "input": {
+            "type": "text",
+            "label": "Score",
+            "placeholder": "e.g. 14/15 (E4V4M6) or 10/15 (E3V3M4)"
+          },
+          "sentence_template": "GCS documented: {value}."
+        },
+        {
+          "id": "ams_ciwa_score",
+          "label": "CIWA-Ar assessed (alcohol withdrawal)",
+          "tags_required": ["tox"],
+          "input": {
+            "type": "select",
+            "label": "Score",
+            "default": "not indicated",
+            "options": [
+              { "label": "Not indicated (no withdrawal concern)", "value": "not indicated" },
+              { "label": "0–9 — mild withdrawal (monitoring appropriate)", "value": "0–9 (mild; clinical monitoring without pharmacotherapy unless symptomatic)" },
+              { "label": "10–18 — moderate withdrawal (benzodiazepines initiated)", "value": "10–18 (moderate; benzodiazepine therapy initiated per protocol)" },
+              { "label": "≥19 — severe withdrawal (aggressive management)", "value": "≥19 (severe; aggressive benzodiazepine management and close monitoring warranted)" }
+            ]
+          },
+          "sentence_template": "CIWA-Ar assessed: {value}."
         }
       ]
     },
@@ -606,6 +706,38 @@
           "tags_required": ["ugi", "lgi"],
           "calculator": { "type": "glasgow_blatchford" },
           "sentence_template": "Glasgow-Blatchford score = {score} ({interpretation}); {details}"
+        },
+        {
+          "id": "gib_rockall_score",
+          "label": "Pre-endoscopy Rockall score",
+          "tags_required": ["ugi", "variceal"],
+          "input": {
+            "type": "select",
+            "label": "Score",
+            "default": "0–2 (low risk)",
+            "options": [
+              { "label": "0–2 — low risk (outpatient candidate)", "value": "0–2 (low risk; outpatient or early discharge may be appropriate)" },
+              { "label": "3–4 — intermediate risk (admit)", "value": "3–4 (intermediate risk; inpatient admission warranted for monitoring and endoscopy)" },
+              { "label": "≥5 — high risk (urgent endoscopy)", "value": "≥5 (high risk; urgent endoscopy and escalated level of care indicated)" }
+            ]
+          },
+          "sentence_template": "Pre-endoscopy Rockall score: {value}."
+        },
+        {
+          "id": "gib_oakland_score",
+          "label": "Oakland score (lower GI bleed)",
+          "tags_required": ["lgi"],
+          "input": {
+            "type": "select",
+            "label": "Score",
+            "default": "≤8 (low risk)",
+            "options": [
+              { "label": "≤8 — low risk (discharge candidate)", "value": "≤8 (low risk; safe for outpatient management with follow-up)" },
+              { "label": "9–14 — moderate risk (admit for monitoring)", "value": "9–14 (moderate risk; inpatient admission for monitoring and colonoscopy)" },
+              { "label": "≥15 — high risk (urgent intervention)", "value": "≥15 (high risk; hemodynamically significant; urgent intervention likely needed)" }
+            ]
+          },
+          "sentence_template": "Oakland score (lower GI bleed): {value}."
         },
         {
           "id": "gib_hemodynamics_stable",
@@ -692,6 +824,33 @@
           "label": "Blood cultures obtained",
           "tags_required": ["sepsis"],
           "sentence_template": "Blood cultures obtained."
+        },
+        {
+          "id": "fever_sofa_score",
+          "label": "SOFA score (Sepsis-3 organ dysfunction)",
+          "tags_required": ["sepsis"],
+          "input": {
+            "type": "text",
+            "label": "Score",
+            "placeholder": "e.g. 4 — organ dysfunction; ≥2 meets Sepsis-3 definition"
+          },
+          "sentence_template": "SOFA score: {value}."
+        },
+        {
+          "id": "fever_lrinec_score",
+          "label": "LRINEC score (necrotizing fasciitis risk)",
+          "tags_required": ["ssti"],
+          "input": {
+            "type": "select",
+            "label": "Score",
+            "default": "<6 (low risk)",
+            "options": [
+              { "label": "<6 — low risk of necrotizing fasciitis", "value": "<6 (low risk of necrotizing fasciitis; ongoing monitoring appropriate)" },
+              { "label": "6–7 — intermediate risk (surgical consult)", "value": "6–7 (intermediate risk; surgical consultation obtained for clinical correlation)" },
+              { "label": "≥8 — high risk (urgent surgery)", "value": "≥8 (high risk; urgent surgical consultation for operative evaluation)" }
+            ]
+          },
+          "sentence_template": "LRINEC score: {value}."
         },
         {
           "id": "fever_improved_stable",
