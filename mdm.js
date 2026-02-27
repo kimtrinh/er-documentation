@@ -15,7 +15,6 @@
     include_shared_decision: true,
     complaint: '',
     working_diagnosis: '',
-    serious_conditions: '',
     return_triggers: 'worsening symptoms, persistent symptoms, new concerning symptoms, chest pain, shortness of breath, syncope, fever, neurologic change, inability to tolerate oral intake/medications, or any other concern',
     followup_with: 'primary care physician and/or relevant specialty',
     followup_timeframe: '24-48 hours',
@@ -465,7 +464,6 @@
     qualityCount: document.getElementById('qualityCount'),
     dischargeBuilder: document.getElementById('discharge-builder'),
     dischargePreview: document.getElementById('dischargePreview'),
-    dischargeMdmPreview: document.getElementById('dischargeMdmPreview'),
     dischargeCopyFullMdmBtn: document.getElementById('dischargeCopyFullMdmBtn'),
     copyDischargeBtn: document.getElementById('copyDischargeBtn'),
     dotphraseSearchInput: document.getElementById('dotphraseSearchInput'),
@@ -573,7 +571,6 @@
     [
       'complaint',
       'working_diagnosis',
-      'serious_conditions',
       'return_triggers',
       'followup_with',
       'followup_timeframe',
@@ -1497,16 +1494,11 @@
     return ['History highlights:', ...lines].join('\n');
   }
 
-  function buildMdmText(pack) {
+  function buildMdmCoreText(pack) {
     const sections = [
       'MDM',
       buildDdxText(pack)
     ];
-
-    const historyText = buildHistoryForMdmText();
-    if (historyText) {
-      sections.push(historyText);
-    }
 
     const riskText = buildRiskText(pack);
     if (riskText) {
@@ -1517,10 +1509,43 @@
     return sections.join('\n\n');
   }
 
+  function buildMdmText(pack) {
+    const sections = [];
+    const historyText = buildHistoryForMdmText();
+    if (historyText) {
+      sections.push(historyText);
+    }
+    sections.push(buildMdmCoreText(pack));
+    return sections.join('\n\n');
+  }
+
+  function buildUnifiedPreviewText(pack) {
+    const sections = [buildMdmText(pack)];
+    const dischargeText = buildDischargeText();
+    if (dischargeText) {
+      sections.push('Discharge Instructions:\n' + dischargeText);
+    }
+    return sections.join('\n\n');
+  }
+
+  function buildAutoDischargeComplaint() {
+    if (state.activePack && state.activePack.title) {
+      return normalizeLabel(state.activePack.title);
+    }
+    return '';
+  }
+
+  function buildAutoDischargeDiagnosis() {
+    if (!state.activePack) return '';
+    const labels = getSelectedDdxItems(state.activePack).map((item) => normalizeLabel(item.label)).filter(Boolean);
+    if (!labels.length) return '';
+    if (labels.length <= 3) return labels.join(', ');
+    return labels.slice(0, 3).join(', ') + ', and other considered etiologies';
+  }
+
   function buildDischargeText() {
-    const complaint = normalizeLabel(state.discharge.complaint) || '[chief complaint]';
-    const diagnosis = normalizeLabel(state.discharge.working_diagnosis) || '[working diagnosis]';
-    const serious = normalizeLabel(state.discharge.serious_conditions) || '[serious conditions considered]';
+    const complaint = normalizeLabel(state.discharge.complaint) || buildAutoDischargeComplaint() || '[chief complaint]';
+    const diagnosis = normalizeLabel(state.discharge.working_diagnosis) || buildAutoDischargeDiagnosis() || '[working diagnosis]';
     const returnTriggers = normalizeLabel(state.discharge.return_triggers) || '[specific return precautions]';
     const followWith = normalizeLabel(state.discharge.followup_with) || '[follow-up provider/clinic]';
     const followTime = normalizeLabel(state.discharge.followup_timeframe) || '[follow-up timeframe]';
@@ -1531,7 +1556,7 @@
     ];
 
     if (state.discharge.include_uncertainty) {
-      lines.push(`I discussed with the patient that today's ED evaluation did not identify a definitive life-threatening cause of ${complaint}, and diagnostic uncertainty remains. Serious conditions including ${serious} currently have low suspicion but cannot be excluded with 100% certainty on a single ED visit.`);
+      lines.push(`I discussed with the patient that today's ED evaluation for ${complaint} did not identify a definitive life-threatening diagnosis, and diagnostic uncertainty remains. The patient understands a serious condition can evolve after discharge and agrees with strict return precautions.`);
     }
 
     if (state.discharge.include_shared_decision) {
@@ -1552,8 +1577,7 @@
   }
 
   function setDischargePreview() {
-    if (!els.dischargePreview) return;
-    els.dischargePreview.value = buildDischargeText();
+    setPreview();
   }
 
   function renderDischargeBuilder() {
@@ -1567,16 +1591,23 @@
         return;
       }
       if (field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement || field instanceof HTMLSelectElement) {
+        if (key === 'complaint') {
+          field.value = String(state.discharge[key] || buildAutoDischargeComplaint() || '');
+          return;
+        }
+        if (key === 'working_diagnosis') {
+          field.value = String(state.discharge[key] || buildAutoDischargeDiagnosis() || '');
+          return;
+        }
         field.value = String(state.discharge[key] || '');
       }
     });
-    setDischargePreview();
   }
 
   function setPreview() {
     var previewText = '';
     if (state.activePack) {
-      previewText = buildMdmText(state.activePack);
+      previewText = buildUnifiedPreviewText(state.activePack);
     }
     if (els.preview) {
       els.preview.value = previewText;
@@ -1584,8 +1615,8 @@
     if (els.historyPreview) {
       els.historyPreview.value = previewText;
     }
-    if (els.dischargeMdmPreview) {
-      els.dischargeMdmPreview.value = previewText;
+    if (els.dischargePreview) {
+      els.dischargePreview.value = previewText;
     }
   }
 
@@ -2570,6 +2601,7 @@
     renderQualityChecks();
     renderCounts();
     renderDotphraseLookup();
+    renderDischargeBuilder();
     setPreview();
     renderHistoryHelper();
   }
@@ -2949,7 +2981,8 @@
 
     if (els.historyCopyFullBtn) {
       els.historyCopyFullBtn.addEventListener('click', () => {
-        copyTextWithFeedback(els.preview.value, els.historyCopyFullBtn);
+        if (!state.activePack) return;
+        copyTextWithFeedback(buildMdmText(state.activePack), els.historyCopyFullBtn);
       });
     }
 
@@ -2989,7 +3022,8 @@
     }
     if (els.stickyCopyFullBtn) {
       els.stickyCopyFullBtn.addEventListener('click', () => {
-        copyTextWithFeedback(els.preview.value, els.stickyCopyFullBtn);
+        if (!state.activePack) return;
+        copyTextWithFeedback(buildMdmText(state.activePack), els.stickyCopyFullBtn);
       });
     }
     if (els.stickyLifeThreatsBtn) {
@@ -3145,7 +3179,8 @@
 
     if (els.copyFullBtn) {
       els.copyFullBtn.addEventListener('click', () => {
-        copyTextWithFeedback(els.preview.value, els.copyFullBtn);
+        if (!state.activePack) return;
+        copyTextWithFeedback(buildMdmText(state.activePack), els.copyFullBtn);
       });
     }
 
@@ -3159,15 +3194,16 @@
       copyTextWithFeedback(buildRuleoutsText(), els.copyRuleoutsBtn);
     });
 
-    if (els.copyDischargeBtn && els.dischargePreview) {
+    if (els.copyDischargeBtn) {
       els.copyDischargeBtn.addEventListener('click', () => {
-        copyTextWithFeedback(els.dischargePreview.value, els.copyDischargeBtn);
+        copyTextWithFeedback(buildDischargeText(), els.copyDischargeBtn);
       });
     }
 
     if (els.dischargeCopyFullMdmBtn) {
       els.dischargeCopyFullMdmBtn.addEventListener('click', () => {
-        copyTextWithFeedback(els.preview.value, els.dischargeCopyFullMdmBtn);
+        if (!state.activePack) return;
+        copyTextWithFeedback(buildMdmText(state.activePack), els.dischargeCopyFullMdmBtn);
       });
     }
   }

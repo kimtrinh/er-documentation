@@ -119,8 +119,6 @@ main{max-width:1100px;margin:0 auto;padding:18px 24px 64px}
 .discharge-field input:focus,.discharge-field textarea:focus{border-color:#3b82f6}
 .discharge-field textarea{min-height:72px;resize:vertical}
 .discharge-preview{min-height:360px}
-.discharge-mdm-preview{min-height:220px}
-.discharge-preview-label{font-size:11px;color:var(--text2);margin-bottom:2px}
 .copy-row{display:flex;gap:8px;flex-wrap:wrap}
 .copy-btn{padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s}
 .copy-btn:hover{border-color:#3b82f6;color:var(--text-blue-bright)}
@@ -319,7 +317,7 @@ main>*:nth-child(4){animation-delay:.15s}
               <div id="historyHelperContainer"></div>
             </div>
             <div class="preview-wrap">
-              <div class="history-preview-hint">Live preview updates as History Helper, MDM, or risk tools change.</div>
+              <div class="history-preview-hint">Unified live preview updates across History, MDM, and Discharge.</div>
               <div class="copy-row">
                 <button id="historyCopyFullBtn" class="copy-btn" type="button">Copy Full MDM</button>
               </div>
@@ -368,7 +366,7 @@ main>*:nth-child(4){animation-delay:.15s}
           </div>
 
           <section class="panel">
-            <div class="panel-head"><h2>Live Preview</h2></div>
+            <div class="panel-head"><h2>Unified Live Preview</h2></div>
             <div class="panel-body preview-wrap">
               <div class="copy-row">
                 <button id="copyFullBtn" class="copy-btn" type="button">Copy Full MDM</button>
@@ -409,11 +407,6 @@ main>*:nth-child(4){animation-delay:.15s}
               </div>
 
               <div class="discharge-field">
-                <label for="dischargeSeriousInput">Serious Conditions Considered</label>
-                <input id="dischargeSeriousInput" data-discharge-field="serious_conditions" type="text" placeholder="e.g., ACS, PE, aortic dissection">
-              </div>
-
-              <div class="discharge-field">
                 <label for="dischargeReturnInput">Return Triggers</label>
                 <textarea id="dischargeReturnInput" data-discharge-field="return_triggers" placeholder="e.g., worsening pain, dyspnea, syncope, fever, new neurologic symptoms"></textarea>
               </div>
@@ -435,16 +428,11 @@ main>*:nth-child(4){animation-delay:.15s}
             </div>
 
             <div class="preview-wrap">
-              <div class="discharge-preview-label">MDM Live Preview</div>
               <div class="copy-row">
                 <button id="dischargeCopyFullMdmBtn" class="copy-btn" type="button">Copy Full MDM</button>
-              </div>
-              <textarea id="dischargeMdmPreview" class="preview discharge-mdm-preview" spellcheck="false" aria-label="Shared MDM output preview"></textarea>
-              <div class="discharge-preview-label">Discharge Instructions Preview</div>
-              <div class="copy-row">
                 <button id="copyDischargeBtn" class="copy-btn" type="button">Copy Discharge Instructions</button>
               </div>
-              <textarea id="dischargePreview" class="preview discharge-preview" spellcheck="false" aria-label="Discharge instructions preview"></textarea>
+              <textarea id="dischargePreview" class="preview discharge-preview" spellcheck="false" aria-label="Unified output preview"></textarea>
             </div>
           </div>
         </section>
