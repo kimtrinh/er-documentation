@@ -1068,6 +1068,310 @@
     return `${title}: ${evaluated.preview}`;
   }
 
+  // --------------- History Risk Tool Labels ---------------
+  var HISTORY_RISK_TOOL_LABELS = Object.freeze({
+    wells_pe: { short: 'WELLS', full: 'Wells PE' },
+    perc: { short: 'PERC', full: 'PERC' },
+    years: { short: 'YEARS', full: 'YEARS Algorithm' },
+    heart: { short: 'HEART', full: 'HEART Score' },
+    abcd2: { short: 'ABCD2', full: 'ABCD2 Score' },
+    cha2ds2_vasc: { short: 'CHA2DS2-VASc', full: 'CHA2DS2-VASc Score' },
+    qsofa: { short: 'qSOFA', full: 'qSOFA' },
+    canadian_ct_head: { short: 'CCTHR', full: 'Canadian CT Head Rule' },
+    pecarn: { short: 'PECARN', full: 'PECARN' },
+    nexus_cspine: { short: 'NEXUS', full: 'NEXUS C-spine' },
+    curb65: { short: 'CURB-65', full: 'CURB-65' },
+    canadian_syncope: { short: 'CSRS', full: 'Canadian Syncope Risk Score' },
+    alvarado: { short: 'ALVARADO', full: 'Alvarado Score' },
+    glasgow_blatchford: { short: 'GBS', full: 'Glasgow-Blatchford Score' },
+    add_rs: { short: 'ADD-RS', full: 'ADD-RS (Aortic Dissection)' },
+    bisap: { short: 'BISAP', full: 'BISAP Score' },
+    ottawa_sah: { short: 'OTTAWA SAH', full: 'Ottawa SAH Rule' },
+    hints: { short: 'HINTS', full: 'HINTS Exam' },
+    dix_hallpike: { short: 'DIX-HALLPIKE', full: 'Dix-Hallpike Test' },
+    ciwa_ar: { short: 'CIWA-Ar', full: 'CIWA-Ar Score' },
+    rockall: { short: 'ROCKALL', full: 'Rockall Score' },
+    oakland: { short: 'OAKLAND', full: 'Oakland Score' },
+    sofa: { short: 'SOFA', full: 'SOFA Score' },
+    lrinec: { short: 'LRINEC', full: 'LRINEC Score' },
+    bnp: { short: 'BNP', full: 'BNP / NT-proBNP' },
+    gcs: { short: 'GCS', full: 'Glasgow Coma Scale' }
+  });
+
+  // --------------- Infer History → Calculator Mappings ---------------
+  function normalizeLabel(text) {
+    return String(text || '').replace(/\s+/g, ' ').trim();
+  }
+
+  function inferHistoryRiskMappings(meta) {
+    var mappings = [];
+    var seen = new Set();
+    function add(calcType, fieldId) {
+      if (!calcType || !fieldId) return;
+      var key = calcType + ':' + fieldId;
+      if (seen.has(key)) return;
+      seen.add(key);
+      mappings.push({ calcType: calcType, fieldId: fieldId });
+    }
+
+    if (!meta) return mappings;
+    var ddx = normalizeLabel(meta.ddxLabel).toLowerCase();
+    var text = normalizeLabel(meta.text).toLowerCase();
+    var qId = String(meta.id || '').toLowerCase();
+
+    // ── PE → Wells PE + PERC + YEARS
+    var peContext = ddx === 'pe' || ddx.includes('pulmonary embol') || qId.includes('_pe_');
+    if (peContext) {
+      add('wells_pe', 'general'); add('perc', 'general'); add('years', 'general');
+      if (/(history|prior).{0,20}\b(dvt|pe)\b|\b(dvt|pe)\b.{0,20}(history|prior)/.test(text)) {
+        add('wells_pe', 'prior_pe_dvt');
+        add('perc', 'prior_pe_dvt');
+      }
+      if (/\b(estrogen|ocp|hrt)\b/.test(text)) { add('perc', 'estrogen_use'); }
+      if (/\b(surgery|immobil|travel)\b/.test(text)) {
+        add('wells_pe', 'immobilization_or_recent_surgery');
+        add('perc', 'recent_surgery_trauma');
+      }
+      if (/unilateral leg swelling|leg swelling|leg pain|leg redness|signs? of dvt/.test(text)) {
+        add('wells_pe', 'dvt_signs');
+        add('perc', 'unilateral_leg_swelling');
+        add('years', 'dvt_signs');
+      }
+      if (/\bhemoptysis\b/.test(text)) {
+        add('wells_pe', 'hemoptysis');
+        add('perc', 'hemoptysis');
+        add('years', 'hemoptysis');
+      }
+      if (/\bmalignan|chemotherap/.test(text)) { add('wells_pe', 'malignancy'); }
+    }
+
+    // ── ACS → HEART
+    var acsContext = ddx.includes('acs') || qId.includes('_acs_');
+    if (acsContext) {
+      add('heart', 'general');
+      if (/(known cad|prior mi|stent|cabg|atherosclerotic|history of heart disease)/.test(text)) { add('heart', 'risk_known_athero'); }
+      if (/family history/.test(text) && /\b(cad|mi|heart)\b/.test(text)) { add('heart', 'risk_family_history'); }
+      if (/hypertension|htn/.test(text)) { add('heart', 'risk_htn'); }
+      if (/hyperlipidemia|hld|cholesterol/.test(text)) { add('heart', 'risk_hld'); }
+      if (/diabet/.test(text)) { add('heart', 'risk_dm'); }
+      if (/smok/.test(text)) { add('heart', 'risk_smoker'); }
+      if (/obes/.test(text)) { add('heart', 'risk_obesity'); }
+      if (/substernal|pressure|squeezing|exertion|radiation|diaphor|nausea/.test(text)) { add('heart', 'history'); }
+    }
+
+    // ── SAH → Ottawa SAH Rule
+    var sahContext = ddx === 'sah' || qId.startsWith('ha_sah');
+    if (sahContext) {
+      add('ottawa_sah', 'general');
+      if (/age.*40|40.*age|\[ottawa.*1\]/.test(text)) { add('ottawa_sah', 'age_ge_40'); }
+      if (/neck pain|neck stiffness|stiff neck|\[ottawa.*2\]/.test(text)) { add('ottawa_sah', 'neck_pain_stiffness'); }
+      if (/witnessed.*loss|loss.*conscious|\[ottawa.*3\]/.test(text)) { add('ottawa_sah', 'witnessed_loc'); }
+      if (/exertion|valsalva|sexual|\[ottawa.*4\]/.test(text)) { add('ottawa_sah', 'onset_exertion'); }
+      if (/thunderclap|maximal.*onset|onset.*within seconds|\[ottawa.*5\]/.test(text)) { add('ottawa_sah', 'thunderclap_onset'); }
+      if (/limited neck|neck flexion|\[ottawa.*6\]/.test(text)) { add('ottawa_sah', 'limited_neck_flexion'); }
+    }
+
+    // ── TIA → ABCD2
+    var tiaContext = ddx === 'tia' || qId.includes('_tia_');
+    if (tiaContext) {
+      add('abcd2', 'general');
+      if (/diabet/.test(text)) { add('abcd2', 'diabetes'); }
+      if (/focal|unilateral|weakness|speech/.test(text)) { add('abcd2', 'clinical'); }
+    }
+
+    // ── Minor head injury (adult) → Canadian CT Head Rule
+    var cthContext = ddx.includes('minor head injury') && ddx.includes('adult');
+    if (cthContext) {
+      add('canadian_ct_head', 'general');
+      if (/vomit/.test(text)) { add('canadian_ct_head', 'vomiting_ge_2'); }
+      if (/amnesia/.test(text)) { add('canadian_ct_head', 'amnesia_ge_30m'); }
+      if (/age.*65|65.*age/.test(text)) { add('canadian_ct_head', 'age_ge_65'); }
+      if (/mechanism|vehicle|pedestrian|height/.test(text)) { add('canadian_ct_head', 'dangerous_mechanism'); }
+    }
+
+    // ── Minor head injury (peds) → PECARN
+    var pedsContext = ddx.includes('minor head injury') && (ddx.includes('peds') || ddx.includes('child'));
+    if (pedsContext) {
+      add('pecarn', 'general');
+      if (/loss of consciousness|loc/.test(text)) { add('pecarn', 'ge2_history_loc'); add('pecarn', 'u2_loc_ge_5s'); }
+      if (/vomit/.test(text)) { add('pecarn', 'ge2_vomiting'); }
+      if (/headache/.test(text)) { add('pecarn', 'ge2_severe_headache'); }
+      if (/mechanism/.test(text)) { add('pecarn', 'ge2_severe_mechanism'); add('pecarn', 'u2_severe_mechanism'); }
+    }
+
+    // ── Cervical spine → NEXUS
+    var cspineContext = ddx.includes('cervical') || qId.includes('_csp_');
+    if (cspineContext) {
+      add('nexus_cspine', 'general');
+      if (/midline|tenderness|neck pain/.test(text)) { add('nexus_cspine', 'midline_tenderness'); }
+      if (/focal neuro|neurologic/.test(text)) { add('nexus_cspine', 'focal_neuro_deficit'); }
+      if (/altered|confusion|mental status/.test(text)) { add('nexus_cspine', 'altered_alertness'); }
+      if (/intoxicat|alcohol|drug/.test(text)) { add('nexus_cspine', 'intoxication'); }
+      if (/distract|other injury|fracture/.test(text)) { add('nexus_cspine', 'distracting_injury'); }
+    }
+
+    // ── Syncope → Canadian Syncope Risk Score
+    var syncopeContext = ddx === 'syncope' || ddx.includes('vasovagal') || ddx.includes('arrhythmic syncope') || qId.includes('syn_arr') || qId.includes('syn_vvs');
+    if (syncopeContext) {
+      add('canadian_syncope', 'general');
+      if (/history.*heart|cardiac history|heart disease/.test(text)) { add('canadian_syncope', 'history_heart_disease'); }
+      if (/vasovagal|prodrome|position/.test(text)) { add('canadian_syncope', 'predisposition_vasovagal'); }
+    }
+
+    // ── AFib → CHA2DS2-VASc
+    var afibContext = ddx.includes('afib') || qId.includes('_afib_');
+    if (afibContext) {
+      add('cha2ds2_vasc', 'general');
+      if (/stroke|tia|thromboembol/.test(text)) { add('cha2ds2_vasc', 'stroke_tia_thromboembolism'); }
+      if (/heart failure|chf/.test(text)) { add('cha2ds2_vasc', 'chf'); }
+      if (/hypertension|htn/.test(text)) { add('cha2ds2_vasc', 'htn'); }
+      if (/diabet/.test(text)) { add('cha2ds2_vasc', 'diabetes'); }
+      if (/vascular|mi|peripheral arterial|aortic plaque/.test(text)) { add('cha2ds2_vasc', 'vascular'); }
+    }
+
+    // ── Aortic dissection → ADD-RS
+    var dissectionContext = ddx.includes('dissection') || qId.includes('_dis_');
+    if (dissectionContext) {
+      add('add_rs', 'general');
+      if (/marfan|connective tissue|bicuspid|aortic valve|prior aortic|family history.*aortic|aortic.*family/.test(text)) { add('add_rs', 'high_risk_condition'); }
+      if (/tearing|ripping|sudden onset|abrupt onset|maximal at onset/.test(text)) { add('add_rs', 'high_risk_pain'); }
+      if (/pulse deficit|unequal pulse|bp differential|blood pressure differential|focal neuro|aortic regurgitation|hypotension|shock/.test(text)) { add('add_rs', 'high_risk_exam'); }
+    }
+
+    // ── Appendicitis → Alvarado
+    var appendicitis = ddx.includes('appendicitis') || qId.includes('_app_');
+    if (appendicitis) {
+      add('alvarado', 'general');
+      if (/migrat|pain.*start.*navel|navel.*pain/.test(text)) { add('alvarado', 'migration'); }
+      if (/anorex|appetite/.test(text)) { add('alvarado', 'anorexia'); }
+      if (/nausea|vomit/.test(text)) { add('alvarado', 'nausea_vomiting'); }
+      if (/rlq|right lower|mcburney/.test(text)) { add('alvarado', 'rlq_tenderness'); }
+      if (/rebound|peritoneal/.test(text)) { add('alvarado', 'rebound'); }
+      if (/fever/.test(text)) { add('alvarado', 'fever'); }
+    }
+
+    // ── Upper GI bleed → Glasgow-Blatchford + Rockall
+    var ugiContext = ddx.includes('upper gi') || qId.startsWith('abd_ugi') || qId.startsWith('gib_ugi');
+    if (ugiContext) {
+      add('glasgow_blatchford', 'general');
+      add('rockall', 'general');
+      if (/melena/.test(text)) { add('glasgow_blatchford', 'melena'); }
+      if (/syncope/.test(text)) { add('glasgow_blatchford', 'syncope'); }
+      if (/liver|hepatic|cirrhosis/.test(text)) { add('glasgow_blatchford', 'hepatic_disease'); }
+      if (/heart failure|chf/.test(text)) { add('glasgow_blatchford', 'heart_failure'); }
+    }
+
+    // ── Lower GI bleed → Glasgow-Blatchford + Oakland
+    var lgiContext = ddx.includes('lower gi') || qId.startsWith('gib_lgi');
+    if (lgiContext) {
+      add('glasgow_blatchford', 'general');
+      add('oakland', 'general');
+      if (/syncope/.test(text)) { add('glasgow_blatchford', 'syncope'); }
+    }
+
+    // ── Variceal → Glasgow-Blatchford + Rockall
+    var varContext = ddx.includes('variceal') || qId.startsWith('gib_var');
+    if (varContext) {
+      add('glasgow_blatchford', 'general');
+      add('rockall', 'general');
+      if (/liver|hepatic|cirrhosis/.test(text)) { add('glasgow_blatchford', 'hepatic_disease'); }
+    }
+
+    // ── Pancreatitis → BISAP
+    var pancContext = ddx === 'pancreatitis' || qId.startsWith('abd_pan');
+    if (pancContext) {
+      add('bisap', 'general');
+      if (/confusion|altered|mental status|gcs/.test(text)) { add('bisap', 'impaired_mentation'); }
+      if (/breath|breathing|shortness|respiratory|sirs|difficulty breathing/.test(text)) { add('bisap', 'sirs'); }
+      if (/age.*60|60.*age|60.*year|over 60|elderly/.test(text)) { add('bisap', 'age_gt60'); }
+    }
+
+    // ── Pneumonia → CURB-65
+    var pnaContext = ddx === 'pneumonia' || qId.startsWith('sob_pna') || qId.startsWith('fev_pna') || qId.startsWith('ccp_pna');
+    if (pnaContext) {
+      add('curb65', 'general');
+      if (/confusion|altered|mental status/.test(text)) { add('curb65', 'confusion'); }
+      if (/age.*65|65.*age|elderly/.test(text)) { add('curb65', 'age_ge_65'); }
+    }
+
+    // ── Bacteremia / sepsis → qSOFA + SOFA
+    var sepsisContext = ddx.includes('bacteremia') || ddx.includes('sepsis') || qId.startsWith('fev_sep') || qId.startsWith('ams_sep');
+    if (sepsisContext) {
+      add('qsofa', 'general');
+      add('sofa', 'general');
+      if (/altered|confusion|mental status/.test(text)) { add('qsofa', 'altered_mentation'); }
+    }
+
+    // ── SSTI → LRINEC
+    var sstiContext = ddx === 'ssti' || qId.startsWith('fev_ssti');
+    if (sstiContext) { add('lrinec', 'general'); }
+
+    // ── Posterior stroke / peripheral vestibular → HINTS
+    var hintsContext = ddx.includes('posterior circulation') || ddx.includes('peripheral vestibular') ||
+                       qId.startsWith('diz_str') || qId.startsWith('diz_bppv');
+    if (hintsContext) { add('hints', 'exam'); }
+
+    // ── BPPV / peripheral vestibular → Dix-Hallpike
+    var bppvContext = ddx.includes('peripheral vestibular') || ddx.includes('bppv') || qId.startsWith('diz_bppv');
+    if (bppvContext) { add('dix_hallpike', 'exam'); }
+
+    // ── CHF → BNP
+    var chfContext = ddx.includes('chf') || ddx.includes('pulmonary edema') || qId.startsWith('sob_chf');
+    if (chfContext) { add('bnp', 'value'); }
+
+    // AMS toxicologic → CIWA-Ar
+    var ciwaContext = ddx.includes('toxicologic') || qId.startsWith('ams_tox');
+    if (ciwaContext) {
+      if (/alcohol|withdrawal|drink|ciwa/.test(text)) { add('ciwa_ar', 'criterion'); }
+    }
+
+    // AMS general → GCS
+    var amsContext = qId.startsWith('ams_') || ddx.includes('hypoglycemia') || ddx.includes('metabolic enceph') || ddx.includes('sepsis-associated');
+    if (amsContext) {
+      if (/mental status|confusion|altered|consciousness/.test(text)) { add('gcs', 'score'); }
+    }
+
+    return mappings;
+  }
+
+  // --------------- Risk Tool Criteria ---------------
+  const RISK_TOOL_CRITERIA = Object.freeze({
+    heart:              ['History — highly/moderately/slightly suspicious', 'ECG — normal / nonspecific / significant ST changes', 'Age — <45 / 45–64 / ≥65', 'Risk factors — known CAD, risk factors, or none', 'Troponin — ≤normal limit / 1–3× / >3×'],
+    wells_pe:           ['DVT signs or symptoms', 'Alternative diagnosis less likely than PE', 'Heart rate > 100', 'Immobilization or surgery ≤ 4 weeks', 'Prior DVT or PE', 'Hemoptysis', 'Active malignancy'],
+    perc:               ['Age < 50', 'HR < 100', 'O₂ sat ≥ 95%', 'No unilateral leg swelling', 'No hemoptysis', 'No recent surgery or trauma (≤4 wk)', 'No prior DVT/PE', 'No estrogen use'],
+    years:              ['Clinical signs of DVT', 'PE most likely diagnosis', 'Hemoptysis'],
+    curb65:             ['Confusion (new onset)', 'Urea > 19 mg/dL (BUN > 7 mmol/L)', 'Respiratory rate ≥ 30/min', 'BP < 90 systolic or ≤ 60 diastolic', 'Age ≥ 65'],
+    abcd2:              ['Age ≥ 60 (1pt)', 'BP ≥ 140/90 (1pt)', 'Clinical: unilateral weakness (2pt) or speech-only (1pt)', 'Duration: ≥ 60 min (2pt) or 10–59 min (1pt)', 'Diabetes (1pt)'],
+    cha2ds2_vasc:       ['CHF or LVEF ≤ 40% (1pt)', 'Hypertension (1pt)', 'Age ≥ 75 (2pt)', 'Diabetes mellitus (1pt)', 'Stroke / TIA / thromboembolism (2pt)', 'Vascular disease (1pt)', 'Age 65–74 (1pt)', 'Female sex (1pt)'],
+    canadian_syncope:   ['Predisposing/precipitating conditions', 'Heart disease history', 'SBP on arrival < 90 or > 180 mmHg', 'Troponin elevated (> 99th percentile)', 'Abnormal QRS axis (< −30° or > 100°)', 'QRS duration > 130 ms', 'QTc interval > 480 ms', 'Emergency diagnosis of cardiac syncope'],
+    canadian_ct_head:   ['GCS < 15 at 2 hours post-injury', 'Suspected open or depressed skull fracture', 'Any sign of basal skull fracture', 'Vomiting ≥ 2 episodes', 'Age ≥ 65', 'Retrograde amnesia ≥ 30 min', 'Dangerous mechanism'],
+    pecarn:             ['< 2 yrs: altered mental status, non-frontal scalp hematoma, LOC ≥ 5s, severe mechanism, palpable skull fracture, acting abnormally per caregiver', '≥ 2 yrs: altered mental status, LOC, severe headache, vomiting ≥ 2, severe mechanism, signs of basilar skull fracture'],
+    nexus_cspine:       ['Focal neurologic deficit', 'Midline cervical spine tenderness', 'Altered level of alertness', 'Intoxication', 'Painful distracting injury'],
+    qsofa:              ['Respiratory rate ≥ 22/min (1pt)', 'Altered mentation — GCS < 15 (1pt)', 'Systolic BP ≤ 100 mmHg (1pt)'],
+    alvarado:           ['Migration to RLQ (1pt)', 'Anorexia (1pt)', 'Nausea/vomiting (1pt)', 'Tenderness in RLQ (2pt)', 'Rebound tenderness (1pt)', 'Elevated temperature (1pt)', 'Leukocytosis WBC > 10k (2pt)', 'Shift to left (1pt)'],
+    glasgow_blatchford: ['BUN ≥ 18.2 mg/dL', 'Hemoglobin < 13 g/dL (M) / < 12 g/dL (F)', 'SBP < 110 mmHg', 'Heart rate ≥ 100', 'Melena on presentation', 'Syncope on presentation', 'Hepatic disease', 'Cardiac failure'],
+    diz_hints_exam:     ['Head Impulse Test — abnormal (catch-up saccade) = peripheral; normal = central concern', 'Nystagmus — unidirectional = peripheral; direction-changing = central concern', 'Test of Skew — no vertical skew = peripheral; vertical skew = central concern'],
+    diz_dix_hallpike:   ['Patient supine, head turned 45° to affected side, lowered 20–30° below horizontal', 'Positive: geotropic upbeat-torsional nystagmus with latency and fatigue = posterior canal BPPV', 'Negative: no nystagmus or atypical pattern'],
+    sob_bnp_reviewed:   ['BNP < 100 pg/mL: CHF unlikely', 'BNP 100–400 pg/mL: gray zone — consider clinical context', 'BNP > 400 pg/mL: CHF highly likely'],
+    ams_gcs_score:      ['Eye opening: spontaneous (4), to voice (3), to pain (2), none (1)', 'Verbal response: oriented (5), confused (4), words (3), sounds (2), none (1)', 'Motor response: obeys (6), localizes (5), withdraws (4), abnormal flexion (3), extension (2), none (1)'],
+    ams_ciwa_score:     ['Tremor (0–7)', 'Paroxysmal sweats (0–7)', 'Anxiety (0–7)', 'Agitation (0–7)', 'Perceptual disturbances (0–7)', 'Headache or fullness in head (0–7)', 'Nausea or vomiting (0–7)', 'Seizure history (0–7)'],
+    gib_rockall_score:  ['Age: < 60 (0pt), 60–79 (1pt), ≥ 80 (2pt)', 'Shock: none (0pt), HR > 100 and SBP ≥ 100 (1pt), SBP < 100 (2pt)', 'Comorbidity: none (0pt), cardiac failure/IHD/major illness (2pt), renal/liver failure or disseminated malignancy (3pt)'],
+    gib_oakland_score:  ['Age < 40 (0pt) vs ≥ 40 (graded)', 'Sex: male (graded pts)', 'Previous LGIB admission', 'DRE: no blood (0pt) vs blood present (1pt)', 'Heart rate < 70 (0pt)', 'SBP ≥ 160 mmHg (0pt)', 'Hemoglobin ≥ 16 g/dL (0pt)'],
+    fever_sofa_score:   ['Respiratory: PaO₂/FiO₂ ratio', 'Coagulation: platelets < 150k', 'Liver: bilirubin ≥ 1.2 mg/dL', 'Cardiovascular: MAP < 70 or vasopressors', 'CNS: GCS < 15', 'Renal: creatinine ≥ 1.2 mg/dL or UO < 0.5 mL/kg/hr'],
+    fever_lrinec_score: ['CRP > 150 mg/L (4pt)', 'WBC 15–25k (1pt) or > 25k (2pt)', 'Hemoglobin ≤ 13.5 g/dL (1pt)', 'Sodium < 135 mEq/L (2pt)', 'Creatinine > 1.6 mg/dL (2pt)', 'Glucose > 180 mg/dL (1pt)']
+  });
+
+  function getCriteriaForToggle(toggle) {
+    if (!toggle) return null;
+    if (toggle.calculator && toggle.calculator.type && RISK_TOOL_CRITERIA[toggle.calculator.type]) {
+      return RISK_TOOL_CRITERIA[toggle.calculator.type];
+    }
+    if (RISK_TOOL_CRITERIA[toggle.id]) {
+      return RISK_TOOL_CRITERIA[toggle.id];
+    }
+    return null;
+  }
+
   window.ER_MDM_RISK = {
     CALC_NEUTRAL,
     CALC_LOW,
@@ -1077,6 +1381,11 @@
     createDefaults,
     evaluate,
     format: renderCalcSummary,
-    renderCalcSummary
+    renderCalcSummary,
+    RISK_TOOL_CRITERIA,
+    getCriteriaForToggle,
+    HISTORY_RISK_TOOL_LABELS,
+    inferHistoryRiskMappings,
+    normalizeLabel
   };
 })();

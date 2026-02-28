@@ -74,7 +74,11 @@
     copyDdxBtn: document.getElementById('slashCopyDdxBtn'),
     copyRuleoutsBtn: document.getElementById('slashCopyRuleoutsBtn'),
     resetBtn: document.getElementById('slashResetBtn'),
-    clearDraftBtn: document.getElementById('slashClearDraftBtn')
+    clearDraftBtn: document.getElementById('slashClearDraftBtn'),
+    historyContainer: document.getElementById('slashHistoryContainer'),
+    historyCount: document.getElementById('slashHistoryCount'),
+    historyEmpty: document.getElementById('slashHistoryEmpty'),
+    copySynthBtn: document.getElementById('slashCopySynthBtn')
   };
 
   const state = {
@@ -104,7 +108,14 @@
       tokenRange: null,
       tokenConsumed: false,
       expandedLabel: ''
-    }
+    },
+    historyQuestions: null,
+    historyLoaded: false,
+    historyLoading: false,
+    historyLoadError: '',
+    historyAnswers: {},
+    historyQuestionMeta: Object.create(null),
+    historyExpandedDdx: new Set()
   };
 
   function normalizeLabel(text) {
@@ -347,8 +358,8 @@
       selectedRuleouts: getSelectedRuleoutIds(),
       selectedRisks: [...state.selectedRisks],
       riskInputs,
-      historyAnswers: existing && existing.historyAnswers && typeof existing.historyAnswers === 'object'
-        ? { ...existing.historyAnswers }
+      historyAnswers: state.historyAnswers && typeof state.historyAnswers === 'object'
+        ? { ...state.historyAnswers }
         : {}
     };
   }
@@ -592,6 +603,48 @@
     return lines.join('\n').trim();
   }
 
+  function buildSynthesizedMdm(pack) {
+    if (!pack) return '';
+
+    const lines = [];
+    const scaffold = normalizeLabel(pack.base_mdm_template)
+      || 'Focused emergency evaluation completed with documentation-ready differential and risk-based disposition.';
+
+    lines.push(`MDM - ${pack.title}: ${scaffold}`);
+    lines.push('');
+    lines.push(buildDdxText(pack));
+
+    const riskLines = buildRiskLines(pack);
+    if (riskLines.length) {
+      lines.push('');
+      lines.push('Risk stratification:');
+      riskLines.forEach((line) => {
+        lines.push(`- ${line}`);
+      });
+    }
+
+    lines.push('');
+    lines.push(buildRuleoutsText());
+
+    const historySummary = buildHistorySummaryText();
+    if (historySummary) {
+      lines.push('');
+      lines.push('History highlights:');
+      historySummary.split('\n').forEach((line) => {
+        lines.push(line);
+      });
+    }
+
+    const editorText = (els.editor ? els.editor.value : '').trim();
+    if (editorText) {
+      lines.push('');
+      lines.push('Additional notes:');
+      lines.push(editorText);
+    }
+
+    return lines.join('\n').trim();
+  }
+
   function renderCounts() {
     if (els.ddxCount) {
       els.ddxCount.textContent = `${state.selectedDdx.size} selected`;
@@ -803,6 +856,7 @@
       return;
     }
 
+    const engine = window.ER_MDM_RISK;
     els.riskContainer.innerHTML = visible.map((toggle) => {
       const isChecked = state.selectedRisks.has(toggle.id);
       const checked = isChecked ? 'checked' : '';
@@ -810,6 +864,11 @@
       const content = toggle.calculator && toggle.calculator.type
         ? renderRiskCalculator(toggle, isChecked)
         : renderRiskInput(toggle, isChecked);
+
+      const criteria = engine && engine.getCriteriaForToggle ? engine.getCriteriaForToggle(toggle) : null;
+      const criteriaHtml = criteria
+        ? '<ul class="risk-criteria-list">' + criteria.map(c => '<li>' + escapeHtml(c) + '</li>').join('') + '</ul>'
+        : '';
 
       return `
         <details class="risk-row" id="slash-risk-${escapeHtml(toggle.id)}" data-risk-tool-id="${escapeHtml(toggle.id)}"${open}>
@@ -820,11 +879,347 @@
             </label>
             <span class="chevron" aria-hidden="true"></span>
           </summary>
+          ${criteriaHtml}
           ${content}
         </details>
       `;
     }).join('');
   }
+
+  // ── History Helper ──────────────────────────────────────────────
+
+  async function loadHistoryQuestionsIfNeeded() {
+    if (state.historyLoaded || state.historyLoading) return;
+    state.historyLoading = true;
+    state.historyLoadError = '';
+    try {
+      const response = await fetch('history_helper.json', { cache: 'no-store' });
+      if (!response.ok) throw new Error('Failed to load history_helper.json');
+      state.historyQuestions = await response.json();
+      indexHistoryQuestions();
+      state.historyLoaded = true;
+    } catch (e) {
+      state.historyLoadError = 'History helper data failed to load.';
+      state.historyQuestionMeta = Object.create(null);
+    } finally {
+      state.historyLoading = false;
+      if (state.historyLoaded && state.activePack) {
+        syncAllHistoryAnswersToMdm();
+        renderAll();
+      } else {
+        renderHistoryHelper();
+      }
+    }
+  }
+
+  function indexHistoryQuestions() {
+    state.historyQuestionMeta = Object.create(null);
+    const packs = state.historyQuestions && state.historyQuestions.packs && typeof state.historyQuestions.packs === 'object'
+      ? state.historyQuestions.packs : {};
+
+    Object.keys(packs).forEach((packId) => {
+      const packData = packs[packId];
+      if (!packData || typeof packData !== 'object' || !packData.ddx_questions) return;
+      Object.keys(packData.ddx_questions).forEach((ddxLabel) => {
+        const questions = packData.ddx_questions[ddxLabel];
+        if (!Array.isArray(questions)) return;
+        questions.forEach((q) => {
+          if (!q || typeof q !== 'object') return;
+          const qId = String(q.id || '').trim();
+          if (!qId) return;
+          state.historyQuestionMeta[qId] = {
+            id: qId,
+            packId: packId,
+            ddxLabel: String(ddxLabel || ''),
+            text: String(q.text || ''),
+            category: String(q.category || '')
+          };
+        });
+      });
+    });
+  }
+
+  function getHistoryRiskToolTags(meta) {
+    const engine = window.ER_MDM_RISK;
+    if (!engine || !engine.inferHistoryRiskMappings) return [];
+    const mappings = engine.inferHistoryRiskMappings(meta);
+    if (!mappings.length) return [];
+
+    const labels = engine.HISTORY_RISK_TOOL_LABELS || {};
+    const seen = new Set();
+    const tags = [];
+    mappings.forEach((mapping) => {
+      const calcType = String(mapping.calcType || '').trim();
+      if (!calcType || seen.has(calcType)) return;
+      seen.add(calcType);
+      const label = labels[calcType];
+      if (label && label.short) {
+        tags.push({ short: label.short, title: label.full || label.short, calcType });
+      } else {
+        const fallback = calcType.toUpperCase().replace(/_/g, '-');
+        tags.push({ short: fallback, title: fallback, calcType });
+      }
+    });
+    return tags;
+  }
+
+  function setHistorySyncedCalculatorField(pack, calcType, fieldId, value) {
+    if (!pack || !calcType || !fieldId) return false;
+    const packToggles = Array.isArray(pack.risk_toggles) ? pack.risk_toggles : [];
+    const nextValue = Boolean(value);
+    let changed = false;
+
+    packToggles.forEach((toggle) => {
+      if (!toggle.calculator || toggle.calculator.type !== calcType) return;
+      const inputs = ensureCalculatorInputState(toggle);
+      if (Boolean(inputs[fieldId]) !== nextValue) {
+        inputs[fieldId] = nextValue;
+        changed = true;
+      }
+      if (nextValue) {
+        state.selectedRisks.add(toggle.id);
+      }
+    });
+
+    return changed;
+  }
+
+  function syncHistoryAnswerToMdm(questionId, answer) {
+    if (!state.activePack || !questionId) return;
+    const meta = state.historyQuestionMeta[questionId];
+    if (!meta || meta.packId !== state.activePack.id) return;
+
+    if (answer === 'yes' && meta.ddxLabel) {
+      const hasDdx = (state.activePack.ddx || []).some((item) => item.label === meta.ddxLabel);
+      if (hasDdx) {
+        state.selectedDdx.add(meta.ddxLabel);
+      }
+    }
+
+    syncRuleouts(state.activePack, { autoSelectNew: true });
+    syncRiskToggles(state.activePack);
+
+    const engine = window.ER_MDM_RISK;
+    if (!engine || !engine.inferHistoryRiskMappings) return;
+    const mappings = engine.inferHistoryRiskMappings(meta);
+    if (!mappings.length) return;
+    const nextValue = answer === 'yes';
+    const packToggles = Array.isArray(state.activePack.risk_toggles) ? state.activePack.risk_toggles : [];
+    mappings.forEach((mapping) => {
+      setHistorySyncedCalculatorField(state.activePack, mapping.calcType, mapping.fieldId, nextValue);
+      if (nextValue) {
+        packToggles.forEach((toggle) => {
+          if (toggle.calculator) return;
+          const ct = mapping.calcType;
+          if (toggle.id === ct || toggle.id.includes(ct)) {
+            state.selectedRisks.add(toggle.id);
+          }
+        });
+      }
+    });
+  }
+
+  function syncAllHistoryAnswersToMdm() {
+    if (!state.activePack || !state.historyLoaded || !state.historyQuestions) return;
+    clearHistorySyncedRiskInputsForActivePack();
+    Object.keys(state.historyAnswers || {}).forEach((qId) => {
+      const answer = state.historyAnswers[qId];
+      if (answer === 'yes' || answer === 'no') {
+        syncHistoryAnswerToMdm(qId, answer);
+      } else {
+        syncHistoryAnswerToMdm(qId, '');
+      }
+    });
+  }
+
+  function clearHistorySyncedRiskInputsForActivePack() {
+    if (!state.activePack || !state.historyLoaded || !state.historyQuestions) return;
+    const packData = state.historyQuestions.packs[state.activePack.id];
+    if (!packData || !packData.ddx_questions) return;
+    const engine = window.ER_MDM_RISK;
+    if (!engine || !engine.inferHistoryRiskMappings) return;
+
+    const seen = new Set();
+    Object.keys(packData.ddx_questions).forEach((ddxLabel) => {
+      const questions = packData.ddx_questions[ddxLabel];
+      if (!Array.isArray(questions)) return;
+      questions.forEach((q) => {
+        if (!q || typeof q !== 'object') return;
+        const meta = {
+          id: String(q.id || ''),
+          ddxLabel,
+          text: String(q.text || ''),
+          category: String(q.category || '')
+        };
+        engine.inferHistoryRiskMappings(meta).forEach((mapping) => {
+          const key = mapping.calcType + ':' + mapping.fieldId;
+          if (seen.has(key)) return;
+          seen.add(key);
+          setHistorySyncedCalculatorField(state.activePack, mapping.calcType, mapping.fieldId, false);
+        });
+      });
+    });
+  }
+
+  function renderHistoryHelper() {
+    if (!els.historyContainer) return;
+    const pack = state.activePack;
+    if (!pack) {
+      els.historyContainer.innerHTML = '';
+      if (els.historyEmpty) els.historyEmpty.style.display = '';
+      if (els.historyCount) els.historyCount.textContent = '0 answered';
+      return;
+    }
+
+    if (els.historyEmpty) els.historyEmpty.style.display = 'none';
+    if (state.historyLoading) {
+      els.historyContainer.innerHTML = '<p class="empty-block">Loading history questions...</p>';
+      if (els.historyCount) els.historyCount.textContent = '0 answered';
+      return;
+    }
+
+    if (state.historyLoadError) {
+      els.historyContainer.innerHTML = '<p class="empty-block">' + escapeHtml(state.historyLoadError) + '</p>';
+      if (els.historyCount) els.historyCount.textContent = '0 answered';
+      return;
+    }
+
+    if (!state.historyLoaded || !state.historyQuestions) {
+      els.historyContainer.innerHTML = '';
+      if (els.historyEmpty) els.historyEmpty.style.display = '';
+      if (els.historyCount) els.historyCount.textContent = '0 answered';
+      return;
+    }
+
+    const packData = state.historyQuestions.packs[pack.id];
+    if (!packData || !packData.ddx_questions) {
+      els.historyContainer.innerHTML = '<p class="empty-block">No history questions for this pack yet.</p>';
+      if (els.historyCount) els.historyCount.textContent = '0 answered';
+      return;
+    }
+
+    const ddxItems = pack.ddx || [];
+    const groups = Object.create(null);
+    ddxItems.forEach((item) => {
+      const g = item.group || 'Other';
+      if (!groups[g]) groups[g] = [];
+      groups[g].push(item);
+    });
+
+    const orderedGroups = [
+      ...GROUP_ORDER.filter((g) => groups[g]),
+      ...Object.keys(groups).filter((g) => !GROUP_ORDER.includes(g))
+    ];
+
+    let totalAnswered = 0;
+    let totalQuestions = 0;
+
+    const html = orderedGroups.map((group) => {
+      const items = groups[group] || [];
+      const ddxSections = items.map((ddxItem) => {
+        const questions = packData.ddx_questions[ddxItem.label];
+        if (!questions || !questions.length) return '';
+
+        totalQuestions += questions.length;
+        let answeredForDdx = 0;
+        const questionRows = questions.map((q) => {
+          const answer = state.historyAnswers[q.id] || '';
+          if (answer && answer !== '') {
+            totalAnswered++;
+            answeredForDdx++;
+          }
+
+          const rowClass = answer === 'yes' ? 'answered-yes' :
+                           answer === 'no' ? 'answered-no' :
+                           answer === 'skip' ? 'answered-skip' : '';
+
+          const yesActive = answer === 'yes' ? ' active-yes' : '';
+          const noActive = answer === 'no' ? ' active-no' : '';
+          const skipActive = answer === 'skip' ? ' active-skip' : '';
+
+          const catTag = q.category
+            ? ' <span class="hh-category-tag">' + escapeHtml(q.category) + '</span>'
+            : '';
+
+          const questionMeta = {
+            id: String(q.id || ''),
+            ddxLabel: String(ddxItem.label || ''),
+            text: String(q.text || ''),
+            category: String(q.category || '')
+          };
+          const riskToolTags = getHistoryRiskToolTags(questionMeta);
+          const riskTag = riskToolTags.map((tag) => {
+            let toggleId = '';
+            const packToggles = Array.isArray(pack.risk_toggles) ? pack.risk_toggles : [];
+            const matchedToggle = packToggles.find((t) => {
+              if (t.calculator && t.calculator.type === tag.calcType) return true;
+              if (t.id === tag.calcType) return true;
+              if (t.id.includes(tag.calcType)) return true;
+              return false;
+            });
+            if (matchedToggle) toggleId = matchedToggle.id;
+            const jumpAttr = toggleId ? ' data-jump-to-risk="' + escapeHtml(toggleId) + '"' : '';
+            return ' <button class="hh-risk-tag"' + jumpAttr + ' title="Jump to ' + escapeHtml(tag.title) + '" type="button">' + escapeHtml(tag.short) + '</button>';
+          }).join('');
+
+          return '<div class="hh-question ' + rowClass + '">' +
+            '<span class="hh-question-text">' + escapeHtml(q.text) + catTag + riskTag + '</span>' +
+            '<div class="hh-actions">' +
+              '<button class="hh-btn' + yesActive + '" data-question-id="' + escapeHtml(q.id) + '" data-ddx-label="' + escapeHtml(ddxItem.label) + '" data-answer="yes" type="button">Yes</button>' +
+              '<button class="hh-btn' + noActive + '" data-question-id="' + escapeHtml(q.id) + '" data-ddx-label="' + escapeHtml(ddxItem.label) + '" data-answer="no" type="button">No</button>' +
+              '<button class="hh-btn' + skipActive + '" data-question-id="' + escapeHtml(q.id) + '" data-ddx-label="' + escapeHtml(ddxItem.label) + '" data-answer="skip" type="button">Skip</button>' +
+            '</div>' +
+          '</div>';
+        }).join('');
+
+        const ddxKey = String(ddxItem.label || '');
+        const isOpen = state.historyExpandedDdx.has(ddxKey);
+        return '<details class="hh-ddx-section" data-history-ddx="' + escapeHtml(ddxKey) + '"' + (isOpen ? ' open' : '') + '>' +
+          '<summary class="hh-ddx-summary">' +
+            '<span class="hh-ddx-label">' + escapeHtml(ddxItem.label) + '</span>' +
+            '<span class="hh-ddx-count">' + answeredForDdx + '/' + questions.length + ' answered</span>' +
+          '</summary>' +
+          '<div class="hh-ddx-body">' + questionRows + '</div>' +
+        '</details>';
+      }).filter(Boolean).join('');
+
+      if (!ddxSections) return '';
+      return '<div class="section-subgroup"><h4>' + escapeHtml(group) + '</h4>' + ddxSections + '</div>';
+    }).filter(Boolean).join('');
+
+    els.historyContainer.innerHTML = html || '<p class="empty-block">No questions available.</p>';
+    if (els.historyCount) {
+      els.historyCount.textContent = totalAnswered + '/' + totalQuestions + ' answered';
+    }
+  }
+
+  function buildHistorySummaryText() {
+    if (!state.activePack || !state.historyLoaded || !state.historyQuestions) return '';
+    const packData = state.historyQuestions.packs[state.activePack.id];
+    if (!packData || !packData.ddx_questions) return '';
+
+    const lines = [];
+    const ddxItems = state.activePack.ddx || [];
+    ddxItems.forEach((ddxItem) => {
+      const questions = packData.ddx_questions[ddxItem.label];
+      if (!questions || !questions.length) return;
+
+      const answered = questions.filter((q) => state.historyAnswers[q.id] && state.historyAnswers[q.id] !== 'skip');
+      if (!answered.length) return;
+
+      lines.push(ddxItem.label + ':');
+      answered.forEach((q) => {
+        const ans = state.historyAnswers[q.id];
+        const prefix = ans === 'yes' ? '[+]' : '[-]';
+        lines.push('  ' + prefix + ' ' + q.text);
+      });
+      lines.push('');
+    });
+
+    return lines.join('\n').trim() || '';
+  }
+
+  // ── End History Helper ────────────────────────────────────────────
 
   function renderPreview() {
     if (!els.editor) return;
@@ -837,6 +1232,7 @@
     renderDdx();
     renderRuleouts();
     renderRiskTools();
+    renderHistoryHelper();
     renderCounts();
     renderPreview();
   }
@@ -857,6 +1253,7 @@
     state.selectedRisks.clear();
     state.riskInputs = Object.create(null);
     state.openRiskTools.clear();
+    state.historyAnswers = {};
     syncRiskToggles(pack, { autoEnableNew: true, prevVisibleIds: new Set() });
   }
 
@@ -872,6 +1269,10 @@
     Object.keys(saved.riskInputs || {}).forEach((id) => {
       state.riskInputs[id] = cloneRiskInputValue(saved.riskInputs[id]);
     });
+
+    state.historyAnswers = saved.historyAnswers && typeof saved.historyAnswers === 'object'
+      ? { ...saved.historyAnswers }
+      : {};
 
     state.openRiskTools = new Set([...state.selectedRisks]);
 
@@ -1034,6 +1435,15 @@
         hint: `${pack.id}`
       }, seen);
 
+      // /hx command for history helper
+      addCommandItem({
+        type: 'history',
+        command: `/hx${preferred}`,
+        packId: pack.id,
+        label: `History Helper: ${pack.title}`,
+        hint: `${pack.id}`
+      }, seen);
+
       const aliases = new Set();
       aliases.add(normalizeAlias(pack.id.replace(/^mdm/, '')));
       (Array.isArray(pack.aliases) ? pack.aliases : []).forEach((alias) => aliases.add(normalizeAlias(alias)));
@@ -1046,6 +1456,13 @@
           command: `/ddx${alias}`,
           packId: pack.id,
           label: `Load ${pack.title}`,
+          hint: `${pack.id}`
+        }, seen);
+        addCommandItem({
+          type: 'history',
+          command: `/hx${alias}`,
+          packId: pack.id,
+          label: `History Helper: ${pack.title}`,
           hint: `${pack.id}`
         }, seen);
       });
@@ -1800,6 +2217,36 @@
       return { ok: false, type: 'risk', command };
     }
 
+    if (first.startsWith('hx')) {
+      let alias = first.slice(2);
+      if (!alias && rest) {
+        alias = normalizeAlias(rest);
+      }
+      alias = normalizeAlias(alias);
+
+      const packId = state.aliasToPack.get(alias);
+      if (!packId) {
+        updateStatus(`Unknown history alias: ${alias || '(none)'}.`, 'warn');
+        return { ok: false, type: 'history', command };
+      }
+
+      selectPack(packId);
+      loadHistoryQuestionsIfNeeded();
+
+      // Open the utility drawer and scroll to history panel
+      const drawer = document.querySelector('.utility-drawer');
+      if (drawer && !drawer.open) drawer.open = true;
+      setTimeout(() => {
+        if (els.historyContainer) {
+          els.historyContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      }, 100);
+
+      updateStatus(`History Helper opened for ${state.packById.get(packId).title}.`, 'ok');
+      recordCommandUsage(`/hx${alias}`);
+      return { ok: true, type: 'history', command: `/hx${alias}`, packId };
+    }
+
     if (first === 'clear') {
       clearAllSelections();
       recordCommandUsage('/clear');
@@ -1813,7 +2260,7 @@
     }
 
     if (first === 'help') {
-      updateStatus('Command help: /ddxcp, /ddxsob, /ddxabd, /ddxha, /ruleout <id>, /risk <tool>, /clear, /reset', 'ok');
+      updateStatus('Command help: /ddxcp, /ddxsob, /hxcp, /hxsob, /ruleout <id>, /risk <tool>, /clear, /reset', 'ok');
       recordCommandUsage('/help');
       return { ok: true, type: 'help', command: '/help' };
     }
@@ -1872,8 +2319,11 @@
     if (result.type === 'risk') {
       return buildRiskInsertText(result.riskId);
     }
+    if (result.type === 'history') {
+      return '';
+    }
     if (result.type === 'help') {
-      return 'Commands: /ddxcp /ddxsob /ddxabd /ddxha /ruleout <id> /risk <tool> /clear /reset';
+      return 'Commands: /ddxcp /ddxsob /ddxabd /ddxha /hxcp /hxsob /ruleout <id> /risk <tool> /clear /reset';
     }
     if (result.type === 'clear' || result.type === 'reset') {
       return '';
@@ -2242,12 +2692,68 @@
       });
     }
 
+    if (els.historyContainer) {
+      els.historyContainer.addEventListener('click', (event) => {
+        const target = event.target;
+        if (!(target instanceof HTMLElement)) return;
+
+        // History answer buttons (Yes/No/Skip)
+        if (target.classList.contains('hh-btn') && target.dataset.questionId) {
+          const qId = target.dataset.questionId;
+          const answer = target.dataset.answer || '';
+          const current = state.historyAnswers[qId] || '';
+          // Toggle off if same answer clicked
+          if (current === answer) {
+            delete state.historyAnswers[qId];
+            syncHistoryAnswerToMdm(qId, '');
+          } else {
+            state.historyAnswers[qId] = answer;
+            syncHistoryAnswerToMdm(qId, answer);
+          }
+          renderAll();
+          persistActivePackState();
+          return;
+        }
+
+        // Jump-to-risk-tool tag
+        if (target.classList.contains('hh-risk-tag') && target.dataset.jumpToRisk) {
+          const riskId = target.dataset.jumpToRisk;
+          const riskEl = document.getElementById('slash-risk-' + riskId);
+          if (riskEl) {
+            if (!riskEl.open) riskEl.open = true;
+            state.openRiskTools.add(riskId);
+            riskEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }
+          return;
+        }
+      });
+
+      // Track expanded DDx sections
+      els.historyContainer.addEventListener('toggle', (event) => {
+        const target = event.target;
+        if (!(target instanceof HTMLDetailsElement)) return;
+        if (!target.dataset.historyDdx) return;
+        const ddxKey = target.dataset.historyDdx;
+        if (target.open) state.historyExpandedDdx.add(ddxKey);
+        else state.historyExpandedDdx.delete(ddxKey);
+      }, true);
+    }
+
     if (els.ddxSelectAllBtn) {
       els.ddxSelectAllBtn.addEventListener('click', selectAllDdx);
     }
 
     if (els.ddxClearAllBtn) {
       els.ddxClearAllBtn.addEventListener('click', clearAllDdx);
+    }
+
+    if (els.copySynthBtn) {
+      els.copySynthBtn.addEventListener('click', () => {
+        if (!state.activePack) return;
+        const text = buildSynthesizedMdm(state.activePack);
+        if (!text.trim()) return;
+        copyTextWithFeedback(text, els.copySynthBtn);
+      });
     }
 
     if (els.copyFullBtn) {
@@ -2348,6 +2854,8 @@
 
     updateSuggestionsFromEditor();
     updateStatus('Private slash editor ready. Type / for commands.', 'ok');
+
+    loadHistoryQuestionsIfNeeded();
   }
 
   init();
