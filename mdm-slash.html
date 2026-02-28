@@ -74,11 +74,23 @@ main{max-width:1380px;margin:0 auto;padding:18px 24px 60px}
 .inline-ddx-group + .inline-ddx-group{margin-top:12px}
 .inline-ddx-group h4{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--text2);margin-bottom:6px}
 .inline-ddx-grid{display:grid;gap:6px}
-.inline-ddx-row{display:flex;align-items:flex-start;gap:8px;border:1px solid var(--border);background:var(--bg);border-radius:8px;padding:8px 10px}
-.inline-ddx-row input{margin-top:2px;accent-color:#3b82f6}
+.inline-ddx-row{display:grid;grid-template-columns:1fr auto;gap:8px;border:1px solid var(--border);background:var(--bg);border-radius:8px;padding:8px 10px}
+.inline-ddx-row.expanded{border-color:#2f4f78;background:#0b1730}
+.inline-ddx-check{display:flex;align-items:flex-start;gap:8px}
+.inline-ddx-check input{margin-top:2px;accent-color:#3b82f6}
+.inline-ddx-expand{align-self:start;padding:4px 8px;border:1px solid var(--border2);border-radius:7px;background:var(--surface2);color:var(--text2);font-size:11px;font-weight:700;cursor:pointer}
+.inline-ddx-expand:hover{border-color:#3b82f6;color:#dbeafe}
+.inline-ddx-expand.disabled{opacity:.55;cursor:not-allowed}
 .inline-ddx-main{display:grid;gap:2px}
 .inline-ddx-label{font-size:12px;color:var(--text)}
 .inline-ddx-meta{font-size:11px;color:#93c5fd;font-family:'JetBrains Mono',monospace}
+.inline-risk-submenu{grid-column:1/-1;margin-top:4px;border-top:1px dashed var(--border2);padding-top:8px;display:grid;gap:6px}
+.inline-risk-row{display:flex;align-items:flex-start;gap:8px;border:1px solid var(--border);border-radius:8px;padding:6px 8px;background:#0a1324}
+.inline-risk-row input{margin-top:2px;accent-color:#3b82f6}
+.inline-risk-main{display:grid;gap:2px}
+.inline-risk-label{font-size:12px;color:var(--text)}
+.inline-risk-score{font-size:11px;color:#a5f3fc}
+.inline-risk-empty{grid-column:1/-1;font-size:11px;color:var(--text3);padding:4px 2px}
 
 .utility-drawer summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:800;color:var(--text2)}
 .utility-drawer summary::-webkit-details-marker{display:none}

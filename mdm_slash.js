@@ -102,7 +102,8 @@
       packId: '',
       command: '',
       tokenRange: null,
-      tokenConsumed: false
+      tokenConsumed: false,
+      expandedLabel: ''
     }
   };
 
@@ -1117,6 +1118,7 @@
     state.inlineDdxPicker.command = '';
     state.inlineDdxPicker.tokenRange = null;
     state.inlineDdxPicker.tokenConsumed = false;
+    state.inlineDdxPicker.expandedLabel = '';
   }
 
   function resolvePackFromDdxToken(token) {
@@ -1170,6 +1172,7 @@
     if (prechecked.length && !state.inlineDdxPicker.tokenConsumed) {
       const insertion = prechecked
         .map((label) => buildDdxInsertionText(label))
+        .filter((snippet) => !editorContainsSnippet(snippet))
         .filter(Boolean)
         .join('\n');
       if (insertion) {
@@ -1179,6 +1182,58 @@
         state.inlineDdxPicker.tokenRange = null;
       }
     }
+  }
+
+  function getRiskTogglesForDdx(pack, ddxItem) {
+    if (!pack || !ddxItem) return [];
+    const itemTags = new Set((ddxItem.tags || []).map((tag) => String(tag)));
+
+    return (pack.risk_toggles || []).filter((toggle) => {
+      const required = Array.isArray(toggle.tags_required) ? toggle.tags_required : [];
+      if (!required.length) return true;
+      if (!itemTags.size) return false;
+      return required.some((tag) => itemTags.has(String(tag)));
+    });
+  }
+
+  function getInlineRiskScoreText(toggle) {
+    const engine = window.ER_MDM_RISK;
+    if (!toggle) return '';
+
+    if (toggle.calculator && toggle.calculator.type && engine && typeof engine.evaluate === 'function') {
+      const values = ensureCalculatorInputState(toggle);
+      const result = engine.evaluate(toggle.calculator.type, values);
+      return normalizeLabel(result.preview || result.interpretation || '');
+    }
+
+    if (state.selectedRisks.has(toggle.id)) {
+      return 'selected';
+    }
+    return 'off';
+  }
+
+  function buildInlineRiskSubmenu(pack, item, expanded) {
+    if (!expanded) return '';
+    const toggles = getRiskTogglesForDdx(pack, item);
+    if (!toggles.length) {
+      return '<div class="inline-risk-empty">No associated risk tools for this diagnosis.</div>';
+    }
+
+    const rows = toggles.map((toggle) => {
+      const checked = state.selectedRisks.has(toggle.id) ? 'checked' : '';
+      const score = getInlineRiskScoreText(toggle);
+      return `
+        <label class="inline-risk-row">
+          <input type="checkbox" data-role="inline-ddx-risk" data-risk-id="${escapeHtml(toggle.id)}" ${checked}>
+          <span class="inline-risk-main">
+            <span class="inline-risk-label">${escapeHtml(toggle.label)}</span>
+            <span class="inline-risk-score">${escapeHtml(score)}</span>
+          </span>
+        </label>
+      `;
+    }).join('');
+
+    return `<div class="inline-risk-submenu">${rows}</div>`;
   }
 
   function buildInlineDdxRows(pack) {
@@ -1196,19 +1251,28 @@
 
     return orderedGroups.map((group) => {
       const rows = (groups[group] || []).map((item) => {
+        const isExpanded = state.inlineDdxPicker.expandedLabel === item.label;
         const checked = state.selectedDdx.has(item.label) ? 'checked' : '';
+        const toggles = getRiskTogglesForDdx(pack, item);
+        const hasTools = toggles.length > 0;
         const ids = Array.isArray(item.ruleouts)
           ? item.ruleouts.map((id) => normalizeId(id)).filter(Boolean)
           : [];
         const tokens = ids.length ? ids.map((id) => formatDotphrase(id)).join(', ') : 'No linked rule-out';
         return `
-          <label class="inline-ddx-row">
-            <input type="checkbox" data-role="inline-ddx-item" data-label="${escapeHtml(item.label)}" ${checked}>
-            <span class="inline-ddx-main">
-              <span class="inline-ddx-label">${escapeHtml(item.label)}</span>
-              <span class="inline-ddx-meta">${escapeHtml(tokens)}</span>
-            </span>
-          </label>
+          <div class="inline-ddx-row${isExpanded ? ' expanded' : ''}" data-role="inline-ddx-row" data-label="${escapeHtml(item.label)}">
+            <label class="inline-ddx-check">
+              <input type="checkbox" data-role="inline-ddx-item" data-label="${escapeHtml(item.label)}" ${checked}>
+              <span class="inline-ddx-main">
+                <span class="inline-ddx-label">${escapeHtml(item.label)}</span>
+                <span class="inline-ddx-meta">${escapeHtml(tokens)}</span>
+              </span>
+            </label>
+            <button type="button" class="inline-ddx-expand${hasTools ? '' : ' disabled'}" data-role="inline-ddx-expand" data-label="${escapeHtml(item.label)}" ${hasTools ? '' : 'disabled'}>
+              ${hasTools ? 'Risk tools' : 'No risk tools'}
+            </button>
+            ${buildInlineRiskSubmenu(pack, item, isExpanded)}
+          </div>
         `;
       }).join('');
 
@@ -1540,6 +1604,46 @@
     return lines.join('\n');
   }
 
+  function editorContainsSnippet(snippet) {
+    if (!els.editor || !snippet) return false;
+    return (els.editor.value || '').includes(snippet);
+  }
+
+  function normalizeEditorWhitespace(value) {
+    return String(value || '')
+      .replace(/\n{3,}/g, '\n\n')
+      .replace(/[ \t]+\n/g, '\n');
+  }
+
+  function removeSnippetFromEditor(snippet) {
+    if (!els.editor || !snippet) return false;
+    const value = els.editor.value || '';
+    const targets = [
+      `\n${snippet}\n`,
+      `\n${snippet}`,
+      `${snippet}\n`,
+      snippet
+    ];
+
+    for (let i = 0; i < targets.length; i += 1) {
+      const block = targets[i];
+      const idx = value.indexOf(block);
+      if (idx < 0) continue;
+      const before = value.slice(0, idx);
+      const after = value.slice(idx + block.length);
+      const merged = normalizeEditorWhitespace(before + after);
+      els.editor.value = merged;
+      const caret = Math.min(idx, merged.length);
+      els.editor.focus();
+      els.editor.setSelectionRange(caret, caret);
+      state.editorText = merged;
+      saveEditorDraft();
+      return true;
+    }
+
+    return false;
+  }
+
   function insertTextAtCaret(text) {
     if (!els.editor || !text) return;
     const value = els.editor.value || '';
@@ -1581,7 +1685,7 @@
 
     if (opts.insertOnCheck && isChecked) {
       const insertion = buildDdxInsertionText(label);
-      if (insertion) {
+      if (insertion && !editorContainsSnippet(insertion)) {
         if (state.inlineDdxPicker.active && !state.inlineDdxPicker.tokenConsumed && state.inlineDdxPicker.tokenRange) {
           state.activeTokenRange = { ...state.inlineDdxPicker.tokenRange };
           replaceActiveTokenInEditor(insertion);
@@ -1593,7 +1697,33 @@
       }
     }
 
+    if (!isChecked && opts.removeOnUncheck) {
+      const insertion = buildDdxInsertionText(label);
+      removeSnippetFromEditor(insertion);
+    }
+
     if (opts.keepInlinePickerOpen && state.inlineDdxPicker.active) {
+      renderSuggestions();
+    }
+  }
+
+  function applyInlineRiskSelection(riskId, isChecked) {
+    if (!state.activePack || !riskId) return;
+    const visibleIds = new Set(getVisibleRiskToggles(state.activePack).map((toggle) => toggle.id));
+    if (!visibleIds.has(riskId)) return;
+
+    if (isChecked) {
+      state.selectedRisks.add(riskId);
+      state.openRiskTools.add(riskId);
+    } else {
+      state.selectedRisks.delete(riskId);
+      state.openRiskTools.delete(riskId);
+    }
+
+    renderRiskTools();
+    renderCounts();
+    persistActivePackState();
+    if (state.inlineDdxPicker.active) {
       renderSuggestions();
     }
   }
@@ -1919,13 +2049,22 @@
       els.suggestions.addEventListener('change', (event) => {
         const target = event.target;
         if (!(target instanceof HTMLInputElement)) return;
-        if (target.dataset.role !== 'inline-ddx-item') return;
-        const label = target.dataset.label || '';
-        if (!label) return;
-        applyDdxSelection(label, target.checked, {
-          insertOnCheck: true,
-          keepInlinePickerOpen: true
-        });
+        if (target.dataset.role === 'inline-ddx-item') {
+          const label = target.dataset.label || '';
+          if (!label) return;
+          applyDdxSelection(label, target.checked, {
+            insertOnCheck: true,
+            removeOnUncheck: true,
+            keepInlinePickerOpen: true
+          });
+          return;
+        }
+
+        if (target.dataset.role === 'inline-ddx-risk') {
+          const riskId = target.dataset.riskId || '';
+          if (!riskId) return;
+          applyInlineRiskSelection(riskId, target.checked);
+        }
       });
 
       els.suggestions.addEventListener('click', (event) => {
@@ -1940,10 +2079,21 @@
             closeSuggestions();
             return;
           }
+          if (role === 'inline-ddx-expand' || role === 'inline-ddx-row') {
+            const label = actionBtn.getAttribute('data-label') || '';
+            if (!label) return;
+            if (target instanceof HTMLInputElement && target.dataset.role === 'inline-ddx-item') {
+              return;
+            }
+            state.inlineDdxPicker.expandedLabel = (state.inlineDdxPicker.expandedLabel === label) ? '' : label;
+            renderSuggestions();
+            return;
+          }
           if (role === 'inline-ddx-select-all' && state.activePack) {
             (state.activePack.ddx || []).forEach((item) => {
               applyDdxSelection(item.label, true, {
                 insertOnCheck: !state.selectedDdx.has(item.label),
+                removeOnUncheck: true,
                 keepInlinePickerOpen: false
               });
             });
@@ -1954,6 +2104,7 @@
             (state.activePack.ddx || []).forEach((item) => {
               applyDdxSelection(item.label, false, {
                 insertOnCheck: false,
+                removeOnUncheck: true,
                 keepInlinePickerOpen: false
               });
             });
@@ -1983,7 +2134,10 @@
         if (!(target instanceof HTMLInputElement) || target.dataset.role !== 'ddx' || !state.activePack) return;
         const label = target.dataset.label || '';
         if (!label) return;
-        applyDdxSelection(label, target.checked, { insertOnCheck: true });
+        applyDdxSelection(label, target.checked, {
+          insertOnCheck: true,
+          removeOnUncheck: true
+        });
       });
     }
 
