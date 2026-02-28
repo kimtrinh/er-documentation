@@ -4,6 +4,7 @@
   const GROUP_ORDER = ['Life-threatening', 'Common', 'Other'];
   const STORAGE_KEY = 'kp_mdm_builder_state_v3';
   const LEGACY_STORAGE_KEYS = ['kp_mdm_builder_state_v2'];
+  const EDITOR_STORAGE_KEY = 'kp_mdm_slash_editor_state_v1';
   const COMMAND_USAGE_KEY = 'kp_mdm_slash_command_usage_v1';
   const MAX_SUGGESTIONS = 10;
   const PRIORITY_COMMAND_BOOSTS = Object.freeze({
@@ -57,12 +58,10 @@
   const els = {
     packSelect: document.getElementById('slashPackSelect'),
     packChips: document.getElementById('slashPackChips'),
-    commandInput: document.getElementById('slashCommandInput'),
-    runCommandBtn: document.getElementById('runCommandBtn'),
+    editor: document.getElementById('slashEditor'),
+    editorShell: document.getElementById('slashEditorShell'),
     suggestions: document.getElementById('slashSuggestions'),
     status: document.getElementById('slashStatus'),
-    quickCommands: document.getElementById('slashQuickCommands'),
-    helpPanel: document.getElementById('slashHelpPanel'),
     ddxContainer: document.getElementById('slashDdxContainer'),
     ddxCount: document.getElementById('slashDdxCount'),
     ddxSelectAllBtn: document.getElementById('slashSelectAllDdxBtn'),
@@ -71,11 +70,11 @@
     ruleoutCount: document.getElementById('slashRuleoutCount'),
     riskContainer: document.getElementById('slashRiskContainer'),
     riskCount: document.getElementById('slashRiskCount'),
-    preview: document.getElementById('slashPreview'),
     copyFullBtn: document.getElementById('slashCopyFullBtn'),
     copyDdxBtn: document.getElementById('slashCopyDdxBtn'),
     copyRuleoutsBtn: document.getElementById('slashCopyRuleoutsBtn'),
-    resetBtn: document.getElementById('slashResetBtn')
+    resetBtn: document.getElementById('slashResetBtn'),
+    clearDraftBtn: document.getElementById('slashClearDraftBtn')
   };
 
   const state = {
@@ -95,7 +94,9 @@
     openRiskTools: new Set(),
     commandUsage: Object.create(null),
     savedByPack: Object.create(null),
-    savedActivePackId: ''
+    savedActivePackId: '',
+    editorText: '',
+    activeTokenRange: null
   };
 
   function normalizeLabel(text) {
@@ -221,6 +222,38 @@
     const command = normalizeCommandText(rawCommand);
     if (!command) return 0;
     return PRIORITY_COMMAND_BOOSTS[command] || 0;
+  }
+
+  function loadEditorDraft() {
+    const storage = safeLocalStorage();
+    if (!storage) return;
+    try {
+      const raw = storage.getItem(EDITOR_STORAGE_KEY);
+      if (!raw) return;
+      const parsed = JSON.parse(raw);
+      if (!parsed || typeof parsed !== 'object') return;
+      const text = typeof parsed.editorText === 'string' ? parsed.editorText : '';
+      state.editorText = text;
+      if (els.editor) {
+        els.editor.value = text;
+      }
+    } catch (e) {
+      state.editorText = '';
+    }
+  }
+
+  function saveEditorDraft() {
+    const storage = safeLocalStorage();
+    if (!storage || !els.editor) return;
+    const payload = {
+      editorText: els.editor.value || '',
+      timestamp: new Date().toISOString()
+    };
+    try {
+      storage.setItem(EDITOR_STORAGE_KEY, JSON.stringify(payload));
+    } catch (e) {
+      // ignore save failures
+    }
   }
 
   function loadSavedState() {
@@ -582,16 +615,6 @@
     }).join('');
   }
 
-  function renderQuickCommandChips() {
-    if (!els.quickCommands) return;
-    const preferred = state.commandItems
-      .filter((item) => item.type === 'pack')
-      .slice(0, 8);
-    els.quickCommands.innerHTML = preferred.map((item) => (
-      `<button type="button" class="quick-chip" data-command="${escapeHtml(item.command)}">${escapeHtml(item.command)}</button>`
-    )).join('');
-  }
-
   function renderDdx() {
     const pack = state.activePack;
     if (!pack || !els.ddxContainer) return;
@@ -796,18 +819,13 @@
   }
 
   function renderPreview() {
-    if (!els.preview) return;
-    if (!state.activePack) {
-      els.preview.value = '';
-      return;
-    }
-    els.preview.value = buildPreviewText(state.activePack);
+    if (!els.editor) return;
+    state.editorText = els.editor.value || '';
   }
 
   function renderAll() {
     renderPackSelect();
     renderPackChips();
-    renderQuickCommandChips();
     renderDdx();
     renderRuleouts();
     renderRiskTools();
@@ -1093,6 +1111,7 @@
     if (!list.length) {
       els.suggestions.innerHTML = '';
       els.suggestions.hidden = true;
+      state.activeTokenRange = null;
       return;
     }
 
@@ -1107,11 +1126,86 @@
         </li>
       `;
     }).join('');
+
+    if (!els.editor || !els.editorShell || !state.activeTokenRange) return;
+    const caretPos = getCaretCoordinates(els.editor, state.activeTokenRange.end);
+    const shellRect = els.editorShell.getBoundingClientRect();
+    const editorRect = els.editor.getBoundingClientRect();
+    const rawLeft = (editorRect.left - shellRect.left) + caretPos.left - els.editor.scrollLeft;
+    const rawTop = (editorRect.top - shellRect.top) + caretPos.top - els.editor.scrollTop + caretPos.height + 6;
+
+    const maxLeft = Math.max(8, els.editorShell.clientWidth - els.suggestions.offsetWidth - 8);
+    const maxTop = Math.max(8, els.editorShell.clientHeight - els.suggestions.offsetHeight - 8);
+    const left = Math.max(8, Math.min(rawLeft, maxLeft));
+    const top = Math.max(8, Math.min(rawTop, maxTop));
+
+    els.suggestions.style.left = `${left}px`;
+    els.suggestions.style.top = `${top}px`;
   }
 
-  function updateSuggestionsFromInput() {
-    const value = els.commandInput ? els.commandInput.value : '';
-    state.suggestions = buildSuggestions(value);
+  function getSlashTokenAtCaret() {
+    if (!els.editor) return null;
+    const value = els.editor.value || '';
+    const caret = Number.isFinite(els.editor.selectionStart) ? els.editor.selectionStart : value.length;
+    const upto = value.slice(0, caret);
+    const start = upto.lastIndexOf('/');
+    if (start < 0) return null;
+    if (start > 0 && !/\s/.test(upto.charAt(start - 1))) return null;
+    const token = upto.slice(start);
+    if (!token.startsWith('/')) return null;
+    if (/[\r\n]/.test(token)) return null;
+    return {
+      token,
+      start,
+      end: caret
+    };
+  }
+
+  function getCaretCoordinates(textarea, position) {
+    const div = document.createElement('div');
+    const style = window.getComputedStyle(textarea);
+    const properties = [
+      'boxSizing', 'width', 'height',
+      'overflowX', 'overflowY',
+      'borderTopWidth', 'borderRightWidth', 'borderBottomWidth', 'borderLeftWidth',
+      'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft',
+      'fontStyle', 'fontVariant', 'fontWeight', 'fontStretch', 'fontSize',
+      'fontSizeAdjust', 'lineHeight', 'fontFamily', 'textAlign', 'textTransform',
+      'textIndent', 'textDecoration', 'letterSpacing', 'wordSpacing'
+    ];
+
+    div.style.position = 'absolute';
+    div.style.visibility = 'hidden';
+    div.style.whiteSpace = 'pre-wrap';
+    div.style.wordWrap = 'break-word';
+    div.style.top = '-9999px';
+    properties.forEach((prop) => {
+      div.style[prop] = style[prop];
+    });
+
+    div.textContent = textarea.value.substring(0, position);
+    const span = document.createElement('span');
+    span.textContent = textarea.value.substring(position) || '.';
+    div.appendChild(span);
+    document.body.appendChild(div);
+    const coords = {
+      top: span.offsetTop,
+      left: span.offsetLeft,
+      height: Number.parseFloat(style.lineHeight) || 18
+    };
+    document.body.removeChild(div);
+    return coords;
+  }
+
+  function updateSuggestionsFromEditor() {
+    const tokenInfo = getSlashTokenAtCaret();
+    if (!tokenInfo) {
+      closeSuggestions();
+      return;
+    }
+
+    state.activeTokenRange = tokenInfo;
+    state.suggestions = buildSuggestions(tokenInfo.token);
     state.activeSuggestionIndex = state.suggestions.length ? 0 : -1;
     renderSuggestions();
   }
@@ -1124,6 +1218,7 @@
   function closeSuggestions() {
     state.suggestions = [];
     state.activeSuggestionIndex = -1;
+    state.activeTokenRange = null;
     renderSuggestions();
   }
 
@@ -1152,7 +1247,25 @@
     renderCounts();
     renderPreview();
     persistActivePackState();
-    return true;
+    return {
+      ok: true,
+      id,
+      enabled: state.selectedRuleouts.has(id)
+    };
+  }
+
+  function findVisibleRiskToggleByQuery(query) {
+    if (!state.activePack) return null;
+    const q = normalizeAlias(query);
+    if (!q) return null;
+    const visible = getVisibleRiskToggles(state.activePack);
+    if (!visible.length) return null;
+    return visible.find((toggle) => {
+      const label = normalizeAlias(toggle.label);
+      const id = normalizeAlias(toggle.id);
+      const calc = toggle.calculator && toggle.calculator.type ? normalizeAlias(toggle.calculator.type) : '';
+      return label.includes(q) || id.includes(q) || calc.includes(q);
+    }) || null;
   }
 
   function focusRiskFromCommand(query) {
@@ -1169,12 +1282,7 @@
       return false;
     }
 
-    const match = visible.find((toggle) => {
-      const label = normalizeAlias(toggle.label);
-      const id = normalizeAlias(toggle.id);
-      const calc = toggle.calculator && toggle.calculator.type ? normalizeAlias(toggle.calculator.type) : '';
-      return label.includes(q) || id.includes(q) || calc.includes(q);
-    });
+    const match = findVisibleRiskToggleByQuery(query);
 
     if (!match) {
       updateStatus(`No visible risk tool matching "${query}".`, 'warn');
@@ -1198,7 +1306,7 @@
     }, 40);
 
     updateStatus(`Focused risk tool: ${match.label}.`, 'ok');
-    return true;
+    return match;
   }
 
   function clearAllSelections() {
@@ -1248,7 +1356,7 @@
 
   function parseAndExecuteCommand(rawInput) {
     const raw = normalizeLabel(rawInput);
-    if (!raw) return false;
+    if (!raw) return { ok: false };
 
     const command = normalizeCommandText(raw);
     const exact = state.commandByText.get(command);
@@ -1256,12 +1364,12 @@
       selectPack(exact.packId);
       updateStatus(`Loaded ${state.packById.get(exact.packId).title}.`, 'ok');
       recordCommandUsage(exact.command);
-      return true;
+      return { ok: true, type: 'pack', command: exact.command, packId: exact.packId };
     }
 
     const body = command.replace(/^\//, '');
     const parts = body.split(/\s+/).filter(Boolean);
-    if (!parts.length) return false;
+    if (!parts.length) return { ok: false };
 
     const first = parts[0].toLowerCase();
     const rest = parts.slice(1).join(' ').trim();
@@ -1276,56 +1384,145 @@
       const packId = state.aliasToPack.get(alias);
       if (!packId) {
         updateStatus(`Unknown DDx command alias: ${alias || '(none)'}.`, 'warn');
-        return false;
+        return { ok: false, type: 'pack', command };
       }
 
       selectPack(packId);
       updateStatus(`Loaded ${state.packById.get(packId).title}.`, 'ok');
       recordCommandUsage(`/ddx${alias}`);
-      return true;
+      return { ok: true, type: 'pack', command: `/ddx${alias}`, packId };
     }
 
     if (first === 'ruleout') {
-      const ok = toggleRuleoutFromCommand(rest);
-      if (ok) {
+      const result = toggleRuleoutFromCommand(rest);
+      if (result && result.ok) {
         recordCommandUsage(`/ruleout ${normalizeId(rest)}`);
       }
-      return ok;
+      return result || { ok: false, type: 'ruleout', command };
     }
 
     if (first === 'risk') {
-      const ok = focusRiskFromCommand(rest);
-      if (ok) {
+      const match = focusRiskFromCommand(rest);
+      if (match) {
         const token = normalizeAlias(rest);
         recordCommandUsage(`/risk ${token || normalizeLabel(rest).toLowerCase()}`);
+        return {
+          ok: true,
+          type: 'risk',
+          command,
+          riskId: match.id,
+          riskLabel: match.label
+        };
       }
-      return ok;
+      return { ok: false, type: 'risk', command };
     }
 
     if (first === 'clear') {
       clearAllSelections();
       recordCommandUsage('/clear');
-      return true;
+      return { ok: true, type: 'clear', command: '/clear' };
     }
 
     if (first === 'reset') {
       resetCurrentPackToDefaults();
       recordCommandUsage('/reset');
-      return true;
+      return { ok: true, type: 'reset', command: '/reset' };
     }
 
     if (first === 'help') {
-      if (els.helpPanel) {
-        els.helpPanel.open = true;
-        els.helpPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      }
-      updateStatus('Opened command help.', 'ok');
+      updateStatus('Command help: /ddxcp, /ddxsob, /ddxabd, /ddxha, /ruleout <id>, /risk <tool>, /clear, /reset', 'ok');
       recordCommandUsage('/help');
-      return true;
+      return { ok: true, type: 'help', command: '/help' };
     }
 
     updateStatus(`Unknown command: ${command}`, 'warn');
-    return false;
+    return { ok: false, type: 'unknown', command };
+  }
+
+  function buildPackInsertText(pack) {
+    if (!pack) return '';
+    const scaffold = normalizeLabel(pack.base_mdm_template)
+      || 'Focused emergency evaluation completed with risk-stratified disposition.';
+    return `MDM - ${pack.title}: ${scaffold}`;
+  }
+
+  function buildRiskInsertText(riskId) {
+    if (!state.activePack || !riskId) return '';
+    const toggle = (state.activePack.risk_toggles || []).find((entry) => entry.id === riskId);
+    if (!toggle) return '';
+    const engine = window.ER_MDM_RISK;
+
+    if (toggle.calculator && toggle.calculator.type && engine && typeof engine.evaluate === 'function') {
+      const values = ensureCalculatorInputState(toggle);
+      const evalResult = engine.evaluate(toggle.calculator.type, values);
+      if (toggle.sentence_template && evalResult.ready) {
+        return applyTemplate(toggle.sentence_template, {
+          score: evalResult.scoreText,
+          interpretation: evalResult.interpretation,
+          details: evalResult.details
+        });
+      }
+      if (engine && typeof engine.renderCalcSummary === 'function') {
+        return engine.renderCalcSummary(toggle.calculator.type, evalResult);
+      }
+    }
+
+    if (toggle.sentence_template) {
+      const value = typeof state.riskInputs[riskId] === 'undefined' ? '' : String(state.riskInputs[riskId]);
+      const sentence = applyTemplate(toggle.sentence_template, { value });
+      if (sentence) return sentence;
+    }
+
+    return toggle.label || '';
+  }
+
+  function buildCommandInsertText(result, rawCommand) {
+    if (!result || !result.ok) return '';
+    if (result.type === 'pack') {
+      return buildPackInsertText(state.activePack);
+    }
+    if (result.type === 'ruleout') {
+      if (!result.enabled) return '';
+      const lookup = phraseLookup(result.id);
+      return lookup.exists ? normalizeLabel(lookup.text) : formatDotphrase(result.id);
+    }
+    if (result.type === 'risk') {
+      return buildRiskInsertText(result.riskId);
+    }
+    if (result.type === 'help') {
+      return 'Commands: /ddxcp /ddxsob /ddxabd /ddxha /ruleout <id> /risk <tool> /clear /reset';
+    }
+    if (result.type === 'clear' || result.type === 'reset') {
+      return '';
+    }
+    return normalizeLabel(rawCommand);
+  }
+
+  function replaceActiveTokenInEditor(insertion) {
+    if (!els.editor || !state.activeTokenRange) return;
+    const text = els.editor.value || '';
+    const start = state.activeTokenRange.start;
+    const end = state.activeTokenRange.end;
+    const before = text.slice(0, start);
+    const after = text.slice(end);
+    const needsNewline = insertion && !before.endsWith('\n') && before.length > 0 ? '\n' : '';
+    const needsTrailingNewline = insertion && after && !after.startsWith('\n') ? '\n' : '';
+    const payload = insertion ? `${needsNewline}${insertion}${needsTrailingNewline}` : '';
+
+    els.editor.value = `${before}${payload}${after}`;
+    const caretPos = before.length + payload.length;
+    els.editor.focus();
+    els.editor.setSelectionRange(caretPos, caretPos);
+    state.editorText = els.editor.value;
+    saveEditorDraft();
+  }
+
+  function applyInlineCommand(commandText) {
+    const result = parseAndExecuteCommand(commandText);
+    if (!result || !result.ok) return;
+    const insertion = buildCommandInsertText(result, commandText);
+    replaceActiveTokenInEditor(insertion);
+    closeSuggestions();
   }
 
   function copyTextWithFeedback(text, btn) {
@@ -1401,26 +1598,34 @@
       });
     }
 
-    if (els.quickCommands) {
-      els.quickCommands.addEventListener('click', (event) => {
-        const target = event.target;
-        if (!(target instanceof Element)) return;
-        const btn = target.closest('[data-command]');
-        if (!btn || !els.commandInput) return;
-        const cmd = btn.getAttribute('data-command');
-        if (!cmd) return;
-        els.commandInput.value = cmd;
-        parseAndExecuteCommand(cmd);
-        closeSuggestions();
-      });
-    }
-
-    if (els.commandInput) {
-      els.commandInput.addEventListener('input', () => {
-        updateSuggestionsFromInput();
+    if (els.editor) {
+      els.editor.addEventListener('input', () => {
+        state.editorText = els.editor.value || '';
+        saveEditorDraft();
+        updateSuggestionsFromEditor();
       });
 
-      els.commandInput.addEventListener('keydown', (event) => {
+      els.editor.addEventListener('click', () => {
+        updateSuggestionsFromEditor();
+      });
+
+      els.editor.addEventListener('keyup', (event) => {
+        if (event.key === 'ArrowUp' || event.key === 'ArrowDown' || event.key === 'Enter' || event.key === 'Tab') return;
+        updateSuggestionsFromEditor();
+      });
+
+      els.editor.addEventListener('scroll', () => {
+        if (state.suggestions.length) {
+          renderSuggestions();
+        }
+      });
+
+      els.editor.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+          closeSuggestions();
+          return;
+        }
+
         if (event.key === 'ArrowDown') {
           if (!state.suggestions.length) return;
           event.preventDefault();
@@ -1437,34 +1642,15 @@
           return;
         }
 
-        if (event.key === 'Tab') {
-          const suggestion = getSuggestionByIndex(state.activeSuggestionIndex);
-          if (!suggestion) return;
+        if (event.key === 'Tab' || event.key === 'Enter') {
+          const tokenInfo = getSlashTokenAtCaret();
+          if (!tokenInfo) return;
+          const suggestion = getSuggestionByIndex(state.activeSuggestionIndex) || state.suggestions[0] || null;
+          const commandToApply = suggestion ? suggestion.command : tokenInfo.token;
           event.preventDefault();
-          els.commandInput.value = suggestion.command;
-          updateSuggestionsFromInput();
-          return;
+          state.activeTokenRange = tokenInfo;
+          applyInlineCommand(commandToApply);
         }
-
-        if (event.key === 'Escape') {
-          closeSuggestions();
-          return;
-        }
-
-        if (event.key === 'Enter') {
-          event.preventDefault();
-          const suggestion = getSuggestionByIndex(state.activeSuggestionIndex);
-          const commandToRun = suggestion ? suggestion.command : els.commandInput.value;
-          parseAndExecuteCommand(commandToRun);
-          closeSuggestions();
-        }
-      });
-    }
-
-    if (els.runCommandBtn && els.commandInput) {
-      els.runCommandBtn.addEventListener('click', () => {
-        parseAndExecuteCommand(els.commandInput.value);
-        closeSuggestions();
       });
     }
 
@@ -1476,13 +1662,15 @@
         const target = event.target;
         if (!(target instanceof Element)) return;
         const row = target.closest('[data-suggestion-index]');
-        if (!row || !els.commandInput) return;
+        if (!row || !els.editor) return;
         const index = Number.parseInt(row.getAttribute('data-suggestion-index') || '', 10);
         const suggestion = getSuggestionByIndex(index);
         if (!suggestion) return;
-        els.commandInput.value = suggestion.command;
-        parseAndExecuteCommand(suggestion.command);
-        closeSuggestions();
+        state.activeSuggestionIndex = index;
+        const tokenInfo = getSlashTokenAtCaret();
+        if (!tokenInfo) return;
+        state.activeTokenRange = tokenInfo;
+        applyInlineCommand(suggestion.command);
       });
     }
 
@@ -1623,8 +1811,9 @@
 
     if (els.copyFullBtn) {
       els.copyFullBtn.addEventListener('click', () => {
-        if (!state.activePack) return;
-        copyTextWithFeedback(buildPreviewText(state.activePack), els.copyFullBtn);
+        const text = els.editor ? (els.editor.value || '') : '';
+        if (!text.trim()) return;
+        copyTextWithFeedback(text, els.copyFullBtn);
       });
     }
 
@@ -1645,10 +1834,20 @@
       els.resetBtn.addEventListener('click', resetCurrentPackToDefaults);
     }
 
+    if (els.clearDraftBtn && els.editor) {
+      els.clearDraftBtn.addEventListener('click', () => {
+        els.editor.value = '';
+        state.editorText = '';
+        saveEditorDraft();
+        updateStatus('Editor draft cleared.', 'ok');
+        closeSuggestions();
+      });
+    }
+
     document.addEventListener('click', (event) => {
       const target = event.target;
       if (!(target instanceof Element)) return;
-      const inside = target.closest('.slash-command-shell');
+      const inside = target.closest('.slash-editor-shell');
       if (!inside) {
         closeSuggestions();
       }
@@ -1682,14 +1881,15 @@
       await loadPacks();
     } catch (error) {
       updateStatus(error.message, 'warn');
-      if (els.preview) {
-        els.preview.value = 'Failed to load MDM packs.';
+      if (els.editor) {
+        els.editor.value = 'Failed to load MDM packs.';
       }
       return;
     }
 
     loadSavedState();
     loadCommandUsage();
+    loadEditorDraft();
     buildPackAliasMap();
     buildCommandCatalog();
 
@@ -1702,8 +1902,8 @@
       selectPack(state.packs[0].id, { skipPersist: true });
     }
 
-    updateSuggestionsFromInput();
-    updateStatus('Slash workspace ready. Try /ddxcp or /help.', 'ok');
+    updateSuggestionsFromEditor();
+    updateStatus('Private slash editor ready. Type / for commands.', 'ok');
   }
 
   init();

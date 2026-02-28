@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <link rel="stylesheet" href="theme.css?v=2"/>
 <link rel="stylesheet" href="mobile.css"/>
-<title>Slash Docs Workspace</title>
+<title>Private Slash Editor</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--bg:#080f1a;--surface:#0d1829;--surface2:#111f35;--surface3:#162540;--border:#1a2d48;--border2:#243d5c;--text:#e8f0fc;--text2:#8fa8c8;--text3:#4a6280;--blue:#3b82f6;--blue2:#1d4ed8;--green:#22c55e;--amber:#f59e0b;--red:#ef4444}
 body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
 
 .sitenav{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;font-family:'DM Sans',system-ui,sans-serif}
-.sitenav-inner{max-width:1200px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:6px;height:46px;overflow:hidden}
+.sitenav-inner{max-width:1380px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:6px;height:46px;overflow:hidden}
 .nav-logo{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:#3b82f6;white-space:nowrap;flex-shrink:0;text-decoration:none;margin-right:6px}
 .nav-logo span{color:var(--text3)}
 .nav-links{display:flex;flex:1;min-width:0;gap:1px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;white-space:nowrap;padding-right:10px}
@@ -21,29 +21,41 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 .nav-link:hover{background:var(--surface2);color:var(--text)}
 .nav-link.active{background:#1d4ed8;color:#fff}
 
-header{padding:20px 24px;border-bottom:1px solid var(--border2);background:linear-gradient(135deg,var(--surface),var(--bg))}
-.header-inner{max-width:1240px;margin:0 auto}
+header{padding:16px 24px;border-bottom:1px solid var(--border2);background:linear-gradient(135deg,var(--surface),var(--bg))}
+.header-inner{max-width:1380px;margin:0 auto}
 .header-title{display:flex;align-items:center;gap:10px}
 .header-title h1{font-size:24px;font-weight:800}
 .subtitle{margin-top:6px;font-size:13px;color:var(--text3)}
-.banner{margin-top:14px;background:#10213f;border:1px solid #1d4ed8;border-radius:10px;padding:10px 12px;font-size:12px;color:#bfdbfe;line-height:1.45}
+.banner{margin-top:12px;background:#10213f;border:1px solid #1d4ed8;border-radius:10px;padding:10px 12px;font-size:12px;color:#bfdbfe;line-height:1.45}
 
-.command-shell{margin-top:14px;display:grid;gap:10px}
-.command-row{display:grid;grid-template-columns:1fr auto;gap:10px}
-.command-row input{width:100%;background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:11px 12px;color:var(--text);font-size:14px;outline:none}
-.command-row input:focus{border-color:#3b82f6}
-.command-row button{padding:10px 13px;border-radius:10px;border:1px solid #2563eb;background:#1d4ed8;color:#eff6ff;font-size:12px;font-weight:800;cursor:pointer}
-.command-row button:hover{background:#2563eb}
-#slashStatus{font-size:12px;color:var(--text2)}
+main{max-width:1380px;margin:0 auto;padding:18px 24px 60px}
+.workspace{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(280px,.6fr);gap:14px;align-items:start}
+.left-column,.right-column{display:grid;gap:14px}
+.right-sticky{position:sticky;top:94px}
+
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.panel-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;background:var(--surface2);border-bottom:1px solid var(--border)}
+.panel-title{font-size:13px;font-weight:800}
+.panel-body{padding:14px}
+.head-count{font-size:10px;padding:2px 8px;border-radius:999px;background:var(--bg);border:1px solid var(--border);color:#93c5fd}
+
+.editor-actions{display:flex;flex-wrap:wrap;gap:8px}
+.copy-btn{padding:8px 11px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:12px;font-weight:800;cursor:pointer}
+.copy-btn:hover{border-color:#3b82f6;color:#dbeafe}
+.copy-btn.primary{background:#1d4ed8;border-color:#2563eb;color:#eff6ff}
+.copy-btn.copied{background:#14532d;border-color:#22c55e;color:#bbf7d0}
+
+.editor-hint{font-size:12px;color:var(--text3);margin-bottom:10px}
+.editor-hint code{font-family:'JetBrains Mono',monospace;color:#93c5fd}
+.slash-editor-shell{position:relative}
+#slashEditor{width:100%;min-height:72vh;resize:vertical;background:var(--bg);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:14px;font:14px/1.5 'JetBrains Mono',monospace;outline:none}
+#slashEditor:focus{border-color:#3b82f6}
+#slashStatus{margin-top:8px;font-size:12px;color:var(--text2)}
 #slashStatus[data-level="ok"]{color:#86efac}
 #slashStatus[data-level="warn"]{color:#fcd34d}
 #slashStatus[data-level="error"]{color:#fca5a5}
 
-.slash-quick{display:flex;flex-wrap:wrap;gap:8px}
-.quick-chip{padding:6px 10px;border-radius:999px;border:1px solid var(--border);background:var(--surface);color:var(--text2);font-size:11px;font-weight:700;cursor:pointer}
-.quick-chip:hover{border-color:#3b82f6;color:#dbeafe}
-
-.slash-suggestions{list-style:none;border:1px solid var(--border);border-radius:10px;background:var(--surface);max-height:280px;overflow:auto}
+.slash-suggestions{position:absolute;z-index:30;left:12px;top:52px;width:min(520px,calc(100% - 24px));list-style:none;border:1px solid var(--border);border-radius:10px;background:var(--surface);max-height:280px;overflow:auto;box-shadow:0 10px 28px rgba(0,0,0,.35)}
 .slash-suggestions[hidden]{display:none}
 .slash-suggestion{display:grid;grid-template-columns:auto 1fr auto;gap:10px;padding:10px 12px;border-bottom:1px solid var(--border)}
 .slash-suggestion:last-child{border-bottom:none}
@@ -52,21 +64,11 @@ header{padding:20px 24px;border-bottom:1px solid var(--border2);background:linea
 .slash-suggestion .hint{font-size:11px;color:var(--text3)}
 .slash-suggestion.active{background:#10213f}
 
-#slashHelpPanel{border:1px solid var(--border);border-radius:10px;background:var(--surface2);padding:8px 10px}
-#slashHelpPanel summary{cursor:pointer;font-size:12px;font-weight:800;color:var(--text2)}
-.help-list{margin-top:8px;display:grid;gap:6px;font-size:12px;color:var(--text2)}
-.help-list code{font-family:'JetBrains Mono',monospace;color:#93c5fd}
-
-main{max-width:1240px;margin:0 auto;padding:18px 24px 60px}
-.workspace{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(340px,.85fr);gap:14px;align-items:start}
-.left-stack,.right-stack{display:grid;gap:14px}
-.right-sticky{position:sticky;top:108px}
-
-.panel{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
-.panel-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;background:var(--surface2);border-bottom:1px solid var(--border)}
-.panel-title{font-size:13px;font-weight:800}
-.head-count{font-size:10px;padding:2px 8px;border-radius:999px;background:var(--bg);border:1px solid var(--border);color:#93c5fd}
-.panel-body{padding:14px}
+.utility-drawer summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:800;color:var(--text2)}
+.utility-drawer summary::-webkit-details-marker{display:none}
+.utility-drawer summary::after{content:'▸';font-size:11px;color:var(--text3)}
+.utility-drawer[open] summary::after{transform:rotate(90deg)}
+.utility-content{margin-top:12px;display:grid;gap:14px}
 
 .pack-select-wrap{display:grid;gap:10px}
 #slashPackSelect{background:var(--bg);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:10px 12px;font-size:14px}
@@ -78,8 +80,6 @@ main{max-width:1240px;margin:0 auto;padding:18px 24px 60px}
 .actions-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
 .action-btn{padding:7px 10px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text2);font-size:11px;font-weight:800;cursor:pointer}
 .action-btn:hover{border-color:#3b82f6;color:#dbeafe}
-.action-btn.primary{background:#1d4ed8;border-color:#2563eb;color:#eff6ff}
-
 .subgroup + .subgroup{margin-top:14px}
 .subgroup h4{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--text2);margin-bottom:8px}
 .check-grid{display:grid;gap:8px}
@@ -95,7 +95,6 @@ details.risk-row>summary::-webkit-details-marker{display:none}
 .chevron{width:14px;height:14px;display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:10px}
 .chevron::after{content:'▸'}
 details.risk-row[open] .chevron{transform:rotate(90deg)}
-
 .risk-input-wrap{display:flex;align-items:center;gap:8px;margin:8px 2px 0 28px}
 .risk-input-wrap span{font-size:11px;color:var(--text2);min-width:58px}
 .risk-input-wrap input,.risk-input-wrap select{background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:12px;padding:6px 8px;min-width:130px}
@@ -111,20 +110,14 @@ details.risk-row[open] .chevron{transform:rotate(90deg)}
 .calc-result.calc-moderate{background:#1c1917;border-color:#ca8a04;color:#fde047}
 .calc-result.calc-high{background:#1f0707;border-color:#dc2626;color:#fca5a5}
 
-.copy-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
-.copy-btn{padding:8px 11px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:12px;font-weight:800;cursor:pointer}
-.copy-btn:hover{border-color:#3b82f6;color:#dbeafe}
-.copy-btn.copied{background:#14532d;border-color:#22c55e;color:#bbf7d0}
-.preview{width:100%;min-height:520px;resize:vertical;background:var(--bg);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:12px;font:13px/1.5 'JetBrains Mono',monospace}
-
-@media(max-width:980px){
+@media(max-width:1080px){
   .workspace{grid-template-columns:1fr}
   .right-sticky{position:static;top:auto}
-  .preview{min-height:360px}
+  #slashEditor{min-height:58vh}
 }
 @media(max-width:640px){
   .nav-link{font-size:11px;padding:4px 8px}
-  .command-row{grid-template-columns:1fr}
+  #slashEditor{min-height:54vh;font-size:13px}
 }
 </style>
 <script>document.documentElement.setAttribute('data-theme',localStorage.getItem('theme')||'dark');</script>
@@ -137,7 +130,6 @@ details.risk-row[open] .chevron{transform:rotate(90deg)}
     <div class="nav-links">
       <a class="nav-link" href="index.html">🏠 Home</a>
       <a class="nav-link" href="mdm.html">🧾 Documentation</a>
-      <a class="nav-link active" href="mdm-slash.html">⌨️ Slash Docs</a>
       <a class="nav-link" href="calculators.html">🧮 Decision Support</a>
       <a class="nav-link" href="rsi.html">🚨 Resuscitation</a>
       <a class="nav-link" href="algorithms.html">🔀 Algorithms</a>
@@ -153,95 +145,95 @@ details.risk-row[open] .chevron{transform:rotate(90deg)}
   <div class="header-inner">
     <div class="header-title">
       <span>⌨️</span>
-      <h1>Slash Command Documentation Workspace</h1>
+      <h1>Private Inline Slash Editor</h1>
     </div>
-    <p class="subtitle">Keyboard-first MDM workflow with slash commands, linked DDx, rule-outs, and risk tools.</p>
-    <div class="banner">Internal documentation aid only. No patient-specific identifiers are stored by this page.</div>
-
-    <div class="command-shell slash-command-shell">
-      <div class="command-row">
-        <input id="slashCommandInput" type="text" placeholder="Try /ddxcp, /ddxsob, /ruleout noacs, /risk wells, /help" autocomplete="off" spellcheck="false" aria-label="Slash command input">
-        <button id="runCommandBtn" type="button">Run Command</button>
-      </div>
-      <ul id="slashSuggestions" class="slash-suggestions" hidden></ul>
-      <div id="slashQuickCommands" class="slash-quick"></div>
-      <div id="slashStatus" data-level="info"></div>
-
-      <details id="slashHelpPanel">
-        <summary>Command Help</summary>
-        <div class="help-list">
-          <div><code>/ddxcp</code> chest pain pack</div>
-          <div><code>/ddxsob</code> shortness of breath pack</div>
-          <div><code>/ddxabd</code> abdominal pain pack</div>
-          <div><code>/ddxha</code> headache/neuro pack</div>
-          <div><code>/ruleout noacs</code> toggle a rule-out</div>
-          <div><code>/risk wells</code> open linked risk tool</div>
-          <div><code>/clear</code> clear active selections</div>
-          <div><code>/reset</code> reset active pack defaults</div>
-        </div>
-      </details>
-    </div>
+    <p class="subtitle">Type directly in the large editor. Use slash commands inline at the cursor to insert documentation snippets and sync DDx/risk state.</p>
+    <div class="banner">Internal documentation aid only. This page stores local draft/state in your browser only and does not add patient identifiers.</div>
   </div>
 </header>
 
 <main>
   <section class="workspace">
-    <div class="left-stack">
+    <div class="left-column">
       <section class="panel">
         <div class="panel-head">
-          <span class="panel-title">Chief Complaint Pack</span>
-        </div>
-        <div class="panel-body pack-select-wrap">
-          <select id="slashPackSelect" aria-label="Chief complaint pack"></select>
-          <div id="slashPackChips"></div>
-        </div>
-      </section>
-
-      <section class="panel">
-        <div class="panel-head">
-          <span class="panel-title">DDx</span>
-          <span id="slashDdxCount" class="head-count">0 selected</span>
+          <span class="panel-title">Editor</span>
+          <div class="editor-actions">
+            <button id="slashCopyFullBtn" class="copy-btn primary" type="button">Copy Full MDM</button>
+            <button id="slashClearDraftBtn" class="copy-btn" type="button">Clear Draft</button>
+          </div>
         </div>
         <div class="panel-body">
-          <div class="actions-row">
-            <button id="slashSelectAllDdxBtn" class="action-btn" type="button">Select All DDx</button>
-            <button id="slashClearAllDdxBtn" class="action-btn" type="button">Clear All DDx</button>
+          <p class="editor-hint">Type <code>/</code> in the editor for command suggestions. Common: <code>/ddxcp</code>, <code>/ruleout noacs</code>, <code>/risk wells</code>, <code>/clear</code>, <code>/reset</code>.</p>
+          <div id="slashEditorShell" class="slash-editor-shell">
+            <textarea id="slashEditor" spellcheck="false" aria-label="Private slash editor"></textarea>
+            <ul id="slashSuggestions" class="slash-suggestions" hidden></ul>
           </div>
-          <div id="slashDdxContainer"></div>
+          <div id="slashStatus" data-level="info"></div>
         </div>
-      </section>
-
-      <section class="panel">
-        <div class="panel-head">
-          <span class="panel-title">Linked Rule-outs</span>
-          <span id="slashRuleoutCount" class="head-count">0 selected</span>
-        </div>
-        <div class="panel-body" id="slashRuleoutContainer"></div>
       </section>
     </div>
 
-    <aside class="right-stack">
+    <aside class="right-column">
       <div class="right-sticky">
         <section class="panel">
-          <div class="panel-head">
-            <span class="panel-title">Risk Tools</span>
-            <span id="slashRiskCount" class="head-count">0 selected</span>
-          </div>
-          <div class="panel-body" id="slashRiskContainer"></div>
-        </section>
-
-        <section class="panel" style="margin-top:14px">
-          <div class="panel-head">
-            <span class="panel-title">Unified Live Preview</span>
-          </div>
           <div class="panel-body">
-            <div class="copy-row">
-              <button id="slashCopyFullBtn" class="copy-btn" type="button">Copy Full MDM</button>
-              <button id="slashCopyDdxBtn" class="copy-btn" type="button">Copy DDx only</button>
-              <button id="slashCopyRuleoutsBtn" class="copy-btn" type="button">Copy Rule-outs only</button>
-              <button id="slashResetBtn" class="copy-btn" type="button">Reset Pack</button>
-            </div>
-            <textarea id="slashPreview" class="preview" spellcheck="false" aria-label="Unified live preview"></textarea>
+            <details class="utility-drawer">
+              <summary>Utilities (DDx, Rule-outs, Risk Tools)</summary>
+              <div class="utility-content">
+                <section class="panel">
+                  <div class="panel-head">
+                    <span class="panel-title">Chief Complaint Pack</span>
+                  </div>
+                  <div class="panel-body pack-select-wrap">
+                    <select id="slashPackSelect" aria-label="Chief complaint pack"></select>
+                    <div id="slashPackChips"></div>
+                  </div>
+                </section>
+
+                <section class="panel">
+                  <div class="panel-head">
+                    <span class="panel-title">DDx</span>
+                    <span id="slashDdxCount" class="head-count">0 selected</span>
+                  </div>
+                  <div class="panel-body">
+                    <div class="actions-row">
+                      <button id="slashSelectAllDdxBtn" class="action-btn" type="button">Select All DDx</button>
+                      <button id="slashClearAllDdxBtn" class="action-btn" type="button">Clear All DDx</button>
+                    </div>
+                    <div id="slashDdxContainer"></div>
+                  </div>
+                </section>
+
+                <section class="panel">
+                  <div class="panel-head">
+                    <span class="panel-title">Linked Rule-outs</span>
+                    <span id="slashRuleoutCount" class="head-count">0 selected</span>
+                  </div>
+                  <div class="panel-body" id="slashRuleoutContainer"></div>
+                </section>
+
+                <section class="panel">
+                  <div class="panel-head">
+                    <span class="panel-title">Risk Tools</span>
+                    <span id="slashRiskCount" class="head-count">0 selected</span>
+                  </div>
+                  <div class="panel-body" id="slashRiskContainer"></div>
+                </section>
+
+                <section class="panel">
+                  <div class="panel-head">
+                    <span class="panel-title">Utility Copy</span>
+                    <span class="head-count">Optional</span>
+                  </div>
+                  <div class="panel-body editor-actions">
+                    <button id="slashCopyDdxBtn" class="copy-btn" type="button">Copy DDx only</button>
+                    <button id="slashCopyRuleoutsBtn" class="copy-btn" type="button">Copy Rule-outs only</button>
+                    <button id="slashResetBtn" class="copy-btn" type="button">Reset Pack</button>
+                  </div>
+                </section>
+              </div>
+            </details>
           </div>
         </section>
       </div>
