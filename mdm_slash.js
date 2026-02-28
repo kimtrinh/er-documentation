@@ -1553,7 +1553,12 @@
     if (!alias && parts[1]) {
       alias = normalizeAlias(parts.slice(1).join(' '));
     }
-    if (!alias) return null;
+    if (!alias) {
+      if (state.activePack && state.activePack.id) {
+        return { packId: state.activePack.id, command: '/ddx' };
+      }
+      return null;
+    }
 
     const packId = state.aliasToPack.get(alias);
     if (!packId) return null;
@@ -1629,6 +1634,69 @@
     return 'off';
   }
 
+  function buildInlineRiskCalculator(toggle) {
+    if (!toggle || !toggle.calculator || !toggle.calculator.type) return '';
+    if (!state.selectedRisks.has(toggle.id)) return '';
+    const engine = window.ER_MDM_RISK;
+    if (!engine || typeof engine.getCalculatorSchema !== 'function' || typeof engine.evaluate !== 'function') {
+      return '';
+    }
+
+    const schema = engine.getCalculatorSchema(toggle.calculator.type);
+    if (!schema) return '';
+    const values = ensureCalculatorInputState(toggle);
+    const result = engine.evaluate(toggle.calculator.type, values);
+
+    const fieldsHtml = (schema.fields || []).map((field) => {
+      if (field.type === 'heading') {
+        return `<div class="inline-risk-calc-head">${escapeHtml(field.label)}</div>`;
+      }
+
+      const inputId = `inline-risk-${toggle.id}-${field.id}`;
+      const currentValue = values[field.id];
+      if (field.type === 'checkbox') {
+        const checked = Boolean(currentValue) ? 'checked' : '';
+        return `
+          <label class="inline-risk-calc-row">
+            <input id="${escapeHtml(inputId)}" type="checkbox" data-role="inline-risk-calc-input" data-risk-id="${escapeHtml(toggle.id)}" data-field-id="${escapeHtml(field.id)}" ${checked}>
+            <span>${escapeHtml(field.label)}</span>
+          </label>
+        `;
+      }
+
+      if (field.type === 'select') {
+        const options = (field.options || []).map((opt) => {
+          const selected = String(opt.value) === String(currentValue ?? '') ? 'selected' : '';
+          return `<option value="${escapeHtml(opt.value)}" ${selected}>${escapeHtml(opt.label)}</option>`;
+        }).join('');
+        return `
+          <label class="inline-risk-calc-input-wrap" for="${escapeHtml(inputId)}">
+            <span>${escapeHtml(field.label)}</span>
+            <select id="${escapeHtml(inputId)}" data-role="inline-risk-calc-input" data-risk-id="${escapeHtml(toggle.id)}" data-field-id="${escapeHtml(field.id)}">${options}</select>
+          </label>
+        `;
+      }
+
+      const min = typeof field.min === 'number' ? `min="${field.min}"` : '';
+      const max = typeof field.max === 'number' ? `max="${field.max}"` : '';
+      const step = field.step ? `step="${escapeHtml(field.step)}"` : '';
+      const placeholder = field.placeholder ? `placeholder="${escapeHtml(field.placeholder)}"` : '';
+      return `
+        <label class="inline-risk-calc-input-wrap" for="${escapeHtml(inputId)}">
+          <span>${escapeHtml(field.label)}</span>
+          <input id="${escapeHtml(inputId)}" type="number" value="${escapeHtml(currentValue ?? '')}" ${min} ${max} ${step} ${placeholder} data-role="inline-risk-calc-input" data-risk-id="${escapeHtml(toggle.id)}" data-field-id="${escapeHtml(field.id)}">
+        </label>
+      `;
+    }).join('');
+
+    return `
+      <div class="inline-risk-calc">
+        <div class="inline-risk-calc-title">${escapeHtml(schema.title)}: ${escapeHtml(result.preview || '')}</div>
+        <div class="inline-risk-calc-grid">${fieldsHtml}</div>
+      </div>
+    `;
+  }
+
   function buildInlineRiskSubmenu(pack, item, expanded) {
     if (!expanded) return '';
     const toggles = getRiskTogglesForDdx(pack, item);
@@ -1640,13 +1708,16 @@
       const checked = state.selectedRisks.has(toggle.id) ? 'checked' : '';
       const score = getInlineRiskScoreText(toggle);
       return `
-        <label class="inline-risk-row">
-          <input type="checkbox" data-role="inline-ddx-risk" data-risk-id="${escapeHtml(toggle.id)}" ${checked}>
-          <span class="inline-risk-main">
-            <span class="inline-risk-label">${escapeHtml(toggle.label)}</span>
-            <span class="inline-risk-score">${escapeHtml(score)}</span>
-          </span>
-        </label>
+        <div class="inline-risk-row">
+          <label class="inline-risk-toggle">
+            <input type="checkbox" data-role="inline-ddx-risk" data-risk-id="${escapeHtml(toggle.id)}" ${checked}>
+            <span class="inline-risk-main">
+              <span class="inline-risk-label">${escapeHtml(toggle.label)}</span>
+              <span class="inline-risk-score">${escapeHtml(score)}</span>
+            </span>
+          </label>
+          ${buildInlineRiskCalculator(toggle)}
+        </div>
       `;
     }).join('');
 
@@ -2087,8 +2158,14 @@
 
     if (isChecked) {
       state.selectedDdx.add(label);
+      if (opts.autoExpandRiskInInline && state.inlineDdxPicker.active) {
+        state.inlineDdxPicker.expandedLabel = label;
+      }
     } else {
       state.selectedDdx.delete(label);
+      if (state.inlineDdxPicker.expandedLabel === label) {
+        state.inlineDdxPicker.expandedLabel = '';
+      }
     }
 
     syncRuleouts(state.activePack, { autoSelectNew: true });
@@ -2137,6 +2214,22 @@
       state.openRiskTools.delete(riskId);
     }
 
+    renderRiskTools();
+    renderCounts();
+    persistActivePackState();
+    if (state.inlineDdxPicker.active) {
+      renderSuggestions();
+    }
+  }
+
+  function applyInlineRiskCalculatorInput(riskId, fieldId, value) {
+    if (!state.activePack || !riskId || !fieldId) return;
+    const existing = state.riskInputs[riskId];
+    const next = (existing && typeof existing === 'object' && !Array.isArray(existing)) ? { ...existing } : {};
+    next[fieldId] = value;
+    state.riskInputs[riskId] = next;
+    state.selectedRisks.add(riskId);
+    state.openRiskTools.add(riskId);
     renderRiskTools();
     renderCounts();
     persistActivePackState();
@@ -2505,7 +2598,8 @@
           applyDdxSelection(label, target.checked, {
             insertOnCheck: true,
             removeOnUncheck: true,
-            keepInlinePickerOpen: true
+            keepInlinePickerOpen: true,
+            autoExpandRiskInInline: true
           });
           return;
         }
@@ -2514,7 +2608,29 @@
           const riskId = target.dataset.riskId || '';
           if (!riskId) return;
           applyInlineRiskSelection(riskId, target.checked);
+          return;
         }
+
+        if (target.dataset.role === 'inline-risk-calc-input') {
+          const riskId = target.dataset.riskId || '';
+          const fieldId = target.dataset.fieldId || '';
+          if (!riskId || !fieldId) return;
+          const nextValue = target.type === 'checkbox' ? target.checked : target.value;
+          applyInlineRiskCalculatorInput(riskId, fieldId, nextValue);
+        }
+      });
+
+      els.suggestions.addEventListener('input', (event) => {
+        const target = event.target;
+        if (!(target instanceof HTMLInputElement || target instanceof HTMLSelectElement)) return;
+        if (target.dataset.role !== 'inline-risk-calc-input') return;
+        const riskId = target.dataset.riskId || '';
+        const fieldId = target.dataset.fieldId || '';
+        if (!riskId || !fieldId) return;
+        const nextValue = target instanceof HTMLInputElement && target.type === 'checkbox'
+          ? target.checked
+          : target.value;
+        applyInlineRiskCalculatorInput(riskId, fieldId, nextValue);
       });
 
       els.suggestions.addEventListener('click', (event) => {
