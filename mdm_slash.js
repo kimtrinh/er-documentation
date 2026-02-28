@@ -1161,6 +1161,24 @@
     state.activeTokenRange = { ...tokenInfo };
     state.suggestions = [];
     state.activeSuggestionIndex = -1;
+
+    const prechecked = (state.activePack && Array.isArray(state.activePack.ddx))
+      ? state.activePack.ddx
+          .map((item) => item.label)
+          .filter((label) => state.selectedDdx.has(label))
+      : [];
+    if (prechecked.length && !state.inlineDdxPicker.tokenConsumed) {
+      const insertion = prechecked
+        .map((label) => buildDdxInsertionText(label))
+        .filter(Boolean)
+        .join('\n');
+      if (insertion) {
+        state.activeTokenRange = { ...tokenInfo };
+        replaceActiveTokenInEditor(insertion);
+        state.inlineDdxPicker.tokenConsumed = true;
+        state.inlineDdxPicker.tokenRange = null;
+      }
+    }
   }
 
   function buildInlineDdxRows(pack) {
@@ -1965,7 +1983,7 @@
         if (!(target instanceof HTMLInputElement) || target.dataset.role !== 'ddx' || !state.activePack) return;
         const label = target.dataset.label || '';
         if (!label) return;
-        applyDdxSelection(label, target.checked, { insertOnCheck: false });
+        applyDdxSelection(label, target.checked, { insertOnCheck: true });
       });
     }
 
