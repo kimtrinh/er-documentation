@@ -78,7 +78,6 @@
     alvarado:           ['Migration to RLQ (1pt)', 'Anorexia (1pt)', 'Nausea/vomiting (1pt)', 'Tenderness in RLQ (2pt)', 'Rebound tenderness (1pt)', 'Elevated temperature (1pt)', 'Leukocytosis WBC > 10k (2pt)', 'Shift to left (1pt)'],
     glasgow_blatchford: ['BUN ≥ 18.2 mg/dL', 'Hemoglobin < 13 g/dL (M) / < 12 g/dL (F)', 'SBP < 110 mmHg', 'Heart rate ≥ 100', 'Melena on presentation', 'Syncope on presentation', 'Hepatic disease', 'Cardiac failure'],
     // Non-calculator tools keyed by toggle ID
-    abd_bisap_score:    ['BUN > 25 mg/dL (1pt)', 'Impaired mental status — GCS < 15 (1pt)', 'SIRS ≥ 2 criteria: temp, HR, RR, WBC (1pt)', 'Age > 60 (1pt)', 'Pleural effusion on imaging (1pt)'],
     diz_hints_exam:     ['Head Impulse Test — abnormal (catch-up saccade) = peripheral; normal = central concern', 'Nystagmus — unidirectional = peripheral; direction-changing = central concern', 'Test of Skew — no vertical skew = peripheral; vertical skew = central concern'],
     diz_dix_hallpike:   ['Patient supine, head turned 45° to affected side, lowered 20–30° below horizontal', 'Positive: geotropic upbeat-torsional nystagmus with latency and fatigue = posterior canal BPPV', 'Negative: no nystagmus or atypical pattern'],
     sob_bnp_reviewed:   ['BNP < 100 pg/mL: CHF unlikely', 'BNP 100–400 pg/mL: gray zone — consider clinical context', 'BNP > 400 pg/mL: CHF highly likely'],
@@ -456,6 +455,16 @@
         { id: 'onset_exertion', type: 'checkbox', label: 'Onset during exertion / Valsalva / sexual activity [Criterion 4]' },
         { id: 'thunderclap_onset', type: 'checkbox', label: 'Thunderclap onset — maximal intensity within seconds [Criterion 5]' },
         { id: 'limited_neck_flexion', type: 'checkbox', label: 'Limited neck flexion on exam [Criterion 6]' }
+      ]
+    },
+    bisap: {
+      title: 'BISAP',
+      fields: [
+        { id: 'bun_gt25', type: 'checkbox', label: 'BUN > 25 mg/dL (+1)' },
+        { id: 'impaired_mentation', type: 'checkbox', label: 'Impaired mental status — GCS < 15 or disorientation (+1)' },
+        { id: 'sirs', type: 'checkbox', label: 'SIRS ≥ 2 criteria: temp <36 or >38°C, HR >90, RR >20, WBC <4k or >12k (+1)' },
+        { id: 'age_gt60', type: 'checkbox', label: 'Age > 60 years (+1)' },
+        { id: 'pleural_effusion', type: 'checkbox', label: 'Pleural effusion on imaging (+1)' }
       ]
     }
   });
@@ -1397,6 +1406,30 @@
     };
   }
 
+  function evaluateBisapCalculator(values) {
+    const score = [
+      Boolean(values.bun_gt25),
+      Boolean(values.impaired_mentation),
+      Boolean(values.sirs),
+      Boolean(values.age_gt60),
+      Boolean(values.pleural_effusion)
+    ].filter(Boolean).length;
+    const interp = score <= 2
+      ? 'low risk — in-hospital mortality <1%'
+      : score === 3
+      ? 'moderate risk — in-hospital mortality ~5–8%; close monitoring warranted'
+      : 'high risk — in-hospital mortality >15%; ICU-level care indicated';
+    const className = score <= 2 ? CALC_LOW : score === 3 ? CALC_MODERATE : CALC_HIGH;
+    return {
+      ready: true,
+      className,
+      preview: `BISAP: ${score}/5 — ${interp}`,
+      scoreText: `${score}/5`,
+      interpretation: interp,
+      details: `BISAP score ${score}/5: ${interp}.`
+    };
+  }
+
   function evaluateRiskCalculator(toggle) {
     const calcType = toggle && toggle.calculator ? toggle.calculator.type : '';
     const values = ensureCalculatorInputState(toggle);
@@ -1434,6 +1467,8 @@
         return evaluateAddRsCalculator(values);
       case 'ottawa_sah':
         return evaluateOttawaSahCalculator(values);
+      case 'bisap':
+        return evaluateBisapCalculator(values);
       default:
         return {
           ready: false,
@@ -2613,7 +2648,10 @@
     // ── Pancreatitis → BISAP ──────────────────────────────────────────────
     var pancContext = ddx === 'pancreatitis' || qId.startsWith('abd_pan');
     if (pancContext) {
-      add('bisap', 'general');
+      add('bisap', 'general'); // tag on all pancreatitis questions
+      if (/confusion|altered|mental status|gcs/.test(text)) { add('bisap', 'impaired_mentation'); }
+      if (/breath|breathing|shortness|respiratory|sirs|difficulty breathing/.test(text)) { add('bisap', 'sirs'); }
+      if (/age.*60|60.*age|60.*year|over 60|elderly/.test(text)) { add('bisap', 'age_gt60'); }
     }
 
     // ── Pneumonia → CURB-65 ────────────────────────────────────────────────
@@ -2752,8 +2790,20 @@
     var mappings = inferHistoryRiskMappings(meta);
     if (!mappings.length) return;
     var nextValue = answer === 'yes';
+    var packToggles = Array.isArray(state.activePack.risk_toggles) ? state.activePack.risk_toggles : [];
     mappings.forEach(function (mapping) {
+      // For calculator-type tools: update the specific boolean field
       setHistorySyncedCalculatorField(state.activePack, mapping.calcType, mapping.fieldId, nextValue);
+      // For input-type tools (select/text): auto-select the toggle when answered 'yes'
+      if (nextValue) {
+        packToggles.forEach(function (toggle) {
+          if (toggle.calculator) return; // already handled above
+          var ct = mapping.calcType;
+          if (toggle.id === ct || toggle.id.includes(ct)) {
+            state.selectedRisks.add(toggle.id);
+          }
+        });
+      }
     });
   }
 
@@ -2876,6 +2926,7 @@
             var matchedToggle = packToggles.find(function (t) {
               if (t.calculator && t.calculator.type === tag.calcType) return true;
               if (t.id === tag.calcType) return true;
+              if (t.id.includes(tag.calcType)) return true; // partial match e.g. 'gib_rockall_score' → 'rockall'
               return false;
             });
             if (matchedToggle) toggleId = matchedToggle.id;

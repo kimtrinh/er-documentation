@@ -219,17 +219,8 @@
           "id": "abd_bisap_score",
           "label": "BISAP score (pancreatitis severity)",
           "tags_required": ["panc"],
-          "input": {
-            "type": "select",
-            "label": "Score",
-            "default": "0–2 (low risk)",
-            "options": [
-              { "label": "0–2 — low risk (<2% mortality)", "value": "0–2 (low risk, <2% in-hospital mortality)" },
-              { "label": "3 — moderate risk (~5% mortality)", "value": "3 (moderate risk, ~5% in-hospital mortality; close monitoring warranted)" },
-              { "label": "4–5 — high risk (>15% mortality)", "value": "4–5 (high risk, >15% in-hospital mortality; ICU-level care indicated)" }
-            ]
-          },
-          "sentence_template": "BISAP score: {value}."
+          "calculator": { "type": "bisap" },
+          "sentence_template": "BISAP score {score}: {interpretation}."
         },
         {
           "id": "abd_no_peritonitis",
