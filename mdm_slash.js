@@ -96,7 +96,14 @@
     savedByPack: Object.create(null),
     savedActivePackId: '',
     editorText: '',
-    activeTokenRange: null
+    activeTokenRange: null,
+    inlineDdxPicker: {
+      active: false,
+      packId: '',
+      command: '',
+      tokenRange: null,
+      tokenConsumed: false
+    }
   };
 
   function normalizeLabel(text) {
@@ -1104,31 +1111,154 @@
     return scored;
   }
 
+  function resetInlineDdxPicker() {
+    state.inlineDdxPicker.active = false;
+    state.inlineDdxPicker.packId = '';
+    state.inlineDdxPicker.command = '';
+    state.inlineDdxPicker.tokenRange = null;
+    state.inlineDdxPicker.tokenConsumed = false;
+  }
+
+  function resolvePackFromDdxToken(token) {
+    const command = normalizeCommandText(token);
+    if (!command.startsWith('/ddx')) return null;
+
+    const body = command.replace(/^\//, '');
+    const parts = body.split(/\s+/).filter(Boolean);
+    if (!parts.length) return null;
+
+    const first = parts[0].toLowerCase();
+    if (!first.startsWith('ddx')) return null;
+
+    let alias = normalizeAlias(first.slice(3));
+    if (!alias && parts[1]) {
+      alias = normalizeAlias(parts.slice(1).join(' '));
+    }
+    if (!alias) return null;
+
+    const packId = state.aliasToPack.get(alias);
+    if (!packId) return null;
+    return { packId, command: `/ddx${alias}` };
+  }
+
+  function openInlineDdxPicker(tokenInfo, packId, commandText) {
+    if (!tokenInfo || !packId) return;
+    const pack = state.packById.get(packId);
+    if (!pack) return;
+
+    if (!state.inlineDdxPicker.active || state.inlineDdxPicker.packId !== packId) {
+      state.inlineDdxPicker.tokenConsumed = false;
+    }
+
+    if (!state.activePack || state.activePack.id !== packId) {
+      selectPack(packId);
+    }
+
+    state.inlineDdxPicker.active = true;
+    state.inlineDdxPicker.packId = packId;
+    state.inlineDdxPicker.command = commandText || '';
+    state.inlineDdxPicker.tokenRange = { ...tokenInfo };
+    state.activeTokenRange = { ...tokenInfo };
+    state.suggestions = [];
+    state.activeSuggestionIndex = -1;
+  }
+
+  function buildInlineDdxRows(pack) {
+    const groups = Object.create(null);
+    (pack.ddx || []).forEach((item) => {
+      const group = item.group || 'Other';
+      if (!groups[group]) groups[group] = [];
+      groups[group].push(item);
+    });
+
+    const orderedGroups = [
+      ...GROUP_ORDER.filter((group) => groups[group]),
+      ...Object.keys(groups).filter((group) => !GROUP_ORDER.includes(group))
+    ];
+
+    return orderedGroups.map((group) => {
+      const rows = (groups[group] || []).map((item) => {
+        const checked = state.selectedDdx.has(item.label) ? 'checked' : '';
+        const ids = Array.isArray(item.ruleouts)
+          ? item.ruleouts.map((id) => normalizeId(id)).filter(Boolean)
+          : [];
+        const tokens = ids.length ? ids.map((id) => formatDotphrase(id)).join(', ') : 'No linked rule-out';
+        return `
+          <label class="inline-ddx-row">
+            <input type="checkbox" data-role="inline-ddx-item" data-label="${escapeHtml(item.label)}" ${checked}>
+            <span class="inline-ddx-main">
+              <span class="inline-ddx-label">${escapeHtml(item.label)}</span>
+              <span class="inline-ddx-meta">${escapeHtml(tokens)}</span>
+            </span>
+          </label>
+        `;
+      }).join('');
+
+      return `
+        <section class="inline-ddx-group">
+          <h4>${escapeHtml(group)}</h4>
+          <div class="inline-ddx-grid">${rows}</div>
+        </section>
+      `;
+    }).join('');
+  }
+
   function renderSuggestions() {
     if (!els.suggestions) return;
 
-    const list = state.suggestions;
-    if (!list.length) {
-      els.suggestions.innerHTML = '';
-      els.suggestions.hidden = true;
-      state.activeTokenRange = null;
-      return;
+    if (state.inlineDdxPicker.active) {
+      const pack = state.packById.get(state.inlineDdxPicker.packId) || state.activePack;
+      if (!pack) {
+        resetInlineDdxPicker();
+        els.suggestions.innerHTML = '';
+        els.suggestions.hidden = true;
+        return;
+      }
+
+      els.suggestions.hidden = false;
+      els.suggestions.innerHTML = `
+        <li class="inline-ddx-head">
+          <div>
+            <div class="inline-ddx-title">${escapeHtml(pack.title)} Differential</div>
+            <div class="inline-ddx-subtitle">Check diagnoses to auto-link rule-outs and insert dotphrase text.</div>
+          </div>
+          <div class="inline-ddx-actions">
+            <button type="button" class="inline-ddx-btn" data-role="inline-ddx-select-all">All</button>
+            <button type="button" class="inline-ddx-btn" data-role="inline-ddx-clear-all">None</button>
+            <button type="button" class="inline-ddx-btn primary" data-role="inline-ddx-done">Done</button>
+          </div>
+        </li>
+        <li class="inline-ddx-body">${buildInlineDdxRows(pack)}</li>
+      `;
+    } else {
+      const list = state.suggestions;
+      if (!list.length) {
+        els.suggestions.innerHTML = '';
+        els.suggestions.hidden = true;
+        state.activeTokenRange = null;
+        return;
+      }
+
+      els.suggestions.hidden = false;
+      els.suggestions.innerHTML = list.map((item, idx) => {
+        const active = idx === state.activeSuggestionIndex ? ' active' : '';
+        return `
+          <li class="slash-suggestion${active}" data-suggestion-index="${idx}">
+            <span class="cmd">${escapeHtml(item.command)}</span>
+            <span class="desc">${escapeHtml(item.label)}</span>
+            <span class="hint">${escapeHtml(item.hint || '')}</span>
+          </li>
+        `;
+      }).join('');
     }
 
-    els.suggestions.hidden = false;
-    els.suggestions.innerHTML = list.map((item, idx) => {
-      const active = idx === state.activeSuggestionIndex ? ' active' : '';
-      return `
-        <li class="slash-suggestion${active}" data-suggestion-index="${idx}">
-          <span class="cmd">${escapeHtml(item.command)}</span>
-          <span class="desc">${escapeHtml(item.label)}</span>
-          <span class="hint">${escapeHtml(item.hint || '')}</span>
-        </li>
-      `;
-    }).join('');
+    if (!els.editor || !els.editorShell) return;
+    const anchorPos = state.inlineDdxPicker.active
+      ? (Number.isFinite(els.editor.selectionStart) ? els.editor.selectionStart : (els.editor.value || '').length)
+      : (state.activeTokenRange ? state.activeTokenRange.end : null);
+    if (!Number.isFinite(anchorPos)) return;
 
-    if (!els.editor || !els.editorShell || !state.activeTokenRange) return;
-    const caretPos = getCaretCoordinates(els.editor, state.activeTokenRange.end);
+    const caretPos = getCaretCoordinates(els.editor, anchorPos);
     const shellRect = els.editorShell.getBoundingClientRect();
     const editorRect = els.editor.getBoundingClientRect();
     const rawLeft = (editorRect.left - shellRect.left) + caretPos.left - els.editor.scrollLeft;
@@ -1204,6 +1334,17 @@
       return;
     }
 
+    const inlinePack = resolvePackFromDdxToken(tokenInfo.token);
+    if (inlinePack) {
+      openInlineDdxPicker(tokenInfo, inlinePack.packId, inlinePack.command);
+      renderSuggestions();
+      return;
+    }
+
+    if (state.inlineDdxPicker.active) {
+      resetInlineDdxPicker();
+    }
+
     state.activeTokenRange = tokenInfo;
     state.suggestions = buildSuggestions(tokenInfo.token);
     state.activeSuggestionIndex = state.suggestions.length ? 0 : -1;
@@ -1216,6 +1357,7 @@
   }
 
   function closeSuggestions() {
+    resetInlineDdxPicker();
     state.suggestions = [];
     state.activeSuggestionIndex = -1;
     state.activeTokenRange = null;
@@ -1352,6 +1494,99 @@
     renderAll();
     persistActivePackState();
     updateStatus('Cleared all DDx.', 'ok');
+  }
+
+  function findDdxItemByLabel(label) {
+    if (!state.activePack) return null;
+    return (state.activePack.ddx || []).find((item) => item.label === label) || null;
+  }
+
+  function buildDdxInsertionText(label) {
+    const item = findDdxItemByLabel(label);
+    if (!item) return '';
+
+    const seen = new Set();
+    const lines = [];
+    (item.ruleouts || []).forEach((rawId) => {
+      const id = normalizeId(rawId);
+      if (!id || seen.has(id)) return;
+      seen.add(id);
+      const lookup = phraseLookup(id);
+      lines.push(lookup.exists ? normalizeLabel(lookup.text) : formatDotphrase(id));
+    });
+
+    if (!lines.length) {
+      lines.push(`${item.label} considered.`);
+    }
+
+    return lines.join('\n');
+  }
+
+  function insertTextAtCaret(text) {
+    if (!els.editor || !text) return;
+    const value = els.editor.value || '';
+    const start = Number.isFinite(els.editor.selectionStart) ? els.editor.selectionStart : value.length;
+    const end = Number.isFinite(els.editor.selectionEnd) ? els.editor.selectionEnd : start;
+    const before = value.slice(0, start);
+    const after = value.slice(end);
+    const prefix = before.length && !before.endsWith('\n') ? '\n' : '';
+    const suffix = after.length && !after.startsWith('\n') ? '\n' : '';
+    const payload = `${prefix}${text}${suffix}`;
+
+    els.editor.value = `${before}${payload}${after}`;
+    const caretPos = before.length + payload.length;
+    els.editor.focus();
+    els.editor.setSelectionRange(caretPos, caretPos);
+    state.editorText = els.editor.value;
+    saveEditorDraft();
+  }
+
+  function applyDdxSelection(label, isChecked, options) {
+    if (!state.activePack || !label) return;
+    const opts = options || {};
+    const prevVisible = new Set(getVisibleRiskToggles(state.activePack).map((toggle) => toggle.id));
+
+    if (isChecked) {
+      state.selectedDdx.add(label);
+    } else {
+      state.selectedDdx.delete(label);
+    }
+
+    syncRuleouts(state.activePack, { autoSelectNew: true });
+    syncRiskToggles(state.activePack, {
+      autoEnableNew: isChecked,
+      prevVisibleIds: prevVisible
+    });
+
+    renderAll();
+    persistActivePackState();
+
+    if (opts.insertOnCheck && isChecked) {
+      const insertion = buildDdxInsertionText(label);
+      if (insertion) {
+        if (state.inlineDdxPicker.active && !state.inlineDdxPicker.tokenConsumed && state.inlineDdxPicker.tokenRange) {
+          state.activeTokenRange = { ...state.inlineDdxPicker.tokenRange };
+          replaceActiveTokenInEditor(insertion);
+          state.inlineDdxPicker.tokenConsumed = true;
+          state.inlineDdxPicker.tokenRange = null;
+        } else {
+          insertTextAtCaret(insertion);
+        }
+      }
+    }
+
+    if (opts.keepInlinePickerOpen && state.inlineDdxPicker.active) {
+      renderSuggestions();
+    }
+  }
+
+  function removeInlineDdxCommandTokenIfNeeded() {
+    if (!state.inlineDdxPicker.active) return;
+    if (state.inlineDdxPicker.tokenConsumed || !state.inlineDdxPicker.tokenRange) return;
+    state.activeTokenRange = { ...state.inlineDdxPicker.tokenRange };
+    replaceActiveTokenInEditor('');
+    state.inlineDdxPicker.tokenConsumed = true;
+    state.inlineDdxPicker.tokenRange = null;
   }
 
   function parseAndExecuteCommand(rawInput) {
@@ -1626,6 +1861,10 @@
           return;
         }
 
+        if (state.inlineDdxPicker.active) {
+          return;
+        }
+
         if (event.key === 'ArrowDown') {
           if (!state.suggestions.length) return;
           event.preventDefault();
@@ -1658,9 +1897,55 @@
       els.suggestions.addEventListener('mousedown', (event) => {
         event.preventDefault();
       });
+
+      els.suggestions.addEventListener('change', (event) => {
+        const target = event.target;
+        if (!(target instanceof HTMLInputElement)) return;
+        if (target.dataset.role !== 'inline-ddx-item') return;
+        const label = target.dataset.label || '';
+        if (!label) return;
+        applyDdxSelection(label, target.checked, {
+          insertOnCheck: true,
+          keepInlinePickerOpen: true
+        });
+      });
+
       els.suggestions.addEventListener('click', (event) => {
         const target = event.target;
         if (!(target instanceof Element)) return;
+
+        const actionBtn = target.closest('[data-role]');
+        if (actionBtn && state.inlineDdxPicker.active) {
+          const role = actionBtn.getAttribute('data-role') || '';
+          if (role === 'inline-ddx-done') {
+            removeInlineDdxCommandTokenIfNeeded();
+            closeSuggestions();
+            return;
+          }
+          if (role === 'inline-ddx-select-all' && state.activePack) {
+            (state.activePack.ddx || []).forEach((item) => {
+              applyDdxSelection(item.label, true, {
+                insertOnCheck: !state.selectedDdx.has(item.label),
+                keepInlinePickerOpen: false
+              });
+            });
+            renderSuggestions();
+            return;
+          }
+          if (role === 'inline-ddx-clear-all' && state.activePack) {
+            (state.activePack.ddx || []).forEach((item) => {
+              applyDdxSelection(item.label, false, {
+                insertOnCheck: false,
+                keepInlinePickerOpen: false
+              });
+            });
+            renderSuggestions();
+            return;
+          }
+        }
+
+        if (state.inlineDdxPicker.active) return;
+
         const row = target.closest('[data-suggestion-index]');
         if (!row || !els.editor) return;
         const index = Number.parseInt(row.getAttribute('data-suggestion-index') || '', 10);
@@ -1680,23 +1965,7 @@
         if (!(target instanceof HTMLInputElement) || target.dataset.role !== 'ddx' || !state.activePack) return;
         const label = target.dataset.label || '';
         if (!label) return;
-
-        const prevVisible = new Set(getVisibleRiskToggles(state.activePack).map((toggle) => toggle.id));
-
-        if (target.checked) {
-          state.selectedDdx.add(label);
-        } else {
-          state.selectedDdx.delete(label);
-        }
-
-        syncRuleouts(state.activePack, { autoSelectNew: true });
-        syncRiskToggles(state.activePack, {
-          autoEnableNew: target.checked,
-          prevVisibleIds: prevVisible
-        });
-
-        renderAll();
-        persistActivePackState();
+        applyDdxSelection(label, target.checked, { insertOnCheck: false });
       });
     }
 
@@ -1849,6 +2118,9 @@
       if (!(target instanceof Element)) return;
       const inside = target.closest('.slash-editor-shell');
       if (!inside) {
+        if (state.inlineDdxPicker.active) {
+          removeInlineDdxCommandTokenIfNeeded();
+        }
         closeSuggestions();
       }
     });
