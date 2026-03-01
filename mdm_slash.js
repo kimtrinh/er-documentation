@@ -109,6 +109,14 @@
       tokenConsumed: false,
       expandedLabel: ''
     },
+    inlineHxPicker: {
+      active: false,
+      packId: '',
+      command: '',
+      tokenRange: null,
+      tokenConsumed: false,
+      expandedDdx: new Set()
+    },
     historyQuestions: null,
     historyLoaded: false,
     historyLoading: false,
@@ -909,6 +917,10 @@
       } else {
         renderHistoryHelper();
       }
+      // Re-render inline HX picker if it was waiting for data
+      if (state.inlineHxPicker.active) {
+        renderSuggestions();
+      }
     }
   }
 
@@ -1425,25 +1437,24 @@
     state.commandByText = new Map();
     const seen = new Set();
 
+    // Pass 1: Register preferred commands + MANUAL aliases for ALL packs first.
+    // This ensures MANUAL_PACK_ALIASES always win over conflicting JSON aliases
+    // (e.g. mdmha JSON has 'mdmsyncope' which would shadow the real syncope pack).
     state.packs.forEach((pack) => {
       const preferred = getPreferredAlias(pack);
-      addCommandItem({
-        type: 'pack',
-        command: `/ddx${preferred}`,
-        packId: pack.id,
-        label: `Load ${pack.title}`,
-        hint: `${pack.id}`
-      }, seen);
+      addCommandItem({ type: 'pack', command: `/ddx${preferred}`, packId: pack.id, label: `Load ${pack.title}`, hint: pack.id }, seen);
+      addCommandItem({ type: 'history', command: `/hx${preferred}`, packId: pack.id, label: `History Helper: ${pack.title}`, hint: pack.id }, seen);
+      (MANUAL_PACK_ALIASES[pack.id] || []).forEach((alias) => {
+        const a = normalizeAlias(alias);
+        if (!a || a === preferred) return;
+        addCommandItem({ type: 'pack', command: `/ddx${a}`, packId: pack.id, label: `Load ${pack.title}`, hint: pack.id }, seen);
+        addCommandItem({ type: 'history', command: `/hx${a}`, packId: pack.id, label: `History Helper: ${pack.title}`, hint: pack.id }, seen);
+      });
+    });
 
-      // /hx command for history helper
-      addCommandItem({
-        type: 'history',
-        command: `/hx${preferred}`,
-        packId: pack.id,
-        label: `History Helper: ${pack.title}`,
-        hint: `${pack.id}`
-      }, seen);
-
+    // Pass 2: Register JSON aliases (already-seen commands from pass 1 are skipped).
+    state.packs.forEach((pack) => {
+      const preferred = getPreferredAlias(pack);
       const aliases = new Set();
       aliases.add(normalizeAlias(pack.id.replace(/^mdm/, '')));
       (Array.isArray(pack.aliases) ? pack.aliases : []).forEach((alias) => aliases.add(normalizeAlias(alias)));
@@ -1560,9 +1571,207 @@
       return null;
     }
 
-    const packId = state.aliasToPack.get(alias);
-    if (!packId) return null;
-    return { packId, command: `/ddx${alias}` };
+    // Exact match first
+    let packId = state.aliasToPack.get(alias);
+    if (packId) return { packId, command: `/ddx${alias}` };
+
+    // Prefix match — use suggestion scoring so /ddxsyn → /ddxsyncope (correct pack)
+    // avoids alias map collisions (e.g. 'syncope' mapped to wrong pack via JSON)
+    if (alias.length >= 1) {
+      const suggestions = buildSuggestions(token);
+      const firstDdx = suggestions.find(s => s.type === 'pack' && s.packId && s.command && s.command.startsWith('/ddx'));
+      if (firstDdx) {
+        return { packId: firstDdx.packId, command: firstDdx.command };
+      }
+    }
+    return null;
+  }
+
+  function commitInlineDdxPicker() {
+    const donePack = state.packById.get(state.inlineDdxPicker.packId) || state.activePack;
+    const checkedLabels = donePack ? (donePack.ddx || [])
+      .map(item => item.label)
+      .filter(label => state.selectedDdx.has(label)) : [];
+    const insertion = checkedLabels
+      .map(label => buildDdxInsertionText(label))
+      .filter(snippet => snippet && !editorContainsSnippet(snippet))
+      .join('\n');
+    if (insertion) {
+      if (!state.inlineDdxPicker.tokenConsumed && state.inlineDdxPicker.tokenRange) {
+        state.activeTokenRange = { ...state.inlineDdxPicker.tokenRange };
+        replaceActiveTokenInEditor(insertion);
+        state.inlineDdxPicker.tokenConsumed = true;
+      } else {
+        insertTextAtCaret(insertion);
+      }
+    } else {
+      removeInlineDdxCommandTokenIfNeeded();
+    }
+    closeSuggestions();
+  }
+
+  // ── Inline HX Picker ─────────────────────────────────────────────
+
+  function resetInlineHxPicker() {
+    state.inlineHxPicker.active = false;
+    state.inlineHxPicker.packId = '';
+    state.inlineHxPicker.command = '';
+    state.inlineHxPicker.tokenRange = null;
+    state.inlineHxPicker.tokenConsumed = false;
+    state.inlineHxPicker.expandedDdx = new Set();
+  }
+
+  function resolvePackFromHxToken(token) {
+    const command = normalizeCommandText(token);
+    if (!command.startsWith('/hx')) return null;
+
+    const body = command.replace(/^\//, '');
+    const parts = body.split(/\s+/).filter(Boolean);
+    if (!parts.length) return null;
+
+    const first = parts[0].toLowerCase();
+    if (!first.startsWith('hx')) return null;
+
+    let alias = first.slice(2);
+    if (!alias && parts[1]) {
+      alias = normalizeAlias(parts.slice(1).join(' '));
+    }
+    alias = normalizeAlias(alias);
+
+    if (!alias) {
+      if (state.activePack && state.activePack.id) {
+        return { packId: state.activePack.id, command: '/hx' };
+      }
+      return null;
+    }
+
+    // Exact match first
+    let packId = state.aliasToPack.get(alias);
+    if (packId) return { packId, command: `/hx${alias}` };
+
+    // Prefix match — use suggestion scoring so /hxsyn → /hxsyncope (correct pack)
+    if (alias.length >= 1) {
+      const suggestions = buildSuggestions(token);
+      const firstHx = suggestions.find(s => s.type === 'history' && s.packId && s.command && s.command.startsWith('/hx'));
+      if (firstHx) {
+        return { packId: firstHx.packId, command: firstHx.command };
+      }
+    }
+    return null;
+  }
+
+  function openInlineHxPicker(tokenInfo, packId, commandText) {
+    if (!tokenInfo || !packId) return;
+    const pack = state.packById.get(packId);
+    if (!pack) return;
+
+    if (!state.inlineHxPicker.active || state.inlineHxPicker.packId !== packId) {
+      state.inlineHxPicker.tokenConsumed = false;
+      state.inlineHxPicker.expandedDdx = new Set();
+    }
+
+    if (!state.activePack || state.activePack.id !== packId) {
+      selectPack(packId);
+    }
+
+    state.inlineHxPicker.active = true;
+    state.inlineHxPicker.packId = packId;
+    state.inlineHxPicker.command = commandText || '';
+    state.inlineHxPicker.tokenRange = { ...tokenInfo };
+    state.activeTokenRange = { ...tokenInfo };
+    state.suggestions = [];
+    state.activeSuggestionIndex = -1;
+
+    // Load history questions if not yet loaded
+    if (!state.historyLoaded && !state.historyLoading) {
+      loadHistoryQuestionsIfNeeded();
+    }
+  }
+
+  function buildInlineHxRows(pack) {
+    if (state.historyLoading) {
+      return '<div class="inline-hx-loading">Loading history questions…</div>';
+    }
+    if (state.historyLoadError) {
+      return '<div class="inline-hx-loading">' + escapeHtml(state.historyLoadError) + '</div>';
+    }
+    if (!state.historyLoaded || !state.historyQuestions) {
+      return '<div class="inline-hx-loading">No history questions loaded.</div>';
+    }
+
+    const packData = state.historyQuestions.packs[pack.id];
+    if (!packData || !packData.ddx_questions) {
+      return '<div class="inline-hx-loading">No history questions for this pack.</div>';
+    }
+
+    const ddxItems = pack.ddx || [];
+    const groups = Object.create(null);
+    ddxItems.forEach((item) => {
+      const g = item.group || 'Other';
+      if (!groups[g]) groups[g] = [];
+      groups[g].push(item);
+    });
+
+    const orderedGroups = [
+      ...GROUP_ORDER.filter((g) => groups[g]),
+      ...Object.keys(groups).filter((g) => !GROUP_ORDER.includes(g))
+    ];
+
+    const html = orderedGroups.map((group) => {
+      const items = groups[group] || [];
+      const sections = items.map((ddxItem) => {
+        const questions = packData.ddx_questions[ddxItem.label];
+        if (!questions || !questions.length) return '';
+
+        let answeredCount = 0;
+        const rows = questions.map((q) => {
+          const answer = state.historyAnswers[q.id] || '';
+          if (answer) answeredCount++;
+          const rowClass = answer === 'yes' ? ' answered-yes' :
+                           answer === 'no' ? ' answered-no' :
+                           answer === 'skip' ? ' answered-skip' : '';
+          const yesActive = answer === 'yes' ? ' active-yes' : '';
+          const noActive = answer === 'no' ? ' active-no' : '';
+          const skipActive = answer === 'skip' ? ' active-skip' : '';
+          const catTag = q.category
+            ? `<span class="hh-category-tag">${escapeHtml(q.category)}</span>`
+            : '';
+          return `<div class="hh-question${rowClass}">
+            <span class="hh-question-text">${escapeHtml(q.text)} ${catTag}</span>
+            <div class="hh-actions">
+              <button class="hh-btn${yesActive}" data-role="inline-hx-answer" data-question-id="${escapeHtml(String(q.id))}" data-ddx-label="${escapeHtml(ddxItem.label)}" data-answer="yes" type="button">Yes</button>
+              <button class="hh-btn${noActive}" data-role="inline-hx-answer" data-question-id="${escapeHtml(String(q.id))}" data-ddx-label="${escapeHtml(ddxItem.label)}" data-answer="no" type="button">No</button>
+              <button class="hh-btn${skipActive}" data-role="inline-hx-answer" data-question-id="${escapeHtml(String(q.id))}" data-ddx-label="${escapeHtml(ddxItem.label)}" data-answer="skip" type="button">Skip</button>
+            </div>
+          </div>`;
+        }).join('');
+
+        const ddxKey = ddxItem.label;
+        const isExpanded = state.inlineHxPicker.expandedDdx.has(ddxKey);
+        return `<details class="hh-ddx-section" data-role="inline-hx-toggle" data-ddx-key="${escapeHtml(ddxKey)}"${isExpanded ? ' open' : ''}>
+          <summary class="hh-ddx-summary">
+            <span class="hh-ddx-label">${escapeHtml(ddxItem.label)}</span>
+            <span class="hh-ddx-count">${answeredCount}/${questions.length} answered</span>
+          </summary>
+          <div class="hh-ddx-body">${rows}</div>
+        </details>`;
+      }).filter(Boolean).join('');
+
+      if (!sections) return '';
+      return `<div class="section-subgroup"><h4>${escapeHtml(group)}</h4>${sections}</div>`;
+    }).filter(Boolean).join('');
+
+    return html || '<div class="inline-hx-loading">No history questions available.</div>';
+  }
+
+  function commitInlineHxPicker() {
+    // Remove the /hx token from editor — no text is inserted (answers sync to calculators)
+    if (!state.inlineHxPicker.tokenConsumed && state.inlineHxPicker.tokenRange) {
+      state.activeTokenRange = { ...state.inlineHxPicker.tokenRange };
+      replaceActiveTokenInEditor('');
+      state.inlineHxPicker.tokenConsumed = true;
+    }
+    closeSuggestions();
   }
 
   function openInlineDdxPicker(tokenInfo, packId, commandText) {
@@ -1585,25 +1794,7 @@
     state.activeTokenRange = { ...tokenInfo };
     state.suggestions = [];
     state.activeSuggestionIndex = -1;
-
-    const prechecked = (state.activePack && Array.isArray(state.activePack.ddx))
-      ? state.activePack.ddx
-          .map((item) => item.label)
-          .filter((label) => state.selectedDdx.has(label))
-      : [];
-    if (prechecked.length && !state.inlineDdxPicker.tokenConsumed) {
-      const insertion = prechecked
-        .map((label) => buildDdxInsertionText(label))
-        .filter((snippet) => !editorContainsSnippet(snippet))
-        .filter(Boolean)
-        .join('\n');
-      if (insertion) {
-        state.activeTokenRange = { ...tokenInfo };
-        replaceActiveTokenInEditor(insertion);
-        state.inlineDdxPicker.tokenConsumed = true;
-        state.inlineDdxPicker.tokenRange = null;
-      }
-    }
+    // No auto-insertion here — text is inserted in batch when user clicks Done
   }
 
   function getRiskTogglesForDdx(pack, ddxItem) {
@@ -1777,6 +1968,7 @@
     if (!els.suggestions) return;
 
     if (state.inlineDdxPicker.active) {
+      els.suggestions.classList.remove('hx-picker-mode');
       const pack = state.packById.get(state.inlineDdxPicker.packId) || state.activePack;
       if (!pack) {
         resetInlineDdxPicker();
@@ -1800,7 +1992,47 @@
         </li>
         <li class="inline-ddx-body">${buildInlineDdxRows(pack)}</li>
       `;
+    } else if (state.inlineHxPicker.active) {
+      els.suggestions.classList.add('hx-picker-mode');
+      const pack = state.packById.get(state.inlineHxPicker.packId) || state.activePack;
+      if (!pack) {
+        resetInlineHxPicker();
+        els.suggestions.innerHTML = '';
+        els.suggestions.hidden = true;
+        return;
+      }
+
+      // Count total answered for the progress display
+      let totalAnswered = 0;
+      let totalQuestions = 0;
+      if (state.historyLoaded && state.historyQuestions) {
+        const packData = state.historyQuestions.packs[pack.id];
+        if (packData && packData.ddx_questions) {
+          (pack.ddx || []).forEach((item) => {
+            const qs = packData.ddx_questions[item.label] || [];
+            totalQuestions += qs.length;
+            qs.forEach((q) => { if (state.historyAnswers[q.id]) totalAnswered++; });
+          });
+        }
+      }
+
+      const countLabel = totalQuestions > 0 ? `${totalAnswered}/${totalQuestions} answered` : '';
+
+      els.suggestions.hidden = false;
+      els.suggestions.innerHTML = `
+        <li class="inline-ddx-head">
+          <div>
+            <div class="inline-ddx-title">${escapeHtml(pack.title)} History</div>
+            <div class="inline-ddx-subtitle">${escapeHtml(countLabel || 'Answer relevant history questions.')}</div>
+          </div>
+          <div class="inline-ddx-actions">
+            <button type="button" class="inline-ddx-btn primary" data-role="inline-hx-done">Done</button>
+          </div>
+        </li>
+        <li class="inline-hx-body">${buildInlineHxRows(pack)}</li>
+      `;
     } else {
+      els.suggestions.classList.remove('hx-picker-mode');
       const list = state.suggestions;
       if (!list.length) {
         els.suggestions.innerHTML = '';
@@ -1823,7 +2055,8 @@
     }
 
     if (!els.editor || !els.editorShell) return;
-    const anchorPos = state.inlineDdxPicker.active
+    const isInlinePicker = state.inlineDdxPicker.active || state.inlineHxPicker.active;
+    const anchorPos = isInlinePicker
       ? (Number.isFinite(els.editor.selectionStart) ? els.editor.selectionStart : (els.editor.value || '').length)
       : (state.activeTokenRange ? state.activeTokenRange.end : null);
     if (!Number.isFinite(anchorPos)) return;
@@ -1904,15 +2137,27 @@
       return;
     }
 
-    const inlinePack = resolvePackFromDdxToken(tokenInfo.token);
-    if (inlinePack) {
-      openInlineDdxPicker(tokenInfo, inlinePack.packId, inlinePack.command);
+    const inlineDdxPack = resolvePackFromDdxToken(tokenInfo.token);
+    if (inlineDdxPack) {
+      if (state.inlineHxPicker.active) resetInlineHxPicker();
+      openInlineDdxPicker(tokenInfo, inlineDdxPack.packId, inlineDdxPack.command);
+      renderSuggestions();
+      return;
+    }
+
+    const inlineHxPack = resolvePackFromHxToken(tokenInfo.token);
+    if (inlineHxPack) {
+      if (state.inlineDdxPicker.active) resetInlineDdxPicker();
+      openInlineHxPicker(tokenInfo, inlineHxPack.packId, inlineHxPack.command);
       renderSuggestions();
       return;
     }
 
     if (state.inlineDdxPicker.active) {
       resetInlineDdxPicker();
+    }
+    if (state.inlineHxPicker.active) {
+      resetInlineHxPicker();
     }
 
     state.activeTokenRange = tokenInfo;
@@ -1928,6 +2173,7 @@
 
   function closeSuggestions() {
     resetInlineDdxPicker();
+    resetInlineHxPicker();
     state.suggestions = [];
     state.activeSuggestionIndex = -1;
     state.activeTokenRange = null;
@@ -2323,19 +2569,8 @@
         return { ok: false, type: 'history', command };
       }
 
-      selectPack(packId);
-      loadHistoryQuestionsIfNeeded();
-
-      // Open the utility drawer and scroll to history panel
-      const drawer = document.querySelector('.utility-drawer');
-      if (drawer && !drawer.open) drawer.open = true;
-      setTimeout(() => {
-        if (els.historyContainer) {
-          els.historyContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }
-      }, 100);
-
-      updateStatus(`History Helper opened for ${state.packById.get(packId).title}.`, 'ok');
+      // Signal to applyInlineCommand that the inline picker should open
+      updateStatus(`History questions loaded for ${state.packById.get(packId).title}. Use inline picker.`, 'ok');
       recordCommandUsage(`/hx${alias}`);
       return { ok: true, type: 'history', command: `/hx${alias}`, packId };
     }
@@ -2446,6 +2681,24 @@
   function applyInlineCommand(commandText) {
     const result = parseAndExecuteCommand(commandText);
     if (!result || !result.ok) return;
+
+    // For history commands: insert full /hxXXX token (no newlines) so inline HX picker opens
+    if (result.type === 'history') {
+      const fullCmd = result.command || commandText;
+      if (state.activeTokenRange && els.editor) {
+        const text = els.editor.value || '';
+        const { start, end } = state.activeTokenRange;
+        els.editor.value = text.slice(0, start) + fullCmd + text.slice(end);
+        const caretPos = start + fullCmd.length;
+        els.editor.focus();
+        els.editor.setSelectionRange(caretPos, caretPos);
+        state.editorText = els.editor.value;
+        saveEditorDraft();
+      }
+      updateSuggestionsFromEditor();
+      return;
+    }
+
     const insertion = buildCommandInsertText(result, commandText);
     replaceActiveTokenInEditor(insertion);
     closeSuggestions();
@@ -2541,7 +2794,7 @@
       });
 
       els.editor.addEventListener('scroll', () => {
-        if (state.suggestions.length) {
+        if (state.suggestions.length || state.inlineDdxPicker.active || state.inlineHxPicker.active) {
           renderSuggestions();
         }
       });
@@ -2553,6 +2806,18 @@
         }
 
         if (state.inlineDdxPicker.active) {
+          if (event.key === 'Enter') {
+            event.preventDefault();
+            commitInlineDdxPicker();
+          }
+          return;
+        }
+
+        if (state.inlineHxPicker.active) {
+          if (event.key === 'Enter') {
+            event.preventDefault();
+            commitInlineHxPicker();
+          }
           return;
         }
 
@@ -2596,8 +2861,8 @@
           const label = target.dataset.label || '';
           if (!label) return;
           applyDdxSelection(label, target.checked, {
-            insertOnCheck: true,
-            removeOnUncheck: true,
+            insertOnCheck: false,
+            removeOnUncheck: false,
             keepInlinePickerOpen: true,
             autoExpandRiskInInline: true
           });
@@ -2641,8 +2906,7 @@
         if (actionBtn && state.inlineDdxPicker.active) {
           const role = actionBtn.getAttribute('data-role') || '';
           if (role === 'inline-ddx-done') {
-            removeInlineDdxCommandTokenIfNeeded();
-            closeSuggestions();
+            commitInlineDdxPicker();
             return;
           }
           if (role === 'inline-ddx-expand' || role === 'inline-ddx-row') {
@@ -2658,8 +2922,8 @@
           if (role === 'inline-ddx-select-all' && state.activePack) {
             (state.activePack.ddx || []).forEach((item) => {
               applyDdxSelection(item.label, true, {
-                insertOnCheck: !state.selectedDdx.has(item.label),
-                removeOnUncheck: true,
+                insertOnCheck: false,
+                removeOnUncheck: false,
                 keepInlinePickerOpen: false
               });
             });
@@ -2670,7 +2934,7 @@
             (state.activePack.ddx || []).forEach((item) => {
               applyDdxSelection(item.label, false, {
                 insertOnCheck: false,
-                removeOnUncheck: true,
+                removeOnUncheck: false,
                 keepInlinePickerOpen: false
               });
             });
@@ -2680,6 +2944,40 @@
         }
 
         if (state.inlineDdxPicker.active) return;
+
+        // ── Inline HX Picker click handling ──
+        if (state.inlineHxPicker.active) {
+          const hxBtn = target.closest('[data-role]');
+          if (hxBtn) {
+            const role = hxBtn.getAttribute('data-role') || '';
+
+            if (role === 'inline-hx-done') {
+              commitInlineHxPicker();
+              return;
+            }
+
+            if (role === 'inline-hx-answer') {
+              const qId = hxBtn.getAttribute('data-question-id') || '';
+              const answer = hxBtn.getAttribute('data-answer') || '';
+              if (!qId || !answer) return;
+              const current = state.historyAnswers[qId] || '';
+              // Toggle off if same answer clicked again
+              if (current === answer) {
+                delete state.historyAnswers[qId];
+                syncHistoryAnswerToMdm(qId, '');
+              } else {
+                state.historyAnswers[qId] = answer;
+                syncHistoryAnswerToMdm(qId, answer);
+              }
+              renderAll();
+              persistActivePackState();
+              // Re-render suggestions so the answered state updates in the inline picker
+              renderSuggestions();
+              return;
+            }
+          }
+          return;
+        }
 
         const row = target.closest('[data-suggestion-index]');
         if (!row || !els.editor) return;
@@ -2692,6 +2990,19 @@
         state.activeTokenRange = tokenInfo;
         applyInlineCommand(suggestion.command);
       });
+    }
+
+      // Track expand/collapse of DDx sections in inline HX picker
+      els.suggestions.addEventListener('toggle', (event) => {
+        if (!state.inlineHxPicker.active) return;
+        const target = event.target;
+        if (!(target instanceof HTMLDetailsElement)) return;
+        if (target.dataset.role !== 'inline-hx-toggle') return;
+        const ddxKey = target.dataset.ddxKey || '';
+        if (!ddxKey) return;
+        if (target.open) state.inlineHxPicker.expandedDdx.add(ddxKey);
+        else state.inlineHxPicker.expandedDdx.delete(ddxKey);
+      }, true);
     }
 
     if (els.ddxContainer) {
@@ -2914,6 +3225,11 @@
       if (!inside) {
         if (state.inlineDdxPicker.active) {
           removeInlineDdxCommandTokenIfNeeded();
+        }
+        if (state.inlineHxPicker.active && !state.inlineHxPicker.tokenConsumed && state.inlineHxPicker.tokenRange) {
+          state.activeTokenRange = { ...state.inlineHxPicker.tokenRange };
+          replaceActiveTokenInEditor('');
+          state.inlineHxPicker.tokenConsumed = true;
         }
         closeSuggestions();
       }
