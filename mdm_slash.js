@@ -2990,7 +2990,6 @@
         state.activeTokenRange = tokenInfo;
         applyInlineCommand(suggestion.command);
       });
-    }
 
       // Track expand/collapse of DDx sections in inline HX picker
       els.suggestions.addEventListener('toggle', (event) => {
