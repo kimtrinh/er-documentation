@@ -3220,6 +3220,9 @@
     document.addEventListener('click', (event) => {
       const target = event.target;
       if (!(target instanceof Element)) return;
+      // If the target was detached during event handling (e.g. innerHTML replaced in picker),
+      // treat it as an inside click to avoid incorrectly closing the picker.
+      if (!target.isConnected) return;
       const inside = target.closest('.slash-editor-shell');
       if (!inside) {
         if (state.inlineDdxPicker.active) {
