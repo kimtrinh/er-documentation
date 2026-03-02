@@ -56,7 +56,7 @@ main{max-width:980px;margin:0 auto;padding:18px 16px 60px}
 #slashStatus[data-level="error"]{color:#fca5a5}
 
 .slash-suggestions{position:absolute;z-index:30;left:12px;top:52px;width:min(440px,calc(100% - 24px));list-style:none;border:1px solid var(--border2);border-radius:10px;background:#0f1d31;max-height:280px;overflow:auto;box-shadow:0 10px 28px rgba(0,0,0,.45)}
-.slash-suggestions.hx-picker-mode{max-height:420px;overflow:hidden}
+.slash-suggestions.hx-picker-mode{max-height:540px;overflow:hidden}
 .slash-suggestions[hidden]{display:none}
 .slash-suggestion{display:grid;grid-template-columns:auto 1fr auto;gap:8px;padding:8px 10px;border-bottom:1px solid var(--border)}
 .slash-suggestion:last-child{border-bottom:none}
@@ -181,6 +181,9 @@ details.risk-row[open] .chevron{transform:rotate(90deg)}
 .inline-hx-body .hh-question{font-size:11px;padding:5px 4px}
 .inline-hx-body .hh-btn{font-size:10px;padding:2px 6px}
 .inline-hx-loading{padding:12px 10px;font-size:11px;color:var(--text3)}
+.inline-hx-preview{padding:7px 10px 8px;border-top:1px solid var(--border);background:var(--surface)}
+.inline-hx-preview-label{font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);margin-bottom:4px}
+.inline-hx-preview-text{font-family:monospace;font-size:11px;color:var(--text2);white-space:pre-wrap;margin:0;padding:6px 8px;background:var(--bg);border:1px solid var(--border);border-radius:6px;max-height:110px;overflow-y:auto;line-height:1.5}
 
 @media(max-width:640px){
   .nav-link{font-size:11px;padding:4px 8px}

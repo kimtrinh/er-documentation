@@ -1765,10 +1765,10 @@
   }
 
   function commitInlineHxPicker() {
-    // Remove the /hx token from editor — no text is inserted (answers sync to calculators)
     if (!state.inlineHxPicker.tokenConsumed && state.inlineHxPicker.tokenRange) {
       state.activeTokenRange = { ...state.inlineHxPicker.tokenRange };
-      replaceActiveTokenInEditor('');
+      const summary = buildHistorySummaryText();
+      replaceActiveTokenInEditor(summary ? summary + '\n' : '');
       state.inlineHxPicker.tokenConsumed = true;
     }
     closeSuggestions();
@@ -1977,6 +1977,8 @@
         return;
       }
 
+      // Preserve scroll position so clicking a checkbox doesn't jump to the top
+      const prevScroll = els.suggestions.scrollTop;
       els.suggestions.hidden = false;
       els.suggestions.innerHTML = `
         <li class="inline-ddx-head">
@@ -1992,6 +1994,7 @@
         </li>
         <li class="inline-ddx-body">${buildInlineDdxRows(pack)}</li>
       `;
+      els.suggestions.scrollTop = prevScroll;
     } else if (state.inlineHxPicker.active) {
       els.suggestions.classList.add('hx-picker-mode');
       const pack = state.packById.get(state.inlineHxPicker.packId) || state.activePack;
@@ -2018,6 +2021,9 @@
 
       const countLabel = totalQuestions > 0 ? `${totalAnswered}/${totalQuestions} answered` : '';
 
+      // Preserve scroll of inner body so clicking Yes/No/Skip doesn't jump to top
+      const prevBodyScroll = els.suggestions.querySelector('.inline-hx-body')?.scrollTop || 0;
+      const previewText = buildHistorySummaryText();
       els.suggestions.hidden = false;
       els.suggestions.innerHTML = `
         <li class="inline-ddx-head">
@@ -2029,8 +2035,15 @@
             <button type="button" class="inline-ddx-btn primary" data-role="inline-hx-done">Done</button>
           </div>
         </li>
+        ${previewText ? `
+        <li class="inline-hx-preview">
+          <div class="inline-hx-preview-label">Will insert on Done / Enter:</div>
+          <pre class="inline-hx-preview-text">${escapeHtml(previewText)}</pre>
+        </li>` : ''}
         <li class="inline-hx-body">${buildInlineHxRows(pack)}</li>
       `;
+      const newBody = els.suggestions.querySelector('.inline-hx-body');
+      if (newBody && prevBodyScroll > 0) newBody.scrollTop = prevBodyScroll;
     } else {
       els.suggestions.classList.remove('hx-picker-mode');
       const list = state.suggestions;

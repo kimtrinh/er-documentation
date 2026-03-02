@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="stylesheet" href="theme.css?v=2"/>
+<title>Vertigo Helper — ER Documentation</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#080f1a;--surface:#0d1829;--surface2:#111f35;--surface3:#162540;--border:#1a2d48;--border2:#243d5c;--text:#e8f0fc;--text2:#8fa8c8;--text3:#4a6280;--text-blue:#93c5fd;--text-blue-bright:#bfdbfe;--blue:#3b82f6;--blue2:#1d4ed8;--blue3:#0d2038;--green:#22c55e;--green2:#15803d;--green3:#0d2d1f;--amber:#f59e0b;--red:#ef4444;--purple:#a78bfa;--cyan:#22d3ee;}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
+
+header{background:linear-gradient(135deg,var(--surface),var(--bg));border-bottom:1px solid var(--border2);padding:20px 24px}
+.header-inner{max-width:960px;margin:0 auto}
+.logo{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.logo span{font-size:22px}.logo h1{font-size:20px;font-weight:700;color:var(--text)}
+.subtitle{font-size:13px;color:var(--text3);margin-left:32px}
+main{max-width:960px;margin:0 auto;padding:20px 24px 60px}
+
+/* DISCLAIMER */
+.disclaimer{background:var(--border2);border:1px solid #2563eb;border-radius:8px;padding:10px 14px;margin-bottom:20px;font-size:12px;color:var(--text-blue);line-height:1.5}
+.disclaimer strong{color:var(--text-blue-bright)}
+
+/* SECTION LABEL */
+.section-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#3b82f6;margin:24px 0 12px;display:flex;align-items:center;gap:8px}
+.section-label::after{content:'';flex:1;height:1px;background:var(--surface)}
+
+/* CARDS */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.card-head{padding:12px 16px;border-bottom:1px solid var(--border);font-weight:700;font-size:13px;display:flex;align-items:center;gap:8px}
+.card-body{padding:14px 16px;font-size:12.5px;line-height:1.8;color:var(--text2)}
+
+/* CHECKBOXES */
+.criterion{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--bg);cursor:pointer;user-select:none}
+.criterion:last-of-type{border-bottom:none}
+.criterion input[type=checkbox]{width:18px;height:18px;accent-color:#3b82f6;flex-shrink:0;margin-top:2px;cursor:pointer}
+.criterion-label{font-size:13px;color:var(--text2);line-height:1.5;flex:1}
+
+/* RADIO */
+.radio-group{margin-bottom:10px}
+.radio-group>label{display:block;font-size:12px;color:var(--text3);margin-bottom:8px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.radio-option{display:flex;align-items:flex-start;gap:10px;padding:12px 0;cursor:pointer;font-size:13px;color:var(--text2);border-bottom:1px solid var(--bg)}
+.radio-option:last-child{border-bottom:none}
+.radio-option input{accent-color:#3b82f6;width:18px;height:18px;cursor:pointer;flex-shrink:0;margin-top:3px}
+.radio-option span{flex:1;line-height:1.5}
+
+/* STEP NUM */
+.flow-step-num{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;font-size:11px;font-weight:800;flex-shrink:0}
+
+/* PROGRESSIVE DISCLOSURE */
+.vertigo-step{display:none}
+.vertigo-step.active{display:block;animation:stepIn .35s ease both}
+@keyframes stepIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* ALERT RESULT BOXES */
+.alert-result{border-radius:12px;padding:20px 24px;margin-top:16px;font-size:13px;line-height:1.7}
+.alert-result h3{font-size:17px;font-weight:800;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.alert-result ul{margin:8px 0 0 18px}
+.alert-result li{margin-bottom:2px}
+.alert-result.danger{background:#1f0707;border:2px solid #dc2626;color:#fca5a5}
+.alert-result.danger h3{color:#f87171}
+.alert-result.safe{background:#052e16;border:2px solid #16a34a;color:#86efac}
+.alert-result.safe h3{color:#4ade80}
+.alert-result.warning{background:#1c1400;border:2px solid #ca8a04;color:#fde68a}
+.alert-result.warning h3{color:#fbbf24}
+
+/* EXCL BAR */
+.excl-bar{background:#1c1400;border:1px solid #f59e0b;border-radius:10px;padding:12px 16px;margin-top:14px;font-size:12px;color:#fde68a;line-height:1.7}
+.excl-bar strong{color:#fbbf24;display:block;margin-bottom:4px}
+
+/* NONE BUTTON */
+.none-btn{margin-top:14px;padding:11px 20px;border-radius:10px;border:1px solid var(--green);background:var(--green3);color:#86efac;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;width:100%}
+.none-btn:hover{background:#16a34a;color:#fff}
+
+/* TOOLTIPS */
+.info-tip{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--border2);color:var(--text-blue);font-size:11px;font-weight:700;cursor:help;margin-left:6px;position:relative;vertical-align:middle;font-style:normal}
+.info-tip .tip-content{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);width:290px;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:12px 14px;font-size:12px;font-weight:400;color:var(--text2);line-height:1.6;box-shadow:0 8px 24px rgba(0,0,0,.5);z-index:50;text-align:left;white-space:normal}
+.info-tip .tip-content strong{color:var(--text);display:block;margin-bottom:4px}
+.info-tip:hover .tip-content,.info-tip:focus .tip-content{display:block}
+@media(max-width:700px){.info-tip .tip-content{left:auto;right:-10px;transform:none;width:260px}}
+
+/* HINTS GRID */
+.hints-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+@media(max-width:700px){.hints-grid{grid-template-columns:1fr}}
+.hints-test{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px 16px}
+.hints-test-label{font-size:12px;font-weight:700;color:var(--text);margin-bottom:8px;display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+.hints-test select{width:100%;padding:9px 12px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:13px;outline:none;cursor:pointer;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%238fa8c8' d='M2 4l4 4 4-4'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
+.hints-test select:focus{border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,.2)}
+.test-badge{margin-top:8px;font-size:11px;font-weight:700;padding:3px 10px;border-radius:6px;display:inline-block}
+.test-peripheral{background:#052e16;color:#86efac;border:1px solid #16a34a}
+.test-central{background:#1f0707;color:#f87171;border:1px solid #dc2626}
+
+/* RESULT NEUTRAL */
+.result-neutral{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-top:16px;font-size:13px;color:var(--text3);font-weight:600;text-align:center}
+
+/* MASTER RESET */
+.master-reset{margin-top:28px;padding:12px 24px;border-radius:10px;border:2px solid var(--border2);background:var(--surface);color:var(--text2);font-size:14px;font-weight:700;cursor:pointer;width:100%;transition:all .2s}
+.master-reset:hover{border-color:var(--red);color:var(--red);background:#1f0707}
+
+/* ===== SHARED NAV ===== */
+.sitenav{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;font-family:'DM Sans',system-ui,sans-serif}
+.sitenav-inner{max-width:1200px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:6px;height:46px;overflow:hidden}
+.nav-logo{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:#3b82f6;white-space:nowrap;flex-shrink:0;text-decoration:none;margin-right:6px}
+.nav-logo span{color:var(--text3)}
+.nav-links{display:flex;flex:1;min-width:0;gap:1px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;white-space:nowrap;padding-right:10px}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-link{padding:5px 10px;border-radius:6px;font-size:12px;font-weight:600;color:var(--text2);text-decoration:none;white-space:nowrap;transition:all .15s}
+.nav-link:hover{background:var(--surface2);color:var(--text)}
+.nav-link.active{background:#1d4ed8;color:#fff}
+@media(max-width:640px){.nav-link{font-size:11px;padding:4px 8px}}
+@keyframes pgFade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+main>*{animation:pgFade .3s ease both}
+main>*:nth-child(2){animation-delay:.05s}
+main>*:nth-child(3){animation-delay:.1s}
+main>*:nth-child(4){animation-delay:.15s}
+</style>
+<link rel="stylesheet" href="mobile.css">
+<script>document.documentElement.setAttribute('data-theme',localStorage.getItem('theme')||'dark');</script>
+<link rel="manifest" href="/manifest.json">
+</head>
+<body>
+<nav class="sitenav">
+  <div class="sitenav-inner">
+    <a class="nav-logo" href="index.html">⚡</a>
+    <div class="nav-links">
+      <a class="nav-link" href="index.html">🏠 Home</a>
+      <a class="nav-link" href="mdm.html">🧾 Documentation</a>
+      <a class="nav-link active" href="calculators.html">🧮 Decision Support</a>
+      <a class="nav-link" href="rsi.html">🚨 Resuscitation</a>
+      <a class="nav-link" href="algorithms.html">🔀 Algorithms</a>
+      <a class="nav-link" href="neurohub.html">🧠 Neuro Hub</a>
+      <a class="nav-link" href="service-agreements.html">📑 Service Agreements</a>
+      <a class="nav-link" href="ed-phone-directory.html">📞 Directory</a>
+      <a class="nav-link" href="links.html">🔗 Links</a>
+    </div>
+  </div>
+</nav>
+
+<header>
+  <div class="header-inner">
+    <div class="logo"><span>🌀</span><h1>Vertigo Helper</h1></div>
+    <p class="subtitle">Acute Vertigo Diagnostic Algorithm &mdash; GRACE-3 based step-by-step decision support</p>
+  </div>
+</header>
+
+<main>
+
+  <div class="disclaimer">
+    <strong>Clinical Disclaimer:</strong> This tool is a decision-support aid only and does not replace physician assessment. Always apply clinical judgment. Based on GRACE-3 guidelines and expert consensus.
+  </div>
+
+  <!-- ===== STEP 1: RED FLAG SCREENING ===== -->
+  <div id="step1" class="vertigo-step active">
+    <div class="section-label">Step 1 &mdash; Screen for Central Features (Red Flags)</div>
+    <div class="card">
+      <div class="card-head">
+        <span class="flow-step-num" style="background:#dc2626;color:#fff">1</span>
+        Red Flag Screening
+      </div>
+      <div class="card-body">
+        <p style="font-size:12px;color:var(--text3);margin-bottom:12px">
+          Check <strong style="color:var(--text)">all</strong> that apply. If <strong style="color:#f87171">any</strong> are present, a central cause is suspected.
+        </p>
+
+        <label class="criterion" for="rf0">
+          <input type="checkbox" id="rf0" onchange="evaluateRedFlags()">
+          <span class="criterion-label">Focal weakness or paresthesia (face or limbs)</span>
+        </label>
+        <label class="criterion" for="rf1">
+          <input type="checkbox" id="rf1" onchange="evaluateRedFlags()">
+          <span class="criterion-label">
+            Any of the "Deadly D's": Diplopia, Dysarthria, Dysmetria, Dysphonia, Dysphagia
+            <span class="info-tip" tabindex="0" role="button" aria-label="Info">i<span class="tip-content"><strong>The Deadly D's</strong>Diplopia &mdash; double vision<br>Dysarthria &mdash; slurred speech<br>Dysmetria &mdash; inability to judge distance/scale of movement<br>Dysphonia &mdash; difficulty producing voice<br>Dysphagia &mdash; difficulty swallowing</span></span>
+          </span>
+        </label>
+        <label class="criterion" for="rf2">
+          <input type="checkbox" id="rf2" onchange="evaluateRedFlags()">
+          <span class="criterion-label">Inability to stand or walk unaided (new onset)</span>
+        </label>
+        <label class="criterion" for="rf3">
+          <input type="checkbox" id="rf3" onchange="evaluateRedFlags()">
+          <span class="criterion-label">Spontaneous purely vertical or torsional nystagmus at rest</span>
+        </label>
+        <label class="criterion" for="rf4">
+          <input type="checkbox" id="rf4" onchange="evaluateRedFlags()">
+          <span class="criterion-label">New significant, sustained headache or neck pain</span>
+        </label>
+
+        <div id="rf-alert" style="display:none">
+          <div class="alert-result danger">
+            <h3>🛑 STOP: Central Cause Suspected</h3>
+            <p>Stroke, hemorrhage, or dissection must be ruled out. <strong>Do not proceed with peripheral vertigo workup.</strong></p>
+            <ul>
+              <li>Activate stroke protocol</li>
+              <li>Emergent CT/CTA head and neck</li>
+              <li>Consider MRI with DWI if available and patient is stable</li>
+              <li>Neurology / stroke team consultation</li>
+              <li>Monitor for clinical deterioration</li>
+            </ul>
+          </div>
+        </div>
+
+        <button class="none-btn" id="rf-none-btn" onclick="proceedToStep2()">
+          None of the above &mdash; Proceed to Step 2 &rarr;
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== STEP 2: CATEGORIZE VERTIGO ===== -->
+  <div id="step2" class="vertigo-step">
+    <div class="section-label">Step 2 &mdash; Categorize the Vertigo</div>
+    <div class="card">
+      <div class="card-head">
+        <span class="flow-step-num" style="background:#3b82f6;color:#fff">2</span>
+        Timing, Triggers &amp; Nystagmus
+      </div>
+      <div class="card-body">
+        <p style="font-size:12px;color:var(--text3);margin-bottom:14px">
+          Select the category that best matches the patient's presentation.
+        </p>
+
+        <div class="radio-group">
+          <label>Vertigo Pattern</label>
+
+          <label class="radio-option" for="cat-a">
+            <input type="radio" name="vertigo-cat" id="cat-a" onchange="selectCategory('A')">
+            <span>
+              <strong style="color:var(--text)">A &mdash; Triggered Episodic Vertigo (t-EVS / BPPV likely)</strong><br>
+              Short episodes (&lt;2 min), initiated by head movement (e.g., rolling in bed), <strong>no</strong> nystagmus at rest
+            </span>
+          </label>
+
+          <label class="radio-option" for="cat-b">
+            <input type="radio" name="vertigo-cat" id="cat-b" onchange="selectCategory('B')">
+            <span>
+              <strong style="color:var(--text)">B &mdash; Acute Vestibular Syndrome (AVS)</strong><br>
+              Constant, ongoing vertigo (hours to days), worsened by head movement, <strong>with</strong> spontaneous or gaze-evoked nystagmus at rest
+            </span>
+          </label>
+
+          <label class="radio-option" for="cat-c">
+            <input type="radio" name="vertigo-cat" id="cat-c" onchange="selectCategory('C')">
+            <span>
+              <strong style="color:var(--text)">C &mdash; Acute Imbalance</strong><br>
+              Constant dizziness, but <strong>no</strong> nystagmus at rest
+            </span>
+          </label>
+        </div>
+
+        <div id="cat-result"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CATEGORY A: BPPV RESULT ===== -->
+  <div id="result-a" class="vertigo-step">
+    <div class="alert-result safe">
+      <h3>&#x2705; Triggered Episodic Vertigo &mdash; BPPV Likely</h3>
+      <p style="margin-top:8px">
+        <strong style="color:#fff">Perform Dix-Hallpike Test</strong>
+        <span class="info-tip" tabindex="0" role="button" aria-label="Dix-Hallpike instructions">i<span class="tip-content"><strong>Dix-Hallpike Maneuver</strong>1. Patient seated, turn head 45&deg; to one side<br>2. Rapidly lower to supine with head hanging 20&deg; off table edge<br>3. Observe eyes for upbeat-torsional nystagmus (latency 2&ndash;10s, fatigues in &lt;60s)<br>4. Positive = affected side is the downward ear<br>5. Repeat for opposite side if first negative</span></span>
+      </p>
+      <p style="margin-top:6px"><strong style="color:#fff">Positive Dix-Hallpike &rarr; Diagnosis: Posterior Canal BPPV</strong></p>
+      <p>Treatment: Perform <strong style="color:#fff">Epley Maneuver</strong> (canalith repositioning). Discharge with return precautions.</p>
+      <div class="excl-bar">
+        <strong>&#x26A0;&#xFE0F; Do NOT perform the HINTS exam for this category.</strong>
+        HINTS is validated only for Acute Vestibular Syndrome (constant vertigo with nystagmus at rest). In episodic positional vertigo, HINTS results are unreliable and may be falsely reassuring. CT scan is also not indicated for isolated BPPV.
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CATEGORY C: GAIT ASSESSMENT ===== -->
+  <div id="result-c" class="vertigo-step">
+    <div class="section-label">Acute Imbalance &mdash; Assess Gait</div>
+    <div class="card">
+      <div class="card-head">
+        <span class="flow-step-num" style="background:#f59e0b;color:#fff">!</span>
+        Gait Assessment
+      </div>
+      <div class="card-body">
+        <p style="font-size:12px;color:var(--text3);margin-bottom:12px">
+          Patient has constant dizziness without nystagmus. Assess for objective gait instability.
+        </p>
+
+        <div class="radio-group">
+          <label>Gait Finding</label>
+          <label class="radio-option" for="gait-abn">
+            <input type="radio" name="gait" id="gait-abn" onchange="selectGait('abnormal')">
+            <span><strong style="color:#f87171">Objective new difficulty walking / Cannot walk unaided</strong></span>
+          </label>
+          <label class="radio-option" for="gait-norm">
+            <input type="radio" name="gait" id="gait-norm" onchange="selectGait('normal')">
+            <span><strong style="color:#86efac">Normal gait</strong></span>
+          </label>
+        </div>
+
+        <div id="gait-result"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== STEP 3: HINTS+ EXAM ===== -->
+  <div id="step3" class="vertigo-step">
+    <div class="section-label">Step 3 &mdash; HINTS+ Examination</div>
+    <div class="card">
+      <div class="card-head">
+        <span class="flow-step-num" style="background:#a78bfa;color:#fff">3</span>
+        HINTS+ Battery (4 Components)
+      </div>
+      <div class="card-body">
+        <p style="font-size:12px;color:var(--text3);margin-bottom:4px">
+          Only perform if nystagmus is present at rest.
+          <strong style="color:var(--text)">All 4 must be peripheral</strong> to safely diagnose vestibular neuritis.
+          <strong style="color:#f87171">Any single central finding</strong> warrants stroke workup.
+        </p>
+
+        <div class="hints-grid">
+          <!-- HIT -->
+          <div class="hints-test">
+            <div class="hints-test-label">
+              1. Head Impulse Test (HIT)
+              <span class="info-tip" tabindex="0" role="button" aria-label="HIT instructions">i<span class="tip-content"><strong>Head Impulse Test</strong>1. Patient fixates on your nose<br>2. Rapidly turn head ~20&deg; to each side<br>3. <em>Abnormal</em> = corrective saccade (eyes lag behind, then "catch up")<br>4. In vestibular neuritis, HIT is abnormal toward the affected side<br>5. A <strong>normal</strong> HIT in AVS is <em>concerning for central cause</em></span></span>
+            </div>
+            <select id="hint-hit" onchange="updateHINTS()">
+              <option value="">-- Select finding --</option>
+              <option value="peripheral">Abnormal (catch-up saccade present)</option>
+              <option value="central">Normal (eyes stay fixed on target)</option>
+            </select>
+            <div id="hit-badge"></div>
+          </div>
+
+          <!-- NYSTAGMUS -->
+          <div class="hints-test">
+            <div class="hints-test-label">2. Nystagmus (Gaze Testing)</div>
+            <select id="hint-nyst" onchange="updateHINTS()">
+              <option value="">-- Select finding --</option>
+              <option value="peripheral">Unidirectional horizontal</option>
+              <option value="central">Bidirectional (changes with gaze) or vertical</option>
+            </select>
+            <div id="nyst-badge"></div>
+          </div>
+
+          <!-- SKEW -->
+          <div class="hints-test">
+            <div class="hints-test-label">3. Test of Skew (Alternate Cover)</div>
+            <select id="hint-skew" onchange="updateHINTS()">
+              <option value="">-- Select finding --</option>
+              <option value="peripheral">No vertical skew deviation</option>
+              <option value="central">Vertical or diagonal skew deviation present</option>
+            </select>
+            <div id="skew-badge"></div>
+          </div>
+
+          <!-- HEARING -->
+          <div class="hints-test">
+            <div class="hints-test-label">4. Plus: Hearing (Finger Rub)</div>
+            <select id="hint-hear" onchange="updateHINTS()">
+              <option value="">-- Select finding --</option>
+              <option value="peripheral">No new hearing loss</option>
+              <option value="central">New unilateral hearing loss</option>
+            </select>
+            <div id="hear-badge"></div>
+          </div>
+        </div>
+
+        <div id="hints-result"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== RESET ===== -->
+  <button class="master-reset" onclick="resetAll()">&#x21BB; Reset / New Patient</button>
+
+</main>
+
+<script>
+(function () {
+  'use strict';
+
+  // ── STEP 1: RED FLAGS ──────────────────────────────────────
+  function evaluateRedFlags() {
+    var any = false;
+    for (var i = 0; i < 5; i++) {
+      if (document.getElementById('rf' + i).checked) { any = true; break; }
+    }
+    var alertEl = document.getElementById('rf-alert');
+    var noneBtn = document.getElementById('rf-none-btn');
+    if (any) {
+      alertEl.style.display = 'block';
+      noneBtn.style.display = 'none';
+      hideStep('step2');
+      hideStep('step3');
+      hideStep('result-a');
+      hideStep('result-c');
+    } else {
+      alertEl.style.display = 'none';
+      noneBtn.style.display = 'block';
+    }
+  }
+
+  function proceedToStep2() {
+    showStep('step2');
+    setTimeout(function () {
+      document.getElementById('step2').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 50);
+  }
+
+  // ── STEP 2: CATEGORIZE ─────────────────────────────────────
+  function selectCategory(cat) {
+    hideStep('result-a');
+    hideStep('result-c');
+    hideStep('step3');
+    document.getElementById('cat-result').innerHTML = '';
+
+    var targetId;
+    if (cat === 'A') {
+      targetId = 'result-a';
+      showStep('result-a');
+    } else if (cat === 'B') {
+      targetId = 'step3';
+      showStep('step3');
+      document.getElementById('cat-result').innerHTML =
+        '<div style="margin-top:10px;font-size:12px;color:var(--text-blue);font-weight:600">' +
+        '&darr; Proceed to Step 3: HINTS+ Examination below</div>';
+    } else if (cat === 'C') {
+      targetId = 'result-c';
+      showStep('result-c');
+    }
+
+    if (targetId) {
+      setTimeout(function () {
+        document.getElementById(targetId).scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 50);
+    }
+  }
+
+  // ── CATEGORY C: GAIT ───────────────────────────────────────
+  function selectGait(result) {
+    var el = document.getElementById('gait-result');
+    if (result === 'abnormal') {
+      el.innerHTML =
+        '<div class="alert-result danger" style="margin-top:14px">' +
+          '<h3>\uD83D\uDED1 High Risk for Stroke</h3>' +
+          '<p><strong>Acute Imbalance Syndrome.</strong> New gait instability without nystagmus in a patient with acute dizziness is highly concerning for a central cause (posterior circulation stroke).</p>' +
+          '<ul>' +
+            '<li>Do <strong>not</strong> perform HINTS (no nystagmus)</li>' +
+            '<li>Emergent CT/CTA head and neck</li>' +
+            '<li>MRI with DWI if available</li>' +
+            '<li>Neurology / stroke team consultation</li>' +
+          '</ul>' +
+        '</div>';
+    } else {
+      el.innerHTML =
+        '<div class="alert-result safe" style="margin-top:14px">' +
+          '<h3>&#x2705; Low Risk for Stroke</h3>' +
+          '<p>Normal gait with no nystagmus. Consider general medical causes:</p>' +
+          '<ul>' +
+            '<li>Orthostatic hypotension</li>' +
+            '<li>Medication side effects (antihypertensives, anticonvulsants, sedatives)</li>' +
+            '<li>Vestibular migraine</li>' +
+            '<li>Anxiety / hyperventilation</li>' +
+            '<li>Metabolic derangement (hypoglycemia, electrolyte abnormalities)</li>' +
+          '</ul>' +
+        '</div>';
+    }
+  }
+
+  // ── STEP 3: HINTS+ ────────────────────────────────────────
+  var COMP_IDS = ['hit', 'nyst', 'skew', 'hear'];
+
+  function updateHINTS() {
+    var allAnswered = true;
+    var anyCentral = false;
+
+    COMP_IDS.forEach(function (comp) {
+      var val = document.getElementById('hint-' + comp).value;
+      var badge = document.getElementById(comp + '-badge');
+      if (!val) {
+        allAnswered = false;
+        badge.innerHTML = '';
+      } else if (val === 'peripheral') {
+        badge.innerHTML = '<span class="test-badge test-peripheral">Peripheral</span>';
+      } else {
+        anyCentral = true;
+        badge.innerHTML = '<span class="test-badge test-central">Central</span>';
+      }
+    });
+
+    var resultEl = document.getElementById('hints-result');
+    if (!allAnswered) {
+      var answered = 0;
+      COMP_IDS.forEach(function (c) { if (document.getElementById('hint-' + c).value) answered++; });
+      resultEl.innerHTML = '<div class="result-neutral">' + answered + '/4 components answered &mdash; complete all to see result</div>';
+      return;
+    }
+
+    if (anyCentral) {
+      resultEl.innerHTML =
+        '<div class="alert-result danger" style="margin-top:16px">' +
+          '<h3>\uD83D\uDED1 HINTS+ Central &mdash; Possible Stroke</h3>' +
+          '<p>One or more HINTS+ components suggest a <strong>central</strong> cause (posterior circulation stroke).</p>' +
+          '<ul>' +
+            '<li>Emergent MRI with DWI (preferred) or CT/CTA</li>' +
+            '<li>Neurology / stroke team consultation</li>' +
+            '<li>Do <strong>not</strong> discharge &mdash; pursue vascular imaging</li>' +
+            '<li>Note: Early MRI may be falsely negative in first 24&ndash;48h; clinical suspicion should guide management</li>' +
+          '</ul>' +
+        '</div>';
+    } else {
+      resultEl.innerHTML =
+        '<div class="alert-result safe" style="margin-top:16px">' +
+          '<h3>&#x2705; HINTS+ Peripheral &mdash; Vestibular Neuritis</h3>' +
+          '<p>All 4 HINTS+ components are consistent with a <strong>peripheral</strong> vestibular cause. Imaging is not routinely indicated.</p>' +
+          '<ul>' +
+            '<li>Symptomatic treatment: meclizine, ondansetron PRN</li>' +
+            '<li>Short course of vestibular suppressants only (24&ndash;72h)</li>' +
+            '<li>Consider short steroid course (controversial)</li>' +
+            '<li>ENT or neurology follow-up within 1 week</li>' +
+            '<li>Return precautions: new focal symptoms, worsening gait, persistent vomiting</li>' +
+          '</ul>' +
+        '</div>';
+    }
+  }
+
+  // ── HELPERS ────────────────────────────────────────────────
+  function showStep(id) {
+    document.getElementById(id).classList.add('active');
+  }
+
+  function hideStep(id) {
+    var el = document.getElementById(id);
+    el.classList.remove('active');
+  }
+
+  // ── RESET ──────────────────────────────────────────────────
+  function resetAll() {
+    // Red flags
+    for (var i = 0; i < 5; i++) {
+      document.getElementById('rf' + i).checked = false;
+    }
+    document.getElementById('rf-alert').style.display = 'none';
+    document.getElementById('rf-none-btn').style.display = 'block';
+
+    // Category
+    document.querySelectorAll('input[name="vertigo-cat"]').forEach(function (r) { r.checked = false; });
+    document.getElementById('cat-result').innerHTML = '';
+
+    // Gait
+    document.querySelectorAll('input[name="gait"]').forEach(function (r) { r.checked = false; });
+    document.getElementById('gait-result').innerHTML = '';
+
+    // HINTS
+    COMP_IDS.forEach(function (comp) {
+      document.getElementById('hint-' + comp).value = '';
+      document.getElementById(comp + '-badge').innerHTML = '';
+    });
+    document.getElementById('hints-result').innerHTML = '';
+
+    // Hide all except step 1
+    hideStep('step2');
+    hideStep('step3');
+    hideStep('result-a');
+    hideStep('result-c');
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ── EXPOSE ─────────────────────────────────────────────────
+  window.evaluateRedFlags = evaluateRedFlags;
+  window.proceedToStep2 = proceedToStep2;
+  window.selectCategory = selectCategory;
+  window.selectGait = selectGait;
+  window.updateHINTS = updateHINTS;
+  window.resetAll = resetAll;
+})();
+</script>
+
+<script src="search-index.js"></script>
+<script id="shared-nav-search"></script>
+
+<button id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">🌙</button>
+<script src="theme.js?v=3"></script>
+<script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
+</body>
+</html>
