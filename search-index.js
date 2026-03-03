@@ -33,6 +33,7 @@ const SEARCH_INDEX = [
 
   // ── CORE PAGES ──────────────────────────────────────────────────────────
   {type:'page',i:'🧾',t:'MDM Builder',s:'mdmccp  ·  mdmsob  ·  mdmabd  ·  mdmha  ·  mdmfever  ·  chief complaint documentation builder',g:'Reference',gc:'t-phrase',u:'mdm.html'},
+  {type:'page',i:'📋',t:'Service Request Board',s:'service request facility maintenance equipment housekeeping IT supply',g:'Reference',gc:'t-phrase',u:'service-requests.html'},
 
   // ── DOTPHRASES ─────────────────────────────────────────────────────────
   {type:'phrase',i:'📋',t:'PE Rule-Out',s:'.nope  ·  Chest Pain  ·  chest pain dyspnea SOB shortness of breath',g:'Chest Pain',gc:'t-phrase',u:'dotphrase.html'},

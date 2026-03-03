@@ -1,4 +1,4 @@
-const CACHE = 'em-toolkit-v3';
+const CACHE = 'em-toolkit-v4';
 
 const ASSETS = [
   '/index.html',
@@ -15,6 +15,7 @@ const ASSETS = [
   '/roadmap.html',
   '/ed-phone-directory.html',
   '/service-agreements.html',
+  '/service-requests.html',
   '/agreements.html',
   '/theme.css',
   '/mobile.css',

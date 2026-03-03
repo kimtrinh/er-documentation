@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="stylesheet" href="theme.css?v=2"/>
+<title>Service Requests — ER Documentation</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#080f1a;--surface:#0d1829;--surface2:#111f35;--surface3:#162540;--border:#1a2d48;--border2:#243d5c;--text:#e8f0fc;--text2:#8fa8c8;--text3:#4a6280;--text-blue:#93c5fd;--text-blue-bright:#bfdbfe;--blue:#3b82f6;--blue2:#1d4ed8;--blue3:#0d2038;--green:#22c55e;--green2:#15803d;--green3:#0d2d1f;--amber:#f59e0b;--red:#ef4444;--purple:#a78bfa;--cyan:#22d3ee;}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
+
+/* HEADER */
+header{background:linear-gradient(135deg,var(--surface),var(--bg));border-bottom:1px solid var(--border2);padding:24px 24px 20px}
+.header-inner{max-width:900px;margin:0 auto;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.header-left .logo{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.header-left .logo span{font-size:24px}
+.header-left .logo h1{font-size:20px;font-weight:800;color:var(--text)}
+.header-left .subtitle{font-size:13px;color:var(--text3);margin-left:34px}
+.suggest-btn{padding:10px 20px;background:#3b82f6;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0}
+.suggest-btn:hover{background:#2563eb}
+
+main{max-width:900px;margin:0 auto;padding:24px 24px 80px}
+
+/* FILTER BAR */
+.filter-bar{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;align-items:center}
+.filter-tab{padding:7px 16px;border-radius:20px;border:1px solid var(--border);background:var(--surface);color:var(--text2);font-size:13px;font-weight:500;cursor:pointer;transition:all .2s}
+.filter-tab:hover{border-color:#3b82f6;color:var(--text)}
+.filter-tab.active{background:#3b82f6;border-color:#3b82f6;color:#fff}
+.filter-divider{color:var(--border);font-size:16px;margin:0 2px;user-select:none}
+.sort-select{padding:7px 12px;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text2);font-size:13px;cursor:pointer;outline:none}
+.sort-select:focus{border-color:#3b82f6}
+.sort-select option{background:var(--surface)}
+.filter-spacer{flex:1}
+
+/* REQUEST LIST */
+.request-list{display:flex;flex-direction:column;gap:10px}
+
+/* CARDS */
+.item-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:0;transition:border-color .15s,transform .1s;cursor:default;box-shadow:0 1px 4px rgba(0,0,0,.2);overflow:hidden}
+.item-card:hover{border-color:#3b82f6;transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,0,0,.4)}
+.item-top{display:flex;align-items:flex-start;gap:10px;padding:14px 16px}
+.vote-btn{display:flex;flex-direction:column;align-items:center;gap:2px;flex-shrink:0;cursor:pointer;user-select:none;padding:6px 8px;border-radius:8px;border:1px solid var(--border);background:var(--bg);transition:all .2s;min-width:44px}
+.vote-btn:hover{border-color:#3b82f6;background:var(--border2)}
+.vote-btn.voted{border-color:#3b82f6;background:var(--border2)}
+.vote-btn .chevron{font-size:10px;color:#475569;line-height:1}
+.vote-btn.voted .chevron{color:#60a5fa}
+.vote-count{font-size:15px;font-weight:800;color:var(--text2);line-height:1}
+.vote-btn.voted .vote-count{color:#60a5fa}
+.item-body{flex:1;min-width:0}
+.item-title{font-size:14px;font-weight:600;color:var(--text);line-height:1.4;margin-bottom:4px}
+.item-desc{font-size:12px;color:var(--text3);line-height:1.5;margin-bottom:8px}
+.item-meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.tag{display:inline-block;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:600}
+.item-submitter{font-size:11px;color:var(--border2);margin-left:auto}
+.item-time{font-size:11px;color:var(--text3)}
+
+/* STATUS BADGES */
+.tag-open{background:#1e3a0a;color:#86efac;border:1px solid #16a34a}
+.tag-inprogress{background:#0d2038;color:#93c5fd;border:1px solid #1d4ed8}
+.tag-resolved{background:var(--surface2);color:var(--text3);border:1px solid var(--border)}
+
+/* PRIORITY BADGES */
+.tag-priority-low{background:var(--surface2);color:var(--text3);border:1px solid var(--border)}
+.tag-priority-medium{background:#1c1400;color:#fde68a;border:1px solid #ca8a04}
+.tag-priority-high{background:#2d0a0a;color:#fca5a5;border:1px solid #dc2626}
+.tag-priority-urgent{background:#4c0519;color:#fda4af;border:1px solid #e11d48;animation:urgentPulse 2s ease-in-out infinite}
+@keyframes urgentPulse{0%,100%{opacity:1}50%{opacity:.6}}
+
+/* LOCATION BADGES */
+.tag-location-omc{background:rgba(59,130,246,.12);color:#93c5fd;border:1px solid rgba(59,130,246,.3)}
+.tag-location-fmc{background:rgba(34,197,94,.12);color:#86efac;border:1px solid rgba(34,197,94,.3)}
+
+/* CATEGORY BADGE */
+.tag-category{background:var(--surface2);color:var(--text2);border:1px solid var(--border)}
+.tag-room{background:var(--bg);color:var(--text3);border:1px solid var(--border);font-size:10px}
+
+/* STATUS CLICKABLE */
+.tag-status{cursor:pointer;transition:all .2s}
+.tag-status:hover{filter:brightness(1.2)}
+
+/* COMMENT TOGGLE */
+.comment-toggle{padding:8px 16px;font-size:12px;color:var(--text3);cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--border);transition:color .15s}
+.comment-toggle:hover{color:var(--text)}
+.comment-arrow{font-size:10px;transition:transform .2s}
+.comment-arrow.open{transform:rotate(180deg)}
+
+/* COMMENTS SECTION */
+.comments-section{padding:12px 16px;border-top:1px solid var(--border);background:var(--bg)}
+.comments-list{display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
+.comment-bubble{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 12px}
+.comment-author-line{font-size:11px;color:var(--text3);margin-bottom:2px;display:flex;justify-content:space-between}
+.comment-text{font-size:13px;color:var(--text);line-height:1.5}
+.comment-form{display:flex;gap:6px;flex-wrap:wrap}
+.comment-input{flex:2;min-width:120px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-size:13px;font-family:inherit;outline:none;transition:border-color .2s}
+.comment-input:focus{border-color:#3b82f6}
+.comment-author-input{flex:1;min-width:80px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-size:13px;font-family:inherit;outline:none;transition:border-color .2s}
+.comment-author-input:focus{border-color:#3b82f6}
+.comment-submit{padding:8px 14px;background:#3b82f6;color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap}
+.comment-submit:hover{background:#2563eb}
+.comment-submit:disabled{background:var(--border2);color:var(--border);cursor:not-allowed}
+.no-comments{font-size:12px;color:var(--text3);padding:4px 0;font-style:italic}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:1000;display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .2s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px;width:100%;max-width:500px;max-height:90vh;overflow-y:auto;transform:translateY(16px);transition:transform .2s}
+.modal-overlay.open .modal{transform:translateY(0)}
+.modal h2{font-size:18px;font-weight:800;color:var(--text);margin-bottom:4px}
+.modal .modal-sub{font-size:13px;color:var(--text3);margin-bottom:22px}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.form-group input,.form-group textarea,.form-group select{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-size:14px;font-family:inherit;outline:none;transition:border-color .2s;resize:none}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:#3b82f6}
+.form-group textarea{min-height:90px}
+.tag-selector{display:flex;gap:6px;flex-wrap:wrap}
+.tag-opt{padding:4px 12px;border-radius:20px;border:1px solid var(--border);background:var(--bg);color:var(--text3);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s}
+.tag-opt:hover{border-color:#3b82f6;color:var(--text-blue)}
+.tag-opt.selected{border-color:#3b82f6;background:var(--border2);color:var(--text-blue)}
+.modal-footer{display:flex;gap:10px;justify-content:flex-end;margin-top:22px}
+.btn-cancel{padding:9px 18px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:14px;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-cancel:hover{background:var(--border);color:var(--text)}
+.btn-submit{padding:9px 20px;border-radius:8px;border:none;background:#3b82f6;color:#fff;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s}
+.btn-submit:hover{background:#2563eb}
+.btn-submit:disabled{background:var(--border2);color:var(--border);cursor:not-allowed}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--surface);border:1px solid #22c55e;color:#86efac;padding:12px 20px;border-radius:10px;font-size:13px;font-weight:600;z-index:2000;transform:translateY(80px);opacity:0;transition:all .3s}
+.toast.show{transform:translateY(0);opacity:1}
+
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:48px 16px;color:var(--text3);font-size:13px}
+.empty-state .icon{font-size:36px;margin-bottom:12px;opacity:.4}
+.empty-state p{margin-top:6px}
+
+/* LOADING STATE */
+.loading{text-align:center;padding:48px 16px;color:var(--text3);font-size:13px}
+.loading .spinner{display:inline-block;width:24px;height:24px;border:3px solid var(--border);border-top-color:#3b82f6;border-radius:50%;animation:spin .8s linear infinite;margin-bottom:12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* CONFIG BANNER */
+.config-banner{background:#1c1400;border:1px solid #ca8a04;border-radius:10px;padding:14px 18px;margin-bottom:20px;font-size:13px;color:#fde68a;line-height:1.5}
+.config-banner code{background:rgba(0,0,0,.3);padding:2px 6px;border-radius:4px;font-size:12px}
+
+/* LIGHT MODE OVERRIDES */
+html[data-theme="light"] .tag-open{background:#f0fdf4;color:#15803d;border-color:#86efac}
+html[data-theme="light"] .tag-inprogress{background:#dbeafe;color:#1d4ed8;border-color:#93c5fd}
+html[data-theme="light"] .tag-resolved{background:#f1f5f9;color:#64748b;border-color:#cbd5e1}
+html[data-theme="light"] .tag-priority-low{background:#f1f5f9;color:#64748b;border-color:#cbd5e1}
+html[data-theme="light"] .tag-priority-medium{background:#fefce8;color:#92400e;border-color:#fde047}
+html[data-theme="light"] .tag-priority-high{background:#fef2f2;color:#991b1b;border-color:#fca5a5}
+html[data-theme="light"] .tag-priority-urgent{background:#fff1f2;color:#be123c;border-color:#fda4af}
+html[data-theme="light"] .tag-location-omc{background:#dbeafe;color:#1d4ed8;border-color:#93c5fd}
+html[data-theme="light"] .tag-location-fmc{background:#f0fdf4;color:#15803d;border-color:#86efac}
+html[data-theme="light"] .comment-bubble{background:#f8fafc;border-color:#e2e8f0}
+html[data-theme="light"] .tag-category{background:#f1f5f9;color:#475569;border-color:#cbd5e1}
+html[data-theme="light"] .config-banner{background:#fefce8;border-color:#fde047;color:#92400e}
+
+/* NAV */
+.sitenav{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;font-family:'DM Sans',system-ui,sans-serif}
+.sitenav-inner{max-width:1200px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:6px;height:46px;overflow:hidden}
+.nav-logo{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:#3b82f6;white-space:nowrap;flex-shrink:0;text-decoration:none;margin-right:6px}
+.nav-logo span{color:var(--text3)}
+.nav-links{display:flex;flex:1;min-width:0;gap:1px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;white-space:nowrap;padding-right:10px}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-link{padding:5px 10px;border-radius:6px;font-size:12px;font-weight:600;color:var(--text2);text-decoration:none;white-space:nowrap;transition:all .15s}
+.nav-link:hover{background:var(--surface2);color:var(--text)}
+.nav-link.active{background:#1d4ed8;color:#fff}
+@media(max-width:640px){.nav-link{font-size:11px;padding:4px 8px}}
+
+/* ANIMATIONS */
+@keyframes pgFade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+main>*{animation:pgFade .3s ease both}
+main>*:nth-child(2){animation-delay:.05s}
+main>*:nth-child(3){animation-delay:.1s}
+main>*:nth-child(4){animation-delay:.15s}
+
+@media(max-width:640px){
+  .filter-bar{gap:6px}
+  .filter-tab{padding:5px 12px;font-size:12px}
+  .sort-select{font-size:12px;padding:5px 8px}
+  .item-top{padding:12px}
+  .comment-form{flex-direction:column}
+  .comment-author-input{min-width:100%}
+}
+</style>
+<link rel="stylesheet" href="mobile.css">
+<script>document.documentElement.setAttribute('data-theme',localStorage.getItem('theme')||'dark');</script>
+<link rel="manifest" href="/manifest.json">
+</head>
+<body>
+<nav class="sitenav">
+  <div class="sitenav-inner">
+    <a class="nav-logo" href="index.html">⚡</a>
+    <div class="nav-links">
+      <a class="nav-link" href="index.html">🏠 Home</a>
+      <a class="nav-link" href="mdm.html">🧾 Documentation</a>
+      <a class="nav-link" href="calculators.html">🧮 Decision Support</a>
+      <a class="nav-link" href="rsi.html">🚨 Resuscitation</a>
+      <a class="nav-link" href="algorithms.html">🔀 Algorithms</a>
+      <a class="nav-link" href="neurohub.html">🧠 Neuro Hub</a>
+      <a class="nav-link" href="service-agreements.html">📑 Service Agreements</a>
+      <a class="nav-link" href="ed-phone-directory.html">📞 Directory</a>
+      <a class="nav-link active" href="links.html">🔗 Links</a>
+    </div>
+  </div>
+</nav>
+<header>
+  <div class="header-inner">
+    <div class="header-left">
+      <div class="logo"><span>📋</span><h1>Service Requests</h1></div>
+      <p class="subtitle">Submit and track ED service requests for FMC & OMC</p>
+    </div>
+    <button class="suggest-btn" onclick="openModal()">+ New Request</button>
+  </div>
+</header>
+
+<main>
+  <div id="config-banner"></div>
+
+  <!-- FILTER BAR -->
+  <div class="filter-bar">
+    <button class="filter-tab active" data-filter="location" data-value="all" onclick="filterLocation('all',this)">All</button>
+    <button class="filter-tab" data-filter="location" data-value="OMC" onclick="filterLocation('OMC',this)">OMC</button>
+    <button class="filter-tab" data-filter="location" data-value="FMC" onclick="filterLocation('FMC',this)">FMC</button>
+
+    <span class="filter-divider">|</span>
+
+    <select class="sort-select" onchange="filterCategory(this.value)">
+      <option value="all">All Categories</option>
+      <option value="Equipment">Equipment</option>
+      <option value="Housekeeping">Housekeeping</option>
+      <option value="IT">IT</option>
+      <option value="Maintenance">Maintenance</option>
+      <option value="Supply">Supply</option>
+      <option value="Other">Other</option>
+    </select>
+
+    <select class="sort-select" onchange="filterStatus(this.value)">
+      <option value="all">All Status</option>
+      <option value="open">Open</option>
+      <option value="inprogress">In Progress</option>
+      <option value="resolved">Resolved</option>
+    </select>
+
+    <div class="filter-spacer"></div>
+
+    <select class="sort-select" onchange="sortItems(this.value)">
+      <option value="newest">Newest First</option>
+      <option value="votes">Most Voted</option>
+    </select>
+  </div>
+
+  <!-- REQUEST LIST -->
+  <div id="request-list" class="request-list">
+    <div class="loading"><div class="spinner"></div><br>Loading requests...</div>
+  </div>
+</main>
+
+<!-- NEW REQUEST MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="handleOverlayClick(event)">
+  <div class="modal">
+    <h2>New Service Request</h2>
+    <p class="modal-sub">Submit a facility request for the ED</p>
+
+    <div class="form-group">
+      <label>Location *</label>
+      <div class="tag-selector" id="location-selector">
+        <span class="tag-opt" onclick="selectOpt('location',this,'OMC')">OMC</span>
+        <span class="tag-opt" onclick="selectOpt('location',this,'FMC')">FMC</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Room</label>
+      <input type="text" id="input-room" placeholder="e.g. T-12, Pod A, Room 8" maxlength="30"/>
+    </div>
+
+    <div class="form-group">
+      <label>Request Title *</label>
+      <input type="text" id="input-title" placeholder="e.g. Broken IV pump, Need sharps container" maxlength="100"/>
+    </div>
+
+    <div class="form-group">
+      <label>Description</label>
+      <textarea id="input-desc" placeholder="Provide details about the request..."></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Priority</label>
+      <div class="tag-selector" id="priority-selector">
+        <span class="tag-opt" onclick="selectOpt('priority',this,'Low')">Low</span>
+        <span class="tag-opt selected" onclick="selectOpt('priority',this,'Medium')">Medium</span>
+        <span class="tag-opt" onclick="selectOpt('priority',this,'High')">High</span>
+        <span class="tag-opt" onclick="selectOpt('priority',this,'Urgent')">Urgent</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Category</label>
+      <div class="tag-selector" id="category-selector">
+        <span class="tag-opt" onclick="selectOpt('category',this,'Equipment')">Equipment</span>
+        <span class="tag-opt" onclick="selectOpt('category',this,'Housekeeping')">Housekeeping</span>
+        <span class="tag-opt" onclick="selectOpt('category',this,'IT')">IT</span>
+        <span class="tag-opt" onclick="selectOpt('category',this,'Maintenance')">Maintenance</span>
+        <span class="tag-opt" onclick="selectOpt('category',this,'Supply')">Supply</span>
+        <span class="tag-opt" onclick="selectOpt('category',this,'Other')">Other</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Your Name (optional)</label>
+      <input type="text" id="input-name" placeholder="e.g. Dr. Smith, RN Jones"/>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-submit" id="submit-btn" onclick="submitRequest()">Submit Request</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+// ── FIREBASE SETUP ──────────────────────────────────────────────
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js';
+import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, arrayUnion, arrayRemove, increment, serverTimestamp, query, orderBy, getDoc } from 'https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js';
+
+// ╔═══════════════════════════════════════════════════════════╗
+// ║  FIREBASE CONFIG — Replace with your project's config    ║
+// ║  1. Go to https://console.firebase.google.com            ║
+// ║  2. Create a project (or use existing)                   ║
+// ║  3. Add a web app → copy the config below                ║
+// ║  4. Enable Firestore Database in the console             ║
+// ║  5. Set Firestore rules to allow read/write              ║
+// ╚═══════════════════════════════════════════════════════════╝
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+
+let db = null;
+let firebaseReady = false;
+
+function initFirebase() {
+  try {
+    if (firebaseConfig.apiKey === "YOUR_API_KEY") {
+      document.getElementById('config-banner').innerHTML =
+        '<div class="config-banner">Firebase is not configured yet. To enable shared data, edit <code>service-requests.html</code> and replace the <code>firebaseConfig</code> placeholder with your Firebase project credentials. See the comments in the source code for instructions.</div>';
+      return false;
+    }
+    const app = initializeApp(firebaseConfig);
+    db = getFirestore(app);
+    firebaseReady = true;
+    return true;
+  } catch (e) {
+    console.error('Firebase init error:', e);
+    document.getElementById('config-banner').innerHTML =
+      '<div class="config-banner">Firebase initialization failed. Check your config and console for errors.</div>';
+    return false;
+  }
+}
+
+// ── BROWSER ID (for vote tracking) ──────────────────────────
+function getBrowserId() {
+  let id = localStorage.getItem('sr_browser_id');
+  if (!id) {
+    id = 'b_' + Date.now() + '_' + Math.random().toString(36).substring(2, 9);
+    localStorage.setItem('sr_browser_id', id);
+  }
+  return id;
+}
+const BROWSER_ID = getBrowserId();
+
+// ── STATE ────────────────────────────────────────────────────
+let allRequests = [];
+let currentLocationFilter = 'all';
+let currentCategoryFilter = 'all';
+let currentStatusFilter = 'all';
+let currentSort = 'newest';
+let openComments = new Set();
+let commentsCache = {};
+
+// Form state
+let selectedLocation = null;
+let selectedPriority = 'Medium';
+let selectedCategory = null;
+
+// ── HELPERS ──────────────────────────────────────────────────
+function esc(str) {
+  const d = document.createElement('div');
+  d.textContent = str || '';
+  return d.innerHTML;
+}
+
+function timeAgo(ts) {
+  if (!ts) return '';
+  const date = ts.toDate ? ts.toDate() : new Date(ts);
+  const now = Date.now();
+  const diff = now - date.getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1) return 'just now';
+  if (mins < 60) return mins + 'm ago';
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return hrs + 'h ago';
+  const days = Math.floor(hrs / 24);
+  if (days < 30) return days + 'd ago';
+  const months = Math.floor(days / 30);
+  return months + 'mo ago';
+}
+
+const STATUS_LABELS = { open: 'Open', inprogress: 'In Progress', resolved: 'Resolved' };
+function statusLabel(s) { return STATUS_LABELS[s] || s; }
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3200);
+}
+
+// ── LOAD REQUESTS ────────────────────────────────────────────
+async function loadRequests() {
+  if (!firebaseReady) {
+    document.getElementById('request-list').innerHTML =
+      '<div class="empty-state"><div class="icon">🔧</div><p>Configure Firebase to start using the Service Request Board.</p></div>';
+    return;
+  }
+  try {
+    const q = query(collection(db, 'serviceRequests'), orderBy('createdAt', 'desc'));
+    const snapshot = await getDocs(q);
+    allRequests = [];
+    snapshot.forEach(d => {
+      allRequests.push({ id: d.id, ...d.data() });
+    });
+    renderAll();
+  } catch (e) {
+    console.error('Load error:', e);
+    document.getElementById('request-list').innerHTML =
+      '<div class="empty-state"><div class="icon">⚠️</div><p>Failed to load requests. Check console for errors.</p></div>';
+  }
+}
+
+// ── RENDER ───────────────────────────────────────────────────
+function renderAll() {
+  let filtered = allRequests.filter(r => {
+    if (currentLocationFilter !== 'all' && r.location !== currentLocationFilter) return false;
+    if (currentCategoryFilter !== 'all' && r.category !== currentCategoryFilter) return false;
+    if (currentStatusFilter !== 'all' && r.status !== currentStatusFilter) return false;
+    return true;
+  });
+
+  if (currentSort === 'votes') {
+    filtered.sort((a, b) => (b.votes || 0) - (a.votes || 0));
+  } else {
+    filtered.sort((a, b) => {
+      const ta = a.createdAt ? (a.createdAt.toMillis ? a.createdAt.toMillis() : a.createdAt) : 0;
+      const tb = b.createdAt ? (b.createdAt.toMillis ? b.createdAt.toMillis() : b.createdAt) : 0;
+      return tb - ta;
+    });
+  }
+
+  const el = document.getElementById('request-list');
+  if (filtered.length === 0) {
+    el.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p>No requests match your filters</p></div>';
+    return;
+  }
+  el.innerHTML = filtered.map(r => cardHTML(r)).join('');
+}
+
+function cardHTML(item) {
+  const votedBy = item.votedBy || [];
+  const voted = votedBy.includes(BROWSER_ID);
+  const commentCount = item.commentCount || 0;
+  const isOpen = openComments.has(item.id);
+
+  return `
+  <div class="item-card" id="card-${item.id}">
+    <div class="item-top">
+      <button class="vote-btn ${voted ? 'voted' : ''}" onclick="window._vote('${item.id}')" title="${voted ? 'Remove vote' : 'Upvote'}">
+        <span class="chevron">&#9650;</span>
+        <span class="vote-count">${item.votes || 0}</span>
+      </button>
+      <div class="item-body">
+        <div class="item-title">${esc(item.title)}</div>
+        ${item.desc ? `<div class="item-desc">${esc(item.desc)}</div>` : ''}
+        <div class="item-meta">
+          <span class="tag tag-status tag-${item.status}" onclick="window._cycleStatus('${item.id}')" title="Click to change status">${statusLabel(item.status)}</span>
+          <span class="tag tag-priority-${(item.priority || 'medium').toLowerCase()}">${esc(item.priority || 'Medium')}</span>
+          <span class="tag tag-location-${(item.location || '').toLowerCase()}">${esc(item.location)}</span>
+          ${item.room ? `<span class="tag tag-room">Rm ${esc(item.room)}</span>` : ''}
+          <span class="tag tag-category">${esc(item.category || 'Other')}</span>
+          <span class="item-time">${timeAgo(item.createdAt)}</span>
+          ${item.submitter ? `<span class="item-submitter">${esc(item.submitter)}</span>` : ''}
+        </div>
+      </div>
+    </div>
+    <div class="comment-toggle" onclick="window._toggleComments('${item.id}')">
+      <span>💬 ${commentCount} comment${commentCount !== 1 ? 's' : ''}</span>
+      <span class="comment-arrow ${isOpen ? 'open' : ''}" id="arrow-${item.id}">&#9660;</span>
+    </div>
+    ${isOpen ? `<div class="comments-section" id="comments-${item.id}">
+      <div class="comments-list" id="clist-${item.id}">${commentsCache[item.id] || '<div class="loading"><div class="spinner"></div></div>'}</div>
+      <div class="comment-form">
+        <input type="text" class="comment-input" id="cinput-${item.id}" placeholder="Add a comment..." maxlength="300"/>
+        <input type="text" class="comment-author-input" id="cauthor-${item.id}" placeholder="Name" maxlength="40"/>
+        <button class="comment-submit" onclick="window._addComment('${item.id}')">Post</button>
+      </div>
+    </div>` : ''}
+  </div>`;
+}
+
+function commentHTML(c) {
+  return `<div class="comment-bubble">
+    <div class="comment-author-line">
+      <span>${esc(c.author || 'Anonymous')}</span>
+      <span>${timeAgo(c.createdAt)}</span>
+    </div>
+    <div class="comment-text">${esc(c.text)}</div>
+  </div>`;
+}
+
+// ── VOTE ─────────────────────────────────────────────────────
+async function vote(id) {
+  if (!firebaseReady) return;
+  const item = allRequests.find(r => r.id === id);
+  if (!item) return;
+
+  const ref = doc(db, 'serviceRequests', id);
+  const votedBy = item.votedBy || [];
+  const alreadyVoted = votedBy.includes(BROWSER_ID);
+
+  try {
+    if (alreadyVoted) {
+      await updateDoc(ref, {
+        votes: increment(-1),
+        votedBy: arrayRemove(BROWSER_ID)
+      });
+      item.votes = Math.max(0, (item.votes || 0) - 1);
+      item.votedBy = votedBy.filter(b => b !== BROWSER_ID);
+    } else {
+      await updateDoc(ref, {
+        votes: increment(1),
+        votedBy: arrayUnion(BROWSER_ID)
+      });
+      item.votes = (item.votes || 0) + 1;
+      item.votedBy = [...votedBy, BROWSER_ID];
+    }
+    renderAll();
+  } catch (e) {
+    console.error('Vote error:', e);
+    showToast('Failed to vote. Please try again.');
+  }
+}
+
+// ── STATUS CYCLE ─────────────────────────────────────────────
+async function cycleStatus(id) {
+  if (!firebaseReady) return;
+  const item = allRequests.find(r => r.id === id);
+  if (!item) return;
+
+  const order = ['open', 'inprogress', 'resolved'];
+  const idx = order.indexOf(item.status);
+  const next = order[(idx + 1) % order.length];
+
+  try {
+    await updateDoc(doc(db, 'serviceRequests', id), { status: next });
+    item.status = next;
+    renderAll();
+    showToast('Status updated to ' + statusLabel(next));
+  } catch (e) {
+    console.error('Status update error:', e);
+    showToast('Failed to update status.');
+  }
+}
+
+// ── COMMENTS ─────────────────────────────────────────────────
+async function toggleComments(id) {
+  if (openComments.has(id)) {
+    openComments.delete(id);
+    renderAll();
+    return;
+  }
+  openComments.add(id);
+  renderAll();
+  if (!firebaseReady) return;
+  await loadComments(id);
+}
+
+async function loadComments(id) {
+  try {
+    const q = query(collection(db, 'serviceRequests', id, 'comments'), orderBy('createdAt', 'asc'));
+    const snapshot = await getDocs(q);
+    const comments = [];
+    snapshot.forEach(d => comments.push({ id: d.id, ...d.data() }));
+    const html = comments.length > 0
+      ? comments.map(c => commentHTML(c)).join('')
+      : '<div class="no-comments">No comments yet</div>';
+    commentsCache[id] = html;
+    const el = document.getElementById('clist-' + id);
+    if (el) el.innerHTML = html;
+  } catch (e) {
+    console.error('Load comments error:', e);
+  }
+}
+
+async function addComment(id) {
+  if (!firebaseReady) return;
+  const input = document.getElementById('cinput-' + id);
+  const authorInput = document.getElementById('cauthor-' + id);
+  if (!input) return;
+
+  const text = input.value.trim();
+  if (!text) {
+    input.style.borderColor = '#dc2626';
+    setTimeout(() => input.style.borderColor = '', 1500);
+    return;
+  }
+
+  const author = (authorInput ? authorInput.value.trim() : '') || 'Anonymous';
+
+  try {
+    await addDoc(collection(db, 'serviceRequests', id, 'comments'), {
+      text: text,
+      author: author,
+      createdAt: serverTimestamp()
+    });
+    // Update comment count on the request doc
+    const item = allRequests.find(r => r.id === id);
+    if (item) {
+      await updateDoc(doc(db, 'serviceRequests', id), { commentCount: increment(1) });
+      item.commentCount = (item.commentCount || 0) + 1;
+    }
+    input.value = '';
+    await loadComments(id);
+    renderAll();
+    showToast('Comment added');
+  } catch (e) {
+    console.error('Add comment error:', e);
+    showToast('Failed to add comment.');
+  }
+}
+
+// ── FILTER / SORT ────────────────────────────────────────────
+function filterLocation(loc, el) {
+  currentLocationFilter = loc;
+  document.querySelectorAll('[data-filter="location"]').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderAll();
+}
+
+function filterCategory(val) {
+  currentCategoryFilter = val;
+  renderAll();
+}
+
+function filterStatus(val) {
+  currentStatusFilter = val;
+  renderAll();
+}
+
+function sortItems(val) {
+  currentSort = val;
+  renderAll();
+}
+
+// ── MODAL ────────────────────────────────────────────────────
+function openModal() {
+  document.getElementById('modal-overlay').classList.add('open');
+  document.getElementById('input-title').focus();
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  resetForm();
+}
+
+function handleOverlayClick(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+}
+
+function selectOpt(group, el, val) {
+  el.closest('.tag-selector').querySelectorAll('.tag-opt').forEach(t => t.classList.remove('selected'));
+  el.classList.add('selected');
+  if (group === 'location') selectedLocation = val;
+  else if (group === 'priority') selectedPriority = val;
+  else if (group === 'category') selectedCategory = val;
+}
+
+function resetForm() {
+  document.getElementById('input-title').value = '';
+  document.getElementById('input-desc').value = '';
+  document.getElementById('input-room').value = '';
+  document.getElementById('input-name').value = '';
+  document.querySelectorAll('#location-selector .tag-opt, #category-selector .tag-opt').forEach(t => t.classList.remove('selected'));
+  // Reset priority to Medium
+  document.querySelectorAll('#priority-selector .tag-opt').forEach(t => t.classList.remove('selected'));
+  document.querySelector('#priority-selector .tag-opt:nth-child(2)').classList.add('selected');
+  selectedLocation = null;
+  selectedPriority = 'Medium';
+  selectedCategory = null;
+}
+
+async function submitRequest() {
+  const title = document.getElementById('input-title').value.trim();
+  if (!title) {
+    const el = document.getElementById('input-title');
+    el.focus();
+    el.style.borderColor = '#dc2626';
+    setTimeout(() => el.style.borderColor = '', 1500);
+    return;
+  }
+  if (!selectedLocation) {
+    showToast('Please select a location (OMC or FMC)');
+    return;
+  }
+  if (!firebaseReady) {
+    showToast('Firebase is not configured. Cannot submit requests.');
+    return;
+  }
+
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true;
+  btn.textContent = 'Submitting...';
+
+  try {
+    const data = {
+      title: title,
+      desc: document.getElementById('input-desc').value.trim(),
+      location: selectedLocation,
+      room: document.getElementById('input-room').value.trim(),
+      priority: selectedPriority || 'Medium',
+      category: selectedCategory || 'Other',
+      status: 'open',
+      submitter: document.getElementById('input-name').value.trim() || 'Anonymous',
+      votes: 0,
+      votedBy: [],
+      commentCount: 0,
+      createdAt: serverTimestamp()
+    };
+
+    await addDoc(collection(db, 'serviceRequests'), data);
+    closeModal();
+    showToast('Request submitted successfully!');
+    await loadRequests();
+  } catch (e) {
+    console.error('Submit error:', e);
+    showToast('Failed to submit. Please try again.');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Submit Request';
+  }
+}
+
+// ── EXPOSE TO INLINE HANDLERS ────────────────────────────────
+window._vote = vote;
+window._cycleStatus = cycleStatus;
+window._toggleComments = toggleComments;
+window._addComment = addComment;
+window.openModal = openModal;
+window.closeModal = closeModal;
+window.handleOverlayClick = handleOverlayClick;
+window.selectOpt = selectOpt;
+window.submitRequest = submitRequest;
+window.filterLocation = filterLocation;
+window.filterCategory = filterCategory;
+window.filterStatus = filterStatus;
+window.sortItems = sortItems;
+
+// ── KEYBOARD ─────────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+});
+
+// ── INIT ─────────────────────────────────────────────────────
+initFirebase();
+loadRequests();
+</script>
+
+<script src="search-index.js"></script>
+<script id="shared-nav-search"></script>
+<button id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">☀️</button>
+<script src="theme.js?v=3"></script>
+<script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
+</body>
+</html>
