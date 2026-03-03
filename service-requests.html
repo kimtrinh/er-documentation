@@ -142,6 +142,15 @@ main{max-width:900px;margin:0 auto;padding:24px 24px 80px}
 .config-banner{background:#1c1400;border:1px solid #ca8a04;border-radius:10px;padding:14px 18px;margin-bottom:20px;font-size:13px;color:#fde68a;line-height:1.5}
 .config-banner code{background:rgba(0,0,0,.3);padding:2px 6px;border-radius:4px;font-size:12px}
 
+/* ADMIN TOGGLE */
+.admin-toggle{background:transparent;border:1px solid var(--border);border-radius:10px;padding:8px 12px;font-size:16px;cursor:pointer;transition:all .2s;line-height:1}
+.admin-toggle:hover{border-color:var(--border2)}
+.admin-toggle.admin-active{border-color:#f59e0b;box-shadow:0 0 8px rgba(245,158,11,.3)}
+
+/* DELETE BUTTON */
+.del-btn{background:transparent;border:1px solid var(--border);border-radius:8px;padding:6px 8px;font-size:14px;cursor:pointer;transition:all .2s;flex-shrink:0;line-height:1;align-self:flex-start;margin-top:6px}
+.del-btn:hover{border-color:#ef4444;background:rgba(239,68,68,.12)}
+
 /* LIGHT MODE OVERRIDES */
 html[data-theme="light"] .tag-open{background:#f0fdf4;color:#15803d;border-color:#86efac}
 html[data-theme="light"] .tag-inprogress{background:#dbeafe;color:#1d4ed8;border-color:#93c5fd}
@@ -155,6 +164,10 @@ html[data-theme="light"] .tag-location-fmc{background:#f0fdf4;color:#15803d;bord
 html[data-theme="light"] .comment-bubble{background:#f8fafc;border-color:#e2e8f0}
 html[data-theme="light"] .tag-category{background:#f1f5f9;color:#475569;border-color:#cbd5e1}
 html[data-theme="light"] .config-banner{background:#fefce8;border-color:#fde047;color:#92400e}
+html[data-theme="light"] .admin-toggle{border-color:#cbd5e1}
+html[data-theme="light"] .admin-toggle.admin-active{border-color:#d97706;box-shadow:0 0 8px rgba(217,119,6,.25)}
+html[data-theme="light"] .del-btn{border-color:#e2e8f0}
+html[data-theme="light"] .del-btn:hover{border-color:#dc2626;background:rgba(220,38,38,.08)}
 
 /* NAV */
 .sitenav{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;font-family:'DM Sans',system-ui,sans-serif}
@@ -211,7 +224,10 @@ main>*:nth-child(4){animation-delay:.15s}
       <div class="logo"><span>📋</span><h1>Service Requests</h1></div>
       <p class="subtitle">Submit and track ED service requests for FMC & OMC</p>
     </div>
-    <button class="suggest-btn" onclick="openModal()">+ New Request</button>
+    <div style="display:flex;align-items:center;gap:8px">
+      <button class="suggest-btn" onclick="openModal()">+ New Request</button>
+      <button class="admin-toggle" id="adminToggle" onclick="window._toggleAdmin()" title="Admin mode">🔒</button>
+    </div>
   </div>
 </header>
 
@@ -325,7 +341,7 @@ main>*:nth-child(4){animation-delay:.15s}
 <script type="module">
 // ── FIREBASE SETUP ──────────────────────────────────────────────
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js';
-import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, arrayUnion, arrayRemove, increment, serverTimestamp, query, orderBy, getDoc } from 'https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js';
+import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, arrayUnion, arrayRemove, increment, serverTimestamp, query, orderBy, getDoc } from 'https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js';
 
 // ╔═══════════════════════════════════════════════════════════╗
 // ║  FIREBASE CONFIG — Replace with your project's config    ║
@@ -386,6 +402,10 @@ let currentStatusFilter = 'all';
 let currentSort = 'newest';
 let openComments = new Set();
 let commentsCache = {};
+
+// Admin state
+const ADMIN_PIN = '0507';
+let isAdmin = sessionStorage.getItem('sr_admin') === 'true';
 
 // Form state
 let selectedLocation = null;
@@ -500,6 +520,7 @@ function cardHTML(item) {
           ${item.submitter ? `<span class="item-submitter">${esc(item.submitter)}</span>` : ''}
         </div>
       </div>
+      ${isAdmin ? `<button class="del-btn" onclick="event.stopPropagation();window._deleteRequest('${item.id}')" title="Delete request">🗑️</button>` : ''}
     </div>
     <div class="comment-toggle" onclick="window._toggleComments('${item.id}')">
       <span>💬 ${commentCount} comment${commentCount !== 1 ? 's' : ''}</span>
@@ -758,11 +779,68 @@ async function submitRequest() {
   }
 }
 
+// ── ADMIN MODE ───────────────────────────────────────────────
+function toggleAdmin() {
+  if (isAdmin) {
+    isAdmin = false;
+    sessionStorage.removeItem('sr_admin');
+    showToast('Admin mode deactivated');
+  } else {
+    const pin = prompt('Enter admin PIN:');
+    if (pin === null) return;
+    if (pin === ADMIN_PIN) {
+      isAdmin = true;
+      sessionStorage.setItem('sr_admin', 'true');
+      showToast('Admin mode activated');
+    } else {
+      showToast('Incorrect PIN');
+      return;
+    }
+  }
+  updateAdminToggle();
+  renderAll();
+}
+
+function updateAdminToggle() {
+  const btn = document.getElementById('adminToggle');
+  if (!btn) return;
+  btn.textContent = isAdmin ? '🔓' : '🔒';
+  btn.classList.toggle('admin-active', isAdmin);
+}
+
+async function deleteRequest(id) {
+  if (!isAdmin || !firebaseReady) return;
+  if (!confirm('Delete this request? This cannot be undone.')) return;
+
+  try {
+    // Delete comments subcollection first
+    const commentsSnap = await getDocs(collection(db, 'serviceRequests', id, 'comments'));
+    const deletes = [];
+    commentsSnap.forEach(d => deletes.push(deleteDoc(doc(db, 'serviceRequests', id, 'comments', d.id))));
+    await Promise.all(deletes);
+
+    // Delete the request document
+    await deleteDoc(doc(db, 'serviceRequests', id));
+
+    // Update local state
+    allRequests = allRequests.filter(r => r.id !== id);
+    delete commentsCache[id];
+    openComments.delete(id);
+    renderAll();
+    showToast('Request deleted');
+  } catch (e) {
+    console.error('Delete error:', e);
+    showToast('Failed to delete request.');
+  }
+}
+
 // ── EXPOSE TO INLINE HANDLERS ────────────────────────────────
 window._vote = vote;
 window._cycleStatus = cycleStatus;
 window._toggleComments = toggleComments;
 window._addComment = addComment;
+window._toggleAdmin = toggleAdmin;
+window._deleteRequest = deleteRequest;
 window.openModal = openModal;
 window.closeModal = closeModal;
 window.handleOverlayClick = handleOverlayClick;
@@ -780,6 +858,7 @@ document.addEventListener('keydown', e => {
 
 // ── INIT ─────────────────────────────────────────────────────
 initFirebase();
+updateAdminToggle();
 loadRequests();
 </script>
 
