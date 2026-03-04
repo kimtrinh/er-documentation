@@ -226,7 +226,6 @@ main>*:nth-child(4){animation-delay:.15s}
     </div>
     <div style="display:flex;align-items:center;gap:8px">
       <button class="suggest-btn" onclick="openModal()">+ New Request</button>
-      <button class="admin-toggle" id="adminToggle" onclick="window._toggleAdmin()" title="Admin mode">🔒</button>
     </div>
   </div>
 </header>
@@ -265,6 +264,8 @@ main>*:nth-child(4){animation-delay:.15s}
       <option value="newest">Newest First</option>
       <option value="votes">Most Voted</option>
     </select>
+
+    <button class="admin-toggle" id="adminToggle" onclick="window._toggleAdmin()" title="Admin mode">🔒</button>
   </div>
 
   <!-- REQUEST LIST -->
