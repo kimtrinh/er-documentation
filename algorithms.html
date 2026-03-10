@@ -49,6 +49,7 @@ main{max-width:1100px;margin:0 auto;padding:24px 24px 80px}
 .badge-thoracic{background:#1e1b2e;color:#a78bfa;border:1px solid #5b21b6}
 .badge-neuro{background:#2d2a1b;color:#fbbf24;border:1px solid #92400e}
 .badge-vascular{background:#2d1b1b;color:#f87171;border:1px solid #991b1b}
+.badge-spine{background:#1b2d2d;color:#2dd4bf;border:1px solid #0f766e}
 
 /* ALGORITHM VIEWER */
 .algo-viewer{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden}
@@ -201,7 +202,7 @@ main>*:nth-child(4){animation-delay:.15s}
   <div class="algo-tools">
     <input id="algoSearchInput" class="algo-search" type="text" placeholder="Search algorithms (e.g. pregnancy, aortic, papilledema, floaters)..." autocomplete="off" spellcheck="false" aria-label="Search algorithms">
     <button id="algoSearchClear" class="algo-clear" type="button">Clear</button>
-    <span id="algoSearchCount" class="algo-count">7 algorithms</span>
+    <span id="algoSearchCount" class="algo-count">8 algorithms</span>
   </div>
 
   <!-- ALGORITHM SELECTOR GRID -->
@@ -253,6 +254,13 @@ main>*:nth-child(4){animation-delay:.15s}
       <div class="algo-info">
         <div class="algo-title">Non-Pregnant Vaginal Bleeding</div>
         <div class="algo-meta">Updated 10/2/2025 &nbsp;·&nbsp; <span class="algo-badge badge-ob">OB/GYN</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('vcf')" id="card-vcf" data-algo="vcf" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🦴</div>
+      <div class="algo-info">
+        <div class="algo-title">Vertebral Compression Fracture (VCF)</div>
+        <div class="algo-meta">Updated 3/10/2026 &nbsp;·&nbsp; <span class="algo-badge badge-spine">Spine/Ortho</span></div>
       </div>
     </div>
   </div>
@@ -771,6 +779,115 @@ const algos = {
           Acute-on-chronic AUB / worsening anemia → Outpatient GYN + <strong>Provera taper</strong> (60mg×1wk, 40mg×1wk, 20mg×1wk, 10mg until f/u)<br>
           Otherwise → <strong>Nora-BE or Provera 10 mg daily</strong> until GYN followup<br>
           <span style="color:#fca5a5">Provera contraindicated in breast cancer or liver disease.</span>
+        </div>
+      </div>
+    `
+  },
+
+  vcf: {
+    icon: '🦴',
+    title: 'Vertebral Compression Fracture (VCF)',
+    updated: 'KP SBC Urgent Care & Emergency Room · Updated 3/10/2026',
+    render: () => `
+      <div class="flow">
+        <div class="node node-start" style="max-width:520px">CT spine with <strong>VCF noted</strong></div>
+        <div class="arrow-down"></div>
+
+        <div class="decision-card" style="width:100%;max-width:520px">
+          <div class="decision-q">Does the patient have neurological symptoms?</div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.8;margin-bottom:12px;padding-left:4px">
+            • Motor weakness<br>
+            • Saddle anesthesia<br>
+            • Bowel / bladder dysfunction
+          </div>
+          <div class="decision-opts">
+            <div class="decision-opt opt-yes">
+              <span class="opt-badge badge-yes">YES</span>
+              <div class="opt-text">
+                <strong style="color:#fca5a5">Emergent Management:</strong>
+                <div style="font-size:12px;color:var(--text2);margin-top:4px;line-height:1.7">
+                  1. Spine precautions<br>
+                  2. MRI, possible CT<br>
+                  3. Neurosurgical Consultation
+                </div>
+              </div>
+            </div>
+            <div class="decision-opt opt-no">
+              <span class="opt-badge badge-no">NO</span>
+              <div class="opt-text">Proceed with conservative management ↓</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="arrow-down"></div>
+
+        <div class="node node-process" style="max-width:520px;text-align:left;padding:14px 18px">
+          <strong style="color:var(--text-blue-bright)">Conservative Management:</strong>
+          <div style="margin-top:8px;font-size:12px;color:var(--text2);line-height:1.8">
+            1. Pain control<br>
+            2. F/u with PCP with upright x-rays at 2 weeks<br>
+            3. W/u and management of low bone density by PCP as needed
+          </div>
+        </div>
+
+        <div class="arrow-down"></div>
+
+        <div class="decision-card" style="width:100%;max-width:580px">
+          <div class="decision-q">Degree of vertebral height loss?</div>
+          <div class="decision-opts">
+            <div class="decision-opt opt-no">
+              <span class="opt-badge badge-no">&lt;50%</span>
+              <div class="opt-text">
+                <strong style="color:var(--text-blue)">Acute VCF &lt;50% loss of height</strong>
+                <div style="font-size:12px;color:var(--text2);margin-top:4px;line-height:1.7">
+                  Upright x-rays at T=0 and T=2 weeks, in brace<br>
+                  → If <strong>Stable</strong>: Follow-up with PCP until pain subsides<br>
+                  → If <strong>Unstable</strong>: Send Dr. Advice Message to Neurosurgery for review of films
+                </div>
+              </div>
+            </div>
+            <div class="decision-opt opt-yes">
+              <span class="opt-badge badge-yes" style="background:#ef4444">≥50%</span>
+              <div class="opt-text">
+                <strong style="color:#fca5a5">Acute VCF ≥50% loss of height</strong>
+                <div style="font-size:12px;color:var(--text2);margin-top:4px;line-height:1.7">
+                  Upright x-rays at T=0, in brace<br>
+                  → Send Dr. Advice Message to Neurosurgery for review of films
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="arrow-down"></div>
+
+        <div class="node node-action-red" style="max-width:520px;text-align:left;padding:14px 18px">
+          <strong>If continued pain refractory to medications:</strong>
+          <div style="margin-top:8px;font-size:12px;line-height:1.8">
+            Consider MRI spine with STIR sequences and referral to <strong>Interventional Radiology</strong> for vertebroplasty (call IR on call)
+          </div>
+        </div>
+
+        <div style="margin-top:24px;width:100%;max-width:580px;display:flex;gap:16px;flex-wrap:wrap">
+          <div class="callout callout-yellow" style="flex:1;min-width:240px">
+            <strong>Types of Upright X-rays:</strong><br>
+            <span style="font-size:12px;line-height:1.8">
+              T1–T10: AP / lateral thoracic spine<br>
+              T11–L2: AP / lateral thoracolumbar<br>
+              L3–L5: AP / lateral lumbosacral
+            </span>
+          </div>
+          <div class="callout" style="flex:1;min-width:240px">
+            <strong>Place Order for Braces:</strong><br>
+            <span style="font-size:12px;line-height:1.8">
+              Prosthetic and Orthotic eval (DME)<br>
+              • Placement of brace by Ortho tech and ER tech<br><br>
+              <strong>For type of evaluation requested:</strong><br>
+              T1–4: Minerva<br>
+              T5–L2: TLSO<br>
+              L3–L5: LSO
+            </span>
+          </div>
         </div>
       </div>
     `
