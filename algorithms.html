@@ -207,56 +207,56 @@ main>*:nth-child(4){animation-delay:.15s}
 
   <!-- ALGORITHM SELECTOR GRID -->
   <div class="algo-grid" id="algoGrid">
-    <div class="algo-card" onclick="showAlgo('orbital')" id="card-orbital" data-algo="orbital" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+    <div class="algo-card" onclick="showAlgo('orbital')" id="card-orbital" data-algo="orbital" data-keywords="ophthalmology eye ocular orbital blowout trauma" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
       <div class="algo-icon">👁️</div>
       <div class="algo-info">
         <div class="algo-title">Orbital Fractures</div>
         <div class="algo-meta">Updated 9/19/2025 &nbsp;·&nbsp; <span class="algo-badge badge-ophtho">Ophthalmology</span></div>
       </div>
     </div>
-    <div class="algo-card" onclick="showAlgo('papilledema')" id="card-papilledema" data-algo="papilledema" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+    <div class="algo-card" onclick="showAlgo('papilledema')" id="card-papilledema" data-algo="papilledema" data-keywords="optic disc swelling elevated ICP vision neurology" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
       <div class="algo-icon">🧠</div>
       <div class="algo-info">
         <div class="algo-title">Papilledema</div>
         <div class="algo-meta">Updated 10/1/2025 &nbsp;·&nbsp; <span class="algo-badge badge-neuro">Neurology</span></div>
       </div>
     </div>
-    <div class="algo-card" onclick="showAlgo('pneumomediastinum')" id="card-pneumomediastinum" data-algo="pneumomediastinum" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+    <div class="algo-card" onclick="showAlgo('pneumomediastinum')" id="card-pneumomediastinum" data-algo="pneumomediastinum" data-keywords="mediastinal air esophageal rupture Boerhaave chest" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
       <div class="algo-icon">🫁</div>
       <div class="algo-info">
         <div class="algo-title">Pneumomediastinum</div>
         <div class="algo-meta">Updated 3/25/2025 &nbsp;·&nbsp; <span class="algo-badge badge-thoracic">Thoracic</span></div>
       </div>
     </div>
-    <div class="algo-card" onclick="showAlgo('pregvb')" id="card-pregvb" data-algo="pregvb" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+    <div class="algo-card" onclick="showAlgo('pregvb')" id="card-pregvb" data-algo="pregvb" data-keywords="OB bleeding first trimester anti-D immunoglobulin Rhogam progesterone pregnancy of unknown location OB trauma" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
       <div class="algo-icon">🤰</div>
       <div class="algo-info">
         <div class="algo-title">Vaginal Bleeding in Pregnancy</div>
         <div class="algo-meta">Updated 5/3/2025 &nbsp;·&nbsp; <span class="algo-badge badge-ob">OB/GYN</span></div>
       </div>
     </div>
-    <div class="algo-card" onclick="showAlgo('aortic')" id="card-aortic" data-algo="aortic" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+    <div class="algo-card" onclick="showAlgo('aortic')" id="card-aortic" data-algo="aortic" data-keywords="chest pain tearing CTA type A type B vascular" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
       <div class="algo-icon">🩸</div>
       <div class="algo-info">
         <div class="algo-title">Aortic Dissection</div>
         <div class="algo-meta">Updated 5/12/2025 &nbsp;·&nbsp; <span class="algo-badge badge-vascular">Vascular/Cardiac</span></div>
       </div>
     </div>
-    <div class="algo-card" onclick="showAlgo('floaters')" id="card-floaters" data-algo="floaters" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+    <div class="algo-card" onclick="showAlgo('floaters')" id="card-floaters" data-algo="floaters" data-keywords="ophthalmology retinal detachment vitreous vision" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
       <div class="algo-icon">✨</div>
       <div class="algo-info">
         <div class="algo-title">Visual Floaters & Flashes</div>
         <div class="algo-meta">Updated 3/24/2025 &nbsp;·&nbsp; <span class="algo-badge badge-ophtho">Ophthalmology</span></div>
       </div>
     </div>
-    <div class="algo-card" onclick="showAlgo('nonpregvb')" id="card-nonpregvb" data-algo="nonpregvb" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+    <div class="algo-card" onclick="showAlgo('nonpregvb')" id="card-nonpregvb" data-algo="nonpregvb" data-keywords="GYN vaginal bleeding non-OB ectopic" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
       <div class="algo-icon">🔴</div>
       <div class="algo-info">
         <div class="algo-title">Non-Pregnant Vaginal Bleeding</div>
         <div class="algo-meta">Updated 10/2/2025 &nbsp;·&nbsp; <span class="algo-badge badge-ob">OB/GYN</span></div>
       </div>
     </div>
-    <div class="algo-card" onclick="showAlgo('vcf')" id="card-vcf" data-algo="vcf" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+    <div class="algo-card" onclick="showAlgo('vcf')" id="card-vcf" data-algo="vcf" data-keywords="spine compression fracture VCF vertebral back pain brace TLSO vertebroplasty neurosurgery bone density" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
       <div class="algo-icon">🦴</div>
       <div class="algo-info">
         <div class="algo-title">Vertebral Compression Fracture (VCF)</div>
@@ -918,7 +918,8 @@ function applyAlgoSearch() {
     const title = (card.querySelector('.algo-title') || {}).textContent || '';
     const meta = (card.querySelector('.algo-meta') || {}).textContent || '';
     const key = String(card.dataset.algo || '');
-    const haystack = `${title} ${meta} ${key}`.toLowerCase();
+    const keywords = String(card.dataset.keywords || '');
+    const haystack = `${title} ${meta} ${key} ${keywords}`.toLowerCase();
     const match = !query || haystack.includes(query);
     card.style.display = match ? '' : 'none';
     if (match) visible += 1;
