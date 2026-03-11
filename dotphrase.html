@@ -50,6 +50,8 @@ main{max-width:900px;margin:0 auto;padding:16px 24px 60px}
 .card-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .vote-btn{padding:6px 12px;border-radius:8px;border:1px solid var(--border2);cursor:pointer;font-size:12px;font-weight:600;background:var(--bg);color:var(--text-blue);transition:border-color .2s,color .2s}
 .vote-btn:hover{border-color:#3b82f6;color:var(--text-blue-bright)}
+.vote-btn.active{border-color:#2563eb;color:#bfdbfe;background:#0d2038}
+.vote-btn:disabled{opacity:.55;cursor:not-allowed}
 .vote-count{font-size:12px;color:var(--text2);min-width:62px}
 .card-body{padding:12px 16px;font-size:13px;line-height:1.75;color:var(--text2)}
 .empty{text-align:center;color:#475569;margin-top:60px;font-size:15px}
@@ -142,6 +144,22 @@ main>*:nth-child(4){animation-delay:.15s}
 <script>
 const phrases = [];
 const basePhrases = Array.isArray(window.KP_DOTPHRASES) ? window.KP_DOTPHRASES : [];
+let currentUser = { id: 'anonymous', isAuthenticated: false };
+const SESSION_STORAGE_KEY = 'kp-dotphrase-session-id';
+
+function getOrCreateSessionId() {
+  const existing = window.localStorage.getItem(SESSION_STORAGE_KEY);
+  if (existing) return existing;
+  const generated = `sess_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 10)}`;
+  window.localStorage.setItem(SESSION_STORAGE_KEY, generated);
+  return generated;
+}
+
+function getApiHeaders() {
+  return {
+    'x-session-id': getOrCreateSessionId()
+  };
+}
 
 function stableHash(value) {
   let hash = 0;
@@ -217,10 +235,17 @@ function setSubmitMessage(message, type) {
 }
 
 async function fetchSubmittedDotphrases() {
-  const response = await fetch('/api/dotphrases', { cache: 'no-store' });
+  const response = await fetch('/api/dotphrases', {
+    cache: 'no-store',
+    headers: getApiHeaders()
+  });
   if (!response.ok) throw new Error('Failed to load dotphrases');
   const data = await response.json();
-  return Array.isArray(data) ? data : [];
+  if (Array.isArray(data)) return { items: data, user: currentUser };
+  return {
+    items: Array.isArray(data.items) ? data.items : [],
+    user: data.user || currentUser
+  };
 }
 
 function replacePhrases(items) {
@@ -250,7 +275,8 @@ function replacePhrases(items) {
 async function refreshPhrases() {
   try {
     const data = await fetchSubmittedDotphrases();
-    replacePhrases([...basePhrases, ...data]);
+    currentUser = data.user || currentUser;
+    replacePhrases([...basePhrases, ...data.items]);
   } catch (e) {
     replacePhrases(basePhrases);
   }
@@ -279,7 +305,10 @@ async function submitDotphrase(e) {
   try {
     const response = await fetch('/api/dotphrases', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        ...getApiHeaders()
+      },
       body: JSON.stringify({
         id: `dp_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`,
         dot: normalizedDot,
@@ -322,7 +351,8 @@ function render() {
         </div>
         <div class="card-actions">
           <span class="vote-count">▲ ${p.votes}</span>
-          <button class="vote-btn" onclick="upvotePhrase(${i})">Upvote</button>
+          <button class="vote-btn ${p.hasUpvoted ? 'active' : ''}" onclick="toggleVote(${i})">${p.hasUpvoted ? 'Upvoted' : 'Upvote'}</button>
+          <button class="vote-btn ${p.hasDownvoted ? 'active' : ''}" onclick="downvotePhrase(${i})">${p.hasDownvoted ? 'Downvoted' : 'Downvote'}</button>
           <button class="copy-btn" id="btn-${i}" onclick="copyText(${i})">Copy</button>
         </div>
       </div>
@@ -331,22 +361,74 @@ function render() {
   `).join("");
 }
 
+async function sendVoteRequest(phrase, action) {
+  const response = await fetch(`/api/dotphrases/${encodeURIComponent(phrase.id)}/${action}`, {
+    method: 'POST',
+    headers: getApiHeaders()
+  });
+  if (!response.ok) throw new Error('Vote failed');
+  return response.json();
+}
+
+function applyVoteResponse(phraseId, updated) {
+  currentUser = updated.user || currentUser;
+  const match = phrases.find(item => item.id === phraseId);
+  if (!match) return;
+
+  match.votes = Number(updated.votes) || 0;
+  match.currentUserVote = Number(updated.currentUserVote) || 0;
+  match.hasVoted = Boolean(updated.hasVoted);
+  match.hasUpvoted = Boolean(updated.hasUpvoted);
+  match.hasDownvoted = Boolean(updated.hasDownvoted);
+}
+
 async function upvotePhrase(i) {
   const filtered = getFiltered();
   const phrase = filtered[i];
   if (!phrase || !phrase.id) return;
 
   try {
-    const response = await fetch(`/api/dotphrases/${encodeURIComponent(phrase.id)}/upvote`, {
-      method: 'POST'
-    });
-    if (!response.ok) throw new Error('Upvote failed');
+    const updated = await sendVoteRequest(phrase, 'upvote');
+    applyVoteResponse(phrase.id, updated);
+    render();
+  } catch (err) {
+    // no-op on network failure
+  }
+}
 
-    const updated = await response.json();
-    const match = phrases.find(item => item.id === phrase.id);
-    if (match) {
-      match.votes = Number(updated.votes) || (match.votes + 1);
-    }
+async function downvotePhrase(i) {
+  const filtered = getFiltered();
+  const phrase = filtered[i];
+  if (!phrase || !phrase.id) return;
+
+  try {
+    const updated = await sendVoteRequest(phrase, 'downvote');
+    applyVoteResponse(phrase.id, updated);
+    render();
+  } catch (err) {
+    // no-op on network failure
+  }
+}
+
+function toggleVote(i) {
+  const filtered = getFiltered();
+  const phrase = filtered[i];
+  if (!phrase) return;
+  if (phrase.hasUpvoted) {
+    unvotePhrase(i);
+    return;
+  }
+  upvotePhrase(i);
+}
+
+async function unvotePhrase(i) {
+  const filtered = getFiltered();
+  const phrase = filtered[i];
+  if (!phrase || !phrase.id) return;
+
+  try {
+    const updated = await sendVoteRequest(phrase, 'unvote');
+    applyVoteResponse(phrase.id, updated);
     render();
   } catch (err) {
     // no-op on network failure

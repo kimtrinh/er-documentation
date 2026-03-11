@@ -1,6 +1,7 @@
 const CACHE = 'em-toolkit-v4';
 const DOTPHRASE_DB_CACHE = 'dotphrases-api-v1';
 const DOTPHRASE_DB_KEY = '/api/dotphrases/store';
+const VOTE_KEY_SEPARATOR = '::';
 
 const ASSETS = [
   '/index.html',
@@ -51,7 +52,10 @@ self.addEventListener('activate', e => {
 self.addEventListener('fetch', e => {
   const url = new URL(e.request.url);
 
-  if (url.pathname === '/api/dotphrases' || /^\/api\/dotphrases\/[^/]+\/upvote$/.test(url.pathname)) {
+  if (
+    url.pathname === '/api/dotphrases'
+    || /^\/api\/dotphrases\/[^/]+\/(upvote|downvote|unvote)$/.test(url.pathname)
+  ) {
     e.respondWith(handleDotphraseApi(e.request));
     return;
   }
@@ -71,18 +75,27 @@ self.addEventListener('fetch', e => {
 async function readDotphraseStore() {
   const cache = await caches.open(DOTPHRASE_DB_CACHE);
   const match = await cache.match(DOTPHRASE_DB_KEY);
-  if (!match) return [];
+  if (!match) return { items: [], voteRecords: {} };
   try {
     const data = await match.json();
-    return Array.isArray(data) ? data : [];
+    if (Array.isArray(data)) {
+      return { items: data, voteRecords: {} };
+    }
+    if (data && typeof data === 'object') {
+      return {
+        items: Array.isArray(data.items) ? data.items : [],
+        voteRecords: data.voteRecords && typeof data.voteRecords === 'object' ? data.voteRecords : {}
+      };
+    }
+    return { items: [], voteRecords: {} };
   } catch (err) {
-    return [];
+    return { items: [], voteRecords: {} };
   }
 }
 
-async function writeDotphraseStore(items) {
+async function writeDotphraseStore(store) {
   const cache = await caches.open(DOTPHRASE_DB_CACHE);
-  const response = new Response(JSON.stringify(items), {
+  const response = new Response(JSON.stringify(store), {
     headers: { 'Content-Type': 'application/json' }
   });
   await cache.put(DOTPHRASE_DB_KEY, response);
@@ -121,19 +134,72 @@ function normalizeItem(raw, index) {
 }
 
 async function readNormalizedStore() {
-  const items = await readDotphraseStore();
-  return items.map((item, index) => normalizeItem(item, index));
+  const store = await readDotphraseStore();
+  return {
+    items: store.items.map((item, index) => normalizeItem(item, index)),
+    voteRecords: store.voteRecords
+  };
+}
+
+function getUserId(request) {
+  const authUserId = String(request.headers.get('x-authenticated-user-id') || '').trim();
+  if (authUserId) {
+    return { userId: authUserId, isAuthenticated: true };
+  }
+
+  const sessionUserId = String(request.headers.get('x-session-id') || '').trim();
+  if (sessionUserId) {
+    return { userId: sessionUserId, isAuthenticated: false };
+  }
+
+  return { userId: 'anonymous', isAuthenticated: false };
+}
+
+function voteRecordKey(dotphraseId, userId) {
+  return `${dotphraseId}${VOTE_KEY_SEPARATOR}${userId}`;
+}
+
+function applyVote(item, voteRecords, dotphraseId, userId, nextVoteValue) {
+  const key = voteRecordKey(dotphraseId, userId);
+  const prevVote = Number(voteRecords[key]) || 0;
+  if (prevVote === nextVoteValue) {
+    return { changed: false, currentVote: prevVote };
+  }
+
+  item.votes += (nextVoteValue - prevVote);
+
+  if (nextVoteValue === 0) {
+    delete voteRecords[key];
+  } else {
+    voteRecords[key] = nextVoteValue;
+  }
+
+  return { changed: true, currentVote: nextVoteValue };
+}
+
+function toUserScopedItem(item, voteRecords, userId) {
+  const currentUserVote = Number(voteRecords[voteRecordKey(item.id, userId)]) || 0;
+  return {
+    ...item,
+    currentUserVote,
+    hasVoted: currentUserVote !== 0,
+    hasUpvoted: currentUserVote === 1,
+    hasDownvoted: currentUserVote === -1
+  };
 }
 
 async function handleDotphraseApi(request) {
   const url = new URL(request.url);
 
   if (request.method === 'POST') {
-    const upvoteMatch = url.pathname.match(/^\/api\/dotphrases\/([^/]+)\/upvote$/);
-    if (upvoteMatch) {
-      const id = decodeURIComponent(upvoteMatch[1]);
-      const existing = await readNormalizedStore();
-      const idx = existing.findIndex(item => item.id === id);
+    const voteMatch = url.pathname.match(/^\/api\/dotphrases\/([^/]+)\/(upvote|downvote|unvote)$/);
+    if (voteMatch) {
+      const id = decodeURIComponent(voteMatch[1]);
+      const action = voteMatch[2];
+      const nextVoteValue = action === 'downvote' ? -1 : action === 'unvote' ? 0 : 1;
+      const { userId, isAuthenticated } = getUserId(request);
+      const store = await readNormalizedStore();
+      const idx = store.items.findIndex(item => item.id === id);
       if (idx === -1) {
         return new Response(JSON.stringify({ error: 'Not found' }), {
           status: 404,
@@ -141,17 +207,24 @@ async function handleDotphraseApi(request) {
         });
       }
 
-      existing[idx].votes += 1;
-      await writeDotphraseStore(existing);
-      return new Response(JSON.stringify(existing[idx]), {
+      const item = store.items[idx];
+      applyVote(item, store.voteRecords, id, userId, nextVoteValue);
+      await writeDotphraseStore(store);
+
+      return new Response(JSON.stringify({
+        ...toUserScopedItem(item, store.voteRecords, userId),
+        user: { id: userId, isAuthenticated }
+      }), {
         headers: { 'Content-Type': 'application/json' }
       });
     }
   }
 
   if (request.method === 'GET') {
-    const items = await readNormalizedStore();
-    return new Response(JSON.stringify(items), {
+    const { userId, isAuthenticated } = getUserId(request);
+    const store = await readNormalizedStore();
+    const items = store.items.map(item => toUserScopedItem(item, store.voteRecords, userId));
+    return new Response(JSON.stringify({ items, user: { id: userId, isAuthenticated } }), {
       headers: { 'Content-Type': 'application/json' }
     });
   }
@@ -176,10 +249,10 @@ async function handleDotphraseApi(request) {
         });
       }
 
-      const existing = await readNormalizedStore();
-      const normalized = normalizeItem(item, existing.length);
-      existing.unshift(normalized);
-      await writeDotphraseStore(existing);
+      const store = await readNormalizedStore();
+      const normalized = normalizeItem(item, store.items.length);
+      store.items.unshift(normalized);
+      await writeDotphraseStore(store);
       return new Response(JSON.stringify(normalized), {
         status: 201,
         headers: { 'Content-Type': 'application/json' }
