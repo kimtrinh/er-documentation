@@ -1,4 +1,6 @@
 const CACHE = 'em-toolkit-v4';
+const DOTPHRASE_DB_CACHE = 'dotphrases-api-v1';
+const DOTPHRASE_DB_KEY = '/api/dotphrases/store';
 
 const ASSETS = [
   '/index.html',
@@ -47,6 +49,13 @@ self.addEventListener('activate', e => {
 
 // Fetch: network-first, fall back to cache when offline
 self.addEventListener('fetch', e => {
+  const url = new URL(e.request.url);
+
+  if (url.pathname === '/api/dotphrases') {
+    e.respondWith(handleDotphraseApi(e.request));
+    return;
+  }
+
   if (e.request.method !== 'GET') return;
   e.respondWith(
     fetch(e.request).then(res => {
@@ -58,3 +67,69 @@ self.addEventListener('fetch', e => {
     }).catch(() => caches.match(e.request))
   );
 });
+
+async function readDotphraseStore() {
+  const cache = await caches.open(DOTPHRASE_DB_CACHE);
+  const match = await cache.match(DOTPHRASE_DB_KEY);
+  if (!match) return [];
+  try {
+    const data = await match.json();
+    return Array.isArray(data) ? data : [];
+  } catch (err) {
+    return [];
+  }
+}
+
+async function writeDotphraseStore(items) {
+  const cache = await caches.open(DOTPHRASE_DB_CACHE);
+  const response = new Response(JSON.stringify(items), {
+    headers: { 'Content-Type': 'application/json' }
+  });
+  await cache.put(DOTPHRASE_DB_KEY, response);
+}
+
+async function handleDotphraseApi(request) {
+  if (request.method === 'GET') {
+    const items = await readDotphraseStore();
+    return new Response(JSON.stringify(items), {
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+
+  if (request.method === 'POST') {
+    try {
+      const payload = await request.json();
+      const item = {
+        dot: String(payload.dot || '').trim(),
+        cond: String(payload.cond || '').trim(),
+        cat: String(payload.cat || '').trim(),
+        text: String(payload.text || '').trim()
+      };
+
+      if (!item.dot || !item.cond || !item.cat || !item.text) {
+        return new Response(JSON.stringify({ error: 'Missing required fields' }), {
+          status: 400,
+          headers: { 'Content-Type': 'application/json' }
+        });
+      }
+
+      const existing = await readDotphraseStore();
+      existing.unshift(item);
+      await writeDotphraseStore(existing);
+      return new Response(JSON.stringify(item), {
+        status: 201,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    } catch (err) {
+      return new Response(JSON.stringify({ error: 'Invalid request body' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+  }
+
+  return new Response(JSON.stringify({ error: 'Method not allowed' }), {
+    status: 405,
+    headers: { 'Content-Type': 'application/json' }
+  });
+}
