@@ -45,6 +45,17 @@ Your site will be served from:
 
 - `https://<your-username>.github.io/er-documentation/`
 
+
+## Dotphrase Voting Identity
+
+The offline dotphrase API in `sw.js` identifies voters in this order:
+
+1. `x-authenticated-user-id` (preferred authenticated account identifier)
+2. `x-session-id` (generated anonymous session identifier fallback)
+3. `anonymous`
+
+Vote records are stored per `dotphraseId::userId`, so repeated upvotes from the same user are idempotent and do not increase totals multiple times.
+
 ## Clinical Safety
 
 These tools are decision-support and documentation aids only. They do not replace clinician judgment, local protocols, pharmacy verification, or specialist consultation.
