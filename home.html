@@ -18,12 +18,6 @@
   --mono:'JetBrains Mono',monospace;--sans:'DM Sans',system-ui,sans-serif;
 }
 body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
-@keyframes pgFade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
-.search-hero{animation:pgFade .3s ease both}
-main>*{animation:pgFade .3s ease both}
-main>*:nth-child(2){animation-delay:.05s}
-main>*:nth-child(3){animation-delay:.1s}
-main>*:nth-child(4){animation-delay:.15s}
 
 /* ===== SHARED NEW NAV ===== */
 .sitenav{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;font-family:'DM Sans',system-ui,sans-serif}
@@ -36,12 +30,18 @@ main>*:nth-child(4){animation-delay:.15s}
 .nav-link:hover{background:var(--surface2);color:var(--text)}
 .nav-link.active{background:#1d4ed8;color:#fff}
 @media(max-width:640px){.nav-link{font-size:11px;padding:4px 8px}}
+@keyframes pgFade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.search-hero{animation:pgFade .3s ease both}
+main>*{animation:pgFade .3s ease both}
+main>*:nth-child(2){animation-delay:.05s}
+main>*:nth-child(3){animation-delay:.1s}
+main>*:nth-child(4){animation-delay:.15s}
 
 /* SEARCH HERO - full width */
 .search-hero{background:linear-gradient(160deg,#0f1e38 0%,#0a1425 60%,var(--bg) 100%);border-bottom:1px solid var(--border);padding:28px 0 24px}
 .search-hero-inner{max-width:100%;padding:0 26px}
-.search-label{font-size:16px;font-weight:800;color:var(--text);margin-bottom:3px;letter-spacing:-.01em}
-.search-sublabel{font-size:12px;color:var(--text3);margin-bottom:16px;letter-spacing:.01em}
+.search-label{font-size:16px;font-weight:800;color:var(--text);letter-spacing:-.01em;margin-bottom:3px}
+.search-sublabel{font-size:12px;color:var(--text3);letter-spacing:.01em;margin-bottom:16px}
 
 /* THE BIG SEARCH */
 .search-wrap{position:relative;width:100%}
@@ -97,13 +97,27 @@ main>*:nth-child(4){animation-delay:.15s}
 .stat-item{display:flex;flex-direction:column;padding-right:28px;margin-right:28px;border-right:1px solid var(--border)}
 .stat-item:last-child{border-right:none;margin-right:0;padding-right:0}
 .stn{font-size:20px;font-weight:800;color:var(--blue);font-family:var(--mono);line-height:1}
-.stl{font-size:10px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-top:3px}
+.stl{font-size:10px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
 
 /* MAIN */
-main{max-width:1100px;margin:0 auto;padding:24px 26px 80px}
-.sec-head{display:flex;align-items:center;gap:10px;margin:28px 0 13px}
-.sec-head h2{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.3px;color:var(--text3);white-space:nowrap}
+main{max-width:1100px;margin:0 auto;padding:22px 24px 80px}
+.sec-head{display:flex;align-items:center;gap:10px;margin:22px 0 11px}
+.sec-head h2{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--text3);white-space:nowrap}
 .sec-head::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* ANNOUNCEMENT BANNER */
+.announcement-banner{background:linear-gradient(135deg,#331100 0%,#1f0f07 100%);border:1px solid rgba(245,158,11,.45);border-radius:12px;padding:14px 16px;margin-bottom:16px;box-shadow:0 8px 18px rgba(0,0,0,.28)}
+.announcement-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.announcement-title{font-size:13px;font-weight:800;letter-spacing:.4px;color:#fbbf24;text-transform:uppercase}
+.announcement-sub{font-size:11px;color:#fdba74;margin-top:2px}
+.announcement-controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.announcement-code{background:rgba(8,15,26,.8);border:1px solid rgba(251,191,36,.35);border-radius:6px;color:var(--text);padding:6px 8px;font-family:var(--mono);font-size:12px;min-width:84px}
+.announcement-btn{background:#b45309;color:#fff;border:1px solid #f59e0b;border-radius:6px;padding:6px 10px;font-size:11px;font-weight:700;cursor:pointer}
+.announcement-btn:hover{background:#d97706}
+.announcement-status{font-size:11px;color:#fdba74;margin-bottom:8px}
+.announcement-text{width:100%;min-height:94px;background:rgba(8,15,26,.82);border:1px solid rgba(251,191,36,.28);border-radius:8px;color:#fef3c7;padding:10px 12px;font-size:13px;line-height:1.45;resize:vertical}
+.announcement-text:disabled{opacity:.72;cursor:not-allowed}
+.announcement-text::placeholder{color:#d97706}
 
 /* TOOL GRID */
 .tool-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:8px}
@@ -126,8 +140,8 @@ main{max-width:1100px;margin:0 auto;padding:24px 26px 80px}
 .panel{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.2)}
 .panel-hd{padding:10px 15px;border-bottom:1px solid var(--border);font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.8px}
 .prow{display:flex;align-items:center;gap:10px;padding:9px 15px;transition:background .1s;text-decoration:none;border-bottom:1px solid var(--border)}
-.prow:last-child{border-bottom:none}
 .prow:hover{background:var(--surface2)}
+.prow:last-child{border-bottom:none}
 .prow-body{flex:1;min-width:0}
 .prow-title{font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .prow-sub{font-size:11px;color:var(--text3)}
@@ -141,9 +155,9 @@ main{max-width:1100px;margin:0 auto;padding:24px 26px 80px}
 .dial-box{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.2)}
 .dial-sec-label{display:block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text3);padding:9px 15px 5px;border-top:1px solid var(--border);background:rgba(0,0,0,.15)}
 .dial-sec:first-child .dial-sec-label{border-top:none}
-.dial-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:7px;padding:0 12px 12px}
-.dc{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px;text-decoration:none;display:block;transition:border-color .15s,background .15s,box-shadow .15s}
-.dc:hover{border-color:var(--border2);background:var(--surface2);box-shadow:0 2px 8px rgba(0,0,0,.3)}
+.dial-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:7px;padding:0 12px 11px}
+.dc{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px;text-decoration:none;display:block;transition:all .15s}
+.dc:hover{border-color:var(--border2);background:var(--surface2)}
 .dc.omc{border-color:rgba(59,130,246,.38);background:rgba(13,32,56,.6);border-left:2px solid rgba(59,130,246,.6)}
 .dc.fmc{border-color:rgba(34,197,94,.3);background:rgba(13,45,31,.55);border-left:2px solid rgba(34,197,94,.55)}
 .dc.ext{border-color:rgba(245,158,11,.3);background:rgba(45,31,13,.5);border-left:2px solid rgba(245,158,11,.55)}
@@ -224,6 +238,21 @@ main{max-width:1100px;margin:0 auto;padding:24px 26px 80px}
 </div>
 
 <main>
+  <section class="announcement-banner" aria-labelledby="announcementTitle">
+    <div class="announcement-head">
+      <div>
+        <div class="announcement-title" id="announcementTitle">🚨 Important Announcements</div>
+        <div class="announcement-sub">Locked section for urgent department-wide updates.</div>
+      </div>
+      <div class="announcement-controls">
+        <input class="announcement-code" id="announcementCode" type="password" inputmode="numeric" placeholder="Enter code" aria-label="Announcement unlock code" maxlength="4">
+        <button class="announcement-btn" id="announcementUnlockBtn" type="button" onclick="toggleAnnouncementLock()">Unlock</button>
+      </div>
+    </div>
+    <div class="announcement-status" id="announcementStatus">🔒 Locked — enter code to edit.</div>
+    <textarea class="announcement-text" id="announcementText" placeholder="Post important announcements here..." disabled></textarea>
+  </section>
+
   <!-- TOOLS -->
   <div class="sec-head"><h2>Clinical Tools</h2></div>
   <div class="tool-grid" style="margin-bottom:22px">
@@ -242,15 +271,22 @@ main{max-width:1100px;margin:0 auto;padding:24px 26px 80px}
   <div class="two-col" style="margin-bottom:22px">
     <div class="panel">
       <div class="panel-hd">⚡ Quick Access</div>
-      <a class="prow" href="dotphrase.html"><div class="prow-body"><div class="prow-title">PE Rule-Out <span style="font-family:var(--mono);font-size:11px;color:var(--text3)">.nope</span></div><div class="prow-sub">PERC · Wells · low probability</div></div><span class="prow-tag pt-blue">Chest</span></a>
-      <a class="prow" href="dotphrase.html"><div class="prow-body"><div class="prow-title">ACS Rule-Out <span style="font-family:var(--mono);font-size:11px;color:var(--text3)">.noacs</span></div><div class="prow-sub">HEART score · serial troponins</div></div><span class="prow-tag pt-blue">Chest</span></a>
-      <a class="prow" href="dotphrase.html"><div class="prow-body"><div class="prow-title">SAH Rule-Out <span style="font-family:var(--mono);font-size:11px;color:var(--text3)">.nosah</span></div><div class="prow-sub">Ottawa rule · thunderclap headache</div></div><span class="prow-tag pt-blue">HA</span></a>
+      <a class="prow" href="dotphrase.html?q=nope"><div class="prow-body"><div class="prow-title">PE Rule-Out <span style="font-family:var(--mono);font-size:11px;color:var(--text3)">.nope</span></div><div class="prow-sub">PERC · Wells · low probability</div></div><span class="prow-tag pt-blue">Chest</span></a>
+      <a class="prow" href="dotphrase.html?q=noacs"><div class="prow-body"><div class="prow-title">ACS Rule-Out <span style="font-family:var(--mono);font-size:11px;color:var(--text3)">.noacs</span></div><div class="prow-sub">HEART score · serial troponins</div></div><span class="prow-tag pt-blue">Chest</span></a>
+      <a class="prow" href="dotphrase.html?q=nosah"><div class="prow-body"><div class="prow-title">SAH Rule-Out <span style="font-family:var(--mono);font-size:11px;color:var(--text3)">.nosah</span></div><div class="prow-sub">Ottawa rule · thunderclap headache</div></div><span class="prow-tag pt-blue">HA</span></a>
       <a class="prow" href="vasopressors.html"><div class="prow-body"><div class="prow-title">Norepinephrine</div><div class="prow-sub">0.01–3 mcg/kg/min · septic shock first-line</div></div><span class="prow-tag pt-orange">Vasc</span></a>
-      <a class="prow" href="calculators.html"><div class="prow-body"><div class="prow-title">HEART Score</div><div class="prow-sub">ACS chest pain risk stratification</div></div><span class="prow-tag pt-green">Calc</span></a>
+      <a class="prow" href="calculators.html#calc-heart"><div class="prow-body"><div class="prow-title">HEART Score</div><div class="prow-sub">ACS chest pain risk stratification</div></div><span class="prow-tag pt-green">Calc</span></a>
       <a class="prow" href="neurohub.html"><div class="prow-body"><div class="prow-title">ICH Protocol</div><div class="prow-sub">BP targets · reversal · neurosurg criteria</div></div><span class="prow-tag pt-purple">Neuro</span></a>
     </div>
     <div class="panel">
       <div class="panel-hd">🤝 Service Agreements</div>
+      <a class="prow" href="service-agreements.html?id=prolonged-ed-los-sla">
+        <div class="prow-body">
+          <div class="prow-title"><span style="display:inline-block;font-size:9px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:#c4b5fd;background:#1e1040;border:1px solid #7c3aed;border-radius:4px;padding:1px 5px;vertical-align:middle;margin-right:5px">NEW</span>Prolonged ED LOS (PLOS)</div>
+          <div class="prow-sub">Disposition barriers · OBS admission · CWD huddle workflow</div>
+        </div>
+        <span class="prow-tag pt-purple">SLA</span>
+      </a>
       <a class="prow" href="service-agreements.html?q=im%20and%20em">
         <div class="prow-body">
           <div class="prow-title">IM and EM Service Agreements</div>
@@ -282,7 +318,7 @@ main{max-width:1100px;margin:0 auto;padding:24px 26px 80px}
     <div class="dial-sec">
       <span class="dial-sec-label">🔵 OMC — Internal Medicine</span>
       <div class="dial-grid">
-        <a class="dc omc" href="ed-phone-directory.html"><div class="dc-lbl">OMC Int. Med 7a–3:30p</div><div class="dc-num">Vocera</div><div class="dc-note">Internal</div></a>
+        <a class="dc omc" href="ed-phone-directory.html#omcPanel"><div class="dc-lbl">OMC Int. Med 7a–3:30p</div><div class="dc-num">Vocera</div><div class="dc-note">Internal</div></a>
         <a class="dc omc" href="tel:+19094277333"><div class="dc-lbl">OMC Int. Med 3:30p–7a</div><div class="dc-num">(909) 427-7333</div><div class="dc-note">ext 47333</div></a>
       </div>
     </div>
@@ -290,7 +326,7 @@ main{max-width:1100px;margin:0 auto;padding:24px 26px 80px}
     <div class="dial-sec">
       <span class="dial-sec-label">🟢 FMC — Internal Medicine</span>
       <div class="dial-grid">
-        <a class="dc fmc" href="ed-phone-directory.html"><div class="dc-lbl">FMC Int. Med 7a–7p</div><div class="dc-num">Vocera</div><div class="dc-note">Internal</div></a>
+        <a class="dc fmc" href="ed-phone-directory.html#fmcPanel"><div class="dc-lbl">FMC Int. Med 7a–7p</div><div class="dc-num">Vocera</div><div class="dc-note">Internal</div></a>
         <a class="dc fmc" href="tel:+19093027028"><div class="dc-lbl">FMC Int. Med 7p–7a</div><div class="dc-num">(909) 302-7028</div><div class="dc-note">ext 27028</div></a>
       </div>
     </div>
@@ -462,9 +498,7 @@ function setFilter(f, el) {
 
   // "All" keeps search on this page.
   const q = document.getElementById('si').value;
-  if (q.trim()) {
-    doSearch(q);
-  }
+  if (q.trim()) doSearch(q);
 }
 
 function doSearch(q) {
@@ -611,6 +645,68 @@ window.addEventListener('storage', e => {
     if (q) doSearch(q);
   }
 });
+
+const ANNOUNCEMENT_UNLOCK_CODE = '0507';
+const ANNOUNCEMENT_TEXT_KEY = 'kpAnnouncementText';
+const ANNOUNCEMENT_UNLOCK_KEY = 'kpAnnouncementUnlocked';
+
+function setAnnouncementLockState(unlocked) {
+  const txt = document.getElementById('announcementText');
+  const status = document.getElementById('announcementStatus');
+  const btn = document.getElementById('announcementUnlockBtn');
+  txt.disabled = !unlocked;
+  btn.textContent = unlocked ? 'Lock' : 'Unlock';
+  status.textContent = unlocked
+    ? '🔓 Unlocked — announcements can be edited and are saved on this device.'
+    : '🔒 Locked — enter code to edit.';
+}
+
+function loadAnnouncement() {
+  const txt = document.getElementById('announcementText');
+  txt.value = localStorage.getItem(ANNOUNCEMENT_TEXT_KEY) || '';
+  const unlocked = localStorage.getItem(ANNOUNCEMENT_UNLOCK_KEY) === 'true';
+  setAnnouncementLockState(unlocked);
+}
+
+function toggleAnnouncementLock() {
+  const unlocked = localStorage.getItem(ANNOUNCEMENT_UNLOCK_KEY) === 'true';
+  if (unlocked) {
+    localStorage.setItem(ANNOUNCEMENT_UNLOCK_KEY, 'false');
+    setAnnouncementLockState(false);
+    return;
+  }
+  const codeInput = document.getElementById('announcementCode');
+  if (codeInput.value.trim() === ANNOUNCEMENT_UNLOCK_CODE) {
+    localStorage.setItem(ANNOUNCEMENT_UNLOCK_KEY, 'true');
+    setAnnouncementLockState(true);
+    codeInput.value = '';
+    document.getElementById('announcementText').focus();
+  } else {
+    alert('Incorrect code.');
+  }
+}
+
+document.getElementById('announcementText').addEventListener('input', e => {
+  localStorage.setItem(ANNOUNCEMENT_TEXT_KEY, e.target.value);
+});
+
+document.getElementById('announcementCode').addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    toggleAnnouncementLock();
+  }
+});
+
+window.addEventListener('storage', e => {
+  if (e.key === ANNOUNCEMENT_TEXT_KEY) {
+    document.getElementById('announcementText').value = e.newValue || '';
+  }
+  if (e.key === ANNOUNCEMENT_UNLOCK_KEY) {
+    setAnnouncementLockState(e.newValue === 'true');
+  }
+});
+
+loadAnnouncement();
 </script>
 <button id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">☀️</button>
 <script src="theme.js?v=3"></script>
