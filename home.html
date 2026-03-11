@@ -649,6 +649,20 @@ window.addEventListener('storage', e => {
 const ANNOUNCEMENT_UNLOCK_CODE = '0507';
 const ANNOUNCEMENT_TEXT_KEY = 'kpAnnouncementText';
 const ANNOUNCEMENT_UNLOCK_KEY = 'kpAnnouncementUnlocked';
+const ANNOUNCEMENT_FIREBASE_CONFIG = {
+  apiKey: 'AIzaSyCH1td6zhupmO-ZT3ruRN2-yZqidXqzgl4',
+  authDomain: 'er-docu.firebaseapp.com',
+  projectId: 'er-docu',
+  storageBucket: 'er-docu.firebasestorage.app',
+  messagingSenderId: '233632582452',
+  appId: '1:233632582452:web:9ef7d4f8d95866c5bc3361',
+  measurementId: 'G-XFLWV3DK7R'
+};
+
+let announcementDb = null;
+let announcementDocRef = null;
+let saveAnnouncementTimer = null;
+let suppressAnnouncementSave = false;
 
 function setAnnouncementLockState(unlocked) {
   const txt = document.getElementById('announcementText');
@@ -666,6 +680,45 @@ function loadAnnouncement() {
   txt.value = localStorage.getItem(ANNOUNCEMENT_TEXT_KEY) || '';
   const unlocked = localStorage.getItem(ANNOUNCEMENT_UNLOCK_KEY) === 'true';
   setAnnouncementLockState(unlocked);
+}
+
+async function initAnnouncementFirebase() {
+  try {
+    const appModule = await import('https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js');
+    const firestoreModule = await import('https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js');
+    const app = appModule.initializeApp(ANNOUNCEMENT_FIREBASE_CONFIG, 'announcement-app');
+    announcementDb = firestoreModule.getFirestore(app);
+    announcementDocRef = firestoreModule.doc(announcementDb, 'siteContent', 'announcement');
+
+    const snap = await firestoreModule.getDoc(announcementDocRef);
+    if (snap.exists()) {
+      const text = snap.data().text || '';
+      suppressAnnouncementSave = true;
+      document.getElementById('announcementText').value = text;
+      suppressAnnouncementSave = false;
+      localStorage.setItem(ANNOUNCEMENT_TEXT_KEY, text);
+    }
+
+    firestoreModule.onSnapshot(announcementDocRef, docSnap => {
+      if (!docSnap.exists()) return;
+      const text = docSnap.data().text || '';
+      suppressAnnouncementSave = true;
+      document.getElementById('announcementText').value = text;
+      suppressAnnouncementSave = false;
+      localStorage.setItem(ANNOUNCEMENT_TEXT_KEY, text);
+    });
+  } catch (e) {
+    console.warn('Announcement Firebase unavailable, using local-only mode.', e);
+  }
+}
+
+async function saveAnnouncementToFirebase(text) {
+  if (!announcementDocRef || suppressAnnouncementSave) return;
+  const firestoreModule = await import('https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js');
+  await firestoreModule.setDoc(announcementDocRef, {
+    text,
+    updatedAt: firestoreModule.serverTimestamp()
+  }, { merge: true });
 }
 
 function toggleAnnouncementLock() {
@@ -688,6 +741,12 @@ function toggleAnnouncementLock() {
 
 document.getElementById('announcementText').addEventListener('input', e => {
   localStorage.setItem(ANNOUNCEMENT_TEXT_KEY, e.target.value);
+  if (saveAnnouncementTimer) clearTimeout(saveAnnouncementTimer);
+  saveAnnouncementTimer = setTimeout(() => {
+    saveAnnouncementToFirebase(e.target.value).catch(err => {
+      console.warn('Failed to save announcement to Firebase.', err);
+    });
+  }, 300);
 });
 
 document.getElementById('announcementCode').addEventListener('keydown', e => {
@@ -707,6 +766,7 @@ window.addEventListener('storage', e => {
 });
 
 loadAnnouncement();
+initAnnouncementFirebase();
 </script>
 <button id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">☀️</button>
 <script src="theme.js?v=3"></script>
