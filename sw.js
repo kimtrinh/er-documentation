@@ -51,7 +51,7 @@ self.addEventListener('activate', e => {
 self.addEventListener('fetch', e => {
   const url = new URL(e.request.url);
 
-  if (url.pathname === '/api/dotphrases') {
+  if (url.pathname === '/api/dotphrases' || /^\/api\/dotphrases\/[^/]+\/upvote$/.test(url.pathname)) {
     e.respondWith(handleDotphraseApi(e.request));
     return;
   }
@@ -88,9 +88,69 @@ async function writeDotphraseStore(items) {
   await cache.put(DOTPHRASE_DB_KEY, response);
 }
 
+function stableHash(value) {
+  let hash = 0;
+  for (let i = 0; i < value.length; i += 1) {
+    hash = ((hash << 5) - hash) + value.charCodeAt(i);
+    hash |= 0;
+  }
+  return Math.abs(hash).toString(36);
+}
+
+function normalizeItem(raw, index) {
+  const dot = String(raw.dot || '').trim();
+  const cond = String(raw.cond || '').trim();
+  const cat = String(raw.cat || '').trim();
+  const text = String(raw.text || '').trim();
+  const createdAtRaw = Number(raw.createdAt);
+  const votesRaw = Number(raw.votes);
+  const createdAt = Number.isFinite(createdAtRaw) ? createdAtRaw : 0;
+  const votes = Number.isFinite(votesRaw) ? votesRaw : 0;
+  const fallbackId = `dp_${stableHash(`${dot}|${cond}|${cat}|${text}|${index}`)}`;
+
+  return {
+    ...raw,
+    dot,
+    cond,
+    cat,
+    text,
+    id: String(raw.id || fallbackId),
+    createdAt,
+    votes
+  };
+}
+
+async function readNormalizedStore() {
+  const items = await readDotphraseStore();
+  return items.map((item, index) => normalizeItem(item, index));
+}
+
 async function handleDotphraseApi(request) {
+  const url = new URL(request.url);
+
+  if (request.method === 'POST') {
+    const upvoteMatch = url.pathname.match(/^\/api\/dotphrases\/([^/]+)\/upvote$/);
+    if (upvoteMatch) {
+      const id = decodeURIComponent(upvoteMatch[1]);
+      const existing = await readNormalizedStore();
+      const idx = existing.findIndex(item => item.id === id);
+      if (idx === -1) {
+        return new Response(JSON.stringify({ error: 'Not found' }), {
+          status: 404,
+          headers: { 'Content-Type': 'application/json' }
+        });
+      }
+
+      existing[idx].votes += 1;
+      await writeDotphraseStore(existing);
+      return new Response(JSON.stringify(existing[idx]), {
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+  }
+
   if (request.method === 'GET') {
-    const items = await readDotphraseStore();
+    const items = await readNormalizedStore();
     return new Response(JSON.stringify(items), {
       headers: { 'Content-Type': 'application/json' }
     });
@@ -103,7 +163,10 @@ async function handleDotphraseApi(request) {
         dot: String(payload.dot || '').trim(),
         cond: String(payload.cond || '').trim(),
         cat: String(payload.cat || '').trim(),
-        text: String(payload.text || '').trim()
+        text: String(payload.text || '').trim(),
+        id: String(payload.id || '').trim(),
+        createdAt: Number(payload.createdAt) || Date.now(),
+        votes: Number(payload.votes) || 0
       };
 
       if (!item.dot || !item.cond || !item.cat || !item.text) {
@@ -113,10 +176,11 @@ async function handleDotphraseApi(request) {
         });
       }
 
-      const existing = await readDotphraseStore();
-      existing.unshift(item);
+      const existing = await readNormalizedStore();
+      const normalized = normalizeItem(item, existing.length);
+      existing.unshift(normalized);
       await writeDotphraseStore(existing);
-      return new Response(JSON.stringify(item), {
+      return new Response(JSON.stringify(normalized), {
         status: 201,
         headers: { 'Content-Type': 'application/json' }
       });

@@ -47,6 +47,10 @@ main{max-width:900px;margin:0 auto;padding:16px 24px 60px}
 .category-tag{font-size:11px;background:var(--bg);color:var(--text3);padding:2px 8px;border-radius:20px;border:1px solid var(--surface)}
 .copy-btn{padding:6px 14px;border-radius:8px;border:none;cursor:pointer;font-size:12px;font-weight:600;background:#3b82f6;color:#fff;transition:background .2s;white-space:nowrap;flex-shrink:0}
 .copy-btn.copied{background:#16a34a}
+.card-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.vote-btn{padding:6px 12px;border-radius:8px;border:1px solid var(--border2);cursor:pointer;font-size:12px;font-weight:600;background:var(--bg);color:var(--text-blue);transition:border-color .2s,color .2s}
+.vote-btn:hover{border-color:#3b82f6;color:var(--text-blue-bright)}
+.vote-count{font-size:12px;color:var(--text2);min-width:62px}
 .card-body{padding:12px 16px;font-size:13px;line-height:1.75;color:var(--text2)}
 .empty{text-align:center;color:#475569;margin-top:60px;font-size:15px}
 @media(max-width:600px){.card-header{flex-direction:column;align-items:flex-start}.copy-btn{width:100%}.submit-grid{grid-template-columns:1fr}}
@@ -139,6 +143,38 @@ main>*:nth-child(4){animation-delay:.15s}
 const phrases = [];
 const basePhrases = Array.isArray(window.KP_DOTPHRASES) ? window.KP_DOTPHRASES : [];
 
+function stableHash(value) {
+  let hash = 0;
+  for (let i = 0; i < value.length; i += 1) {
+    hash = ((hash << 5) - hash) + value.charCodeAt(i);
+    hash |= 0;
+  }
+  return Math.abs(hash).toString(36);
+}
+
+function normalizePhraseRecord(item, index) {
+  const dot = String(item.dot || '').trim();
+  const cond = String(item.cond || '').trim();
+  const cat = String(item.cat || '').trim();
+  const text = String(item.text || '').trim();
+  const createdAtRaw = Number(item.createdAt);
+  const createdAt = Number.isFinite(createdAtRaw) ? createdAtRaw : 0;
+  const votesRaw = Number(item.votes);
+  const votes = Number.isFinite(votesRaw) ? votesRaw : 0;
+  const fallbackId = `dp_${stableHash(`${dot}|${cond}|${cat}|${text}|${index}`)}`;
+
+  return {
+    ...item,
+    dot,
+    cond,
+    cat,
+    text,
+    id: String(item.id || fallbackId),
+    createdAt,
+    votes
+  };
+}
+
 const cats = ["All", ...Array.from(new Set(basePhrases.map(p => p.cat)))];
 let activeCategory = "All";
 
@@ -158,12 +194,20 @@ cats.forEach(cat => {
 
 function getFiltered() {
   const q = document.getElementById("search").value.toLowerCase();
-  return phrases.filter(p => {
+  const filtered = phrases.filter(p => {
     const matchSearch = !q || p.dot.includes(q) || p.cond.toLowerCase().includes(q)
       || p.cat.toLowerCase().includes(q) || p.text.toLowerCase().includes(q);
     const matchCat = activeCategory === "All" || p.cat === activeCategory;
     return matchSearch && matchCat;
   });
+
+  filtered.sort((a, b) => {
+    if (b.votes !== a.votes) return b.votes - a.votes;
+    if (b.createdAt !== a.createdAt) return b.createdAt - a.createdAt;
+    return a.id.localeCompare(b.id);
+  });
+
+  return filtered;
 }
 
 function setSubmitMessage(message, type) {
@@ -180,8 +224,27 @@ async function fetchSubmittedDotphrases() {
 }
 
 function replacePhrases(items) {
+  const mergedById = new Map();
+  items.forEach((item, index) => {
+    const normalized = normalizePhraseRecord(item, index);
+    const existing = mergedById.get(normalized.id);
+    if (existing) {
+      mergedById.set(normalized.id, {
+        ...existing,
+        ...normalized,
+        dot: normalized.dot || existing.dot,
+        cond: normalized.cond || existing.cond,
+        cat: normalized.cat || existing.cat,
+        text: normalized.text || existing.text,
+        votes: Math.max(existing.votes || 0, normalized.votes || 0)
+      });
+      return;
+    }
+    mergedById.set(normalized.id, normalized);
+  });
+
   phrases.length = 0;
-  phrases.push(...items);
+  phrases.push(...mergedById.values());
 }
 
 async function refreshPhrases() {
@@ -218,10 +281,13 @@ async function submitDotphrase(e) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
+        id: `dp_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`,
         dot: normalizedDot,
         cond,
         cat,
-        text
+        text,
+        createdAt: Date.now(),
+        votes: 0
       })
     });
 
@@ -254,11 +320,37 @@ function render() {
           <span class="condition">${p.cond}</span>
           <span class="category-tag">${p.cat}</span>
         </div>
-        <button class="copy-btn" id="btn-${i}" onclick="copyText(${i})">Copy</button>
+        <div class="card-actions">
+          <span class="vote-count">▲ ${p.votes}</span>
+          <button class="vote-btn" onclick="upvotePhrase(${i})">Upvote</button>
+          <button class="copy-btn" id="btn-${i}" onclick="copyText(${i})">Copy</button>
+        </div>
       </div>
       <p class="card-body">${p.text}</p>
     </div>
   `).join("");
+}
+
+async function upvotePhrase(i) {
+  const filtered = getFiltered();
+  const phrase = filtered[i];
+  if (!phrase || !phrase.id) return;
+
+  try {
+    const response = await fetch(`/api/dotphrases/${encodeURIComponent(phrase.id)}/upvote`, {
+      method: 'POST'
+    });
+    if (!response.ok) throw new Error('Upvote failed');
+
+    const updated = await response.json();
+    const match = phrases.find(item => item.id === phrase.id);
+    if (match) {
+      match.votes = Number(updated.votes) || (match.votes + 1);
+    }
+    render();
+  } catch (err) {
+    // no-op on network failure
+  }
 }
 
 function copyText(i) {
