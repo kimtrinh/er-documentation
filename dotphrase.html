@@ -142,6 +142,35 @@ main>*:nth-child(4){animation-delay:.15s}
 <script src="search-index.js"></script>
 <script src="data/dotphrases.js"></script>
 <script>
+const firebaseConfig = {
+  apiKey: "AIzaSyCH1td6zhupmO-ZT3ruRN2-yZqidXqzgl4",
+  authDomain: "er-docu.firebaseapp.com",
+  projectId: "er-docu",
+  storageBucket: "er-docu.firebasestorage.app",
+  messagingSenderId: "233632582452",
+  appId: "1:233632582452:web:9ef7d4f8d95866c5bc3361",
+  measurementId: "G-XFLWV3DK7R"
+};
+
+let firebaseReady = false;
+let db = null;
+let firestoreApi = null;
+
+async function initFirebase() {
+  try {
+    const [{ initializeApp }, firestore] = await Promise.all([
+      import('https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js'),
+      import('https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js')
+    ]);
+    const app = initializeApp(firebaseConfig, 'dotphrase-app');
+    db = firestore.getFirestore(app);
+    firestoreApi = firestore;
+    firebaseReady = true;
+  } catch (err) {
+    firebaseReady = false;
+  }
+}
+
 const phrases = [];
 const basePhrases = Array.isArray(window.KP_DOTPHRASES) ? window.KP_DOTPHRASES : [];
 let currentUser = { id: 'anonymous', isAuthenticated: false };
@@ -176,6 +205,14 @@ function getApiHeaders() {
 
   return {
     'x-session-id': getOrCreateSessionId()
+  };
+}
+
+function syncCurrentUser() {
+  const authenticatedUserId = getAuthenticatedUserId();
+  currentUser = {
+    id: authenticatedUserId || getOrCreateSessionId() || 'anonymous',
+    isAuthenticated: Boolean(authenticatedUserId)
   };
 }
 
@@ -259,6 +296,39 @@ function setSubmitMessage(message, type) {
 }
 
 async function fetchSubmittedDotphrases() {
+  if (firebaseReady && db && firestoreApi) {
+    const { collection, getDocs, orderBy, query, where } = firestoreApi;
+    const dotphraseSnapshot = await getDocs(query(collection(db, 'dotphrases'), orderBy('createdAt', 'desc')));
+    const userSnapshot = await getDocs(query(collection(db, 'dotphraseVotes'), where('userId', '==', currentUser.id)));
+    const userVotes = new Map();
+
+    userSnapshot.forEach(d => {
+      const row = d.data() || {};
+      if (row.phraseId) userVotes.set(String(row.phraseId), Number(row.vote) || 0);
+    });
+
+    const items = [];
+    dotphraseSnapshot.forEach(d => {
+      const row = d.data() || {};
+      const currentUserVote = Number(userVotes.get(d.id)) || 0;
+      items.push({
+        id: d.id,
+        dot: String(row.dot || ''),
+        cond: String(row.cond || ''),
+        cat: String(row.cat || ''),
+        text: String(row.text || ''),
+        votes: Number(row.votes) || 0,
+        createdAt: Number(row.createdAt) || 0,
+        currentUserVote,
+        hasVoted: currentUserVote !== 0,
+        hasUpvoted: currentUserVote === 1,
+        hasDownvoted: currentUserVote === -1
+      });
+    });
+
+    return { items, user: currentUser };
+  }
+
   const response = await fetch('/api/dotphrases', {
     cache: 'no-store',
     headers: getApiHeaders()
@@ -297,6 +367,7 @@ function replacePhrases(items) {
 }
 
 async function refreshPhrases() {
+  syncCurrentUser();
   try {
     const data = await fetchSubmittedDotphrases();
     currentUser = data.user || currentUser;
@@ -327,24 +398,31 @@ async function submitDotphrase(e) {
   setSubmitMessage('Submitting…');
 
   try {
-    const response = await fetch('/api/dotphrases', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        ...getApiHeaders()
-      },
-      body: JSON.stringify({
-        id: `dp_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`,
-        dot: normalizedDot,
-        cond,
-        cat,
-        text,
-        createdAt: Date.now(),
-        votes: 0
-      })
-    });
+    const payload = {
+      id: `dp_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`,
+      dot: normalizedDot,
+      cond,
+      cat,
+      text,
+      createdAt: Date.now(),
+      votes: 0
+    };
 
-    if (!response.ok) throw new Error('Unable to submit');
+    if (firebaseReady && db && firestoreApi) {
+      const { doc, setDoc } = firestoreApi;
+      await setDoc(doc(db, 'dotphrases', payload.id), payload);
+    } else {
+      const response = await fetch('/api/dotphrases', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...getApiHeaders()
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) throw new Error('Unable to submit');
+    }
 
     form.reset();
     setSubmitMessage('Submitted successfully.', 'success');
@@ -431,6 +509,50 @@ function render() {
 }
 
 async function sendVoteRequest(phrase, action) {
+  if (firebaseReady && db && firestoreApi) {
+    const { doc, runTransaction } = firestoreApi;
+    const userId = currentUser.id;
+    const voteDocId = `v_${stableHash(`${phrase.id}::${userId}`)}`;
+    const phraseRef = doc(db, 'dotphrases', phrase.id);
+    const voteRef = doc(db, 'dotphraseVotes', voteDocId);
+    const nextVoteValue = action === 'downvote' ? -1 : action === 'unvote' ? 0 : 1;
+
+    return runTransaction(db, async (tx) => {
+      const phraseSnap = await tx.get(phraseRef);
+      if (!phraseSnap.exists()) throw new Error('Vote failed');
+
+      const voteSnap = await tx.get(voteRef);
+      const prevVote = voteSnap.exists() ? Number(voteSnap.data().vote) || 0 : 0;
+      const currentVotes = Number(phraseSnap.data().votes) || 0;
+      const votes = currentVotes + (nextVoteValue - prevVote);
+
+      if (votes !== currentVotes) {
+        tx.update(phraseRef, { votes });
+      }
+
+      if (nextVoteValue === 0) {
+        if (voteSnap.exists()) tx.delete(voteRef);
+      } else {
+        tx.set(voteRef, {
+          phraseId: phrase.id,
+          userId,
+          vote: nextVoteValue,
+          updatedAt: Date.now()
+        });
+      }
+
+      return {
+        ...phrase,
+        votes,
+        currentUserVote: nextVoteValue,
+        hasVoted: nextVoteValue !== 0,
+        hasUpvoted: nextVoteValue === 1,
+        hasDownvoted: nextVoteValue === -1,
+        user: currentUser
+      };
+    });
+  }
+
   const response = await fetch(`/api/dotphrases/${encodeURIComponent(phrase.id)}/${action}`, {
     method: 'POST',
     headers: getApiHeaders()
@@ -561,7 +683,7 @@ function copyText(i) {
 })();
 
 document.getElementById('dotphrase-form').addEventListener('submit', submitDotphrase);
-refreshPhrases();
+initFirebase().finally(refreshPhrases);
 </script>
 
 <script id="shared-nav-search">
