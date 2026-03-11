@@ -48,6 +48,8 @@ Your site will be served from:
 
 ## Dotphrase Voting Identity
 
+`dotphrase.html` now prefers Firebase/Firestore (same project as the Service Request Board) for shared submissions and votes when Firebase loads successfully. If Firebase is unavailable, it falls back to the offline service-worker store in `sw.js`.
+
 The offline dotphrase API in `sw.js` identifies voters in this order:
 
 1. `x-authenticated-user-id` (preferred authenticated account identifier)
