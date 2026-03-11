@@ -25,6 +25,19 @@ nav{background:var(--bg);border-bottom:1px solid var(--surface);overflow-x:auto;
 .tab.active{background:#3b82f6;color:#fff}
 main{max-width:900px;margin:0 auto;padding:16px 24px 60px}
 .count{font-size:12px;color:#475569;margin-bottom:12px}
+.submit-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:16px}
+.submit-title{font-size:15px;font-weight:700;margin-bottom:10px}
+.submit-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:10px}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-size:12px;color:var(--text2)}
+.field input,.field textarea{width:100%;background:var(--bg);border:1px solid var(--border2);border-radius:8px;color:var(--text);font-size:13px;padding:10px 11px;font-family:inherit}
+.field textarea{resize:vertical;min-height:110px;line-height:1.45}
+.submit-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.submit-btn{padding:8px 14px;border-radius:8px;border:none;cursor:pointer;font-size:12px;font-weight:700;background:#2563eb;color:#fff}
+.submit-btn:disabled{opacity:.6;cursor:not-allowed}
+.submit-message{font-size:12px;color:var(--text2)}
+.submit-message.error{color:#fda4af}
+.submit-message.success{color:#86efac}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;overflow:hidden;transition:border-color .2s}
 .card:hover{border-color:#3b82f6}
 .card-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border);gap:8px;flex-wrap:wrap}
@@ -36,7 +49,7 @@ main{max-width:900px;margin:0 auto;padding:16px 24px 60px}
 .copy-btn.copied{background:#16a34a}
 .card-body{padding:12px 16px;font-size:13px;line-height:1.75;color:var(--text2)}
 .empty{text-align:center;color:#475569;margin-top:60px;font-size:15px}
-@media(max-width:600px){.card-header{flex-direction:column;align-items:flex-start}.copy-btn{width:100%}}
+@media(max-width:600px){.card-header{flex-direction:column;align-items:flex-start}.copy-btn{width:100%}.submit-grid{grid-template-columns:1fr}}
 
 /* ===== SHARED NEW NAV ===== */
 @media(max-width:640px){}
@@ -88,14 +101,45 @@ main>*:nth-child(4){animation-delay:.15s}
   </div>
 </header>
 <nav><div class="tabs" id="tabs"></div></nav>
-<main><p class="count" id="count"></p><div id="main"></div></main>
+<main>
+  <section class="submit-card">
+    <h2 class="submit-title">Share your dotphrase</h2>
+    <form id="dotphrase-form">
+      <div class="submit-grid">
+        <div class="field">
+          <label for="dot-input">Dotphrase name</label>
+          <input id="dot-input" name="dot" type="text" placeholder="e.g. nosyncope" required/>
+        </div>
+        <div class="field">
+          <label for="cond-input">Condition / title</label>
+          <input id="cond-input" name="cond" type="text" placeholder="e.g. Syncope Rule-Out" required/>
+        </div>
+        <div class="field">
+          <label for="cat-input">Category</label>
+          <input id="cat-input" name="cat" type="text" placeholder="e.g. Neuro" required/>
+        </div>
+      </div>
+      <div class="field" style="margin-bottom:10px">
+        <label for="text-input">Phrase body</label>
+        <textarea id="text-input" name="text" placeholder="Enter the full phrase body..." required></textarea>
+      </div>
+      <div class="submit-actions">
+        <button class="submit-btn" type="submit" id="submit-btn">Submit dotphrase</button>
+        <p class="submit-message" id="submit-message" aria-live="polite"></p>
+      </div>
+    </form>
+  </section>
+  <p class="count" id="count"></p>
+  <div id="main"></div>
+</main>
 
 <script src="search-index.js"></script>
 <script src="data/dotphrases.js"></script>
 <script>
-const phrases = Array.isArray(window.KP_DOTPHRASES) ? window.KP_DOTPHRASES : [];
+const phrases = [];
+const basePhrases = Array.isArray(window.KP_DOTPHRASES) ? window.KP_DOTPHRASES : [];
 
-const cats = ["All", ...Array.from(new Set(phrases.map(p => p.cat)))];
+const cats = ["All", ...Array.from(new Set(basePhrases.map(p => p.cat)))];
 let activeCategory = "All";
 
 const tabsEl = document.getElementById("tabs");
@@ -120,6 +164,77 @@ function getFiltered() {
     const matchCat = activeCategory === "All" || p.cat === activeCategory;
     return matchSearch && matchCat;
   });
+}
+
+function setSubmitMessage(message, type) {
+  const msgEl = document.getElementById("submit-message");
+  msgEl.textContent = message || "";
+  msgEl.className = `submit-message${type ? " " + type : ""}`;
+}
+
+async function fetchSubmittedDotphrases() {
+  const response = await fetch('/api/dotphrases', { cache: 'no-store' });
+  if (!response.ok) throw new Error('Failed to load dotphrases');
+  const data = await response.json();
+  return Array.isArray(data) ? data : [];
+}
+
+function replacePhrases(items) {
+  phrases.length = 0;
+  phrases.push(...items);
+}
+
+async function refreshPhrases() {
+  try {
+    const data = await fetchSubmittedDotphrases();
+    replacePhrases([...basePhrases, ...data]);
+  } catch (e) {
+    replacePhrases(basePhrases);
+  }
+  render();
+}
+
+async function submitDotphrase(e) {
+  e.preventDefault();
+  const submitBtn = document.getElementById('submit-btn');
+  const form = e.currentTarget;
+  const formData = new FormData(form);
+
+  const normalizedDot = window.KP_normalizeDotphraseId(formData.get('dot'));
+  const cond = String(formData.get('cond') || '').trim();
+  const cat = String(formData.get('cat') || '').trim();
+  const text = String(formData.get('text') || '').trim();
+
+  if (!normalizedDot || !cond || !cat || !text) {
+    setSubmitMessage('All fields are required.', 'error');
+    return;
+  }
+
+  submitBtn.disabled = true;
+  setSubmitMessage('Submitting…');
+
+  try {
+    const response = await fetch('/api/dotphrases', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        dot: normalizedDot,
+        cond,
+        cat,
+        text
+      })
+    });
+
+    if (!response.ok) throw new Error('Unable to submit');
+
+    form.reset();
+    setSubmitMessage('Submitted successfully.', 'success');
+    await refreshPhrases();
+  } catch (err) {
+    setSubmitMessage('Submission failed. Please try again.', 'error');
+  } finally {
+    submitBtn.disabled = false;
+  }
 }
 
 function render() {
@@ -202,7 +317,8 @@ function copyText(i) {
   if (q) { document.getElementById('search').value = q; }
 })();
 
-render();
+document.getElementById('dotphrase-form').addEventListener('submit', submitDotphrase);
+refreshPhrases();
 </script>
 
 <script id="shared-nav-search">
