@@ -361,28 +361,73 @@ function render() {
   const mainEl = document.getElementById("main");
   const countEl = document.getElementById("count");
   countEl.textContent = `${filtered.length} dotphrase${filtered.length !== 1 ? "s" : ""} ${activeCategory !== "All" ? "in " + activeCategory : "total"}`;
+  mainEl.replaceChildren();
+
   if (filtered.length === 0) {
-    mainEl.innerHTML = '<p class="empty">No dotphrases found. Try a different search.</p>';
+    const empty = document.createElement('p');
+    empty.className = 'empty';
+    empty.textContent = 'No dotphrases found. Try a different search.';
+    mainEl.append(empty);
     return;
   }
-  mainEl.innerHTML = filtered.map((p, i) => `
-    <div class="card">
-      <div class="card-header">
-        <div class="card-meta">
-          <span class="dotphrase">.${p.dot}</span>
-          <span class="condition">${p.cond}</span>
-          <span class="category-tag">${p.cat}</span>
-        </div>
-        <div class="card-actions">
-          <span class="vote-count">▲ ${p.votes}</span>
-          <button class="vote-btn ${p.hasUpvoted ? 'active' : ''}" onclick="toggleVote(${i})">${p.hasUpvoted ? 'Remove upvote' : 'Upvote'}</button>
-          <button class="vote-btn ${p.hasDownvoted ? 'active' : ''}" onclick="downvotePhrase(${i})">${p.hasDownvoted ? 'Downvoted' : 'Downvote'}</button>
-          <button class="copy-btn" id="btn-${i}" onclick="copyText(${i})">Copy</button>
-        </div>
-      </div>
-      <p class="card-body">${p.text}</p>
-    </div>
-  `).join("");
+
+  filtered.forEach((p, i) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+
+    const cardHeader = document.createElement('div');
+    cardHeader.className = 'card-header';
+
+    const cardMeta = document.createElement('div');
+    cardMeta.className = 'card-meta';
+
+    const dotphrase = document.createElement('span');
+    dotphrase.className = 'dotphrase';
+    dotphrase.textContent = `.${p.dot || ''}`;
+
+    const condition = document.createElement('span');
+    condition.className = 'condition';
+    condition.textContent = p.cond || '';
+
+    const category = document.createElement('span');
+    category.className = 'category-tag';
+    category.textContent = p.cat || '';
+
+    cardMeta.append(dotphrase, condition, category);
+
+    const cardActions = document.createElement('div');
+    cardActions.className = 'card-actions';
+
+    const voteCount = document.createElement('span');
+    voteCount.className = 'vote-count';
+    voteCount.textContent = `▲ ${p.votes || 0}`;
+
+    const upvoteBtn = document.createElement('button');
+    upvoteBtn.className = `vote-btn${p.hasUpvoted ? ' active' : ''}`;
+    upvoteBtn.textContent = p.hasUpvoted ? 'Remove upvote' : 'Upvote';
+    upvoteBtn.addEventListener('click', () => toggleVote(i));
+
+    const downvoteBtn = document.createElement('button');
+    downvoteBtn.className = `vote-btn${p.hasDownvoted ? ' active' : ''}`;
+    downvoteBtn.textContent = p.hasDownvoted ? 'Downvoted' : 'Downvote';
+    downvoteBtn.addEventListener('click', () => downvotePhrase(i));
+
+    const copyBtn = document.createElement('button');
+    copyBtn.className = 'copy-btn';
+    copyBtn.id = `btn-${i}`;
+    copyBtn.textContent = 'Copy';
+    copyBtn.addEventListener('click', () => copyText(i));
+
+    cardActions.append(voteCount, upvoteBtn, downvoteBtn, copyBtn);
+    cardHeader.append(cardMeta, cardActions);
+
+    const body = document.createElement('p');
+    body.className = 'card-body';
+    body.textContent = p.text || '';
+
+    card.append(cardHeader, body);
+    mainEl.append(card);
+  });
 }
 
 async function sendVoteRequest(phrase, action) {
