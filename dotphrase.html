@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <link rel="stylesheet" href="theme.css?v=2"/>
-<title>Dotphrases — ER Toolkit</title>
+<title>Community Dotphrases — ER Toolkit</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--bg:#080f1a;--surface:#0d1829;--surface2:#111f35;--surface3:#162540;--border:#1a2d48;--border2:#243d5c;--text:#e8f0fc;--text2:#8fa8c8;--text3:#4a6280;--text-blue:#93c5fd;--text-blue-bright:#bfdbfe;--blue:#3b82f6;--blue2:#1d4ed8;--blue3:#0d2038;--green:#22c55e;--green2:#15803d;--green3:#0d2d1f;--amber:#f59e0b;--red:#ef4444;--purple:#a78bfa;--cyan:#22d3ee;}
@@ -19,7 +19,7 @@ header{background:linear-gradient(135deg,var(--surface),var(--bg));border-bottom
 #search{width:100%;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:15px;outline:none;transition:border-color .2s}
 #search:focus{border-color:#3b82f6}
 #search::placeholder{color:#475569}
-nav{background:var(--bg);border-bottom:1px solid var(--surface);overflow-x:auto;-webkit-overflow-scrolling:touch}
+nav.catnav{background:var(--bg);border-bottom:1px solid var(--surface);overflow-x:auto;-webkit-overflow-scrolling:touch}
 .tabs{max-width:900px;margin:0 auto;display:flex;gap:4px;padding:8px 24px}
 .tab{padding:6px 14px;border-radius:20px;border:none;cursor:pointer;font-size:13px;font-weight:500;white-space:nowrap;background:var(--surface);color:var(--text2);transition:all .2s}
 .tab.active{background:#3b82f6;color:#fff}
@@ -38,27 +38,36 @@ main{max-width:900px;margin:0 auto;padding:16px 24px 60px}
 .submit-message{font-size:12px;color:var(--text2)}
 .submit-message.error{color:#fda4af}
 .submit-message.success{color:#86efac}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;overflow:hidden;transition:border-color .2s}
-.card:hover{border-color:#3b82f6}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;overflow:hidden;transition:border-color .2s;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.card:hover{border-color:#3b82f6;transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.4)}
 .card-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border);gap:8px;flex-wrap:wrap}
+.card-left{display:flex;align-items:center;gap:8px}
 .card-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .dotphrase{background:var(--bg);color:#38bdf8;padding:3px 10px;border-radius:6px;font-size:13px;font-weight:700;border:1px solid var(--border2);font-family:monospace}
 .condition{font-weight:600;font-size:14px;color:var(--text)}
 .category-tag{font-size:11px;background:var(--bg);color:var(--text3);padding:2px 8px;border-radius:20px;border:1px solid var(--surface)}
-.copy-btn{padding:6px 14px;border-radius:8px;border:none;cursor:pointer;font-size:12px;font-weight:600;background:#3b82f6;color:#fff;transition:background .2s;white-space:nowrap;flex-shrink:0}
-.copy-btn.copied{background:#16a34a}
+.community-tag{font-size:10px;background:#1f0d2d;color:#e879f9;padding:2px 7px;border-radius:20px;font-weight:700;border:1px solid rgba(168,139,250,.3)}
 .card-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .vote-btn{padding:6px 12px;border-radius:8px;border:1px solid var(--border2);cursor:pointer;font-size:12px;font-weight:600;background:var(--bg);color:var(--text-blue);transition:border-color .2s,color .2s}
 .vote-btn:hover{border-color:#3b82f6;color:var(--text-blue-bright)}
 .vote-btn.active{border-color:#2563eb;color:#bfdbfe;background:#0d2038}
 .vote-btn:disabled{opacity:.55;cursor:not-allowed}
 .vote-count{font-size:12px;color:var(--text2);min-width:62px}
+.copy-btn{padding:6px 14px;border-radius:8px;border:none;cursor:pointer;font-size:12px;font-weight:600;background:#3b82f6;color:#fff;transition:background .2s;white-space:nowrap}
+.copy-btn.copied{background:#16a34a}
 .card-body{padding:12px 16px;font-size:13px;line-height:1.75;color:var(--text2)}
 .empty{text-align:center;color:#475569;margin-top:60px;font-size:15px}
+
+/* SORT BAR */
+.sort-bar{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.sort-bar span{font-size:12px;color:var(--text3);font-weight:600}
+.sort-btn{padding:4px 12px;border-radius:16px;border:1px solid var(--border);cursor:pointer;font-size:11px;font-weight:600;background:transparent;color:var(--text3);transition:all .15s}
+.sort-btn:hover{border-color:var(--border2);color:var(--text2)}
+.sort-btn.active{background:var(--blue);border-color:var(--blue);color:#fff}
+
 @media(max-width:600px){.card-header{flex-direction:column;align-items:flex-start}.copy-btn{width:100%}.submit-grid{grid-template-columns:1fr}}
 
 /* ===== SHARED NEW NAV ===== */
-@media(max-width:640px){}
 .sitenav{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;font-family:'DM Sans',system-ui,sans-serif}
 .sitenav-inner{max-width:1200px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:6px;height:46px;overflow:hidden}
 .nav-logo{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:#3b82f6;white-space:nowrap;flex-shrink:0;text-decoration:none;margin-right:6px}
@@ -74,7 +83,6 @@ main>*{animation:pgFade .3s ease both}
 main>*:nth-child(2){animation-delay:.05s}
 main>*:nth-child(3){animation-delay:.1s}
 main>*:nth-child(4){animation-delay:.15s}
-.card{box-shadow:0 1px 4px rgba(0,0,0,.2)}.card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.4)}
 </style>
 <link rel="stylesheet" href="mobile.css">
 <script>document.documentElement.setAttribute('data-theme',localStorage.getItem('theme')||'dark');</script>
@@ -87,7 +95,6 @@ main>*:nth-child(4){animation-delay:.15s}
     <div class="nav-links">
       <a class="nav-link" href="index.html">🏠 Home</a>
       <a class="nav-link active" href="dotphrase.html">🧾 Documentation</a>
-
       <a class="nav-link" href="calculators.html">🧮 Decision Support</a>
       <a class="nav-link" href="rsi.html">🚨 Resuscitation</a>
       <a class="nav-link" href="algorithms.html">🔀 Algorithms</a>
@@ -100,13 +107,13 @@ main>*:nth-child(4){animation-delay:.15s}
 </nav>
 <header>
   <div class="header-inner">
-    <div class="logo"><span>🏥</span><h1>ER Rule-Out Dotphrases</h1></div>
-    <p class="subtitle">Search all dotphrases or browse by category</p>
+    <div class="logo"><span>📋</span><h1>Community Dotphrases</h1></div>
+    <p class="subtitle">Share your dotphrases and upvote the best ones — top voted rise to the top</p>
     <div class="disclaimer"><strong>⚠️ Clinical Disclaimer:</strong> These are documentation templates only. All phrases must be reviewed, individualized, and verified by the treating physician before use. Do not copy without confirming accuracy for each patient encounter. Templates do not substitute for clinical judgment.</div>
-    <input id="search" type="text" placeholder="Search: nosah, PE, DKA, compartment, abscess..." oninput="render()"/>
+    <input id="search" type="text" placeholder="Search dotphrases: nosah, PE, DKA, compartment, abscess..." oninput="render()"/>
   </div>
 </header>
-<nav><div class="tabs" id="tabs"></div></nav>
+<nav class="catnav"><div class="tabs" id="tabs"></div></nav>
 <main>
   <section class="submit-card">
     <h2 class="submit-title">Share your dotphrase</h2>
@@ -135,6 +142,15 @@ main>*:nth-child(4){animation-delay:.15s}
       </div>
     </form>
   </section>
+
+  <!-- SORT -->
+  <div class="sort-bar">
+    <span>Sort by:</span>
+    <button class="sort-btn active" onclick="setSort('votes',this)">Most Voted</button>
+    <button class="sort-btn" onclick="setSort('newest',this)">Newest</button>
+    <button class="sort-btn" onclick="setSort('alpha',this)">A-Z</button>
+  </div>
+
   <p class="count" id="count"></p>
   <div id="main"></div>
 </main>
@@ -191,21 +207,15 @@ function getAuthenticatedUserId() {
     window.localStorage.setItem(AUTH_USER_STORAGE_KEY, runtimeAuthId);
     return runtimeAuthId;
   }
-
   return String(window.localStorage.getItem(AUTH_USER_STORAGE_KEY) || '').trim();
 }
 
 function getApiHeaders() {
   const authenticatedUserId = getAuthenticatedUserId();
   if (authenticatedUserId) {
-    return {
-      'x-authenticated-user-id': authenticatedUserId
-    };
+    return { 'x-authenticated-user-id': authenticatedUserId };
   }
-
-  return {
-    'x-session-id': getOrCreateSessionId()
-  };
+  return { 'x-session-id': getOrCreateSessionId() };
 }
 
 function syncCurrentUser() {
@@ -235,58 +245,70 @@ function normalizePhraseRecord(item, index) {
   const votesRaw = Number(item.votes);
   const votes = Number.isFinite(votesRaw) ? votesRaw : 0;
   const fallbackId = `dp_${stableHash(`${dot}|${cond}|${cat}|${text}|${index}`)}`;
-
   const currentUserVote = Number(item.currentUserVote) || 0;
 
   return {
     ...item,
-    dot,
-    cond,
-    cat,
-    text,
+    dot, cond, cat, text,
     id: String(item.id || fallbackId),
-    createdAt,
-    votes,
-    currentUserVote,
+    createdAt, votes, currentUserVote,
     hasVoted: currentUserVote !== 0,
     hasUpvoted: currentUserVote === 1,
     hasDownvoted: currentUserVote === -1
   };
 }
 
-const cats = ["All", ...Array.from(new Set(basePhrases.map(p => p.cat)))];
 let activeCategory = "All";
+let activeSort = "votes";
 
-const tabsEl = document.getElementById("tabs");
-cats.forEach(cat => {
-  const btn = document.createElement("button");
-  btn.className = "tab" + (cat === "All" ? " active" : "");
-  btn.textContent = cat;
-  btn.onclick = () => {
-    activeCategory = cat;
-    document.querySelectorAll(".tab").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    render();
-  };
-  tabsEl.appendChild(btn);
-});
+function rebuildTabs() {
+  const catSet = new Set(phrases.map(p => p.cat));
+  const cats = ["All", ...Array.from(catSet).sort()];
+  const tabsEl = document.getElementById("tabs");
+  tabsEl.innerHTML = '';
+  cats.forEach(cat => {
+    const btn = document.createElement("button");
+    btn.className = "tab" + (cat === activeCategory ? " active" : "");
+    btn.textContent = cat;
+    btn.onclick = () => {
+      activeCategory = cat;
+      document.querySelectorAll(".tab").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      render();
+    };
+    tabsEl.appendChild(btn);
+  });
+}
 
 function getFiltered() {
   const q = document.getElementById("search").value.toLowerCase();
   const filtered = phrases.filter(p => {
-    const matchSearch = !q || p.dot.includes(q) || p.cond.toLowerCase().includes(q)
+    const matchSearch = !q || p.dot.toLowerCase().includes(q) || p.cond.toLowerCase().includes(q)
       || p.cat.toLowerCase().includes(q) || p.text.toLowerCase().includes(q);
     const matchCat = activeCategory === "All" || p.cat === activeCategory;
     return matchSearch && matchCat;
   });
 
-  filtered.sort((a, b) => {
-    if (b.votes !== a.votes) return b.votes - a.votes;
-    if (b.createdAt !== a.createdAt) return b.createdAt - a.createdAt;
-    return a.id.localeCompare(b.id);
-  });
+  if (activeSort === 'votes') {
+    filtered.sort((a, b) => {
+      if (b.votes !== a.votes) return b.votes - a.votes;
+      if (b.createdAt !== a.createdAt) return b.createdAt - a.createdAt;
+      return a.id.localeCompare(b.id);
+    });
+  } else if (activeSort === 'newest') {
+    filtered.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+  } else {
+    filtered.sort((a, b) => a.cond.localeCompare(b.cond));
+  }
 
   return filtered;
+}
+
+function setSort(s, el) {
+  activeSort = s;
+  document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  render();
 }
 
 function setSubmitMessage(message, type) {
@@ -375,6 +397,7 @@ async function refreshPhrases() {
   } catch (e) {
     replacePhrases(basePhrases);
   }
+  rebuildTabs();
   render();
 }
 
@@ -384,7 +407,10 @@ async function submitDotphrase(e) {
   const form = e.currentTarget;
   const formData = new FormData(form);
 
-  const normalizedDot = window.KP_normalizeDotphraseId(formData.get('dot'));
+  const dotRaw = String(formData.get('dot') || '').trim().replace(/^\./, '');
+  const normalizedDot = typeof window.KP_normalizeDotphraseId === 'function'
+    ? window.KP_normalizeDotphraseId(formData.get('dot'))
+    : dotRaw;
   const cond = String(formData.get('cond') || '').trim();
   const cat = String(formData.get('cat') || '').trim();
   const text = String(formData.get('text') || '').trim();
@@ -420,7 +446,6 @@ async function submitDotphrase(e) {
         },
         body: JSON.stringify(payload)
       });
-
       if (!response.ok) throw new Error('Unable to submit');
     }
 
@@ -438,13 +463,14 @@ function render() {
   const filtered = getFiltered();
   const mainEl = document.getElementById("main");
   const countEl = document.getElementById("count");
+
   countEl.textContent = `${filtered.length} dotphrase${filtered.length !== 1 ? "s" : ""} ${activeCategory !== "All" ? "in " + activeCategory : "total"}`;
   mainEl.replaceChildren();
 
   if (filtered.length === 0) {
     const empty = document.createElement('p');
     empty.className = 'empty';
-    empty.textContent = 'No dotphrases found. Try a different search.';
+    empty.textContent = 'No dotphrases found. Try a different search or share your own!';
     mainEl.append(empty);
     return;
   }
@@ -577,28 +603,22 @@ async function upvotePhrase(i) {
   const filtered = getFiltered();
   const phrase = filtered[i];
   if (!phrase || !phrase.id) return;
-
   try {
     const updated = await sendVoteRequest(phrase, 'upvote');
     applyVoteResponse(phrase.id, updated);
     render();
-  } catch (err) {
-    // no-op on network failure
-  }
+  } catch (err) {}
 }
 
 async function downvotePhrase(i) {
   const filtered = getFiltered();
   const phrase = filtered[i];
   if (!phrase || !phrase.id) return;
-
   try {
     const updated = await sendVoteRequest(phrase, 'downvote');
     applyVoteResponse(phrase.id, updated);
     render();
-  } catch (err) {
-    // no-op on network failure
-  }
+  } catch (err) {}
 }
 
 function toggleVote(i) {
@@ -616,16 +636,16 @@ async function unvotePhrase(i) {
   const filtered = getFiltered();
   const phrase = filtered[i];
   if (!phrase || !phrase.id) return;
-
   try {
     const updated = await sendVoteRequest(phrase, 'unvote');
     applyVoteResponse(phrase.id, updated);
     render();
-  } catch (err) {
-    // no-op on network failure
-  }
+  } catch (err) {}
 }
 
+// ══════════════════════════════════════════
+//  COPY
+// ══════════════════════════════════════════
 function copyText(i) {
   const filtered = getFiltered();
   const text = filtered[i] ? filtered[i].text : "";
@@ -643,31 +663,25 @@ function copyText(i) {
     ta.focus();
     ta.select();
     let ok = false;
-    try {
-      ok = document.execCommand("copy");
-    } catch (e) {
-      ok = false;
-    }
+    try { ok = document.execCommand("copy"); } catch { ok = false; }
     document.body.removeChild(ta);
     return ok;
   };
 
   const onSuccess = () => {
-    btn.textContent = "✓ Copied!";
+    btn.textContent = "Copied!";
     btn.classList.add("copied");
     setTimeout(() => { btn.textContent = "Copy"; btn.classList.remove("copied"); }, 2000);
   };
 
   const onFailure = () => {
     btn.textContent = "Copy failed";
-    btn.classList.remove("copied");
     setTimeout(() => { btn.textContent = "Copy"; }, 2000);
   };
 
   if (navigator.clipboard && window.isSecureContext) {
     navigator.clipboard.writeText(text).then(onSuccess).catch(() => {
-      if (fallbackCopy()) onSuccess();
-      else onFailure();
+      if (fallbackCopy()) onSuccess(); else onFailure();
     });
   } else if (fallbackCopy()) {
     onSuccess();
@@ -676,7 +690,9 @@ function copyText(i) {
   }
 }
 
-// Pre-fill search from URL ?q= param
+// ══════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════
 (function() {
   var q = new URLSearchParams(window.location.search).get('q');
   if (q) { document.getElementById('search').value = q; }

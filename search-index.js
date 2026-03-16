@@ -547,8 +547,8 @@ if (typeof window !== 'undefined') {
 (function initSharedNavSearch() {
   if (typeof window === 'undefined' || typeof document === 'undefined') return;
 
-  // Home has a dedicated hero search. Directory has its own large live-search bar.
-  if (document.getElementById('si') || document.getElementById('globalSearch')) return;
+  // Home page has a dedicated hero search that already uses the full index.
+  if (document.getElementById('si')) return;
   if (document.getElementById('kp-shared-search-host')) return;
 
   const nav = document.querySelector('.sitenav');

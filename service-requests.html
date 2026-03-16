@@ -4,6 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <link rel="stylesheet" href="theme.css?v=2"/>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <title>Service Requests — ER Toolkit</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -361,6 +362,55 @@ const firebaseConfig = {
   appId: "1:233632582452:web:9ef7d4f8d95866c5bc3361",
   measurementId: "G-XFLWV3DK7R"
 };
+
+// ╔═══════════════════════════════════════════════════════════╗
+// ║  EMAILJS CONFIG — Email notifications on new requests    ║
+// ║  1. Go to https://www.emailjs.com and create an account  ║
+// ║  2. Add an Email Service (e.g. Gmail) → copy Service ID  ║
+// ║  3. Create an Email Template with variables:              ║
+// ║     {{title}}, {{description}}, {{location}}, {{room}},  ║
+// ║     {{priority}}, {{category}}, {{submitter}}             ║
+// ║  4. Copy your Public Key from Account → API Keys         ║
+// ║  5. Replace the values below                              ║
+// ╚═══════════════════════════════════════════════════════════╝
+const EMAILJS_PUBLIC_KEY = 'ZUkxeb4p-LrOetbHE';
+const EMAILJS_SERVICE_ID = 'service_7s9tj4j';
+const EMAILJS_TEMPLATE_ID = 'template_gkq401s';
+const NOTIFY_EMAILS = [
+  'Russel.W.Maxie-Sr@kp.org',
+  'David.J.Thiessen@kp.org',
+  'kim.x.trinh@kp.org'
+];
+
+let emailjsReady = false;
+function initEmailJS() {
+  if (EMAILJS_PUBLIC_KEY === 'YOUR_EMAILJS_PUBLIC_KEY') return;
+  try {
+    emailjs.init(EMAILJS_PUBLIC_KEY);
+    emailjsReady = true;
+  } catch (e) {
+    console.warn('EmailJS init failed:', e);
+  }
+}
+
+async function sendEmailNotification(data) {
+  if (!emailjsReady) return;
+  const params = {
+    to_email: NOTIFY_EMAILS.join(','),
+    title: data.title,
+    description: data.desc || '(none)',
+    location: data.location,
+    room: data.room || '(not specified)',
+    priority: data.priority,
+    category: data.category,
+    submitter: data.submitter
+  };
+  try {
+    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params);
+  } catch (e) {
+    console.warn('Email notification failed:', e);
+  }
+}
 
 let db = null;
 let firebaseReady = false;
@@ -768,6 +818,7 @@ async function submitRequest() {
     };
 
     await addDoc(collection(db, 'serviceRequests'), data);
+    sendEmailNotification(data);
     closeModal();
     showToast('Request submitted successfully!');
     await loadRequests();
@@ -859,6 +910,7 @@ document.addEventListener('keydown', e => {
 
 // ── INIT ─────────────────────────────────────────────────────
 initFirebase();
+initEmailJS();
 updateAdminToggle();
 loadRequests();
 </script>
