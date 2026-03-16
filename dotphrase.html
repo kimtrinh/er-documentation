@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <link rel="stylesheet" href="theme.css?v=2"/>
-<title>Dotphrases — ER Toolkit</title>
+<title>Community Dotphrases — ER Toolkit</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--bg:#080f1a;--surface:#0d1829;--surface2:#111f35;--surface3:#162540;--border:#1a2d48;--border2:#243d5c;--text:#e8f0fc;--text2:#8fa8c8;--text3:#4a6280;--text-blue:#93c5fd;--text-blue-bright:#bfdbfe;--blue:#3b82f6;--blue2:#1d4ed8;--blue3:#0d2038;--green:#22c55e;--green2:#15803d;--green3:#0d2d1f;--amber:#f59e0b;--red:#ef4444;--purple:#a78bfa;--cyan:#22d3ee;}
@@ -19,27 +19,72 @@ header{background:linear-gradient(135deg,var(--surface),var(--bg));border-bottom
 #search{width:100%;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:15px;outline:none;transition:border-color .2s}
 #search:focus{border-color:#3b82f6}
 #search::placeholder{color:#475569}
-nav{background:var(--bg);border-bottom:1px solid var(--surface);overflow-x:auto;-webkit-overflow-scrolling:touch}
+nav.catnav{background:var(--bg);border-bottom:1px solid var(--surface);overflow-x:auto;-webkit-overflow-scrolling:touch}
 .tabs{max-width:900px;margin:0 auto;display:flex;gap:4px;padding:8px 24px}
 .tab{padding:6px 14px;border-radius:20px;border:none;cursor:pointer;font-size:13px;font-weight:500;white-space:nowrap;background:var(--surface);color:var(--text2);transition:all .2s}
 .tab.active{background:#3b82f6;color:#fff}
 main{max-width:900px;margin:0 auto;padding:16px 24px 60px}
 .count{font-size:12px;color:#475569;margin-bottom:12px}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;overflow:hidden;transition:border-color .2s}
-.card:hover{border-color:#3b82f6}
+
+/* CARDS */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;overflow:hidden;transition:border-color .2s;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.card:hover{border-color:#3b82f6;transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.4)}
+.card.community{border-left:3px solid var(--purple)}
 .card-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border);gap:8px;flex-wrap:wrap}
+.card-left{display:flex;align-items:center;gap:8px}
 .card-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .dotphrase{background:var(--bg);color:#38bdf8;padding:3px 10px;border-radius:6px;font-size:13px;font-weight:700;border:1px solid var(--border2);font-family:monospace}
 .condition{font-weight:600;font-size:14px;color:var(--text)}
 .category-tag{font-size:11px;background:var(--bg);color:var(--text3);padding:2px 8px;border-radius:20px;border:1px solid var(--surface)}
-.copy-btn{padding:6px 14px;border-radius:8px;border:none;cursor:pointer;font-size:12px;font-weight:600;background:#3b82f6;color:#fff;transition:background .2s;white-space:nowrap;flex-shrink:0}
+.community-tag{font-size:10px;background:#1f0d2d;color:#e879f9;padding:2px 7px;border-radius:20px;font-weight:700;border:1px solid rgba(168,139,250,.3)}
+.card-actions{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.copy-btn{padding:6px 14px;border-radius:8px;border:none;cursor:pointer;font-size:12px;font-weight:600;background:#3b82f6;color:#fff;transition:background .2s;white-space:nowrap}
 .copy-btn.copied{background:#16a34a}
-.card-body{padding:12px 16px;font-size:13px;line-height:1.75;color:var(--text2)}
+.card-body{padding:12px 16px;font-size:13px;line-height:1.75;color:var(--text2);white-space:pre-wrap}
+.card-footer{display:flex;align-items:center;justify-content:space-between;padding:8px 16px;border-top:1px solid var(--border);font-size:11px;color:var(--text3)}
+.author-info{font-style:italic}
 .empty{text-align:center;color:#475569;margin-top:60px;font-size:15px}
-@media(max-width:600px){.card-header{flex-direction:column;align-items:flex-start}.copy-btn{width:100%}}
+
+/* VOTE BUTTON */
+.vote-btn{display:flex;align-items:center;gap:5px;padding:5px 12px;border-radius:8px;border:1px solid var(--border2);cursor:pointer;font-size:13px;font-weight:700;background:var(--bg);color:var(--text2);transition:all .2s;flex-shrink:0}
+.vote-btn:hover{border-color:var(--blue);color:var(--blue);background:var(--blue3)}
+.vote-btn.voted{border-color:var(--blue);color:#fff;background:var(--blue2)}
+.vote-count{font-family:monospace;font-size:13px}
+
+/* SUBMIT FORM */
+.submit-toggle{display:flex;justify-content:center;margin-bottom:16px}
+.submit-toggle button{padding:10px 24px;border-radius:10px;border:1px solid var(--purple);cursor:pointer;font-size:14px;font-weight:700;background:transparent;color:var(--purple);transition:all .2s}
+.submit-toggle button:hover{background:rgba(167,139,250,.12)}
+.submit-panel{display:none;background:var(--surface);border:1px solid var(--border2);border-radius:12px;padding:20px;margin-bottom:20px}
+.submit-panel.open{display:block}
+.submit-panel h3{font-size:16px;margin-bottom:14px;color:var(--text)}
+.form-row{margin-bottom:12px}
+.form-row label{display:block;font-size:12px;font-weight:600;color:var(--text2);margin-bottom:4px}
+.form-row input,.form-row textarea,.form-row select{width:100%;padding:10px 14px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:14px;font-family:inherit;outline:none;transition:border-color .2s}
+.form-row input:focus,.form-row textarea:focus,.form-row select:focus{border-color:var(--blue)}
+.form-row textarea{min-height:120px;resize:vertical;line-height:1.6}
+.form-row select{cursor:pointer}
+.form-row select option{background:var(--bg);color:var(--text)}
+.form-actions{display:flex;gap:10px;justify-content:flex-end}
+.btn-submit{padding:10px 24px;border-radius:8px;border:none;cursor:pointer;font-size:13px;font-weight:700;background:var(--green);color:#fff;transition:background .2s}
+.btn-submit:hover{background:var(--green2)}
+.btn-cancel{padding:10px 24px;border-radius:8px;border:1px solid var(--border);cursor:pointer;font-size:13px;font-weight:600;background:transparent;color:var(--text2);transition:all .2s}
+.btn-cancel:hover{background:var(--surface2)}
+
+/* SORT BAR */
+.sort-bar{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.sort-bar span{font-size:12px;color:var(--text3);font-weight:600}
+.sort-btn{padding:4px 12px;border-radius:16px;border:1px solid var(--border);cursor:pointer;font-size:11px;font-weight:600;background:transparent;color:var(--text3);transition:all .15s}
+.sort-btn:hover{border-color:var(--border2);color:var(--text2)}
+.sort-btn.active{background:var(--blue);border-color:var(--blue);color:#fff}
+
+@media(max-width:600px){
+  .card-header{flex-direction:column;align-items:flex-start}
+  .card-actions{width:100%;justify-content:space-between}
+  .copy-btn{flex:1}
+}
 
 /* ===== SHARED NEW NAV ===== */
-@media(max-width:640px){}
 .sitenav{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;font-family:'DM Sans',system-ui,sans-serif}
 .sitenav-inner{max-width:1200px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:6px;height:46px;overflow:hidden}
 .nav-logo{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:#3b82f6;white-space:nowrap;flex-shrink:0;text-decoration:none;margin-right:6px}
@@ -55,7 +100,6 @@ main>*{animation:pgFade .3s ease both}
 main>*:nth-child(2){animation-delay:.05s}
 main>*:nth-child(3){animation-delay:.1s}
 main>*:nth-child(4){animation-delay:.15s}
-.card{box-shadow:0 1px 4px rgba(0,0,0,.2)}.card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.4)}
 </style>
 <link rel="stylesheet" href="mobile.css">
 <script>document.documentElement.setAttribute('data-theme',localStorage.getItem('theme')||'dark');</script>
@@ -68,7 +112,6 @@ main>*:nth-child(4){animation-delay:.15s}
     <div class="nav-links">
       <a class="nav-link" href="index.html">🏠 Home</a>
       <a class="nav-link active" href="mdm.html">🧾 Documentation</a>
-
       <a class="nav-link" href="calculators.html">🧮 Decision Support</a>
       <a class="nav-link" href="rsi.html">🚨 Resuscitation</a>
       <a class="nav-link" href="algorithms.html">🔀 Algorithms</a>
@@ -81,71 +124,242 @@ main>*:nth-child(4){animation-delay:.15s}
 </nav>
 <header>
   <div class="header-inner">
-    <div class="logo"><span>🏥</span><h1>ER Rule-Out Dotphrases</h1></div>
-    <p class="subtitle">Search all dotphrases or browse by category</p>
+    <div class="logo"><span>📋</span><h1>Community Dotphrases</h1></div>
+    <p class="subtitle">Share your dotphrases and upvote the best ones — top voted rise to the top</p>
     <div class="disclaimer"><strong>⚠️ Clinical Disclaimer:</strong> These are documentation templates only. All phrases must be reviewed, individualized, and verified by the treating physician before use. Do not copy without confirming accuracy for each patient encounter. Templates do not substitute for clinical judgment.</div>
-    <input id="search" type="text" placeholder="Search: nosah, PE, DKA, compartment, abscess..." oninput="render()"/>
+    <input id="search" type="text" placeholder="Search dotphrases: nosah, PE, DKA, compartment, abscess..." oninput="render()"/>
   </div>
 </header>
-<nav><div class="tabs" id="tabs"></div></nav>
-<main><p class="count" id="count"></p><div id="main"></div></main>
+<nav class="catnav"><div class="tabs" id="tabs"></div></nav>
+<main>
+  <!-- SUBMIT YOUR OWN -->
+  <div class="submit-toggle"><button onclick="toggleSubmit()">+ Share Your Dotphrase</button></div>
+  <div class="submit-panel" id="submitPanel">
+    <h3>Share a Dotphrase</h3>
+    <div class="form-row">
+      <label>Dotphrase Trigger (e.g. nosah, noacs)</label>
+      <input id="newDot" type="text" placeholder=".yourdotphrase" maxlength="40"/>
+    </div>
+    <div class="form-row">
+      <label>Condition / Title</label>
+      <input id="newCond" type="text" placeholder="e.g. SAH Rule-Out" maxlength="100"/>
+    </div>
+    <div class="form-row">
+      <label>Category</label>
+      <select id="newCat">
+        <option value="">Select a category...</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <label>Your Name (optional)</label>
+      <input id="newAuthor" type="text" placeholder="e.g. Dr. Smith" maxlength="60"/>
+    </div>
+    <div class="form-row">
+      <label>Dotphrase Text</label>
+      <textarea id="newText" placeholder="Paste your dotphrase template text here..."></textarea>
+    </div>
+    <div class="form-actions">
+      <button class="btn-cancel" onclick="toggleSubmit()">Cancel</button>
+      <button class="btn-submit" onclick="submitPhrase()">Submit Dotphrase</button>
+    </div>
+  </div>
+
+  <!-- SORT -->
+  <div class="sort-bar">
+    <span>Sort by:</span>
+    <button class="sort-btn active" onclick="setSort('votes',this)">Most Voted</button>
+    <button class="sort-btn" onclick="setSort('newest',this)">Newest</button>
+    <button class="sort-btn" onclick="setSort('alpha',this)">A-Z</button>
+  </div>
+
+  <p class="count" id="count"></p>
+  <div id="main"></div>
+</main>
 
 <script src="search-index.js"></script>
 <script src="data/dotphrases.js"></script>
 <script>
-const phrases = Array.isArray(window.KP_DOTPHRASES) ? window.KP_DOTPHRASES : [];
+// ══════════════════════════════════════════
+//  DATA: merge curated + community phrases
+// ══════════════════════════════════════════
+const STORAGE_KEY = 'kp_community_dotphrases';
+const VOTES_KEY = 'kp_dotphrase_votes';
+const VOTED_KEY = 'kp_dotphrase_voted'; // which IDs this user voted for
 
-const cats = ["All", ...Array.from(new Set(phrases.map(p => p.cat)))];
+function getCommunityPhrases() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
+  catch { return []; }
+}
+function saveCommunityPhrases(arr) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+}
+function getVotes() {
+  try { return JSON.parse(localStorage.getItem(VOTES_KEY)) || {}; }
+  catch { return {}; }
+}
+function saveVotes(v) { localStorage.setItem(VOTES_KEY, JSON.stringify(v)); }
+function getVotedSet() {
+  try { return new Set(JSON.parse(localStorage.getItem(VOTED_KEY)) || []); }
+  catch { return new Set(); }
+}
+function saveVotedSet(s) { localStorage.setItem(VOTED_KEY, JSON.stringify([...s])); }
+
+// Build merged list: curated (from data file) + community (from localStorage)
+function getAllPhrases() {
+  const curated = (Array.isArray(window.KP_DOTPHRASES) ? window.KP_DOTPHRASES : []).map((p, i) => ({
+    id: 'curated-' + i,
+    dot: p.dot,
+    cond: p.cond,
+    cat: p.cat,
+    text: p.text,
+    community: false,
+    author: '',
+    ts: 0
+  }));
+  const community = getCommunityPhrases().map(p => ({ ...p, community: true }));
+  return [...curated, ...community];
+}
+
+function getVoteCount(id) {
+  return getVotes()[id] || 0;
+}
+
+// ══════════════════════════════════════════
+//  CATEGORIES + TABS
+// ══════════════════════════════════════════
 let activeCategory = "All";
+let activeSort = "votes";
 
-const tabsEl = document.getElementById("tabs");
-cats.forEach(cat => {
-  const btn = document.createElement("button");
-  btn.className = "tab" + (cat === "All" ? " active" : "");
-  btn.textContent = cat;
-  btn.onclick = () => {
-    activeCategory = cat;
-    document.querySelectorAll(".tab").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    render();
-  };
-  tabsEl.appendChild(btn);
-});
+function rebuildTabs() {
+  const all = getAllPhrases();
+  const catSet = new Set(all.map(p => p.cat));
+  const cats = ["All", ...Array.from(catSet).sort()];
 
+  const tabsEl = document.getElementById("tabs");
+  tabsEl.innerHTML = '';
+  cats.forEach(cat => {
+    const btn = document.createElement("button");
+    btn.className = "tab" + (cat === activeCategory ? " active" : "");
+    btn.textContent = cat;
+    btn.onclick = () => {
+      activeCategory = cat;
+      document.querySelectorAll(".tab").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      render();
+    };
+    tabsEl.appendChild(btn);
+  });
+
+  // Populate category select for submission form
+  const sel = document.getElementById("newCat");
+  const existing = sel.value;
+  sel.innerHTML = '<option value="">Select a category...</option>';
+  Array.from(catSet).sort().forEach(c => {
+    sel.innerHTML += `<option value="${escHtml(c)}"${c === existing ? ' selected' : ''}>${escHtml(c)}</option>`;
+  });
+  sel.innerHTML += '<option value="__custom__">+ New category...</option>';
+}
+
+// ══════════════════════════════════════════
+//  FILTERING + SORTING
+// ══════════════════════════════════════════
 function getFiltered() {
   const q = document.getElementById("search").value.toLowerCase();
-  return phrases.filter(p => {
-    const matchSearch = !q || p.dot.includes(q) || p.cond.toLowerCase().includes(q)
+  let list = getAllPhrases().filter(p => {
+    const matchSearch = !q || p.dot.toLowerCase().includes(q) || p.cond.toLowerCase().includes(q)
       || p.cat.toLowerCase().includes(q) || p.text.toLowerCase().includes(q);
     const matchCat = activeCategory === "All" || p.cat === activeCategory;
     return matchSearch && matchCat;
   });
+
+  // Sort
+  if (activeSort === 'votes') {
+    list.sort((a, b) => getVoteCount(b.id) - getVoteCount(a.id));
+  } else if (activeSort === 'newest') {
+    list.sort((a, b) => (b.ts || 0) - (a.ts || 0));
+  } else {
+    list.sort((a, b) => a.cond.localeCompare(b.cond));
+  }
+  return list;
+}
+
+function setSort(s, el) {
+  activeSort = s;
+  document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  render();
+}
+
+// ══════════════════════════════════════════
+//  RENDER
+// ══════════════════════════════════════════
+function escHtml(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 }
 
 function render() {
   const filtered = getFiltered();
   const mainEl = document.getElementById("main");
   const countEl = document.getElementById("count");
+  const votedSet = getVotedSet();
+
   countEl.textContent = `${filtered.length} dotphrase${filtered.length !== 1 ? "s" : ""} ${activeCategory !== "All" ? "in " + activeCategory : "total"}`;
+
   if (filtered.length === 0) {
-    mainEl.innerHTML = '<p class="empty">No dotphrases found. Try a different search.</p>';
+    mainEl.innerHTML = '<p class="empty">No dotphrases found. Try a different search or share your own!</p>';
     return;
   }
-  mainEl.innerHTML = filtered.map((p, i) => `
-    <div class="card">
+
+  mainEl.innerHTML = filtered.map((p, i) => {
+    const votes = getVoteCount(p.id);
+    const hasVoted = votedSet.has(p.id);
+    return `
+    <div class="card${p.community ? ' community' : ''}">
       <div class="card-header">
         <div class="card-meta">
-          <span class="dotphrase">.${p.dot}</span>
-          <span class="condition">${p.cond}</span>
-          <span class="category-tag">${p.cat}</span>
+          <span class="dotphrase">.${escHtml(p.dot)}</span>
+          <span class="condition">${escHtml(p.cond)}</span>
+          <span class="category-tag">${escHtml(p.cat)}</span>
+          ${p.community ? '<span class="community-tag">Community</span>' : ''}
         </div>
-        <button class="copy-btn" id="btn-${i}" onclick="copyText(${i})">Copy</button>
+        <div class="card-actions">
+          <button class="vote-btn${hasVoted ? ' voted' : ''}" onclick="toggleVote('${escHtml(p.id)}')">
+            ${hasVoted ? '&#9650;' : '&#9651;'} <span class="vote-count">${votes}</span>
+          </button>
+          <button class="copy-btn" id="btn-${i}" onclick="copyText(${i})">Copy</button>
+        </div>
       </div>
-      <p class="card-body">${p.text}</p>
-    </div>
-  `).join("");
+      <p class="card-body">${escHtml(p.text)}</p>
+      ${p.community && p.author ? `<div class="card-footer"><span class="author-info">Shared by ${escHtml(p.author)}</span></div>` : ''}
+    </div>`;
+  }).join("");
 }
 
+// ══════════════════════════════════════════
+//  VOTING
+// ══════════════════════════════════════════
+function toggleVote(id) {
+  const votes = getVotes();
+  const votedSet = getVotedSet();
+
+  if (votedSet.has(id)) {
+    // Un-vote
+    votes[id] = Math.max((votes[id] || 0) - 1, 0);
+    votedSet.delete(id);
+  } else {
+    // Vote
+    votes[id] = (votes[id] || 0) + 1;
+    votedSet.add(id);
+  }
+
+  saveVotes(votes);
+  saveVotedSet(votedSet);
+  render();
+}
+
+// ══════════════════════════════════════════
+//  COPY
+// ══════════════════════════════════════════
 function copyText(i) {
   const filtered = getFiltered();
   const text = filtered[i] ? filtered[i].text : "";
@@ -163,31 +377,25 @@ function copyText(i) {
     ta.focus();
     ta.select();
     let ok = false;
-    try {
-      ok = document.execCommand("copy");
-    } catch (e) {
-      ok = false;
-    }
+    try { ok = document.execCommand("copy"); } catch { ok = false; }
     document.body.removeChild(ta);
     return ok;
   };
 
   const onSuccess = () => {
-    btn.textContent = "✓ Copied!";
+    btn.textContent = "Copied!";
     btn.classList.add("copied");
     setTimeout(() => { btn.textContent = "Copy"; btn.classList.remove("copied"); }, 2000);
   };
 
   const onFailure = () => {
     btn.textContent = "Copy failed";
-    btn.classList.remove("copied");
     setTimeout(() => { btn.textContent = "Copy"; }, 2000);
   };
 
   if (navigator.clipboard && window.isSecureContext) {
     navigator.clipboard.writeText(text).then(onSuccess).catch(() => {
-      if (fallbackCopy()) onSuccess();
-      else onFailure();
+      if (fallbackCopy()) onSuccess(); else onFailure();
     });
   } else if (fallbackCopy()) {
     onSuccess();
@@ -196,12 +404,78 @@ function copyText(i) {
   }
 }
 
+// ══════════════════════════════════════════
+//  SUBMIT
+// ══════════════════════════════════════════
+function toggleSubmit() {
+  document.getElementById('submitPanel').classList.toggle('open');
+}
+
+function submitPhrase() {
+  const dot = document.getElementById('newDot').value.trim().replace(/^\./, '');
+  const cond = document.getElementById('newCond').value.trim();
+  let cat = document.getElementById('newCat').value;
+  const author = document.getElementById('newAuthor').value.trim();
+  const text = document.getElementById('newText').value.trim();
+
+  if (!dot || !cond || !text) {
+    alert('Please fill in the dotphrase trigger, title, and text.');
+    return;
+  }
+
+  if (cat === '__custom__') {
+    cat = prompt('Enter new category name:');
+    if (!cat || !cat.trim()) return;
+    cat = cat.trim();
+  }
+  if (!cat) {
+    alert('Please select a category.');
+    return;
+  }
+
+  const community = getCommunityPhrases();
+  const newPhrase = {
+    id: 'community-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7),
+    dot: dot,
+    cond: cond,
+    cat: cat,
+    text: text,
+    author: author,
+    ts: Date.now()
+  };
+  community.push(newPhrase);
+  saveCommunityPhrases(community);
+
+  // Give it an initial upvote from the submitter
+  const votes = getVotes();
+  votes[newPhrase.id] = 1;
+  saveVotes(votes);
+  const votedSet = getVotedSet();
+  votedSet.add(newPhrase.id);
+  saveVotedSet(votedSet);
+
+  // Reset form
+  document.getElementById('newDot').value = '';
+  document.getElementById('newCond').value = '';
+  document.getElementById('newCat').value = '';
+  document.getElementById('newAuthor').value = '';
+  document.getElementById('newText').value = '';
+  document.getElementById('submitPanel').classList.remove('open');
+
+  rebuildTabs();
+  render();
+}
+
+// ══════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════
 // Pre-fill search from URL ?q= param
 (function() {
   var q = new URLSearchParams(window.location.search).get('q');
   if (q) { document.getElementById('search').value = q; }
 })();
 
+rebuildTabs();
 render();
 </script>
 
