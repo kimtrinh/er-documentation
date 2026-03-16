@@ -143,7 +143,7 @@ main>*:nth-child(4){animation-delay:.15s}
     <a class="nav-logo" href="index.html">⚡</a>
     <div class="nav-links">
       <a class="nav-link" href="index.html">🏠 Home</a>
-      <a class="nav-link" href="mdm.html">🧾 Documentation</a>
+      <a class="nav-link" href="dotphrase.html">🧾 Documentation</a>
 
       <a class="nav-link" href="calculators.html">🧮 Decision Support</a>
       <a class="nav-link" href="rsi.html">🚨 Resuscitation</a>
@@ -281,33 +281,106 @@ const SEED = [
   {id:'s16',status:'done',title:'Evidence-Based Scores in Dotphrases',desc:'nope, noacs, nodvt, nonci, sdmlowriskcp all updated with validated score language, criteria, and citations (Kline 2004, Six 2008, Wells 2003, Stiell 2001).',tag:'Docs',votes:12,submitter:'Kim',ts:1707000000},
 ];
 
+const ROADMAP_FIREBASE_CONFIG = {
+  apiKey: 'AIzaSyCH1td6zhupmO-ZT3ruRN2-yZqidXqzgl4',
+  authDomain: 'er-docu.firebaseapp.com',
+  projectId: 'er-docu',
+  storageBucket: 'er-docu.firebasestorage.app',
+  messagingSenderId: '233632582452',
+  appId: '1:233632582452:web:9ef7d4f8d95866c5bc3361',
+  measurementId: 'G-XFLWV3DK7R'
+};
+
 // ── STATE ─────────────────────────────────────────────────────
 let items = [];
 let votedIds = new Set();
 let selectedTag = null;
 let currentFilter = 'all';
 let currentSort = 'votes';
+let roadmapDb = null;
+let firestoreApi = null;
+let firebaseReady = false;
+let browserId = null;
 
-const DATA_VERSION = 'v3';
-function loadState() {
+function getBrowserId() {
+  const key = 'roadmap_browser_id';
+  let id = localStorage.getItem(key);
+  if (!id) {
+    id = (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2));
+    localStorage.setItem(key, id);
+  }
+  return id;
+}
+
+async function initFirebase() {
   try {
-    const ver = localStorage.getItem('roadmap_version');
-    const saved = localStorage.getItem('roadmap_items');
-    const voted = localStorage.getItem('roadmap_voted');
-    if (saved && ver === DATA_VERSION) items = JSON.parse(saved);
-    else { items = JSON.parse(JSON.stringify(SEED)); localStorage.removeItem('roadmap_voted'); }
-    if (voted && ver === DATA_VERSION) votedIds = new Set(JSON.parse(voted));
-  } catch(e) {
-    items = JSON.parse(JSON.stringify(SEED));
+    const appModule = await import('https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js');
+    const fs = await import('https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js');
+    const app = appModule.initializeApp(ROADMAP_FIREBASE_CONFIG, 'roadmap-app');
+    roadmapDb = fs.getFirestore(app);
+    firestoreApi = fs;
+    firebaseReady = true;
+    return true;
+  } catch (e) {
+    console.warn('Roadmap Firebase unavailable; page is read-only.', e);
+    firebaseReady = false;
+    return false;
   }
 }
 
-function saveState() {
-  try {
-    localStorage.setItem('roadmap_version', DATA_VERSION);
-    localStorage.setItem('roadmap_items', JSON.stringify(items));
-    localStorage.setItem('roadmap_voted', JSON.stringify([...votedIds]));
-  } catch(e) {}
+async function seedRoadmapIfEmpty() {
+  if (!firebaseReady || !roadmapDb || !firestoreApi) return;
+  const { collection, getDocs, setDoc, doc, serverTimestamp } = firestoreApi;
+  const snap = await getDocs(collection(roadmapDb, 'roadmapItems'));
+  if (!snap.empty) return;
+  await Promise.all(SEED.map(item => setDoc(doc(roadmapDb, 'roadmapItems', item.id), {
+    ...item,
+    createdAt: serverTimestamp()
+  })));
+}
+
+async function loadState() {
+  items = JSON.parse(JSON.stringify(SEED));
+  votedIds = new Set();
+  browserId = getBrowserId();
+
+  const ready = await initFirebase();
+  if (!ready) {
+    showToast('Firebase unavailable. Roadmap suggestions/votes are temporarily read-only.');
+    return;
+  }
+
+  await seedRoadmapIfEmpty();
+  await Promise.all([loadRoadmapItems(), loadVotedIds()]);
+}
+
+async function loadRoadmapItems() {
+  const { collection, getDocs } = firestoreApi;
+  const snap = await getDocs(collection(roadmapDb, 'roadmapItems'));
+  items = [];
+  snap.forEach(d => {
+    const data = d.data();
+    items.push({
+      id: d.id,
+      status: data.status || 'planned',
+      title: data.title || '',
+      desc: data.desc || '',
+      tag: data.tag || '',
+      votes: Number(data.votes || 0),
+      submitter: data.submitter || 'Anonymous',
+      ts: Number(data.ts || Math.floor(Date.now() / 1000))
+    });
+  });
+}
+
+async function loadVotedIds() {
+  const { collection, query, where, getDocs } = firestoreApi;
+  const snap = await getDocs(query(collection(roadmapDb, 'roadmapVotes'), where('userId', '==', browserId)));
+  votedIds = new Set();
+  snap.forEach(d => {
+    const data = d.data();
+    if (data.itemId) votedIds.add(data.itemId);
+  });
 }
 
 // ── RENDER ────────────────────────────────────────────────────
@@ -347,7 +420,7 @@ function cardHTML(item) {
   return `
   <div class="item-card" id="card-${item.id}">
     <div class="item-header">
-      <button class="vote-btn ${voted?'voted':''}" onclick="vote('${item.id}')" title="${voted?'Remove vote':'Upvote'}">
+      <button class="vote-btn ${voted?'voted':''}" onclick="vote('${item.id}')" title="${voted?'Remove vote':'Upvote'}" ${!firebaseReady ? 'disabled' : ''}>
         <span class="chevron">▲</span>
         <span class="vote-count" id="vc-${item.id}">${item.votes}</span>
       </button>
@@ -364,24 +437,50 @@ function cardHTML(item) {
 }
 
 // ── VOTE ──────────────────────────────────────────────────────
-function vote(id) {
+async function vote(id) {
+  if (!firebaseReady || !roadmapDb || !firestoreApi) {
+    showToast('Firebase unavailable. Voting is temporarily disabled.');
+    return;
+  }
+
   const item = items.find(i => i.id === id);
   if (!item) return;
-  if (votedIds.has(id)) {
-    votedIds.delete(id);
-    item.votes = Math.max(0, item.votes - 1);
-  } else {
-    votedIds.add(id);
-    item.votes++;
+
+  const { doc, runTransaction, serverTimestamp } = firestoreApi;
+  const itemRef = doc(roadmapDb, 'roadmapItems', id);
+  const voteRef = doc(roadmapDb, 'roadmapVotes', `${id}__${browserId}`);
+
+  try {
+    const didUpvote = await runTransaction(roadmapDb, async tx => {
+      const voteSnap = await tx.get(voteRef);
+      const itemSnap = await tx.get(itemRef);
+      if (!itemSnap.exists()) throw new Error('Item not found');
+
+      const currentVotes = Number(itemSnap.data().votes || 0);
+      if (voteSnap.exists()) {
+        tx.delete(voteRef);
+        tx.update(itemRef, { votes: Math.max(0, currentVotes - 1) });
+        return false;
+      }
+
+      tx.set(voteRef, {
+        itemId: id,
+        userId: browserId,
+        createdAt: serverTimestamp()
+      });
+      tx.update(itemRef, { votes: currentVotes + 1 });
+      return true;
+    });
+
+    if (didUpvote) votedIds.add(id);
+    else votedIds.delete(id);
+
+    await loadRoadmapItems();
+    renderAll();
+  } catch (e) {
+    console.error('Vote failed:', e);
+    showToast('Could not update vote. Please try again.');
   }
-  saveState();
-  // Update just this card's vote UI without full re-render
-  const btn = document.querySelector(`#card-${id} .vote-btn`);
-  const vc = document.getElementById('vc-' + id);
-  if (btn) btn.classList.toggle('voted', votedIds.has(id));
-  if (vc) vc.textContent = item.votes;
-  // Re-sort if needed
-  if (currentSort === 'votes') renderAll();
 }
 
 // ── FILTER / SORT ─────────────────────────────────────────────
@@ -424,7 +523,7 @@ function resetForm() {
   selectedTag = null;
 }
 
-function submitSuggestion() {
+async function submitSuggestion() {
   const title = document.getElementById('input-title').value.trim();
   if (!title) {
     document.getElementById('input-title').focus();
@@ -433,29 +532,38 @@ function submitSuggestion() {
     return;
   }
 
+  if (!firebaseReady || !roadmapDb || !firestoreApi) {
+    showToast('Firebase unavailable. Cannot submit suggestion right now.');
+    return;
+  }
+
   const desc = document.getElementById('input-desc').value.trim();
   const name = (document.getElementById('input-name').value || '').trim() || 'Anonymous';
   const tag = selectedTag || '';
+  const id = (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()));
 
-  // Google Form (prefilled) — shared storage for everyone (responses land in the linked Sheet)
-  const FORM_BASE = "https://docs.google.com/forms/d/e/1FAIpQLSftejPFLQfXJXbR1byrQ6Co47FGVUYp8jNtnZ3MK8g2PtSk-g/viewform?usp=pp_url";
-  const ENTRY_NAME = "entry.587021054";
-  const ENTRY_TEXT = "entry.1057679111";
-  const ENTRY_PUBLISH = "entry.475669583";
+  try {
+    const { doc, setDoc, serverTimestamp } = firestoreApi;
+    await setDoc(doc(roadmapDb, 'roadmapItems', id), {
+      id,
+      status: 'planned',
+      title,
+      desc,
+      tag,
+      submitter: name,
+      votes: 0,
+      ts: Math.floor(Date.now() / 1000),
+      createdAt: serverTimestamp()
+    });
 
-  // Combine title + optional detail into a single request string (you can change this format anytime)
-  const requestText = `${title}${desc ? " — " + desc : ""}${tag ? " [" + tag + "]" : ""}`;
-
-  const url =
-    `${FORM_BASE}` +
-    `&${ENTRY_NAME}=${encodeURIComponent(name)}` +
-    `&${ENTRY_TEXT}=${encodeURIComponent(requestText)}` +
-    `&${ENTRY_PUBLISH}=Yes,+publish+my+request`;
-
-  window.open(url, "_blank");
-
-  closeModal();
-  showToast("Almost done — click Submit in the form to publish it for everyone.");
+    closeModal();
+    await loadRoadmapItems();
+    renderAll();
+    showToast('Suggestion posted for everyone.');
+  } catch (e) {
+    console.error('Submit failed:', e);
+    showToast('Failed to submit suggestion.');
+  }
 }
 
 function showToast(msg) {
@@ -471,8 +579,10 @@ document.addEventListener('keydown', e => {
 });
 
 // ── INIT ─────────────────────────────────────────────────────
-loadState();
-renderAll();
+loadState().then(renderAll).catch(err => {
+  console.error('Failed to initialize roadmap:', err);
+  renderAll();
+});
 </script>
 
 <script id="shared-nav-search">
