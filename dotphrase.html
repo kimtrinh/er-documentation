@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <link rel="stylesheet" href="theme.css?v=2"/>
-<title>Community Dotphrases — ER Toolkit</title>
+<title>ER Dotphrases</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--bg:#080f1a;--surface:#0d1829;--surface2:#111f35;--surface3:#162540;--border:#1a2d48;--border2:#243d5c;--text:#e8f0fc;--text2:#8fa8c8;--text3:#4a6280;--text-blue:#93c5fd;--text-blue-bright:#bfdbfe;--blue:#3b82f6;--blue2:#1d4ed8;--blue3:#0d2038;--green:#22c55e;--green2:#15803d;--green3:#0d2d1f;--amber:#f59e0b;--red:#ef4444;--purple:#a78bfa;--cyan:#22d3ee;}
@@ -19,55 +19,27 @@ header{background:linear-gradient(135deg,var(--surface),var(--bg));border-bottom
 #search{width:100%;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:15px;outline:none;transition:border-color .2s}
 #search:focus{border-color:#3b82f6}
 #search::placeholder{color:#475569}
-nav.catnav{background:var(--bg);border-bottom:1px solid var(--surface);overflow-x:auto;-webkit-overflow-scrolling:touch}
+nav{background:var(--bg);border-bottom:1px solid var(--surface);overflow-x:auto;-webkit-overflow-scrolling:touch}
 .tabs{max-width:900px;margin:0 auto;display:flex;gap:4px;padding:8px 24px}
 .tab{padding:6px 14px;border-radius:20px;border:none;cursor:pointer;font-size:13px;font-weight:500;white-space:nowrap;background:var(--surface);color:var(--text2);transition:all .2s}
 .tab.active{background:#3b82f6;color:#fff}
 main{max-width:900px;margin:0 auto;padding:16px 24px 60px}
 .count{font-size:12px;color:#475569;margin-bottom:12px}
-.submit-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:16px}
-.submit-title{font-size:15px;font-weight:700;margin-bottom:10px}
-.submit-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:10px}
-.field{display:flex;flex-direction:column;gap:5px}
-.field label{font-size:12px;color:var(--text2)}
-.field input,.field textarea{width:100%;background:var(--bg);border:1px solid var(--border2);border-radius:8px;color:var(--text);font-size:13px;padding:10px 11px;font-family:inherit}
-.field textarea{resize:vertical;min-height:110px;line-height:1.45}
-.submit-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.submit-btn{padding:8px 14px;border-radius:8px;border:none;cursor:pointer;font-size:12px;font-weight:700;background:#2563eb;color:#fff}
-.submit-btn:disabled{opacity:.6;cursor:not-allowed}
-.submit-message{font-size:12px;color:var(--text2)}
-.submit-message.error{color:#fda4af}
-.submit-message.success{color:#86efac}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;overflow:hidden;transition:border-color .2s;box-shadow:0 1px 4px rgba(0,0,0,.2)}
-.card:hover{border-color:#3b82f6;transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.4)}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;overflow:hidden;transition:border-color .2s}
+.card:hover{border-color:#3b82f6}
 .card-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border);gap:8px;flex-wrap:wrap}
-.card-left{display:flex;align-items:center;gap:8px}
 .card-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .dotphrase{background:var(--bg);color:#38bdf8;padding:3px 10px;border-radius:6px;font-size:13px;font-weight:700;border:1px solid var(--border2);font-family:monospace}
 .condition{font-weight:600;font-size:14px;color:var(--text)}
 .category-tag{font-size:11px;background:var(--bg);color:var(--text3);padding:2px 8px;border-radius:20px;border:1px solid var(--surface)}
-.community-tag{font-size:10px;background:#1f0d2d;color:#e879f9;padding:2px 7px;border-radius:20px;font-weight:700;border:1px solid rgba(168,139,250,.3)}
-.card-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.vote-btn{padding:6px 12px;border-radius:8px;border:1px solid var(--border2);cursor:pointer;font-size:12px;font-weight:600;background:var(--bg);color:var(--text-blue);transition:border-color .2s,color .2s}
-.vote-btn:hover{border-color:#3b82f6;color:var(--text-blue-bright)}
-.vote-btn.active{border-color:#2563eb;color:#bfdbfe;background:#0d2038}
-.vote-btn:disabled{opacity:.55;cursor:not-allowed}
-.vote-count{font-size:12px;color:var(--text2);min-width:62px}
-.copy-btn{padding:6px 14px;border-radius:8px;border:none;cursor:pointer;font-size:12px;font-weight:600;background:#3b82f6;color:#fff;transition:background .2s;white-space:nowrap}
+.copy-btn{padding:6px 14px;border-radius:8px;border:none;cursor:pointer;font-size:12px;font-weight:600;background:#3b82f6;color:#fff;transition:background .2s;white-space:nowrap;flex-shrink:0}
 .copy-btn.copied{background:#16a34a}
 .card-body{padding:12px 16px;font-size:13px;line-height:1.75;color:var(--text2)}
 .empty{text-align:center;color:#475569;margin-top:60px;font-size:15px}
-
-/* SORT BAR */
-.sort-bar{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap}
-.sort-bar span{font-size:12px;color:var(--text3);font-weight:600}
-.sort-btn{padding:4px 12px;border-radius:16px;border:1px solid var(--border);cursor:pointer;font-size:11px;font-weight:600;background:transparent;color:var(--text3);transition:all .15s}
-.sort-btn:hover{border-color:var(--border2);color:var(--text2)}
-.sort-btn.active{background:var(--blue);border-color:var(--blue);color:#fff}
-
-@media(max-width:600px){.card-header{flex-direction:column;align-items:flex-start}.copy-btn{width:100%}.submit-grid{grid-template-columns:1fr}}
+@media(max-width:600px){.card-header{flex-direction:column;align-items:flex-start}.copy-btn{width:100%}}
 
 /* ===== SHARED NEW NAV ===== */
+@media(max-width:640px){}
 .sitenav{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;font-family:'DM Sans',system-ui,sans-serif}
 .sitenav-inner{max-width:1200px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:6px;height:46px;overflow:hidden}
 .nav-logo{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:#3b82f6;white-space:nowrap;flex-shrink:0;text-decoration:none;margin-right:6px}
@@ -83,6 +55,7 @@ main>*{animation:pgFade .3s ease both}
 main>*:nth-child(2){animation-delay:.05s}
 main>*:nth-child(3){animation-delay:.1s}
 main>*:nth-child(4){animation-delay:.15s}
+.card{box-shadow:0 1px 4px rgba(0,0,0,.2)}.card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.4)}
 </style>
 <link rel="stylesheet" href="mobile.css">
 <script>document.documentElement.setAttribute('data-theme',localStorage.getItem('theme')||'dark');</script>
@@ -94,7 +67,8 @@ main>*:nth-child(4){animation-delay:.15s}
     <a class="nav-logo" href="index.html">⚡</a>
     <div class="nav-links">
       <a class="nav-link" href="index.html">🏠 Home</a>
-      <a class="nav-link active" href="dotphrase.html">🧾 Documentation</a>
+      <a class="nav-link active" href="mdm.html">🧾 Documentation</a>
+
       <a class="nav-link" href="calculators.html">🧮 Decision Support</a>
       <a class="nav-link" href="rsi.html">🚨 Resuscitation</a>
       <a class="nav-link" href="algorithms.html">🔀 Algorithms</a>
@@ -107,545 +81,71 @@ main>*:nth-child(4){animation-delay:.15s}
 </nav>
 <header>
   <div class="header-inner">
-    <div class="logo"><span>📋</span><h1>Community Dotphrases</h1></div>
-    <p class="subtitle">Share your dotphrases and upvote the best ones — top voted rise to the top</p>
+    <div class="logo"><span>🏥</span><h1>ER Rule-Out Dotphrases</h1></div>
+    <p class="subtitle">Search all dotphrases or browse by category</p>
     <div class="disclaimer"><strong>⚠️ Clinical Disclaimer:</strong> These are documentation templates only. All phrases must be reviewed, individualized, and verified by the treating physician before use. Do not copy without confirming accuracy for each patient encounter. Templates do not substitute for clinical judgment.</div>
-    <input id="search" type="text" placeholder="Search dotphrases: nosah, PE, DKA, compartment, abscess..." oninput="render()"/>
+    <input id="search" type="text" placeholder="Search: nosah, PE, DKA, compartment, abscess..." oninput="render()"/>
   </div>
 </header>
-<nav class="catnav"><div class="tabs" id="tabs"></div></nav>
-<main>
-  <section class="submit-card">
-    <h2 class="submit-title">Share your dotphrase</h2>
-    <form id="dotphrase-form">
-      <div class="submit-grid">
-        <div class="field">
-          <label for="dot-input">Dotphrase name</label>
-          <input id="dot-input" name="dot" type="text" placeholder="e.g. nosyncope" required/>
-        </div>
-        <div class="field">
-          <label for="cond-input">Condition / title</label>
-          <input id="cond-input" name="cond" type="text" placeholder="e.g. Syncope Rule-Out" required/>
-        </div>
-        <div class="field">
-          <label for="cat-input">Category</label>
-          <input id="cat-input" name="cat" type="text" placeholder="e.g. Neuro" required/>
-        </div>
-      </div>
-      <div class="field" style="margin-bottom:10px">
-        <label for="text-input">Phrase body</label>
-        <textarea id="text-input" name="text" placeholder="Enter the full phrase body..." required></textarea>
-      </div>
-      <div class="submit-actions">
-        <button class="submit-btn" type="submit" id="submit-btn">Submit dotphrase</button>
-        <p class="submit-message" id="submit-message" aria-live="polite"></p>
-      </div>
-    </form>
-  </section>
+<nav><div class="tabs" id="tabs"></div></nav>
+<main><p class="count" id="count"></p><div id="main"></div></main>
 
-  <!-- SORT -->
-  <div class="sort-bar">
-    <span>Sort by:</span>
-    <button class="sort-btn active" onclick="setSort('votes',this)">Most Voted</button>
-    <button class="sort-btn" onclick="setSort('newest',this)">Newest</button>
-    <button class="sort-btn" onclick="setSort('alpha',this)">A-Z</button>
-  </div>
-
-  <p class="count" id="count"></p>
-  <div id="main"></div>
-</main>
-
-<script src="search-index.js"></script>
+<script src="search-index.js?v=2"></script>
 <script src="data/dotphrases.js"></script>
 <script>
-const firebaseConfig = {
-  apiKey: "AIzaSyCH1td6zhupmO-ZT3ruRN2-yZqidXqzgl4",
-  authDomain: "er-docu.firebaseapp.com",
-  projectId: "er-docu",
-  storageBucket: "er-docu.firebasestorage.app",
-  messagingSenderId: "233632582452",
-  appId: "1:233632582452:web:9ef7d4f8d95866c5bc3361",
-  measurementId: "G-XFLWV3DK7R"
-};
+const phrases = Array.isArray(window.KP_DOTPHRASES) ? window.KP_DOTPHRASES : [];
 
-let firebaseReady = false;
-let db = null;
-let firestoreApi = null;
-
-async function initFirebase() {
-  try {
-    const [{ initializeApp }, firestore] = await Promise.all([
-      import('https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js'),
-      import('https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js')
-    ]);
-    const app = initializeApp(firebaseConfig, 'dotphrase-app');
-    db = firestore.getFirestore(app);
-    firestoreApi = firestore;
-    firebaseReady = true;
-  } catch (err) {
-    firebaseReady = false;
-  }
-}
-
-const phrases = [];
-const basePhrases = Array.isArray(window.KP_DOTPHRASES) ? window.KP_DOTPHRASES : [];
-let currentUser = { id: 'anonymous', isAuthenticated: false };
-const SESSION_STORAGE_KEY = 'kp-dotphrase-session-id';
-const AUTH_USER_STORAGE_KEY = 'kp-auth-user-id';
-
-function getOrCreateSessionId() {
-  const existing = window.localStorage.getItem(SESSION_STORAGE_KEY);
-  if (existing) return existing;
-  const generated = `sess_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 10)}`;
-  window.localStorage.setItem(SESSION_STORAGE_KEY, generated);
-  return generated;
-}
-
-function getAuthenticatedUserId() {
-  const runtimeAuthId = typeof window.KP_AUTH_USER_ID === 'string' ? window.KP_AUTH_USER_ID.trim() : '';
-  if (runtimeAuthId) {
-    window.localStorage.setItem(AUTH_USER_STORAGE_KEY, runtimeAuthId);
-    return runtimeAuthId;
-  }
-  return String(window.localStorage.getItem(AUTH_USER_STORAGE_KEY) || '').trim();
-}
-
-function getApiHeaders() {
-  const authenticatedUserId = getAuthenticatedUserId();
-  if (authenticatedUserId) {
-    return { 'x-authenticated-user-id': authenticatedUserId };
-  }
-  return { 'x-session-id': getOrCreateSessionId() };
-}
-
-function syncCurrentUser() {
-  const authenticatedUserId = getAuthenticatedUserId();
-  currentUser = {
-    id: authenticatedUserId || getOrCreateSessionId() || 'anonymous',
-    isAuthenticated: Boolean(authenticatedUserId)
-  };
-}
-
-function stableHash(value) {
-  let hash = 0;
-  for (let i = 0; i < value.length; i += 1) {
-    hash = ((hash << 5) - hash) + value.charCodeAt(i);
-    hash |= 0;
-  }
-  return Math.abs(hash).toString(36);
-}
-
-function normalizePhraseRecord(item, index) {
-  const dot = String(item.dot || '').trim();
-  const cond = String(item.cond || '').trim();
-  const cat = String(item.cat || '').trim();
-  const text = String(item.text || '').trim();
-  const createdAtRaw = Number(item.createdAt);
-  const createdAt = Number.isFinite(createdAtRaw) ? createdAtRaw : 0;
-  const votesRaw = Number(item.votes);
-  const votes = Number.isFinite(votesRaw) ? votesRaw : 0;
-  const fallbackId = `dp_${stableHash(`${dot}|${cond}|${cat}|${text}|${index}`)}`;
-  const currentUserVote = Number(item.currentUserVote) || 0;
-
-  return {
-    ...item,
-    dot, cond, cat, text,
-    id: String(item.id || fallbackId),
-    createdAt, votes, currentUserVote,
-    hasVoted: currentUserVote !== 0,
-    hasUpvoted: currentUserVote === 1,
-    hasDownvoted: currentUserVote === -1
-  };
-}
-
+const cats = ["All", ...Array.from(new Set(phrases.map(p => p.cat)))];
 let activeCategory = "All";
-let activeSort = "votes";
 
-function rebuildTabs() {
-  const catSet = new Set(phrases.map(p => p.cat));
-  const cats = ["All", ...Array.from(catSet).sort()];
-  const tabsEl = document.getElementById("tabs");
-  tabsEl.innerHTML = '';
-  cats.forEach(cat => {
-    const btn = document.createElement("button");
-    btn.className = "tab" + (cat === activeCategory ? " active" : "");
-    btn.textContent = cat;
-    btn.onclick = () => {
-      activeCategory = cat;
-      document.querySelectorAll(".tab").forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-      render();
-    };
-    tabsEl.appendChild(btn);
-  });
-}
+const tabsEl = document.getElementById("tabs");
+cats.forEach(cat => {
+  const btn = document.createElement("button");
+  btn.className = "tab" + (cat === "All" ? " active" : "");
+  btn.textContent = cat;
+  btn.onclick = () => {
+    activeCategory = cat;
+    document.querySelectorAll(".tab").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    render();
+  };
+  tabsEl.appendChild(btn);
+});
 
 function getFiltered() {
   const q = document.getElementById("search").value.toLowerCase();
-  const filtered = phrases.filter(p => {
-    const matchSearch = !q || p.dot.toLowerCase().includes(q) || p.cond.toLowerCase().includes(q)
+  return phrases.filter(p => {
+    const matchSearch = !q || p.dot.includes(q) || p.cond.toLowerCase().includes(q)
       || p.cat.toLowerCase().includes(q) || p.text.toLowerCase().includes(q);
     const matchCat = activeCategory === "All" || p.cat === activeCategory;
     return matchSearch && matchCat;
   });
-
-  if (activeSort === 'votes') {
-    filtered.sort((a, b) => {
-      if (b.votes !== a.votes) return b.votes - a.votes;
-      if (b.createdAt !== a.createdAt) return b.createdAt - a.createdAt;
-      return a.id.localeCompare(b.id);
-    });
-  } else if (activeSort === 'newest') {
-    filtered.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-  } else {
-    filtered.sort((a, b) => a.cond.localeCompare(b.cond));
-  }
-
-  return filtered;
-}
-
-function setSort(s, el) {
-  activeSort = s;
-  document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
-  el.classList.add('active');
-  render();
-}
-
-function setSubmitMessage(message, type) {
-  const msgEl = document.getElementById("submit-message");
-  msgEl.textContent = message || "";
-  msgEl.className = `submit-message${type ? " " + type : ""}`;
-}
-
-async function fetchSubmittedDotphrases() {
-  if (firebaseReady && db && firestoreApi) {
-    const { collection, getDocs, orderBy, query, where } = firestoreApi;
-    const dotphraseSnapshot = await getDocs(query(collection(db, 'dotphrases'), orderBy('createdAt', 'desc')));
-    const userSnapshot = await getDocs(query(collection(db, 'dotphraseVotes'), where('userId', '==', currentUser.id)));
-    const userVotes = new Map();
-
-    userSnapshot.forEach(d => {
-      const row = d.data() || {};
-      if (row.phraseId) userVotes.set(String(row.phraseId), Number(row.vote) || 0);
-    });
-
-    const items = [];
-    dotphraseSnapshot.forEach(d => {
-      const row = d.data() || {};
-      const currentUserVote = Number(userVotes.get(d.id)) || 0;
-      items.push({
-        id: d.id,
-        dot: String(row.dot || ''),
-        cond: String(row.cond || ''),
-        cat: String(row.cat || ''),
-        text: String(row.text || ''),
-        votes: Number(row.votes) || 0,
-        createdAt: Number(row.createdAt) || 0,
-        currentUserVote,
-        hasVoted: currentUserVote !== 0,
-        hasUpvoted: currentUserVote === 1,
-        hasDownvoted: currentUserVote === -1
-      });
-    });
-
-    return { items, user: currentUser };
-  }
-
-  const response = await fetch('/api/dotphrases', {
-    cache: 'no-store',
-    headers: getApiHeaders()
-  });
-  if (!response.ok) throw new Error('Failed to load dotphrases');
-  const data = await response.json();
-  if (Array.isArray(data)) return { items: data, user: currentUser };
-  return {
-    items: Array.isArray(data.items) ? data.items : [],
-    user: data.user || currentUser
-  };
-}
-
-function replacePhrases(items) {
-  const mergedById = new Map();
-  items.forEach((item, index) => {
-    const normalized = normalizePhraseRecord(item, index);
-    const existing = mergedById.get(normalized.id);
-    if (existing) {
-      mergedById.set(normalized.id, {
-        ...existing,
-        ...normalized,
-        dot: normalized.dot || existing.dot,
-        cond: normalized.cond || existing.cond,
-        cat: normalized.cat || existing.cat,
-        text: normalized.text || existing.text,
-        votes: Math.max(existing.votes || 0, normalized.votes || 0)
-      });
-      return;
-    }
-    mergedById.set(normalized.id, normalized);
-  });
-
-  phrases.length = 0;
-  phrases.push(...mergedById.values());
-}
-
-async function refreshPhrases() {
-  syncCurrentUser();
-  try {
-    const data = await fetchSubmittedDotphrases();
-    currentUser = data.user || currentUser;
-    replacePhrases([...basePhrases, ...data.items]);
-  } catch (e) {
-    replacePhrases(basePhrases);
-  }
-  rebuildTabs();
-  render();
-}
-
-async function submitDotphrase(e) {
-  e.preventDefault();
-  const submitBtn = document.getElementById('submit-btn');
-  const form = e.currentTarget;
-  const formData = new FormData(form);
-
-  const dotRaw = String(formData.get('dot') || '').trim().replace(/^\./, '');
-  const normalizedDot = typeof window.KP_normalizeDotphraseId === 'function'
-    ? window.KP_normalizeDotphraseId(formData.get('dot'))
-    : dotRaw;
-  const cond = String(formData.get('cond') || '').trim();
-  const cat = String(formData.get('cat') || '').trim();
-  const text = String(formData.get('text') || '').trim();
-
-  if (!normalizedDot || !cond || !cat || !text) {
-    setSubmitMessage('All fields are required.', 'error');
-    return;
-  }
-
-  submitBtn.disabled = true;
-  setSubmitMessage('Submitting…');
-
-  try {
-    const payload = {
-      id: `dp_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`,
-      dot: normalizedDot,
-      cond,
-      cat,
-      text,
-      createdAt: Date.now(),
-      votes: 0
-    };
-
-    if (firebaseReady && db && firestoreApi) {
-      const { doc, setDoc } = firestoreApi;
-      await setDoc(doc(db, 'dotphrases', payload.id), payload);
-    } else {
-      const response = await fetch('/api/dotphrases', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...getApiHeaders()
-        },
-        body: JSON.stringify(payload)
-      });
-      if (!response.ok) throw new Error('Unable to submit');
-    }
-
-    form.reset();
-    setSubmitMessage('Submitted successfully.', 'success');
-    await refreshPhrases();
-  } catch (err) {
-    setSubmitMessage('Submission failed. Please try again.', 'error');
-  } finally {
-    submitBtn.disabled = false;
-  }
 }
 
 function render() {
   const filtered = getFiltered();
   const mainEl = document.getElementById("main");
   const countEl = document.getElementById("count");
-
   countEl.textContent = `${filtered.length} dotphrase${filtered.length !== 1 ? "s" : ""} ${activeCategory !== "All" ? "in " + activeCategory : "total"}`;
-  mainEl.replaceChildren();
-
   if (filtered.length === 0) {
-    const empty = document.createElement('p');
-    empty.className = 'empty';
-    empty.textContent = 'No dotphrases found. Try a different search or share your own!';
-    mainEl.append(empty);
+    mainEl.innerHTML = '<p class="empty">No dotphrases found. Try a different search.</p>';
     return;
   }
-
-  filtered.forEach((p, i) => {
-    const card = document.createElement('div');
-    card.className = 'card';
-
-    const cardHeader = document.createElement('div');
-    cardHeader.className = 'card-header';
-
-    const cardMeta = document.createElement('div');
-    cardMeta.className = 'card-meta';
-
-    const dotphrase = document.createElement('span');
-    dotphrase.className = 'dotphrase';
-    dotphrase.textContent = `.${p.dot || ''}`;
-
-    const condition = document.createElement('span');
-    condition.className = 'condition';
-    condition.textContent = p.cond || '';
-
-    const category = document.createElement('span');
-    category.className = 'category-tag';
-    category.textContent = p.cat || '';
-
-    cardMeta.append(dotphrase, condition, category);
-
-    const cardActions = document.createElement('div');
-    cardActions.className = 'card-actions';
-
-    const voteCount = document.createElement('span');
-    voteCount.className = 'vote-count';
-    voteCount.textContent = `▲ ${p.votes || 0}`;
-
-    const upvoteBtn = document.createElement('button');
-    upvoteBtn.className = `vote-btn${p.hasUpvoted ? ' active' : ''}`;
-    upvoteBtn.textContent = p.hasUpvoted ? 'Remove upvote' : 'Upvote';
-    upvoteBtn.addEventListener('click', () => toggleVote(i));
-
-    const downvoteBtn = document.createElement('button');
-    downvoteBtn.className = `vote-btn${p.hasDownvoted ? ' active' : ''}`;
-    downvoteBtn.textContent = p.hasDownvoted ? 'Downvoted' : 'Downvote';
-    downvoteBtn.addEventListener('click', () => downvotePhrase(i));
-
-    const copyBtn = document.createElement('button');
-    copyBtn.className = 'copy-btn';
-    copyBtn.id = `btn-${i}`;
-    copyBtn.textContent = 'Copy';
-    copyBtn.addEventListener('click', () => copyText(i));
-
-    cardActions.append(voteCount, upvoteBtn, downvoteBtn, copyBtn);
-    cardHeader.append(cardMeta, cardActions);
-
-    const body = document.createElement('p');
-    body.className = 'card-body';
-    body.textContent = p.text || '';
-
-    card.append(cardHeader, body);
-    mainEl.append(card);
-  });
+  mainEl.innerHTML = filtered.map((p, i) => `
+    <div class="card">
+      <div class="card-header">
+        <div class="card-meta">
+          <span class="dotphrase">.${p.dot}</span>
+          <span class="condition">${p.cond}</span>
+          <span class="category-tag">${p.cat}</span>
+        </div>
+        <button class="copy-btn" id="btn-${i}" onclick="copyText(${i})">Copy</button>
+      </div>
+      <p class="card-body">${p.text}</p>
+    </div>
+  `).join("");
 }
 
-async function sendVoteRequest(phrase, action) {
-  if (firebaseReady && db && firestoreApi) {
-    const { doc, runTransaction } = firestoreApi;
-    const userId = currentUser.id;
-    const voteDocId = `v_${stableHash(`${phrase.id}::${userId}`)}`;
-    const phraseRef = doc(db, 'dotphrases', phrase.id);
-    const voteRef = doc(db, 'dotphraseVotes', voteDocId);
-    const nextVoteValue = action === 'downvote' ? -1 : action === 'unvote' ? 0 : 1;
-
-    return runTransaction(db, async (tx) => {
-      const phraseSnap = await tx.get(phraseRef);
-      if (!phraseSnap.exists()) throw new Error('Vote failed');
-
-      const voteSnap = await tx.get(voteRef);
-      const prevVote = voteSnap.exists() ? Number(voteSnap.data().vote) || 0 : 0;
-      const currentVotes = Number(phraseSnap.data().votes) || 0;
-      const votes = currentVotes + (nextVoteValue - prevVote);
-
-      if (votes !== currentVotes) {
-        tx.update(phraseRef, { votes });
-      }
-
-      if (nextVoteValue === 0) {
-        if (voteSnap.exists()) tx.delete(voteRef);
-      } else {
-        tx.set(voteRef, {
-          phraseId: phrase.id,
-          userId,
-          vote: nextVoteValue,
-          updatedAt: Date.now()
-        });
-      }
-
-      return {
-        ...phrase,
-        votes,
-        currentUserVote: nextVoteValue,
-        hasVoted: nextVoteValue !== 0,
-        hasUpvoted: nextVoteValue === 1,
-        hasDownvoted: nextVoteValue === -1,
-        user: currentUser
-      };
-    });
-  }
-
-  const response = await fetch(`/api/dotphrases/${encodeURIComponent(phrase.id)}/${action}`, {
-    method: 'POST',
-    headers: getApiHeaders()
-  });
-  if (!response.ok) throw new Error('Vote failed');
-  return response.json();
-}
-
-function applyVoteResponse(phraseId, updated) {
-  currentUser = updated.user || currentUser;
-  const match = phrases.find(item => item.id === phraseId);
-  if (!match) return;
-
-  match.votes = Number(updated.votes) || 0;
-  match.currentUserVote = Number(updated.currentUserVote) || 0;
-  match.hasVoted = match.currentUserVote !== 0;
-  match.hasUpvoted = match.currentUserVote === 1;
-  match.hasDownvoted = match.currentUserVote === -1;
-}
-
-async function upvotePhrase(i) {
-  const filtered = getFiltered();
-  const phrase = filtered[i];
-  if (!phrase || !phrase.id) return;
-  try {
-    const updated = await sendVoteRequest(phrase, 'upvote');
-    applyVoteResponse(phrase.id, updated);
-    render();
-  } catch (err) {}
-}
-
-async function downvotePhrase(i) {
-  const filtered = getFiltered();
-  const phrase = filtered[i];
-  if (!phrase || !phrase.id) return;
-  try {
-    const updated = await sendVoteRequest(phrase, 'downvote');
-    applyVoteResponse(phrase.id, updated);
-    render();
-  } catch (err) {}
-}
-
-function toggleVote(i) {
-  const filtered = getFiltered();
-  const phrase = filtered[i];
-  if (!phrase) return;
-  if (phrase.hasUpvoted) {
-    unvotePhrase(i);
-    return;
-  }
-  upvotePhrase(i);
-}
-
-async function unvotePhrase(i) {
-  const filtered = getFiltered();
-  const phrase = filtered[i];
-  if (!phrase || !phrase.id) return;
-  try {
-    const updated = await sendVoteRequest(phrase, 'unvote');
-    applyVoteResponse(phrase.id, updated);
-    render();
-  } catch (err) {}
-}
-
-// ══════════════════════════════════════════
-//  COPY
-// ══════════════════════════════════════════
 function copyText(i) {
   const filtered = getFiltered();
   const text = filtered[i] ? filtered[i].text : "";
@@ -663,25 +163,31 @@ function copyText(i) {
     ta.focus();
     ta.select();
     let ok = false;
-    try { ok = document.execCommand("copy"); } catch { ok = false; }
+    try {
+      ok = document.execCommand("copy");
+    } catch (e) {
+      ok = false;
+    }
     document.body.removeChild(ta);
     return ok;
   };
 
   const onSuccess = () => {
-    btn.textContent = "Copied!";
+    btn.textContent = "✓ Copied!";
     btn.classList.add("copied");
     setTimeout(() => { btn.textContent = "Copy"; btn.classList.remove("copied"); }, 2000);
   };
 
   const onFailure = () => {
     btn.textContent = "Copy failed";
+    btn.classList.remove("copied");
     setTimeout(() => { btn.textContent = "Copy"; }, 2000);
   };
 
   if (navigator.clipboard && window.isSecureContext) {
     navigator.clipboard.writeText(text).then(onSuccess).catch(() => {
-      if (fallbackCopy()) onSuccess(); else onFailure();
+      if (fallbackCopy()) onSuccess();
+      else onFailure();
     });
   } else if (fallbackCopy()) {
     onSuccess();
@@ -690,16 +196,13 @@ function copyText(i) {
   }
 }
 
-// ══════════════════════════════════════════
-//  INIT
-// ══════════════════════════════════════════
+// Pre-fill search from URL ?q= param
 (function() {
   var q = new URLSearchParams(window.location.search).get('q');
   if (q) { document.getElementById('search').value = q; }
 })();
 
-document.getElementById('dotphrase-form').addEventListener('submit', submitDotphrase);
-initFirebase().finally(refreshPhrases);
+render();
 </script>
 
 <script id="shared-nav-search">

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <link rel="stylesheet" href="theme.css?v=2"/>
 <link rel="stylesheet" href="mobile.css"/>
-<title>Slash Editor — ER Toolkit</title>
+<title>Private Slash Editor</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--bg:#0b1220;--surface:#0f1b2d;--surface2:#14243a;--surface3:#1a2e49;--border:#213654;--border2:#2c476d;--text:#e7eef8;--text2:#9bb0cb;--text3:#6c86a8;--blue:#3b82f6;--blue2:#1d4ed8;--green:#22c55e;--amber:#f59e0b;--red:#ef4444}
@@ -184,6 +184,12 @@ details.risk-row[open] .chevron{transform:rotate(90deg)}
 .inline-hx-preview{padding:7px 10px 8px;border-top:1px solid var(--border);background:var(--surface)}
 .inline-hx-preview-label{font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);margin-bottom:4px}
 .inline-hx-preview-text{font-family:monospace;font-size:11px;color:var(--text2);white-space:pre-wrap;margin:0;padding:6px 8px;background:var(--bg);border:1px solid var(--border);border-radius:6px;max-height:110px;overflow-y:auto;line-height:1.5}
+.inline-risk-picker-body{padding:8px 10px;overflow-y:auto;max-height:400px}
+.inline-risk-picker-body .inline-risk-calc-title{display:none}
+.inline-risk-simple-wrap{padding:4px 0}
+.inline-ddx-subtitle.calc-low{color:#4ade80}
+.inline-ddx-subtitle.calc-moderate{color:#fbbf24}
+.inline-ddx-subtitle.calc-high{color:#f87171}
 
 @media(max-width:640px){
   .nav-link{font-size:11px;padding:4px 8px}
@@ -205,7 +211,7 @@ details.risk-row[open] .chevron{transform:rotate(90deg)}
     <a class="nav-logo" href="index.html">⚡</a>
     <div class="nav-links">
       <a class="nav-link" href="index.html">🏠 Home</a>
-      <a class="nav-link" href="dotphrase.html">🧾 Documentation</a>
+      <a class="nav-link" href="mdm.html">🧾 Documentation</a>
       <a class="nav-link" href="calculators.html">🧮 Decision Support</a>
       <a class="nav-link" href="rsi.html">🚨 Resuscitation</a>
       <a class="nav-link" href="algorithms.html">🔀 Algorithms</a>
@@ -328,7 +334,7 @@ details.risk-row[open] .chevron{transform:rotate(90deg)}
   </section>
 </main>
 
-<script src="search-index.js"></script>
+<script src="search-index.js?v=2"></script>
 <script src="data/dotphrases.js"></script>
 <script src="mdm_risk_engine.js"></script>
 <script src="mdm_slash.js"></script>

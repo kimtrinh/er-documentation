@@ -1,6 +1,6 @@
 {
-  "name": "ER Toolkit",
-  "short_name": "ER Toolkit",
+  "name": "Emergency Medicine Toolkit",
+  "short_name": "EM Toolkit",
   "description": "KP SBC ER — dotphrases, calculators, vasopressors, RSI, algorithms, phone directory",
   "start_url": "/index.html",
   "display": "standalone",

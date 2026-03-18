@@ -424,6 +424,161 @@ html[data-theme="light"] #feedback-popup::after {
   background: var(--surface);
 }
 
+/* ── Global omnisearch modal ──────────────────────────────────────────── */
+#omnisearch-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(4,10,20,.88);
+  z-index: 9998;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 72px 16px 24px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .18s;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+#omnisearch-overlay.open {
+  opacity: 1;
+  pointer-events: all;
+}
+#omnisearch-modal {
+  background: var(--surface, #0d1829);
+  border: 1px solid var(--border2, #243d5c);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 640px;
+  max-height: calc(100vh - 100px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 24px 80px rgba(0,0,0,.85);
+  transform: translateY(-14px) scale(.97);
+  transition: transform .18s;
+}
+#omnisearch-overlay.open #omnisearch-modal {
+  transform: translateY(0) scale(1);
+}
+#omnisearch-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border, #1a2d48);
+  flex-shrink: 0;
+}
+#om-icon {
+  font-size: 17px;
+  flex-shrink: 0;
+  opacity: .6;
+}
+#om-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text, #e8f0fc);
+  font-size: 16px;
+  font-family: inherit;
+  min-width: 0;
+}
+#om-input::placeholder { color: var(--text3, #4a6280); }
+#om-esc-hint {
+  font-size: 10px;
+  color: var(--text3, #4a6280);
+  background: var(--surface2, #111f35);
+  border: 1px solid var(--border, #1a2d48);
+  padding: 3px 7px;
+  border-radius: 5px;
+  font-family: monospace;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+#om-chips {
+  display: flex;
+  gap: 6px;
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--border, #1a2d48);
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+.om-chip {
+  padding: 4px 11px;
+  border-radius: 20px;
+  border: 1px solid var(--border, #1a2d48);
+  background: transparent;
+  color: var(--text3, #4a6280);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .15s;
+  font-family: inherit;
+}
+.om-chip:hover { border-color: var(--border2, #243d5c); color: var(--text2, #8fa8c8); background: var(--surface2, #111f35); }
+.om-chip.on    { border-color: var(--blue, #3b82f6); background: var(--blue3, #0d2038); color: #38bdf8; }
+#om-results {
+  overflow-y: auto;
+  flex: 1;
+  min-height: 80px;
+}
+
+/* ── sdrop-* shared classes (home search + omnisearch modal) ─────────── */
+/* These are also declared inline in index.html/home.html; here they serve
+   all other pages that load theme.css but not the home page inline styles. */
+.sdrop-group {
+  padding: 7px 14px 3px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--text3, #4a6280);
+  border-top: 1px solid var(--border, #1a2d48);
+  background: var(--surface, #0d1829);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.sdrop-group:first-child { border-top: none; }
+.sdrop-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 14px;
+  text-decoration: none;
+  transition: background .1s;
+  cursor: pointer;
+}
+.sdrop-row:hover, .sdrop-row.hi { background: var(--surface2, #111f35); }
+.sdrop-row:focus-visible { outline: 2px solid #60a5fa; outline-offset: -2px; }
+.sdrop-ico   { font-size: 15px; width: 22px; text-align: center; flex-shrink: 0; }
+.sdrop-body  { flex: 1; min-width: 0; }
+.sdrop-title { font-size: 13px; font-weight: 600; color: var(--text, #e8f0fc); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sdrop-sub   { font-size: 11px; color: var(--text3, #4a6280); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sdrop-tag   { font-size: 10px; padding: 2px 7px; border-radius: 20px; font-weight: 700; white-space: nowrap; flex-shrink: 0; border: 1px solid transparent; }
+.t-phrase { background: var(--blue3,  #0d2038); color: #38bdf8; border-color: #0369a1; }
+.t-calc   { background: var(--green3, #0d2d1f); color: #4ade80; border-color: var(--green2, #15803d); }
+.t-drug   { background: #2d1f0d; color: #fb923c; border-color: #c2410c; }
+.t-phone  { background: #1f1a0d; color: #facc15; border-color: #a16207; }
+.t-algo   { background: #0d2d2d; color: #22d3ee; border-color: #0e7490; }
+.t-neuro  { background: #1f0d2d; color: #e879f9; border-color: #a21caf; }
+.sdrop-empty  { padding: 22px 14px; text-align: center; font-size: 13px; color: var(--text3, #4a6280); }
+.sdrop-footer { padding: 5px 14px 8px; font-size: 11px; color: var(--text3, #4a6280); border-top: 1px solid var(--border, #1a2d48); }
+
+/* Light-mode overrides for modal + tags */
+html[data-theme="light"] #omnisearch-overlay { background: rgba(10,20,40,.65); }
+html[data-theme="light"] .t-phrase { background: #dbeafe; color: #1d4ed8; border-color: #93c5fd; }
+html[data-theme="light"] .t-calc   { background: #dcfce7; color: #15803d; border-color: #86efac; }
+html[data-theme="light"] .t-drug   { background: #fff7ed; color: #c2410c; border-color: #fdba74; }
+html[data-theme="light"] .t-phone  { background: #fefce8; color: #a16207; border-color: #fde047; }
+html[data-theme="light"] .t-algo   { background: #ecfeff; color: #0e7490; border-color: #67e8f9; }
+html[data-theme="light"] .t-neuro  { background: #fdf4ff; color: #a21caf; border-color: #e879f9; }
+
+@media (max-width: 640px) {
+  #omnisearch-overlay { padding-top: 40px; }
+}
+
 /* ── Vertigo helper page elements ─────────────────────────────────────── */
 html[data-theme="light"] .alert-result.danger{background:#fef2f2;border-color:#dc2626;color:#991b1b}
 html[data-theme="light"] .alert-result.danger h3{color:#b91c1c}

@@ -32,8 +32,6 @@ const SEARCH_INDEX = [
 
 
   // ── CORE PAGES ──────────────────────────────────────────────────────────
-  {type:'page',i:'🧾',t:'MDM Builder',s:'mdmccp  ·  mdmsob  ·  mdmabd  ·  mdmha  ·  mdmfever  ·  chief complaint documentation builder',g:'Reference',gc:'t-phrase',u:'mdm.html'},
-  {type:'page',i:'📋',t:'Service Request Board',s:'service request facility maintenance equipment housekeeping IT supply',g:'Reference',gc:'t-phrase',u:'service-requests.html'},
 
   // ── DOTPHRASES ─────────────────────────────────────────────────────────
   {type:'phrase',i:'📋',t:'PE Rule-Out',s:'.nope  ·  Chest Pain  ·  chest pain dyspnea SOB shortness of breath',g:'Chest Pain',gc:'t-phrase',u:'dotphrase.html'},
@@ -190,7 +188,6 @@ const SEARCH_INDEX = [
   {type:'algo',i:'🔀',t:'Aortic Dissection',s:'chest pain  ·  tearing  ·  CTA  ·  type A type B  ·  vascular  ·  KP SBC ED Practice Guideline',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-aortic'},
   {type:'algo',i:'🔀',t:'Visual Floaters & Flashes',s:'ophthalmology  ·  retinal detachment  ·  vitreous  ·  vision  ·  KP SBC ED Practice Guideline',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-floaters'},
   {type:'algo',i:'🔀',t:'Non-Pregnant Vaginal Bleeding',s:'GYN  ·  vaginal bleeding  ·  non-OB  ·  ectopic  ·  KP SBC ED Practice Guideline',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-nonpregvb'},
-  {type:'algo',i:'🔀',t:'Vertebral Compression Fracture (VCF)',s:'spine  ·  compression fracture  ·  VCF  ·  vertebral  ·  back pain  ·  brace  ·  TLSO  ·  vertebroplasty  ·  neurosurgery  ·  bone density  ·  KP SBC ED Practice Guideline',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-vcf'},
 
   // ── NEURO HUB ───────────────────────────────────────────────────────────
   {type:'neuro',i:'🧠',t:'Neuro Hub — ICH Protocol Overview',s:'ICH  ·  intracerebral hemorrhage  ·  stroke  ·  neurology consult',g:'Neuro Hub',gc:'t-neuro',u:'neurohub.html'},
@@ -361,10 +358,18 @@ const SEARCH_INDEX = [
   {type:'staff',i:'👤',t:'FMC — Denise Ramos',s:'29176  ·  Fax 29196  ·  key staff — fmc ed  ·  fmc',g:'FMC Key Staff',gc:'t-phone',u:'ed-phone-directory.html'},
   {type:'staff',i:'👤',t:'FMC — ED Security Specialist',s:'35500  ·  key staff — fmc ed  ·  fmc',g:'FMC Key Staff',gc:'t-phone',u:'ed-phone-directory.html'},
 
+  // ── PEDS FEVER ──────────────────────────────────────────────────────────
+  {type:'page',i:'🌡️',t:'Peds Fever — CA FIRST Protocol',s:'pediatric fever  ·  febrile infant  ·  age-stratified workup  ·  0-28 days  ·  1-3 months  ·  3-24 months  ·  risk stratification',g:'Peds Fever',gc:'t-algo',u:'pedsfever.html'},
+  {type:'page',i:'🌡️',t:'Peds Fever — Neonates (0–28 days)',s:'febrile neonate  ·  high risk  ·  full sepsis workup  ·  LP  ·  ceftriaxone  ·  ampicillin  ·  admit  ·  CA FIRST',g:'Peds Fever',gc:'t-algo',u:'pedsfever.html'},
+  {type:'page',i:'🌡️',t:'Peds Fever — Young Infants (29–60 days)',s:'1-3 months  ·  Step-by-Step criteria  ·  PECARN  ·  SBI risk  ·  febrile infant  ·  discharge vs admit',g:'Peds Fever',gc:'t-algo',u:'pedsfever.html'},
+  {type:'page',i:'🌡️',t:'Peds Fever — 3–24 Months',s:'fever without source  ·  UTI  ·  bacteremia  ·  UA  ·  CBC  ·  occult bacteremia  ·  pneumococcal',g:'Peds Fever',gc:'t-algo',u:'pedsfever.html'},
+  {type:'page',i:'🌡️',t:'Peds Fever — Older Children (>3 years)',s:'fever  ·  school age  ·  older child  ·  focal infection  ·  workup criteria  ·  antibiotics',g:'Peds Fever',gc:'t-algo',u:'pedsfever.html'},
+
   // ── SITE PAGES ──────────────────────────────────────────────────────────
   {type:'page',i:'🤝',t:'Agreements & Protocols',s:'Kaiser  ·  SCPMG  ·  department agreements  ·  policies  ·  clinical protocols',g:'Reference',gc:'t-algo',u:'service-agreements.html'},
   {type:'page',i:'🔗',t:'External Links',s:'useful links  ·  references  ·  resources  ·  clinical tools  ·  external sites',g:'Reference',gc:'t-algo',u:'links.html'},
   {type:'page',i:'🗺️',t:'Roadmap',s:'upcoming features  ·  planned additions  ·  site roadmap',g:'Reference',gc:'t-algo',u:'roadmap.html'},
+  {type:'page',i:'🌀',t:'Vertigo Helper',s:'vertigo  ·  dizziness  ·  BPPV  ·  central vs peripheral  ·  HINTS exam  ·  nystagmus  ·  cerebellar stroke  ·  vestibular',g:'Reference',gc:'t-algo',u:'vertigo-helper.html'},
 
 ];
 
@@ -547,8 +552,8 @@ if (typeof window !== 'undefined') {
 (function initSharedNavSearch() {
   if (typeof window === 'undefined' || typeof document === 'undefined') return;
 
-  // Home page has a dedicated hero search that already uses the full index.
-  if (document.getElementById('si')) return;
+  // Home has a dedicated hero search. Directory has its own large live-search bar.
+  if (document.getElementById('si') || document.getElementById('globalSearch')) return;
   if (document.getElementById('kp-shared-search-host')) return;
 
   const nav = document.querySelector('.sitenav');
@@ -613,6 +618,7 @@ if (typeof window !== 'undefined') {
     'Calculators',
     'Algorithms',
     'Neuro Hub',
+    'Peds Fever',
     'Drugs',
     'OMC',
     'FMC',
@@ -621,6 +627,7 @@ if (typeof window !== 'undefined') {
     'FMC Imaging Orders',
     'OMC Key Staff',
     'FMC Key Staff',
+    'Service Agreements',
     'Reference',
   ];
 

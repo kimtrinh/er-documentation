@@ -35,12 +35,9 @@ function checkSearchIndexSyntax() {
 function checkInlineScripts() {
   for (const file of HTML_FILES) {
     const html = fs.readFileSync(path.join(ROOT, file), 'utf8');
-    const matches = [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)];
+    const matches = [...html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)];
     matches.forEach((match, idx) => {
-      const attrs = match[1] || '';
-      const body = match[2] || '';
-      if (/\btype\s*=\s*["']module["']/i.test(attrs)) return;
-      compileFile(`${file}#inline-${idx}`, body);
+      compileFile(`${file}#inline-${idx}`, match[1]);
     });
   }
 }

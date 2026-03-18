@@ -117,6 +117,13 @@
       tokenConsumed: false,
       expandedDdx: new Set()
     },
+    inlineRiskPicker: {
+      active: false,
+      riskId: '',
+      packId: '',
+      tokenRange: null,
+      tokenConsumed: false
+    },
     historyQuestions: null,
     historyLoaded: false,
     historyLoading: false,
@@ -1621,6 +1628,79 @@
     state.inlineHxPicker.expandedDdx = new Set();
   }
 
+  // ── Inline Risk Picker ────────────────────────────────────────────
+
+  function resetInlineRiskPicker() {
+    state.inlineRiskPicker.active = false;
+    state.inlineRiskPicker.riskId = '';
+    state.inlineRiskPicker.packId = '';
+    state.inlineRiskPicker.tokenRange = null;
+    state.inlineRiskPicker.tokenConsumed = false;
+  }
+
+  function openInlineRiskPicker(tokenInfo, toggle, packId) {
+    if (!tokenInfo || !toggle || !packId) return;
+    state.inlineRiskPicker.active = true;
+    state.inlineRiskPicker.riskId = toggle.id;
+    state.inlineRiskPicker.packId = packId;
+    state.inlineRiskPicker.tokenRange = { ...tokenInfo };
+    state.inlineRiskPicker.tokenConsumed = false;
+    state.activeTokenRange = { ...tokenInfo };
+    state.suggestions = [];
+    state.activeSuggestionIndex = -1;
+    // Auto-select and initialize so buildInlineRiskCalculator() renders
+    state.selectedRisks.add(toggle.id);
+    state.openRiskTools.add(toggle.id);
+    if (toggle.calculator) ensureCalculatorInputState(toggle);
+    renderRiskTools();
+    renderSuggestions();
+  }
+
+  function commitInlineRiskPicker() {
+    if (!state.inlineRiskPicker.tokenConsumed && state.inlineRiskPicker.tokenRange) {
+      state.activeTokenRange = { ...state.inlineRiskPicker.tokenRange };
+      const text = buildRiskInsertText(state.inlineRiskPicker.riskId);
+      replaceActiveTokenInEditor(text ? text + '\n' : '');
+      state.inlineRiskPicker.tokenConsumed = true;
+    }
+    renderAll();
+    persistActivePackState();
+    closeSuggestions();
+  }
+
+  function buildInlineRiskSimpleField(toggle) {
+    if (!toggle || !toggle.input) return '';
+    const inp = toggle.input;
+    const current = typeof state.riskInputs[toggle.id] === 'string'
+      ? state.riskInputs[toggle.id]
+      : (inp.default !== undefined ? String(inp.default) : '');
+
+    if (inp.type === 'select') {
+      const options = (inp.options || []).map((opt) => {
+        const sel = String(opt.value) === String(current) ? 'selected' : '';
+        return `<option value="${escapeHtml(opt.value)}" ${sel}>${escapeHtml(opt.label)}</option>`;
+      }).join('');
+      return `<div class="inline-risk-simple-wrap">
+        <label class="inline-risk-calc-input-wrap">
+          <span>${escapeHtml(inp.label || 'Value')}</span>
+          <select data-role="inline-risk-simple-value" data-risk-id="${escapeHtml(toggle.id)}">${options}</select>
+        </label>
+      </div>`;
+    }
+
+    const type = inp.type === 'number' ? 'number' : 'text';
+    const placeholder = inp.placeholder ? `placeholder="${escapeHtml(inp.placeholder)}"` : '';
+    const minAttr = typeof inp.min === 'number' ? `min="${inp.min}"` : '';
+    const maxAttr = typeof inp.max === 'number' ? `max="${inp.max}"` : '';
+    return `<div class="inline-risk-simple-wrap">
+      <label class="inline-risk-calc-input-wrap">
+        <span>${escapeHtml(inp.label || 'Value')}</span>
+        <input type="${type}" value="${escapeHtml(current)}" ${placeholder} ${minAttr} ${maxAttr}
+          data-role="inline-risk-simple-value" data-risk-id="${escapeHtml(toggle.id)}">
+      </label>
+    </div>`;
+  }
+
   function resolvePackFromHxToken(token) {
     const command = normalizeCommandText(token);
     if (!command.startsWith('/hx')) return null;
@@ -2044,6 +2124,55 @@
       `;
       const newBody = els.suggestions.querySelector('.inline-hx-body');
       if (newBody && prevBodyScroll > 0) newBody.scrollTop = prevBodyScroll;
+
+    } else if (state.inlineRiskPicker.active) {
+      els.suggestions.classList.add('hx-picker-mode');
+      const pack = state.packById.get(state.inlineRiskPicker.packId) || state.activePack;
+      const toggle = pack ? (pack.risk_toggles || []).find((t) => t.id === state.inlineRiskPicker.riskId) : null;
+      if (!toggle) {
+        resetInlineRiskPicker();
+        els.suggestions.innerHTML = '';
+        els.suggestions.hidden = true;
+        return;
+      }
+
+      // Build live score for header subtitle
+      const engine = window.ER_MDM_RISK;
+      let scoreSubtitle = '';
+      let scoreClass = '';
+      if (toggle.calculator && toggle.calculator.type && engine) {
+        const values = ensureCalculatorInputState(toggle);
+        const evalResult = engine.evaluate(toggle.calculator.type, values);
+        scoreSubtitle = evalResult.preview || '';
+        scoreClass = evalResult.className || '';
+      }
+
+      // Build body — calculator or simple input
+      let bodyHtml = '';
+      if (toggle.calculator && toggle.calculator.type) {
+        bodyHtml = buildInlineRiskCalculator(toggle);
+      } else if (toggle.input) {
+        bodyHtml = buildInlineRiskSimpleField(toggle);
+      }
+
+      // Preserve body scroll across re-renders
+      const prevRiskBodyScroll = els.suggestions.querySelector('.inline-risk-picker-body')?.scrollTop || 0;
+      els.suggestions.hidden = false;
+      els.suggestions.innerHTML = `
+        <li class="inline-ddx-head">
+          <div>
+            <div class="inline-ddx-title">${escapeHtml(toggle.label)}</div>
+            ${scoreSubtitle ? `<div class="inline-ddx-subtitle ${escapeHtml(scoreClass)}">${escapeHtml(scoreSubtitle)}</div>` : ''}
+          </div>
+          <div class="inline-ddx-actions">
+            <button type="button" class="inline-ddx-btn primary" data-role="inline-risk-done">Done</button>
+          </div>
+        </li>
+        <li class="inline-risk-picker-body">${bodyHtml}</li>
+      `;
+      const newRiskBody = els.suggestions.querySelector('.inline-risk-picker-body');
+      if (newRiskBody && prevRiskBodyScroll > 0) newRiskBody.scrollTop = prevRiskBodyScroll;
+
     } else {
       els.suggestions.classList.remove('hx-picker-mode');
       const list = state.suggestions;
@@ -2068,7 +2197,7 @@
     }
 
     if (!els.editor || !els.editorShell) return;
-    const isInlinePicker = state.inlineDdxPicker.active || state.inlineHxPicker.active;
+    const isInlinePicker = state.inlineDdxPicker.active || state.inlineHxPicker.active || state.inlineRiskPicker.active;
     const anchorPos = isInlinePicker
       ? (Number.isFinite(els.editor.selectionStart) ? els.editor.selectionStart : (els.editor.value || '').length)
       : (state.activeTokenRange ? state.activeTokenRange.end : null);
@@ -2187,6 +2316,7 @@
   function closeSuggestions() {
     resetInlineDdxPicker();
     resetInlineHxPicker();
+    resetInlineRiskPicker();
     state.suggestions = [];
     state.activeSuggestionIndex = -1;
     state.activeTokenRange = null;
@@ -2492,7 +2622,7 @@
     renderRiskTools();
     renderCounts();
     persistActivePackState();
-    if (state.inlineDdxPicker.active) {
+    if (state.inlineDdxPicker.active || state.inlineRiskPicker.active) {
       renderSuggestions();
     }
   }
@@ -2712,6 +2842,17 @@
       return;
     }
 
+    // For risk commands: open inline risk picker instead of immediately inserting
+    if (result.type === 'risk') {
+      const pack = state.activePack;
+      const toggle = (pack?.risk_toggles || []).find((t) => t.id === result.riskId);
+      if (toggle) {
+        const tokenInfo = getSlashTokenAtCaret() || state.activeTokenRange;
+        openInlineRiskPicker(tokenInfo, toggle, pack.id);
+        return;
+      }
+    }
+
     const insertion = buildCommandInsertText(result, commandText);
     replaceActiveTokenInEditor(insertion);
     closeSuggestions();
@@ -2834,6 +2975,14 @@
           return;
         }
 
+        if (state.inlineRiskPicker.active) {
+          if (event.key === 'Enter') {
+            event.preventDefault();
+            commitInlineRiskPicker();
+          }
+          return;
+        }
+
         if (event.key === 'ArrowDown') {
           if (!state.suggestions.length) return;
           event.preventDefault();
@@ -2869,7 +3018,7 @@
 
       els.suggestions.addEventListener('change', (event) => {
         const target = event.target;
-        if (!(target instanceof HTMLInputElement)) return;
+        if (!(target instanceof HTMLInputElement || target instanceof HTMLSelectElement)) return;
         if (target.dataset.role === 'inline-ddx-item') {
           const label = target.dataset.label || '';
           if (!label) return;
@@ -2896,19 +3045,40 @@
           const nextValue = target.type === 'checkbox' ? target.checked : target.value;
           applyInlineRiskCalculatorInput(riskId, fieldId, nextValue);
         }
+
+        // Simple value field in inline risk picker (select)
+        if (target.dataset.role === 'inline-risk-simple-value') {
+          const riskId = target.dataset.riskId || '';
+          if (!riskId) return;
+          state.riskInputs[riskId] = target.value;
+          state.selectedRisks.add(riskId);
+          persistActivePackState();
+        }
       });
 
       els.suggestions.addEventListener('input', (event) => {
         const target = event.target;
         if (!(target instanceof HTMLInputElement || target instanceof HTMLSelectElement)) return;
-        if (target.dataset.role !== 'inline-risk-calc-input') return;
-        const riskId = target.dataset.riskId || '';
-        const fieldId = target.dataset.fieldId || '';
-        if (!riskId || !fieldId) return;
-        const nextValue = target instanceof HTMLInputElement && target.type === 'checkbox'
-          ? target.checked
-          : target.value;
-        applyInlineRiskCalculatorInput(riskId, fieldId, nextValue);
+
+        if (target.dataset.role === 'inline-risk-calc-input') {
+          const riskId = target.dataset.riskId || '';
+          const fieldId = target.dataset.fieldId || '';
+          if (!riskId || !fieldId) return;
+          const nextValue = target instanceof HTMLInputElement && target.type === 'checkbox'
+            ? target.checked
+            : target.value;
+          applyInlineRiskCalculatorInput(riskId, fieldId, nextValue);
+          return;
+        }
+
+        // Simple value field in inline risk picker (text/number)
+        if (target.dataset.role === 'inline-risk-simple-value') {
+          const riskId = target.dataset.riskId || '';
+          if (!riskId) return;
+          state.riskInputs[riskId] = target.value;
+          state.selectedRisks.add(riskId);
+          persistActivePackState();
+        }
       });
 
       els.suggestions.addEventListener('click', (event) => {
@@ -2988,6 +3158,15 @@
               renderSuggestions();
               return;
             }
+          }
+          return;
+        }
+
+        // ── Inline Risk Picker click handling ──
+        if (state.inlineRiskPicker.active) {
+          const btn = target.closest('[data-role]');
+          if (btn && btn.getAttribute('data-role') === 'inline-risk-done') {
+            commitInlineRiskPicker();
           }
           return;
         }
