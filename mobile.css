@@ -376,3 +376,40 @@ code {
     scroll-margin-top: 120px;
   }
 }
+
+/* ===== MOBILE BOTTOM NAV (shared across all pages) ===== */
+.mobile-nav { display: none; }
+
+@media (max-width: 640px) {
+  .mobile-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    display: flex;
+    padding: 5px 0 calc(5px + env(safe-area-inset-bottom));
+    z-index: 100;
+  }
+  .mob-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+    padding: 2px 0;
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--text3);
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+  .mob-item.active { color: var(--blue); }
+  .mob-icon { font-size: 19px; }
+  main { padding-bottom: 80px !important; }
+}
+
+@media (min-width: 641px) {
+  .mobile-nav { display: none !important; }
+}
