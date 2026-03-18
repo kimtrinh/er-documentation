@@ -3,41 +3,43 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="stylesheet" href="theme.css?v=2"/>
 <title>ER Calculators</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',system-ui,sans-serif;background:#0f172a;color:#e2e8f0;min-height:100vh}
+:root{--bg:#080f1a;--surface:#0d1829;--surface2:#111f35;--surface3:#162540;--border:#1a2d48;--border2:#243d5c;--text:#e8f0fc;--text2:#8fa8c8;--text3:#4a6280;--text-blue:#93c5fd;--text-blue-bright:#bfdbfe;--blue:#3b82f6;--blue2:#1d4ed8;--blue3:#0d2038;--green:#22c55e;--green2:#15803d;--green3:#0d2d1f;--amber:#f59e0b;--red:#ef4444;--purple:#a78bfa;--cyan:#22d3ee;}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
 
-header{background:linear-gradient(135deg,#1e293b,#0f172a);border-bottom:1px solid #1e3a5f;padding:20px 24px}
+header{background:linear-gradient(135deg,var(--surface),var(--bg));border-bottom:1px solid var(--border2);padding:20px 24px}
 .header-inner{max-width:980px;margin:0 auto}
 .logo{display:flex;align-items:center;gap:10px;margin-bottom:4px}
-.logo span{font-size:22px}.logo h1{font-size:20px;font-weight:700;color:#f1f5f9}
-.subtitle{font-size:13px;color:#64748b;margin-left:32px}
+.logo span{font-size:22px}.logo h1{font-size:20px;font-weight:700;color:var(--text)}
+.subtitle{font-size:13px;color:var(--text3);margin-left:32px}
 
 main{max-width:980px;margin:0 auto;padding:24px}
 .calc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:24px}
 
 /* CALC TABS */
 .calc-tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
-.calc-tab{padding:8px 18px;border-radius:20px;border:none;cursor:pointer;font-size:14px;font-weight:600;background:#1e293b;color:#94a3b8;transition:all .2s}
+.calc-tab{padding:8px 18px;border-radius:20px;border:none;cursor:pointer;font-size:14px;font-weight:600;background:var(--surface);color:var(--text2);transition:all .2s}
 .calc-tab.active{background:#3b82f6;color:#fff}
 
 /* CARD */
-.card{background:#1e293b;border:1px solid #334155;border-radius:14px;overflow:hidden}
-.card-title{padding:14px 18px;border-bottom:1px solid #334155;font-weight:700;font-size:15px;color:#f1f5f9;display:flex;align-items:center;gap:8px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.card-title{padding:14px 18px;border-bottom:1px solid var(--border);font-weight:700;font-size:15px;color:var(--text);display:flex;align-items:center;gap:8px}
 .card-body{padding:16px 18px}
 
 /* CRITERIA */
-.criterion{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid #1e293b;cursor:pointer;user-select:none}
+.criterion{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--surface);cursor:pointer;user-select:none}
 .criterion:last-child{border-bottom:none}
 .criterion input[type=checkbox]{width:18px;height:18px;accent-color:#3b82f6;flex-shrink:0;margin-top:2px;cursor:pointer}
-.criterion-label{font-size:13px;color:#cbd5e1;line-height:1.5;flex:1}
+.criterion-label{font-size:13px;color:var(--text2);line-height:1.5;flex:1}
 .criterion-pts{font-size:12px;font-weight:700;color:#38bdf8;white-space:nowrap;margin-top:2px}
 
 /* RADIO */
 .radio-group{margin-bottom:10px}
-.radio-group label{display:block;font-size:12px;color:#64748b;margin-bottom:6px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
-.radio-option{display:flex;align-items:center;gap:8px;padding:8px 0;cursor:pointer;font-size:13px;color:#cbd5e1;border-bottom:1px solid #1e293b}
+.radio-group label{display:block;font-size:12px;color:var(--text3);margin-bottom:6px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.radio-option{display:flex;align-items:center;gap:8px;padding:8px 0;cursor:pointer;font-size:13px;color:var(--text2);border-bottom:1px solid var(--surface)}
 .radio-option:last-child{border-bottom:none}
 .radio-option input{accent-color:#3b82f6;width:16px;height:16px;cursor:pointer;flex-shrink:0}
 .radio-option span{flex:1;line-height:1.4}
@@ -48,43 +50,51 @@ main{max-width:980px;margin:0 auto;padding:24px}
 .result.low{background:#052e16;border-color:#16a34a;color:#86efac}
 .result.moderate{background:#1c1917;border-color:#ca8a04;color:#fde047}
 .result.high{background:#1f0707;border-color:#dc2626;color:#fca5a5}
-.result.neutral{background:#1e293b;border-color:#334155;color:#94a3b8}
+.result.neutral{background:var(--surface);border-color:var(--border);color:var(--text2)}
 .result-score{font-size:24px;font-weight:800;margin-bottom:4px}
 .result-label{font-size:14px;font-weight:600;margin-bottom:6px}
 .result-action{font-size:12px;line-height:1.6;opacity:.9}
 
 /* COPY DOC BUTTON */
-.copy-doc-btn{margin-top:10px;padding:8px 16px;border-radius:8px;border:1px solid #3b82f6;background:#1e3a5f;color:#93c5fd;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;width:100%;display:flex;align-items:center;justify-content:center;gap:6px}
+.copy-doc-btn{margin-top:10px;padding:8px 16px;border-radius:8px;border:1px solid #3b82f6;background:var(--border2);color:var(--text-blue);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;width:100%;display:flex;align-items:center;justify-content:center;gap:6px}
 .copy-doc-btn:hover{background:#2563eb;color:#fff;border-color:#2563eb}
 .copy-doc-btn.show{display:flex}
 .copy-doc-btn.copied{background:#052e16;border-color:#16a34a;color:#86efac}
 
-.reset-btn{margin-top:8px;padding:7px 16px;border-radius:8px;border:1px solid #334155;background:transparent;color:#64748b;font-size:12px;cursor:pointer;transition:all .2s;width:100%}
-.reset-btn:hover{background:#334155;color:#f1f5f9}
+.reset-btn{margin-top:8px;padding:7px 16px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:12px;cursor:pointer;transition:all .2s;width:100%}
+.reset-btn:hover{background:var(--border);color:var(--text)}
 
-.disclaimer{background:#1e3a5f;border:1px solid #2563eb;border-radius:8px;padding:10px 14px;margin-bottom:20px;font-size:12px;color:#93c5fd;line-height:1.5}
-.disclaimer strong{color:#bfdbfe}
+.disclaimer{background:var(--border2);border:1px solid #2563eb;border-radius:8px;padding:10px 14px;margin-bottom:20px;font-size:12px;color:var(--text-blue);line-height:1.5}
+.disclaimer strong{color:var(--text-blue-bright)}
 
 @media(max-width:600px){main{padding:16px}}
 
 /* INPUTS */
-.input{width:100%;padding:10px;border-radius:10px;border:1px solid #334155;background:#0f172a;color:#e2e8f0;outline:none}
+.input{width:100%;padding:10px;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--text);outline:none}
 .input:focus{border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,.2)}
 
 /* ===== SHARED NEW NAV ===== */
 @media(max-width:640px){}
-.sitenav{background:#0d1829;border-bottom:1px solid #1a2d48;position:sticky;top:0;z-index:100;font-family:'DM Sans',system-ui,sans-serif}
+.sitenav{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;font-family:'DM Sans',system-ui,sans-serif}
 .sitenav-inner{max-width:1200px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:6px;height:46px;overflow:hidden}
 .nav-logo{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:#3b82f6;white-space:nowrap;flex-shrink:0;text-decoration:none;margin-right:6px}
-.nav-logo span{color:#4a6280}
+.nav-logo span{color:var(--text3)}
 .nav-links{display:flex;flex:1;min-width:0;gap:1px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;white-space:nowrap;padding-right:10px}
 .nav-links::-webkit-scrollbar{display:none}
-.nav-link{padding:5px 10px;border-radius:6px;font-size:12px;font-weight:600;color:#8fa8c8;text-decoration:none;white-space:nowrap;transition:all .15s}
-.nav-link:hover{background:#111f35;color:#e8f0fc}
+.nav-link{padding:5px 10px;border-radius:6px;font-size:12px;font-weight:600;color:var(--text2);text-decoration:none;white-space:nowrap;transition:all .15s}
+.nav-link:hover{background:var(--surface2);color:var(--text)}
 .nav-link.active{background:#1d4ed8;color:#fff}
 @media(max-width:640px){.nav-link{font-size:11px;padding:4px 8px}}
+@keyframes pgFade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+main>*{animation:pgFade .3s ease both}
+main>*:nth-child(2){animation-delay:.05s}
+main>*:nth-child(3){animation-delay:.1s}
+main>*:nth-child(4){animation-delay:.15s}
+.card{box-shadow:0 1px 4px rgba(0,0,0,.2)}
 </style>
 <link rel="stylesheet" href="mobile.css">
+<script>document.documentElement.setAttribute('data-theme',localStorage.getItem('theme')||'dark');</script>
+<link rel="manifest" href="/manifest.json">
 </head>
 <body>
 <nav class="sitenav">
@@ -93,6 +103,7 @@ main{max-width:980px;margin:0 auto;padding:24px}
     <div class="nav-links">
       <a class="nav-link" href="index.html">🏠 Home</a>
       <a class="nav-link" href="mdm.html">🧾 Documentation</a>
+
       <a class="nav-link active" href="calculators.html">🧮 Decision Support</a>
       <a class="nav-link" href="rsi.html">🚨 Resuscitation</a>
       <a class="nav-link" href="algorithms.html">🔀 Algorithms</a>
@@ -135,9 +146,9 @@ main{max-width:980px;margin:0 auto;padding:24px}
 
       <!-- PERC -->
       <div class="card">
-        <div class="card-title">🔍 PERC Rule <span style="font-size:12px;font-weight:400;color:#64748b">— Rule OUT PE (use first)</span></div>
+        <div class="card-title">🔍 PERC Rule <span style="font-size:12px;font-weight:400;color:var(--text3)">— Rule OUT PE (use first)</span></div>
         <div class="card-body">
-          <p style="font-size:12px;color:#64748b;margin-bottom:12px">All 8 must be <strong style="color:#f1f5f9">absent</strong> to PERC-negative. Use only if Wells PE &lt;2 (low pre-test probability).</p>
+          <p style="font-size:12px;color:var(--text3);margin-bottom:12px">All 8 must be <strong style="color:var(--text)">absent</strong> to PERC-negative. Use only if Wells PE &lt;2 (low pre-test probability).</p>
           <div id="perc-criteria">
             <div class="criterion" onclick="togglePerc(0)"><input type="checkbox" id="perc0"> <span class="criterion-label">Age ≥ 50</span></div>
             <div class="criterion" onclick="togglePerc(1)"><input type="checkbox" id="perc1"> <span class="criterion-label">HR ≥ 100 bpm</span></div>
@@ -189,9 +200,9 @@ main{max-width:980px;margin:0 auto;padding:24px}
     <div class="calc-grid">
 
       <div class="card">
-        <div class="card-title">❤️ HEART Score <span style="font-size:12px;font-weight:400;color:#64748b">— Chest Pain Risk Stratification</span></div>
+        <div class="card-title">❤️ HEART Score <span style="font-size:12px;font-weight:400;color:var(--text3)">— Chest Pain Risk Stratification</span></div>
         <div class="card-body">
-          <p style="font-size:12px;color:#64748b;margin-bottom:14px">Each category scored 0–2. Score ≤3 = low risk (MACE &lt;2%). Use with serial troponins.</p>
+          <p style="font-size:12px;color:var(--text3);margin-bottom:14px">Each category scored 0–2. Score ≤3 = low risk (MACE &lt;2%). Use with serial troponins.</p>
 
           <!-- H: History -->
           <div class="radio-group">
@@ -246,15 +257,15 @@ main{max-width:980px;margin:0 auto;padding:24px}
       <!-- Interpretation reference -->
       <div class="card" style="align-self:start">
         <div class="card-title">📊 HEART Score Interpretation</div>
-        <div class="card-body" style="font-size:13px;line-height:1.9;color:#cbd5e1">
-          <p style="margin-bottom:10px;color:#64748b;font-size:12px">6-week MACE risk (death, MI, revascularization):</p>
+        <div class="card-body" style="font-size:13px;line-height:1.9;color:var(--text2)">
+          <p style="margin-bottom:10px;color:var(--text3);font-size:12px">6-week MACE risk (death, MI, revascularization):</p>
           <p><span style="color:#86efac;font-weight:700">0–3 — Low Risk</span><br/>MACE ~1.7%. Eligible for early discharge with outpatient follow-up if serial troponins negative. Shared decision-making discussion documented.</p>
           <br/>
           <p><span style="color:#fde047;font-weight:700">4–6 — Moderate Risk</span><br/>MACE ~12–17%. Consider observation, stress testing, or cardiology consult. Not safe for routine discharge without further evaluation.</p>
           <br/>
           <p><span style="color:#fca5a5;font-weight:700">7–10 — High Risk</span><br/>MACE ~50–65%. Early invasive strategy indicated. Cardiology consult, admission, likely catheterization.</p>
           <br/>
-          <p style="font-size:12px;color:#475569;border-top:1px solid #334155;padding-top:10px">⚠️ HEART score does <strong style="color:#94a3b8">not</strong> replace clinical judgment. Patients with STEMI, new LBBB, or hemodynamic instability require immediate intervention regardless of score.</p>
+          <p style="font-size:12px;color:#475569;border-top:1px solid var(--border);padding-top:10px">⚠️ HEART score does <strong style="color:var(--text2)">not</strong> replace clinical judgment. Patients with STEMI, new LBBB, or hemodynamic instability require immediate intervention regardless of score.</p>
         </div>
       </div>
     </div>
@@ -267,16 +278,16 @@ main{max-width:980px;margin:0 auto;padding:24px}
     <div class="calc-grid">
 
       <div class="card">
-        <div class="card-title">🫁 YEARS Algorithm <span style="font-size:12px;font-weight:400;color:#64748b">— PE CT reduction strategy</span></div>
+        <div class="card-title">🫁 YEARS Algorithm <span style="font-size:12px;font-weight:400;color:var(--text3)">— PE CT reduction strategy</span></div>
         <div class="card-body">
-          <p style="font-size:12px;color:#64748b;margin-bottom:12px">Select YEARS criteria and enter D-dimer (ng/mL FEU).</p>
+          <p style="font-size:12px;color:var(--text3);margin-bottom:12px">Select YEARS criteria and enter D-dimer (ng/mL FEU).</p>
           <div id="years-criteria">
             <div class="criterion" onclick="toggleYEARS(0)"><input type="checkbox" id="years0"><span class="criterion-label">Clinical signs of DVT</span></div>
             <div class="criterion" onclick="toggleYEARS(1)"><input type="checkbox" id="years1"><span class="criterion-label">Hemoptysis</span></div>
             <div class="criterion" onclick="toggleYEARS(2)"><input type="checkbox" id="years2"><span class="criterion-label">PE most likely diagnosis</span></div>
           </div>
           <div style="margin-top:12px">
-            <label style="display:block;font-size:12px;color:#64748b;font-weight:600;margin-bottom:6px">D-dimer (ng/mL FEU)</label>
+            <label style="display:block;font-size:12px;color:var(--text3);font-weight:600;margin-bottom:6px">D-dimer (ng/mL FEU)</label>
             <input id="years-ddimer" class="input" type="number" inputmode="decimal" min="0" placeholder="e.g., 420" oninput="updateYEARS()"/>
           </div>
 
@@ -292,12 +303,12 @@ main{max-width:980px;margin:0 auto;padding:24px}
 
       <div class="card" style="align-self:start">
         <div class="card-title">📊 YEARS Interpretation</div>
-        <div class="card-body" style="font-size:13px;line-height:1.85;color:#cbd5e1">
+        <div class="card-body" style="font-size:13px;line-height:1.85;color:var(--text2)">
           <p><span style="color:#86efac;font-weight:700">0 YEARS criteria</span><br/>Use D-dimer cutoff of <strong>&lt;1000</strong> ng/mL FEU to rule out PE.</p>
           <br/>
           <p><span style="color:#fde047;font-weight:700">1 or more YEARS criteria</span><br/>Use D-dimer cutoff of <strong>&lt;500</strong> ng/mL FEU to rule out PE.</p>
           <br/>
-          <p style="font-size:12px;color:#64748b">Use in low/intermediate pre-test probability patients with clinical judgment and local protocol alignment.</p>
+          <p style="font-size:12px;color:var(--text3)">Use in low/intermediate pre-test probability patients with clinical judgment and local protocol alignment.</p>
         </div>
       </div>
     </div>
@@ -310,7 +321,7 @@ main{max-width:980px;margin:0 auto;padding:24px}
     <div class="calc-grid">
 
       <div class="card">
-        <div class="card-title">🧠 ABCD2 Score <span style="font-size:12px;font-weight:400;color:#64748b">— TIA early stroke risk</span></div>
+        <div class="card-title">🧠 ABCD2 Score <span style="font-size:12px;font-weight:400;color:var(--text3)">— TIA early stroke risk</span></div>
         <div class="card-body">
           <div id="abcd2-criteria">
             <div class="criterion" onclick="toggleABCD2('age')"><input type="checkbox" id="abcd2-age"><span class="criterion-label">Age ≥60 years</span><span class="criterion-pts">+1</span></div>
@@ -347,7 +358,7 @@ main{max-width:980px;margin:0 auto;padding:24px}
 
       <div class="card" style="align-self:start">
         <div class="card-title">📊 ABCD2 Interpretation</div>
-        <div class="card-body" style="font-size:13px;line-height:1.85;color:#cbd5e1">
+        <div class="card-body" style="font-size:13px;line-height:1.85;color:var(--text2)">
           <p><span style="color:#86efac;font-weight:700">0–3 Low risk</span><br/>Often outpatient pathway if evaluation is otherwise reassuring and follow-up is rapid.</p>
           <br/>
           <p><span style="color:#fde047;font-weight:700">4–5 Moderate risk</span><br/>Consider admission vs expedited stroke/TIA clinic based on resources and exam/imaging.</p>
@@ -365,7 +376,7 @@ main{max-width:980px;margin:0 auto;padding:24px}
     <div class="calc-grid">
 
       <div class="card">
-        <div class="card-title">❤️ CHA2DS2-VASc <span style="font-size:12px;font-weight:400;color:#64748b">— AF stroke risk</span></div>
+        <div class="card-title">❤️ CHA2DS2-VASc <span style="font-size:12px;font-weight:400;color:var(--text3)">— AF stroke risk</span></div>
         <div class="card-body">
           <div class="radio-group">
             <label>Sex</label>
@@ -400,7 +411,7 @@ main{max-width:980px;margin:0 auto;padding:24px}
 
       <div class="card" style="align-self:start">
         <div class="card-title">📊 CHA2DS2-VASc Thresholds</div>
-        <div class="card-body" style="font-size:13px;line-height:1.85;color:#cbd5e1">
+        <div class="card-body" style="font-size:13px;line-height:1.85;color:var(--text2)">
           <p><span style="color:#86efac;font-weight:700">Lower risk</span><br/>Men 0 / Women 1: anticoagulation usually not indicated.</p>
           <br/>
           <p><span style="color:#fde047;font-weight:700">Intermediate</span><br/>Men 1 / Women 2: consider anticoagulation based on bleeding risk and shared decision-making.</p>
@@ -442,8 +453,8 @@ main{max-width:980px;margin:0 auto;padding:24px}
 
       <div class="card" style="align-self:start">
         <div class="card-title">📊 Interpretation</div>
-        <div class="card-body" style="font-size:13px;line-height:1.8;color:#cbd5e1">
-          <p style="margin-bottom:10px;color:#64748b;font-size:12px">Wells DVT Score interpretation:</p>
+        <div class="card-body" style="font-size:13px;line-height:1.8;color:var(--text2)">
+          <p style="margin-bottom:10px;color:var(--text3);font-size:12px">Wells DVT Score interpretation:</p>
           <p><span style="color:#86efac;font-weight:700">≤1 — Low probability</span><br/>DVT prevalence ~5%. D-dimer negative → DVT excluded. D-dimer positive → ultrasound.</p>
           <br/>
           <p><span style="color:#fde047;font-weight:700">2–6 — Moderate probability</span><br/>DVT prevalence ~17%. Compression ultrasound. If negative + D-dimer negative → DVT excluded.</p>
@@ -463,7 +474,7 @@ main{max-width:980px;margin:0 auto;padding:24px}
       <div class="card">
         <div class="card-title">✅ Eligibility Check</div>
         <div class="card-body">
-          <p style="font-size:12px;color:#64748b;margin-bottom:12px">Patient MUST meet ALL of the following to apply the rule:</p>
+          <p style="font-size:12px;color:var(--text3);margin-bottom:12px">Patient MUST meet ALL of the following to apply the rule:</p>
           <div id="cthead-eligibility">
             <div class="criterion" onclick="toggleCTElig(0)"><input type="checkbox" id="cte0"><span class="criterion-label">GCS score of 13–15</span></div>
             <div class="criterion" onclick="toggleCTElig(1)"><input type="checkbox" id="cte1"><span class="criterion-label">Witnessed loss of consciousness, amnesia, or confusion</span></div>
@@ -478,9 +489,9 @@ main{max-width:980px;margin:0 auto;padding:24px}
       </div>
 
       <div class="card">
-        <div class="card-title">🔴 High-Risk Factors <span style="font-size:12px;font-weight:400;color:#64748b">— CT if ANY present</span></div>
+        <div class="card-title">🔴 High-Risk Factors <span style="font-size:12px;font-weight:400;color:var(--text3)">— CT if ANY present</span></div>
         <div class="card-body">
-          <p style="font-size:12px;color:#64748b;margin-bottom:8px">Predicts need for neurological intervention:</p>
+          <p style="font-size:12px;color:var(--text3);margin-bottom:8px">Predicts need for neurological intervention:</p>
           <div id="cthead-high">
             <div class="criterion" onclick="toggleCTHigh(0)"><input type="checkbox" id="cth0"><span class="criterion-label">GCS &lt; 15 at 2 hours post-injury</span></div>
             <div class="criterion" onclick="toggleCTHigh(1)"><input type="checkbox" id="cth1"><span class="criterion-label">Suspected open or depressed skull fracture</span></div>
@@ -495,9 +506,9 @@ main{max-width:980px;margin:0 auto;padding:24px}
       </div>
 
       <div class="card">
-        <div class="card-title">🟡 Medium-Risk Factors <span style="font-size:12px;font-weight:400;color:#64748b">— CT if ANY present</span></div>
+        <div class="card-title">🟡 Medium-Risk Factors <span style="font-size:12px;font-weight:400;color:var(--text3)">— CT if ANY present</span></div>
         <div class="card-body">
-          <p style="font-size:12px;color:#64748b;margin-bottom:8px">Predicts brain injury on CT:</p>
+          <p style="font-size:12px;color:var(--text3);margin-bottom:8px">Predicts brain injury on CT:</p>
           <div id="cthead-med">
             <div class="criterion" onclick="toggleCTMed(0)"><input type="checkbox" id="ctm0"><span class="criterion-label">Amnesia before impact ≥ 30 minutes</span></div>
             <div class="criterion" onclick="toggleCTMed(1)"><input type="checkbox" id="ctm1"><span class="criterion-label">Dangerous mechanism (pedestrian struck by MVC, ejected, fall &gt;3 feet or 5 stairs)</span></div>
@@ -536,38 +547,38 @@ main{max-width:980px;margin:0 auto;padding:24px}
         <div class="card-title">🩸 LRINEC (Necrotizing Soft Tissue Infection)</div>
         <div class="card-body">
 
-          <p style="font-size:12px;color:#64748b;margin-bottom:12px">
+          <p style="font-size:12px;color:var(--text3);margin-bottom:12px">
             LRINEC is a risk stratification/documentation tool — limited sensitivity (do NOT use to rule out nec fasc).
           </p>
 
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
             <div>
-              <label style="display:block;font-size:12px;color:#64748b;font-weight:600;margin-bottom:6px">CRP (mg/L)</label>
+              <label style="display:block;font-size:12px;color:var(--text3);font-weight:600;margin-bottom:6px">CRP (mg/L)</label>
               <input id="lr-crp" type="number" inputmode="decimal" placeholder="e.g., 180"
                 oninput="calcLRINEC()" class="input"/>
             </div>
             <div>
-              <label style="display:block;font-size:12px;color:#64748b;font-weight:600;margin-bottom:6px">WBC (×10³/µL)</label>
+              <label style="display:block;font-size:12px;color:var(--text3);font-weight:600;margin-bottom:6px">WBC (×10³/µL)</label>
               <input id="lr-wbc" type="number" inputmode="decimal" placeholder="e.g., 22"
                 oninput="calcLRINEC()" class="input"/>
             </div>
             <div>
-              <label style="display:block;font-size:12px;color:#64748b;font-weight:600;margin-bottom:6px">Hgb (g/dL)</label>
+              <label style="display:block;font-size:12px;color:var(--text3);font-weight:600;margin-bottom:6px">Hgb (g/dL)</label>
               <input id="lr-hgb" type="number" inputmode="decimal" placeholder="e.g., 12.5"
                 oninput="calcLRINEC()" class="input"/>
             </div>
             <div>
-              <label style="display:block;font-size:12px;color:#64748b;font-weight:600;margin-bottom:6px">Na (mmol/L)</label>
+              <label style="display:block;font-size:12px;color:var(--text3);font-weight:600;margin-bottom:6px">Na (mmol/L)</label>
               <input id="lr-na" type="number" inputmode="decimal" placeholder="e.g., 131"
                 oninput="calcLRINEC()" class="input"/>
             </div>
             <div>
-              <label style="display:block;font-size:12px;color:#64748b;font-weight:600;margin-bottom:6px">Creatinine (mg/dL)</label>
+              <label style="display:block;font-size:12px;color:var(--text3);font-weight:600;margin-bottom:6px">Creatinine (mg/dL)</label>
               <input id="lr-cr" type="number" inputmode="decimal" placeholder="e.g., 2.1"
                 oninput="calcLRINEC()" class="input"/>
             </div>
             <div>
-              <label style="display:block;font-size:12px;color:#64748b;font-weight:600;margin-bottom:6px">Glucose (mg/dL)</label>
+              <label style="display:block;font-size:12px;color:var(--text3);font-weight:600;margin-bottom:6px">Glucose (mg/dL)</label>
               <input id="lr-glu" type="number" inputmode="decimal" placeholder="e.g., 220"
                 oninput="calcLRINEC()" class="input"/>
             </div>
@@ -589,37 +600,37 @@ main{max-width:980px;margin:0 auto;padding:24px}
         <div class="card-title">⚠️ Fournier’s Gangrene Severity Index (FGSI)</div>
         <div class="card-body">
 
-          <p style="font-size:12px;color:#64748b;margin-bottom:12px">
+          <p style="font-size:12px;color:var(--text3);margin-bottom:12px">
             Prognostic score (mortality risk / ICU justification). Commonly cited: FGSI &gt; 9 → high mortality risk.
           </p>
 
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-            <div><label style="display:block;font-size:12px;color:#64748b;font-weight:600;margin-bottom:6px">Temp (°C)</label>
+            <div><label style="display:block;font-size:12px;color:var(--text3);font-weight:600;margin-bottom:6px">Temp (°C)</label>
               <input id="fg-temp" type="number" inputmode="decimal" placeholder="e.g., 39.2" oninput="calcFGSI()" class="input"/>
             </div>
-            <div><label style="display:block;font-size:12px;color:#64748b;font-weight:600;margin-bottom:6px">HR</label>
+            <div><label style="display:block;font-size:12px;color:var(--text3);font-weight:600;margin-bottom:6px">HR</label>
               <input id="fg-hr" type="number" inputmode="numeric" placeholder="e.g., 145" oninput="calcFGSI()" class="input"/>
             </div>
-            <div><label style="display:block;font-size:12px;color:#64748b;font-weight:600;margin-bottom:6px">RR</label>
+            <div><label style="display:block;font-size:12px;color:var(--text3);font-weight:600;margin-bottom:6px">RR</label>
               <input id="fg-rr" type="number" inputmode="numeric" placeholder="e.g., 28" oninput="calcFGSI()" class="input"/>
             </div>
-            <div><label style="display:block;font-size:12px;color:#64748b;font-weight:600;margin-bottom:6px">Na (mmol/L)</label>
+            <div><label style="display:block;font-size:12px;color:var(--text3);font-weight:600;margin-bottom:6px">Na (mmol/L)</label>
               <input id="fg-na" type="number" inputmode="decimal" placeholder="e.g., 128" oninput="calcFGSI()" class="input"/>
             </div>
-            <div><label style="display:block;font-size:12px;color:#64748b;font-weight:600;margin-bottom:6px">K (mmol/L)</label>
+            <div><label style="display:block;font-size:12px;color:var(--text3);font-weight:600;margin-bottom:6px">K (mmol/L)</label>
               <input id="fg-k" type="number" inputmode="decimal" placeholder="e.g., 5.7" oninput="calcFGSI()" class="input"/>
             </div>
-            <div><label style="display:block;font-size:12px;color:#64748b;font-weight:600;margin-bottom:6px">Creatinine (mg/dL)</label>
+            <div><label style="display:block;font-size:12px;color:var(--text3);font-weight:600;margin-bottom:6px">Creatinine (mg/dL)</label>
               <input id="fg-cr" type="number" inputmode="decimal" placeholder="e.g., 2.3" oninput="calcFGSI()" class="input"/>
             </div>
-            <div><label style="display:block;font-size:12px;color:#64748b;font-weight:600;margin-bottom:6px">Hct (%)</label>
+            <div><label style="display:block;font-size:12px;color:var(--text3);font-weight:600;margin-bottom:6px">Hct (%)</label>
               <input id="fg-hct" type="number" inputmode="decimal" placeholder="e.g., 28" oninput="calcFGSI()" class="input"/>
             </div>
-            <div><label style="display:block;font-size:12px;color:#64748b;font-weight:600;margin-bottom:6px">WBC (×10³/µL)</label>
+            <div><label style="display:block;font-size:12px;color:var(--text3);font-weight:600;margin-bottom:6px">WBC (×10³/µL)</label>
               <input id="fg-wbc" type="number" inputmode="decimal" placeholder="e.g., 24" oninput="calcFGSI()" class="input"/>
             </div>
             <div style="grid-column:1 / -1">
-              <label style="display:block;font-size:12px;color:#64748b;font-weight:600;margin-bottom:6px">HCO₃ (mmol/L, venous)</label>
+              <label style="display:block;font-size:12px;color:var(--text3);font-weight:600;margin-bottom:6px">HCO₃ (mmol/L, venous)</label>
               <input id="fg-hco3" type="number" inputmode="decimal" placeholder="e.g., 17" oninput="calcFGSI()" class="input"/>
             </div>
           </div>
@@ -680,11 +691,11 @@ main{max-width:980px;margin:0 auto;padding:24px}
         <div class="card-body">
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
             <div>
-              <label style="display:block;font-size:12px;color:#64748b;font-weight:600;margin-bottom:6px">HR</label>
+              <label style="display:block;font-size:12px;color:var(--text3);font-weight:600;margin-bottom:6px">HR</label>
               <input id="si-hr" type="number" inputmode="numeric" placeholder="e.g., 120" oninput="calcShockIndex()" class="input"/>
             </div>
             <div>
-              <label style="display:block;font-size:12px;color:#64748b;font-weight:600;margin-bottom:6px">SBP</label>
+              <label style="display:block;font-size:12px;color:var(--text3);font-weight:600;margin-bottom:6px">SBP</label>
               <input id="si-sbp" type="number" inputmode="numeric" placeholder="e.g., 95" oninput="calcShockIndex()" class="input"/>
             </div>
           </div>
@@ -712,7 +723,7 @@ main{max-width:980px;margin:0 auto;padding:24px}
       <div class="card">
         <div class="card-title">🦠 Centor / McIsaac (Strep Pharyngitis)</div>
         <div class="card-body">
-          <p style="font-size:12px;color:#64748b;margin-bottom:12px">
+          <p style="font-size:12px;color:var(--text3);margin-bottom:12px">
             Centor criteria (+1 each): tonsillar exudate, tender anterior cervical nodes, fever, absence of cough.
             McIsaac adds age adjustment.
           </p>
@@ -751,7 +762,7 @@ main{max-width:980px;margin:0 auto;padding:24px}
       <div class="card">
         <div class="card-title">👶 PECARN Pediatric Head Injury</div>
         <div class="card-body">
-          <p style="font-size:12px;color:#64748b;margin-bottom:12px">
+          <p style="font-size:12px;color:var(--text3);margin-bottom:12px">
             Decision support for minor blunt head trauma (GCS 14–15). Choose age group, then select findings.
           </p>
 
@@ -773,7 +784,7 @@ main{max-width:980px;margin:0 auto;padding:24px}
           <button id="pecarn-copy-btn" class="copy-doc-btn" onclick="copyDoc('pecarn')">📋 Copy Documentation</button>
           <button class="reset-btn" onclick="resetPecarn()">Reset</button>
 
-          <p style="font-size:11px;color:#64748b;margin-top:10px">PECARN supports CT vs observation; always use clinical judgment, and consider non-accidental trauma.</p>
+          <p style="font-size:11px;color:var(--text3);margin-top:10px">PECARN supports CT vs observation; always use clinical judgment, and consider non-accidental trauma.</p>
         </div>
       </div>
 
@@ -787,10 +798,10 @@ main{max-width:980px;margin:0 auto;padding:24px}
       <div class="card">
         <div class="card-title">🌡️ Peds Fever (0–60d)</div>
         <div class="card-body">
-          <p style="font-size:12px;color:#64748b;margin-bottom:12px">
+          <p style="font-size:12px;color:var(--text3);margin-bottom:12px">
             Full workflow is on the dedicated page (labs, age bands, disposition suggestions).
           </p>
-          <a href="pedsfever.html" style="display:inline-block;width:100%;text-align:center;padding:10px 14px;border-radius:10px;border:1px solid #3b82f6;background:#1e3a5f;color:#bfdbfe;font-weight:700;text-decoration:none">Open Peds Fever Page</a>
+          <a href="pedsfever.html" style="display:inline-block;width:100%;text-align:center;padding:10px 14px;border-radius:10px;border:1px solid #3b82f6;background:var(--border2);color:var(--text-blue-bright);font-weight:700;text-decoration:none">Open Peds Fever Page</a>
           <div style="height:12px"></div>
           <div id="pedsfever-note" class="result neutral">
             <div class="result-label">Quick note</div>
@@ -805,7 +816,7 @@ main{max-width:980px;margin:0 auto;padding:24px}
 
 </main>
 
-<script src="search-index.js"></script>
+<script src="search-index.js?v=2"></script>
 <script>
 // ── CALC TAB SWITCHING ───────────────────────────────────────
 const CALC_IDS = ['wellspe','heart','years','wellsdvt','abcd2','cha2ds2vasc','cthead','softtissue','centor','pecarn','pedsfever'];
@@ -2101,11 +2112,11 @@ function renderPecarnCriteria(){
   pecarnChecked = Array(def.high.length + def.intermediate.length).fill(false);
 
   let html = '';
-  html += '<div style="font-size:12px;color:#64748b;font-weight:700;margin:8px 0 6px">High-risk</div>';
+  html += '<div style="font-size:12px;color:var(--text3);font-weight:700;margin:8px 0 6px">High-risk</div>';
   def.high.forEach((lab,i)=>{
     html += `<div class="criterion" onclick="togglePecarn(${i})"><input type="checkbox" id="pecarn${i}"><span class="criterion-label">${lab}</span></div>`;
   });
-  html += '<div style="font-size:12px;color:#64748b;font-weight:700;margin:12px 0 6px">Intermediate-risk</div>';
+  html += '<div style="font-size:12px;color:var(--text3);font-weight:700;margin:12px 0 6px">Intermediate-risk</div>';
   def.intermediate.forEach((lab,j)=>{
     const idx = def.high.length + j;
     html += `<div class="criterion" onclick="togglePecarn(${idx})"><input type="checkbox" id="pecarn${idx}"><span class="criterion-label">${lab}</span></div>`;
@@ -2158,5 +2169,8 @@ function resetPecarn(){
 <script id="shared-nav-search">
 </script>
 
+<button id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">☀️</button>
+<script src="theme.js?v=3"></script>
+<script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
 </body>
 </html>

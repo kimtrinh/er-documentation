@@ -3,161 +3,256 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="stylesheet" href="theme.css?v=2"/>
 <title>MDM Builder</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',system-ui,sans-serif;background:#0f172a;color:#e2e8f0;min-height:100vh}
-header{background:linear-gradient(135deg,#1e293b,#0f172a);border-bottom:1px solid #1e3a5f;padding:20px 24px}
+:root{--bg:#080f1a;--surface:#0d1829;--surface2:#111f35;--surface3:#162540;--border:#1a2d48;--border2:#243d5c;--text:#e8f0fc;--text2:#8fa8c8;--text3:#4a6280;--text-blue:#93c5fd;--text-blue-bright:#bfdbfe;--blue:#3b82f6;--blue2:#1d4ed8;--blue3:#0d2038;--green:#22c55e;--green2:#15803d;--green3:#0d2d1f;--amber:#f59e0b;--red:#ef4444;--purple:#a78bfa;--cyan:#22d3ee;}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
+header{background:linear-gradient(135deg,var(--surface),var(--bg));border-bottom:1px solid var(--border2);padding:20px 24px}
 .header-inner{max-width:1100px;margin:0 auto}
 .logo{display:flex;align-items:center;gap:10px;margin-bottom:4px}
-.logo span{font-size:22px}.logo h1{font-size:20px;font-weight:700;color:#f1f5f9}
-.subtitle{font-size:13px;color:#64748b;margin-left:32px;margin-bottom:12px}
-.disclaimer{background:#1e3a5f;border:1px solid #2563eb;border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:12px;color:#93c5fd;line-height:1.5}
-.disclaimer strong{color:#bfdbfe}
+.logo span{font-size:22px}.logo h1{font-size:20px;font-weight:700;color:var(--text)}
+.subtitle{font-size:13px;color:var(--text3);margin-left:32px;margin-bottom:12px}
+.disclaimer{background:var(--border2);border:1px solid #2563eb;border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:12px;color:var(--text-blue);line-height:1.5}
+.disclaimer strong{color:var(--text-blue-bright)}
 
 .controls{display:grid;grid-template-columns:2fr 1.2fr 1.5fr;gap:12px;align-items:end}
 .control{display:flex;flex-direction:column;gap:6px}
-.control label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#8fa8c8;font-weight:700}
-.control select,.control input[type="text"]{width:100%;padding:10px 12px;background:#1e293b;border:1px solid #334155;border-radius:10px;color:#f1f5f9;font-size:14px;outline:none}
+.control label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--text2);font-weight:700}
+.control select,.control input[type="text"]{width:100%;padding:10px 12px;background:var(--surface);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:14px;outline:none}
 .control select:focus,.control input[type="text"]:focus{border-color:#3b82f6}
 .control input[type="text"].invalid{border-color:#ef4444;box-shadow:0 0 0 3px rgba(239,68,68,.15)}
 .mode-toggle{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.mode-pill{display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #334155;background:#1e293b;border-radius:999px;color:#cbd5e1;font-size:13px;font-weight:600;cursor:pointer}
+.mode-pill{display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--border);background:var(--surface);border-radius:999px;color:var(--text2);font-size:13px;font-weight:600;cursor:pointer}
 .mode-pill input{accent-color:#3b82f6}
-.alias-hint{margin-top:8px;font-size:11px;color:#64748b}
+.alias-hint{margin-top:8px;font-size:11px;color:var(--text3)}
+.controls{display:grid;grid-template-columns:minmax(280px,420px);gap:12px;align-items:end}
+.control.secondary{display:none}
+.alias-hint{display:none}
+.pack-shortcuts-label{margin-top:10px;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--text2);font-weight:700}
 .pack-shortcuts{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
-.pack-chip{padding:6px 10px;border-radius:999px;border:1px solid #334155;background:#1e293b;color:#cbd5e1;font-size:11px;font-weight:700;cursor:pointer;transition:all .15s}
-.pack-chip:hover{border-color:#3b82f6;color:#bfdbfe}
+.pack-chip{padding:6px 10px;border-radius:999px;border:1px solid var(--border);background:var(--surface);color:var(--text2);font-size:11px;font-weight:700;cursor:pointer;transition:all .15s}
+.pack-chip:hover{border-color:#3b82f6;color:var(--text-blue-bright)}
 .pack-chip.active{background:#1d4ed8;border-color:#2563eb;color:#fff}
 .quick-actions{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
-.quick-btn{padding:7px 10px;border-radius:8px;border:1px solid #334155;background:#0f172a;color:#cbd5e1;font-size:11px;font-weight:700;cursor:pointer;transition:all .15s;text-decoration:none;display:inline-flex;align-items:center}
-.quick-btn:hover{border-color:#3b82f6;color:#bfdbfe}
+.quick-btn{padding:7px 10px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text2);font-size:11px;font-weight:700;cursor:pointer;transition:all .15s;text-decoration:none;display:inline-flex;align-items:center}
+.quick-btn:hover{border-color:#3b82f6;color:var(--text-blue-bright)}
 .quick-btn.primary{background:#1d4ed8;border-color:#2563eb;color:#eff6ff}
 .quick-btn.primary:hover{background:#2563eb;color:#fff}
+.quick-btn.danger{background:#7f1d1d;border-color:#b91c1c;color:#fee2e2;font-size:12px;font-weight:800;letter-spacing:.02em}
+.quick-btn.danger:hover{background:#991b1b;border-color:#dc2626;color:#fff}
 
-main{max-width:1100px;margin:0 auto;padding:18px 24px 64px}
+main{max-width:1240px;margin:0 auto;padding:18px 24px 64px}
+.doc-toolbar{position:sticky;top:46px;z-index:60;background:var(--surface);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:12px;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.toolbar-left{display:flex;gap:8px;flex-wrap:wrap}
+.toolbar-btn{padding:8px 11px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;font-weight:700;cursor:pointer}
+.toolbar-btn:hover{border-color:#3b82f6;color:var(--text-blue-bright)}
+.toolbar-btn.primary{background:#1d4ed8;border-color:#2563eb;color:#eff6ff}
+.toolbar-btn.primary:hover{background:#2563eb;color:#fff}
+.status-badges{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.status-pill{font-size:11px;font-weight:700;border-radius:999px;padding:4px 8px;border:1px solid var(--border);background:var(--bg);color:var(--text2)}
+.status-pill.ok{background:#052e16;border-color:#166534;color:#86efac}
+.status-pill.warn{background:#2b1f0a;border-color:#b45309;color:#fcd34d}
+.status-pill.neutral{background:var(--bg);border-color:var(--border);color:var(--text2)}
+.doc-tabs{display:none}
+.workspace-shell{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(340px,.8fr);gap:14px;align-items:start}
+.workspace-left{display:grid;gap:14px}
+.workspace-right{position:relative}
+.preview-panel-sticky{position:sticky;top:112px}
+.jump-preview{display:inline-flex;text-decoration:none}
+.advanced-actions{border:1px solid var(--border);border-radius:10px;background:var(--surface2);padding:8px 10px}
+.advanced-actions summary{cursor:pointer;font-size:12px;font-weight:700;color:var(--text2)}
+.advanced-actions[open] summary{margin-bottom:10px}
 .doc-accordion{display:grid;gap:14px}
-.doc-panel{background:#1e293b;border:1px solid #334155;border-radius:12px;overflow:hidden}
-.doc-panel > summary{list-style:none;cursor:pointer;padding:14px 16px;background:#172235;border-bottom:1px solid #334155;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.doc-panel{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.doc-panel > summary{list-style:none;cursor:pointer;padding:14px 16px;background:var(--surface2);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px}
 .doc-panel > summary::-webkit-details-marker{display:none}
-.doc-title{font-size:14px;font-weight:700;color:#f1f5f9}
-.doc-meta{font-size:11px;color:#94a3b8}
-.doc-panel > summary::after{content:'+';font-size:18px;line-height:1;color:#93c5fd;font-weight:700}
+.doc-title{font-size:14px;font-weight:700;color:var(--text)}
+.doc-meta{font-size:11px;color:var(--text2)}
+.doc-panel > summary::after{content:'+';font-size:18px;line-height:1;color:var(--text-blue);font-weight:700}
 .doc-panel[open] > summary::after{content:'−'}
 .doc-content{padding:14px}
 .doc-content .grid{margin:0}
 .doc-content .dotphrase-panel{margin:0}
 .grid{display:grid;grid-template-columns:1.1fr 1fr;gap:16px;align-items:start}
-.panel{background:#1e293b;border:1px solid #334155;border-radius:12px;overflow:hidden}
-.panel-head{padding:12px 14px;border-bottom:1px solid #334155;background:#172235}
-.panel-head h2{font-size:13px;color:#f1f5f9;font-weight:700;letter-spacing:.02em;display:flex;align-items:center;justify-content:space-between;gap:10px}
-.head-count{font-size:10px;padding:2px 8px;border-radius:999px;background:#0f172a;border:1px solid #27364d;color:#93c5fd}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.panel-head{padding:12px 14px;border-bottom:1px solid var(--border);background:var(--surface2)}
+.panel-head h2{font-size:13px;color:var(--text);font-weight:700;letter-spacing:.02em;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.head-count{font-size:10px;padding:2px 8px;border-radius:999px;background:var(--bg);border:1px solid var(--border);color:var(--text-blue)}
 .panel-body{padding:14px}
 .section-subgroup + .section-subgroup{margin-top:14px}
-.section-subgroup h4{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#8fa8c8;margin-bottom:8px}
+.section-subgroup h4{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--text2);margin-bottom:8px}
+.ddx-actions{display:flex;justify-content:flex-end;gap:8px;margin-bottom:10px}
+.ddx-action-btn{padding:6px 10px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text2);font-size:11px;font-weight:700;cursor:pointer}
+.ddx-action-btn:hover{border-color:#3b82f6;color:var(--text-blue-bright)}
 .check-grid{display:grid;grid-template-columns:1fr;gap:8px}
-.check-row{display:flex;align-items:flex-start;gap:8px;padding:9px 10px;background:#0f172a;border:1px solid #27364d;border-radius:9px;font-size:13px;color:#cbd5e1}
+.check-row{display:flex;align-items:flex-start;gap:8px;padding:9px 10px;background:var(--bg);border:1px solid var(--border);border-radius:9px;font-size:13px;color:var(--text2)}
 .check-row input{margin-top:2px;accent-color:#3b82f6}
 .ruleout-label{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .missing-tag{font-size:11px;color:#fca5a5;border:1px solid #7f1d1d;background:#2d1b1b;padding:1px 6px;border-radius:20px}
 
-.risk-row + .risk-row{margin-top:10px}
+/* Collapsible risk rows */
+details.risk-row{margin-top:10px;list-style:none}
+details.risk-row + details.risk-row{margin-top:10px}
+details.risk-row > summary{list-style:none;display:flex;align-items:center;justify-content:space-between;cursor:pointer;padding:4px 2px;border-radius:6px;user-select:none}
+details.risk-row > summary::-webkit-details-marker{display:none}
+details.risk-row > summary:hover{background:var(--surface2)}
+.risk-row-summary{display:flex;align-items:center;justify-content:space-between;width:100%;gap:6px}
+.risk-row-chevron{flex-shrink:0;width:14px;height:14px;display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:10px;transition:transform .18s ease}
+.risk-row-chevron::after{content:'▸'}
+details.risk-row[open] .risk-row-chevron{transform:rotate(90deg)}
+@keyframes risk-highlight-pulse{0%{box-shadow:0 0 0 0 rgba(251,191,36,.55)}60%{box-shadow:0 0 0 6px rgba(251,191,36,0)}100%{box-shadow:none}}
+.risk-row-highlight{animation:risk-highlight-pulse .7s ease 2;border-radius:8px;outline:2px solid #f59e0b;outline-offset:2px}
 .risk-input-wrap{display:flex;align-items:center;gap:8px;margin:8px 2px 0 28px}
-.risk-input-wrap span{font-size:11px;color:#94a3b8;min-width:54px}
-.risk-input-wrap input,.risk-input-wrap select{background:#0f172a;border:1px solid #334155;border-radius:8px;color:#e2e8f0;font-size:12px;padding:6px 8px;min-width:120px}
+.risk-input-wrap span{font-size:11px;color:var(--text2);min-width:54px}
+.risk-input-wrap input,.risk-input-wrap select{background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:12px;padding:6px 8px;min-width:120px}
 .risk-input-wrap input:disabled,.risk-input-wrap select:disabled{opacity:.5}
-.risk-calc-wrap{margin:8px 2px 0 28px;padding:10px;border:1px solid #334155;border-radius:10px;background:#111827}
-.risk-calc-title{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#8fa8c8;font-weight:700;margin-bottom:8px}
+.risk-calc-wrap{margin:8px 2px 0 28px;padding:10px;border:1px solid var(--border);border-radius:10px;background:var(--surface2)}
+.risk-calc-title{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--text2);font-weight:700;margin-bottom:8px}
 .risk-calc-grid{display:grid;grid-template-columns:1fr;gap:8px}
 .risk-calc-field{margin:0}
 .risk-calc-check{background:#0b1322}
-.risk-calc-subhead{font-size:11px;font-weight:700;color:#93c5fd;letter-spacing:.04em;margin-top:2px}
-.risk-calc-result{margin-top:8px;border-radius:8px;border:1px solid #334155;padding:8px 10px;font-size:12px;color:#cbd5e1}
-.risk-calc-result.calc-neutral{background:#0f172a;border-color:#334155;color:#94a3b8}
+.risk-calc-subhead{font-size:11px;font-weight:700;color:var(--text-blue);letter-spacing:.04em;margin-top:2px}
+.risk-calc-result{margin-top:8px;border-radius:8px;border:1px solid var(--border);padding:8px 10px;font-size:12px;color:var(--text2)}
+.risk-calc-result.calc-neutral{background:var(--bg);border-color:var(--border);color:var(--text2)}
 .risk-calc-result.calc-low{background:#052e16;border-color:#16a34a;color:#86efac}
 .risk-calc-result.calc-moderate{background:#1c1917;border-color:#ca8a04;color:#fde047}
 .risk-calc-result.calc-high{background:#1f0707;border-color:#dc2626;color:#fca5a5}
-.risk-calc-link{display:inline-flex;margin-top:8px;font-size:11px;color:#93c5fd;text-decoration:none;border-bottom:1px dotted #1d4ed8}
-.risk-calc-link:hover{color:#bfdbfe}
+.risk-calc-link{display:inline-flex;margin-top:8px;font-size:11px;color:var(--text-blue);text-decoration:none;border-bottom:1px dotted #1d4ed8}
+.risk-calc-link:hover{color:var(--text-blue-bright)}
 
 .preview-wrap{display:flex;flex-direction:column;gap:10px}
-.preview{width:100%;min-height:500px;resize:vertical;background:#0f172a;border:1px solid #334155;border-radius:10px;color:#e2e8f0;padding:12px;font:13px/1.55 'JetBrains Mono',monospace;outline:none}
+.preview{width:100%;min-height:500px;resize:vertical;background:var(--bg);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:12px;font:13px/1.55 'JetBrains Mono',monospace;outline:none}
 .discharge-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
 .discharge-form{display:grid;gap:10px}
 .discharge-checks{display:flex;flex-wrap:wrap;gap:8px}
-.discharge-check{display:flex;align-items:center;gap:6px;padding:7px 9px;background:#0f172a;border:1px solid #27364d;border-radius:8px;font-size:12px;color:#cbd5e1}
+.discharge-check{display:flex;align-items:center;gap:6px;padding:7px 9px;background:var(--bg);border:1px solid var(--border);border-radius:8px;font-size:12px;color:var(--text2)}
 .discharge-check input{accent-color:#3b82f6}
 .discharge-field{display:flex;flex-direction:column;gap:6px}
-.discharge-field label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#8fa8c8;font-weight:700}
-.discharge-field input,.discharge-field textarea{width:100%;padding:9px 10px;background:#0f172a;border:1px solid #334155;border-radius:8px;color:#e2e8f0;font-size:13px;outline:none;font-family:inherit}
+.discharge-field label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--text2);font-weight:700}
+.discharge-field input,.discharge-field textarea{width:100%;padding:9px 10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;outline:none;font-family:inherit}
 .discharge-field input:focus,.discharge-field textarea:focus{border-color:#3b82f6}
 .discharge-field textarea{min-height:72px;resize:vertical}
 .discharge-preview{min-height:360px}
 .copy-row{display:flex;gap:8px;flex-wrap:wrap}
-.copy-btn{padding:8px 12px;border-radius:8px;border:1px solid #334155;background:#1e293b;color:#e2e8f0;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s}
-.copy-btn:hover{border-color:#3b82f6;color:#bfdbfe}
+.copy-btn{padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s}
+.copy-btn:hover{border-color:#3b82f6;color:var(--text-blue-bright)}
 .copy-btn.copied{background:#14532d;border-color:#22c55e;color:#bbf7d0}
-.empty-block{font-size:12px;color:#64748b;padding:6px 2px}
+.empty-block{font-size:12px;color:var(--text3);padding:6px 2px}
 .quality-list{display:grid;grid-template-columns:1fr;gap:8px}
-.quality-item{border:1px solid #27364d;background:#0f172a;border-radius:9px;padding:9px 10px;font-size:12px;line-height:1.45;color:#cbd5e1}
+.quality-item{border:1px solid var(--border);background:var(--bg);border-radius:9px;padding:9px 10px;font-size:12px;line-height:1.45;color:var(--text2)}
 .quality-item.ok{border-color:#166534;background:#052215;color:#86efac}
 .quality-item.warn{border-color:#b45309;background:#2b1f0a;color:#fcd34d}
 .quality-item .quality-title{display:block;font-weight:700;margin-bottom:2px}
 
 .dotphrase-panel{margin-top:16px;border-color:#1d4ed8;box-shadow:0 0 0 1px rgba(29,78,216,.2)}
 .dotphrase-panel.prominent{margin:0 0 16px;border:2px solid #3b82f6;box-shadow:0 14px 28px rgba(2,6,23,.45),0 0 0 1px rgba(59,130,246,.35)}
-.dotphrase-panel .panel-head{background:linear-gradient(90deg,#172235,#10213f)}
+.dotphrase-panel .panel-head{background:linear-gradient(90deg,var(--surface2),#10213f)}
 .dotphrase-panel.prominent .panel-head{background:linear-gradient(90deg,#0f2a4f,#10213f)}
 .dotphrase-panel.prominent .panel-head h2{font-size:15px;letter-spacing:.02em}
-.dotphrase-intro{font-size:12px;color:#bfdbfe;line-height:1.45;margin-bottom:10px}
+.dotphrase-intro{font-size:12px;color:var(--text-blue-bright);line-height:1.45;margin-bottom:10px}
 .dotphrase-tools{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;margin-bottom:10px}
-.dotphrase-search{width:100%;padding:12px 14px;background:#0f172a;border:1px solid #334155;border-radius:10px;color:#e2e8f0;font-size:14px;outline:none}
+.dotphrase-search{width:100%;padding:12px 14px;background:var(--bg);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:14px;outline:none}
 .dotphrase-search:focus{border-color:#3b82f6}
-.dotphrase-helper{font-size:11px;color:#94a3b8;margin-bottom:10px}
+.dotphrase-helper{font-size:11px;color:var(--text2);margin-bottom:10px}
+.dotphrase-favorites{margin-bottom:12px;padding:10px;border:1px solid var(--border);border-radius:10px;background:var(--surface2)}
+.dotphrase-favorites-head{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-blue);font-weight:700;margin-bottom:8px}
+.dotphrase-favorites-count{font-size:10px;padding:2px 8px;border-radius:999px;background:var(--bg);border:1px solid var(--border);color:var(--text-blue)}
 .dotphrase-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;max-height:560px;overflow:auto;padding-right:2px}
-.dotphrase-item{border:1px solid #334155;background:#0f172a;border-radius:10px;padding:10px}
+.dotphrase-item{border:1px solid var(--border);background:var(--bg);border-radius:10px;padding:10px}
 .dotphrase-item.linked{border-color:#2563eb;background:#0d1b34}
+.dotphrase-item.favorite{border-color:#d97706;background:#2b1f0a}
 .dotphrase-meta{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}
-.dotphrase-dot{font:700 12px/1.2 'JetBrains Mono',monospace;color:#bfdbfe;background:#12284a;border:1px solid #1d4ed8;border-radius:999px;padding:3px 8px}
-.dotphrase-cat{font-size:10px;color:#93c5fd;border:1px solid #1e3a8a;background:#0b1730;border-radius:999px;padding:3px 8px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
-.dotphrase-cond{font-size:12px;font-weight:700;color:#e2e8f0}
-.dotphrase-snippet{font-size:12px;color:#94a3b8;line-height:1.45;margin-top:4px}
+.dotphrase-dot{font:700 12px/1.2 'JetBrains Mono',monospace;color:var(--text-blue-bright);background:#12284a;border:1px solid #1d4ed8;border-radius:999px;padding:3px 8px}
+.dotphrase-cat{font-size:10px;color:var(--text-blue);border:1px solid #1e3a8a;background:#0b1730;border-radius:999px;padding:3px 8px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.dotphrase-cond{font-size:12px;font-weight:700;color:var(--text)}
+.dotphrase-snippet{font-size:12px;color:var(--text2);line-height:1.45;margin-top:4px}
 .dotphrase-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.dotphrase-btn{padding:6px 9px;border-radius:8px;border:1px solid #334155;background:#1e293b;color:#e2e8f0;font-size:11px;font-weight:700;cursor:pointer}
-.dotphrase-btn:hover{border-color:#3b82f6;color:#bfdbfe}
-.dotphrase-empty{font-size:12px;color:#64748b;padding:10px;border:1px dashed #334155;border-radius:10px}
+.dotphrase-btn{padding:6px 9px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:11px;font-weight:700;cursor:pointer}
+.dotphrase-btn:hover{border-color:#3b82f6;color:var(--text-blue-bright)}
+.dotphrase-btn.favorite{background:#1f2937;border-color:#4b5563;color:#d1d5db}
+.dotphrase-btn.favorite.active{background:#92400e;border-color:#b45309;color:#fde68a}
+.dotphrase-empty{font-size:12px;color:var(--text3);padding:10px;border:1px dashed var(--border);border-radius:10px}
 
 @media(max-width:980px){
   .controls{grid-template-columns:1fr}
+  .workspace-shell{grid-template-columns:1fr}
+  .preview-panel-sticky{position:static;top:auto}
   .grid{grid-template-columns:1fr}
   .discharge-grid{grid-template-columns:1fr}
   .preview{min-height:320px}
   .dotphrase-tools{grid-template-columns:1fr}
   .dotphrase-list{grid-template-columns:1fr;max-height:none}
+  .doc-toolbar{top:46px;flex-direction:column;align-items:stretch}
+  .status-badges{justify-content:flex-start}
 }
 
 /* ===== SHARED NEW NAV ===== */
 @media(max-width:640px){}
-.sitenav{background:#0d1829;border-bottom:1px solid #1a2d48;position:sticky;top:0;z-index:100;font-family:'DM Sans',system-ui,sans-serif}
+.sitenav{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;font-family:'DM Sans',system-ui,sans-serif}
 .sitenav-inner{max-width:1200px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:6px;height:46px;overflow:hidden}
 .nav-logo{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:#3b82f6;white-space:nowrap;flex-shrink:0;text-decoration:none;margin-right:6px}
-.nav-logo span{color:#4a6280}
+.nav-logo span{color:var(--text3)}
 .nav-links{display:flex;flex:1;min-width:0;gap:1px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;white-space:nowrap;padding-right:10px}
 .nav-links::-webkit-scrollbar{display:none}
-.nav-link{padding:5px 10px;border-radius:6px;font-size:12px;font-weight:600;color:#8fa8c8;text-decoration:none;white-space:nowrap;transition:all .15s}
-.nav-link:hover{background:#111f35;color:#e8f0fc}
+.nav-link{padding:5px 10px;border-radius:6px;font-size:12px;font-weight:600;color:var(--text2);text-decoration:none;white-space:nowrap;transition:all .15s}
+.nav-link:hover{background:var(--surface2);color:var(--text)}
 .nav-link.active{background:#1d4ed8;color:#fff}
 @media(max-width:640px){.nav-link{font-size:11px;padding:4px 8px}}
+@keyframes pgFade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+main>*{animation:pgFade .3s ease both}
+main>*:nth-child(2){animation-delay:.05s}
+main>*:nth-child(3){animation-delay:.1s}
+main>*:nth-child(4){animation-delay:.15s}
+
+/* History Helper */
+.history-grid{display:grid;grid-template-columns:1.15fr 1fr;gap:14px;align-items:start}
+.history-preview{min-height:420px}
+.history-preview-hint{font-size:11px;color:var(--text2);margin-bottom:8px}
+.hh-ddx-section{border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--surface)}
+.hh-ddx-section+.hh-ddx-section{margin-top:10px}
+.hh-ddx-summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;background:var(--surface2);border-bottom:1px solid var(--border)}
+.hh-ddx-summary::-webkit-details-marker{display:none}
+.hh-ddx-summary::after{content:'+';font-size:16px;line-height:1;color:var(--text-blue);font-weight:700}
+.hh-ddx-section[open] .hh-ddx-summary::after{content:'−'}
+.hh-ddx-label{font-size:12px;font-weight:700;color:var(--text)}
+.hh-ddx-count{font-size:10px;padding:2px 8px;border-radius:999px;background:var(--bg);border:1px solid var(--border);color:var(--text2);font-weight:700;white-space:nowrap}
+.hh-ddx-body{padding:10px;background:var(--surface)}
+.hh-question{display:flex;align-items:center;gap:8px;padding:9px 10px;background:var(--bg);border:1px solid var(--border);border-radius:9px;font-size:13px;color:var(--text2);transition:border-color .15s,background .15s}
+.hh-question+.hh-question{margin-top:6px}
+.hh-question.answered-yes{border-color:#166534;background:#052215;color:#86efac}
+.hh-question.answered-no{border-color:#b45309;background:#2b1f0a;color:#fcd34d}
+.hh-question.answered-skip{opacity:.4}
+.hh-question-text{flex:1;font-size:13px;line-height:1.4}
+.hh-actions{display:flex;gap:4px;flex-shrink:0}
+.hh-btn{padding:4px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text2);font-size:11px;font-weight:700;cursor:pointer;transition:all .15s}
+.hh-btn:hover{border-color:#3b82f6;color:var(--text-blue-bright)}
+.hh-btn.active-yes{background:#14532d;border-color:#22c55e;color:#bbf7d0}
+.hh-btn.active-no{background:#7f1d1d;border-color:#b91c1c;color:#fee2e2}
+.hh-btn.active-skip{background:var(--surface2);border-color:var(--border2);color:var(--text3)}
+.hh-category-tag{font-size:10px;color:var(--text-blue);border:1px solid #1e3a8a;background:#0b1730;border-radius:999px;padding:2px 7px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-left:4px;white-space:nowrap}
+.hh-risk-tag{font-size:10px;color:#fde68a;border:1px solid #b45309;background:#2b1f0a;border-radius:999px;padding:2px 7px;font-weight:800;letter-spacing:.04em;margin-left:4px;white-space:nowrap;cursor:pointer;transition:background .15s,border-color .15s}
+.hh-risk-tag:hover{background:#3d2c0e;border-color:#d97706;color:#fef3c7}
+.risk-criteria-list{margin:4px 0 6px 18px;padding:0;list-style:disc;display:flex;flex-direction:column;gap:2px}
+.risk-criteria-list li{font-size:11px;color:var(--text3);line-height:1.35}
+@media(max-width:980px){
+  .history-grid{grid-template-columns:1fr}
+  .history-preview{min-height:280px}
+}
 </style>
 <link rel="stylesheet" href="mobile.css">
+<script>document.documentElement.setAttribute('data-theme',localStorage.getItem('theme')||'dark');</script>
+<link rel="manifest" href="/manifest.json">
 </head>
-<body>
+<body class="mdm-page">
 <nav class="sitenav">
   <div class="sitenav-inner">
     <a class="nav-logo" href="index.html">⚡</a>
     <div class="nav-links">
       <a class="nav-link" href="index.html">🏠 Home</a>
       <a class="nav-link active" href="mdm.html">🧾 Documentation</a>
+
       <a class="nav-link" href="calculators.html">🧮 Decision Support</a>
       <a class="nav-link" href="rsi.html">🚨 Resuscitation</a>
       <a class="nav-link" href="algorithms.html">🔀 Algorithms</a>
@@ -180,11 +275,11 @@ main{max-width:1100px;margin:0 auto;padding:18px 24px 64px}
         <label for="packSelect">Chief Complaint Pack</label>
         <select id="packSelect" aria-label="Chief Complaint Pack"></select>
       </div>
-      <div class="control">
+      <div class="control secondary">
         <label for="commandInput">Quick Command</label>
-        <input id="commandInput" type="text" placeholder="Type mdmccp, mdmsob, mdmabd..." autocomplete="off" spellcheck="false" aria-label="Quick Command Alias">
+        <input id="commandInput" type="text" placeholder="Type mdmccp, mdmsob, mdmabd, mdmpregvb..." autocomplete="off" spellcheck="false" aria-label="Quick Command Alias">
       </div>
-      <div class="control">
+      <div class="control secondary">
           <label>Output Mode</label>
           <div class="mode-toggle">
           <label class="mode-pill"><input id="modeDotphrase" name="outputMode" type="radio" value="dotphrase">Dotphrase</label>
@@ -193,65 +288,83 @@ main{max-width:1100px;margin:0 auto;padding:18px 24px 64px}
       </div>
     </div>
     <div id="aliasHint" class="alias-hint"></div>
+    <div class="pack-shortcuts-label">Chief Complaints</div>
     <div class="pack-shortcuts" id="quickPackButtons"></div>
-    <div class="quick-actions">
-      <button class="quick-btn" id="resetPackBtn" type="button">Reset Pack Defaults</button>
-      <button class="quick-btn" id="lifeThreatsBtn" type="button">Life-Threats Only</button>
-      <button class="quick-btn" id="clearAllBtn" type="button">Clear All</button>
-      <button class="quick-btn" id="openMdmBuilderBtn" type="button">MDM Builder</button>
-      <button class="quick-btn" id="openDischargeBuilderBtn" type="button">Discharge Builder</button>
-      <button class="quick-btn primary" id="openDotphraseBtn" type="button">Dotphrase Library</button>
-      <a class="quick-btn" href="dotphrase.html">Open Full Dotphrase Library</a>
-      <a class="quick-btn" href="calculators.html#calc-heart">Open Full HEART Calc</a>
-    </div>
   </div>
 </header>
 
 <main>
-  <div class="doc-accordion">
-    <details class="doc-panel" id="panel-mdm-builder">
+  <section class="doc-toolbar" aria-label="Quick Documentation Actions">
+    <div class="toolbar-left">
+      <a id="jumpToPreviewBtn" href="#unified-preview-panel" class="toolbar-btn jump-preview">Jump to Preview</a>
+    </div>
+    <div id="completenessIndicators" class="status-badges" aria-live="polite">
+      <span class="status-pill neutral">DDx: 0</span>
+      <span class="status-pill neutral">Rule-outs: 0</span>
+      <span class="status-pill neutral">Risk: 0</span>
+    </div>
+  </section>
+
+  <section class="workspace-shell">
+    <div class="workspace-left doc-accordion">
+    <details class="doc-panel" id="panel-history-helper" open>
+      <summary>
+        <span class="doc-title">History Helper</span>
+        <span class="doc-meta">Targeted history questions by differential diagnosis</span>
+      </summary>
+      <div class="doc-content">
+        <section class="panel">
+          <div class="panel-head">
+            <h2>
+              History Questions
+              <span id="historyHelperCount" class="head-count">0 answered</span>
+            </h2>
+          </div>
+          <div class="panel-body">
+            <div id="historyHelperToolbar" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+              <button id="historyHelperResetBtn" class="ddx-action-btn" type="button">Reset Answers</button>
+            </div>
+            <p class="empty-block" style="margin-bottom:8px">Tap a diagnosis to expand its question set.</p>
+            <p id="historyHelperEmpty" class="empty-block">Select a chief complaint pack to see history questions.</p>
+            <div id="historyHelperContainer"></div>
+          </div>
+        </section>
+      </div>
+    </details>
+
+    <details class="doc-panel" id="panel-mdm-builder" open>
       <summary>
         <span class="doc-title">🧾 MDM Builder</span>
         <span class="doc-meta">Chief complaint packs, DDx, risk tools, and live output</span>
       </summary>
       <div class="doc-content">
-        <div class="grid" id="mdm-builder">
-          <div>
-            <section class="panel">
-              <div class="panel-head"><h2>DDx <span id="ddxCount" class="head-count">0 selected</span></h2></div>
-              <div class="panel-body" id="ddxContainer"></div>
-            </section>
-
-            <section class="panel" style="margin-top:14px">
-              <div class="panel-head"><h2>Rule-outs <span id="ruleoutCount" class="head-count">0 selected</span></h2></div>
-              <div class="panel-body" id="ruleoutContainer"></div>
-            </section>
-
-            <section class="panel" style="margin-top:14px">
-              <div class="panel-head"><h2>Risk Tools <span id="riskCount" class="head-count">0 selected</span></h2></div>
-              <div class="panel-body" id="riskContainer"></div>
-            </section>
-
-            <section class="panel" style="margin-top:14px">
-              <div class="panel-head"><h2>Documentation Quality Checks <span id="qualityCount" class="head-count">0 warnings</span></h2></div>
-              <div class="panel-body">
-                <div id="qualityContainer" class="quality-list"></div>
-              </div>
-            </section>
-          </div>
-
-          <section class="panel">
-            <div class="panel-head"><h2>Live Preview</h2></div>
-            <div class="panel-body preview-wrap">
-              <div class="copy-row">
-                <button id="copyFullBtn" class="copy-btn" type="button">Copy Full MDM</button>
-                <button id="copyDdxBtn" class="copy-btn" type="button">Copy DDx only</button>
-                <button id="copyRuleoutsBtn" class="copy-btn" type="button">Copy Rule-outs only</button>
-              </div>
-              <textarea id="mdmPreview" class="preview" spellcheck="false" aria-label="MDM output preview"></textarea>
+        <section class="panel">
+          <div class="panel-head"><h2>DDx <span id="ddxCount" class="head-count">0 selected</span></h2></div>
+          <div class="panel-body">
+            <div class="ddx-actions">
+              <button id="ddxSelectAllBtn" class="ddx-action-btn" type="button">Select All DDx</button>
+              <button id="ddxClearAllBtn" class="ddx-action-btn" type="button">Clear All DDx</button>
             </div>
-          </section>
-        </div>
+            <div id="ddxContainer"></div>
+          </div>
+        </section>
+
+        <section class="panel" style="margin-top:14px">
+          <div class="panel-head"><h2>Rule-outs <span id="ruleoutCount" class="head-count">0 selected</span></h2></div>
+          <div class="panel-body" id="ruleoutContainer"></div>
+        </section>
+
+        <section class="panel" style="margin-top:14px">
+          <div class="panel-head"><h2>Risk Tools <span id="riskCount" class="head-count">0 selected</span></h2></div>
+          <div class="panel-body" id="riskContainer"></div>
+        </section>
+
+        <section class="panel" style="margin-top:14px">
+          <div class="panel-head"><h2>Documentation Quality Checks <span id="qualityCount" class="head-count">0 warnings</span></h2></div>
+          <div class="panel-body">
+            <div id="qualityContainer" class="quality-list"></div>
+          </div>
+        </section>
       </div>
     </details>
 
@@ -262,7 +375,7 @@ main{max-width:1100px;margin:0 auto;padding:18px 24px 64px}
       </summary>
       <div class="doc-content">
         <section class="panel">
-          <div class="panel-head"><h2>Discharge Text (separate from MDM)</h2></div>
+          <div class="panel-head"><h2>Discharge Inputs</h2></div>
           <div class="panel-body discharge-grid" id="discharge-builder">
             <div class="discharge-form">
               <div class="discharge-checks">
@@ -279,11 +392,6 @@ main{max-width:1100px;margin:0 auto;padding:18px 24px 64px}
               <div class="discharge-field">
                 <label for="dischargeDxInput">Working Diagnosis Today</label>
                 <input id="dischargeDxInput" data-discharge-field="working_diagnosis" type="text" placeholder="e.g., low-risk chest pain">
-              </div>
-
-              <div class="discharge-field">
-                <label for="dischargeSeriousInput">Serious Conditions Considered</label>
-                <input id="dischargeSeriousInput" data-discharge-field="serious_conditions" type="text" placeholder="e.g., ACS, PE, aortic dissection">
               </div>
 
               <div class="discharge-field">
@@ -305,13 +413,6 @@ main{max-width:1100px;margin:0 auto;padding:18px 24px 64px}
                 <label for="dischargeNotesInput">Additional Instructions (Optional)</label>
                 <textarea id="dischargeNotesInput" data-discharge-field="additional_notes" placeholder="e.g., medication or activity-specific instructions"></textarea>
               </div>
-            </div>
-
-            <div class="preview-wrap">
-              <div class="copy-row">
-                <button id="copyDischargeBtn" class="copy-btn" type="button">Copy Discharge Instructions</button>
-              </div>
-              <textarea id="dischargePreview" class="preview discharge-preview" spellcheck="false" aria-label="Discharge instructions preview"></textarea>
             </div>
           </div>
         </section>
@@ -338,19 +439,54 @@ main{max-width:1100px;margin:0 auto;padding:18px 24px 64px}
               <a class="quick-btn" href="dotphrase.html">Open Full Dotphrase Library</a>
             </div>
             <p class="dotphrase-helper">Linked rule-outs for the selected DDx are highlighted first for faster bedside documentation.</p>
+            <section class="dotphrase-favorites">
+              <div class="dotphrase-favorites-head">
+                <span>Pinned Favorites</span>
+                <span id="dotphraseFavoritesCount" class="dotphrase-favorites-count">0</span>
+              </div>
+              <div id="dotphraseFavoritesList" class="dotphrase-list"></div>
+            </section>
             <div id="dotphraseQuickList" class="dotphrase-list"></div>
           </div>
         </section>
       </div>
     </details>
-  </div>
+
+    </div>
+
+    <aside class="workspace-right" id="unified-preview-panel">
+      <section class="panel preview-panel-sticky">
+        <div class="panel-head"><h2>Unified Live Preview</h2></div>
+        <div class="panel-body preview-wrap">
+          <div class="copy-row">
+            <button id="copyFullBtn" class="copy-btn" type="button">Copy Full MDM</button>
+            <button id="copyDischargeBtn" class="copy-btn" type="button">Copy Discharge Instructions</button>
+            <button id="resetPackBtn" class="ddx-action-btn" type="button">Reset Pack</button>
+          </div>
+          <details class="advanced-actions">
+            <summary>Advanced Actions</summary>
+            <div class="copy-row">
+              <button id="copyDdxBtn" class="copy-btn" type="button">Copy DDx only</button>
+              <button id="copyRuleoutsBtn" class="copy-btn" type="button">Copy Rule-outs only</button>
+              <button id="historyHelperCopyBtn" class="copy-btn" type="button">Copy History Summary</button>
+              <button id="lifeThreatsBtn" class="ddx-action-btn" type="button">Life-Threats Only</button>
+            </div>
+          </details>
+          <textarea id="mdmPreview" class="preview discharge-preview" spellcheck="false" aria-label="Unified output preview"></textarea>
+        </div>
+      </section>
+    </aside>
+  </section>
 </main>
 
-<script src="search-index.js"></script>
+<script src="search-index.js?v=2"></script>
 <script src="data/dotphrases.js"></script>
 <script src="mdm.js"></script>
 
 <script id="shared-nav-search">
 </script>
+<button id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">☀️</button>
+<script src="theme.js?v=3"></script>
+<script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
 </body>
 </html>

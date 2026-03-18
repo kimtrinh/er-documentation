@@ -1,0 +1,18 @@
+{
+  "name": "Emergency Medicine Toolkit",
+  "short_name": "EM Toolkit",
+  "description": "KP SBC ER — dotphrases, calculators, vasopressors, RSI, algorithms, phone directory",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#080f1a",
+  "theme_color": "#0d1829",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230d1829'/><text y='.9em' font-size='80' x='10'>⚡</text></svg>",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

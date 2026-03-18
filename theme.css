@@ -1,0 +1,597 @@
+/* Light mode overrides — applied when <html data-theme="light"> */
+html[data-theme="light"] {
+  /* Backgrounds */
+  --bg: #f0f4f8;
+  --surface: #ffffff;
+  --surface2: #f1f5f9;
+  --surface3: #e2e8f0;
+  /* Borders */
+  --border: #e2e8f0;
+  --border2: #94a3b8;
+  /* Text */
+  --text: #0f172a;
+  --text2: #334155;
+  --text3: #64748b;
+  --text-blue: #1d4ed8;
+  --text-blue-bright: #1e40af;
+  /* Blues */
+  --blue: #2563eb;
+  --blue2: #1d4ed8;
+  --blue3: #dbeafe;
+  /* Greens */
+  --green: #16a34a;
+  --green2: #15803d;
+  --green3: #dcfce7;
+  /* Others */
+  --amber: #d97706;
+  --red: #dc2626;
+  --purple: #7c3aed;
+  --cyan: #0891b2;
+}
+
+/* ── Light mode component overrides ───────────────────────────────────── */
+
+/* Header gradient: subtle on light backgrounds */
+html[data-theme="light"] header {
+  background: linear-gradient(135deg, var(--surface2), var(--bg));
+  border-bottom-color: var(--border);
+}
+
+/* Sticky toolbars that used hardcoded dark rgba */
+html[data-theme="light"] .doc-toolbar {
+  background: rgba(240, 244, 248, 0.95);
+  border-color: var(--border);
+}
+
+/* Tabs and small button-like elements */
+html[data-theme="light"] .doc-tab,
+html[data-theme="light"] .doc-tab.secondary {
+  background: var(--surface2);
+  color: var(--text2);
+  border-color: var(--border);
+}
+html[data-theme="light"] .doc-tab.primary {
+  background: #dbeafe;
+  color: #1d4ed8;
+  border-color: #93c5fd;
+}
+html[data-theme="light"] .doc-tab.active {
+  background: #dbeafe;
+  border-color: var(--blue);
+  color: var(--blue);
+}
+
+/* Check rows, discharge checks, quality items */
+html[data-theme="light"] .check-row,
+html[data-theme="light"] .discharge-check,
+html[data-theme="light"] .quality-item {
+  background: var(--surface2);
+  border-color: var(--border);
+  color: var(--text);
+}
+
+/* Calc tabs (calculators page) */
+html[data-theme="light"] .calc-tab {
+  background: var(--surface2);
+  color: var(--text2);
+  border-color: var(--border);
+}
+html[data-theme="light"] .calc-tab.active {
+  background: var(--blue);
+  color: #fff;
+}
+
+/* Result boxes — keep colored status backgrounds but fix text */
+html[data-theme="light"] .result.low,
+html[data-theme="light"] .calc-low {
+  background: #f0fdf4;
+  border-color: #16a34a;
+  color: #15803d;
+}
+html[data-theme="light"] .result.moderate,
+html[data-theme="light"] .calc-moderate {
+  background: #fefce8;
+  border-color: #ca8a04;
+  color: #92400e;
+}
+html[data-theme="light"] .result.high,
+html[data-theme="light"] .calc-high {
+  background: #fef2f2;
+  border-color: #dc2626;
+  color: #991b1b;
+}
+html[data-theme="light"] .result.neutral,
+html[data-theme="light"] .calc-neutral {
+  background: var(--surface2);
+  border-color: var(--border);
+  color: var(--text2);
+}
+
+/* Disclaimer boxes */
+html[data-theme="light"] .disclaimer {
+  background: #dbeafe;
+  border-color: #93c5fd;
+  color: #1e40af;
+}
+html[data-theme="light"] .disclaimer strong {
+  color: #1d4ed8;
+}
+
+/* Search hero banner — hardcoded dark gradient */
+html[data-theme="light"] .search-hero {
+  background: linear-gradient(170deg, var(--surface3) 0%, var(--bg) 100%);
+  border-bottom-color: var(--border);
+}
+
+/* Status pills */
+html[data-theme="light"] .status-pill.ok {
+  background: #f0fdf4;
+  border-color: #16a34a;
+  color: #15803d;
+}
+html[data-theme="light"] .status-pill.warn {
+  background: #fefce8;
+  border-color: #ca8a04;
+  color: #92400e;
+}
+
+/* ── Home / Index page elements ────────────────────────────────────────── */
+
+/* Type badge tags (t-phrase already uses CSS vars) */
+html[data-theme="light"] .t-drug  { background:#fff7ed; color:#c2410c; border-color:#fdba74; }
+html[data-theme="light"] .t-phone { background:#fefce8; color:#a16207; border-color:#fde047; }
+html[data-theme="light"] .t-algo  { background:#ecfeff; color:#0e7490; border-color:#67e8f9; }
+html[data-theme="light"] .t-neuro { background:#fdf4ff; color:#a21caf; border-color:#e879f9; }
+
+/* Pill type badges */
+html[data-theme="light"] .pt-orange { background:#fff7ed; color:#c2410c; }
+html[data-theme="light"] .pt-purple { background:#fdf4ff; color:#a21caf; }
+
+/* Quick-dial cards */
+html[data-theme="light"] .dc.omc { border-color:rgba(37,99,235,.3);  background:rgba(219,234,254,.5); }
+html[data-theme="light"] .dc.fmc { border-color:rgba(22,163,74,.3);  background:rgba(220,252,231,.5); }
+html[data-theme="light"] .dc.ext { border-color:rgba(217,119,6,.3);  background:rgba(254,243,199,.5); }
+
+/* ── Service agreements elements ───────────────────────────────────────── */
+html[data-theme="light"] .banner            { background:#fffbeb; border-color:#d97706; color:#92400e; }
+html[data-theme="light"] .result-row.active { background:#eff6ff; }
+html[data-theme="light"] .b-dept            { background:#dbeafe; color:#1d4ed8; border-color:#93c5fd; }
+html[data-theme="light"] .b-tag             { background:#dcfce7; color:#15803d; border-color:#86efac; }
+html[data-theme="light"] .b-date            { background:#fef9c3; color:#92400e; border-color:#fde047; }
+
+/* ── MDM page elements ──────────────────────────────────────────────────── */
+html[data-theme="light"] .missing-tag           { background:#fef2f2; color:#991b1b; border-color:#fca5a5; }
+html[data-theme="light"] .risk-calc-check       { background:var(--surface2); }
+html[data-theme="light"] .dotphrase-item.linked   { background:#eff6ff; border-color:#93c5fd; }
+html[data-theme="light"] .dotphrase-item.favorite { background:#fffbeb; border-color:#fcd34d; }
+html[data-theme="light"] .dotphrase-dot  { background:#dbeafe; color:#1d4ed8; border-color:#93c5fd; }
+html[data-theme="light"] .dotphrase-cat  { background:#e0f2fe; color:#0369a1; border-color:#bae6fd; }
+html[data-theme="light"] .copy-btn.copied { background:#15803d; }
+
+/* ── Semantic color pills (shared across pages) ─────────────────────────── */
+html[data-theme="light"] .pill-red    { background:#fef2f2; color:#991b1b; border-color:#fca5a5; }
+html[data-theme="light"] .pill-green  { background:#f0fdf4; color:#15803d; border-color:#86efac; }
+html[data-theme="light"] .pill-yellow { background:#fefce8; color:#92400e; border-color:#fde047; }
+html[data-theme="light"] .pill-purple { background:#f5f3ff; color:#5b21b6; border-color:#c4b5fd; }
+html[data-theme="light"] .pill-blue   { background:#e0f2fe; color:#0369a1; border-color:#7dd3fc; }
+
+/* ── Pedsfever page elements ────────────────────────────────────────────── */
+html[data-theme="light"] .risk-high                   { background:#fef2f2; border-color:#dc2626; }
+html[data-theme="light"] .risk-high .card-head        { color:#991b1b; }
+html[data-theme="light"] .risk-mod                    { background:#fffbeb; border-color:#ca8a04; }
+html[data-theme="light"] .risk-mod .card-head         { color:#92400e; }
+html[data-theme="light"] .risk-low                    { background:#f0fdf4; border-color:#16a34a; }
+html[data-theme="light"] .risk-low .card-head         { color:#15803d; }
+html[data-theme="light"] .excl-bar                    { background:#fffbeb; border-color:#f59e0b; color:#92400e; }
+html[data-theme="light"] .excl-bar strong             { color:#b45309; }
+html[data-theme="light"] .hsv-callout                 { background:#faf5ff; border-color:#7c3aed; color:#5b21b6; }
+html[data-theme="light"] .hsv-callout strong          { color:#6d28d9; }
+html[data-theme="light"] .lowrisk-callout             { background:#f0fdf4; border-color:#16a34a; color:#15803d; }
+html[data-theme="light"] .lowrisk-callout strong      { color:#166534; }
+
+/* ── Neurohub page elements ─────────────────────────────────────────────── */
+html[data-theme="light"] .rule-box              { background:#fef2f2; border-color:#dc2626; }
+html[data-theme="light"] .rule-box .rule-head h3{ color:#991b1b; }
+html[data-theme="light"] .rule-box .rule-body   { color:#b91c1c; }
+html[data-theme="light"] .alert-box.expanded    { background:#f0fdf4; border-color:#22c55e; color:#15803d; }
+html[data-theme="light"] .callback-badge        { background:#fffbeb; border-color:#f59e0b; color:#92400e; }
+html[data-theme="light"] .flow-step.red         { background:#fef2f2; border-color:#dc2626; }
+html[data-theme="light"] .flow-step.yellow      { background:#fffbeb; border-color:#ca8a04; }
+html[data-theme="light"] .flow-step.green       { background:#f0fdf4; border-color:#16a34a; }
+html[data-theme="light"] .flow-step.purple      { background:#f5f3ff; border-color:#4f46e5; }
+html[data-theme="light"] .flow-step.blue        { background:#e0f2fe; border-color:#0ea5e9; }
+html[data-theme="light"] .dispo-card.no-surg    { background:#f0fdf4; border-color:#16a34a; color:#15803d; }
+html[data-theme="light"] .dispo-card.surg       { background:#f5f3ff; border-color:#4f46e5; color:#4338ca; }
+html[data-theme="light"] .exclusion             { background:#fffbeb; border-color:#ca8a04; color:#92400e; }
+html[data-theme="light"] .exclusion strong      { color:#b45309; }
+
+/* ── RSI page elements ──────────────────────────────────────────────────── */
+html[data-theme="light"] .drug-note.warn   { background:#fffbeb; color:#92400e; }
+html[data-theme="light"] .drug-note.danger { background:#fef2f2; color:#991b1b; }
+html[data-theme="light"] .diff-flag        { background:#fffbeb; border-color:#f59e0b; color:#92400e; }
+html[data-theme="light"] .class-paralytic  { background:#dcfce7; color:#15803d; }
+html[data-theme="light"] .class-pretreat   { background:#f5f3ff; color:#5b21b6; }
+html[data-theme="light"] .flag-btn.active-flag { border-color:#d97706; background:#fef9c3; color:#92400e; }
+
+/* ── Vasopressors page elements ─────────────────────────────────────────── */
+html[data-theme="light"] .class-inotrope { background:#dcfce7; color:#15803d; }
+html[data-theme="light"] .class-both     { background:#f5f3ff; color:#5b21b6; }
+html[data-theme="light"] .class-push     { background:#fff7ed; color:#c2410c; }
+
+/* ── Algorithms page elements ───────────────────────────────────────────── */
+html[data-theme="light"] .badge-ophtho   { background:#e0f2fe; color:#0369a1; border-color:#7dd3fc; }
+html[data-theme="light"] .badge-cardio   { background:#fef2f2; color:#991b1b; border-color:#fca5a5; }
+html[data-theme="light"] .badge-ob       { background:#f0fdf4; color:#15803d; border-color:#86efac; }
+html[data-theme="light"] .badge-thoracic { background:#f5f3ff; color:#5b21b6; border-color:#c4b5fd; }
+html[data-theme="light"] .badge-neuro    { background:#fffbeb; color:#92400e; border-color:#fde047; }
+html[data-theme="light"] .badge-vascular { background:#fef2f2; color:#991b1b; border-color:#fca5a5; }
+html[data-theme="light"] .node-start       { background:#dcfce7; border-color:#22c55e; color:#14532d; }
+html[data-theme="light"] .node-action-red  { background:#fef2f2; border-color:#ef4444; color:#991b1b; }
+html[data-theme="light"] .node-decision    { background:var(--surface2); border-color:var(--border2); color:var(--text2); }
+html[data-theme="light"] .diamond          { background:var(--surface2); border-color:var(--border2); }
+html[data-theme="light"] .diamond-inner    { color:var(--text2); }
+html[data-theme="light"] .hex-red          { background:#fef2f2; border-color:#ef4444; color:#991b1b; }
+html[data-theme="light"] .hex-green        { background:#f0fdf4; border-color:#22c55e; color:#14532d; }
+html[data-theme="light"] .hex-purple       { background:#f5f3ff; border-color:#a78bfa; color:#5b21b6; }
+html[data-theme="light"] .hex-yellow       { background:#fefce8; border-color:#fbbf24; color:#92400e; }
+html[data-theme="light"] .callout-yellow strong { color:#92400e; }
+html[data-theme="light"] .callout-red   strong  { color:#991b1b; }
+html[data-theme="light"] .callout-green strong  { color:#15803d; }
+html[data-theme="light"] .opt-yes        { background:#f0fdf4; border-color:#22c55e; }
+html[data-theme="light"] .arrow-down,
+html[data-theme="light"] .arrow-right,
+html[data-theme="light"] .line-h,
+html[data-theme="light"] .line-v         { background:var(--border2); }
+
+/* ── Roadmap page tags ──────────────────────────────────────────────────── */
+html[data-theme="light"] .tag-cardiology { background:#f5f3ff; color:#4338ca; border-color:#a5b4fc; }
+html[data-theme="light"] .tag-airway     { background:#fef2f2; color:#991b1b; border-color:#fca5a5; }
+html[data-theme="light"] .tag-tox        { background:#fefce8; color:#92400e; border-color:#fde047; }
+html[data-theme="light"] .tag-peds       { background:#e0f2fe; color:#0369a1; border-color:#7dd3fc; }
+html[data-theme="light"] .tag-workflow   { background:#f0fdf4; color:#15803d; border-color:#86efac; }
+html[data-theme="light"] .tag-neuro      { background:#faf5ff; color:#6d28d9; border-color:#c4b5fd; }
+html[data-theme="light"] .tag-trauma     { background:#fef2f2; color:#b91c1c; border-color:#fca5a5; }
+html[data-theme="light"] .tag-ux         { background:#f0fdfa; color:#0f766e; border-color:#5eead4; }
+html[data-theme="light"] .tag-renal      { background:#f5f3ff; color:#5b21b6; border-color:#a78bfa; }
+html[data-theme="light"] .tag-gi         { background:#fff7ed; color:#c2410c; border-color:#fdba74; }
+html[data-theme="light"] .toast          { color:#15803d; }
+
+/* ── Shared search bar (injected by search-index.js) ───────────────────── */
+html[data-theme="light"] #kp-shared-search-host {
+  background: rgba(240, 244, 248, 0.97);
+  border-bottom-color: var(--border);
+}
+html[data-theme="light"] #kp-shared-search-input {
+  background: var(--surface);
+  border-color: var(--border2);
+  color: var(--text);
+}
+html[data-theme="light"] #kp-shared-search-input::placeholder { color: var(--text3); }
+html[data-theme="light"] #kp-shared-search-kbd {
+  color: var(--text2);
+  background: var(--surface2);
+  border-color: var(--border);
+}
+html[data-theme="light"] #kp-shared-search-dd {
+  background: var(--surface);
+  border-color: var(--border2);
+  box-shadow: 0 22px 48px rgba(0,0,0,.15);
+}
+html[data-theme="light"] .kp-sg {
+  color: var(--text3);
+  border-top-color: var(--border);
+  background: var(--surface);
+}
+html[data-theme="light"] .kp-sr:hover,
+html[data-theme="light"] .kp-sr.hi { background: var(--surface2); }
+html[data-theme="light"] .kp-st   { color: var(--text); }
+html[data-theme="light"] .kp-ss   { color: var(--text2); }
+html[data-theme="light"] .kp-empty { color: var(--text2); }
+html[data-theme="light"] .kp-foot  { color: var(--text3); border-top-color: var(--border); }
+html[data-theme="light"] .kp-tag.t-phrase { background:#dbeafe; color:#1d4ed8; border-color:#93c5fd; }
+html[data-theme="light"] .kp-tag.t-calc   { background:#dcfce7; color:#15803d; border-color:#86efac; }
+html[data-theme="light"] .kp-tag.t-drug   { background:#fff7ed; color:#c2410c; border-color:#fdba74; }
+html[data-theme="light"] .kp-tag.t-phone  { background:#fefce8; color:#a16207; border-color:#fde047; }
+html[data-theme="light"] .kp-tag.t-algo   { background:#ecfeff; color:#0e7490; border-color:#67e8f9; }
+html[data-theme="light"] .kp-tag.t-neuro  { background:#fdf4ff; color:#a21caf; border-color:#e879f9; }
+
+/* ── Toggle button — visible on all pages ──────────────────────────────── */
+/* Toggle button — visible on all pages */
+#theme-toggle {
+  position: fixed;
+  top: 12px;
+  right: 16px;
+  z-index: 9999;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border2, #243d5c);
+  background: var(--surface2, #111f35);
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, border-color 0.2s, transform 0.1s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+#theme-toggle:hover {
+  transform: scale(1.1);
+}
+
+/* ── Feedback bubble + popup ──────────────────────────────────────────── */
+#feedback-bubble {
+  position: fixed;
+  bottom: 20px;
+  right: 16px;
+  z-index: 9997;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  background: var(--blue, #3b82f6);
+  color: #fff;
+  cursor: pointer;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(59,130,246,.45);
+  transition: transform .2s, box-shadow .2s;
+  animation: fbPulse 3s ease-in-out 2s 3;
+}
+@keyframes fbPulse {
+  0%,100% { box-shadow: 0 4px 16px rgba(59,130,246,.45); }
+  50%      { box-shadow: 0 4px 28px rgba(59,130,246,.8); transform: scale(1.08); }
+}
+#feedback-bubble:hover {
+  transform: scale(1.12);
+  box-shadow: 0 6px 24px rgba(59,130,246,.65);
+}
+#feedback-bubble.active {
+  background: var(--blue2, #1d4ed8);
+  animation: none;
+}
+
+#feedback-popup {
+  position: fixed;
+  bottom: 74px;
+  right: 16px;
+  z-index: 9997;
+  width: 252px;
+  background: var(--surface, #0d1829);
+  border: 1px solid var(--border2, #243d5c);
+  border-radius: 14px;
+  box-shadow: 0 8px 36px rgba(0,0,0,.5);
+  padding: 18px 16px 14px;
+  opacity: 0;
+  transform: translateY(10px) scale(.96);
+  pointer-events: none;
+  transition: opacity .22s, transform .22s;
+}
+#feedback-popup.open {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: all;
+}
+#feedback-popup::after {
+  content: '';
+  position: absolute;
+  bottom: -7px;
+  right: 18px;
+  width: 13px;
+  height: 13px;
+  background: var(--surface, #0d1829);
+  border-right: 1px solid var(--border2, #243d5c);
+  border-bottom: 1px solid var(--border2, #243d5c);
+  transform: rotate(45deg);
+}
+.fb-popup-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text, #e8f0fc);
+  margin-bottom: 5px;
+}
+.fb-popup-body {
+  font-size: 12px;
+  color: var(--text2, #8fa8c8);
+  line-height: 1.55;
+  margin-bottom: 13px;
+}
+.fb-popup-btn {
+  display: block;
+  text-align: center;
+  padding: 8px 14px;
+  background: var(--blue, #3b82f6);
+  color: #fff;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  letter-spacing: .02em;
+  transition: background .15s;
+}
+.fb-popup-btn:hover {
+  background: var(--blue2, #1d4ed8);
+  color: #fff;
+}
+/* light-mode popup */
+html[data-theme="light"] #feedback-popup {
+  box-shadow: 0 8px 36px rgba(0,0,0,.15);
+}
+html[data-theme="light"] #feedback-popup::after {
+  background: var(--surface);
+}
+
+/* ── Global omnisearch modal ──────────────────────────────────────────── */
+#omnisearch-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(4,10,20,.88);
+  z-index: 9998;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 72px 16px 24px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .18s;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+#omnisearch-overlay.open {
+  opacity: 1;
+  pointer-events: all;
+}
+#omnisearch-modal {
+  background: var(--surface, #0d1829);
+  border: 1px solid var(--border2, #243d5c);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 640px;
+  max-height: calc(100vh - 100px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 24px 80px rgba(0,0,0,.85);
+  transform: translateY(-14px) scale(.97);
+  transition: transform .18s;
+}
+#omnisearch-overlay.open #omnisearch-modal {
+  transform: translateY(0) scale(1);
+}
+#omnisearch-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border, #1a2d48);
+  flex-shrink: 0;
+}
+#om-icon {
+  font-size: 17px;
+  flex-shrink: 0;
+  opacity: .6;
+}
+#om-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text, #e8f0fc);
+  font-size: 16px;
+  font-family: inherit;
+  min-width: 0;
+}
+#om-input::placeholder { color: var(--text3, #4a6280); }
+#om-esc-hint {
+  font-size: 10px;
+  color: var(--text3, #4a6280);
+  background: var(--surface2, #111f35);
+  border: 1px solid var(--border, #1a2d48);
+  padding: 3px 7px;
+  border-radius: 5px;
+  font-family: monospace;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+#om-chips {
+  display: flex;
+  gap: 6px;
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--border, #1a2d48);
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+.om-chip {
+  padding: 4px 11px;
+  border-radius: 20px;
+  border: 1px solid var(--border, #1a2d48);
+  background: transparent;
+  color: var(--text3, #4a6280);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .15s;
+  font-family: inherit;
+}
+.om-chip:hover { border-color: var(--border2, #243d5c); color: var(--text2, #8fa8c8); background: var(--surface2, #111f35); }
+.om-chip.on    { border-color: var(--blue, #3b82f6); background: var(--blue3, #0d2038); color: #38bdf8; }
+#om-results {
+  overflow-y: auto;
+  flex: 1;
+  min-height: 80px;
+}
+
+/* ── sdrop-* shared classes (home search + omnisearch modal) ─────────── */
+/* These are also declared inline in index.html/home.html; here they serve
+   all other pages that load theme.css but not the home page inline styles. */
+.sdrop-group {
+  padding: 7px 14px 3px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--text3, #4a6280);
+  border-top: 1px solid var(--border, #1a2d48);
+  background: var(--surface, #0d1829);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.sdrop-group:first-child { border-top: none; }
+.sdrop-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 14px;
+  text-decoration: none;
+  transition: background .1s;
+  cursor: pointer;
+}
+.sdrop-row:hover, .sdrop-row.hi { background: var(--surface2, #111f35); }
+.sdrop-row:focus-visible { outline: 2px solid #60a5fa; outline-offset: -2px; }
+.sdrop-ico   { font-size: 15px; width: 22px; text-align: center; flex-shrink: 0; }
+.sdrop-body  { flex: 1; min-width: 0; }
+.sdrop-title { font-size: 13px; font-weight: 600; color: var(--text, #e8f0fc); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sdrop-sub   { font-size: 11px; color: var(--text3, #4a6280); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sdrop-tag   { font-size: 10px; padding: 2px 7px; border-radius: 20px; font-weight: 700; white-space: nowrap; flex-shrink: 0; border: 1px solid transparent; }
+.t-phrase { background: var(--blue3,  #0d2038); color: #38bdf8; border-color: #0369a1; }
+.t-calc   { background: var(--green3, #0d2d1f); color: #4ade80; border-color: var(--green2, #15803d); }
+.t-drug   { background: #2d1f0d; color: #fb923c; border-color: #c2410c; }
+.t-phone  { background: #1f1a0d; color: #facc15; border-color: #a16207; }
+.t-algo   { background: #0d2d2d; color: #22d3ee; border-color: #0e7490; }
+.t-neuro  { background: #1f0d2d; color: #e879f9; border-color: #a21caf; }
+.sdrop-empty  { padding: 22px 14px; text-align: center; font-size: 13px; color: var(--text3, #4a6280); }
+.sdrop-footer { padding: 5px 14px 8px; font-size: 11px; color: var(--text3, #4a6280); border-top: 1px solid var(--border, #1a2d48); }
+
+/* Light-mode overrides for modal + tags */
+html[data-theme="light"] #omnisearch-overlay { background: rgba(10,20,40,.65); }
+html[data-theme="light"] .t-phrase { background: #dbeafe; color: #1d4ed8; border-color: #93c5fd; }
+html[data-theme="light"] .t-calc   { background: #dcfce7; color: #15803d; border-color: #86efac; }
+html[data-theme="light"] .t-drug   { background: #fff7ed; color: #c2410c; border-color: #fdba74; }
+html[data-theme="light"] .t-phone  { background: #fefce8; color: #a16207; border-color: #fde047; }
+html[data-theme="light"] .t-algo   { background: #ecfeff; color: #0e7490; border-color: #67e8f9; }
+html[data-theme="light"] .t-neuro  { background: #fdf4ff; color: #a21caf; border-color: #e879f9; }
+
+@media (max-width: 640px) {
+  #omnisearch-overlay { padding-top: 40px; }
+}
+
+/* ── Vertigo helper page elements ─────────────────────────────────────── */
+html[data-theme="light"] .alert-result.danger{background:#fef2f2;border-color:#dc2626;color:#991b1b}
+html[data-theme="light"] .alert-result.danger h3{color:#b91c1c}
+html[data-theme="light"] .alert-result.safe{background:#f0fdf4;border-color:#16a34a;color:#15803d}
+html[data-theme="light"] .alert-result.safe h3{color:#166534}
+html[data-theme="light"] .alert-result.warning{background:#fffbeb;border-color:#ca8a04;color:#92400e}
+html[data-theme="light"] .alert-result.warning h3{color:#b45309}
+html[data-theme="light"] .test-peripheral{background:#f0fdf4;color:#15803d;border-color:#86efac}
+html[data-theme="light"] .test-central{background:#fef2f2;color:#991b1b;border-color:#fca5a5}
+html[data-theme="light"] .none-btn{background:#166534;border-color:#16a34a}
+html[data-theme="light"] .none-btn:hover{background:#15803d}
+html[data-theme="light"] .info-tip .tip-content{background:var(--surface);border-color:var(--border2);color:var(--text2);box-shadow:0 8px 24px rgba(0,0,0,.12)}
+html[data-theme="light"] .hints-test{background:var(--surface);border-color:var(--border)}
+html[data-theme="light"] .hints-test select{background:var(--surface2);border-color:var(--border);color:var(--text)}
+html[data-theme="light"] .master-reset{background:var(--surface2);border-color:var(--border);color:var(--text2)}
+html[data-theme="light"] .master-reset:hover{background:var(--surface3);color:var(--text)}

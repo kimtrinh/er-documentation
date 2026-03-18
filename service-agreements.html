@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="stylesheet" href="theme.css?v=2"/>
 <title>Service Agreements & Protocols - KP SBC ER</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=DM+Sans:wght@400;500;600;700;800&display=swap');
@@ -10,22 +11,22 @@
 :root{
   --bg:#080f1a;--surface:#0d1829;--surface2:#111f35;--surface3:#162540;
   --border:#1a2d48;--border2:#243d5c;
-  --text:#e8f0fc;--text2:#8fa8c8;--text3:#4a6280;
+  --text:#e8f0fc;--text2:#8fa8c8;--text3:#4a6280;--text-blue:#93c5fd;--text-blue-bright:#bfdbfe;
   --blue:#3b82f6;--blue2:#1d4ed8;--blue3:#0d2038;
   --green:#16a34a;--greenSoft:#052e16;--greenBorder:#15803d;
   --amber:#f59e0b;--amberSoft:#2b1f0a;--amberBorder:#b45309;
   --red:#ef4444;--redSoft:#2f1114;--redBorder:#b91c1c;
   --mono:'JetBrains Mono',monospace;--sans:'DM Sans',system-ui,sans-serif;
 }
-body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh}
-.sitenav{background:#0d1829;border-bottom:1px solid #1a2d48;position:sticky;top:0;z-index:100;font-family:'DM Sans',system-ui,sans-serif}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
+.sitenav{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;font-family:'DM Sans',system-ui,sans-serif}
 .sitenav-inner{max-width:1200px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:6px;height:46px;overflow:hidden}
 .nav-logo{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:#3b82f6;white-space:nowrap;flex-shrink:0;text-decoration:none;margin-right:6px}
-.nav-logo span{color:#4a6280}
+.nav-logo span{color:var(--text3)}
 .nav-links{display:flex;flex:1;min-width:0;gap:1px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;white-space:nowrap;padding-right:10px}
 .nav-links::-webkit-scrollbar{display:none}
-.nav-link{padding:5px 10px;border-radius:6px;font-size:12px;font-weight:600;color:#8fa8c8;text-decoration:none;white-space:nowrap;transition:all .15s}
-.nav-link:hover{background:#111f35;color:#e8f0fc}
+.nav-link{padding:5px 10px;border-radius:6px;font-size:12px;font-weight:600;color:var(--text2);text-decoration:none;white-space:nowrap;transition:all .15s}
+.nav-link:hover{background:var(--surface2);color:var(--text)}
 .nav-link.active{background:#1d4ed8;color:#fff}
 @media(max-width:640px){.nav-link{font-size:11px;padding:4px 8px}}
 
@@ -93,6 +94,9 @@ main{max-width:1280px;margin:0 auto;padding:20px}
 .badge{font-size:10px;padding:3px 8px;border-radius:14px;font-weight:700;border:1px solid transparent}
 .b-dept{background:#0d2038;color:#93c5fd;border-color:#1d4ed8}
 .b-tag{background:#10281d;color:#86efac;border-color:#15803d}
+.b-new{background:#1e1040;color:#c4b5fd;border-color:#7c3aed;text-transform:uppercase;letter-spacing:.06em;animation:newPulse 2.4s ease-in-out 3}
+@keyframes newPulse{0%,100%{box-shadow:none}50%{box-shadow:0 0 8px rgba(167,139,250,.6)}}
+.rr-new{display:inline-block;font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#c4b5fd;background:#1e1040;border:1px solid #7c3aed;border-radius:4px;padding:1px 5px;vertical-align:middle;margin-right:2px}
 .b-date{background:#27170d;color:#fbbf24;border-color:#a16207}
 .section{border:1px solid var(--border);border-radius:10px;overflow:hidden}
 .section summary{cursor:pointer;list-style:none;padding:9px 10px;background:var(--surface2);font-size:12px;font-weight:700;color:var(--text2)}
@@ -129,8 +133,16 @@ main{max-width:1280px;margin:0 auto;padding:20px}
   .card-head{flex-direction:column}
   .decision{align-self:flex-start}
 }
+@keyframes pgFade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+main>*{animation:pgFade .3s ease both}
+main>*:nth-child(2){animation-delay:.05s}
+main>*:nth-child(3){animation-delay:.1s}
+main>*:nth-child(4){animation-delay:.15s}
+.ag-card{box-shadow:0 1px 4px rgba(0,0,0,.2)}.ag-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.4)}
 </style>
 <link rel="stylesheet" href="mobile.css">
+<script>document.documentElement.setAttribute('data-theme',localStorage.getItem('theme')||'dark');</script>
+<link rel="manifest" href="/manifest.json">
 </head>
 <body>
 <nav class="sitenav">
@@ -139,6 +151,7 @@ main{max-width:1280px;margin:0 auto;padding:20px}
     <div class="nav-links">
       <a class="nav-link" href="index.html">🏠 Home</a>
       <a class="nav-link" href="mdm.html">🧾 Documentation</a>
+
       <a class="nav-link" href="calculators.html">🧮 Decision Support</a>
       <a class="nav-link" href="rsi.html">🚨 Resuscitation</a>
       <a class="nav-link" href="algorithms.html">🔀 Algorithms</a>
@@ -175,7 +188,7 @@ main{max-width:1280px;margin:0 auto;padding:20px}
       <select id="sortSelect" class="select" aria-label="Sort results">
         <option value="relevance">Sort: relevance</option>
         <option value="title">Sort: title</option>
-        <option value="last_updated">Sort: last updated</option>
+        <option value="last_updated" selected>Sort: last updated</option>
       </select>
     </div>
   </section>
@@ -208,6 +221,60 @@ const DEFAULT_AUTOMATION_CHECKS = [
 ];
 
 const PROTOCOL_OVERRIDES = {
+  "prolonged-ed-los-sla": {
+    title: "Prolonged ED LOS (PLOS) — Service Line Agreement",
+    banner: { level: "yellow", label: "Consider Admission" },
+    purpose: [
+      "Provide consistent, safe care for non-admitted ED patients with LOS ≥24 hours who cannot be safely discharged due to disposition barriers.",
+      "Agreement between Emergency Medicine, Hospital Medicine, Care Without Delay, AAMD, and Area Medical Director at Ontario and Fontana medical centers."
+    ],
+    when_to_use: [
+      "Patient has been in the ED for ≥24 hours (total LOS).",
+      "No medical indication for hospital admission.",
+      "Safe discharge is not possible due to social, logistical, or other disposition barriers.",
+      "Applies at Ontario and Fontana medical centers — members and non-members.",
+      "Exclusions: admitted patients awaiting bed assignment, psychiatric patients with no medical need, pediatric patients."
+    ],
+    red_flags: [
+      "No case management or social services consult placed at 24+ hours — escalate immediately.",
+      "No CWD physician discussion when no disposition plan exists within 12 hours of the 24-hour threshold.",
+      "Patient decompensates at any point — revert to standard ED-to-HM consult workflow.",
+      "Weekend or no local CWD coverage — ED case manager must contact CWD on-call physician."
+    ],
+    workflow: [
+      "All patients with ED LOS ≥24 hours and no discharge plan discussed in daily morning CWD huddle.",
+      "If no disposition secured within 12 hours of the 24-hour mark, discuss with local CWD physician.",
+      "CWD physician confirms criteria → ED physician requests hospital medicine consult.",
+      "Hospital medicine consultation completed during daytime hours, 7 days a week (avoid after-hours unless medically indicated).",
+      "Hospital medicine accepts as primary team and admits patient to observation status.",
+      "ED physician signs off but remains available for acute decompensation (airway emergencies, code blue) per current practice.",
+      "AAMD and AMD notified during daytime hours when patient is admitted for disposition barriers.",
+      "On weekends or days with no local CWD coverage, ED case manager contacts CWD on-call — this workflow is valid 7 days a week."
+    ],
+    treatment: [
+      "No specific medication protocol — this is a disposition and care-coordination agreement.",
+      "Appropriate ED medical workup and treatment continue per ED physician judgment.",
+      "Involve multidisciplinary team early: medical social worker, case manager, CWD physician, geriatrician, hospice liaison as indicated."
+    ],
+    disposition: [
+      "Admit to observation status under hospital medicine service when PLOS criteria are met.",
+      "Hospital medicine assumes physician-level continuity of care, family communication, and MDT coordination.",
+      "If patient decompensates and meets inpatient admission criteria, follow standard ED-to-HM consult workflow.",
+      "ED physician retains responsibility for acute decompensation even after sign-off to hospital medicine."
+    ],
+    documentation: "Patient has been in ED for [X] hours with no medical indication for inpatient admission. Disposition barriers include [describe]. Case management and social services consulted. Discussed in CWD huddle on [date]. CWD physician [name] agrees patient meets PLOS criteria. Hospital medicine consult placed. Patient to be admitted to OBS under hospital medicine service. AAMD/AMD notified.",
+    automation_checks: [
+      "ED LOS ≥24 hours confirmed and documented",
+      "No medical indication for inpatient admission documented",
+      "Case management consult placed",
+      "Social services consult placed",
+      "CWD huddle discussion documented",
+      "CWD physician reviewed and approved PLOS pathway",
+      "Hospital medicine consult placed during daytime hours",
+      "AAMD and AMD notified"
+    ],
+    tags_add: ["prolonged-los", "observation", "length-of-stay", "disposition-barrier", "hospital-medicine", "plos"]
+  },
   "kaiser-outpatient-anticoagulation-dvt-protocol-1-16-14": {
     title: "Outpatient DVT Management",
     banner: { level: "green", label: "Outpt OK" },
@@ -401,7 +468,7 @@ const state = {
   selectedDepts: new Set(),
   selectedTags: new Set(),
   olderThanFiveYears: false,
-  sort: "relevance",
+  sort: "last_updated",
   activeAgreementKey: "",
   presetAgreementId: ""
 };
@@ -681,7 +748,7 @@ function sectionHtml(title, lines, opts = {}) {
 function documentationSectionHtml(item) {
   const documentation = item.card.documentation || "Documentation guidance not provided in source.";
   return `
-    <details class="section">
+    <details class="section" open>
       <summary>Documentation</summary>
       <div class="section-body">
         <p class="doc-text">${escapeHtml(documentation)}</p>
@@ -710,7 +777,7 @@ function listSnippet(item) {
 function detailCardHtml(item) {
   const updated = item.last_updated ? item.last_updated : "unknown";
   const deptBadges = (item.departments || []).map((d) => `<span class="badge b-dept">${escapeHtml(d)}</span>`).join("");
-  const tagBadges = (item.tags || []).map((t) => `<span class="badge b-tag">${escapeHtml(t)}</span>`).join("");
+  const tagBadges = (item.tags || []).map((t) => `<span class="badge ${t === 'new' ? 'b-new' : 'b-tag'}">${escapeHtml(t)}</span>`).join("");
   const docButton = item.sharepoint_url
     ? `<a class="btn btn-primary" href="${escapeHtml(item.sharepoint_url)}" target="_blank" rel="noopener">Open Document</a>`
     : `<button class="btn btn-primary" disabled>Open Document</button>`;
@@ -736,13 +803,13 @@ function detailCardHtml(item) {
         ${tagBadges}
       </div>
       ${sectionHtml("Purpose", item.card.purpose, { open: true })}
-      ${sectionHtml("When to Use", item.card.when_to_use, { open: false })}
-      ${sectionHtml("Exclusions / Red Flags", item.card.red_flags, { open: false })}
-      ${sectionHtml("Workflow", item.card.workflow, { open: false, checkable: true })}
-      ${sectionHtml("Treatment", item.card.treatment, { open: false, checkable: true })}
-      ${sectionHtml("Disposition", item.card.disposition, { open: false, checkable: true })}
+      ${sectionHtml("When to Use", item.card.when_to_use, { open: true })}
+      ${sectionHtml("Exclusions / Red Flags", item.card.red_flags, { open: true })}
+      ${sectionHtml("Workflow", item.card.workflow, { open: true, checkable: true })}
+      ${sectionHtml("Treatment", item.card.treatment, { open: true, checkable: true })}
+      ${sectionHtml("Disposition", item.card.disposition, { open: true, checkable: true })}
       ${documentationSectionHtml(item)}
-      ${sectionHtml("Automation Placeholders", item.card.automation_checks, { open: false, checkable: true })}
+      ${sectionHtml("Automation Placeholders", item.card.automation_checks, { open: true, checkable: true })}
       <div class="actions">
         <button class="btn js-copy-workflow" type="button">Copy Workflow</button>
         <button class="btn js-copy-doc" type="button">Copy Documentation</button>
@@ -789,9 +856,10 @@ function renderResults() {
     const active = key === state.activeAgreementKey ? " active" : "";
     const updated = item.last_updated ? item.last_updated : "unknown";
     const banner = item.card.banner || { level: "yellow", label: "Consider Admission" };
+    const isNew = (item.tags || []).includes('new');
     return `
       <button class="result-row${active}" type="button" data-role="pick-agreement" data-key="${escapeHtml(key)}">
-        <div class="result-row-title">${escapeHtml(displayTitle(item))}</div>
+        <div class="result-row-title">${isNew ? '<span class="rr-new">NEW</span> ' : ''}${escapeHtml(displayTitle(item))}</div>
         <div class="result-row-snippet">${escapeHtml(listSnippet(item))}</div>
         <div class="result-row-meta">
           <span class="result-row-date">${escapeHtml(updated)}</span>
@@ -815,6 +883,11 @@ function renderResults() {
       if (!key || key === state.activeAgreementKey) return;
       state.activeAgreementKey = key;
       renderResults();
+      // On narrow viewports the detail pane renders below the list — scroll to it
+      if (window.innerWidth <= 900) {
+        const pane = document.querySelector(".detail-pane");
+        if (pane) pane.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
     });
   });
 
@@ -919,10 +992,21 @@ async function init() {
   });
 
   applyPresetQueryFromUrl();
+  const hadPresetId = !!state.presetAgreementId;
   renderFiltersAndResults();
+  if (hadPresetId) {
+    // Came from a deep link (?id=…) — scroll straight to the detail card
+    setTimeout(() => {
+      const pane = document.querySelector(".detail-pane");
+      if (pane) pane.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 80);
+  }
 }
 
 init();
 </script>
+<button id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">☀️</button>
+<script src="theme.js?v=3"></script>
+<script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
 </body>
 </html>

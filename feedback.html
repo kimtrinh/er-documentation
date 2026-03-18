@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="stylesheet" href="theme.css?v=2"/>
+<title>Feedback — ER Reference</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080f1a;--surface:#0d1829;--surface2:#111f35;--surface3:#162540;
+  --border:#1a2d48;--border2:#243d5c;
+  --text:#e8f0fc;--text2:#8fa8c8;--text3:#4a6280;
+  --text-blue:#93c5fd;--text-blue-bright:#bfdbfe;
+  --blue:#3b82f6;--blue2:#1d4ed8;--blue3:#0d2038;
+  --green:#22c55e;--green2:#15803d;--green3:#0d2d1f;
+  --amber:#f59e0b;--red:#ef4444;--purple:#a78bfa;--cyan:#22d3ee;
+}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
+
+/* ── Shared nav (matches other pages) ── */
+.sitenav{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;font-family:'DM Sans',system-ui,sans-serif}
+.sitenav-inner{max-width:1200px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:6px;height:46px;overflow:hidden}
+.nav-logo{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:#3b82f6;white-space:nowrap;flex-shrink:0;text-decoration:none;margin-right:6px}
+.nav-logo span{color:var(--text3)}
+.nav-links{display:flex;flex:1;min-width:0;gap:1px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;white-space:nowrap;padding-right:10px}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-link{padding:5px 10px;border-radius:6px;font-size:12px;font-weight:600;color:var(--text2);text-decoration:none;white-space:nowrap;transition:all .15s}
+.nav-link:hover{background:var(--surface2);color:var(--text)}
+.nav-link.active{background:#1d4ed8;color:#fff}
+@media(max-width:640px){.nav-link{font-size:11px;padding:4px 8px}}
+
+/* ── Page layout ── */
+main{max-width:560px;margin:0 auto;padding:40px 20px 80px}
+
+/* ── Hero ── */
+.fb-hero{text-align:center;margin-bottom:36px}
+.fb-hero-icon{font-size:40px;margin-bottom:12px;display:block}
+.fb-hero h1{font-size:22px;font-weight:800;color:var(--text);margin-bottom:8px}
+.fb-hero p{font-size:14px;color:var(--text2);line-height:1.6;max-width:380px;margin:0 auto}
+
+/* ── Card ── */
+.fb-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px 24px;box-shadow:0 2px 12px rgba(0,0,0,.3)}
+
+/* ── Form elements ── */
+.fb-field{margin-bottom:18px}
+.fb-label{display:block;font-size:12px;font-weight:700;color:var(--text2);margin-bottom:6px;letter-spacing:.04em;text-transform:uppercase}
+.fb-label .opt{font-weight:400;color:var(--text3);text-transform:none;letter-spacing:0}
+.fb-input,.fb-select,.fb-textarea{
+  width:100%;padding:10px 13px;
+  background:var(--surface2);border:1px solid var(--border);border-radius:9px;
+  color:var(--text);font-size:14px;font-family:inherit;outline:none;
+  transition:border-color .2s,box-shadow .2s;
+}
+.fb-input:focus,.fb-select:focus,.fb-textarea:focus{
+  border-color:var(--blue);
+  box-shadow:0 0 0 3px rgba(59,130,246,.18);
+}
+.fb-input::placeholder,.fb-textarea::placeholder{color:var(--text3)}
+.fb-select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%238fa8c8' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;cursor:pointer}
+.fb-textarea{resize:vertical;min-height:110px;line-height:1.6}
+
+/* ── Type chips ── */
+.type-chips{display:flex;flex-wrap:wrap;gap:7px}
+.type-chip input[type="radio"]{display:none}
+.type-chip label{
+  display:inline-block;padding:5px 13px;border-radius:20px;
+  border:1px solid var(--border2);background:var(--surface2);
+  font-size:12px;font-weight:600;color:var(--text2);cursor:pointer;
+  transition:all .15s;user-select:none;
+}
+.type-chip input[type="radio"]:checked + label{
+  background:var(--blue);color:#fff;border-color:var(--blue);
+}
+.type-chip label:hover{border-color:var(--blue);color:var(--text)}
+
+/* ── Submit button ── */
+.fb-submit{
+  width:100%;padding:12px;border-radius:10px;border:none;
+  background:var(--blue);color:#fff;font-size:14px;font-weight:700;
+  cursor:pointer;transition:background .15s,transform .1s;
+  margin-top:4px;
+}
+.fb-submit:hover:not(:disabled){background:var(--blue2);transform:translateY(-1px)}
+.fb-submit:disabled{opacity:.6;cursor:not-allowed;transform:none}
+
+/* ── Success / Error states ── */
+#fb-success,#fb-error{display:none}
+#fb-success{text-align:center;padding:28px 20px}
+.fb-success-icon{font-size:44px;display:block;margin-bottom:14px}
+.fb-success-title{font-size:18px;font-weight:800;color:var(--green);margin-bottom:8px}
+.fb-success-body{font-size:13px;color:var(--text2);line-height:1.6}
+.fb-back-link{display:inline-block;margin-top:16px;font-size:13px;font-weight:600;color:var(--blue);text-decoration:none}
+.fb-back-link:hover{color:var(--text-blue-bright)}
+.fb-error-msg{margin-top:10px;font-size:12px;color:var(--red);display:none}
+
+/* ── Footer note ── */
+.fb-note{text-align:center;margin-top:16px;font-size:11px;color:var(--text3);line-height:1.5}
+.fb-note a{color:var(--text3);text-decoration:underline}
+
+/* ── Animations ── */
+@keyframes pgFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.fb-hero{animation:pgFade .3s ease both}
+.fb-card{animation:pgFade .3s ease .08s both}
+
+/* ── Light mode ── */
+html[data-theme="light"] .fb-select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23334155' d='M6 8L1 3h10z'/%3E%3C/svg%3E")}
+</style>
+<script>document.documentElement.setAttribute('data-theme',localStorage.getItem('theme')||'dark');</script>
+<link rel="manifest" href="/manifest.json">
+</head>
+<body>
+
+<nav class="sitenav">
+  <div class="sitenav-inner">
+    <a class="nav-logo" href="index.html">⚡</a>
+    <div class="nav-links">
+      <a class="nav-link" href="index.html">🏠 Home</a>
+      <a class="nav-link" href="mdm.html">🧾 Documentation</a>
+
+      <a class="nav-link" href="calculators.html">🧮 Decision Support</a>
+      <a class="nav-link" href="rsi.html">🚨 Resuscitation</a>
+      <a class="nav-link" href="algorithms.html">🔀 Algorithms</a>
+      <a class="nav-link" href="neurohub.html">🧠 Neuro Hub</a>
+      <a class="nav-link" href="service-agreements.html">📑 Service Agreements</a>
+      <a class="nav-link" href="ed-phone-directory.html">📞 Directory</a>
+      <a class="nav-link" href="links.html">🔗 Links</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <div class="fb-hero">
+    <span class="fb-hero-icon">💬</span>
+    <h1>Share Your Feedback</h1>
+    <p>Help us improve the ER Reference site. Report bugs, suggest features, or let us know what you think.</p>
+  </div>
+
+  <div class="fb-card">
+
+    <!-- Success state -->
+    <div id="fb-success">
+      <span class="fb-success-icon">✅</span>
+      <div class="fb-success-title">Thanks for your feedback!</div>
+      <p class="fb-success-body">Your message has been sent. We'll review it and use it to improve the site.</p>
+      <a class="fb-back-link" href="index.html">← Back to home</a>
+    </div>
+
+    <!-- Form -->
+    <form id="feedback-form" novalidate>
+
+      <div class="fb-field">
+        <span class="fb-label">Type of feedback</span>
+        <div class="type-chips">
+          <div class="type-chip">
+            <input type="radio" name="type" id="t-suggestion" value="Suggestion" checked>
+            <label for="t-suggestion">💡 Suggestion</label>
+          </div>
+          <div class="type-chip">
+            <input type="radio" name="type" id="t-bug" value="Bug Report">
+            <label for="t-bug">🐛 Bug Report</label>
+          </div>
+          <div class="type-chip">
+            <input type="radio" name="type" id="t-content" value="Content Issue">
+            <label for="t-content">📋 Content Issue</label>
+          </div>
+          <div class="type-chip">
+            <input type="radio" name="type" id="t-other" value="General">
+            <label for="t-other">💬 General</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="fb-field">
+        <label class="fb-label" for="fb-message">Message <span style="color:var(--red)">*</span></label>
+        <textarea class="fb-textarea" id="fb-message" name="message" placeholder="Describe your feedback, suggestion, or issue in detail..." required></textarea>
+        <p id="fb-msg-error" class="fb-error-msg">Please enter a message before submitting.</p>
+      </div>
+
+      <div class="fb-field">
+        <label class="fb-label" for="fb-name">Name <span class="opt">(optional)</span></label>
+        <input class="fb-input" type="text" id="fb-name" name="name" placeholder="Your name" autocomplete="name">
+      </div>
+
+      <div class="fb-field">
+        <label class="fb-label" for="fb-email">Email <span class="opt">(optional — for follow-up)</span></label>
+        <input class="fb-input" type="email" id="fb-email" name="_replyto" placeholder="you@example.com" autocomplete="email">
+      </div>
+
+      <!-- Honeypot (Formspree anti-spam) -->
+      <input type="text" name="_gotcha" style="display:none">
+      <input type="hidden" name="_subject" value="ER Reference Site — New Feedback">
+
+      <p id="fb-submit-error" class="fb-error-msg" style="margin-bottom:8px;">Something went wrong. Please try again or email kltrinh@gmail.com directly.</p>
+      <button class="fb-submit" type="submit" id="fb-submit-btn">Send Feedback →</button>
+    </form>
+
+  </div>
+
+  <p class="fb-note">Submissions are sent to the site administrator. You can also email directly at <a href="mailto:kltrinh@gmail.com">kltrinh@gmail.com</a>.</p>
+</main>
+
+<button id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">☀️</button>
+<script src="theme.js?v=3"></script>
+<script>
+(function () {
+  var form = document.getElementById('feedback-form');
+  var submitBtn = document.getElementById('fb-submit-btn');
+  var successEl = document.getElementById('fb-success');
+  var msgError = document.getElementById('fb-msg-error');
+  var submitError = document.getElementById('fb-submit-error');
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    msgError.style.display = 'none';
+    submitError.style.display = 'none';
+
+    var msg = document.getElementById('fb-message').value.trim();
+    if (!msg) {
+      msgError.style.display = 'block';
+      document.getElementById('fb-message').focus();
+      return;
+    }
+
+    submitBtn.textContent = 'Sending…';
+    submitBtn.disabled = true;
+
+    var data = new FormData(form);
+
+    fetch('https://formspree.io/kltrinh@gmail.com', {
+      method: 'POST',
+      body: data,
+      headers: { 'Accept': 'application/json' }
+    })
+    .then(function (res) {
+      if (res.ok) {
+        form.style.display = 'none';
+        successEl.style.display = 'block';
+      } else {
+        return res.json().then(function (j) { throw j; });
+      }
+    })
+    .catch(function () {
+      submitBtn.textContent = 'Send Feedback →';
+      submitBtn.disabled = false;
+      submitError.style.display = 'block';
+    });
+  });
+})();
+</script>
+
+<script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
+</body>
+</html>

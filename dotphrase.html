@@ -3,53 +3,63 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="stylesheet" href="theme.css?v=2"/>
 <title>ER Dotphrases</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',system-ui,sans-serif;background:#0f172a;color:#e2e8f0;min-height:100vh}
-header{background:linear-gradient(135deg,#1e293b,#0f172a);border-bottom:1px solid #1e3a5f;padding:20px 24px}
+:root{--bg:#080f1a;--surface:#0d1829;--surface2:#111f35;--surface3:#162540;--border:#1a2d48;--border2:#243d5c;--text:#e8f0fc;--text2:#8fa8c8;--text3:#4a6280;--text-blue:#93c5fd;--text-blue-bright:#bfdbfe;--blue:#3b82f6;--blue2:#1d4ed8;--blue3:#0d2038;--green:#22c55e;--green2:#15803d;--green3:#0d2d1f;--amber:#f59e0b;--red:#ef4444;--purple:#a78bfa;--cyan:#22d3ee;}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
+header{background:linear-gradient(135deg,var(--surface),var(--bg));border-bottom:1px solid var(--border2);padding:20px 24px}
 .header-inner{max-width:900px;margin:0 auto}
 .logo{display:flex;align-items:center;gap:10px;margin-bottom:4px}
-.logo span{font-size:22px}.logo h1{font-size:20px;font-weight:700;color:#f1f5f9}
-.subtitle{font-size:13px;color:#64748b;margin-left:32px;margin-bottom:12px}
-.disclaimer{background:#1e3a5f;border:1px solid #2563eb;border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:12px;color:#93c5fd;line-height:1.5}
-.disclaimer strong{color:#bfdbfe}
-#search{width:100%;padding:12px 16px;background:#1e293b;border:1px solid #334155;border-radius:10px;color:#f1f5f9;font-size:15px;outline:none;transition:border-color .2s}
+.logo span{font-size:22px}.logo h1{font-size:20px;font-weight:700;color:var(--text)}
+.subtitle{font-size:13px;color:var(--text3);margin-left:32px;margin-bottom:12px}
+.disclaimer{background:var(--border2);border:1px solid #2563eb;border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:12px;color:var(--text-blue);line-height:1.5}
+.disclaimer strong{color:var(--text-blue-bright)}
+#search{width:100%;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:15px;outline:none;transition:border-color .2s}
 #search:focus{border-color:#3b82f6}
 #search::placeholder{color:#475569}
-nav{background:#0f172a;border-bottom:1px solid #1e293b;overflow-x:auto;-webkit-overflow-scrolling:touch}
+nav{background:var(--bg);border-bottom:1px solid var(--surface);overflow-x:auto;-webkit-overflow-scrolling:touch}
 .tabs{max-width:900px;margin:0 auto;display:flex;gap:4px;padding:8px 24px}
-.tab{padding:6px 14px;border-radius:20px;border:none;cursor:pointer;font-size:13px;font-weight:500;white-space:nowrap;background:#1e293b;color:#94a3b8;transition:all .2s}
+.tab{padding:6px 14px;border-radius:20px;border:none;cursor:pointer;font-size:13px;font-weight:500;white-space:nowrap;background:var(--surface);color:var(--text2);transition:all .2s}
 .tab.active{background:#3b82f6;color:#fff}
 main{max-width:900px;margin:0 auto;padding:16px 24px 60px}
 .count{font-size:12px;color:#475569;margin-bottom:12px}
-.card{background:#1e293b;border:1px solid #334155;border-radius:12px;margin-bottom:12px;overflow:hidden;transition:border-color .2s}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;overflow:hidden;transition:border-color .2s}
 .card:hover{border-color:#3b82f6}
-.card-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid #334155;gap:8px;flex-wrap:wrap}
+.card-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border);gap:8px;flex-wrap:wrap}
 .card-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.dotphrase{background:#0f172a;color:#38bdf8;padding:3px 10px;border-radius:6px;font-size:13px;font-weight:700;border:1px solid #1e3a5f;font-family:monospace}
-.condition{font-weight:600;font-size:14px;color:#f1f5f9}
-.category-tag{font-size:11px;background:#0f172a;color:#64748b;padding:2px 8px;border-radius:20px;border:1px solid #1e293b}
+.dotphrase{background:var(--bg);color:#38bdf8;padding:3px 10px;border-radius:6px;font-size:13px;font-weight:700;border:1px solid var(--border2);font-family:monospace}
+.condition{font-weight:600;font-size:14px;color:var(--text)}
+.category-tag{font-size:11px;background:var(--bg);color:var(--text3);padding:2px 8px;border-radius:20px;border:1px solid var(--surface)}
 .copy-btn{padding:6px 14px;border-radius:8px;border:none;cursor:pointer;font-size:12px;font-weight:600;background:#3b82f6;color:#fff;transition:background .2s;white-space:nowrap;flex-shrink:0}
 .copy-btn.copied{background:#16a34a}
-.card-body{padding:12px 16px;font-size:13px;line-height:1.75;color:#cbd5e1}
+.card-body{padding:12px 16px;font-size:13px;line-height:1.75;color:var(--text2)}
 .empty{text-align:center;color:#475569;margin-top:60px;font-size:15px}
 @media(max-width:600px){.card-header{flex-direction:column;align-items:flex-start}.copy-btn{width:100%}}
 
 /* ===== SHARED NEW NAV ===== */
 @media(max-width:640px){}
-.sitenav{background:#0d1829;border-bottom:1px solid #1a2d48;position:sticky;top:0;z-index:100;font-family:'DM Sans',system-ui,sans-serif}
+.sitenav{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;font-family:'DM Sans',system-ui,sans-serif}
 .sitenav-inner{max-width:1200px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:6px;height:46px;overflow:hidden}
 .nav-logo{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:#3b82f6;white-space:nowrap;flex-shrink:0;text-decoration:none;margin-right:6px}
-.nav-logo span{color:#4a6280}
+.nav-logo span{color:var(--text3)}
 .nav-links{display:flex;flex:1;min-width:0;gap:1px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;white-space:nowrap;padding-right:10px}
 .nav-links::-webkit-scrollbar{display:none}
-.nav-link{padding:5px 10px;border-radius:6px;font-size:12px;font-weight:600;color:#8fa8c8;text-decoration:none;white-space:nowrap;transition:all .15s}
-.nav-link:hover{background:#111f35;color:#e8f0fc}
+.nav-link{padding:5px 10px;border-radius:6px;font-size:12px;font-weight:600;color:var(--text2);text-decoration:none;white-space:nowrap;transition:all .15s}
+.nav-link:hover{background:var(--surface2);color:var(--text)}
 .nav-link.active{background:#1d4ed8;color:#fff}
 @media(max-width:640px){.nav-link{font-size:11px;padding:4px 8px}}
+@keyframes pgFade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+main>*{animation:pgFade .3s ease both}
+main>*:nth-child(2){animation-delay:.05s}
+main>*:nth-child(3){animation-delay:.1s}
+main>*:nth-child(4){animation-delay:.15s}
+.card{box-shadow:0 1px 4px rgba(0,0,0,.2)}.card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.4)}
 </style>
 <link rel="stylesheet" href="mobile.css">
+<script>document.documentElement.setAttribute('data-theme',localStorage.getItem('theme')||'dark');</script>
+<link rel="manifest" href="/manifest.json">
 </head>
 <body>
 <nav class="sitenav">
@@ -58,6 +68,7 @@ main{max-width:900px;margin:0 auto;padding:16px 24px 60px}
     <div class="nav-links">
       <a class="nav-link" href="index.html">🏠 Home</a>
       <a class="nav-link active" href="mdm.html">🧾 Documentation</a>
+
       <a class="nav-link" href="calculators.html">🧮 Decision Support</a>
       <a class="nav-link" href="rsi.html">🚨 Resuscitation</a>
       <a class="nav-link" href="algorithms.html">🔀 Algorithms</a>
@@ -79,7 +90,7 @@ main{max-width:900px;margin:0 auto;padding:16px 24px 60px}
 <nav><div class="tabs" id="tabs"></div></nav>
 <main><p class="count" id="count"></p><div id="main"></div></main>
 
-<script src="search-index.js"></script>
+<script src="search-index.js?v=2"></script>
 <script src="data/dotphrases.js"></script>
 <script>
 const phrases = Array.isArray(window.KP_DOTPHRASES) ? window.KP_DOTPHRASES : [];
@@ -185,11 +196,20 @@ function copyText(i) {
   }
 }
 
+// Pre-fill search from URL ?q= param
+(function() {
+  var q = new URLSearchParams(window.location.search).get('q');
+  if (q) { document.getElementById('search').value = q; }
+})();
+
 render();
 </script>
 
 <script id="shared-nav-search">
 </script>
 
+<button id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">☀️</button>
+<script src="theme.js?v=3"></script>
+<script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
 </body>
 </html>

@@ -73,6 +73,13 @@
           "label": "CTA aorta considered / not indicated",
           "tags_required": ["dissection"],
           "sentence_template": "CTA aorta considered; not indicated given low clinical suspicion and reassuring evaluation."
+        },
+        {
+          "id": "ccp_addrs_score",
+          "label": "ADD-RS (Aortic Dissection Detection Risk Score)",
+          "tags_required": ["dissection"],
+          "calculator": { "type": "add_rs" },
+          "sentence_template": "ADD-RS score {score}: {interpretation}."
         }
       ]
     },
@@ -137,6 +144,17 @@
           "sentence_template": "No clinical evidence of volume overload on exam."
         },
         {
+          "id": "sob_bnp_reviewed",
+          "label": "BNP / NT-proBNP reviewed",
+          "tags_required": ["chf"],
+          "input": {
+            "type": "text",
+            "label": "Value",
+            "placeholder": "e.g. 420 pg/mL (elevated) or 68 pg/mL (reassuring)"
+          },
+          "sentence_template": "BNP/NT-proBNP reviewed: {value}."
+        },
+        {
           "id": "sob_improved",
           "label": "Improved with treatment in ED",
           "tags_required": [],
@@ -157,7 +175,7 @@
         { "label": "Diverticulitis", "group": "Common", "tags": ["divert"], "ruleouts": [], "default_checked": false },
         { "label": "AAA", "group": "Life-threatening", "tags": ["aaa"], "ruleouts": ["noaaa"], "default_checked": false },
         { "label": "Mesenteric ischemia", "group": "Life-threatening", "tags": ["mes_isch"], "ruleouts": ["nomesischemia"], "default_checked": false },
-        { "label": "Upper GI bleed", "group": "Life-threatening", "tags": ["gi_bleed"], "ruleouts": ["nogibleed"], "default_checked": false }
+        { "label": "Upper GI bleed", "group": "Life-threatening", "tags": ["gi_bleed"], "ruleouts": ["nougibleed"], "default_checked": false }
       ],
       "risk_toggles": [
         {
@@ -188,9 +206,21 @@
         },
         {
           "id": "abd_lipase_reassuring",
-          "label": "Lipase reassuring",
+          "label": "Lipase reviewed",
           "tags_required": ["panc"],
-          "sentence_template": "Lipase reviewed and not consistent with pancreatitis."
+          "input": {
+            "type": "text",
+            "label": "Value",
+            "placeholder": "e.g. 45 U/L (normal) or 1,240 U/L (elevated)"
+          },
+          "sentence_template": "Lipase reviewed: {value}."
+        },
+        {
+          "id": "abd_bisap_score",
+          "label": "BISAP score (pancreatitis severity)",
+          "tags_required": ["panc"],
+          "calculator": { "type": "bisap" },
+          "sentence_template": "BISAP score {score}: {interpretation}."
         },
         {
           "id": "abd_no_peritonitis",
@@ -238,10 +268,11 @@
           "sentence_template": "CT head reviewed without acute intracranial abnormality."
         },
         {
-          "id": "ha_sah_rule_negative",
-          "label": "SAH rule negative",
+          "id": "ha_ottawa_sah_rule",
+          "label": "Ottawa SAH Rule applied",
           "tags_required": ["sah"],
-          "sentence_template": "Low suspicion for SAH based on history/exam and decision rule criteria."
+          "calculator": { "type": "ottawa_sah" },
+          "sentence_template": "Ottawa SAH Rule: {interpretation}."
         },
         {
           "id": "ha_abcd2_calculator",
@@ -284,6 +315,450 @@
           "tags_required": ["cspine"],
           "calculator": { "type": "nexus_cspine" },
           "sentence_template": "NEXUS C-spine applied: {interpretation}; {details}"
+        }
+      ]
+    },
+    {
+      "id": "mdmpregvb",
+      "aliases": ["mdm-pregvb", "pregvb", "mdmobbleed", "obbleed", "mdmvbip"],
+      "title": "Pregnant Vaginal Bleeding",
+      "base_mdm_template": "Patient evaluated for vaginal bleeding in pregnancy with focused assessment for ectopic pregnancy, hemorrhage/instability, and pregnancy viability.",
+      "ddx": [
+        { "label": "Ectopic pregnancy", "group": "Life-threatening", "tags": ["ectopic"], "ruleouts": ["noectopic"], "default_checked": true },
+        { "label": "Pregnancy hemorrhage/instability", "group": "Life-threatening", "tags": ["preg_heme"], "ruleouts": ["nopregvbhemorrhage"], "default_checked": true },
+        { "label": "Placental abruption", "group": "Life-threatening", "tags": ["abruption"], "ruleouts": ["noabruption"], "default_checked": false },
+        { "label": "Threatened miscarriage / viable IUP", "group": "Common", "tags": ["threatened_iup"], "ruleouts": ["nothreatenedmiscarriage"], "default_checked": true },
+        { "label": "Failed early IUP", "group": "Common", "tags": ["failed_iup"], "ruleouts": ["nofailediup"], "default_checked": true },
+        { "label": "Pregnancy of unknown location", "group": "Life-threatening", "tags": ["pul"], "ruleouts": ["nopul"], "default_checked": true },
+        { "label": "Preeclampsia/HELLP spectrum", "group": "Other", "tags": ["htn_preg"], "ruleouts": ["noeclampsia", "nohellp"], "default_checked": false },
+        { "label": "Cervical/vaginal source", "group": "Other", "tags": ["cervical_source"], "ruleouts": [], "default_checked": false }
+      ],
+      "risk_toggles": [
+        {
+          "id": "pregvb_hemodynamic_stable",
+          "label": "Hemodynamically stable",
+          "tags_required": ["preg_heme"],
+          "sentence_template": "Hemodynamics remained stable without signs of active hemorrhagic shock during ED course."
+        },
+        {
+          "id": "pregvb_tvus_reviewed",
+          "label": "Transvaginal ultrasound reviewed",
+          "tags_required": [],
+          "sentence_template": "Transvaginal ultrasound findings reviewed and integrated into disposition."
+        },
+        {
+          "id": "pregvb_quant_hcg",
+          "label": "Quant beta-hCG reviewed",
+          "tags_required": [],
+          "input": {
+            "type": "text",
+            "label": "Value",
+            "placeholder": "e.g. 2400 mIU/mL"
+          },
+          "sentence_template": "Quantitative beta-hCG reviewed: {value}."
+        },
+        {
+          "id": "pregvb_rh_status",
+          "label": "ABO/Rh status reviewed",
+          "tags_required": [],
+          "sentence_template": "ABO/Rh status reviewed."
+        },
+        {
+          "id": "pregvb_rhogam",
+          "label": "Anti-D immunoglobulin (Rhogam) addressed",
+          "tags_required": [],
+          "input": {
+            "type": "select",
+            "default": "not indicated",
+            "options": [
+              { "label": "Not indicated", "value": "not indicated" },
+              { "label": "Indicated and given", "value": "indicated and given" },
+              { "label": "Indicated and arranged/deferred", "value": "indicated and arranged/deferred" }
+            ]
+          },
+          "sentence_template": "Anti-D immunoglobulin status: {value}."
+        },
+        {
+          "id": "pregvb_ob_consult",
+          "label": "OB/GYN consulted or expedited follow-up arranged",
+          "tags_required": ["ectopic", "pul", "abruption"],
+          "sentence_template": "OB/GYN pathway addressed with consult and/or expedited follow-up."
+        },
+        {
+          "id": "pregvb_no_peritoneal_signs",
+          "label": "No peritoneal signs",
+          "tags_required": ["ectopic", "pul"],
+          "sentence_template": "Abdominal exam without peritoneal signs."
+        },
+        {
+          "id": "pregvb_short_interval_followup",
+          "label": "Short-interval recheck plan",
+          "tags_required": [],
+          "sentence_template": "Short-interval repeat beta-hCG/ultrasound follow-up plan documented."
+        }
+      ]
+    },
+    {
+      "id": "mdmsyncope",
+      "aliases": ["mdm-syncope", "syncope", "near-syncope"],
+      "title": "Syncope / Near-Syncope",
+      "base_mdm_template": "Patient evaluated for syncope/near-syncope with focused assessment for arrhythmic, thromboembolic, neurologic, and hemorrhagic emergencies.",
+      "ddx": [
+        { "label": "Arrhythmic syncope", "group": "Life-threatening", "tags": ["arrhythmia"], "ruleouts": ["noarrhythmia"], "default_checked": true },
+        { "label": "Pulmonary embolism", "group": "Life-threatening", "tags": ["pe"], "ruleouts": ["nope"], "default_checked": false },
+        { "label": "ACS / ischemia equivalent", "group": "Life-threatening", "tags": ["acs"], "ruleouts": ["noacs"], "default_checked": false },
+        { "label": "Seizure/postictal event", "group": "Life-threatening", "tags": ["seizure"], "ruleouts": ["noseizure"], "default_checked": false },
+        { "label": "TIA/Stroke mimic", "group": "Life-threatening", "tags": ["tia", "stroke_ich"], "ruleouts": ["notia", "nostroke"], "default_checked": false },
+        { "label": "GI bleed/anemia contribution", "group": "Life-threatening", "tags": ["gi_bleed"], "ruleouts": ["nougibleed", "nolgibleed"], "default_checked": false },
+        { "label": "Vasovagal/orthostatic syncope", "group": "Common", "tags": ["vasovagal"], "ruleouts": [], "default_checked": true }
+      ],
+      "risk_toggles": [
+        {
+          "id": "syn_canadian_syncope_calculator",
+          "label": "Canadian Syncope Risk calculator",
+          "tags_required": ["arrhythmia", "vasovagal"],
+          "calculator": { "type": "canadian_syncope" },
+          "sentence_template": "Canadian Syncope Risk Score = {score} ({interpretation}); {details}"
+        },
+        {
+          "id": "syn_ecg_no_highrisk",
+          "label": "ECG without high-risk findings",
+          "tags_required": ["arrhythmia", "acs"],
+          "sentence_template": "ECG reviewed without malignant dysrhythmia, conduction instability, or acute ischemic pattern."
+        },
+        {
+          "id": "syn_wells_pe_calculator",
+          "label": "Wells PE score calculator",
+          "tags_required": ["pe"],
+          "calculator": { "type": "wells_pe" },
+          "sentence_template": "Wells PE score = {score} ({interpretation}); {details}"
+        },
+        {
+          "id": "syn_perc_calculator",
+          "label": "PERC calculator",
+          "tags_required": ["pe"],
+          "calculator": { "type": "perc" },
+          "sentence_template": "PERC applied: {details}"
+        },
+        {
+          "id": "syn_troponin_reassuring",
+          "label": "Troponin reassuring",
+          "tags_required": ["acs"],
+          "sentence_template": "Troponin assessment was reviewed and reassuring in context of current presentation."
+        },
+        {
+          "id": "syn_orthostatics_noncritical",
+          "label": "Orthostatic/volume status supports non-emergent etiology",
+          "tags_required": ["vasovagal"],
+          "sentence_template": "Orthostatic and volume status findings were reviewed and did not suggest an unstable process."
+        },
+        {
+          "id": "syn_reassess_stable",
+          "label": "Serial reassessments remained stable",
+          "tags_required": [],
+          "sentence_template": "Serial reassessments remained stable without recurrent syncope or new high-risk findings."
+        }
+      ]
+    },
+    {
+      "id": "mdmdizzy",
+      "aliases": ["mdm-dizzy", "dizzy", "vertigo"],
+      "title": "Dizziness / Vertigo",
+      "base_mdm_template": "Patient evaluated for dizziness/vertigo with targeted exclusion of posterior circulation stroke, dissection, cardiac causes, and major metabolic derangement.",
+      "ddx": [
+        { "label": "Posterior circulation stroke", "group": "Life-threatening", "tags": ["stroke_ich"], "ruleouts": ["nocentralvertigo"], "default_checked": true },
+        { "label": "Cervical artery dissection", "group": "Life-threatening", "tags": ["dissection"], "ruleouts": ["novertebraldissection"], "default_checked": false },
+        { "label": "Arrhythmia/cardiac presyncope", "group": "Life-threatening", "tags": ["arrhythmia"], "ruleouts": ["noarrhythmia"], "default_checked": false },
+        { "label": "Metabolic derangement", "group": "Common", "tags": ["metabolic"], "ruleouts": ["nometabolicencephalopathy", "nohypoglycemia"], "default_checked": true },
+        { "label": "Peripheral vestibular etiology (BPPV/neuritis)", "group": "Common", "tags": ["peripheral_vertigo"], "ruleouts": ["nobppv"], "default_checked": true },
+        { "label": "TIA", "group": "Other", "tags": ["tia"], "ruleouts": ["notia"], "default_checked": false }
+      ],
+      "risk_toggles": [
+        {
+          "id": "diz_neuro_nonfocal",
+          "label": "Neuro exam non-focal",
+          "tags_required": ["stroke_ich", "dissection", "tia"],
+          "sentence_template": "Serial neurologic examinations were non-focal."
+        },
+        {
+          "id": "diz_gait_reassuring",
+          "label": "Gait/coordination reassuring",
+          "tags_required": [],
+          "sentence_template": "Gait and coordination assessment remained reassuring without evolving focal deficit."
+        },
+        {
+          "id": "diz_ct_head_negative",
+          "label": "CT head reviewed",
+          "tags_required": ["stroke_ich"],
+          "sentence_template": "CT head reviewed without acute intracranial abnormality."
+        },
+        {
+          "id": "diz_abcd2_calculator",
+          "label": "ABCD2 score calculator",
+          "tags_required": ["tia"],
+          "calculator": { "type": "abcd2" },
+          "sentence_template": "ABCD2 score = {score} ({interpretation}); {details}"
+        },
+        {
+          "id": "diz_cta_not_indicated",
+          "label": "CTA head/neck considered / not indicated",
+          "tags_required": ["dissection"],
+          "sentence_template": "CTA head/neck considered; not indicated given low clinical suspicion and reassuring evaluation."
+        },
+        {
+          "id": "diz_glucose_normal",
+          "label": "Glucose/metabolic screen reassuring",
+          "tags_required": ["metabolic"],
+          "sentence_template": "Glucose and key metabolic data reviewed without severe derangement explaining symptoms."
+        },
+        {
+          "id": "diz_hints_exam",
+          "label": "HINTS exam performed",
+          "tags_required": ["stroke_ich", "peripheral_vertigo"],
+          "input": {
+            "type": "select",
+            "label": "Result",
+            "default": "not performed",
+            "options": [
+              { "label": "Not applicable (episodic, non-AVS presentation)", "value": "not performed — episodic presentation; HINTS indicated for acute vestibular syndrome only" },
+              { "label": "HINTS-safe — peripheral pattern", "value": "HINTS-safe — positive head impulse test, unidirectional nystagmus, no skew; peripheral pattern favored" },
+              { "label": "HINTS+ — central features present", "value": "HINTS+ — negative head impulse test, direction-changing nystagmus, or vertical skew present; central etiology cannot be excluded; advanced imaging indicated" }
+            ]
+          },
+          "sentence_template": "HINTS exam: {value}."
+        },
+        {
+          "id": "diz_dix_hallpike",
+          "label": "Dix-Hallpike test performed",
+          "tags_required": ["peripheral_vertigo"],
+          "input": {
+            "type": "select",
+            "label": "Result",
+            "default": "not performed",
+            "options": [
+              { "label": "Not performed", "value": "not performed" },
+              { "label": "Positive — posterior canal BPPV", "value": "positive — upbeat-torsional nystagmus with geotropic pattern; posterior canal BPPV confirmed; Epley maneuver performed" },
+              { "label": "Negative — BPPV not supported", "value": "negative — no diagnostic nystagmus; posterior canal BPPV not supported" }
+            ]
+          },
+          "sentence_template": "Dix-Hallpike: {value}."
+        }
+      ]
+    },
+    {
+      "id": "mdmlbp",
+      "aliases": ["mdm-lbp", "lbp", "backpain"],
+      "title": "Low Back Pain",
+      "base_mdm_template": "Patient evaluated for low back pain with focused exclusion of spinal cord emergencies, infection, fracture, and vascular catastrophe.",
+      "ddx": [
+        { "label": "Cauda equina syndrome", "group": "Life-threatening", "tags": ["cauda"], "ruleouts": ["nocaudaequina"], "default_checked": true },
+        { "label": "Spinal epidural abscess", "group": "Life-threatening", "tags": ["sea"], "ruleouts": ["nosea"], "default_checked": true },
+        { "label": "Spinal cord compression", "group": "Life-threatening", "tags": ["cord"], "ruleouts": ["nospinalcord"], "default_checked": false },
+        { "label": "Vertebral fracture", "group": "Life-threatening", "tags": ["vfracture"], "ruleouts": ["novertebralfracture"], "default_checked": false },
+        { "label": "AAA / aortic emergency", "group": "Life-threatening", "tags": ["aaa"], "ruleouts": ["noaaa"], "default_checked": false },
+        { "label": "Mechanical low back pain (no red flags)", "group": "Common", "tags": ["msk_lbp"], "ruleouts": ["nolowbackredflags"], "default_checked": true }
+      ],
+      "risk_toggles": [
+        {
+          "id": "lbp_neuro_intact",
+          "label": "Lower-extremity neuro exam intact",
+          "tags_required": [],
+          "sentence_template": "Lower-extremity neurologic exam remained intact on serial assessment."
+        },
+        {
+          "id": "lbp_no_retention_saddle",
+          "label": "No retention/incontinence/saddle anesthesia",
+          "tags_required": ["cauda", "cord"],
+          "sentence_template": "No urinary retention/incontinence, no bowel dysfunction, and no saddle anesthesia."
+        },
+        {
+          "id": "lbp_no_infectious_pattern",
+          "label": "No spinal infection pattern",
+          "tags_required": ["sea"],
+          "sentence_template": "No fever/IVDU/immunosuppression pattern or exam findings suggesting spinal infection."
+        },
+        {
+          "id": "lbp_mri_not_indicated",
+          "label": "MRI spine considered / not indicated",
+          "tags_required": ["cauda", "sea", "cord"],
+          "sentence_template": "MRI spine considered; not indicated at this stage given reassuring neurologic and clinical findings."
+        },
+        {
+          "id": "lbp_imaging_deferred",
+          "label": "Imaging deferred due to reassuring red-flag screen",
+          "tags_required": ["msk_lbp"],
+          "sentence_template": "Advanced imaging deferred after reassuring red-flag screen and stable serial exam."
+        }
+      ]
+    },
+    {
+      "id": "mdmams",
+      "aliases": ["mdm-ams", "ams", "altered"],
+      "title": "Altered Mental Status",
+      "base_mdm_template": "Patient evaluated for altered mental status with broad consideration of metabolic, neurologic, toxicologic, and infectious life threats.",
+      "ddx": [
+        { "label": "Hypoglycemia", "group": "Life-threatening", "tags": ["hypoglycemia"], "ruleouts": ["nohypoglycemia"], "default_checked": true },
+        { "label": "Stroke/ICH", "group": "Life-threatening", "tags": ["stroke_ich"], "ruleouts": ["nostroke"], "default_checked": true },
+        { "label": "Seizure/postictal state", "group": "Life-threatening", "tags": ["seizure"], "ruleouts": ["noseizure"], "default_checked": false },
+        { "label": "Toxicologic/medication effect", "group": "Common", "tags": ["tox"], "ruleouts": ["nodrugtox"], "default_checked": true },
+        { "label": "Metabolic encephalopathy", "group": "Life-threatening", "tags": ["metabolic"], "ruleouts": ["nometabolicencephalopathy"], "default_checked": true },
+        { "label": "Sepsis-associated encephalopathy", "group": "Life-threatening", "tags": ["sepsis"], "ruleouts": ["nosepsis"], "default_checked": false },
+        { "label": "Carbon monoxide exposure", "group": "Other", "tags": ["co"], "ruleouts": ["noco"], "default_checked": false }
+      ],
+      "risk_toggles": [
+        {
+          "id": "ams_qsofa_calculator",
+          "label": "qSOFA calculator",
+          "tags_required": ["sepsis"],
+          "calculator": { "type": "qsofa" },
+          "sentence_template": "qSOFA score = {score} ({interpretation}); {details}"
+        },
+        {
+          "id": "ams_ct_head_negative",
+          "label": "CT head reviewed",
+          "tags_required": ["stroke_ich"],
+          "sentence_template": "CT head reviewed without acute intracranial pathology."
+        },
+        {
+          "id": "ams_glucose_correction",
+          "label": "Glucose trend reviewed",
+          "tags_required": ["hypoglycemia"],
+          "input": {
+            "type": "text",
+            "label": "Value",
+            "placeholder": "e.g. 42 -> 118 mg/dL"
+          },
+          "sentence_template": "Glucose trend reviewed: {value}."
+        },
+        {
+          "id": "ams_tox_screen_reviewed",
+          "label": "Toxicology/medication review completed",
+          "tags_required": ["tox"],
+          "sentence_template": "Medication and toxicology assessment reviewed without immediate antidotal indication."
+        },
+        {
+          "id": "ams_collateral_history",
+          "label": "Collateral baseline history obtained",
+          "tags_required": [],
+          "sentence_template": "Collateral history was obtained to establish baseline mental status and progression."
+        },
+        {
+          "id": "ams_serial_reassess",
+          "label": "Serial reassessment documented",
+          "tags_required": [],
+          "sentence_template": "Serial reassessment documented mental status trajectory and hemodynamic stability."
+        },
+        {
+          "id": "ams_gcs_score",
+          "label": "GCS documented",
+          "tags_required": [],
+          "input": {
+            "type": "text",
+            "label": "Score",
+            "placeholder": "e.g. 14/15 (E4V4M6) or 10/15 (E3V3M4)"
+          },
+          "sentence_template": "GCS documented: {value}."
+        },
+        {
+          "id": "ams_ciwa_score",
+          "label": "CIWA-Ar assessed (alcohol withdrawal)",
+          "tags_required": ["tox"],
+          "input": {
+            "type": "select",
+            "label": "Score",
+            "default": "not indicated",
+            "options": [
+              { "label": "Not indicated (no withdrawal concern)", "value": "not indicated" },
+              { "label": "0–9 — mild withdrawal (monitoring appropriate)", "value": "0–9 (mild; clinical monitoring without pharmacotherapy unless symptomatic)" },
+              { "label": "10–18 — moderate withdrawal (benzodiazepines initiated)", "value": "10–18 (moderate; benzodiazepine therapy initiated per protocol)" },
+              { "label": "≥19 — severe withdrawal (aggressive management)", "value": "≥19 (severe; aggressive benzodiazepine management and close monitoring warranted)" }
+            ]
+          },
+          "sentence_template": "CIWA-Ar assessed: {value}."
+        }
+      ]
+    },
+    {
+      "id": "mdmgibleed",
+      "aliases": ["mdm-gibleed", "gibleed", "ugi", "lgi"],
+      "title": "GI Bleed",
+      "base_mdm_template": "Patient evaluated for gastrointestinal bleeding with source differentiation, hemodynamic assessment, and escalation planning.",
+      "ddx": [
+        { "label": "Upper GI bleed source", "group": "Life-threatening", "tags": ["ugi"], "ruleouts": ["nougibleed"], "default_checked": true },
+        { "label": "Lower GI bleed source", "group": "Life-threatening", "tags": ["lgi"], "ruleouts": ["nolgibleed"], "default_checked": true },
+        { "label": "Variceal source", "group": "Life-threatening", "tags": ["variceal"], "ruleouts": ["novariceal"], "default_checked": false },
+        { "label": "Bowel perforation/peritonitis mimic", "group": "Life-threatening", "tags": ["perforation"], "ruleouts": ["nobowelperf"], "default_checked": false },
+        { "label": "Aortic catastrophe mimic", "group": "Life-threatening", "tags": ["aaa"], "ruleouts": ["noaaa"], "default_checked": false }
+      ],
+      "risk_toggles": [
+        {
+          "id": "gib_gbs_calculator",
+          "label": "Glasgow-Blatchford score calculator",
+          "tags_required": ["ugi", "lgi"],
+          "calculator": { "type": "glasgow_blatchford" },
+          "sentence_template": "Glasgow-Blatchford score = {score} ({interpretation}); {details}"
+        },
+        {
+          "id": "gib_rockall_score",
+          "label": "Pre-endoscopy Rockall score",
+          "tags_required": ["ugi", "variceal"],
+          "input": {
+            "type": "select",
+            "label": "Score",
+            "default": "0–2 (low risk)",
+            "options": [
+              { "label": "0–2 — low risk (outpatient candidate)", "value": "0–2 (low risk; outpatient or early discharge may be appropriate)" },
+              { "label": "3–4 — intermediate risk (admit)", "value": "3–4 (intermediate risk; inpatient admission warranted for monitoring and endoscopy)" },
+              { "label": "≥5 — high risk (urgent endoscopy)", "value": "≥5 (high risk; urgent endoscopy and escalated level of care indicated)" }
+            ]
+          },
+          "sentence_template": "Pre-endoscopy Rockall score: {value}."
+        },
+        {
+          "id": "gib_oakland_score",
+          "label": "Oakland score (lower GI bleed)",
+          "tags_required": ["lgi"],
+          "input": {
+            "type": "select",
+            "label": "Score",
+            "default": "≤8 (low risk)",
+            "options": [
+              { "label": "≤8 — low risk (discharge candidate)", "value": "≤8 (low risk; safe for outpatient management with follow-up)" },
+              { "label": "9–14 — moderate risk (admit for monitoring)", "value": "9–14 (moderate risk; inpatient admission for monitoring and colonoscopy)" },
+              { "label": "≥15 — high risk (urgent intervention)", "value": "≥15 (high risk; hemodynamically significant; urgent intervention likely needed)" }
+            ]
+          },
+          "sentence_template": "Oakland score (lower GI bleed): {value}."
+        },
+        {
+          "id": "gib_hemodynamics_stable",
+          "label": "Hemodynamics reassessed",
+          "tags_required": [],
+          "sentence_template": "Hemodynamics were reassessed serially with stability guiding current disposition."
+        },
+        {
+          "id": "gib_resuscitation_started",
+          "label": "Initial resuscitation + type/screen addressed",
+          "tags_required": [],
+          "sentence_template": "IV access, labs, and transfusion planning (including type/screen) were addressed."
+        },
+        {
+          "id": "gib_anticoag_reversal_considered",
+          "label": "Anticoagulation reversal considered",
+          "tags_required": [],
+          "sentence_template": "Anticoagulation status and reversal strategy were considered as clinically indicated."
+        },
+        {
+          "id": "gib_gi_consult_pathway",
+          "label": "GI consult/escalation pathway addressed",
+          "tags_required": [],
+          "sentence_template": "GI consultation and escalation pathway were addressed based on bleeding severity and trajectory."
+        },
+        {
+          "id": "gib_cta_or_endoscopy_considered",
+          "label": "CTA/endoscopy escalation considered",
+          "tags_required": [],
+          "sentence_template": "CTA/endoscopy escalation was considered based on ongoing bleeding, labs, and hemodynamics."
         }
       ]
     },
@@ -340,6 +815,33 @@
           "label": "Blood cultures obtained",
           "tags_required": ["sepsis"],
           "sentence_template": "Blood cultures obtained."
+        },
+        {
+          "id": "fever_sofa_score",
+          "label": "SOFA score (Sepsis-3 organ dysfunction)",
+          "tags_required": ["sepsis"],
+          "input": {
+            "type": "text",
+            "label": "Score",
+            "placeholder": "e.g. 4 — organ dysfunction; ≥2 meets Sepsis-3 definition"
+          },
+          "sentence_template": "SOFA score: {value}."
+        },
+        {
+          "id": "fever_lrinec_score",
+          "label": "LRINEC score (necrotizing fasciitis risk)",
+          "tags_required": ["ssti"],
+          "input": {
+            "type": "select",
+            "label": "Score",
+            "default": "<6 (low risk)",
+            "options": [
+              { "label": "<6 — low risk of necrotizing fasciitis", "value": "<6 (low risk of necrotizing fasciitis; ongoing monitoring appropriate)" },
+              { "label": "6–7 — intermediate risk (surgical consult)", "value": "6–7 (intermediate risk; surgical consultation obtained for clinical correlation)" },
+              { "label": "≥8 — high risk (urgent surgery)", "value": "≥8 (high risk; urgent surgical consultation for operative evaluation)" }
+            ]
+          },
+          "sentence_template": "LRINEC score: {value}."
         },
         {
           "id": "fever_improved_stable",

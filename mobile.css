@@ -341,3 +341,38 @@ code {
     font-size: 12px !important;
   }
 }
+
+@media (max-width: 900px) {
+  body.mdm-page .doc-toolbar {
+    position: static !important;
+    top: auto !important;
+  }
+
+  body.mdm-page .workspace-shell {
+    gap: 12px !important;
+  }
+
+  body.mdm-page .workspace-right {
+    order: 2;
+  }
+
+  body.mdm-page .preview-panel-sticky {
+    position: static !important;
+    top: auto !important;
+  }
+
+  body.mdm-page #jumpToPreviewBtn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  body.mdm-page #unified-preview-panel {
+    scroll-margin-top: 72px;
+  }
+}
+
+@media (min-width: 901px) {
+  body.mdm-page #unified-preview-panel {
+    scroll-margin-top: 120px;
+  }
+}

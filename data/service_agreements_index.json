@@ -3,6 +3,56 @@
   "generated_at": "2026-02-22T03:23:00.544123+00:00",
   "agreements": [
     {
+      "id": "prolonged-ed-los-sla",
+      "title": "Prolonged ED Length of Stay Service Line Agreement",
+      "source_filename": "prolongedLOSsla.docx",
+      "file_type": "docx",
+      "departments": ["Emergency Medicine", "Hospital Medicine", "Care Without Delay"],
+      "last_updated": "2026-02-24",
+      "tags": ["new", "disposition", "consult-workflow", "escalation", "observation", "prolonged-los", "length-of-stay"],
+      "summary_bullets": [
+        "Non-admitted patients in the ED for 24 or more hours with no medical indication for admission but disposition barriers will be evaluated for hospital medicine consult and OBS admission.",
+        "Agreement between Emergency Medicine, Hospital Medicine, Care Without Delay, AAMD, and Area Medical Director at Ontario and Fontana medical centers.",
+        "Applies to members and non-members. Excludes admitted patients awaiting bed, psychiatric patients without medical need, and pediatric patients.",
+        "All patients with ED LOS 24 or more hours and no discharge plan must have case management and social services consults at minimum.",
+        "If the multidisciplinary team agrees no disposition is secured within 12 hours of the 24-hour threshold, CWD physician reviews; if criteria are met, ED physician requests hospital medicine consult.",
+        "Hospital medicine accepts as primary team under observation status for physician continuity, improved family communication, and MDT coordination.",
+        "ED physician signs off but remains available for acute decompensation including airway emergencies and code blue.",
+        "Hospital medicine consultation will be requested and completed during daytime hours, 7 days a week.",
+        "AAMD and AMD notified during daytime hours when patient is admitted for disposition barriers."
+      ],
+      "ed_actions": [
+        "Evaluate all ED patients for medical need for admission versus disposition barriers.",
+        "Escalate to multidisciplinary team (social worker, case manager, CWD physician, geriatrician, hospice liaison) as early as possible when indicated.",
+        "Ensure case management and social services consults are placed for any patient with ED LOS 24 or more hours and no discharge plan.",
+        "Discuss qualifying patients in morning Care Without Delay huddle daily.",
+        "Request hospital medicine consult when CWD physician agrees patient meets PLOS criteria.",
+        "Sign off after hospital medicine consult but remain available for acute decompensation.",
+        "Notify AAMD and AMD during daytime hours of patient being admitted for disposition barriers."
+      ],
+      "consults_and_escalation": [
+        "Case management and social services consult required for all patients with ED LOS 24 or more hours and no discharge plan.",
+        "CWD physician must be discussed with if no disposition is secured within 12 hours of the 24-hour threshold.",
+        "If CWD physician agrees criteria are met, ED physician requests hospital medicine consult.",
+        "On weekends or when no local CWD coverage is available, ED case manager will discuss with CWD on-call physician.",
+        "Hospital medicine consultation completed during daytime hours, 7 days a week. Avoid after-hours consultation unless medically indicated."
+      ],
+      "disposition_or_ownership": [
+        "Hospital medicine accepts as primary team and admits to observation status after consultation.",
+        "ED physician signs off after hospital medicine consult but remains available for acute medical decompensation.",
+        "If patient decompensates and meets admission criteria at any time, follow standard ED-to-hospital medicine consult workflow.",
+        "AAMD and AMD must be notified during daytime hours when patient is admitted for disposition barriers."
+      ],
+      "timing_targets": [
+        "Trigger: ED LOS reaches 24 hours with no discharge plan",
+        "Daily CWD huddle discussion for all qualifying patients",
+        "Hospital medicine consult if no disposition within 12 hours of 24-hour threshold",
+        "Hospital medicine consultation: daytime hours only, 7 days a week"
+      ],
+      "redaction_notes": "Signatory names retained for reference; verify against current signed source document.",
+      "sharepoint_url": null
+    },
+    {
       "id": "covid-19-ischemic-stroke-management-in-covid-patients-v2",
       "title": "COVID 19 Ischemic Stroke Management in COVID patients V2",
       "source_filename": "Service agreements/COVID 19 Ischemic Stroke Management in COVID patients V2.docx",

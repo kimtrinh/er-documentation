@@ -3,38 +3,40 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="stylesheet" href="theme.css?v=2"/>
 <title>Resuscitation Calculators</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',system-ui,sans-serif;background:#0f172a;color:#e2e8f0;min-height:100vh}
+:root{--bg:#080f1a;--surface:#0d1829;--surface2:#111f35;--surface3:#162540;--border:#1a2d48;--border2:#243d5c;--text:#e8f0fc;--text2:#8fa8c8;--text3:#4a6280;--text-blue:#93c5fd;--text-blue-bright:#bfdbfe;--blue:#3b82f6;--blue2:#1d4ed8;--blue3:#0d2038;--green:#22c55e;--green2:#15803d;--green3:#0d2d1f;--amber:#f59e0b;--red:#ef4444;--purple:#a78bfa;--cyan:#22d3ee;}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
 
-header{background:linear-gradient(135deg,#1e293b,#0f172a);border-bottom:1px solid #1e3a5f;padding:20px 24px}
+header{background:linear-gradient(135deg,var(--surface),var(--bg));border-bottom:1px solid var(--border2);padding:20px 24px}
 .header-inner{max-width:960px;margin:0 auto}
 .logo{display:flex;align-items:center;gap:10px;margin-bottom:4px}
-.logo span{font-size:22px}.logo h1{font-size:20px;font-weight:700;color:#f1f5f9}
-.subtitle{font-size:13px;color:#64748b;margin-left:32px}
+.logo span{font-size:22px}.logo h1{font-size:20px;font-weight:700;color:var(--text)}
+.subtitle{font-size:13px;color:var(--text3);margin-left:32px}
 main{max-width:960px;margin:0 auto;padding:20px 24px 60px}
-.disclaimer{background:#1e3a5f;border:1px solid #2563eb;border-radius:8px;padding:10px 14px;margin-bottom:20px;font-size:12px;color:#93c5fd;line-height:1.5}
-.disclaimer strong{color:#bfdbfe}
+.disclaimer{background:var(--border2);border:1px solid #2563eb;border-radius:8px;padding:10px 14px;margin-bottom:20px;font-size:12px;color:var(--text-blue);line-height:1.5}
+.disclaimer strong{color:var(--text-blue-bright)}
 .resus-accordion{display:grid;gap:14px}
-.resus-panel{background:#1e293b;border:1px solid #334155;border-radius:12px;overflow:hidden}
-.resus-panel > summary{list-style:none;cursor:pointer;padding:14px 16px;background:#172235;border-bottom:1px solid #334155;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.resus-panel{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.resus-panel > summary{list-style:none;cursor:pointer;padding:14px 16px;background:var(--surface2);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px}
 .resus-panel > summary::-webkit-details-marker{display:none}
-.resus-title{font-weight:700;font-size:14px;color:#f1f5f9}
-.resus-meta{font-size:11px;color:#94a3b8}
-.resus-panel > summary::after{content:'+';font-size:18px;line-height:1;color:#93c5fd;font-weight:700}
+.resus-title{font-weight:700;font-size:14px;color:var(--text)}
+.resus-meta{font-size:11px;color:var(--text2)}
+.resus-panel > summary::after{content:'+';font-size:18px;line-height:1;color:var(--text-blue);font-weight:700}
 .resus-panel[open] > summary::after{content:'−'}
 .resus-content{padding:14px 14px 16px}
-.resus-frame{width:100%;border:1px solid #334155;border-radius:10px;background:#0f172a;min-height:900px}
+.resus-frame{width:100%;border:1px solid var(--border);border-radius:10px;background:var(--bg);min-height:900px}
 
 /* WEIGHT BAR */
-.weight-bar{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
-.weight-bar label{font-size:14px;font-weight:600;color:#f1f5f9;white-space:nowrap}
-.weight-bar input{width:100px;padding:8px 12px;background:#0f172a;border:1px solid #334155;border-radius:8px;color:#38bdf8;font-size:18px;font-weight:700;outline:none;text-align:center}
+.weight-bar{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.weight-bar label{font-size:14px;font-weight:600;color:var(--text);white-space:nowrap}
+.weight-bar input{width:100px;padding:8px 12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:#38bdf8;font-size:18px;font-weight:700;outline:none;text-align:center}
 .weight-bar input:focus{border-color:#3b82f6}
-.weight-bar .unit{font-size:14px;color:#64748b}
+.weight-bar .unit{font-size:14px;color:var(--text3)}
 .flags{display:flex;gap:10px;flex-wrap:wrap;margin-left:auto}
-.flag-btn{padding:6px 14px;border-radius:20px;border:1px solid #334155;background:#0f172a;color:#94a3b8;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s}
+.flag-btn{padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:var(--bg);color:var(--text2);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s}
 .flag-btn.active-flag{border-color:#f59e0b;background:#292300;color:#fbbf24}
 
 /* LAYOUT */
@@ -45,70 +47,78 @@ main{max-width:960px;margin:0 auto;padding:20px 24px 60px}
 .section-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#475569;margin:20px 0 8px;padding-left:4px}
 
 /* DRUG CARDS */
-.drug-card{background:#1e293b;border:1px solid #334155;border-radius:12px;margin-bottom:10px;overflow:hidden}
-.drug-header{padding:11px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #334155}
-.drug-name{font-weight:700;font-size:14px;color:#f1f5f9}
+.drug-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:10px;overflow:hidden}
+.drug-header{padding:11px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+.drug-name{font-weight:700;font-size:14px;color:var(--text)}
 .drug-class{font-size:11px;padding:2px 8px;border-radius:20px;font-weight:600}
-.class-induction{background:#1e3a5f;color:#93c5fd}
+.class-induction{background:var(--border2);color:var(--text-blue)}
 .class-paralytic{background:#1a2e1a;color:#86efac}
 .class-pretreat{background:#2d1b4e;color:#c4b5fd}
 .drug-body{display:grid;grid-template-columns:repeat(3,1fr)}
-.drug-cell{padding:10px 14px;border-right:1px solid #0f172a}
+.drug-cell{padding:10px 14px;border-right:1px solid var(--bg)}
 .drug-cell:last-child{border-right:none}
 .cell-label{font-size:10px;color:#475569;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
-.cell-value{font-size:13px;color:#e2e8f0;font-weight:500}
+.cell-value{font-size:13px;color:var(--text);font-weight:500}
 .cell-value.dose{color:#38bdf8;font-weight:800;font-size:16px}
 .cell-value.alt{color:#a78bfa;font-weight:700;font-size:14px}
-.drug-note{padding:8px 14px;font-size:11px;color:#64748b;background:#0f172a;border-top:1px solid #1e293b;line-height:1.5}
+.drug-note{padding:8px 14px;font-size:11px;color:var(--text3);background:var(--bg);border-top:1px solid var(--surface);line-height:1.5}
 .drug-note.warn{color:#fbbf24;background:#1c1400}
 .drug-note.danger{color:#f87171;background:#1f0707}
 
 /* POST-INTUBATION DRIPS */
-.drip-card{background:#1e293b;border:1px solid #334155;border-radius:12px;margin-bottom:10px;overflow:hidden}
-.drip-header{padding:11px 16px;border-bottom:1px solid #334155;font-weight:700;font-size:14px;color:#f1f5f9;display:flex;align-items:center;justify-content:space-between}
+.drip-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:10px;overflow:hidden}
+.drip-header{padding:11px 16px;border-bottom:1px solid var(--border);font-weight:700;font-size:14px;color:var(--text);display:flex;align-items:center;justify-content:space-between}
 .drip-body{padding:12px 16px}
-.drip-row{display:flex;justify-content:space-between;align-items:flex-start;padding:8px 0;border-bottom:1px solid #0f172a;font-size:13px;gap:8px}
+.drip-row{display:flex;justify-content:space-between;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--bg);font-size:13px;gap:8px}
 .drip-row:last-child{border-bottom:none}
-.drip-label{color:#94a3b8;flex:1}
+.drip-label{color:var(--text2);flex:1}
 .drip-value{color:#38bdf8;font-weight:700;text-align:right}
 
 /* SIDEBAR */
-.side-card{background:#1e293b;border:1px solid #334155;border-radius:12px;margin-bottom:12px;overflow:hidden}
-.side-header{padding:11px 16px;border-bottom:1px solid #334155;font-weight:700;font-size:13px;color:#f1f5f9}
+.side-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;overflow:hidden}
+.side-header{padding:11px 16px;border-bottom:1px solid var(--border);font-weight:700;font-size:13px;color:var(--text)}
 .side-body{padding:12px 16px}
-.side-row{font-size:12px;padding:6px 0;border-bottom:1px solid #0f172a;color:#cbd5e1;line-height:1.5}
+.side-row{font-size:12px;padding:6px 0;border-bottom:1px solid var(--bg);color:var(--text2);line-height:1.5}
 .side-row:last-child{border-bottom:none}
-.side-row strong{color:#f1f5f9}
+.side-row strong{color:var(--text)}
 .side-row .val{color:#38bdf8;font-weight:700}
 
 /* DIFFICULT AIRWAY */
-.diff-card{background:#1e293b;border:1px solid #334155;border-radius:12px;margin-bottom:12px;overflow:hidden}
-.diff-header{padding:11px 16px;border-bottom:1px solid #334155;font-weight:700;font-size:13px;color:#fbbf24}
-.diff-body{padding:12px 16px;font-size:12px;line-height:1.7;color:#cbd5e1}
+.diff-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;overflow:hidden}
+.diff-header{padding:11px 16px;border-bottom:1px solid var(--border);font-weight:700;font-size:13px;color:#fbbf24}
+.diff-body{padding:12px 16px;font-size:12px;line-height:1.7;color:var(--text2)}
 .diff-flag{display:none;background:#1c1400;border:1px solid #f59e0b;border-radius:8px;padding:10px 14px;margin-bottom:10px;font-size:12px;color:#fde68a;line-height:1.6}
 .diff-flag.show{display:block}
 
 /* CRIC */
-.cric-card{background:#1e293b;border:1px solid #334155;border-radius:12px;overflow:hidden}
-.cric-header{padding:11px 16px;border-bottom:1px solid #334155;font-weight:700;font-size:13px;color:#f87171}
-.cric-step{display:flex;gap:10px;padding:9px 16px;border-bottom:1px solid #0f172a;font-size:12px;color:#cbd5e1;line-height:1.5;align-items:flex-start}
+.cric-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.cric-header{padding:11px 16px;border-bottom:1px solid var(--border);font-weight:700;font-size:13px;color:#f87171}
+.cric-step{display:flex;gap:10px;padding:9px 16px;border-bottom:1px solid var(--bg);font-size:12px;color:var(--text2);line-height:1.5;align-items:flex-start}
 .cric-step:last-child{border-bottom:none}
 .cric-num{background:#3b82f6;color:#fff;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px}
 
 /* ===== SHARED NEW NAV ===== */
 @media(max-width:640px){}
-.sitenav{background:#0d1829;border-bottom:1px solid #1a2d48;position:sticky;top:0;z-index:100;font-family:'DM Sans',system-ui,sans-serif}
+.sitenav{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;font-family:'DM Sans',system-ui,sans-serif}
 .sitenav-inner{max-width:1200px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:6px;height:46px;overflow:hidden}
 .nav-logo{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:#3b82f6;white-space:nowrap;flex-shrink:0;text-decoration:none;margin-right:6px}
-.nav-logo span{color:#4a6280}
+.nav-logo span{color:var(--text3)}
 .nav-links{display:flex;flex:1;min-width:0;gap:1px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;white-space:nowrap;padding-right:10px}
 .nav-links::-webkit-scrollbar{display:none}
-.nav-link{padding:5px 10px;border-radius:6px;font-size:12px;font-weight:600;color:#8fa8c8;text-decoration:none;white-space:nowrap;transition:all .15s}
-.nav-link:hover{background:#111f35;color:#e8f0fc}
+.nav-link{padding:5px 10px;border-radius:6px;font-size:12px;font-weight:600;color:var(--text2);text-decoration:none;white-space:nowrap;transition:all .15s}
+.nav-link:hover{background:var(--surface2);color:var(--text)}
 .nav-link.active{background:#1d4ed8;color:#fff}
 @media(max-width:640px){.nav-link{font-size:11px;padding:4px 8px}}
+@keyframes pgFade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+main>*{animation:pgFade .3s ease both}
+main>*:nth-child(2){animation-delay:.05s}
+main>*:nth-child(3){animation-delay:.1s}
+main>*:nth-child(4){animation-delay:.15s}
+.drug-card{box-shadow:0 1px 4px rgba(0,0,0,.2)}.drip-card{box-shadow:0 1px 4px rgba(0,0,0,.2)}
 </style>
 <link rel="stylesheet" href="mobile.css">
+<script>document.documentElement.setAttribute('data-theme',localStorage.getItem('theme')||'dark');</script>
+<link rel="manifest" href="/manifest.json">
 </head>
 <body>
 <nav class="sitenav">
@@ -117,6 +127,7 @@ main{max-width:960px;margin:0 auto;padding:20px 24px 60px}
     <div class="nav-links">
       <a class="nav-link" href="index.html">🏠 Home</a>
       <a class="nav-link" href="mdm.html">🧾 Documentation</a>
+
       <a class="nav-link" href="calculators.html">🧮 Decision Support</a>
       <a class="nav-link active" href="rsi.html">🚨 Resuscitation</a>
       <a class="nav-link" href="algorithms.html">🔀 Algorithms</a>
@@ -164,7 +175,7 @@ main{max-width:960px;margin:0 auto;padding:20px 24px 60px}
 
       <div class="drug-card">
         <div class="drug-header">
-          <span class="drug-name">Fentanyl <span style="font-size:11px;color:#64748b;font-weight:400">— opioid blunting</span></span>
+          <span class="drug-name">Fentanyl <span style="font-size:11px;color:var(--text3);font-weight:400">— opioid blunting</span></span>
           <span class="drug-class class-pretreat">Pretreatment</span>
         </div>
         <div class="drug-body">
@@ -235,7 +246,7 @@ main{max-width:960px;margin:0 auto;padding:20px 24px 60px}
 
       <div class="drug-card">
         <div class="drug-header">
-          <span class="drug-name">Succinylcholine <span style="font-size:11px;color:#64748b;font-weight:400">— depolarizing</span></span>
+          <span class="drug-name">Succinylcholine <span style="font-size:11px;color:var(--text3);font-weight:400">— depolarizing</span></span>
           <span class="drug-class class-paralytic">Paralytic</span>
         </div>
         <div class="drug-body">
@@ -248,7 +259,7 @@ main{max-width:960px;margin:0 auto;padding:20px 24px 60px}
 
       <div class="drug-card">
         <div class="drug-header">
-          <span class="drug-name">Rocuronium <span style="font-size:11px;color:#64748b;font-weight:400">— non-depolarizing</span></span>
+          <span class="drug-name">Rocuronium <span style="font-size:11px;color:var(--text3);font-weight:400">— non-depolarizing</span></span>
           <span class="drug-class class-paralytic">Paralytic</span>
         </div>
         <div class="drug-body">
@@ -261,7 +272,7 @@ main{max-width:960px;margin:0 auto;padding:20px 24px 60px}
 
       <div class="drug-card">
         <div class="drug-header">
-          <span class="drug-name">Vecuronium <span style="font-size:11px;color:#64748b;font-weight:400">— non-depolarizing</span></span>
+          <span class="drug-name">Vecuronium <span style="font-size:11px;color:var(--text3);font-weight:400">— non-depolarizing</span></span>
           <span class="drug-class class-paralytic">Paralytic</span>
         </div>
         <div class="drug-body">
@@ -276,32 +287,32 @@ main{max-width:960px;margin:0 auto;padding:20px 24px 60px}
       <div class="section-label">Post-Intubation Sedation & Analgesia</div>
 
       <div class="drip-card">
-        <div class="drip-header"><span>💤 Sedation Drips</span><span style="font-size:11px;font-weight:400;color:#64748b">Start immediately after intubation</span></div>
+        <div class="drip-header"><span>💤 Sedation Drips</span><span style="font-size:11px;font-weight:400;color:var(--text3)">Start immediately after intubation</span></div>
         <div class="drip-body">
           <div class="drip-row">
-            <div class="drip-label"><strong style="color:#f1f5f9">Propofol</strong><br/><span style="font-size:11px;color:#475569">10mg/mL standard. Preferred ICU sedation (RASS-guided)</span></div>
+            <div class="drip-label"><strong style="color:var(--text)">Propofol</strong><br/><span style="font-size:11px;color:#475569">10mg/mL standard. Preferred ICU sedation (RASS-guided)</span></div>
             <div class="drip-value" id="prop-drip">—</div>
           </div>
           <div class="drip-row">
-            <div class="drip-label"><strong style="color:#f1f5f9">Midazolam</strong><br/><span style="font-size:11px;color:#475569">1mg/mL standard. Use if propofol unavailable or hemodynamically unstable</span></div>
+            <div class="drip-label"><strong style="color:var(--text)">Midazolam</strong><br/><span style="font-size:11px;color:#475569">1mg/mL standard. Use if propofol unavailable or hemodynamically unstable</span></div>
             <div class="drip-value" id="midaz-drip">—</div>
           </div>
           <div class="drip-row">
-            <div class="drip-label"><strong style="color:#f1f5f9">Ketamine</strong><br/><span style="font-size:11px;color:#475569">2mg/mL. Good opioid-sparing option, bronchodilator</span></div>
+            <div class="drip-label"><strong style="color:var(--text)">Ketamine</strong><br/><span style="font-size:11px;color:#475569">2mg/mL. Good opioid-sparing option, bronchodilator</span></div>
             <div class="drip-value" id="ket-drip">—</div>
           </div>
         </div>
       </div>
 
       <div class="drip-card">
-        <div class="drip-header"><span>💊 Analgesia Drips</span><span style="font-size:11px;font-weight:400;color:#64748b">Analgesia-first approach</span></div>
+        <div class="drip-header"><span>💊 Analgesia Drips</span><span style="font-size:11px;font-weight:400;color:var(--text3)">Analgesia-first approach</span></div>
         <div class="drip-body">
           <div class="drip-row">
-            <div class="drip-label"><strong style="color:#f1f5f9">Fentanyl</strong><br/><span style="font-size:11px;color:#475569">50 mcg/mL standard. Preferred — hemodynamically stable, titratable</span></div>
+            <div class="drip-label"><strong style="color:var(--text)">Fentanyl</strong><br/><span style="font-size:11px;color:#475569">50 mcg/mL standard. Preferred — hemodynamically stable, titratable</span></div>
             <div class="drip-value" id="fent-drip">—</div>
           </div>
           <div class="drip-row">
-            <div class="drip-label"><strong style="color:#f1f5f9">Morphine</strong><br/><span style="font-size:11px;color:#475569">1mg/mL standard. Avoid in renal failure (active metabolite accumulates)</span></div>
+            <div class="drip-label"><strong style="color:var(--text)">Morphine</strong><br/><span style="font-size:11px;color:#475569">1mg/mL standard. Avoid in renal failure (active metabolite accumulates)</span></div>
             <div class="drip-value" id="morph-drip">—</div>
           </div>
         </div>
@@ -353,9 +364,9 @@ main{max-width:960px;margin:0 auto;padding:20px 24px 60px}
       <div class="side-card">
         <div class="side-header">🔄 Sugammadex (Rocuronium Reversal)</div>
         <div class="side-body">
-          <div class="side-row"><strong>Routine reversal</strong><br/><span class="val" id="sug-routine">—</span> <span style="color:#64748b">(4 mg/kg)</span></div>
-          <div class="side-row"><strong>Immediate reversal</strong> (can't intubate/oxygenate)<br/><span class="val" id="sug-immediate">—</span> <span style="color:#64748b">(16 mg/kg)</span></div>
-          <div class="side-row" style="font-size:11px;color:#64748b">Onset ~3 min for routine, ~1.5 min for high dose. Only reverses rocuronium/vecuronium — does NOT reverse succinylcholine.</div>
+          <div class="side-row"><strong>Routine reversal</strong><br/><span class="val" id="sug-routine">—</span> <span style="color:var(--text3)">(4 mg/kg)</span></div>
+          <div class="side-row"><strong>Immediate reversal</strong> (can't intubate/oxygenate)<br/><span class="val" id="sug-immediate">—</span> <span style="color:var(--text3)">(16 mg/kg)</span></div>
+          <div class="side-row" style="font-size:11px;color:var(--text3)">Onset ~3 min for routine, ~1.5 min for high dose. Only reverses rocuronium/vecuronium — does NOT reverse succinylcholine.</div>
         </div>
       </div>
 
@@ -368,7 +379,7 @@ main{max-width:960px;margin:0 auto;padding:20px 24px 60px}
           <div class="side-row"><strong>Difficult airway ETT</strong><br/><span class="val">6.0–6.5 mm</span></div>
           <div class="side-row"><strong>Insertion depth (lips)</strong><br/><span class="val">Male: 23 cm | Female: 21 cm</span></div>
           <div class="side-row"><strong>Confirm with</strong><br/><span class="val">Waveform capnography + CXR</span></div>
-          <div class="side-row"><strong>Initial vent settings</strong><br/><span class="val" id="vent-tv">—</span><br/><span style="font-size:11px;color:#64748b">TV 6–8 mL/kg IBW, RR 12–16, FiO₂ 100% initially, PEEP 5</span></div>
+          <div class="side-row"><strong>Initial vent settings</strong><br/><span class="val" id="vent-tv">—</span><br/><span style="font-size:11px;color:var(--text3)">TV 6–8 mL/kg IBW, RR 12–16, FiO₂ 100% initially, PEEP 5</span></div>
         </div>
       </div>
 
@@ -406,7 +417,7 @@ main{max-width:960px;margin:0 auto;padding:20px 24px 60px}
   </div>
 </main>
 
-<script src="search-index.js"></script>
+<script src="search-index.js?v=2"></script>
 <script>
 const flags = {obese:false, pregnant:false, difficult:false};
 
@@ -548,5 +559,8 @@ update();
 <script id="shared-nav-search">
 </script>
 
+<button id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">☀️</button>
+<script src="theme.js?v=3"></script>
+<script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
 </body>
 </html>
