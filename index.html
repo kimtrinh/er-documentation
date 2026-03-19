@@ -105,6 +105,29 @@ main{max-width:1100px;margin:0 auto;padding:22px 24px 80px}
 .sec-head h2{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--text3);white-space:nowrap}
 .sec-head::after{content:'';flex:1;height:1px;background:var(--border)}
 
+/* ANNOUNCEMENT BANNER */
+.announcement-banner{background:linear-gradient(135deg,#331100 0%,#1f0f07 100%);border:1px solid rgba(245,158,11,.45);border-radius:12px;padding:14px 16px;margin-bottom:16px;box-shadow:0 8px 18px rgba(0,0,0,.28)}
+.announcement-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.announcement-title{font-size:13px;font-weight:800;letter-spacing:.4px;color:#fbbf24;text-transform:uppercase}
+.announcement-sub{font-size:11px;color:#fdba74;margin-top:2px}
+.announcement-controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.announcement-code{background:rgba(8,15,26,.8);border:1px solid rgba(251,191,36,.35);border-radius:6px;color:var(--text);padding:6px 8px;font-family:var(--mono);font-size:12px;min-width:84px}
+.announcement-btn{background:#b45309;color:#fff;border:1px solid #f59e0b;border-radius:6px;padding:6px 10px;font-size:11px;font-weight:700;cursor:pointer}
+.announcement-btn:hover{background:#d97706}
+.announcement-status{font-size:11px;color:#fdba74;margin-bottom:8px}
+.announcement-text{width:100%;min-height:94px;background:rgba(8,15,26,.82);border:1px solid rgba(251,191,36,.28);border-radius:8px;color:#fef3c7;padding:10px 12px;font-size:13px;line-height:1.45;resize:vertical}
+.announcement-text:disabled{opacity:.72;cursor:not-allowed}
+.announcement-text::placeholder{color:#d97706}
+html[data-theme="light"] .announcement-banner{background:linear-gradient(135deg,#fff7ed 0%,#ffedd5 100%);border-color:rgba(194,65,12,.4);box-shadow:0 8px 18px rgba(124,45,18,.12)}
+html[data-theme="light"] .announcement-title{color:#b45309}
+html[data-theme="light"] .announcement-sub,
+html[data-theme="light"] .announcement-status{color:#c2410c}
+html[data-theme="light"] .announcement-code{background:#fff;border-color:rgba(194,65,12,.35);color:#7c2d12}
+html[data-theme="light"] .announcement-btn{background:#c2410c;border-color:#b45309}
+html[data-theme="light"] .announcement-btn:hover{background:#9a3412}
+html[data-theme="light"] .announcement-text{background:#fffaf0;border-color:rgba(194,65,12,.28);color:#7c2d12}
+html[data-theme="light"] .announcement-text::placeholder{color:#ea580c}
+
 /* TOOL GRID */
 .tool-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:8px}
 .tc{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:15px;transition:border-color .15s,background .15s,transform .15s,box-shadow .15s;text-decoration:none;display:flex;flex-direction:column;gap:5px;box-shadow:0 1px 4px rgba(0,0,0,.2)}
@@ -224,6 +247,21 @@ main{max-width:1100px;margin:0 auto;padding:22px 24px 80px}
 </div>
 
 <main>
+  <section class="announcement-banner" aria-labelledby="announcementTitle">
+    <div class="announcement-head">
+      <div>
+        <div class="announcement-title" id="announcementTitle">🚨 Important Announcements</div>
+        <div class="announcement-sub">Locked section for urgent department-wide updates.</div>
+      </div>
+      <div class="announcement-controls">
+        <input class="announcement-code" id="announcementCode" type="password" inputmode="numeric" placeholder="Enter code" aria-label="Announcement unlock code" maxlength="4">
+        <button class="announcement-btn" id="announcementUnlockBtn" type="button" onclick="toggleAnnouncementLock()">Unlock</button>
+      </div>
+    </div>
+    <div class="announcement-status" id="announcementStatus">🔒 Locked — enter code to edit.</div>
+    <textarea class="announcement-text" id="announcementText" placeholder="Post important announcements here..." disabled></textarea>
+  </section>
+
   <!-- TOOLS -->
   <div class="sec-head"><h2>Clinical Tools</h2></div>
   <div class="tool-grid" style="margin-bottom:22px">
@@ -248,6 +286,8 @@ main{max-width:1100px;margin:0 auto;padding:22px 24px 80px}
       <a class="prow" href="vasopressors.html"><div class="prow-body"><div class="prow-title">Norepinephrine</div><div class="prow-sub">0.01–3 mcg/kg/min · septic shock first-line</div></div><span class="prow-tag pt-orange">Vasc</span></a>
       <a class="prow" href="calculators.html#calc-heart"><div class="prow-body"><div class="prow-title">HEART Score</div><div class="prow-sub">ACS chest pain risk stratification</div></div><span class="prow-tag pt-green">Calc</span></a>
       <a class="prow" href="neurohub.html"><div class="prow-body"><div class="prow-title">ICH Protocol</div><div class="prow-sub">BP targets · reversal · neurosurg criteria</div></div><span class="prow-tag pt-purple">Neuro</span></a>
+      <a class="prow" href="algorithms.html#card-vcf"><div class="prow-body"><div class="prow-title">Vertebral Compression Fracture</div><div class="prow-sub">VCF algorithm · TLSO · vertebroplasty criteria</div></div><span class="prow-tag pt-green">Algo</span></a>
+      <a class="prow" href="neurohub.html"><div class="prow-body"><div class="prow-title">Neuro Hub ICH Protocol</div><div class="prow-sub">Regional neuro hub · triage flowchart · reversal</div></div><span class="prow-tag pt-purple">Neuro</span></a>
     </div>
     <div class="panel">
       <div class="panel-hd">🤝 Service Agreements</div>
@@ -335,7 +375,7 @@ main{max-width:1100px;margin:0 auto;padding:22px 24px 80px}
 
 <div class="mobile-nav">
   <a class="mob-item active" href="index.html"><span class="mob-icon">🏠</span>Home</a>
-  <a class="mob-item" href="mdm.html"><span class="mob-icon">🧾</span>Docs</a>
+  <a class="mob-item" href="dotphrase.html"><span class="mob-icon">📋</span>Phrases</a>
   <a class="mob-item" href="calculators.html"><span class="mob-icon">🧮</span>Calcs</a>
   <a class="mob-item" href="rsi.html"><span class="mob-icon">🚨</span>Resus</a>
   <a class="mob-item" href="ed-phone-directory.html"><span class="mob-icon">📞</span>Directory</a>
@@ -616,6 +656,128 @@ window.addEventListener('storage', e => {
     if (q) doSearch(q);
   }
 });
+
+const ANNOUNCEMENT_UNLOCK_CODE = '0507';
+const ANNOUNCEMENT_TEXT_KEY = 'kpAnnouncementText';
+const ANNOUNCEMENT_UNLOCK_KEY = 'kpAnnouncementUnlocked';
+const ANNOUNCEMENT_FIREBASE_CONFIG = {
+  apiKey: 'AIzaSyCH1td6zhupmO-ZT3ruRN2-yZqidXqzgl4',
+  authDomain: 'er-docu.firebaseapp.com',
+  projectId: 'er-docu',
+  storageBucket: 'er-docu.firebasestorage.app',
+  messagingSenderId: '233632582452',
+  appId: '1:233632582452:web:9ef7d4f8d95866c5bc3361',
+  measurementId: 'G-XFLWV3DK7R'
+};
+
+let announcementDb = null;
+let announcementDocRef = null;
+let saveAnnouncementTimer = null;
+let suppressAnnouncementSave = false;
+
+function setAnnouncementLockState(unlocked) {
+  const txt = document.getElementById('announcementText');
+  const status = document.getElementById('announcementStatus');
+  const btn = document.getElementById('announcementUnlockBtn');
+  txt.disabled = !unlocked;
+  btn.textContent = unlocked ? 'Lock' : 'Unlock';
+  status.textContent = unlocked
+    ? '🔓 Unlocked — announcements can be edited and synced for everyone.'
+    : '🔒 Locked — enter code to edit.';
+}
+
+function loadAnnouncement() {
+  const txt = document.getElementById('announcementText');
+  txt.value = localStorage.getItem(ANNOUNCEMENT_TEXT_KEY) || '';
+  const unlocked = localStorage.getItem(ANNOUNCEMENT_UNLOCK_KEY) === 'true';
+  setAnnouncementLockState(unlocked);
+}
+
+async function initAnnouncementFirebase() {
+  try {
+    const appModule = await import('https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js');
+    const firestoreModule = await import('https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js');
+    const app = appModule.initializeApp(ANNOUNCEMENT_FIREBASE_CONFIG, 'announcement-app');
+    announcementDb = firestoreModule.getFirestore(app);
+    announcementDocRef = firestoreModule.doc(announcementDb, 'siteContent', 'announcement');
+
+    const snap = await firestoreModule.getDoc(announcementDocRef);
+    if (snap.exists()) {
+      const text = snap.data().text || '';
+      suppressAnnouncementSave = true;
+      document.getElementById('announcementText').value = text;
+      suppressAnnouncementSave = false;
+      localStorage.setItem(ANNOUNCEMENT_TEXT_KEY, text);
+    }
+
+    firestoreModule.onSnapshot(announcementDocRef, docSnap => {
+      if (!docSnap.exists()) return;
+      const text = docSnap.data().text || '';
+      suppressAnnouncementSave = true;
+      document.getElementById('announcementText').value = text;
+      suppressAnnouncementSave = false;
+      localStorage.setItem(ANNOUNCEMENT_TEXT_KEY, text);
+    });
+  } catch (e) {
+    console.warn('Announcement Firebase unavailable, using local-only mode.', e);
+  }
+}
+
+async function saveAnnouncementToFirebase(text) {
+  if (!announcementDocRef || suppressAnnouncementSave) return;
+  const firestoreModule = await import('https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js');
+  await firestoreModule.setDoc(announcementDocRef, {
+    text,
+    updatedAt: firestoreModule.serverTimestamp()
+  }, { merge: true });
+}
+
+function toggleAnnouncementLock() {
+  const unlocked = localStorage.getItem(ANNOUNCEMENT_UNLOCK_KEY) === 'true';
+  if (unlocked) {
+    localStorage.setItem(ANNOUNCEMENT_UNLOCK_KEY, 'false');
+    setAnnouncementLockState(false);
+    return;
+  }
+  const codeInput = document.getElementById('announcementCode');
+  if (codeInput.value.trim() === ANNOUNCEMENT_UNLOCK_CODE) {
+    localStorage.setItem(ANNOUNCEMENT_UNLOCK_KEY, 'true');
+    setAnnouncementLockState(true);
+    codeInput.value = '';
+    document.getElementById('announcementText').focus();
+  } else {
+    alert('Incorrect code.');
+  }
+}
+
+document.getElementById('announcementText').addEventListener('input', e => {
+  localStorage.setItem(ANNOUNCEMENT_TEXT_KEY, e.target.value);
+  if (saveAnnouncementTimer) clearTimeout(saveAnnouncementTimer);
+  saveAnnouncementTimer = setTimeout(() => {
+    saveAnnouncementToFirebase(e.target.value).catch(err => {
+      console.warn('Failed to save announcement to Firebase.', err);
+    });
+  }, 300);
+});
+
+document.getElementById('announcementCode').addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    toggleAnnouncementLock();
+  }
+});
+
+window.addEventListener('storage', e => {
+  if (e.key === ANNOUNCEMENT_TEXT_KEY) {
+    document.getElementById('announcementText').value = e.newValue || '';
+  }
+  if (e.key === ANNOUNCEMENT_UNLOCK_KEY) {
+    setAnnouncementLockState(e.newValue === 'true');
+  }
+});
+
+loadAnnouncement();
+initAnnouncementFirebase();
 </script>
 <button id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">☀️</button>
 <script src="theme.js?v=3"></script>
