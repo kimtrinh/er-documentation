@@ -188,6 +188,7 @@ const SEARCH_INDEX = [
   {type:'algo',i:'🔀',t:'Aortic Dissection',s:'chest pain  ·  tearing  ·  CTA  ·  type A type B  ·  vascular  ·  KP SBC ED Practice Guideline',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-aortic'},
   {type:'algo',i:'🔀',t:'Visual Floaters & Flashes',s:'ophthalmology  ·  retinal detachment  ·  vitreous  ·  vision  ·  KP SBC ED Practice Guideline',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-floaters'},
   {type:'algo',i:'🔀',t:'Non-Pregnant Vaginal Bleeding',s:'GYN  ·  vaginal bleeding  ·  non-OB  ·  ectopic  ·  KP SBC ED Practice Guideline',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-nonpregvb'},
+  {type:'algo',i:'🦴',t:'Vertebral Compression Fracture (VCF)',s:'spine  ·  compression fracture  ·  VCF  ·  vertebral  ·  back pain  ·  brace  ·  TLSO  ·  LSO  ·  vertebroplasty  ·  neurosurgery  ·  bone density  ·  KP SBC ED Practice Guideline',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-vcf'},
 
   // ── NEURO HUB ───────────────────────────────────────────────────────────
   {type:'neuro',i:'🧠',t:'Neuro Hub — ICH Protocol Overview',s:'ICH  ·  intracerebral hemorrhage  ·  stroke  ·  neurology consult',g:'Neuro Hub',gc:'t-neuro',u:'neurohub.html'},
