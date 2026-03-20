@@ -459,6 +459,62 @@ const PROTOCOL_OVERRIDES = {
       "Accepting STMC service documented"
     ],
     tags_add: ["appendicitis", "pediatric-transfer", "ptac", "gmc", "stmc"]
+  },
+  "urology-and-emergency-medicine-service-agreement-2019": {
+    title: "Urology & Emergency Medicine Service Agreement (2019)",
+    banner: { level: "yellow", label: "Tiered Consult" },
+    purpose: [
+      "Define a four-tier ED disposition pathway for urologic conditions: (1) Urgent/Emergent — call Urology immediately, (2) Hospital Medicine admit without overnight Urology call, (3) Outpatient Urology referral, (4) PCP follow-up.",
+      "Agreement between Emergency Medicine and Urology at Kaiser Permanente Fontana/Ontario."
+    ],
+    when_to_use: [
+      "Any ED patient presenting with a urologic complaint or finding (stone, hematuria, retention, testicular complaint, GU infection, renal mass, penile emergency, Fournier's gangrene).",
+      "Use the four-tier pathway below to determine the correct disposition and consult level.",
+      "Applies 24/7 — note the no-overnight-call window (7 PM – 7 AM) for Tier 2."
+    ],
+    red_flags: [
+      "Testicular torsion (or clinical concern for torsion).",
+      "Persistent priapism.",
+      "Penile fracture.",
+      "Unreducible paraphimosis.",
+      "Fournier's gangrene of the scrotum or penis — add General Surgery if perirectal involvement is present or unclear.",
+      "Obstructing stone with fever > 38 °C, solitary-kidney obstruction, or bilateral ureteral obstruction.",
+      "Gross hematuria refractory to CBI and repeated Foley irrigation.",
+      "Difficult catheterization with acute urinary retention.",
+      "Post-operative urologic complication."
+    ],
+    workflow: [
+      "TIER 1 — URGENT/EMERGENT: Call Urology Immediately — Torsion (or concern for torsion), persistent priapism, penile fracture, unreducible paraphimosis, Fournier's gangrene (add General Surgery if perirectal), obstructing stone with fever > 38 °C, solitary-kidney obstruction, bilateral obstruction, refractory gross hematuria despite CBI, difficult catheterization with acute retention, post-op urologic complications.",
+      "TIER 2 — ADMIT TO HOSPITAL MEDICINE (No Overnight Urology Call 7 PM – 7 AM) — Non-fever obstructive stone pain or intractable vomiting requiring IV fluids/pain control; controlled gross hematuria on CBI (not refractory); septic epididymo-orchitis without abscess or gangrene.",
+      "TIER 3 — OUTPATIENT UROLOGY REFERRAL (No ED Urology Consult) — Stone > 3 mm without fever or sepsis; asymptomatic or incidental hydronephrosis; renal stone ≥ 10 mm (non-obstructive); urinary retention after successful Foley placement (start tamsulosin, plan outpatient follow-up); asymptomatic renal mass or complex renal cyst; testicular mass on ultrasound.",
+      "TIER 4 — PCP FOLLOW-UP (No Urology Referral) — Stone ≤ 3 mm without fever; non-obstructive UTI or pyelonephritis; balanitis or posthitis; uncomplicated epididymo-orchitis; renal stone < 10 mm without obstruction; benign hydrocele or simple epididymal cyst; negative-ultrasound testicular pain; testicular microlithiasis.",
+      "For any presentation that does not cleanly fit a tier, escalate via attending-to-attending discussion."
+    ],
+    treatment: [
+      "Tier 1 conditions: initiate resuscitation and stabilization per ED standards while awaiting Urology arrival.",
+      "Urinary retention after Foley: start tamsulosin and arrange outpatient Urology follow-up (Tier 3).",
+      "Fournier's gangrene: broad-spectrum antibiotics; early surgical consultation (Urology ± General Surgery).",
+      "Obstructive stone with infection: IV antibiotics, IV fluids, and emergent Urology decompression.",
+      "Hematuria: continuous bladder irrigation (CBI); escalate to Tier 1 if refractory."
+    ],
+    disposition: [
+      "Tier 1 (Urgent/Emergent): Urology assumes care; admit or operative management as indicated.",
+      "Tier 2 (Admit): Hospital Medicine is the admitting service. No overnight Urology call between 7 PM – 7 AM for these defined scenarios.",
+      "Tier 3 (Outpatient Referral): Discharge from ED with Urology referral. No ED Urology consult required.",
+      "Tier 4 (PCP Follow-up): Discharge from ED with PCP follow-up. No Urology referral required.",
+      "Document the tier/pathway category in the ED note for every urologic disposition."
+    ],
+    documentation: "ED presentation consistent with [urologic condition]. Assessed per Urology–EM Service Agreement (2019). Pathway category: Tier [1/2/3/4]. [If Tier 1: Urology contacted at [time], Dr. [name] responding. / If Tier 2: Admitted to Hospital Medicine; no overnight Urology call per agreement. / If Tier 3: Outpatient Urology referral placed; tamsulosin started if retention. / If Tier 4: PCP follow-up arranged.] Disposition: [admit/discharge]. Return precautions reviewed.",
+    automation_checks: [
+      "Tier/pathway category documented (1–4)",
+      "Urology contacted and time documented (Tier 1)",
+      "Hospital Medicine consult placed (Tier 2)",
+      "Outpatient Urology referral placed (Tier 3)",
+      "Tamsulosin started for retention (Tier 3)",
+      "PCP follow-up arranged (Tier 4)",
+      "Return precautions documented"
+    ],
+    tags_add: ["urology", "torsion", "hematuria", "retention", "fournier", "renal-stone", "kidney-stone"]
   }
 };
 
