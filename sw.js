@@ -15,6 +15,7 @@ const ASSETS = [
   '/roadmap.html',
   '/ed-phone-directory.html',
   '/service-agreements.html',
+  '/service-requests.html',
   '/agreements.html',
   '/theme.css',
   '/mobile.css',

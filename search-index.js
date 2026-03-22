@@ -32,6 +32,7 @@ const SEARCH_INDEX = [
 
 
   // ── CORE PAGES ──────────────────────────────────────────────────────────
+  {type:'page',i:'📋',t:'Service Request Board',s:'service request facility maintenance equipment housekeeping IT supply broken missing upvote',g:'Tools',gc:'t-algo',u:'service-requests.html'},
 
   // ── DOTPHRASES ─────────────────────────────────────────────────────────
   {type:'phrase',i:'📋',t:'PE Rule-Out',s:'.nope  ·  Chest Pain  ·  chest pain dyspnea SOB shortness of breath',g:'Chest Pain',gc:'t-phrase',u:'dotphrase.html'},
