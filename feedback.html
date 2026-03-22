@@ -4,7 +4,8 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <link rel="stylesheet" href="theme.css?v=2"/>
-<title>Feedback — ER Reference</title>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<title>Feedback — ER Toolkit</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -204,6 +205,12 @@ html[data-theme="light"] .fb-select{background-image:url("data:image/svg+xml,%3C
 <script src="theme.js?v=3"></script>
 <script>
 (function () {
+  var EMAILJS_PUBLIC_KEY = 'ZUkxeb4p-LrOetbHE';
+  var EMAILJS_SERVICE_ID = 'service_7s9tj4j';
+  var EMAILJS_TEMPLATE_ID = 'template_gkq401s';
+
+  try { emailjs.init(EMAILJS_PUBLIC_KEY); } catch (e) { console.warn('EmailJS init failed:', e); }
+
   var form = document.getElementById('feedback-form');
   var submitBtn = document.getElementById('fb-submit-btn');
   var successEl = document.getElementById('fb-success');
@@ -225,20 +232,21 @@ html[data-theme="light"] .fb-select{background-image:url("data:image/svg+xml,%3C
     submitBtn.textContent = 'Sending…';
     submitBtn.disabled = true;
 
-    var data = new FormData(form);
+    var type = form.querySelector('input[name="type"]:checked').value;
+    var name = document.getElementById('fb-name').value.trim() || '(anonymous)';
+    var email = document.getElementById('fb-email').value.trim() || '(not provided)';
 
-    fetch('https://formspree.io/kltrinh@gmail.com', {
-      method: 'POST',
-      body: data,
-      headers: { 'Accept': 'application/json' }
+    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+      to_email: 'kim.x.trinh@kp.org',
+      title: 'Feedback: ' + type,
+      description: msg,
+      location: 'Feedback Page',
+      room: name + ' / ' + email,
+      priority: type
     })
-    .then(function (res) {
-      if (res.ok) {
-        form.style.display = 'none';
-        successEl.style.display = 'block';
-      } else {
-        return res.json().then(function (j) { throw j; });
-      }
+    .then(function () {
+      form.style.display = 'none';
+      successEl.style.display = 'block';
     })
     .catch(function () {
       submitBtn.textContent = 'Send Feedback →';
