@@ -19,13 +19,11 @@
 }
 body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
 
-/* ===== SHARED NEW NAV — grouped ===== */
+/* ===== SHARED NAV — matches all other pages ===== */
 .sitenav{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;font-family:'DM Sans',system-ui,sans-serif}
-.sitenav-inner{max-width:1200px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:4px;height:48px;overflow:hidden}
-.nav-logo{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;color:#3b82f6;white-space:nowrap;flex-shrink:0;text-decoration:none;display:flex;align-items:center;gap:6px}
-.nav-logo .logo-text{font-family:var(--sans);font-size:12px;font-weight:600;color:var(--text2)}
-.nav-sep{width:1px;height:20px;background:var(--border);margin:0 4px;flex-shrink:0}
-.nav-group{display:flex;gap:2px;align-items:center}
+.sitenav-inner{max-width:1200px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:12px;height:48px;overflow-x:auto}
+.nav-logo{font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:#3b82f6;white-space:nowrap;flex-shrink:0;text-decoration:none}
+.nav-links{display:flex;gap:2px;align-items:center;overflow-x:auto}
 .nav-link{padding:5px 10px;border-radius:6px;font-size:12px;font-weight:600;color:var(--text2);text-decoration:none;white-space:nowrap;transition:all .15s}
 .nav-link:hover{background:var(--surface2);color:var(--text)}
 .nav-link.active{background:#1d4ed8;color:#fff}
@@ -223,25 +221,20 @@ main{max-width:1100px;margin:0 auto;padding:22px 24px 80px}
 </head>
 <body>
 
-<!-- NAV — grouped with all links -->
 <nav class="sitenav">
   <div class="sitenav-inner">
-    <a class="nav-logo" href="index.html">⚡ <span class="logo-text">ER Toolkit</span></a>
-    <span class="nav-sep"></span>
-    <div class="nav-group">
-      <a class="nav-link active" href="index.html">Home</a>
-      <a class="nav-link" href="dotphrase.html">Docs</a>
-      <a class="nav-link" href="calculators.html">Calcs</a>
-      <a class="nav-link" href="rsi.html">Resus</a>
-      <a class="nav-link" href="algorithms.html">Algos</a>
-      <a class="nav-link" href="neurohub.html">Neuro</a>
-    </div>
-    <span class="nav-sep"></span>
-    <div class="nav-group">
-      <a class="nav-link" href="ed-phone-directory.html">Directory</a>
-      <a class="nav-link" href="service-agreements.html">Agreements</a>
-      <a class="nav-link" href="service-requests.html">Requests</a>
-      <a class="nav-link" href="links.html">Links</a>
+    <a class="nav-logo" href="index.html">⚡</a>
+    <div class="nav-links">
+      <a class="nav-link active" href="index.html">🏠 Home</a>
+      <a class="nav-link" href="dotphrase.html">🧾 Documentation</a>
+      <a class="nav-link" href="calculators.html">🧮 Decision Support</a>
+      <a class="nav-link" href="rsi.html">🚨 Resuscitation</a>
+      <a class="nav-link" href="algorithms.html">🔀 Algorithms</a>
+      <a class="nav-link" href="neurohub.html">🧠 Neuro Hub</a>
+      <a class="nav-link" href="service-agreements.html">📑 Service Agreements</a>
+      <a class="nav-link" href="ed-phone-directory.html">📞 Directory</a>
+      <a class="nav-link" href="service-requests.html">📋 Requests</a>
+      <a class="nav-link" href="links.html">🔗 Links</a>
     </div>
   </div>
 </nav>
