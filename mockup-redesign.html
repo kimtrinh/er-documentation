@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MOCKUP — Redesigned Homepage</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap');
+
+/* ═══════════════════════════════════════════
+   DESIGN TOKENS (single source of truth)
+   ═══════════════════════════════════════════ */
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080f1a;--surface:#0d1829;--surface2:#111f35;--surface3:#162540;
+  --border:#1a2d48;--border2:#243d5c;
+  --text:#e8f0fc;--text2:#8fa8c8;--text3:#4a6280;
+  --text-blue:#93c5fd;--text-blue-bright:#bfdbfe;
+  --blue:#3b82f6;--blue2:#1d4ed8;--blue3:#0d2038;
+  --green:#22c55e;--green2:#15803d;--green3:#0d2d1f;
+  --amber:#f59e0b;--red:#ef4444;--purple:#a78bfa;--cyan:#22d3ee;
+  --mono:'JetBrains Mono',monospace;
+  --sans:'DM Sans',system-ui,sans-serif;
+  /* Spacing scale */
+  --sp-xs:4px;--sp-sm:8px;--sp-md:16px;--sp-lg:24px;--sp-xl:32px;--sp-2xl:48px;
+  /* Radius */
+  --r-sm:6px;--r-md:10px;--r-lg:14px;--r-pill:20px;
+}
+
+html[data-theme="light"]{
+  --bg:#f0f4f8;--surface:#ffffff;--surface2:#f1f5f9;--surface3:#e2e8f0;
+  --border:#e2e8f0;--border2:#94a3b8;
+  --text:#0f172a;--text2:#334155;--text3:#64748b;
+  --text-blue:#1d4ed8;--text-blue-bright:#1e40af;
+  --blue:#2563eb;--blue2:#1d4ed8;--blue3:#dbeafe;
+  --green:#16a34a;--green2:#15803d;--green3:#dcfce7;
+  --amber:#d97706;--red:#dc2626;--purple:#7c3aed;--cyan:#0891b2;
+}
+
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
+
+/* ═══════════════════════════════════════════
+   NAVIGATION — cleaner, grouped
+   ═══════════════════════════════════════════ */
+.sitenav{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.sitenav-inner{max-width:1100px;margin:0 auto;padding:0 var(--sp-lg);display:flex;align-items:center;height:48px;gap:var(--sp-sm)}
+.nav-logo{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--blue);text-decoration:none;flex-shrink:0;display:flex;align-items:center;gap:6px}
+.nav-logo .logo-text{color:var(--text2);font-size:12px;font-weight:600;font-family:var(--sans)}
+.nav-group{display:flex;gap:2px;align-items:center;padding:0 var(--sp-sm)}
+.nav-sep{width:1px;height:20px;background:var(--border);margin:0 var(--sp-xs);flex-shrink:0}
+.nav-link{padding:6px 10px;border-radius:var(--r-sm);font-size:12px;font-weight:600;color:var(--text2);text-decoration:none;white-space:nowrap;transition:all .15s}
+.nav-link:hover{background:var(--surface2);color:var(--text)}
+.nav-link.active{background:var(--blue2);color:#fff}
+.nav-right{margin-left:auto;display:flex;gap:var(--sp-sm);align-items:center}
+.theme-btn{width:34px;height:34px;border-radius:50%;border:1px solid var(--border);background:var(--surface);color:var(--text2);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.theme-btn:hover{background:var(--surface2);border-color:var(--border2);transform:scale(1.08)}
+
+/* ═══════════════════════════════════════════
+   SEARCH HERO
+   ═══════════════════════════════════════════ */
+@keyframes pgFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.search-hero{background:linear-gradient(160deg,#0f1e38 0%,#0a1425 60%,var(--bg) 100%);border-bottom:1px solid var(--border);padding:var(--sp-xl) 0 var(--sp-lg);animation:pgFade .35s ease both}
+html[data-theme="light"] .search-hero{background:linear-gradient(160deg,#e0e7f1 0%,#edf2f7 60%,var(--bg) 100%)}
+.search-hero-inner{max-width:1100px;margin:0 auto;padding:0 var(--sp-lg)}
+.search-label{font-size:18px;font-weight:800;color:var(--text);letter-spacing:-.02em;margin-bottom:2px}
+.search-sublabel{font-size:12px;color:var(--text3);margin-bottom:var(--sp-md)}
+.search-wrap{position:relative;width:100%}
+.search-input{width:100%;padding:14px 110px 14px 48px;background:var(--surface);border:1.5px solid var(--border2);border-radius:12px;color:var(--text);font-size:16px;font-family:var(--sans);outline:none;transition:border-color .2s,box-shadow .2s;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.search-input:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(59,130,246,.18),0 4px 16px rgba(0,0,0,.3)}
+.search-input::placeholder{color:var(--text3)}
+.search-icon{position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:18px;pointer-events:none;color:var(--text3)}
+.search-shortcut{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:11px;color:var(--text3);font-family:var(--mono);background:var(--surface2);border:1px solid var(--border);padding:3px 8px;border-radius:5px;pointer-events:none}
+.chips{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
+.chip{padding:5px 13px;border-radius:var(--r-pill);border:1px solid var(--border);background:transparent;color:var(--text3);font-size:11px;font-weight:600;cursor:pointer;transition:all .15s;font-family:var(--sans)}
+.chip:hover{border-color:var(--border2);color:var(--text2);background:var(--surface2)}
+.chip.on{border-color:var(--blue);background:var(--blue3);color:#38bdf8}
+html[data-theme="light"] .chip.on{color:var(--blue)}
+
+/* ═══════════════════════════════════════════
+   MAIN CONTENT
+   ═══════════════════════════════════════════ */
+main{max-width:1100px;margin:0 auto;padding:var(--sp-lg) var(--sp-lg) 80px;animation:pgFade .35s ease both;animation-delay:.08s}
+.sec-head{display:flex;align-items:center;gap:10px;margin:var(--sp-lg) 0 12px}
+.sec-head h2{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--text3);white-space:nowrap}
+.sec-head::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* ═══════════════════════════════════════════
+   TOOL CARDS — tiered hierarchy
+   ═══════════════════════════════════════════ */
+
+/* Hero cards (top 2) */
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.tc{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:var(--sp-md) 18px;transition:all .18s;text-decoration:none;display:flex;flex-direction:column;gap:6px;box-shadow:0 1px 4px rgba(0,0,0,.2);position:relative;overflow:hidden}
+.tc::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px 0 0 3px}
+.tc:hover{border-color:var(--border2);background:var(--surface2);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.35)}
+.tc:hover .tc-arr{color:var(--blue);transform:translateX(3px)}
+
+/* Category accent colors */
+.tc.cat-docs::before{background:#3b82f6}
+.tc.cat-calc::before{background:#22c55e}
+.tc.cat-drug::before{background:#f97316}
+.tc.cat-resus::before{background:#ef4444}
+.tc.cat-algo::before{background:#22d3ee}
+.tc.cat-neuro::before{background:#a78bfa}
+.tc.cat-peds::before{background:#f59e0b}
+.tc.cat-agree::before{background:#c084fc}
+.tc.cat-phone::before{background:#fbbf24}
+.tc.cat-links::before{background:#64748b}
+
+/* Hero card specific */
+.hero-grid .tc{padding:20px 22px;gap:8px}
+.hero-grid .tc-ico{font-size:28px}
+.hero-grid .tc-name{font-size:16px;font-weight:800;color:var(--text)}
+.hero-grid .tc-desc{font-size:12px;color:var(--text2);line-height:1.5;flex:1}
+.hero-grid .tc-meta{display:flex;align-items:center;margin-top:4px}
+.hero-grid .tc-count{font-size:11px;color:var(--text3);font-family:var(--mono);font-weight:600}
+.hero-grid .tc-arr{font-size:16px;margin-left:auto;color:var(--border2);transition:all .18s}
+
+/* Standard cards */
+.tool-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}
+.tool-grid .tc-ico{font-size:22px}
+.tool-grid .tc-name{font-size:13px;font-weight:700;color:var(--text)}
+.tool-grid .tc-desc{font-size:11px;color:var(--text3);line-height:1.4;flex:1}
+.tool-grid .tc-meta{display:flex;align-items:center;margin-top:2px}
+.tool-grid .tc-count{font-size:10px;color:var(--text3);font-family:var(--mono)}
+.tool-grid .tc-arr{margin-left:auto;color:var(--border2);font-size:13px;transition:all .18s}
+
+/* NEW badge */
+.badge-new{position:absolute;top:10px;right:10px;background:#7e22ce;color:#fff;font-size:9px;font-weight:800;padding:2px 7px;border-radius:var(--r-pill);letter-spacing:.5px}
+
+/* ═══════════════════════════════════════════
+   PINNED / QUICK ACCESS — compact strip
+   ═══════════════════════════════════════════ */
+.pinned-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}
+.pin{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:10px 14px;text-decoration:none;transition:all .15s;display:block}
+.pin:hover{border-color:var(--border2);background:var(--surface2);transform:translateY(-1px)}
+.pin-title{font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pin-sub{font-size:10px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pin-tag{display:inline-block;font-size:9px;padding:1px 6px;border-radius:var(--r-pill);font-weight:700;margin-top:4px}
+.pin-tag.blue{background:var(--blue3);color:#38bdf8}
+.pin-tag.green{background:var(--green3);color:#4ade80}
+.pin-tag.orange{background:#2d1f0d;color:#fb923c}
+.pin-tag.purple{background:#1f0d2d;color:#e879f9}
+html[data-theme="light"] .pin-tag.blue{background:#dbeafe;color:#1d4ed8}
+html[data-theme="light"] .pin-tag.green{background:#dcfce7;color:#15803d}
+html[data-theme="light"] .pin-tag.orange{background:#fff7ed;color:#c2410c}
+html[data-theme="light"] .pin-tag.purple{background:#faf5ff;color:#7c3aed}
+
+/* ═══════════════════════════════════════════
+   ANNOUNCEMENT — collapsed by default
+   ═══════════════════════════════════════════ */
+.announcement-bar{background:var(--surface);border:1px solid rgba(245,158,11,.3);border-radius:var(--r-md);overflow:hidden;margin-top:var(--sp-sm)}
+.announcement-trigger{display:flex;align-items:center;gap:10px;padding:12px 16px;cursor:pointer;transition:background .15s;user-select:none;width:100%;border:none;background:transparent;color:var(--text);font-family:var(--sans);text-align:left}
+.announcement-trigger:hover{background:var(--surface2)}
+.announcement-trigger .arrow{font-size:12px;color:var(--text3);transition:transform .2s;flex-shrink:0}
+.announcement-trigger.open .arrow{transform:rotate(90deg)}
+.announcement-label{font-size:12px;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:.5px}
+.announcement-hint{font-size:11px;color:var(--text3);margin-left:auto}
+.announcement-body{display:none;padding:0 16px 14px;border-top:1px solid var(--border)}
+.announcement-body.open{display:block;padding-top:14px}
+
+/* ═══════════════════════════════════════════
+   MOCKUP BANNER (remove in real implementation)
+   ═══════════════════════════════════════════ */
+.mockup-banner{background:linear-gradient(135deg,#7e22ce,#4f46e5);color:#fff;text-align:center;padding:10px;font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase}
+.mockup-banner span{opacity:.7;font-weight:400;text-transform:none;margin-left:8px}
+
+/* ═══════════════════════════════════════════
+   COMPARISON TOGGLE
+   ═══════════════════════════════════════════ */
+.comparison-bar{background:var(--surface2);border-bottom:1px solid var(--border);padding:8px var(--sp-lg);display:flex;align-items:center;justify-content:center;gap:12px}
+.comparison-bar label{font-size:12px;color:var(--text2);font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px}
+.comparison-bar input{accent-color:var(--blue)}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════ */
+@media(max-width:768px){
+  .hero-grid{grid-template-columns:1fr}
+  .tool-grid{grid-template-columns:1fr 1fr}
+  .pinned-grid{grid-template-columns:1fr 1fr}
+  .nav-group:not(:first-child){display:none}
+}
+@media(max-width:480px){
+  .tool-grid{grid-template-columns:1fr}
+  .pinned-grid{grid-template-columns:1fr}
+  .search-shortcut{display:none}
+  .search-hero{padding:var(--sp-lg) 0 var(--sp-md)}
+  main{padding:var(--sp-md) var(--sp-md) 80px}
+}
+
+/* ═══════════════════════════════════════════
+   MOBILE BOTTOM NAV
+   ═══════════════════════════════════════════ */
+@media(max-width:640px){
+  .mobile-nav{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);display:flex;padding:6px 0 calc(6px + env(safe-area-inset-bottom));z-index:100}
+  .mob-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 0;font-size:9px;font-weight:700;color:var(--text3);text-decoration:none;text-transform:uppercase;min-height:48px;justify-content:center}
+  .mob-item.active{color:var(--blue)}
+  .mob-icon{font-size:18px}
+  main{padding-bottom:90px}
+}
+@media(min-width:641px){.mobile-nav{display:none}}
+</style>
+<script>
+  // Theme from localStorage
+  const saved = localStorage.getItem('theme');
+  if (saved) document.documentElement.setAttribute('data-theme', saved);
+</script>
+</head>
+<body>
+
+<!-- MOCKUP LABEL -->
+<div class="mockup-banner">
+  Redesign Mockup <span>— this is a standalone preview, not the live site</span>
+</div>
+
+<!-- THEME COMPARISON TOGGLE -->
+<div class="comparison-bar">
+  <label><input type="checkbox" id="themeToggle" onchange="toggleTheme()"> Toggle Light Mode</label>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     NAVIGATION — cleaner, grouped, shorter labels
+     ═══════════════════════════════════════════ -->
+<nav class="sitenav">
+  <div class="sitenav-inner">
+    <a class="nav-logo" href="#">
+      <span style="font-size:18px">&#9889;</span>
+      <span class="logo-text">ER Toolkit</span>
+    </a>
+    <span class="nav-sep"></span>
+    <!-- Clinical group -->
+    <div class="nav-group">
+      <a class="nav-link active" href="index.html">Home</a>
+      <a class="nav-link" href="dotphrase.html">Docs</a>
+      <a class="nav-link" href="calculators.html">Calcs</a>
+      <a class="nav-link" href="rsi.html">Resus</a>
+      <a class="nav-link" href="algorithms.html">Algos</a>
+      <a class="nav-link" href="neurohub.html">Neuro</a>
+    </div>
+    <span class="nav-sep"></span>
+    <!-- Resources group -->
+    <div class="nav-group">
+      <a class="nav-link" href="ed-phone-directory.html">Directory</a>
+      <a class="nav-link" href="service-agreements.html">Agreements</a>
+      <a class="nav-link" href="links.html">Links</a>
+    </div>
+    <div class="nav-right">
+      <button class="theme-btn" onclick="toggleTheme()" title="Toggle theme">&#9790;</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════
+     SEARCH HERO — same great concept, refined
+     ═══════════════════════════════════════════ -->
+<div class="search-hero">
+  <div class="search-hero-inner">
+    <div class="search-label">Emergency Medicine Toolkit</div>
+    <div class="search-sublabel">OMC &middot; FMC &mdash; search dotphrases, calculators, drugs, algorithms, and phone numbers</div>
+    <div class="search-wrap">
+      <span class="search-icon">&#128269;</span>
+      <input class="search-input" type="text"
+        placeholder="Search everything — e.g. PE, ketamine, ortho, HEART score..."
+        autocomplete="off" readonly/>
+      <span class="search-shortcut">&#8984;K</span>
+    </div>
+    <div class="chips">
+      <button class="chip on">All</button>
+      <button class="chip">Dotphrases</button>
+      <button class="chip">Calculators</button>
+      <button class="chip">Drugs</button>
+      <button class="chip">Algorithms</button>
+      <button class="chip">Neuro</button>
+      <button class="chip">Phones</button>
+    </div>
+
+    <!-- ANNOUNCEMENT — under search bar -->
+    <div class="announcement-bar" style="margin-top:16px">
+      <button class="announcement-trigger" onclick="toggleAnnouncement(this)">
+        <span class="arrow">&#9654;</span>
+        <span class="announcement-label">&#128680; Announcements</span>
+        <span class="announcement-hint">&#128274; Locked &mdash; click to expand</span>
+      </button>
+      <div class="announcement-body" id="announcementBody">
+        <div style="padding:12px 0;text-align:center;color:var(--text3);font-size:13px">
+          Enter unlock code to view and edit announcements.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     MAIN CONTENT
+     ═══════════════════════════════════════════ -->
+<main>
+
+  <!-- CORE TOOLS — tiered hierarchy -->
+  <div class="sec-head"><h2>Core Tools</h2></div>
+
+  <!-- Tier 1: Hero cards (2-up, larger) -->
+  <div class="hero-grid">
+    <a class="tc cat-docs" href="#">
+      <div class="tc-ico">&#128203;</div>
+      <div class="tc-name">Dotphrases</div>
+      <div class="tc-desc">Rule-out documentation templates across 20 clinical categories. Copy-paste ready for your notes.</div>
+      <div class="tc-meta">
+        <span class="tc-count">127 phrases</span>
+        <span class="tc-arr">&rarr;</span>
+      </div>
+    </a>
+    <a class="tc cat-calc" href="#">
+      <div class="tc-ico">&#129518;</div>
+      <div class="tc-name">Clinical Calculators</div>
+      <div class="tc-desc">HEART, Wells PE/DVT, PERC, PECARN, CHA&#8322;DS&#8322;-VASc, Canadian CT Head, Centor, LRINEC</div>
+      <div class="tc-meta">
+        <span class="tc-count">13 calculators</span>
+        <span class="tc-arr">&rarr;</span>
+      </div>
+    </a>
+  </div>
+
+  <!-- Tier 2: Clinical tools (4-up) -->
+  <div class="tool-grid">
+    <a class="tc cat-drug" href="#">
+      <div class="tc-ico">&#128138;</div>
+      <div class="tc-name">Vasopressors</div>
+      <div class="tc-desc">Weight-based drip dosing + push-dose calculations</div>
+      <div class="tc-meta">
+        <span class="tc-count">8 agents</span>
+        <span class="tc-arr">&rarr;</span>
+      </div>
+    </a>
+    <a class="tc cat-resus" href="#">
+      <div class="tc-ico">&#129723;</div>
+      <div class="tc-name">RSI</div>
+      <div class="tc-desc">Induction + paralytic dosing, airway flags</div>
+      <div class="tc-meta">
+        <span class="tc-count">Weight-based</span>
+        <span class="tc-arr">&rarr;</span>
+      </div>
+    </a>
+    <a class="tc cat-algo" href="#">
+      <div class="tc-ico">&#128256;</div>
+      <div class="tc-name">Algorithms</div>
+      <div class="tc-desc">ED Practice Guideline visual flowcharts</div>
+      <div class="tc-meta">
+        <span class="tc-count">7 algorithms</span>
+        <span class="tc-arr">&rarr;</span>
+      </div>
+    </a>
+    <a class="tc cat-neuro" href="#">
+      <div class="tc-ico">&#129504;</div>
+      <div class="tc-name">Neuro Hub</div>
+      <div class="tc-desc">ICH, tPA criteria, reversal, stroke triage</div>
+      <div class="tc-meta">
+        <span class="tc-count">ICH &middot; tPA &middot; Reversal</span>
+        <span class="tc-arr">&rarr;</span>
+      </div>
+    </a>
+  </div>
+
+  <!-- Tier 3: Secondary tools (4-up) -->
+  <div class="tool-grid">
+    <a class="tc cat-peds" href="#">
+      <div class="tc-ico">&#127777;&#65039;</div>
+      <div class="tc-name">Peds Fever</div>
+      <div class="tc-desc">CA FIRST age-stratified workup</div>
+      <div class="tc-meta">
+        <span class="tc-count">Age-stratified</span>
+        <span class="tc-arr">&rarr;</span>
+      </div>
+    </a>
+    <a class="tc cat-agree" href="#">
+      <span class="badge-new">NEW</span>
+      <div class="tc-ico">&#129309;</div>
+      <div class="tc-name">Service Agreements</div>
+      <div class="tc-desc">Consult criteria &amp; escalation by specialty</div>
+      <div class="tc-meta">
+        <span class="tc-count" style="color:var(--purple)">Add yours</span>
+        <span class="tc-arr">&rarr;</span>
+      </div>
+    </a>
+    <a class="tc cat-phone" href="#">
+      <div class="tc-ico">&#128222;</div>
+      <div class="tc-name">Phone Directory</div>
+      <div class="tc-desc">OMC &amp; FMC — all extensions, pagers, lines</div>
+      <div class="tc-meta">
+        <span class="tc-count">200+ contacts</span>
+        <span class="tc-arr">&rarr;</span>
+      </div>
+    </a>
+    <a class="tc cat-links" href="#">
+      <div class="tc-ico">&#128279;</div>
+      <div class="tc-name">Links &amp; Resources</div>
+      <div class="tc-desc">Curated external references &amp; tools</div>
+      <div class="tc-meta">
+        <span class="tc-count">External</span>
+        <span class="tc-arr">&rarr;</span>
+      </div>
+    </a>
+  </div>
+
+  <!-- PINNED / QUICK ACCESS — compact strip replaces two-column panels -->
+  <div class="sec-head"><h2>Quick Access</h2></div>
+  <div class="pinned-grid">
+    <a class="pin" href="#">
+      <div class="pin-title">PE Rule-Out</div>
+      <div class="pin-sub">PERC &middot; Wells &middot; low probability</div>
+      <span class="pin-tag blue">.nope</span>
+    </a>
+    <a class="pin" href="#">
+      <div class="pin-title">ACS Rule-Out</div>
+      <div class="pin-sub">HEART score &middot; serial troponins</div>
+      <span class="pin-tag blue">.noacs</span>
+    </a>
+    <a class="pin" href="#">
+      <div class="pin-title">SAH Rule-Out</div>
+      <div class="pin-sub">Ottawa rule &middot; thunderclap HA</div>
+      <span class="pin-tag blue">.nosah</span>
+    </a>
+    <a class="pin" href="#">
+      <div class="pin-title">HEART Score</div>
+      <div class="pin-sub">ACS chest pain risk stratification</div>
+      <span class="pin-tag green">Calc</span>
+    </a>
+    <a class="pin" href="#">
+      <div class="pin-title">ICH Protocol</div>
+      <div class="pin-sub">BP targets &middot; reversal &middot; neurosurg</div>
+      <span class="pin-tag purple">Neuro</span>
+    </a>
+    <a class="pin" href="#">
+      <div class="pin-title">Norepinephrine</div>
+      <div class="pin-sub">0.01&ndash;3 mcg/kg/min &middot; septic shock</div>
+      <span class="pin-tag orange">Vaso</span>
+    </a>
+  </div>
+
+
+</main>
+
+<!-- MOBILE BOTTOM NAV — with "More" item -->
+<div class="mobile-nav">
+  <a class="mob-item active" href="#"><span class="mob-icon">&#127968;</span>Home</a>
+  <a class="mob-item" href="#"><span class="mob-icon">&#128203;</span>Docs</a>
+  <a class="mob-item" href="#"><span class="mob-icon">&#129518;</span>Calcs</a>
+  <a class="mob-item" href="#"><span class="mob-icon">&#128680;</span>Resus</a>
+  <a class="mob-item" href="#"><span class="mob-icon">&#128222;</span>Directory</a>
+</div>
+
+<script>
+function toggleTheme() {
+  const html = document.documentElement;
+  const current = html.getAttribute('data-theme');
+  const next = current === 'light' ? 'dark' : 'light';
+  html.setAttribute('data-theme', next);
+  localStorage.setItem('theme', next);
+  const cb = document.getElementById('themeToggle');
+  if (cb) cb.checked = (next === 'light');
+}
+
+function toggleAnnouncement(btn) {
+  btn.classList.toggle('open');
+  const body = document.getElementById('announcementBody');
+  body.classList.toggle('open');
+}
+
+// Sync checkbox with current theme
+document.addEventListener('DOMContentLoaded', () => {
+  const cb = document.getElementById('themeToggle');
+  if (cb) cb.checked = document.documentElement.getAttribute('data-theme') === 'light';
+});
+</script>
+</body>
+</html>
