@@ -9,149 +9,139 @@
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=DM+Sans:wght@400;500;600;700;800&display=swap');
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#080f1a;--surface:#0d1829;--surface2:#111f35;--surface3:#162540;
+  --bg:#080f1a;--surface:#0d1829;--surface2:#111f35;
   --border:#1a2d48;--border2:#243d5c;
-  --text:#e8f0fc;--text2:#8fa8c8;--text3:#4a6280;--text-blue:#93c5fd;--text-blue-bright:#bfdbfe;
+  --text:#e8f0fc;--text2:#8fa8c8;--text3:#4a6280;
   --blue:#3b82f6;--blue2:#1d4ed8;--blue3:#0d2038;
   --green:#16a34a;--greenSoft:#052e16;--greenBorder:#15803d;
   --amber:#f59e0b;--amberSoft:#2b1f0a;--amberBorder:#b45309;
   --red:#ef4444;--redSoft:#2f1114;--redBorder:#b91c1c;
+  --purple:#a855f7;--purpleSoft:#1e0a38;--purpleBorder:#7c3aed;
+  --teal:#14b8a6;--tealSoft:#022827;--tealBorder:#0d9488;
+  --orange:#f97316;--orangeSoft:#2c1206;--orangeBorder:#c2410c;
   --mono:'JetBrains Mono',monospace;--sans:'DM Sans',system-ui,sans-serif;
 }
 body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
-.sitenav{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;font-family:'DM Sans',system-ui,sans-serif}
+
+/* NAV */
+.sitenav{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;font-family:var(--sans)}
 .sitenav-inner{max-width:1200px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:6px;height:46px;overflow:hidden}
-.nav-logo{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:#3b82f6;white-space:nowrap;flex-shrink:0;text-decoration:none;margin-right:6px}
-.nav-logo span{color:var(--text3)}
-.nav-links{display:flex;flex:1;min-width:0;gap:1px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;white-space:nowrap;padding-right:10px}
+.nav-logo{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--blue);white-space:nowrap;flex-shrink:0;text-decoration:none;margin-right:6px}
+.nav-links{display:flex;flex:1;min-width:0;gap:1px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;white-space:nowrap}
 .nav-links::-webkit-scrollbar{display:none}
-.nav-link{padding:5px 10px;border-radius:6px;font-size:12px;font-weight:600;color:var(--text2);text-decoration:none;white-space:nowrap;transition:all .15s}
+.nav-link{padding:5px 10px;border-radius:6px;font-size:12px;font-weight:600;color:var(--text2);text-decoration:none;white-space:nowrap;transition:.15s}
 .nav-link:hover{background:var(--surface2);color:var(--text)}
 .nav-link.active{background:#1d4ed8;color:#fff}
-@media(max-width:640px){.nav-link{font-size:11px;padding:4px 8px}}
 
+/* HEADER */
 header{background:linear-gradient(160deg,#0f1e38 0%,#080f1a 100%);border-bottom:1px solid var(--border);padding:22px 20px}
 .header-inner{max-width:1280px;margin:0 auto}
 .kicker{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.9px;font-weight:700}
-h1{font-size:29px;line-height:1.15;margin-top:6px}
-.subtitle{font-size:13px;color:var(--text2);margin-top:8px}
-.banner{margin-top:14px;background:#2d1f0d;border:1px solid #a16207;color:#fcd34d;padding:10px 12px;border-radius:10px;font-size:13px;font-weight:600}
-.legend{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
-.legend-pill{font-size:11px;font-weight:700;border-radius:999px;padding:5px 10px;border:1px solid transparent}
-.legend-green{background:var(--greenSoft);border-color:var(--greenBorder);color:#86efac}
-.legend-yellow{background:var(--amberSoft);border-color:var(--amberBorder);color:#fcd34d}
-.legend-red{background:var(--redSoft);border-color:var(--redBorder);color:#fca5a5}
+h1{font-size:28px;line-height:1.15;margin-top:6px}
+.subtitle{font-size:13px;color:var(--text2);margin-top:6px}
+.banner{margin-top:12px;background:#2d1f0d;border:1px solid #a16207;color:#fcd34d;padding:10px 12px;border-radius:10px;font-size:13px;font-weight:600}
 
-main{max-width:1280px;margin:0 auto;padding:20px}
-.controls{display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-bottom:14px}
+/* LAYOUT */
+main{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-columns:290px minmax(0,1fr);gap:14px;align-items:start}
+
+/* LEFT LIST PANEL */
+.list-panel{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;position:sticky;top:56px;max-height:calc(100vh - 72px);display:flex;flex-direction:column}
+.list-search{padding:10px;border-bottom:1px solid var(--border)}
 .search-wrap{position:relative}
-.search-input{width:100%;padding:14px 14px 14px 44px;border-radius:12px;border:1px solid var(--border2);background:var(--surface);color:var(--text);font-size:15px;outline:none}
-.search-input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(59,130,246,.2)}
-.search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:16px;color:var(--text3)}
-.right-controls{display:flex;gap:10px;align-items:center;justify-content:flex-end;flex-wrap:wrap}
-.select{padding:10px 12px;background:var(--surface);border:1px solid var(--border2);border-radius:10px;color:var(--text);font-size:13px}
-.toggle{display:flex;align-items:center;gap:6px;color:var(--text2);font-size:13px;white-space:nowrap}
+.list-search input{width:100%;padding:8px 10px 8px 32px;border-radius:8px;border:1px solid var(--border2);background:var(--surface2);color:var(--text);font-size:12px;outline:none;font-family:var(--sans)}
+.list-search input:focus{border-color:var(--blue)}
+.search-icon{position:absolute;left:9px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--text3)}
+.list-items{overflow-y:auto;padding:8px;display:flex;flex-direction:column;gap:5px}
+.list-item{padding:9px 11px;border-radius:9px;border:1px solid var(--border);background:var(--surface2);cursor:pointer;transition:.15s;user-select:none}
+.list-item:hover{border-color:var(--border2)}
+.list-item.active{border-color:var(--blue);background:#0e1f38;box-shadow:0 0 0 1px rgba(59,130,246,.2)}
+.li-title{font-size:12px;font-weight:700;color:var(--text);line-height:1.3}
+.li-meta{display:flex;align-items:center;gap:6px;margin-top:5px;flex-wrap:wrap}
+.li-badge{font-size:10px;font-weight:700;border-radius:999px;padding:2px 7px;border:1px solid transparent}
+.li-badge.green{background:var(--greenSoft);border-color:var(--greenBorder);color:#86efac}
+.li-badge.yellow{background:var(--amberSoft);border-color:var(--amberBorder);color:#fcd34d}
+.li-badge.red{background:var(--redSoft);border-color:var(--redBorder);color:#fca5a5}
+.li-badge.purple{background:var(--purpleSoft);border-color:var(--purpleBorder);color:#d8b4fe}
+.li-badge.teal{background:var(--tealSoft);border-color:var(--tealBorder);color:#5eead4}
+.li-badge.orange{background:var(--orangeSoft);border-color:var(--orangeBorder);color:#fdba74}
+.li-dept{font-size:10px;color:var(--text3)}
 
-.filters{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
-.filter-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px}
-.filter-title{font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:var(--text3);font-weight:700;margin-bottom:8px}
-.chips{display:flex;flex-wrap:wrap;gap:6px}
-.chip{padding:5px 10px;border:1px solid var(--border2);border-radius:16px;background:transparent;color:var(--text2);font-size:11px;cursor:pointer;transition:.15s;font-family:var(--sans)}
-.chip:hover{border-color:#375376;color:var(--text)}
-.chip.on{background:var(--blue3);border-color:var(--blue);color:#93c5fd}
+/* DETAIL PANE */
+.detail{display:flex;flex-direction:column;gap:12px}
+.agreement-panel{display:none;flex-direction:column;gap:12px}
+.agreement-panel.active{display:flex}
 
-.meta-row{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
-.result-count{font-size:13px;color:var(--text2)}
-.small-note{font-size:11px;color:var(--text3)}
+/* Info card */
+.info-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:14px}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.card-title{font-size:21px;font-weight:800;line-height:1.2;color:var(--text)}
+.card-dept{font-size:11px;color:var(--text3);font-family:var(--mono);margin-top:4px;letter-spacing:.04em}
+.decision-badge{font-size:12px;font-weight:700;border-radius:999px;padding:7px 14px;border:1px solid transparent;white-space:nowrap;flex-shrink:0}
+.decision-badge.red{background:var(--redSoft);border-color:var(--redBorder);color:#fca5a5}
+.decision-badge.green{background:var(--greenSoft);border-color:var(--greenBorder);color:#86efac}
+.decision-badge.yellow{background:var(--amberSoft);border-color:var(--amberBorder);color:#fcd34d}
+.decision-badge.purple{background:var(--purpleSoft);border-color:var(--purpleBorder);color:#d8b4fe}
+.decision-badge.teal{background:var(--tealSoft);border-color:var(--tealBorder);color:#5eead4}
+.decision-badge.orange{background:var(--orangeSoft);border-color:var(--orangeBorder);color:#fdba74}
 
-.workspace{display:grid;grid-template-columns:340px minmax(0,1fr);gap:12px;align-items:start}
-.result-list{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;position:sticky;top:62px;max-height:calc(100vh - 80px);display:flex;flex-direction:column}
-.result-list-head{padding:10px 12px;border-bottom:1px solid var(--border);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text3)}
-.result-list-items{overflow:auto;padding:8px;display:flex;flex-direction:column;gap:6px}
-.result-row{width:100%;text-align:left;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:9px 10px;cursor:pointer;display:flex;flex-direction:column;gap:4px}
-.result-row:hover{border-color:var(--border2)}
-.result-row.active{border-color:var(--blue);box-shadow:0 0 0 1px rgba(59,130,246,.35);background:#10203a}
-.result-row-title{font-size:12px;font-weight:700;color:var(--text);line-height:1.35}
-.result-row-meta{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.result-row-date{font-size:10px;color:var(--text3)}
-.result-row-badge{font-size:10px;font-weight:700;border-radius:999px;padding:2px 8px;border:1px solid transparent}
-.result-row-badge.green{background:var(--greenSoft);border-color:var(--greenBorder);color:#86efac}
-.result-row-badge.yellow{background:var(--amberSoft);border-color:var(--amberBorder);color:#fcd34d}
-.result-row-badge.red{background:var(--redSoft);border-color:var(--redBorder);color:#fca5a5}
-.result-row-snippet{font-size:11px;color:var(--text2);line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+/* Tags */
+.tags{display:flex;flex-wrap:wrap;gap:5px}
+.tag{font-size:10px;padding:3px 9px;border-radius:12px;font-weight:700;border:1px solid #1d4ed8;background:#0d2038;color:#93c5fd}
+.tag.red{border-color:var(--redBorder);background:var(--redSoft);color:#fca5a5}
+.tag.purple{border-color:var(--purpleBorder);background:var(--purpleSoft);color:#d8b4fe}
+.tag.teal{border-color:var(--tealBorder);background:var(--tealSoft);color:#5eead4}
+.tag.orange{border-color:var(--orangeBorder);background:var(--orangeSoft);color:#fdba74}
+.tag.yellow{border-color:var(--amberBorder);background:var(--amberSoft);color:#fcd34d}
+.tag.green{border-color:var(--greenBorder);background:var(--greenSoft);color:#86efac}
 
-.detail-pane{min-width:0}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px}
-.card:hover{border-color:var(--border2)}
-.card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
-.card-title{font-size:17px;font-weight:700;line-height:1.25}
-.card-sub{font-size:11px;color:var(--text3);font-family:var(--mono);margin-top:4px}
-.decision{font-size:11px;font-weight:700;border-radius:999px;padding:6px 10px;border:1px solid transparent;white-space:nowrap}
-.decision.green{background:var(--greenSoft);border-color:var(--greenBorder);color:#86efac}
-.decision.yellow{background:var(--amberSoft);border-color:var(--amberBorder);color:#fcd34d}
-.decision.red{background:var(--redSoft);border-color:var(--redBorder);color:#fca5a5}
-.badges{display:flex;flex-wrap:wrap;gap:6px}
-.badge{font-size:10px;padding:3px 8px;border-radius:14px;font-weight:700;border:1px solid transparent}
-.b-dept{background:#0d2038;color:#93c5fd;border-color:#1d4ed8}
-.b-tag{background:#10281d;color:#86efac;border-color:#15803d}
-.b-new{background:#1e1040;color:#c4b5fd;border-color:#7c3aed;text-transform:uppercase;letter-spacing:.06em;animation:newPulse 2.4s ease-in-out 3}
-@keyframes newPulse{0%,100%{box-shadow:none}50%{box-shadow:0 0 8px rgba(167,139,250,.6)}}
-.rr-new{display:inline-block;font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#c4b5fd;background:#1e1040;border:1px solid #7c3aed;border-radius:4px;padding:1px 5px;vertical-align:middle;margin-right:2px}
-.b-date{background:#27170d;color:#fbbf24;border-color:#a16207}
-.section{border:1px solid var(--border);border-radius:10px;overflow:hidden}
-.section summary{cursor:pointer;list-style:none;padding:9px 10px;background:var(--surface2);font-size:12px;font-weight:700;color:var(--text2)}
-.section summary::-webkit-details-marker{display:none}
-.section-body{padding:9px 10px 11px}
-.list{padding-left:17px}
-.list li{font-size:12px;color:var(--text2);line-height:1.45;margin-bottom:5px}
-.list li:last-child{margin-bottom:0}
-.checklist{list-style:none;padding-left:0}
-.checklist li{margin-bottom:6px}
-.checklist li:last-child{margin-bottom:0}
-.check-row{display:flex;align-items:flex-start;gap:8px}
-.check-row input{margin-top:2px;accent-color:var(--blue);width:15px;height:15px}
-.check-row span{display:block;font-size:12px;color:var(--text2);line-height:1.45}
-.doc-text{font-size:12px;color:var(--text2);line-height:1.45;white-space:pre-wrap}
-.section-copy{margin-top:10px}
-.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:2px}
-.btn{padding:8px 10px;border-radius:8px;border:1px solid var(--border2);background:var(--surface2);color:var(--text);font-size:12px;cursor:pointer;font-family:var(--sans)}
-.btn:hover{border-color:#41628a}
-.btn:disabled{opacity:.45;cursor:not-allowed}
-.btn-primary{background:var(--blue3);border-color:#1d4ed8;color:#bfdbfe}
+/* Summary */
+.summary-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);margin-bottom:6px}
+.summary-text{font-size:14px;color:var(--text2);line-height:1.75}
 
-.empty{border:1px dashed var(--border2);border-radius:12px;padding:28px;text-align:center;color:var(--text3);font-size:14px;background:var(--surface)}
+/* Download button */
+.download-btn{display:inline-flex;align-items:center;gap:9px;padding:11px 18px;border-radius:10px;width:fit-content;background:#0a2a0a;border:1px solid #15803d;color:#86efac;font-size:13px;font-weight:700;text-decoration:none;transition:.15s;font-family:var(--sans)}
+.download-btn:hover{background:#0d3b0d;border-color:#22c55e;box-shadow:0 0 0 3px rgba(34,197,94,.15)}
+.download-btn-sub{font-size:10px;color:#4ade80;font-weight:500;margin-top:1px}
 
-@media(max-width:900px){
-  .controls{grid-template-columns:1fr}
-  .right-controls{justify-content:flex-start}
-  .filters{grid-template-columns:1fr}
-  .workspace{grid-template-columns:1fr}
-  .result-list{position:static;max-height:none}
+.divider{border:none;border-top:1px solid var(--border)}
+.updated{font-size:11px;color:var(--text3);display:flex;align-items:center;gap:5px}
+
+/* PDF/Doc preview card */
+.pdf-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.pdf-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--border);background:var(--surface2)}
+.pdf-bar-title{font-size:12px;font-weight:700;color:var(--text2);display:flex;align-items:center;gap:7px}
+.pdf-open-link{font-size:11px;font-weight:700;color:#93c5fd;text-decoration:none;display:flex;align-items:center;gap:4px;padding:5px 10px;border-radius:7px;border:1px solid #1d4ed8;background:#0d2038;transition:.15s}
+.pdf-open-link:hover{background:#162a5a;border-color:#3b82f6}
+.pdf-iframe{width:100%;height:780px;border:none;background:#1a1a2e;display:block}
+
+/* No-doc placeholder */
+.no-doc{padding:40px 20px;text-align:center;color:var(--text3);font-size:13px;border-top:1px solid var(--border)}
+.no-doc strong{display:block;font-size:15px;color:var(--text2);margin-bottom:6px}
+
+/* Empty state */
+.empty{padding:48px 24px;text-align:center;color:var(--text3);font-size:14px}
+
+@media(max-width:860px){
+  main{grid-template-columns:1fr}
+  .list-panel{position:static;max-height:360px}
 }
 @media(max-width:500px){
-  h1{font-size:24px}
-  .card-head{flex-direction:column}
-  .decision{align-self:flex-start}
+  h1{font-size:22px}
+  .card-title{font-size:18px}
 }
-@keyframes pgFade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
-main>*{animation:pgFade .3s ease both}
-main>*:nth-child(2){animation-delay:.05s}
-main>*:nth-child(3){animation-delay:.1s}
-main>*:nth-child(4){animation-delay:.15s}
-.ag-card{box-shadow:0 1px 4px rgba(0,0,0,.2)}.ag-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.4)}
 </style>
 <link rel="stylesheet" href="mobile.css">
 <script>document.documentElement.setAttribute('data-theme',localStorage.getItem('theme')||'dark');</script>
 <link rel="manifest" href="/manifest.json">
 </head>
 <body>
+
 <nav class="sitenav">
   <div class="sitenav-inner">
     <a class="nav-logo" href="index.html">⚡</a>
     <div class="nav-links">
       <a class="nav-link" href="index.html">🏠 Home</a>
       <a class="nav-link" href="dotphrase.html">🧾 Documentation</a>
-
       <a class="nav-link" href="calculators.html">🧮 Decision Support</a>
       <a class="nav-link" href="rsi.html">🚨 Resuscitation</a>
       <a class="nav-link" href="algorithms.html">🔀 Algorithms</a>
@@ -167,910 +157,435 @@ main>*:nth-child(4){animation-delay:.15s}
 <header>
   <div class="header-inner">
     <div class="kicker">Policy Reference Library</div>
-    <h1>Service Agreements & Protocols</h1>
-    <div class="subtitle">Practical, bedside-first workflow summaries from the service agreement library (DOC/DOCX only).</div>
-    <div class="banner">Internal reference summaries. Verify the most current policy before final disposition decisions.</div>
-    <div class="legend">
-      <span class="legend-pill legend-green">GREEN = Outpt OK</span>
-      <span class="legend-pill legend-yellow">YELLOW = Consider Admission</span>
-      <span class="legend-pill legend-red">RED = Send to ED / Transfer</span>
-    </div>
+    <h1>Service Agreements &amp; Protocols</h1>
+    <div class="subtitle">Select an agreement to read the summary and view the official document inline.</div>
+    <div class="banner">Internal reference summaries only — verify the most current policy before final disposition decisions.</div>
   </div>
 </header>
 
 <main>
-  <section class="controls">
-    <div class="search-wrap">
-      <span class="search-icon">🔍</span>
-      <input id="searchInput" class="search-input" type="text" placeholder="Search title, workflow steps, red flags, treatment, disposition..." autocomplete="off"/>
-    </div>
-    <div class="right-controls">
-      <label class="toggle"><input id="olderToggle" type="checkbox"/> older than 5 years</label>
-      <select id="sortSelect" class="select" aria-label="Sort results">
-        <option value="relevance">Sort: relevance</option>
-        <option value="title">Sort: title</option>
-        <option value="last_updated" selected>Sort: last updated</option>
-      </select>
-    </div>
-  </section>
 
-  <section class="filters">
-    <div class="filter-box">
-      <div class="filter-title">Department Filters (multi-select)</div>
-      <div id="deptChips" class="chips"></div>
+  <!-- ── LEFT LIST ── -->
+  <div class="list-panel">
+    <div class="list-search">
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input id="searchInput" type="text" placeholder="Search agreements…" autocomplete="off"/>
+      </div>
     </div>
-    <div class="filter-box">
-      <div class="filter-title">Tag Filters (multi-select)</div>
-      <div id="tagChips" class="chips"></div>
-    </div>
-  </section>
+    <div class="list-items" id="listItems">
 
-  <div class="meta-row">
-    <div id="resultCount" class="result-count">Loading...</div>
-    <div class="small-note">Use checkboxes as placeholders for future automation. Open Document remains disabled until SharePoint URLs are added.</div>
+      <div class="list-item active" data-target="necfasc" data-keywords="necrotizing fasciitis soft tissue infection surgery surgical emergency gas gangrene">
+        <div class="li-title">Necrotizing Fasciitis</div>
+        <div class="li-meta">
+          <span class="li-badge red">Transfer / Surgical</span>
+          <span class="li-dept">Surgery · General</span>
+        </div>
+      </div>
+
+      <div class="list-item" data-target="pedsappendix" data-keywords="pediatric appendicitis peds surgery children appendix pas score abdominal pain transfer">
+        <div class="li-title">Pediatric Appendicitis</div>
+        <div class="li-meta">
+          <span class="li-badge purple">Peds Surgery</span>
+          <span class="li-dept">Pediatrics · Surgery</span>
+        </div>
+      </div>
+
+      <div class="list-item" data-target="urology" data-keywords="urology renal colic urolithiasis stone urinary retention hematuria torsion fournier">
+        <div class="li-title">Urology Service Agreement (2019)</div>
+        <div class="li-meta">
+          <span class="li-badge teal">Tiered Consult</span>
+          <span class="li-dept">Urology · Emergency Medicine</span>
+        </div>
+      </div>
+
+      <div class="list-item" data-target="hipfracture" data-keywords="hip fracture orthopedics ortho internal medicine surgical planning dual consult admit">
+        <div class="li-title">Hip Fracture — Ortho/Medicine</div>
+        <div class="li-meta">
+          <span class="li-badge orange">Dual Consult</span>
+          <span class="li-dept">Orthopedics · Internal Medicine</span>
+        </div>
+      </div>
+
+      <div class="list-item" data-target="dvt" data-keywords="dvt deep vein thrombosis anticoagulation outpatient enoxaparin wells score">
+        <div class="li-title">Outpatient DVT Anticoagulation</div>
+        <div class="li-meta">
+          <span class="li-badge green">Outpt OK</span>
+          <span class="li-dept">Hematology · Vascular</span>
+        </div>
+      </div>
+
+      <div class="list-item" data-target="afib" data-keywords="atrial fibrillation flutter afib rate control cardioversion diltiazem metoprolol cha2ds2">
+        <div class="li-title">Atrial Fibrillation / Flutter</div>
+        <div class="li-meta">
+          <span class="li-badge yellow">Consider Admission</span>
+          <span class="li-dept">Cardiology</span>
+        </div>
+      </div>
+
+      <div class="list-item" data-target="plos" data-keywords="prolonged ed los plos length of stay disposition hospital medicine observation cwd">
+        <div class="li-title">Prolonged ED LOS (PLOS)</div>
+        <div class="li-meta">
+          <span class="li-badge yellow">Consider Admission</span>
+          <span class="li-dept">Hospital Medicine · CWD</span>
+        </div>
+      </div>
+
+      <div class="list-item" data-target="pphtн" data-keywords="postpartum hypertension preeclampsia eclampsia hellp nifedipine magnesium obstetrics">
+        <div class="li-title">Postpartum Severe Hypertension</div>
+        <div class="li-meta">
+          <span class="li-badge yellow">Consider Admission</span>
+          <span class="li-dept">OB/GYN · Emergency Medicine</span>
+        </div>
+      </div>
+
+    </div>
   </div>
 
-  <section id="results" class="workspace" aria-live="polite"></section>
+  <!-- ── DETAIL PANE ── -->
+  <div class="detail" id="detailPane">
+
+    <!-- ══ NECROTIZING FASCIITIS ══ -->
+    <div class="agreement-panel active" id="necfasc">
+      <div class="info-card">
+        <div class="card-top">
+          <div>
+            <div class="card-title">Necrotizing Fasciitis</div>
+            <div class="card-dept">Surgery · Emergency Medicine · Infectious Disease</div>
+          </div>
+          <div class="decision-badge red">🔴 Transfer / Surgical</div>
+        </div>
+        <div class="tags">
+          <span class="tag">necrotizing fasciitis</span>
+          <span class="tag">soft tissue infection</span>
+          <span class="tag">surgical emergency</span>
+          <span class="tag">LRINEC score</span>
+          <span class="tag red">time-critical</span>
+        </div>
+        <hr class="divider"/>
+        <div>
+          <div class="summary-label">Summary</div>
+          <p class="summary-text">Necrotizing fasciitis is a rapidly progressive, life-threatening bacterial infection of the fascial planes that requires immediate surgical consultation and debridement — delays of even a few hours significantly increase mortality. Diagnosis is primarily clinical (severe pain out of proportion to exam, woody induration, crepitus, skin necrosis), supported by CT showing gas tracking along fascial planes and a LRINEC score ≥6, though a low score does not exclude the diagnosis. Management in the ED centers on broad-spectrum antibiotics (Vancomycin + Pip-Tazo ± Clindamycin), aggressive IV resuscitation, and emergent surgical referral; if surgical capability is unavailable on-site, initiate treatment and transfer without delay.</p>
+        </div>
+        <hr class="divider"/>
+        <a class="download-btn" href="https://drive.google.com/uc?export=download&id=1mCdwfHeO3AXFPIaDqQ1mak7tmfxJgXll" target="_blank" rel="noopener">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#86efac" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <div><div>Download Official Agreement</div><div class="download-btn-sub">PDF · Google Drive</div></div>
+        </a>
+        <div class="updated">📅 Last updated: Jan 2024</div>
+      </div>
+      <div class="pdf-card">
+        <div class="pdf-bar">
+          <div class="pdf-bar-title"><span>📄</span> Official Service Agreement — Necrotizing Fasciitis</div>
+          <a class="pdf-open-link" href="https://drive.google.com/file/d/1mCdwfHeO3AXFPIaDqQ1mak7tmfxJgXll/view" target="_blank" rel="noopener">Open in Drive ↗</a>
+        </div>
+        <iframe class="pdf-iframe" src="https://drive.google.com/file/d/1mCdwfHeO3AXFPIaDqQ1mak7tmfxJgXll/preview" allow="autoplay" title="Necrotizing Fasciitis Service Agreement PDF"></iframe>
+      </div>
+    </div>
+
+    <!-- ══ PEDIATRIC APPENDICITIS ══ -->
+    <div class="agreement-panel" id="pedsappendix">
+      <div class="info-card">
+        <div class="card-top">
+          <div>
+            <div class="card-title">Pediatric Appendicitis</div>
+            <div class="card-dept">Pediatrics · Pediatric Surgery · Emergency Medicine</div>
+          </div>
+          <div class="decision-badge purple">🟣 Peds Surgery Consult</div>
+        </div>
+        <div class="tags">
+          <span class="tag">appendicitis</span>
+          <span class="tag">pediatric</span>
+          <span class="tag purple">peds surgery</span>
+          <span class="tag">abdominal pain</span>
+          <span class="tag">PAS score</span>
+          <span class="tag">GMC → STMC transfer</span>
+        </div>
+        <hr class="divider"/>
+        <div>
+          <div class="summary-label">Summary</div>
+          <p class="summary-text">This agreement outlines the collaborative pathway between the Emergency Department and Pediatric Surgery for children (ages 0–13) presenting with suspected appendicitis at a GMC without an inpatient pediatric floor. The local Surgeon on Duty (SOD) is called first to confirm suspected appendicitis, then contacts PTAC to coordinate surgeon-to-surgeon transfer to the STMC — with age determining the accepting surgical service (Pediatric Surgery for ages 0–5, Adult General Surgery for ages 6–13). If the local SOD is unavailable and CT confirms appendicitis, the ED physician may initiate transfer directly through PTAC. The Pediatric Appendicitis Score (PAS ≥7 highly suspicious, &lt;5 less likely) and pediatric CT protocol guide imaging decisions, and the accepting surgeon creates an OR case at STMC immediately upon transfer confirmation to reduce time to surgery.</p>
+        </div>
+        <hr class="divider"/>
+        <a class="download-btn" href="https://drive.google.com/uc?export=download&id=1OKYzqVeFKhx3CrDWDMFHGD04Z-Hv_qHc" target="_blank" rel="noopener">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#86efac" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <div><div>Download Official Agreement</div><div class="download-btn-sub">PDF · Google Drive</div></div>
+        </a>
+        <div class="updated">📅 Last updated: Jan 2024</div>
+      </div>
+      <div class="pdf-card">
+        <div class="pdf-bar">
+          <div class="pdf-bar-title"><span>📄</span> Official Service Agreement — Pediatric Appendicitis</div>
+          <a class="pdf-open-link" href="https://drive.google.com/file/d/1OKYzqVeFKhx3CrDWDMFHGD04Z-Hv_qHc/view" target="_blank" rel="noopener">Open in Drive ↗</a>
+        </div>
+        <iframe class="pdf-iframe" src="https://drive.google.com/file/d/1OKYzqVeFKhx3CrDWDMFHGD04Z-Hv_qHc/preview" allow="autoplay" title="Pediatric Appendicitis Service Agreement PDF"></iframe>
+      </div>
+    </div>
+
+    <!-- ══ UROLOGY 2019 ══ -->
+    <div class="agreement-panel" id="urology">
+      <div class="info-card">
+        <div class="card-top">
+          <div>
+            <div class="card-title">Urology Service Agreement (2019)</div>
+            <div class="card-dept">Urology · Emergency Medicine</div>
+          </div>
+          <div class="decision-badge teal">🩺 Tiered Consult</div>
+        </div>
+        <div class="tags">
+          <span class="tag">urology</span>
+          <span class="tag">renal stone</span>
+          <span class="tag">hematuria</span>
+          <span class="tag">urinary retention</span>
+          <span class="tag teal">4-tier pathway</span>
+          <span class="tag red">torsion</span>
+          <span class="tag">Fournier's gangrene</span>
+        </div>
+        <hr class="divider"/>
+        <div>
+          <div class="summary-label">Summary</div>
+          <p class="summary-text">This agreement defines a four-tier ED disposition pathway for urologic conditions: Tier 1 (call Urology immediately) covers true emergencies such as testicular torsion, persistent priapism, penile fracture, Fournier's gangrene, obstructing stone with fever &gt;38°C, and refractory gross hematuria; Tier 2 (admit to Hospital Medicine, no overnight Urology call 7 PM–7 AM) applies to non-febrile obstructive stone pain, controlled hematuria on CBI, and septic epididymo-orchitis without abscess; Tier 3 (outpatient Urology referral, no ED consult) covers stones &gt;3 mm without fever, successful urinary retention with Foley placed, incidental renal masses, and testicular masses on ultrasound; Tier 4 (PCP follow-up only) applies to stones ≤3 mm without fever, uncomplicated UTI/pyelonephritis, balanitis, and benign hydroceles. The tier category must be documented in every ED note, and any presentation that does not cleanly fit a tier should be escalated via attending-to-attending discussion.</p>
+        </div>
+        <hr class="divider"/>
+        <a class="download-btn" href="https://drive.google.com/uc?export=download&id=1vAbpJfo8miWAHTBvVR-KJfRUh7pRXqlG" target="_blank" rel="noopener">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#86efac" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <div><div>Download Official Agreement</div><div class="download-btn-sub">PDF · Google Drive</div></div>
+        </a>
+        <div class="updated">📅 Last updated: 2019</div>
+      </div>
+      <div class="pdf-card">
+        <div class="pdf-bar">
+          <div class="pdf-bar-title"><span>📄</span> Official Service Agreement — Urology (2019)</div>
+          <a class="pdf-open-link" href="https://drive.google.com/file/d/1vAbpJfo8miWAHTBvVR-KJfRUh7pRXqlG/view" target="_blank" rel="noopener">Open in Drive ↗</a>
+        </div>
+        <iframe class="pdf-iframe" src="https://drive.google.com/file/d/1vAbpJfo8miWAHTBvVR-KJfRUh7pRXqlG/preview" allow="autoplay" title="Urology Service Agreement PDF"></iframe>
+      </div>
+    </div>
+
+    <!-- ══ HIP FRACTURE ══ -->
+    <div class="agreement-panel" id="hipfracture">
+      <div class="info-card">
+        <div class="card-top">
+          <div>
+            <div class="card-title">Hip Fracture — Ortho/Medicine</div>
+            <div class="card-dept">Orthopedics · Internal Medicine · Emergency Medicine</div>
+          </div>
+          <div class="decision-badge orange">🦴 Dual Consult Required</div>
+        </div>
+        <div class="tags">
+          <span class="tag">hip fracture</span>
+          <span class="tag">orthopedics</span>
+          <span class="tag">internal medicine</span>
+          <span class="tag orange">admit</span>
+          <span class="tag orange">surgical planning</span>
+        </div>
+        <hr class="divider"/>
+        <div>
+          <div class="summary-label">Summary</div>
+          <p class="summary-text">Once a hip fracture patient arrives in the ED, both Medicine and Orthopedics are to be consulted simultaneously — Medicine to arrange admission and Orthopedics to begin expedited surgical planning. This dual-consult approach has been shown to move patients out of the ED sooner, reduce time to surgery, decrease medical complications, shorten overall length of stay, and free up hospital beds for other patients.</p>
+        </div>
+        <hr class="divider"/>
+        <a class="download-btn" href="https://docs.google.com/document/d/1G2Xqo2RrQUACXl0RHD9n57y78rjSIMPP5iXc1o318Jg/export?format=pdf" target="_blank" rel="noopener">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#86efac" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <div><div>Download Official Agreement</div><div class="download-btn-sub">PDF · Google Docs</div></div>
+        </a>
+        <div class="updated">📅 Last updated: Aug 2025</div>
+      </div>
+      <div class="pdf-card">
+        <div class="pdf-bar">
+          <div class="pdf-bar-title"><span>📄</span> Official Service Agreement — Hip Fracture Ortho/Medicine</div>
+          <a class="pdf-open-link" href="https://docs.google.com/document/d/1G2Xqo2RrQUACXl0RHD9n57y78rjSIMPP5iXc1o318Jg/edit" target="_blank" rel="noopener">Open in Docs ↗</a>
+        </div>
+        <iframe class="pdf-iframe" src="https://docs.google.com/document/d/1G2Xqo2RrQUACXl0RHD9n57y78rjSIMPP5iXc1o318Jg/preview" allow="autoplay" title="Hip Fracture Service Agreement"></iframe>
+      </div>
+    </div>
+
+    <!-- ══ DVT ══ -->
+    <div class="agreement-panel" id="dvt">
+      <div class="info-card">
+        <div class="card-top">
+          <div>
+            <div class="card-title">Outpatient DVT Anticoagulation</div>
+            <div class="card-dept">Hematology · Vascular · Emergency Medicine</div>
+          </div>
+          <div class="decision-badge green">🟢 Outpt OK</div>
+        </div>
+        <div class="tags">
+          <span class="tag">DVT</span>
+          <span class="tag">anticoagulation</span>
+          <span class="tag green">outpatient</span>
+          <span class="tag">enoxaparin</span>
+          <span class="tag">Wells score</span>
+        </div>
+        <hr class="divider"/>
+        <div>
+          <div class="summary-label">Summary</div>
+          <p class="summary-text">Confirmed acute upper or lower extremity DVT in hemodynamically stable patients 18 years or older may be managed with outpatient anticoagulation if no exclusion criteria are present — exclusions include active bleeding risk, platelets below 75,000, stroke within 6 weeks, recent surgery under 2 weeks, pregnancy, heparin allergy or HIT, weight ≥150 kg, age over 75, or therapeutic INR. The Wells score guides the diagnostic approach: score ≥3 proceeds directly to ultrasound, while score 0–2 uses D-dimer first. If ultrasound is positive, the patient receives a nurse visit, first anticoagulant dose (preferred: enoxaparin 1 mg/kg q12h, or 1 mg/kg daily if CrCl &lt;30), an outpatient anticoagulation referral, and follow-up within 2–3 days with explicit return precautions.</p>
+        </div>
+        <hr class="divider"/>
+        <div class="updated">📅 Last updated: Jan 2014</div>
+      </div>
+      <div class="pdf-card">
+        <div class="pdf-bar">
+          <div class="pdf-bar-title"><span>📄</span> Official Service Agreement — Outpatient DVT Anticoagulation</div>
+        </div>
+        <div class="no-doc">
+          <strong>Document not yet linked</strong>
+          Contact your department administrator to add the official PDF link for this agreement.
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ AFIB ══ -->
+    <div class="agreement-panel" id="afib">
+      <div class="info-card">
+        <div class="card-top">
+          <div>
+            <div class="card-title">Atrial Fibrillation / Flutter</div>
+            <div class="card-dept">Cardiology · Emergency Medicine</div>
+          </div>
+          <div class="decision-badge yellow">🟡 Consider Admission</div>
+        </div>
+        <div class="tags">
+          <span class="tag">atrial fibrillation</span>
+          <span class="tag">AFib</span>
+          <span class="tag">rate control</span>
+          <span class="tag">cardioversion</span>
+          <span class="tag yellow">CHA₂DS₂-VASc</span>
+        </div>
+        <hr class="divider"/>
+        <div>
+          <div class="summary-label">Summary</div>
+          <p class="summary-text">Hemodynamically stable atrial fibrillation or flutter with rate above 100–110 bpm is managed with IV rate control first (diltiazem 0.25 mg/kg IV, or metoprolol 5 mg IV q15 min), then conversion to oral therapy once rate is controlled — discharge is appropriate if the rate remains below 110 on oral regimen and the patient is clinically stable. If symptom onset is clearly under 48 hours, pharmacologic or electrical cardioversion is generally acceptable with cardiology input. The discharge plan must address a rate-control medication, an antithrombotic strategy based on CHA₂DS₂-VASc score, echocardiography for a first episode, and cardiology follow-up; admission is required if exclusion criteria are present (active ischemia, decompensated CHF, PE, sepsis, stroke, or ongoing instability).</p>
+        </div>
+        <hr class="divider"/>
+        <div class="updated">📅 Last updated: 2020</div>
+      </div>
+      <div class="pdf-card">
+        <div class="pdf-bar">
+          <div class="pdf-bar-title"><span>📄</span> Official Service Agreement — Atrial Fibrillation / Flutter</div>
+        </div>
+        <div class="no-doc">
+          <strong>Document not yet linked</strong>
+          Contact your department administrator to add the official PDF link for this agreement.
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ PLOS ══ -->
+    <div class="agreement-panel" id="plos">
+      <div class="info-card">
+        <div class="card-top">
+          <div>
+            <div class="card-title">Prolonged ED LOS (PLOS)</div>
+            <div class="card-dept">Hospital Medicine · CWD · Emergency Medicine</div>
+          </div>
+          <div class="decision-badge yellow">🟡 Consider Admission</div>
+        </div>
+        <div class="tags">
+          <span class="tag">prolonged LOS</span>
+          <span class="tag">PLOS</span>
+          <span class="tag">hospital medicine</span>
+          <span class="tag yellow">observation</span>
+          <span class="tag">disposition barrier</span>
+          <span class="tag">CWD</span>
+        </div>
+        <hr class="divider"/>
+        <div>
+          <div class="summary-label">Summary</div>
+          <p class="summary-text">This agreement between Emergency Medicine, Hospital Medicine, Care Without Delay (CWD), AAMD, and Area Medical Director (Ontario and Fontana) provides a consistent pathway for non-admitted ED patients with LOS ≥24 hours who cannot be safely discharged due to disposition barriers — not medical acuity. All such patients are discussed in the daily morning CWD huddle; if no disposition is secured within 12 hours of the 24-hour mark, the case is escalated to the CWD physician who, if criteria are confirmed, authorizes a Hospital Medicine consult. Hospital Medicine accepts the patient as the primary team and admits to observation, while the ED physician signs off but remains available for acute decompensation (airway emergency, code blue). AAMD and AMD are notified during daytime hours; the pathway is valid 7 days a week with on-call CWD coverage on weekends.</p>
+        </div>
+        <hr class="divider"/>
+        <div class="updated">📅 Last updated: 2022</div>
+      </div>
+      <div class="pdf-card">
+        <div class="pdf-bar">
+          <div class="pdf-bar-title"><span>📄</span> Official Service Agreement — Prolonged ED LOS (PLOS)</div>
+        </div>
+        <div class="no-doc">
+          <strong>Document not yet linked</strong>
+          Contact your department administrator to add the official PDF link for this agreement.
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ POSTPARTUM HTN ══ -->
+    <div class="agreement-panel" id="pphtн">
+      <div class="info-card">
+        <div class="card-top">
+          <div>
+            <div class="card-title">Postpartum Severe Hypertension</div>
+            <div class="card-dept">OB/GYN · Emergency Medicine</div>
+          </div>
+          <div class="decision-badge yellow">🟡 Consider Admission</div>
+        </div>
+        <div class="tags">
+          <span class="tag">postpartum</span>
+          <span class="tag">hypertension</span>
+          <span class="tag">preeclampsia</span>
+          <span class="tag red">eclampsia</span>
+          <span class="tag">HELLP</span>
+          <span class="tag">nifedipine</span>
+        </div>
+        <hr class="divider"/>
+        <div>
+          <div class="summary-label">Summary</div>
+          <p class="summary-text">Postpartum patients with systolic BP ≥160 or diastolic BP ≥110 on two readings 15 minutes apart, or postpartum headache with elevated BP, are managed with acetaminophen 650 mg PO and nifedipine IR 10 mg PO, then reassessed hourly for four hours. Concerning GI symptoms (RUQ pain, nausea/vomiting) should prompt HELLP labs (CBC, LFTs, creatinine, DIC panel), and seizures are treated with magnesium sulfate. Red flags requiring urgent escalation include headache not improved after one hour of treatment, vision changes or hyperreflexia, respiratory symptoms or hypoxia, or any seizure activity — most eclampsia occurs by postpartum day 6. Discharge is appropriate only if BP is controlled, workup is reassuring, and a next-day BP check is arranged; admission is required for persistent severe features, refractory headache, or cardiopulmonary/neurologic concerns.</p>
+        </div>
+        <hr class="divider"/>
+        <div class="updated">📅 Last updated: 2022</div>
+      </div>
+      <div class="pdf-card">
+        <div class="pdf-bar">
+          <div class="pdf-bar-title"><span>📄</span> Official Service Agreement — Postpartum Severe Hypertension</div>
+        </div>
+        <div class="no-doc">
+          <strong>Document not yet linked</strong>
+          Contact your department administrator to add the official PDF link for this agreement.
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /detail -->
+
 </main>
 
 <script>
-const DEFAULT_AUTOMATION_CHECKS = [
-  "Eligibility criteria reviewed",
-  "Consult/escalation pathway completed",
-  "Disposition and follow-up plan confirmed",
-  "Documentation finalized"
-];
+(function() {
+  const items = document.querySelectorAll('.list-item[data-target]');
+  const panels = document.querySelectorAll('.agreement-panel');
+  const searchInput = document.getElementById('searchInput');
 
-const PROTOCOL_OVERRIDES = {
-  "prolonged-ed-los-sla": {
-    title: "Prolonged ED LOS (PLOS) — Service Line Agreement",
-    banner: { level: "yellow", label: "Consider Admission" },
-    purpose: [
-      "Provide consistent, safe care for non-admitted ED patients with LOS ≥24 hours who cannot be safely discharged due to disposition barriers.",
-      "Agreement between Emergency Medicine, Hospital Medicine, Care Without Delay, AAMD, and Area Medical Director at Ontario and Fontana medical centers."
-    ],
-    when_to_use: [
-      "Patient has been in the ED for ≥24 hours (total LOS).",
-      "No medical indication for hospital admission.",
-      "Safe discharge is not possible due to social, logistical, or other disposition barriers.",
-      "Applies at Ontario and Fontana medical centers — members and non-members.",
-      "Exclusions: admitted patients awaiting bed assignment, psychiatric patients with no medical need, pediatric patients."
-    ],
-    red_flags: [
-      "No case management or social services consult placed at 24+ hours — escalate immediately.",
-      "No CWD physician discussion when no disposition plan exists within 12 hours of the 24-hour threshold.",
-      "Patient decompensates at any point — revert to standard ED-to-HM consult workflow.",
-      "Weekend or no local CWD coverage — ED case manager must contact CWD on-call physician."
-    ],
-    workflow: [
-      "All patients with ED LOS ≥24 hours and no discharge plan discussed in daily morning CWD huddle.",
-      "If no disposition secured within 12 hours of the 24-hour mark, discuss with local CWD physician.",
-      "CWD physician confirms criteria → ED physician requests hospital medicine consult.",
-      "Hospital medicine consultation completed during daytime hours, 7 days a week (avoid after-hours unless medically indicated).",
-      "Hospital medicine accepts as primary team and admits patient to observation status.",
-      "ED physician signs off but remains available for acute decompensation (airway emergencies, code blue) per current practice.",
-      "AAMD and AMD notified during daytime hours when patient is admitted for disposition barriers.",
-      "On weekends or days with no local CWD coverage, ED case manager contacts CWD on-call — this workflow is valid 7 days a week."
-    ],
-    treatment: [
-      "No specific medication protocol — this is a disposition and care-coordination agreement.",
-      "Appropriate ED medical workup and treatment continue per ED physician judgment.",
-      "Involve multidisciplinary team early: medical social worker, case manager, CWD physician, geriatrician, hospice liaison as indicated."
-    ],
-    disposition: [
-      "Admit to observation status under hospital medicine service when PLOS criteria are met.",
-      "Hospital medicine assumes physician-level continuity of care, family communication, and MDT coordination.",
-      "If patient decompensates and meets inpatient admission criteria, follow standard ED-to-HM consult workflow.",
-      "ED physician retains responsibility for acute decompensation even after sign-off to hospital medicine."
-    ],
-    documentation: "Patient has been in ED for [X] hours with no medical indication for inpatient admission. Disposition barriers include [describe]. Case management and social services consulted. Discussed in CWD huddle on [date]. CWD physician [name] agrees patient meets PLOS criteria. Hospital medicine consult placed. Patient to be admitted to OBS under hospital medicine service. AAMD/AMD notified.",
-    automation_checks: [
-      "ED LOS ≥24 hours confirmed and documented",
-      "No medical indication for inpatient admission documented",
-      "Case management consult placed",
-      "Social services consult placed",
-      "CWD huddle discussion documented",
-      "CWD physician reviewed and approved PLOS pathway",
-      "Hospital medicine consult placed during daytime hours",
-      "AAMD and AMD notified"
-    ],
-    tags_add: ["prolonged-los", "observation", "length-of-stay", "disposition-barrier", "hospital-medicine", "plos"]
-  },
-  "kaiser-outpatient-anticoagulation-dvt-protocol-1-16-14": {
-    title: "Outpatient DVT Management",
-    banner: { level: "green", label: "Outpt OK" },
-    purpose: [
-      "Standardize outpatient treatment of confirmed DVT with anticoagulation and coordinated follow-up."
-    ],
-    when_to_use: [
-      "Acute upper or lower extremity DVT.",
-      "Age 18 years or older.",
-      "Hemodynamically stable.",
-      "Subtherapeutic INR if already on warfarin."
-    ],
-    red_flags: [
-      "Active bleeding risk.",
-      "Hemodynamic instability.",
-      "Symptoms concerning for pulmonary embolism.",
-      "Platelets below 75,000.",
-      "Stroke within 6 weeks.",
-      "Recent surgery (under 2 weeks).",
-      "Pregnancy.",
-      "Heparin allergy or HIT.",
-      "Weight 150 kg or higher.",
-      "Age over 75.",
-      "Therapeutic INR."
-    ],
-    workflow: [
-      "Wells score 3 or higher: CBC, creatinine, INR, and immediate ultrasound.",
-      "Wells score 0 to 2: D-dimer first; ultrasound if positive.",
-      "If ultrasound positive: nurse visit, first dose administered, patient education, outpatient anticoagulation referral.",
-      "If after hours: ED manages dosing and referral pathway.",
-      "Follow-up expected in 2 to 3 days with return precautions."
-    ],
-    treatment: [
-      "Preferred enoxaparin: CrCl above 30 -> 1 mg/kg every 12 hours (or 1.5 mg/kg daily for home health support).",
-      "CrCl below 30 -> enoxaparin 1 mg/kg daily.",
-      "Avoid enoxaparin if weight is over 150 kg.",
-      "Fondaparinux alternative: avoid if CrCl below 80, or age over 75 and weight under 50 kg.",
-      "Fondaparinux dosing: under 50 kg -> 5 mg daily; 50 to 100 kg -> 7.5 mg daily; over 100 kg -> 10 mg daily."
-    ],
-    disposition: [
-      "Outpatient anticoagulation pathway if inclusion criteria met.",
-      "Hospitalize and use standard IV heparin if exclusion criteria are present and anticoagulation is still indicated.",
-      "Document return precautions and explicit follow-up plan."
-    ],
-    documentation: "Ultrasound positive for DVT. Patient stable and meets outpatient anticoagulation criteria. First dose administered and anticoagulation referral placed.",
-    automation_checks: [
-      "Wells score pathway selected",
-      "Ultrasound result reviewed",
-      "First anticoagulant dose documented",
-      "Outpatient anticoagulation referral submitted"
-    ],
-    tags_add: ["dvt", "anticoagulation", "outpatient"]
-  },
-  "kaiser-afib-protocol": {
-    title: "Atrial Fibrillation / Flutter Protocol",
-    banner: { level: "yellow", label: "Consider Admission" },
-    purpose: [
-      "Provide an ED alternative to admission for uncomplicated atrial fibrillation/flutter with rapid rate control and safe discharge criteria."
-    ],
-    when_to_use: [
-      "Hemodynamically stable AF/flutter.",
-      "Heart rate above about 100 to 110 bpm.",
-      "Keep NPO initially in case cardioversion is needed."
-    ],
-    red_flags: [
-      "Stroke or TIA.",
-      "Myocardial infarction or active ischemia.",
-      "Significant CHF exacerbation.",
-      "Pulmonary embolism.",
-      "Sepsis or other acute critical illness."
-    ],
-    workflow: [
-      "Troponin is not required unless chest pain, ischemic symptoms, or concerning ST changes are present.",
-      "Use IV rate control first, then convert to oral once rate is controlled.",
-      "If symptom onset is clearly under 48 hours, pharmacologic or electrical cardioversion is generally acceptable (with cardiology input as needed).",
-      "Assess discharge only after sustained control on oral medication."
-    ],
-    treatment: [
-      "Diltiazem: 0.25 mg/kg IV over 10 minutes, then 0.35 mg/kg repeat if needed, then oral conversion.",
-      "Metoprolol: 5 mg IV every 15 minutes as needed, then oral conversion when heart rate under 100.",
-      "If CHA2DS2-VASc is 1 or higher, consider anticoagulation plan."
-    ],
-    disposition: [
-      "Discharge if heart rate below 110 and patient remains clinically stable on oral regimen.",
-      "Discharge plan should include rate-control medication, antithrombotic strategy, echocardiography for first episode, and cardiology follow-up.",
-      "Admit if exclusion criteria or ongoing instability are present."
-    ],
-    documentation: "Stable atrial fibrillation/flutter with rate control achieved. No evidence of acute ischemia, decompensated heart failure, PE, or sepsis. Discharge plan and follow-up reviewed.",
-    automation_checks: [
-      "Rate control endpoint met",
-      "Stroke risk (CHA2DS2-VASc) addressed",
-      "Cardioversion window assessed",
-      "Cardiology follow-up arranged"
-    ],
-    tags_add: ["afib", "atrial-flutter", "rate-control", "cardioversion"]
-  },
-  "pp-severe-htn-algorithm": {
-    title: "Postpartum Severe Hypertension",
-    banner: { level: "yellow", label: "Consider Admission" },
-    purpose: [
-      "Rapidly identify and treat severe postpartum hypertension and escalate early when severe features or organ involvement appear."
-    ],
-    when_to_use: [
-      "Postpartum patient with systolic BP 160 or higher or diastolic BP 110 or higher on 2 readings 15 minutes apart.",
-      "Postpartum headache with elevated blood pressure.",
-      "Concern for preeclampsia/eclampsia spectrum symptoms."
-    ],
-    red_flags: [
-      "Headache not improved after 1 hour of treatment.",
-      "Vision changes, refractory headache, or hyperreflexia.",
-      "Shortness of breath, chest pain, edema, or hypoxia.",
-      "RUQ pain, nausea, or vomiting concerning for HELLP.",
-      "Seizure activity."
-    ],
-    workflow: [
-      "If headache plus HTN: give acetaminophen 650 mg PO and nifedipine IR 10 mg PO; recheck BP in 20 minutes.",
-      "Observe and recheck BP hourly for 4 hours.",
-      "For concerning GI symptoms, obtain HELLP-focused labs (CBC, LFTs, creatinine, DIC panel).",
-      "Treat seizures with magnesium sulfate.",
-      "Most eclampsia occurs by postpartum day 6; magnesium prophylaxis is not routine unless clinically indicated."
-    ],
-    treatment: [
-      "Nifedipine IR for acute BP reduction in the protocol pathway.",
-      "Supportive symptom treatment (for example, acetaminophen for headache).",
-      "Targeted lab and cardiopulmonary evaluation when severe features are present."
-    ],
-    disposition: [
-      "Discharge only if BP is controlled, workup is reassuring, and next-day BP check is arranged.",
-      "Admit when severe features persist, headache is refractory, or cardiopulmonary/neurologic concerns are present."
-    ],
-    documentation: "Postpartum severe hypertension treated per protocol with serial reassessment. Blood pressure response, severe feature screen, and follow-up plan documented.",
-    automation_checks: [
-      "Two severe BP readings documented",
-      "20-minute BP recheck completed",
-      "Severe feature screen documented",
-      "Next-day BP follow-up arranged"
-    ],
-    tags_add: ["postpartum", "hypertension", "preeclampsia", "eclampsia"]
-  },
-  "pediatric-appendicitis-service-line-agreement-with-appendicitis": {
-    title: "Pediatric Appendicitis Transfer (GMC -> STMC)",
-    banner: { level: "red", label: "Send to ED / Transfer" },
-    purpose: [
-      "Expedite diagnosis and inter-facility transfer for pediatric appendicitis while minimizing unnecessary transfer."
-    ],
-    when_to_use: [
-      "Age 0 to 13 years with suspected appendicitis at GMC without inpatient pediatric floor.",
-      "Initial ED or Pediatric Urgent Care evaluation where definitive management site is STMC.",
-      "Age is the key branch point for accepting surgical service.",
-      "Definitions: GMC = site without pediatric floor; STMC = receiving site with pediatric floor; SOD = Surgeon on Duty; PTAC = Pediatric Treatment & Advice Center."
-    ],
-    red_flags: [
-      "Unavailable local Surgeon on Duty (SOD) with CT-positive appendicitis requiring physician-initiated transfer.",
-      "Delays in surgeon-to-surgeon handoff or transfer acceptance.",
-      "Equivocal imaging that does not match clinical concern."
-    ],
-    workflow: [
-      "Initial evaluation at GMC: abdominal pain concerning for appendicitis.",
-      "Call GMC/local SOD to confirm suspected appendicitis.",
-      "If appendicitis suspected, local SOD contacts PTAC for transfer coordination and surgeon-to-surgeon communication.",
-      "Age 0 to 5 years -> Pediatric Surgery accepting service.",
-      "Age 6 to 13 years -> Adult General Surgery accepting service.",
-      "If local SOD unavailable and CT is positive, ED physician may initiate transfer via PTAC and speak with accepting STMC SOD directly.",
-      "Once transfer confirmed, STMC SOD creates case on grease board to reduce OR wait time: search by MRN, select 'search my region,' import chart, create case."
-    ],
-    treatment: [
-      "Use pediatric CT protocol when CT is required to reduce radiation exposure.",
-      "Recognize pediatric CT protocol may increase equivocal reads due to lower resolution.",
-      "PAS scoring: RLQ tenderness (2), cough/percussion/hopping tenderness (2), migration of pain (1), anorexia (1), fever (1), nausea/vomiting (1), leukocytosis 10,000 or higher (1), neutrophilia (1).",
-      "PAS interpretation: score 7 or higher is highly suspicious; below 5 is less likely appendicitis."
-    ],
-    disposition: [
-      "Transfer confirmed through PTAC with explicit accepting surgeon and service.",
-      "Document accepting service by age branch and closed-loop handoff.",
-      "Maintain ED ownership until accepting service confirmation is complete."
-    ],
-    documentation: "Suspected appendicitis in pediatric patient age 0-13 at GMC without inpatient pediatrics. SOD consulted, PTAC contacted, and transfer arranged with accepting service based on age.",
-    automation_checks: [
-      "Age branch applied (0-5 vs 6-13)",
-      "SOD contacted",
-      "PTAC transfer initiated",
-      "Accepting STMC service documented"
-    ],
-    tags_add: ["appendicitis", "pediatric-transfer", "ptac", "gmc", "stmc"]
-  },
-  "urology-and-emergency-medicine-service-agreement-2019": {
-    title: "Urology & Emergency Medicine Service Agreement (2019)",
-    banner: { level: "yellow", label: "Tiered Consult" },
-    purpose: [
-      "Define a four-tier ED disposition pathway for urologic conditions: (1) Urgent/Emergent — call Urology immediately, (2) Hospital Medicine admit without overnight Urology call, (3) Outpatient Urology referral, (4) PCP follow-up.",
-      "Agreement between Emergency Medicine and Urology at Kaiser Permanente Fontana/Ontario."
-    ],
-    when_to_use: [
-      "Any ED patient presenting with a urologic complaint or finding (stone, hematuria, retention, testicular complaint, GU infection, renal mass, penile emergency, Fournier's gangrene).",
-      "Use the four-tier pathway below to determine the correct disposition and consult level.",
-      "Applies 24/7 — note the no-overnight-call window (7 PM – 7 AM) for Tier 2."
-    ],
-    red_flags: [
-      "Testicular torsion (or clinical concern for torsion).",
-      "Persistent priapism.",
-      "Penile fracture.",
-      "Unreducible paraphimosis.",
-      "Fournier's gangrene of the scrotum or penis — add General Surgery if perirectal involvement is present or unclear.",
-      "Obstructing stone with fever > 38 °C, solitary-kidney obstruction, or bilateral ureteral obstruction.",
-      "Gross hematuria refractory to CBI and repeated Foley irrigation.",
-      "Difficult catheterization with acute urinary retention.",
-      "Post-operative urologic complication."
-    ],
-    workflow: [
-      "TIER 1 — URGENT/EMERGENT: Call Urology Immediately — Torsion (or concern for torsion), persistent priapism, penile fracture, unreducible paraphimosis, Fournier's gangrene (add General Surgery if perirectal), obstructing stone with fever > 38 °C, solitary-kidney obstruction, bilateral obstruction, refractory gross hematuria despite CBI, difficult catheterization with acute retention, post-op urologic complications.",
-      "TIER 2 — ADMIT TO HOSPITAL MEDICINE (No Overnight Urology Call 7 PM – 7 AM) — Non-fever obstructive stone pain or intractable vomiting requiring IV fluids/pain control; controlled gross hematuria on CBI (not refractory); septic epididymo-orchitis without abscess or gangrene.",
-      "TIER 3 — OUTPATIENT UROLOGY REFERRAL (No ED Urology Consult) — Stone > 3 mm without fever or sepsis; asymptomatic or incidental hydronephrosis; renal stone ≥ 10 mm (non-obstructive); urinary retention after successful Foley placement (start tamsulosin, plan outpatient follow-up); asymptomatic renal mass or complex renal cyst; testicular mass on ultrasound.",
-      "TIER 4 — PCP FOLLOW-UP (No Urology Referral) — Stone ≤ 3 mm without fever; non-obstructive UTI or pyelonephritis; balanitis or posthitis; uncomplicated epididymo-orchitis; renal stone < 10 mm without obstruction; benign hydrocele or simple epididymal cyst; negative-ultrasound testicular pain; testicular microlithiasis.",
-      "For any presentation that does not cleanly fit a tier, escalate via attending-to-attending discussion."
-    ],
-    treatment: [
-      "Tier 1 conditions: initiate resuscitation and stabilization per ED standards while awaiting Urology arrival.",
-      "Urinary retention after Foley: start tamsulosin and arrange outpatient Urology follow-up (Tier 3).",
-      "Fournier's gangrene: broad-spectrum antibiotics; early surgical consultation (Urology ± General Surgery).",
-      "Obstructive stone with infection: IV antibiotics, IV fluids, and emergent Urology decompression.",
-      "Hematuria: continuous bladder irrigation (CBI); escalate to Tier 1 if refractory."
-    ],
-    disposition: [
-      "Tier 1 (Urgent/Emergent): Urology assumes care; admit or operative management as indicated.",
-      "Tier 2 (Admit): Hospital Medicine is the admitting service. No overnight Urology call between 7 PM – 7 AM for these defined scenarios.",
-      "Tier 3 (Outpatient Referral): Discharge from ED with Urology referral. No ED Urology consult required.",
-      "Tier 4 (PCP Follow-up): Discharge from ED with PCP follow-up. No Urology referral required.",
-      "Document the tier/pathway category in the ED note for every urologic disposition."
-    ],
-    documentation: "ED presentation consistent with [urologic condition]. Assessed per Urology–EM Service Agreement (2019). Pathway category: Tier [1/2/3/4]. [If Tier 1: Urology contacted at [time], Dr. [name] responding. / If Tier 2: Admitted to Hospital Medicine; no overnight Urology call per agreement. / If Tier 3: Outpatient Urology referral placed; tamsulosin started if retention. / If Tier 4: PCP follow-up arranged.] Disposition: [admit/discharge]. Return precautions reviewed.",
-    automation_checks: [
-      "Tier/pathway category documented (1–4)",
-      "Urology contacted and time documented (Tier 1)",
-      "Hospital Medicine consult placed (Tier 2)",
-      "Outpatient Urology referral placed (Tier 3)",
-      "Tamsulosin started for retention (Tier 3)",
-      "PCP follow-up arranged (Tier 4)",
-      "Return precautions documented"
-    ],
-    tags_add: ["urology", "torsion", "hematuria", "retention", "fournier", "renal-stone", "kidney-stone"]
-  }
-};
-
-const state = {
-  agreements: [],
-  query: "",
-  selectedDepts: new Set(),
-  selectedTags: new Set(),
-  olderThanFiveYears: false,
-  sort: "last_updated",
-  activeAgreementKey: "",
-  presetAgreementId: ""
-};
-
-function escapeHtml(value) {
-  return String(value ?? "").replace(/[&<>"']/g, (ch) => (
-    ch === "&" ? "&amp;" :
-    ch === "<" ? "&lt;" :
-    ch === ">" ? "&gt;" :
-    ch === "\"" ? "&quot;" : "&#39;"
-  ));
-}
-
-function normalize(value) {
-  return String(value || "").toLowerCase();
-}
-
-function tokenize(value) {
-  return normalize(value)
-    .replace(/[^a-z0-9]+/g, " ")
-    .trim()
-    .split(/\s+/)
-    .filter(Boolean);
-}
-
-function dedupeClean(values) {
-  const out = [];
-  const seen = new Set();
-  (values || []).forEach((value) => {
-    const clean = String(value || "").trim();
-    if (!clean) return;
-    const key = normalize(clean);
-    if (seen.has(key)) return;
-    seen.add(key);
-    out.push(clean);
-  });
-  return out;
-}
-
-function parseDate(value) {
-  if (!value) return null;
-  const d = new Date(value + "T00:00:00");
-  return Number.isNaN(d.getTime()) ? null : d;
-}
-
-function isOlderThanFiveYears(value) {
-  const d = parseDate(value);
-  if (!d) return false;
-  const cutoff = new Date();
-  cutoff.setFullYear(cutoff.getFullYear() - 5);
-  return d < cutoff;
-}
-
-function inferBanner(item) {
-  const tagSet = new Set((item.tags || []).map((t) => normalize(t)));
-  if (tagSet.has("transfer") || tagSet.has("surgical") || tagSet.has("pediatric-transfer")) {
-    return { level: "red", label: "Send to ED / Transfer" };
-  }
-  if (tagSet.has("disposition") || tagSet.has("escalation") || tagSet.has("consult-workflow")) {
-    return { level: "yellow", label: "Consider Admission" };
-  }
-  return { level: "green", label: "Outpt OK" };
-}
-
-function toArray(value) {
-  return Array.isArray(value) ? value : [];
-}
-
-function fallbackCardModel(item) {
-  const summary = dedupeClean(toArray(item.summary_bullets));
-  const actions = dedupeClean(toArray(item.ed_actions));
-  const consults = dedupeClean(toArray(item.consults_and_escalation));
-  const disposition = dedupeClean([...toArray(item.disposition_or_ownership), ...toArray(item.timing_targets)]);
-
-  const purpose = summary.slice(0, 2);
-  const whenToUse = summary.filter((line) => /use|criteria|eligible|age|stable|when/i.test(line)).slice(0, 4);
-  const redFlags = dedupeClean(
-    [...summary, ...consults].filter((line) => /exclude|unstable|severe|transfer|escalat|bleed|critical|red flag|call/i.test(line))
-  ).slice(0, 6);
-  const workflow = dedupeClean([...actions, ...consults]).slice(0, 8);
-  const treatment = dedupeClean(
-    summary.filter((line) => /\bmg\b|dose|dosing|iv|po|medication|antibiotic|anticoag|cardioversion|treat/i.test(line))
-  ).slice(0, 6);
-
-  return {
-    title: item.title,
-    banner: inferBanner(item),
-    purpose: purpose.length ? purpose : ["Operational summary available in source agreement."],
-    when_to_use: whenToUse.length ? whenToUse : ["Use for scenarios covered by this service agreement and department scope."],
-    red_flags: redFlags.length ? redFlags : ["Escalate to specialty or attending pathway for instability or conflicting recommendations."],
-    workflow: workflow.length ? workflow : ["Follow source agreement workflow and document consultant communication."],
-    treatment: treatment.length ? treatment : ["No medication-specific treatment details extracted; review source document."],
-    disposition: disposition.length ? disposition : ["Disposition should be based on source agreement criteria and current reassessment."],
-    documentation: "Reviewed service agreement and applied ED workflow, consultant communication, and disposition plan per protocol.",
-    automation_checks: DEFAULT_AUTOMATION_CHECKS
-  };
-}
-
-function buildCardModel(item) {
-  const override = PROTOCOL_OVERRIDES[item.id];
-  if (!override) return fallbackCardModel(item);
-  return {
-    title: override.title || item.title,
-    banner: override.banner || inferBanner(item),
-    purpose: dedupeClean(override.purpose),
-    when_to_use: dedupeClean(override.when_to_use),
-    red_flags: dedupeClean(override.red_flags),
-    workflow: dedupeClean(override.workflow),
-    treatment: dedupeClean(override.treatment),
-    disposition: dedupeClean(override.disposition),
-    documentation: String(override.documentation || "").trim(),
-    automation_checks: dedupeClean(override.automation_checks).length ? dedupeClean(override.automation_checks) : DEFAULT_AUTOMATION_CHECKS
-  };
-}
-
-function prepareAgreement(agreement) {
-  const override = PROTOCOL_OVERRIDES[agreement.id] || null;
-  const mergedTags = dedupeClean([...toArray(agreement.tags), ...(override ? toArray(override.tags_add) : [])]);
-  const card = buildCardModel({ ...agreement, tags: mergedTags });
-  const searchText = normalize([
-    agreement.title,
-    card.title,
-    agreement.source_filename,
-    mergedTags.join(" "),
-    toArray(agreement.departments).join(" "),
-    card.purpose.join(" "),
-    card.when_to_use.join(" "),
-    card.red_flags.join(" "),
-    card.workflow.join(" "),
-    card.treatment.join(" "),
-    card.disposition.join(" "),
-    card.documentation
-  ].join(" "));
-
-  return {
-    ...agreement,
-    tags: mergedTags,
-    card,
-    _searchText: searchText
-  };
-}
-
-function displayTitle(item) {
-  return (item.card && item.card.title) ? item.card.title : item.title;
-}
-
-function scoreAgreement(item, tokens) {
-  if (!tokens.length) return 1;
-  const titleText = normalize(displayTitle(item));
-  const sourceTitleText = normalize(item.title);
-  const tagsText = normalize((item.tags || []).join(" "));
-  const deptText = normalize((item.departments || []).join(" "));
-  const searchText = item._searchText || "";
-
-  let matchedTokens = 0;
-  let score = 0;
-  tokens.forEach((token) => {
-    let matched = false;
-    if (titleText.includes(token)) {
-      score += 10;
-      matched = true;
-    }
-    if (sourceTitleText.includes(token)) {
-      score += 7;
-      matched = true;
-    }
-    if (tagsText.includes(token)) {
-      score += 6;
-      matched = true;
-    }
-    if (deptText.includes(token)) {
-      score += 4;
-      matched = true;
-    }
-    if (searchText.includes(token)) {
-      score += 2;
-      matched = true;
-    }
-    if (matched) matchedTokens += 1;
-  });
-
-  if (!matchedTokens) return 0;
-  score += Math.round((matchedTokens / tokens.length) * 5);
-  return score;
-}
-
-function matchFilters(item) {
-  if (state.selectedDepts.size) {
-    const hasDept = (item.departments || []).some((d) => state.selectedDepts.has(d));
-    if (!hasDept) return false;
-  }
-  if (state.selectedTags.size) {
-    const hasTag = (item.tags || []).some((t) => state.selectedTags.has(t));
-    if (!hasTag) return false;
-  }
-  if (state.olderThanFiveYears && !isOlderThanFiveYears(item.last_updated)) {
-    return false;
-  }
-  return true;
-}
-
-function getFilteredRows() {
-  const tokens = tokenize(state.query);
-  const rows = [];
-
-  state.agreements.forEach((item) => {
-    if (!matchFilters(item)) return;
-    const relevance = scoreAgreement(item, tokens);
-    if (tokens.length && relevance === 0) return;
-    rows.push({ item, relevance });
-  });
-
-  rows.sort((a, b) => {
-    const titleA = displayTitle(a.item);
-    const titleB = displayTitle(b.item);
-
-    if (state.sort === "title") {
-      return titleA.localeCompare(titleB);
-    }
-
-    if (state.sort === "last_updated") {
-      const ad = parseDate(a.item.last_updated);
-      const bd = parseDate(b.item.last_updated);
-      if (ad && bd) return bd - ad;
-      if (bd) return 1;
-      if (ad) return -1;
-      return titleA.localeCompare(titleB);
-    }
-
-    if (b.relevance !== a.relevance) return b.relevance - a.relevance;
-    const ad = parseDate(a.item.last_updated);
-    const bd = parseDate(b.item.last_updated);
-    if (ad && bd && bd.getTime() !== ad.getTime()) return bd - ad;
-    if (bd && !ad) return 1;
-    if (ad && !bd) return -1;
-    return titleA.localeCompare(titleB);
-  });
-
-  return rows;
-}
-
-async function copyText(value) {
-  const text = String(value || "");
-  try {
-    await navigator.clipboard.writeText(text);
-  } catch (_) {
-    const ta = document.createElement("textarea");
-    ta.value = text;
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand("copy");
-    ta.remove();
-  }
-}
-
-function sectionHtml(title, lines, opts = {}) {
-  const openAttr = opts.open ? " open" : "";
-  const checkable = !!opts.checkable;
-  const items = dedupeClean(lines);
-  const emptyLine = checkable
-    ? '<p class="doc-text">No checklist items currently defined.</p>'
-    : '<p class="doc-text">No details listed.</p>';
-
-  const listHtml = items.length ? `
-    <ul class="${checkable ? "list checklist" : "list"}">
-      ${items.map((line) => (
-        checkable
-          ? `<li><label class="check-row"><input type="checkbox"/><span>${escapeHtml(line)}</span></label></li>`
-          : `<li>${escapeHtml(line)}</li>`
-      )).join("")}
-    </ul>
-  ` : emptyLine;
-
-  return `<details class="section"${openAttr}><summary>${escapeHtml(title)}</summary><div class="section-body">${listHtml}</div></details>`;
-}
-
-function documentationSectionHtml(item) {
-  const documentation = item.card.documentation || "Documentation guidance not provided in source.";
-  return `
-    <details class="section" open>
-      <summary>Documentation</summary>
-      <div class="section-body">
-        <p class="doc-text">${escapeHtml(documentation)}</p>
-        <button class="btn section-copy js-copy-doc" type="button">Copy Documentation</button>
-      </div>
-    </details>
-  `;
-}
-
-function workflowText(item) {
-  const title = displayTitle(item);
-  const bullets = dedupeClean(item.card.workflow).map((line) => `- ${line}`).join("\n");
-  return `${title} - Workflow\n${bullets}`;
-}
-
-function agreementKey(item) {
-  const raw = item.id || item.source_filename || item.title || "";
-  return normalize(raw).replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
-}
-
-function listSnippet(item) {
-  const lines = dedupeClean([...(item.card.when_to_use || []), ...(item.card.workflow || [])]);
-  return lines[0] || "Open to view practical workflow details.";
-}
-
-function detailCardHtml(item) {
-  const updated = item.last_updated ? item.last_updated : "unknown";
-  const deptBadges = (item.departments || []).map((d) => `<span class="badge b-dept">${escapeHtml(d)}</span>`).join("");
-  const tagBadges = (item.tags || []).map((t) => `<span class="badge ${t === 'new' ? 'b-new' : 'b-tag'}">${escapeHtml(t)}</span>`).join("");
-  const docButton = item.sharepoint_url
-    ? `<a class="btn btn-primary" href="${escapeHtml(item.sharepoint_url)}" target="_blank" rel="noopener">Open Document</a>`
-    : `<button class="btn btn-primary" disabled>Open Document</button>`;
-  const sourceTitleLine = item.card.title !== item.title
-    ? `<div class="card-sub">Source title: ${escapeHtml(item.title)}</div>`
-    : "";
-  const bannerLevel = item.card.banner && item.card.banner.level ? item.card.banner.level : "yellow";
-  const bannerLabel = item.card.banner && item.card.banner.label ? item.card.banner.label : "Consider Admission";
-
-  return `
-    <article class="card">
-      <div class="card-head">
-        <div>
-          <div class="card-title">${escapeHtml(displayTitle(item))}</div>
-          ${sourceTitleLine}
-          <div class="card-sub">Source: ${escapeHtml(item.source_filename || "")}</div>
-        </div>
-        <div class="decision ${escapeHtml(bannerLevel)}">${escapeHtml(bannerLabel)}</div>
-      </div>
-      <div class="badges">
-        <span class="badge b-date">Updated: ${escapeHtml(updated)}</span>
-        ${deptBadges}
-        ${tagBadges}
-      </div>
-      ${sectionHtml("Purpose", item.card.purpose, { open: true })}
-      ${sectionHtml("When to Use", item.card.when_to_use, { open: true })}
-      ${sectionHtml("Exclusions / Red Flags", item.card.red_flags, { open: true })}
-      ${sectionHtml("Workflow", item.card.workflow, { open: true, checkable: true })}
-      ${sectionHtml("Treatment", item.card.treatment, { open: true, checkable: true })}
-      ${sectionHtml("Disposition", item.card.disposition, { open: true, checkable: true })}
-      ${documentationSectionHtml(item)}
-      ${sectionHtml("Automation Placeholders", item.card.automation_checks, { open: true, checkable: true })}
-      <div class="actions">
-        <button class="btn js-copy-workflow" type="button">Copy Workflow</button>
-        <button class="btn js-copy-doc" type="button">Copy Documentation</button>
-        ${docButton}
-      </div>
-    </article>
-  `;
-}
-
-function renderResults() {
-  const container = document.getElementById("results");
-  const resultCount = document.getElementById("resultCount");
-  const rows = getFilteredRows();
-
-  resultCount.textContent = `${rows.length} agreement${rows.length === 1 ? "" : "s"} found`;
-
-  if (!rows.length) {
-    state.activeAgreementKey = "";
-    container.innerHTML = '<div class="empty">No agreements match your current search/filter settings.</div>';
-    return;
+  function activate(target) {
+    items.forEach(i => i.classList.remove('active'));
+    panels.forEach(p => p.classList.remove('active'));
+    const item = document.querySelector(`.list-item[data-target="${target}"]`);
+    const panel = document.getElementById(target);
+    if (item) item.classList.add('active');
+    if (panel) panel.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  if (state.presetAgreementId) {
-    const target = rows.find(({ item }) => {
-      const itemId = String(item.id || "").trim().toLowerCase();
-      return itemId === state.presetAgreementId || agreementKey(item) === state.presetAgreementId;
-    });
-    if (target) {
-      state.activeAgreementKey = agreementKey(target.item);
-      state.presetAgreementId = "";
-    }
-  }
-
-  const keys = rows.map(({ item }) => agreementKey(item));
-  if (!keys.includes(state.activeAgreementKey)) {
-    state.activeAgreementKey = keys[0];
-  }
-
-  const activeRow = rows.find(({ item }) => agreementKey(item) === state.activeAgreementKey) || rows[0];
-  const activeItem = activeRow.item;
-
-  const listHtml = rows.map(({ item }) => {
-    const key = agreementKey(item);
-    const active = key === state.activeAgreementKey ? " active" : "";
-    const updated = item.last_updated ? item.last_updated : "unknown";
-    const banner = item.card.banner || { level: "yellow", label: "Consider Admission" };
-    const isNew = (item.tags || []).includes('new');
-    return `
-      <button class="result-row${active}" type="button" data-role="pick-agreement" data-key="${escapeHtml(key)}">
-        <div class="result-row-title">${isNew ? '<span class="rr-new">NEW</span> ' : ''}${escapeHtml(displayTitle(item))}</div>
-        <div class="result-row-snippet">${escapeHtml(listSnippet(item))}</div>
-        <div class="result-row-meta">
-          <span class="result-row-date">${escapeHtml(updated)}</span>
-          <span class="result-row-badge ${escapeHtml(banner.level || "yellow")}">${escapeHtml(banner.label || "Consider Admission")}</span>
-        </div>
-      </button>
-    `;
-  }).join("");
-
-  container.innerHTML = `
-    <aside class="result-list">
-      <div class="result-list-head">Agreements</div>
-      <div class="result-list-items">${listHtml}</div>
-    </aside>
-    <section class="detail-pane">${detailCardHtml(activeItem)}</section>
-  `;
-
-  container.querySelectorAll('[data-role="pick-agreement"]').forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const key = btn.getAttribute("data-key") || "";
-      if (!key || key === state.activeAgreementKey) return;
-      state.activeAgreementKey = key;
-      renderResults();
-      // On narrow viewports the detail pane renders below the list — scroll to it
-      if (window.innerWidth <= 900) {
-        const pane = document.querySelector(".detail-pane");
-        if (pane) pane.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
+  items.forEach(item => {
+    item.addEventListener('click', () => {
+      const target = item.dataset.target;
+      if (target) activate(target);
     });
   });
 
-  container.querySelectorAll(".js-copy-workflow").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      copyText(workflowText(activeItem));
+  searchInput.addEventListener('input', function() {
+    const q = this.value.trim().toLowerCase();
+    let firstVisible = null;
+    items.forEach(item => {
+      const keywords = (item.dataset.keywords || '').toLowerCase();
+      const title = item.querySelector('.li-title').textContent.toLowerCase();
+      const match = !q || title.includes(q) || keywords.includes(q);
+      item.style.display = match ? '' : 'none';
+      if (match && !firstVisible) firstVisible = item;
     });
   });
-
-  container.querySelectorAll(".js-copy-doc").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      copyText(activeItem.card.documentation || "");
-    });
-  });
-}
-
-function renderFilterChips(containerId, values, selectedSet, onToggle) {
-  const container = document.getElementById(containerId);
-  if (!values.length) {
-    container.innerHTML = '<span class="small-note">No values found</span>';
-    return;
-  }
-  container.innerHTML = values.map((value) => {
-    const active = selectedSet.has(value) ? " on" : "";
-    return `<button class="chip${active}" data-value="${escapeHtml(value)}">${escapeHtml(value)}</button>`;
-  }).join("");
-
-  container.querySelectorAll(".chip").forEach((chip) => {
-    chip.addEventListener("click", () => onToggle(chip.dataset.value || ""));
-  });
-}
-
-function toggleSetValue(set, value) {
-  if (set.has(value)) set.delete(value);
-  else set.add(value);
-}
-
-function renderFiltersAndResults() {
-  const deptValues = Array.from(new Set(state.agreements.flatMap((a) => a.departments || []))).sort((a, b) => a.localeCompare(b));
-  const tagValues = Array.from(new Set(state.agreements.flatMap((a) => a.tags || []))).sort((a, b) => a.localeCompare(b));
-
-  renderFilterChips("deptChips", deptValues, state.selectedDepts, (value) => {
-    toggleSetValue(state.selectedDepts, value);
-    renderFiltersAndResults();
-  });
-
-  renderFilterChips("tagChips", tagValues, state.selectedTags, (value) => {
-    toggleSetValue(state.selectedTags, value);
-    renderFiltersAndResults();
-  });
-
-  renderResults();
-}
-
-function applyPresetQueryFromUrl() {
-  const params = new URLSearchParams(window.location.search || "");
-  const preset = (params.get("q") || params.get("query") || "").trim();
-  const presetId = (params.get("id") || params.get("agreement") || "").trim();
-  if (preset) {
-    state.query = preset;
-    const input = document.getElementById("searchInput");
-    if (input) input.value = preset;
-  }
-  if (presetId) {
-    state.presetAgreementId = normalize(presetId).replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
-  }
-}
-
-async function init() {
-  try {
-    const res = await fetch("./data/service_agreements_index.json", { cache: "no-store" });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const payload = await res.json();
-    const agreements = Array.isArray(payload.agreements) ? payload.agreements : [];
-    const docOnly = agreements.filter((agreement) => {
-      const src = String((agreement && agreement.source_filename) || "").toLowerCase();
-      return src.endsWith(".doc") || src.endsWith(".docx");
-    });
-    state.agreements = docOnly.map(prepareAgreement);
-  } catch (err) {
-    document.getElementById("resultCount").textContent = "Failed to load agreement index";
-    const note = location.protocol === "file:"
-      ? " This page must be served via HTTP (for example: python3 -m http.server) to load JSON data."
-      : "";
-    document.getElementById("results").innerHTML = `<div class="empty">Could not load data/service_agreements_index.json (${escapeHtml(err.message)}).${escapeHtml(note)}</div>`;
-    return;
-  }
-
-  document.getElementById("searchInput").addEventListener("input", (e) => {
-    state.query = e.target.value || "";
-    renderResults();
-  });
-
-  document.getElementById("olderToggle").addEventListener("change", (e) => {
-    state.olderThanFiveYears = !!e.target.checked;
-    renderResults();
-  });
-
-  document.getElementById("sortSelect").addEventListener("change", (e) => {
-    state.sort = e.target.value || "relevance";
-    renderResults();
-  });
-
-  applyPresetQueryFromUrl();
-  const hadPresetId = !!state.presetAgreementId;
-  renderFiltersAndResults();
-  if (hadPresetId) {
-    // Came from a deep link (?id=…) — scroll straight to the detail card
-    setTimeout(() => {
-      const pane = document.querySelector(".detail-pane");
-      if (pane) pane.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 80);
-  }
-}
-
-init();
+})();
 </script>
-<div class="mobile-nav">
-  <a class="mob-item" href="index.html"><span class="mob-icon">🏠</span>Home</a>
-  <a class="mob-item" href="dotphrase.html"><span class="mob-icon">📋</span>Phrases</a>
-  <a class="mob-item" href="calculators.html"><span class="mob-icon">🧮</span>Calcs</a>
-  <a class="mob-item" href="rsi.html"><span class="mob-icon">🚨</span>Resus</a>
-  <a class="mob-item active" href="ed-phone-directory.html"><span class="mob-icon">📞</span>Directory</a>
-</div>
-<button id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">☀️</button>
-<script src="theme.js?v=3"></script>
-<script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
+
 </body>
 </html>
