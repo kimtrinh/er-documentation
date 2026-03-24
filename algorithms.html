@@ -203,7 +203,7 @@ main>*:nth-child(4){animation-delay:.15s}
   <div class="algo-tools">
     <input id="algoSearchInput" class="algo-search" type="text" placeholder="Search algorithms (e.g. pregnancy, aortic, papilledema, floaters)..." autocomplete="off" spellcheck="false" aria-label="Search algorithms">
     <button id="algoSearchClear" class="algo-clear" type="button">Clear</button>
-    <span id="algoSearchCount" class="algo-count">8 algorithms</span>
+    <span id="algoSearchCount" class="algo-count">9 algorithms</span>
   </div>
 
   <!-- ALGORITHM SELECTOR GRID -->
@@ -262,6 +262,13 @@ main>*:nth-child(4){animation-delay:.15s}
       <div class="algo-info">
         <div class="algo-title">Vertebral Compression Fracture (VCF)</div>
         <div class="algo-meta">Updated 3/10/2026 &nbsp;·&nbsp; <span class="algo-badge badge-spine">Spine/Ortho</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('pphtн')" id="card-pphtн" data-algo="pphtн" data-keywords="postpartum hypertension HTN eclampsia nifedipine magnesium HELLP preeclampsia OB delivery severe blood pressure" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🤱</div>
+      <div class="algo-info">
+        <div class="algo-title">Postpartum Severe Hypertension</div>
+        <div class="algo-meta">KP SBC OB/ED &nbsp;·&nbsp; <span class="algo-badge badge-ob">OB/GYN</span></div>
       </div>
     </div>
   </div>
@@ -890,6 +897,29 @@ const algos = {
             </span>
           </div>
         </div>
+      </div>
+    `
+  },
+
+  'pphtн': {
+    icon: '🤱',
+    title: 'Postpartum Severe Hypertension',
+    updated: 'KP SBC OB/Emergency Department',
+    render: () => `
+      <div style="max-width:680px;margin:0 auto">
+        <div class="callout callout-yellow" style="margin-bottom:20px">
+          <strong>Entry Criteria:</strong> Postpartum patients &gt;48h and within 7 days of delivery with severe HTN — <strong>SBP ≥160 mmHg OR DBP ≥110 mmHg</strong> on two readings 15 min apart. Management is individualized based on symptoms. BP monitoring cutoff is <strong>1:30 PM</strong> — patients not discharged are sent to the ED.
+        </div>
+
+        <div class="callout" style="margin-bottom:24px">
+          For postpartum patients presenting with severe hypertension, management is symptom-guided: asymptomatic patients receive Nifedipine 10mg IR with BP recheck at 20 minutes, followed by hourly monitoring ×4 hours and STAT labs (CBC, LFTs, Creatinine). Patients with headache also receive Tylenol 650mg — if headache is not relieved at 1 hour, consider admission. Patients with neurologic symptoms (blurry vision, hyperreflexia), cardiovascular symptoms (chest pain, SOB, hypoxia, rales), or GI symptoms (RUQ/epigastric pain, nausea/vomiting) receive Nifedipine 10mg IR with escalation toward admission; GI-symptomatic patients also get HELLP labs (CBC, LFTs, Creatinine, DIC panel). Convulsions are treated with Magnesium Sulfate 10mg IM if available. Admission orders at physician discretion include antihypertensives, lab evaluation, and magnesium sulfate.
+        </div>
+
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+          <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 Official Algorithm Document</div>
+          <a href="assets/pp-htn-algorithm.pdf" download style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue2);border:1px solid var(--blue);border-radius:8px;color:#fff;font-size:12px;font-weight:600;text-decoration:none">⬇ Download PDF</a>
+        </div>
+        <iframe src="assets/pp-htn-algorithm.pdf" style="width:100%;height:600px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Postpartum Severe Hypertension Algorithm"></iframe>
       </div>
     `
   }
