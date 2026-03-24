@@ -117,6 +117,9 @@ main{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-colu
 /* No-doc placeholder */
 .no-doc{padding:40px 20px;text-align:center;color:var(--text3);font-size:13px;border-top:1px solid var(--border)}
 .no-doc strong{display:block;font-size:15px;color:var(--text2);margin-bottom:6px}
+.sp-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:9px;border:1px solid #1d4ed8;background:#0d2038;color:#93c5fd;font-size:13px;font-weight:700;text-decoration:none;transition:.15s;font-family:var(--sans);margin-top:10px}
+.sp-btn:hover{background:#162a5a;border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,.15)}
+.sp-note{font-size:11px;color:var(--text3);margin-top:8px}
 
 /* Empty state */
 .empty{padding:48px 24px;text-align:center;color:var(--text3);font-size:14px}
@@ -204,6 +207,14 @@ main{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-colu
         <div class="li-meta">
           <span class="li-badge orange">Dual Consult</span>
           <span class="li-dept">Orthopedics · Internal Medicine</span>
+        </div>
+      </div>
+
+      <div class="list-item" data-target="imgsurg" data-keywords="internal medicine general surgery biliary cholecystitis bowel obstruction diverticulitis IBD ischemic colitis post-op trauma cellulitis routing admission">
+        <div class="li-title">IM & Gen Surgery Admissions (2016)</div>
+        <div class="li-meta">
+          <span class="li-badge yellow">Routing Agreement</span>
+          <span class="li-dept">Internal Medicine · General Surgery</span>
         </div>
       </div>
 
@@ -400,6 +411,45 @@ main{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-colu
       </div>
     </div>
 
+    <!-- ══ IM & GEN SURG ══ -->
+    <div class="agreement-panel" id="imgsurg">
+      <div class="info-card">
+        <div class="card-top">
+          <div>
+            <div class="card-title">IM &amp; General Surgery Admissions (2016)</div>
+            <div class="card-dept">Internal Medicine · General Surgery · Emergency Medicine</div>
+          </div>
+          <div class="decision-badge yellow">🟡 Routing Agreement</div>
+        </div>
+        <div class="tags">
+          <span class="tag">biliary disease</span>
+          <span class="tag">bowel obstruction</span>
+          <span class="tag">diverticulitis</span>
+          <span class="tag">post-op complications</span>
+          <span class="tag yellow">IM vs Gen Surg</span>
+          <span class="tag">trauma</span>
+        </div>
+        <hr class="divider"/>
+        <div>
+          <div class="summary-label">Summary</div>
+          <p class="summary-text">This agreement defines which service admits for common surgical presentations: biliary disease with confirmed gallstones (acute cholecystitis, gallstone pancreatitis, choledocholithiasis with cholelithiasis) goes to General Surgery, while biliary pathology without gallstones, post-cholecystectomy stones, or surgical refusal goes to Internal Medicine. Bowel obstruction with an incarcerated hernia or CT transition zone goes to General Surgery; ileus, carcinomatosis, impaction, or refusal of surgery goes to Internal Medicine. For diverticulitis, free air or abscess requiring intervention goes to General Surgery; all other cases go to Internal Medicine. Any post-operative complication (wound infection, dehiscence, abscess) goes to General Surgery, while non-surgical post-op issues (PE/DVT, pneumonia, MI/CHF) go to Internal Medicine. Necrotizing fasciitis and large abscesses requiring surgery go to General Surgery; all other cellulitis goes to Internal Medicine. For trauma, multisystem or wound-care cases go to General Surgery, while patients transferred from outside hospitals with only active medical issues go to Internal Medicine. Pediatric surgical patients 14 years and older may be admitted to FMC or OMC; those under 14 must go to FMC.</p>
+        </div>
+        <hr class="divider"/>
+        <a class="download-btn" href="https://docs.google.com/document/d/1ztbJbafrhIB25dcaKtnhs2Ip2OdPdrh55Avy08Grl10/export?format=pdf" target="_blank" rel="noopener">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#86efac" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <div><div>Download Official Agreement</div><div class="download-btn-sub">PDF · Google Docs</div></div>
+        </a>
+        <div class="updated">📅 Last updated: Feb 2013 (reviewed 2016)</div>
+      </div>
+      <div class="pdf-card">
+        <div class="pdf-bar">
+          <div class="pdf-bar-title"><span>📄</span> Official Service Agreement — IM &amp; General Surgery</div>
+          <a class="pdf-open-link" href="https://docs.google.com/document/d/1ztbJbafrhIB25dcaKtnhs2Ip2OdPdrh55Avy08Grl10/edit" target="_blank" rel="noopener">Open in Docs ↗</a>
+        </div>
+        <iframe class="pdf-iframe" src="https://docs.google.com/document/d/1ztbJbafrhIB25dcaKtnhs2Ip2OdPdrh55Avy08Grl10/preview" allow="autoplay" title="IM and General Surgery Service Agreement"></iframe>
+      </div>
+    </div>
+
     <!-- ══ DVT ══ -->
     <div class="agreement-panel" id="dvt">
       <div class="info-card">
@@ -423,16 +473,18 @@ main{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-colu
           <p class="summary-text">Confirmed acute upper or lower extremity DVT in hemodynamically stable patients 18 years or older may be managed with outpatient anticoagulation if no exclusion criteria are present — exclusions include active bleeding risk, platelets below 75,000, stroke within 6 weeks, recent surgery under 2 weeks, pregnancy, heparin allergy or HIT, weight ≥150 kg, age over 75, or therapeutic INR. The Wells score guides the diagnostic approach: score ≥3 proceeds directly to ultrasound, while score 0–2 uses D-dimer first. If ultrasound is positive, the patient receives a nurse visit, first anticoagulant dose (preferred: enoxaparin 1 mg/kg q12h, or 1 mg/kg daily if CrCl &lt;30), an outpatient anticoagulation referral, and follow-up within 2–3 days with explicit return precautions.</p>
         </div>
         <hr class="divider"/>
+        <a class="download-btn" href="https://drive.google.com/uc?export=download&id=0B9XD81fWj2XJT0MyWHJxeWZTWDA" target="_blank" rel="noopener">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#86efac" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <div><div>Download Official Agreement</div><div class="download-btn-sub">PDF · Google Drive</div></div>
+        </a>
         <div class="updated">📅 Last updated: Jan 2014</div>
       </div>
       <div class="pdf-card">
         <div class="pdf-bar">
           <div class="pdf-bar-title"><span>📄</span> Official Service Agreement — Outpatient DVT Anticoagulation</div>
+          <a class="pdf-open-link" href="https://drive.google.com/file/d/0B9XD81fWj2XJT0MyWHJxeWZTWDA/view" target="_blank" rel="noopener">Open in Drive ↗</a>
         </div>
-        <div class="no-doc">
-          <strong>Document not yet linked</strong>
-          Contact your department administrator to add the official PDF link for this agreement.
-        </div>
+        <iframe class="pdf-iframe" src="https://drive.google.com/file/d/0B9XD81fWj2XJT0MyWHJxeWZTWDA/preview" allow="autoplay" title="DVT Anticoagulation Service Agreement PDF"></iframe>
       </div>
     </div>
 
@@ -459,16 +511,18 @@ main{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-colu
           <p class="summary-text">Hemodynamically stable atrial fibrillation or flutter with rate above 100–110 bpm is managed with IV rate control first (diltiazem 0.25 mg/kg IV, or metoprolol 5 mg IV q15 min), then conversion to oral therapy once rate is controlled — discharge is appropriate if the rate remains below 110 on oral regimen and the patient is clinically stable. If symptom onset is clearly under 48 hours, pharmacologic or electrical cardioversion is generally acceptable with cardiology input. The discharge plan must address a rate-control medication, an antithrombotic strategy based on CHA₂DS₂-VASc score, echocardiography for a first episode, and cardiology follow-up; admission is required if exclusion criteria are present (active ischemia, decompensated CHF, PE, sepsis, stroke, or ongoing instability).</p>
         </div>
         <hr class="divider"/>
+        <a class="download-btn" href="https://drive.google.com/uc?export=download&id=1VKBsLt3_T9Jnw4Swzx5Hxg99fxho6BLg" target="_blank" rel="noopener">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#86efac" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <div><div>Download Official Agreement</div><div class="download-btn-sub">PDF · Google Drive</div></div>
+        </a>
         <div class="updated">📅 Last updated: 2020</div>
       </div>
       <div class="pdf-card">
         <div class="pdf-bar">
           <div class="pdf-bar-title"><span>📄</span> Official Service Agreement — Atrial Fibrillation / Flutter</div>
+          <a class="pdf-open-link" href="https://drive.google.com/file/d/1VKBsLt3_T9Jnw4Swzx5Hxg99fxho6BLg/view" target="_blank" rel="noopener">Open in Drive ↗</a>
         </div>
-        <div class="no-doc">
-          <strong>Document not yet linked</strong>
-          Contact your department administrator to add the official PDF link for this agreement.
-        </div>
+        <iframe class="pdf-iframe" src="https://drive.google.com/file/d/1VKBsLt3_T9Jnw4Swzx5Hxg99fxho6BLg/preview" allow="autoplay" title="Atrial Fibrillation Service Agreement PDF"></iframe>
       </div>
     </div>
 
@@ -501,10 +555,16 @@ main{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-colu
       <div class="pdf-card">
         <div class="pdf-bar">
           <div class="pdf-bar-title"><span>📄</span> Official Service Agreement — Prolonged ED LOS (PLOS)</div>
+          <a class="pdf-open-link" href="https://sp-cloud.kp.org/sites/Fontario/SiteAssets/Forms/AllItems.aspx?id=%2Fsites%2FFontario%2FSiteAssets%2FSitePages%2FCollabHome%281%29%2FService-Agreement---Prolonged-Length-of-Stay.pdf&parent=%2Fsites%2FFontario%2FSiteAssets%2FSitePages%2FCollabHome%281%29" target="_blank" rel="noopener">Open in SharePoint ↗</a>
         </div>
         <div class="no-doc">
-          <strong>Document not yet linked</strong>
-          Contact your department administrator to add the official PDF link for this agreement.
+          <strong>KP SharePoint Document</strong>
+          This document is hosted on the KP internal network and cannot be embedded here.
+          <br/>
+          <a class="sp-btn" href="https://sp-cloud.kp.org/sites/Fontario/SiteAssets/Forms/AllItems.aspx?id=%2Fsites%2FFontario%2FSiteAssets%2FSitePages%2FCollabHome%281%29%2FService-Agreement---Prolonged-Length-of-Stay.pdf&parent=%2Fsites%2FFontario%2FSiteAssets%2FSitePages%2FCollabHome%281%29" target="_blank" rel="noopener">
+            🔒 Open on KP SharePoint ↗
+          </a>
+          <div class="sp-note">Requires KP network access or VPN</div>
         </div>
       </div>
     </div>
