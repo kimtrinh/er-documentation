@@ -271,6 +271,13 @@ main>*:nth-child(4){animation-delay:.15s}
         <div class="algo-meta">KP SBC OB/ED &nbsp;·&nbsp; <span class="algo-badge badge-ob">OB/GYN</span></div>
       </div>
     </div>
+    <div class="algo-card" onclick="showAlgo('dvt')" id="card-dvt" data-algo="dvt" data-keywords="dvt deep vein thrombosis anticoagulation outpatient enoxaparin wells score hematology vascular" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🩸</div>
+      <div class="algo-info">
+        <div class="algo-title">Outpatient DVT Anticoagulation</div>
+        <div class="algo-meta">KP SBC ED &nbsp;·&nbsp; <span class="algo-badge badge-cards">Hematology</span></div>
+      </div>
+    </div>
   </div>
 
   <!-- ALGORITHM VIEWER -->
@@ -897,6 +904,24 @@ const algos = {
             </span>
           </div>
         </div>
+      </div>
+    `
+  },
+
+  'dvt': {
+    icon: '🩸',
+    title: 'Outpatient DVT Anticoagulation',
+    updated: 'KP SBC Hematology · Vascular · Emergency Medicine',
+    render: () => `
+      <div style="max-width:680px;margin:0 auto">
+        <div class="callout" style="margin-bottom:24px">
+          Confirmed acute upper or lower extremity DVT in hemodynamically stable patients 18 years or older may be managed with outpatient anticoagulation if no exclusion criteria are present — exclusions include active bleeding risk, platelets below 75,000, stroke within 6 weeks, recent surgery under 2 weeks, pregnancy, heparin allergy or HIT, weight ≥150 kg, age over 75, or therapeutic INR. The Wells score guides the diagnostic approach: score ≥3 proceeds directly to ultrasound, while score 0–2 uses D-dimer first. If ultrasound is positive, the patient receives a nurse visit, first anticoagulant dose (preferred: enoxaparin 1 mg/kg q12h, or 1 mg/kg daily if CrCl &lt;30), an outpatient anticoagulation referral, and follow-up within 2–3 days with explicit return precautions.
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+          <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 Official Protocol Document</div>
+          <a href="assets/dvt-outpatient-anticoagulation.pdf" download style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue2);border:1px solid var(--blue);border-radius:8px;color:#fff;font-size:12px;font-weight:600;text-decoration:none">⬇ Download PDF</a>
+        </div>
+        <iframe src="assets/dvt-outpatient-anticoagulation.pdf" style="width:100%;height:600px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Outpatient DVT Anticoagulation Protocol"></iframe>
       </div>
     `
   },
