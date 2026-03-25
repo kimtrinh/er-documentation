@@ -46,7 +46,9 @@ main{max-width:900px;margin:0 auto;padding:24px 24px 80px}
 .vote-btn.voted{border-color:#3b82f6;background:var(--border2)}
 .vote-btn .chevron{font-size:10px;color:#475569;line-height:1}
 .vote-btn.voted .chevron{color:#60a5fa}
-.vote-count{font-size:15px;font-weight:800;color:var(--text2);line-height:1}
+.vote-count{font-size:15px;font-weight:800;color:var(--text2);line-height:1;transition:color .3s}
+@keyframes votePulse{0%{color:var(--text2);transform:scale(1)}40%{color:#22c55e;transform:scale(1.35)}100%{color:var(--text2);transform:scale(1)}}
+.vote-pulse{animation:votePulse .55s ease-out}
 .vote-btn.voted .vote-count{color:#60a5fa}
 .item-body{flex:1;min-width:0}
 .item-title{font-size:14px;font-weight:600;color:var(--text);line-height:1.4;margin-bottom:4px}
@@ -344,7 +346,7 @@ main>*:nth-child(4){animation-delay:.15s}
 <script type="module">
 // ── FIREBASE SETUP ──────────────────────────────────────────────
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js';
-import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, arrayUnion, arrayRemove, increment, serverTimestamp, query, orderBy, getDoc } from 'https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js';
+import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, arrayUnion, arrayRemove, increment, serverTimestamp, query, orderBy, getDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js';
 
 // ╔═══════════════════════════════════════════════════════════╗
 // ║  FIREBASE CONFIG — Replace with your project's config    ║
@@ -377,7 +379,7 @@ const firebaseConfig = {
 const EMAILJS_PUBLIC_KEY = 'ZUkxeb4p-LrOetbHE';
 const EMAILJS_SERVICE_ID = 'service_7s9tj4j';
 const EMAILJS_TEMPLATE_ID = 'template_gkq401s';
-const NOTIFY_EMAILS = atob('UnVzc2VsLlcuTWF4aWUtU3JAa3Aub3JnLERhdmlkLkouVGhpZXNzZW5Aa3Aub3JnLGtpbS54LnRyaW5oQGtwLm9yZw==').split(',');
+const NOTIFY_EMAILS = atob('UnVzc2VsLlcuTWF4aWUtU3JAa3Aub3JnLERhdmlkLkouVGhpZXNzZW5Aa3Aub3JnLGtpbS54LnRyaW5oQGtwLm9yZyxNaWNoYWVsLlNjaHdhcnR6d2FsZEBrcC5vcmc=').split(',');
 
 let emailjsReady = false;
 function initEmailJS() {
@@ -450,6 +452,10 @@ let currentStatusFilter = 'all';
 let currentSort = 'newest';
 let openComments = new Set();
 let commentsCache = {};
+let requestsUnsub = null;
+const commentUnsubs = {};
+const changedVoteIds = new Set();
+const prevVoteCounts = new Map();
 
 // Admin state
 const ADMIN_PIN = '0507';
@@ -493,26 +499,31 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove('show'), 3200);
 }
 
-// ── LOAD REQUESTS ────────────────────────────────────────────
-async function loadRequests() {
+// ── REALTIME REQUESTS ────────────────────────────────────────
+function setupRealtimeRequests() {
   if (!firebaseReady) {
     document.getElementById('request-list').innerHTML =
       '<div class="empty-state"><div class="icon">🔧</div><p>Configure Firebase to start using the Service Request Board.</p></div>';
     return;
   }
-  try {
-    const q = query(collection(db, 'serviceRequests'), orderBy('createdAt', 'desc'));
-    const snapshot = await getDocs(q);
+  if (requestsUnsub) requestsUnsub();
+  const q = query(collection(db, 'serviceRequests'), orderBy('createdAt', 'desc'));
+  requestsUnsub = onSnapshot(q, snapshot => {
     allRequests = [];
     snapshot.forEach(d => {
-      allRequests.push({ id: d.id, ...d.data() });
+      const data = { id: d.id, ...d.data() };
+      const prev = prevVoteCounts.get(d.id);
+      const curr = data.votes || 0;
+      if (prev !== undefined && prev !== curr) changedVoteIds.add(d.id);
+      prevVoteCounts.set(d.id, curr);
+      allRequests.push(data);
     });
     renderAll();
-  } catch (e) {
-    console.error('Load error:', e);
+  }, err => {
+    console.error('Requests listener error:', err);
     document.getElementById('request-list').innerHTML =
       '<div class="empty-state"><div class="icon">⚠️</div><p>Failed to load requests. Check console for errors.</p></div>';
-  }
+  });
 }
 
 // ── RENDER ───────────────────────────────────────────────────
@@ -547,13 +558,15 @@ function cardHTML(item) {
   const voted = votedBy.includes(BROWSER_ID);
   const commentCount = item.commentCount || 0;
   const isOpen = openComments.has(item.id);
+  const pulse = changedVoteIds.has(item.id);
+  if (pulse) changedVoteIds.delete(item.id);
 
   return `
   <div class="item-card" id="card-${item.id}">
     <div class="item-top">
       <button class="vote-btn ${voted ? 'voted' : ''}" onclick="window._vote('${item.id}')" title="${voted ? 'Remove vote' : 'Upvote'}">
         <span class="chevron">&#9650;</span>
-        <span class="vote-count">${item.votes || 0}</span>
+        <span class="vote-count${pulse ? ' vote-pulse' : ''}">${item.votes || 0}</span>
       </button>
       <div class="item-body">
         <div class="item-title">${esc(item.title)}</div>
@@ -653,19 +666,20 @@ async function cycleStatus(id) {
 async function toggleComments(id) {
   if (openComments.has(id)) {
     openComments.delete(id);
+    if (commentUnsubs[id]) { commentUnsubs[id](); delete commentUnsubs[id]; }
     renderAll();
     return;
   }
   openComments.add(id);
   renderAll();
   if (!firebaseReady) return;
-  await loadComments(id);
+  setupRealtimeComments(id);
 }
 
-async function loadComments(id) {
-  try {
-    const q = query(collection(db, 'serviceRequests', id, 'comments'), orderBy('createdAt', 'asc'));
-    const snapshot = await getDocs(q);
+function setupRealtimeComments(id) {
+  if (commentUnsubs[id]) return;
+  const q = query(collection(db, 'serviceRequests', id, 'comments'), orderBy('createdAt', 'asc'));
+  commentUnsubs[id] = onSnapshot(q, snapshot => {
     const comments = [];
     snapshot.forEach(d => comments.push({ id: d.id, ...d.data() }));
     const html = comments.length > 0
@@ -674,9 +688,7 @@ async function loadComments(id) {
     commentsCache[id] = html;
     const el = document.getElementById('clist-' + id);
     if (el) el.innerHTML = html;
-  } catch (e) {
-    console.error('Load comments error:', e);
-  }
+  }, err => { console.error('Comments listener error:', err); });
 }
 
 async function addComment(id) {
@@ -707,8 +719,6 @@ async function addComment(id) {
       item.commentCount = (item.commentCount || 0) + 1;
     }
     input.value = '';
-    await loadComments(id);
-    renderAll();
     showToast('Comment added');
   } catch (e) {
     console.error('Add comment error:', e);
@@ -817,8 +827,7 @@ async function submitRequest() {
     await addDoc(collection(db, 'serviceRequests'), data);
     sendEmailNotification(data);
     closeModal();
-    showToast('Request submitted successfully!');
-    await loadRequests();
+    showToast('Request submitted successfully!'); // listener auto-updates the list
   } catch (e) {
     console.error('Submit error:', e);
     showToast('Failed to submit. Please try again.');
@@ -909,7 +918,7 @@ document.addEventListener('keydown', e => {
 initFirebase();
 initEmailJS();
 updateAdminToggle();
-loadRequests();
+setupRealtimeRequests();
 </script>
 
 <script src="search-index.js"></script>

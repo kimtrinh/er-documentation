@@ -53,6 +53,8 @@ main{max-width:900px;margin:0 auto;padding:16px 24px 60px}
 .vote-btn.active{border-color:#2563eb;color:#bfdbfe;background:#0d2038}
 .vote-btn:disabled{opacity:.55;cursor:not-allowed}
 .vote-count{font-size:12px;color:var(--text2);min-width:62px}
+@keyframes votePulse{0%{color:var(--text2)}40%{color:#22c55e;font-weight:800}100%{color:var(--text2)}}
+.vote-pulse{animation:votePulse .6s ease-out}
 .copy-btn{padding:6px 14px;border-radius:8px;border:none;cursor:pointer;font-size:12px;font-weight:600;background:#3b82f6;color:#fff;transition:background .2s;white-space:nowrap}
 .copy-btn.copied{background:#16a34a}
 .card-body{padding:12px 16px;font-size:13px;line-height:1.75;color:var(--text2)}
@@ -172,6 +174,9 @@ const firebaseConfig = {
 let firebaseReady = false;
 let db = null;
 let firestoreApi = null;
+let phrasesUnsub = null;
+const userVotesMap = new Map();  // phraseId -> vote value
+const changedVoteIds = new Set(); // IDs whose vote count changed via listener
 
 async function initFirebase() {
   try {
@@ -318,51 +323,61 @@ function setSubmitMessage(message, type) {
   msgEl.className = `submit-message${type ? " " + type : ""}`;
 }
 
-async function fetchSubmittedDotphrases() {
-  if (firebaseReady && db && firestoreApi) {
-    const { collection, getDocs, orderBy, query, where } = firestoreApi;
-    const dotphraseSnapshot = await getDocs(query(collection(db, 'dotphrases'), orderBy('createdAt', 'desc')));
-    const userSnapshot = await getDocs(query(collection(db, 'dotphraseVotes'), where('userId', '==', currentUser.id)));
-    const userVotes = new Map();
-
-    userSnapshot.forEach(d => {
+async function loadUserVotes() {
+  if (!firebaseReady || !db || !firestoreApi) return;
+  const { collection, getDocs, query, where } = firestoreApi;
+  try {
+    const snap = await getDocs(query(collection(db, 'dotphraseVotes'), where('userId', '==', currentUser.id)));
+    userVotesMap.clear();
+    snap.forEach(d => {
       const row = d.data() || {};
-      if (row.phraseId) userVotes.set(String(row.phraseId), Number(row.vote) || 0);
+      if (row.phraseId) userVotesMap.set(String(row.phraseId), Number(row.vote) || 0);
     });
+  } catch (e) { /* silent */ }
+}
 
-    const items = [];
-    dotphraseSnapshot.forEach(d => {
+function setupRealtimePhrases() {
+  if (!firebaseReady || !db || !firestoreApi) {
+    replacePhrases(basePhrases);
+    rebuildTabs();
+    render();
+    return;
+  }
+  const { collection, onSnapshot, query, orderBy } = firestoreApi;
+  if (phrasesUnsub) phrasesUnsub();
+  const prevCounts = new Map();
+  const q = query(collection(db, 'dotphrases'), orderBy('createdAt', 'desc'));
+  phrasesUnsub = onSnapshot(q, snapshot => {
+    const firestoreItems = [];
+    snapshot.forEach(d => {
       const row = d.data() || {};
-      const currentUserVote = Number(userVotes.get(d.id)) || 0;
-      items.push({
+      const cv = userVotesMap.get(d.id) || 0;
+      const newVotes = Number(row.votes) || 0;
+      if (prevCounts.has(d.id) && prevCounts.get(d.id) !== newVotes) changedVoteIds.add(d.id);
+      prevCounts.set(d.id, newVotes);
+      firestoreItems.push({
         id: d.id,
         dot: String(row.dot || ''),
         cond: String(row.cond || ''),
         cat: String(row.cat || ''),
         text: String(row.text || ''),
-        votes: Number(row.votes) || 0,
+        votes: newVotes,
         createdAt: Number(row.createdAt) || 0,
-        currentUserVote,
-        hasVoted: currentUserVote !== 0,
-        hasUpvoted: currentUserVote === 1,
-        hasDownvoted: currentUserVote === -1
+        currentUserVote: cv,
+        hasVoted: cv !== 0,
+        hasUpvoted: cv === 1,
+        hasDownvoted: cv === -1
       });
     });
-
-    return { items, user: currentUser };
-  }
-
-  const response = await fetch('/api/dotphrases', {
-    cache: 'no-store',
-    headers: getApiHeaders()
+    replacePhrases([...basePhrases, ...firestoreItems]);
+    rebuildTabs();
+    render();
+  }, err => {
+    console.error('Phrases listener error:', err);
+    replacePhrases(basePhrases);
+    rebuildTabs();
+    render();
   });
-  if (!response.ok) throw new Error('Failed to load dotphrases');
-  const data = await response.json();
-  if (Array.isArray(data)) return { items: data, user: currentUser };
-  return {
-    items: Array.isArray(data.items) ? data.items : [],
-    user: data.user || currentUser
-  };
 }
 
 function replacePhrases(items) {
@@ -391,15 +406,8 @@ function replacePhrases(items) {
 
 async function refreshPhrases() {
   syncCurrentUser();
-  try {
-    const data = await fetchSubmittedDotphrases();
-    currentUser = data.user || currentUser;
-    replacePhrases([...basePhrases, ...data.items]);
-  } catch (e) {
-    replacePhrases(basePhrases);
-  }
-  rebuildTabs();
-  render();
+  await loadUserVotes();
+  setupRealtimePhrases();
 }
 
 async function submitDotphrase(e) {
@@ -504,7 +512,9 @@ function render() {
     cardActions.className = 'card-actions';
 
     const voteCount = document.createElement('span');
-    voteCount.className = 'vote-count';
+    const pulse = changedVoteIds.has(p.id);
+    if (pulse) changedVoteIds.delete(p.id);
+    voteCount.className = 'vote-count' + (pulse ? ' vote-pulse' : '');
     voteCount.textContent = `▲ ${p.votes || 0}`;
 
     const upvoteBtn = document.createElement('button');
@@ -590,6 +600,8 @@ async function sendVoteRequest(phrase, action) {
 
 function applyVoteResponse(phraseId, updated) {
   currentUser = updated.user || currentUser;
+  // Keep userVotesMap in sync so onSnapshot rebuilds with correct user vote state
+  userVotesMap.set(phraseId, Number(updated.currentUserVote) || 0);
   const match = phrases.find(item => item.id === phraseId);
   if (!match) return;
 
@@ -615,6 +627,10 @@ async function downvotePhrase(i) {
   const filtered = getFiltered();
   const phrase = filtered[i];
   if (!phrase || !phrase.id) return;
+  if (phrase.hasDownvoted) {
+    unvotePhrase(i);
+    return;
+  }
   try {
     const updated = await sendVoteRequest(phrase, 'downvote');
     applyVoteResponse(phrase.id, updated);
