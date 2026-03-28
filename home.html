@@ -217,11 +217,11 @@ html[data-theme="light"] .announcement-text::placeholder{color:#ea580c}
 <div class="search-hero">
   <div class="search-hero-inner">
     <div class="search-label">Emergency Medicine Toolkit</div>
-    <div class="search-sublabel">OMC · FMC — search dotphrases, calculators, drugs, algorithms, and phone numbers</div>
+    <div class="search-sublabel">OMC · FMC — search calculators, drugs, algorithms, and phone numbers</div>
     <div class="search-wrap">
       <span class="search-icon">🔍</span>
       <input class="search-input" id="si" type="text"
-        placeholder="Search everything — e.g. PE, ketamine, ortho, HEART score, aortic dissection, 47333, ETAP..."
+        placeholder="Search calculators, drugs, algorithms, phones — e.g. PE, ketamine, HEART score, 47333..."
         autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
         role="combobox" aria-autocomplete="list" aria-haspopup="listbox" aria-expanded="false"
         aria-controls="sd" aria-label="Search toolkit and phone directory"
@@ -231,7 +231,6 @@ html[data-theme="light"] .announcement-text::placeholder{color:#ea580c}
     </div>
     <div class="chips">
       <button class="chip on" onclick="setFilter('all',this)">All</button>
-      <button class="chip" onclick="setFilter('phrase',this)">📋 Dotphrases</button>
       <button class="chip" onclick="setFilter('calc',this)">🧮 Calculators</button>
       <button class="chip" onclick="setFilter('drug',this)">💊 Drugs</button>
       <button class="chip" onclick="setFilter('algo',this)">🔀 Algorithms</button>
@@ -521,6 +520,7 @@ function doSearch(q) {
   const lo = q.toLowerCase();
 
   let results = getIDX().filter(item => {
+    if (item.type === 'phrase') return false;
     if (!matchesActiveFilter(item)) return false;
     return (
       item.t.toLowerCase().includes(lo) ||
