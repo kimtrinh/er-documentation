@@ -643,6 +643,7 @@ if (typeof window !== 'undefined') {
 
   const safeHref = (href) => {
     const trimmed = String(href || '').trim();
+    if (/^https?:\/\/[^\s]+$/i.test(trimmed)) return trimmed;
     return /^[A-Za-z0-9._/-]+\.html(?:\?[A-Za-z0-9._%=&:+-]+)?(?:#[A-Za-z0-9._:-]+)?$/.test(trimmed)
       ? trimmed
       : 'index.html';
