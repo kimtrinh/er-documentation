@@ -862,6 +862,12 @@ async function deleteRequest(id) {
   if (!confirm('Delete this request? This cannot be undone.')) return;
 
   try {
+    // Stop any active comments listener for this request to avoid orphan subscriptions.
+    if (commentUnsubs[id]) {
+      commentUnsubs[id]();
+      delete commentUnsubs[id];
+    }
+
     // Delete comments subcollection first
     const commentsSnap = await getDocs(collection(db, 'serviceRequests', id, 'comments'));
     const deletes = [];
