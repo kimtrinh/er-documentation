@@ -610,7 +610,8 @@ function doSearch(q) {
     if (!matchesActiveFilter(item)) return false;
     if (item.type === 'phrase') return false;
     const searchable = [item.t, item.s, item.g].join(' ').toLowerCase();
-    return tokens.every(token => searchable.includes(token));
+    const words = searchable.split(/[\s\-\/(),.:;]+/).filter(Boolean);
+    return tokens.every(tok => words.some(w => w.startsWith(tok)));
   });
 
   // Boost title-starts-with matches (on first token)
