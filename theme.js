@@ -77,7 +77,7 @@ applyTheme(getTheme());
         '<div id="omnisearch-head">'+
           '<span id="om-icon">🔍</span>'+
           '<input id="om-input" type="text"'+
-            ' placeholder="Search dotphrases, drugs, calcs, phones…"'+
+            ' placeholder="Search drugs, calcs, algorithms, phones…"'+
             ' autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"'+
             ' role="combobox" aria-autocomplete="list" aria-haspopup="listbox"'+
             ' aria-expanded="false" aria-controls="om-results" aria-label="Search toolkit"/>'+
@@ -92,7 +92,7 @@ applyTheme(getTheme());
           '<button class="om-chip" data-filter="phone">📞 Phones</button>'+
         '</div>'+
         '<div id="om-results" role="listbox" aria-label="Search results">'+
-          '<div class="sdrop-empty">Type to search — dotphrases, drugs, calculators, phones…</div>'+
+          '<div class="sdrop-empty">Type to search — drugs, calculators, algorithms, phones…</div>'+
         '</div>'+
       '</div>';
     document.body.appendChild(overlay);
@@ -104,7 +104,9 @@ applyTheme(getTheme());
     overlay.querySelectorAll('.om-chip').forEach(function(btn){
       btn.addEventListener('click', function(e){
         e.stopPropagation();
-        omFilter = btn.getAttribute('data-filter');
+        var filter = btn.getAttribute('data-filter');
+        if (filter === 'phrase') { window.location.assign('dotphrase.html'); return; }
+        omFilter = filter;
         overlay.querySelectorAll('.om-chip').forEach(function(b){b.classList.remove('on');});
         btn.classList.add('on');
         omRun(inp.value);
@@ -170,7 +172,7 @@ applyTheme(getTheme());
       inp.setAttribute('aria-expanded', q ? 'true' : 'false');
 
       if (!q) {
-        results.innerHTML = '<div class="sdrop-empty">Type to search — dotphrases, drugs, calculators, phones…</div>';
+        results.innerHTML = '<div class="sdrop-empty">Type to search — drugs, calculators, algorithms, phones…</div>';
         return;
       }
 
@@ -184,16 +186,19 @@ applyTheme(getTheme());
       }
 
       var lo = q.toLowerCase();
+      var tokens = lo.split(/\s+/).filter(Boolean);
       var found = idx.filter(function(item){
         if (!omMatches(item)) return false;
-        return item.t.toLowerCase().indexOf(lo)>=0 ||
-               item.s.toLowerCase().indexOf(lo)>=0 ||
-               item.g.toLowerCase().indexOf(lo)>=0;
+        if (item.type === 'phrase') return false;
+        var searchable = [item.t, item.s, item.g].join(' ').toLowerCase();
+        var words = searchable.split(/[\s\-\/(),.:;]+/).filter(Boolean);
+        return tokens.every(function(tok){ return words.some(function(w){ return w.startsWith(tok); }); });
       });
 
-      // Boost title-starts-with
+      // Boost title-starts-with (on first token)
+      var firstToken = tokens[0] || lo;
       found.sort(function(a,b){
-        return (a.t.toLowerCase().indexOf(lo)===0?0:1) - (b.t.toLowerCase().indexOf(lo)===0?0:1);
+        return (a.t.toLowerCase().indexOf(firstToken)===0?0:1) - (b.t.toLowerCase().indexOf(firstToken)===0?0:1);
       });
 
       var total = found.length;
