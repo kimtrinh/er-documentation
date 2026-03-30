@@ -243,7 +243,7 @@ main{max-width:1100px;margin:0 auto;padding:22px 24px 80px}
 <div class="search-hero">
   <div class="search-hero-inner">
     <div class="search-label">Emergency Medicine Toolkit</div>
-    <div class="search-sublabel">OMC · FMC — search dotphrases, calculators, drugs, algorithms, and phone numbers</div>
+    <div class="search-sublabel">OMC · FMC — search calculators, drugs, algorithms, and phone numbers</div>
     <div class="search-wrap">
       <span class="search-icon">🔍</span>
       <input class="search-input" id="si" type="text"
@@ -604,20 +604,20 @@ function doSearch(q) {
     return;
   }
   const lo = q.toLowerCase();
+  const tokens = lo.split(/\s+/).filter(Boolean);
 
   let results = getIDX().filter(item => {
     if (!matchesActiveFilter(item)) return false;
-    return (
-      item.t.toLowerCase().includes(lo) ||
-      item.s.toLowerCase().includes(lo) ||
-      item.g.toLowerCase().includes(lo)
-    );
+    if (item.type === 'phrase') return false;
+    const searchable = [item.t, item.s, item.g].join(' ').toLowerCase();
+    return tokens.every(token => searchable.includes(token));
   });
 
-  // Boost title-starts-with matches
+  // Boost title-starts-with matches (on first token)
   results.sort((a, b) => {
-    const at = a.t.toLowerCase().startsWith(lo) ? 0 : 1;
-    const bt = b.t.toLowerCase().startsWith(lo) ? 0 : 1;
+    const firstToken = tokens[0] || lo;
+    const at = a.t.toLowerCase().startsWith(firstToken) ? 0 : 1;
+    const bt = b.t.toLowerCase().startsWith(firstToken) ? 0 : 1;
     return at - bt;
   });
 
