@@ -288,9 +288,14 @@ function rebuildTabs() {
 
 function getFiltered() {
   const q = document.getElementById("search").value.toLowerCase();
+  const tokens = q.split(/\s+/).filter(Boolean);
   const filtered = phrases.filter(p => {
-    const matchSearch = !q || p.dot.toLowerCase().includes(q) || p.cond.toLowerCase().includes(q)
-      || p.cat.toLowerCase().includes(q) || p.text.toLowerCase().includes(q);
+    let matchSearch = true;
+    if (tokens.length) {
+      const searchable = [p.dot, p.cond, p.cat, p.text].join(' ').toLowerCase();
+      const words = searchable.split(/[\s\-\/(),.:;]+/).filter(Boolean);
+      matchSearch = tokens.every(tok => words.some(w => w.startsWith(tok)));
+    }
     const matchCat = activeCategory === "All" || p.cat === activeCategory;
     return matchSearch && matchCat;
   });
