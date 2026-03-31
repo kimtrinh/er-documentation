@@ -149,6 +149,21 @@ main{max-width:900px;margin:0 auto;padding:24px 24px 80px}
 .admin-toggle{background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:8px 12px;font-size:16px;cursor:pointer;transition:all .2s;line-height:1}
 .admin-toggle:hover{border-color:#3b82f6}
 .admin-toggle.admin-active{border-color:#f59e0b;box-shadow:0 0 8px rgba(245,158,11,.3)}
+.admin-toggle.fulfiller-active{border-color:#22c55e;box-shadow:0 0 8px rgba(34,197,94,.3)}
+
+/* FULFILLER ACTIONS */
+.fulfiller-actions{padding:10px 16px 14px;border-top:2px solid rgba(34,197,94,.25);background:rgba(34,197,94,.04);display:flex;flex-direction:column;gap:8px}
+.fulfiller-actions-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.done-btn{padding:7px 18px;background:#16a34a;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:5px}
+.done-btn:hover{background:#15803d}
+.done-btn:disabled{background:var(--border2);color:var(--border);cursor:not-allowed}
+.cannot-section{display:flex;gap:6px;flex:1;min-width:200px}
+.cannot-input{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:7px 12px;color:var(--text);font-size:13px;font-family:inherit;outline:none;transition:border-color .2s}
+.cannot-input:focus{border-color:#f59e0b}
+.cannot-btn{padding:7px 14px;background:#b45309;color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap}
+.cannot-btn:hover{background:#92400e}
+.comment-bubble.is-fulfiller{border-color:rgba(245,158,11,.5);background:rgba(245,158,11,.07)}
+.comment-bubble.is-fulfiller .comment-author-line{color:#f59e0b}
 
 /* DELETE BUTTON */
 .del-btn{background:transparent;border:1px solid var(--border);border-radius:8px;padding:6px 8px;font-size:14px;cursor:pointer;transition:all .2s;flex-shrink:0;line-height:1;align-self:flex-start;margin-top:6px}
@@ -169,6 +184,8 @@ html[data-theme="light"] .tag-category{background:#f1f5f9;color:#475569;border-c
 html[data-theme="light"] .config-banner{background:#fefce8;border-color:#fde047;color:#92400e}
 html[data-theme="light"] .admin-toggle{border-color:#cbd5e1}
 html[data-theme="light"] .admin-toggle.admin-active{border-color:#d97706;box-shadow:0 0 8px rgba(217,119,6,.25)}
+html[data-theme="light"] .admin-toggle.fulfiller-active{border-color:#16a34a;box-shadow:0 0 8px rgba(22,163,74,.25)}
+html[data-theme="light"] .fulfiller-actions{background:rgba(34,197,94,.05);border-top-color:rgba(34,197,94,.3)}
 html[data-theme="light"] .del-btn{border-color:#e2e8f0}
 html[data-theme="light"] .del-btn:hover{border-color:#dc2626;background:rgba(220,38,38,.08)}
 
@@ -269,6 +286,7 @@ main>*:nth-child(4){animation-delay:.15s}
       <option value="votes">Most Voted</option>
     </select>
 
+    <button class="admin-toggle" id="fulfillerToggle" onclick="window._toggleFulfiller()" title="Fulfiller mode">🔧</button>
     <button class="admin-toggle" id="adminToggle" onclick="window._toggleAdmin()" title="Admin mode">🔒</button>
   </div>
 
@@ -461,6 +479,10 @@ const prevVoteCounts = new Map();
 const ADMIN_PIN = '0507';
 let isAdmin = sessionStorage.getItem('sr_admin') === 'true';
 
+// Fulfiller state
+const FULFILLER_CODE = '0911';
+let isFulfiller = sessionStorage.getItem('sr_fulfiller') === 'true';
+
 // Form state
 let selectedLocation = null;
 let selectedPriority = 'Medium';
@@ -583,6 +605,16 @@ function cardHTML(item) {
       </div>
       ${isAdmin ? `<button class="del-btn" onclick="event.stopPropagation();window._deleteRequest('${item.id}')" title="Delete request">🗑️</button>` : ''}
     </div>
+    ${isFulfiller ? `
+    <div class="fulfiller-actions">
+      <div class="fulfiller-actions-row">
+        <button class="done-btn" onclick="window._markDone('${item.id}')">✓ Done</button>
+        <div class="cannot-section">
+          <input type="text" class="cannot-input" id="cannot-input-${item.id}" placeholder="Reason cannot be completed…" maxlength="200"/>
+          <button class="cannot-btn" onclick="window._postCannotComplete('${item.id}')">Cannot Complete</button>
+        </div>
+      </div>
+    </div>` : ''}
     <div class="comment-toggle" onclick="window._toggleComments('${item.id}')">
       <span>💬 ${commentCount} comment${commentCount !== 1 ? 's' : ''}</span>
       <span class="comment-arrow ${isOpen ? 'open' : ''}" id="arrow-${item.id}">&#9660;</span>
@@ -599,7 +631,8 @@ function cardHTML(item) {
 }
 
 function commentHTML(c) {
-  return `<div class="comment-bubble">
+  const isFulfillerNote = c.type === 'fulfiller';
+  return `<div class="comment-bubble${isFulfillerNote ? ' is-fulfiller' : ''}">
     <div class="comment-author-line">
       <span>${esc(c.author || 'Anonymous')}</span>
       <span>${timeAgo(c.createdAt)}</span>
@@ -898,6 +931,91 @@ async function deleteRequest(id) {
   }
 }
 
+// ── FULFILLER MODE ───────────────────────────────────────────
+function toggleFulfiller() {
+  if (isFulfiller) {
+    isFulfiller = false;
+    sessionStorage.removeItem('sr_fulfiller');
+    showToast('Fulfiller mode deactivated');
+  } else {
+    const code = prompt('Enter fulfiller code:');
+    if (code === null) return;
+    if (code === FULFILLER_CODE) {
+      isFulfiller = true;
+      sessionStorage.setItem('sr_fulfiller', 'true');
+      showToast('Fulfiller mode activated');
+    } else {
+      showToast('Incorrect code');
+      return;
+    }
+  }
+  updateFulfillerToggle();
+  renderAll();
+}
+
+function updateFulfillerToggle() {
+  const btn = document.getElementById('fulfillerToggle');
+  if (!btn) return;
+  btn.textContent = isFulfiller ? '🔓' : '🔧';
+  btn.classList.toggle('fulfiller-active', isFulfiller);
+}
+
+async function markDone(id) {
+  if (!firebaseReady) return;
+  try {
+    await updateDoc(doc(db, 'serviceRequests', id), { status: 'resolved' });
+    const item = allRequests.find(r => r.id === id);
+    if (item) item.status = 'resolved';
+    renderAll();
+    showToast('✓ Marked as done');
+  } catch (e) {
+    console.error('Mark done error:', e);
+    showToast('Failed to update status.');
+  }
+}
+
+async function postCannotComplete(id) {
+  if (!firebaseReady) return;
+  const input = document.getElementById('cannot-input-' + id);
+  if (!input) return;
+
+  const reason = input.value.trim();
+  if (!reason) {
+    input.style.borderColor = '#dc2626';
+    setTimeout(() => input.style.borderColor = '', 1500);
+    return;
+  }
+
+  try {
+    await addDoc(collection(db, 'serviceRequests', id, 'comments'), {
+      text: reason,
+      author: '⚠️ Cannot Complete',
+      type: 'fulfiller',
+      createdAt: serverTimestamp()
+    });
+    await updateDoc(doc(db, 'serviceRequests', id), {
+      status: 'resolved',
+      commentCount: increment(1)
+    });
+    const item = allRequests.find(r => r.id === id);
+    if (item) {
+      item.status = 'resolved';
+      item.commentCount = (item.commentCount || 0) + 1;
+    }
+    input.value = '';
+    // Ensure the comments section opens so the note is immediately visible
+    if (!openComments.has(id)) {
+      openComments.add(id);
+      setupRealtimeComments(id);
+    }
+    renderAll();
+    showToast('Note posted — request marked as resolved');
+  } catch (e) {
+    console.error('Cannot complete error:', e);
+    showToast('Failed to post note.');
+  }
+}
+
 // ── EXPOSE TO INLINE HANDLERS ────────────────────────────────
 window._vote = vote;
 window._cycleStatus = cycleStatus;
@@ -905,6 +1023,9 @@ window._toggleComments = toggleComments;
 window._addComment = addComment;
 window._toggleAdmin = toggleAdmin;
 window._deleteRequest = deleteRequest;
+window._toggleFulfiller = toggleFulfiller;
+window._markDone = markDone;
+window._postCannotComplete = postCannotComplete;
 window.openModal = openModal;
 window.closeModal = closeModal;
 window.handleOverlayClick = handleOverlayClick;
@@ -924,6 +1045,7 @@ document.addEventListener('keydown', e => {
 initFirebase();
 initEmailJS();
 updateAdminToggle();
+updateFulfillerToggle();
 setupRealtimeRequests();
 </script>
 
