@@ -3,6 +3,42 @@
   "generated_at": "2026-02-22T03:23:00.544123+00:00",
   "agreements": [
     {
+      "id": "nonmember-transfer",
+      "title": "Non-member Transfer Process",
+      "source_filename": "assets/non-member-transfer-process.pdf",
+      "file_type": "pdf",
+      "departments": ["Emergency Medicine", "Health Plan", "Managed Care"],
+      "last_updated": "2026-04-13",
+      "tags": ["transfer", "non-member", "authorization", "managed-care", "consult-workflow", "disposition", "pilot"],
+      "summary_bullets": [
+        "Secure Chat Alerts: ED physicians will receive notifications for patients requiring authorization.",
+        "One-Hour Rule: Health plan must respond within 1 hour; if no response, authorization defaults to admit.",
+        "Transfer Timeframe: Maximum 2–3 hours wait for a bed at an outside facility; if no bed, admit locally.",
+        "Scope: Managed Care Commercial, Managed Medicare, Managed Medi-Cal.",
+        "Go-Live: April 13",
+        "Pilot Duration: 4–6 weeks with weekly check-ins."
+      ],
+      "ed_actions": [
+        "Monitor Secure Chat for authorization notifications on non-member patients.",
+        "If no health plan response within 1 hour, authorization defaults to admit — proceed accordingly.",
+        "Wait up to 2–3 hours for an outside bed; if no bed available, admit locally."
+      ],
+      "consults_and_escalation": [
+        "Health plan must respond to authorization requests within 1 hour.",
+        "If no response within 1 hour, authorization is assumed and patient may be admitted."
+      ],
+      "disposition_or_ownership": [
+        "If outside bed secured within 2–3 hours, transfer per standard process.",
+        "If no outside bed within 2–3 hours, admit locally regardless of member status."
+      ],
+      "timing_targets": [
+        "Health plan response: within 1 hour of authorization request",
+        "Outside bed wait: maximum 2–3 hours before defaulting to local admit"
+      ],
+      "redaction_notes": null,
+      "sharepoint_url": null
+    },
+    {
       "id": "prolonged-ed-los-sla",
       "title": "Prolonged ED Length of Stay Service Line Agreement",
       "source_filename": "prolongedLOSsla.docx",
