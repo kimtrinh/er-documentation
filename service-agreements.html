@@ -588,6 +588,26 @@ main{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-colu
     });
   });
 
+  // Activate panel from URL ?id= or ?q= param (e.g. from global search)
+  (function() {
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+    const q = params.get('q');
+    if (id) {
+      activate(id);
+    } else if (q) {
+      const ql = q.toLowerCase();
+      let match = null;
+      items.forEach(item => {
+        if (match) return;
+        const title = item.querySelector('.li-title').textContent.toLowerCase();
+        const keywords = (item.dataset.keywords || '').toLowerCase();
+        if (title.includes(ql) || keywords.includes(ql)) match = item.dataset.target;
+      });
+      if (match) activate(match);
+    }
+  })();
+
   searchInput.addEventListener('input', function() {
     const q = this.value.trim().toLowerCase();
     let firstVisible = null;

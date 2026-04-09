@@ -504,7 +504,7 @@ async function kpRefreshServiceAgreementIndex() {
     const items = agreements
       .filter((agreement) => {
         const src = String((agreement && agreement.source_filename) || '').toLowerCase();
-        return src.endsWith('.doc') || src.endsWith('.docx');
+        return src.endsWith('.doc') || src.endsWith('.docx') || src.endsWith('.pdf');
       })
       .map(kpNormalizeAgreementSearchItem)
       .filter(Boolean);
