@@ -371,6 +371,7 @@ const SEARCH_INDEX = [
   {type:'page',i:'🤝',t:'Agreements & Protocols',s:'Kaiser  ·  SCPMG  ·  department agreements  ·  policies  ·  clinical protocols',g:'Reference',gc:'t-algo',u:'service-agreements.html'},
   {type:'page',i:'🔗',t:'External Links',s:'useful links  ·  references  ·  resources  ·  clinical tools  ·  external sites',g:'Reference',gc:'t-algo',u:'links.html'},
   {type:'page',i:'🗺️',t:'Roadmap',s:'upcoming features  ·  planned additions  ·  site roadmap',g:'Reference',gc:'t-algo',u:'roadmap.html'},
+  {type:'page',i:'🆕',t:"What's New",s:'changelog  ·  site updates  ·  new features  ·  recent changes  ·  release notes',g:'Reference',gc:'t-algo',u:'changelog.html'},
   {type:'page',i:'🌀',t:'Vertigo Helper',s:'vertigo  ·  dizziness  ·  BPPV  ·  central vs peripheral  ·  HINTS exam  ·  nystagmus  ·  cerebellar stroke  ·  vestibular',g:'Reference',gc:'t-algo',u:'vertigo-helper.html'},
   {type:'page',i:'🚩',t:'Issue Reporting Form',s:'report  ·  on-call consultant delay  ·  critical radiology delay  ·  staff behavior  ·  complaint  ·  concern  ·  incident  ·  feedback',g:'Reference',gc:'t-algo',u:'https://forms.cloud.microsoft/r/Fbf0L0XCBK'},
 
@@ -504,7 +505,7 @@ async function kpRefreshServiceAgreementIndex() {
     const items = agreements
       .filter((agreement) => {
         const src = String((agreement && agreement.source_filename) || '').toLowerCase();
-        return src.endsWith('.doc') || src.endsWith('.docx');
+        return src.endsWith('.doc') || src.endsWith('.docx') || src.endsWith('.pdf');
       })
       .map(kpNormalizeAgreementSearchItem)
       .filter(Boolean);
