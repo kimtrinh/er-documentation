@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="stylesheet" href="theme.css?v=2"/>
+<title>What's New — KP SBC ER</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=DM+Sans:wght@400;500;600;700;800&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080f1a;--surface:#0d1829;--surface2:#111f35;
+  --border:#1a2d48;--border2:#243d5c;
+  --text:#e8f0fc;--text2:#8fa8c8;--text3:#4a6280;
+  --blue:#3b82f6;--blue2:#1d4ed8;--blue3:#0d2038;
+  --green:#16a34a;--greenSoft:#052e16;--greenBorder:#15803d;
+  --amber:#f59e0b;--amberSoft:#2b1f0a;--amberBorder:#b45309;
+  --red:#ef4444;--redSoft:#2f1114;--redBorder:#b91c1c;
+  --purple:#a855f7;--purpleSoft:#1e0a38;--purpleBorder:#7c3aed;
+  --teal:#14b8a6;--tealSoft:#022827;--tealBorder:#0d9488;
+  --orange:#f97316;--orangeSoft:#2c1206;--orangeBorder:#c2410c;
+  --mono:'JetBrains Mono',monospace;--sans:'DM Sans',system-ui,sans-serif;
+}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
+
+/* NAV */
+.sitenav{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.sitenav-inner{max-width:1200px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:6px;height:46px;overflow:hidden}
+.nav-logo{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--blue);white-space:nowrap;flex-shrink:0;text-decoration:none;margin-right:6px}
+.nav-links{display:flex;flex:1;min-width:0;gap:1px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;white-space:nowrap}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-link{padding:5px 10px;border-radius:6px;font-size:12px;font-weight:600;color:var(--text2);text-decoration:none;white-space:nowrap;transition:.15s}
+.nav-link:hover{background:var(--surface2);color:var(--text)}
+.nav-link.active{background:#1d4ed8;color:#fff}
+
+/* HEADER */
+header{background:linear-gradient(160deg,#0f1e38 0%,#080f1a 100%);border-bottom:1px solid var(--border);padding:28px 20px}
+.header-inner{max-width:860px;margin:0 auto}
+.kicker{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.9px;font-weight:700}
+h1{font-size:28px;line-height:1.15;margin-top:6px}
+.subtitle{font-size:13px;color:var(--text2);margin-top:6px;line-height:1.6}
+
+/* MAIN */
+main{max-width:860px;margin:0 auto;padding:32px 20px 64px}
+
+/* FILTER BAR */
+.filter-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:28px}
+.filter-btn{padding:6px 14px;border-radius:999px;font-size:12px;font-weight:700;border:1px solid var(--border2);background:var(--surface2);color:var(--text2);cursor:pointer;transition:.15s;font-family:var(--sans)}
+.filter-btn:hover{border-color:var(--border);color:var(--text)}
+.filter-btn.active{background:#0d2038;border-color:var(--blue);color:#93c5fd}
+.filter-btn.feat.active{background:var(--greenSoft);border-color:var(--greenBorder);color:#86efac}
+.filter-btn.fix.active{background:var(--redSoft);border-color:var(--redBorder);color:#fca5a5}
+.filter-btn.improvement.active{background:#0d2038;border-color:var(--blue);color:#93c5fd}
+.filter-btn.maintenance.active{background:var(--surface2);border-color:var(--border2);color:var(--text3)}
+
+/* TIMELINE */
+.timeline{display:flex;flex-direction:column;gap:0}
+
+/* DATE GROUP */
+.date-group{position:relative;padding-left:28px;margin-bottom:8px}
+.date-group::before{content:'';position:absolute;left:7px;top:28px;bottom:0;width:2px;background:var(--border)}
+.date-group:last-child::before{display:none}
+
+.date-label{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.date-dot{width:16px;height:16px;border-radius:50%;background:var(--blue2);border:3px solid var(--blue);flex-shrink:0;position:absolute;left:0;top:4px}
+.date-text{font-size:12px;font-weight:700;color:var(--text2);font-family:var(--mono);letter-spacing:.04em;padding-left:4px}
+.date-relative{font-size:11px;color:var(--text3);font-weight:500}
+
+/* ENTRY CARD */
+.entries{display:flex;flex-direction:column;gap:8px;margin-bottom:20px}
+.entry{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start;transition:.15s}
+.entry:hover{border-color:var(--border2)}
+.entry.hidden{display:none}
+
+.entry-icon{font-size:18px;flex-shrink:0;margin-top:1px}
+.entry-body{flex:1;min-width:0}
+.entry-title{font-size:14px;font-weight:700;color:var(--text);line-height:1.4}
+.entry-desc{font-size:13px;color:var(--text2);margin-top:4px;line-height:1.6}
+.entry-meta{display:flex;align-items:center;gap:6px;margin-top:8px;flex-wrap:wrap}
+
+.badge{font-size:10px;font-weight:700;border-radius:999px;padding:2px 8px;border:1px solid transparent;white-space:nowrap}
+.badge.feat{background:var(--greenSoft);border-color:var(--greenBorder);color:#86efac}
+.badge.fix{background:var(--redSoft);border-color:var(--redBorder);color:#fca5a5}
+.badge.improvement{background:#0d2038;border-color:#1d4ed8;color:#93c5fd}
+.badge.maintenance{background:var(--surface2);border-color:var(--border2);color:var(--text3)}
+
+.entry-link{font-size:11px;color:var(--text3);text-decoration:none;font-weight:600;border-radius:6px;padding:2px 8px;border:1px solid var(--border);transition:.15s}
+.entry-link:hover{color:#93c5fd;border-color:#1d4ed8;background:#0d2038}
+
+/* EMPTY STATE */
+.empty{text-align:center;padding:48px 20px;color:var(--text3);font-size:14px;display:none}
+.empty strong{display:block;font-size:16px;color:var(--text2);margin-bottom:6px}
+
+@media(max-width:600px){
+  h1{font-size:22px}
+  .date-group{padding-left:20px}
+  .entry{flex-direction:column;gap:8px}
+}
+</style>
+<link rel="stylesheet" href="mobile.css">
+<script>document.documentElement.setAttribute('data-theme',localStorage.getItem('theme')||'dark');</script>
+<link rel="manifest" href="/manifest.json">
+</head>
+<body>
+
+<nav class="sitenav">
+  <div class="sitenav-inner">
+    <a class="nav-logo" href="index.html">⚡</a>
+    <div class="nav-links">
+      <a class="nav-link" href="index.html">🏠 Home</a>
+      <a class="nav-link" href="dotphrase.html">🧾 Documentation</a>
+      <a class="nav-link" href="calculators.html">🧮 Decision Support</a>
+      <a class="nav-link" href="rsi.html">🚨 Resuscitation</a>
+      <a class="nav-link" href="algorithms.html">🔀 Algorithms</a>
+      <a class="nav-link" href="neurohub.html">🧠 Neuro Hub</a>
+      <a class="nav-link" href="service-agreements.html">📑 Service Agreements</a>
+      <a class="nav-link" href="ed-phone-directory.html">📞 Directory</a>
+      <a class="nav-link" href="service-requests.html">📋 Requests</a>
+      <a class="nav-link" href="links.html">🔗 Links</a>
+      <a class="nav-link active" href="changelog.html">🆕 What's New</a>
+    </div>
+  </div>
+</nav>
+
+<header>
+  <div class="header-inner">
+    <div class="kicker">Site Updates</div>
+    <h1>What's New</h1>
+    <div class="subtitle">A running log of new features, improvements, and fixes — most recent first.</div>
+  </div>
+</header>
+
+<main>
+
+  <div class="filter-bar">
+    <button class="filter-btn active" data-filter="all">All updates</button>
+    <button class="filter-btn feat" data-filter="feat">🟢 New features</button>
+    <button class="filter-btn improvement" data-filter="improvement">🔵 Improvements</button>
+    <button class="filter-btn fix" data-filter="fix">🔴 Fixes</button>
+    <button class="filter-btn maintenance" data-filter="maintenance">⚙️ Maintenance</button>
+  </div>
+
+  <div class="timeline" id="timeline">
+
+    <!-- ── April 13, 2026 ── -->
+    <div class="date-group">
+      <div class="date-dot"></div>
+      <div class="date-label">
+        <span class="date-text">April 13, 2026</span>
+        <span class="date-relative">Today</span>
+      </div>
+      <div class="entries">
+
+        <div class="entry" data-type="feat">
+          <div class="entry-icon">📄</div>
+          <div class="entry-body">
+            <div class="entry-title">Two additional documents embedded under Non-member Transfer Process</div>
+            <div class="entry-desc">Added the ED Non-Member Workflow (SBC Physician Reference) as an inline PDF and the ED Non-Member Process Physician One Pager (DOCX) via Office Online viewer — both viewable directly inside the agreement panel without leaving the page.</div>
+            <div class="entry-meta">
+              <span class="badge feat">New Feature</span>
+              <a class="entry-link" href="service-agreements.html?id=nonmember-transfer">View agreement →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="entry" data-type="feat">
+          <div class="entry-icon">🆕</div>
+          <div class="entry-body">
+            <div class="entry-title">What's New page launched</div>
+            <div class="entry-desc">This page — a running timeline of all site updates grouped by date, with filters for New Features, Improvements, Fixes, and Maintenance. Accessible from the nav bar on every page and via the global search bar.</div>
+            <div class="entry-meta">
+              <span class="badge feat">New Feature</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── April 9, 2026 ── -->
+    <div class="date-group">
+      <div class="date-dot"></div>
+      <div class="date-label">
+        <span class="date-text">April 9, 2026</span>
+      </div>
+      <div class="entries">
+
+        <div class="entry" data-type="feat">
+          <div class="entry-icon">📋</div>
+          <div class="entry-body">
+            <div class="entry-title">Non-member Transfer Process agreement added</div>
+            <div class="entry-desc">New service agreement covering the April 13 go-live pilot for managed care non-member transfers. Includes all key protocol rules (Secure Chat alerts, 1-hour health plan response rule, 2–3 hour transfer window) with an embedded PDF and full search support.</div>
+            <div class="entry-meta">
+              <span class="badge feat">New Feature</span>
+              <a class="entry-link" href="service-agreements.html?id=nonmember-transfer">View agreement →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="entry" data-type="improvement">
+          <div class="entry-icon">🔍</div>
+          <div class="entry-body">
+            <div class="entry-title">All service agreements now searchable from the global search bar</div>
+            <div class="entry-desc">PDF-based agreements were previously invisible to the search index. Fixed the filter so all agreement types (DOCX and PDF) appear in results. Clicking a result now deep-links directly to the correct agreement panel.</div>
+            <div class="entry-meta">
+              <span class="badge improvement">Improvement</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="entry" data-type="fix">
+          <div class="entry-icon">🧹</div>
+          <div class="entry-body">
+            <div class="entry-title">Removed 24 outdated agreements from search results</div>
+            <div class="entry-desc">The search index contained 31 agreements — many from the old data pipeline with no corresponding page content. Pruned to the 7 that actually exist on the site so search results no longer surface dead links.</div>
+            <div class="entry-meta">
+              <span class="badge fix">Fix</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── March 31, 2026 ── -->
+    <div class="date-group">
+      <div class="date-dot"></div>
+      <div class="date-label">
+        <span class="date-text">March 31, 2026</span>
+      </div>
+      <div class="entries">
+
+        <div class="entry" data-type="feat">
+          <div class="entry-icon">✅</div>
+          <div class="entry-body">
+            <div class="entry-title">Fulfiller mode added to Service Requests</div>
+            <div class="entry-desc">A new code-protected fulfiller mode lets the person handling requests mark items Done in one tap or post a "Cannot Complete" reason with an automatic comment. The fulfiller toggle sits next to the admin lock and persists for the session.</div>
+            <div class="entry-meta">
+              <span class="badge feat">New Feature</span>
+              <a class="entry-link" href="service-requests.html">View →</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── March 30, 2026 ── -->
+    <div class="date-group">
+      <div class="date-dot"></div>
+      <div class="date-label">
+        <span class="date-text">March 30, 2026</span>
+      </div>
+      <div class="entries">
+
+        <div class="entry" data-type="improvement">
+          <div class="entry-icon">🔎</div>
+          <div class="entry-body">
+            <div class="entry-title">Smarter multi-token search across the whole site</div>
+            <div class="entry-desc">Global search now uses word-start multi-token matching — typing "pulm embo" finds "Pulmonary Embolism", "afib flutter" finds the AFib protocol. Each word in your query is matched independently against the start of any word in the title or tags.</div>
+            <div class="entry-meta">
+              <span class="badge improvement">Improvement</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="entry" data-type="improvement">
+          <div class="entry-icon">🧾</div>
+          <div class="entry-body">
+            <div class="entry-title">Dot phrases removed from main search bar</div>
+            <div class="entry-desc">Dot phrases were cluttering global search results. They're now scoped to the Documentation page only — the main search bar focuses on clinical tools, agreements, algorithms, and pages.</div>
+            <div class="entry-meta">
+              <span class="badge improvement">Improvement</span>
+              <a class="entry-link" href="dotphrase.html">Dot phrases →</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── March 28–29, 2026 ── -->
+    <div class="date-group">
+      <div class="date-dot"></div>
+      <div class="date-label">
+        <span class="date-text">March 28–29, 2026</span>
+      </div>
+      <div class="entries">
+
+        <div class="entry" data-type="fix">
+          <div class="entry-icon">🔗</div>
+          <div class="entry-body">
+            <div class="entry-title">External links in search results now open correctly</div>
+            <div class="entry-desc">A bug in the URL sanitizer was rewriting external https:// links (like SharePoint and Google Drive) to index.html. Fixed so links in search results always go to the right destination.</div>
+            <div class="entry-meta">
+              <span class="badge fix">Fix</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="entry" data-type="fix">
+          <div class="entry-icon">⚡</div>
+          <div class="entry-body">
+            <div class="entry-title">Service requests no longer create orphaned database connections</div>
+            <div class="entry-desc">Deleting a service request was leaving an active Firestore listener running in the background. The listener is now properly stopped before deletion to prevent memory leaks and unexpected behavior.</div>
+            <div class="entry-meta">
+              <span class="badge fix">Fix</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── March 24, 2026 ── -->
+    <div class="date-group">
+      <div class="date-dot"></div>
+      <div class="date-label">
+        <span class="date-text">March 24, 2026</span>
+      </div>
+      <div class="entries">
+
+        <div class="entry" data-type="feat">
+          <div class="entry-icon">⚡</div>
+          <div class="entry-body">
+            <div class="entry-title">Live real-time updates — no more refreshing</div>
+            <div class="entry-desc">Votes, comments, and new service requests now update instantly for all users. The dot phrase vote counts animate with a green pulse when another user votes. New requests appear at the top of the board the moment they're submitted.</div>
+            <div class="entry-meta">
+              <span class="badge feat">New Feature</span>
+              <a class="entry-link" href="service-requests.html">Service Requests →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="entry" data-type="improvement">
+          <div class="entry-icon">📧</div>
+          <div class="entry-body">
+            <div class="entry-title">Additional email recipient added to service request notifications</div>
+            <div class="entry-desc">Michael Schwartzwald added to the service request email notification list so new submissions reach the full review team.</div>
+            <div class="entry-meta">
+              <span class="badge improvement">Improvement</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── March 23, 2026 ── -->
+    <div class="date-group">
+      <div class="date-dot"></div>
+      <div class="date-label">
+        <span class="date-text">March 23, 2026</span>
+      </div>
+      <div class="entries">
+
+        <div class="entry" data-type="feat">
+          <div class="entry-icon">🤱</div>
+          <div class="entry-body">
+            <div class="entry-title">Postpartum Severe Hypertension algorithm added</div>
+            <div class="entry-desc">New OB/GYN algorithm card with entry criteria callout, plain-English summary, and inline embedded PDF — consistent with other algorithm pages.</div>
+            <div class="entry-meta">
+              <span class="badge feat">New Feature</span>
+              <a class="entry-link" href="algorithms.html">View algorithms →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="entry" data-type="feat">
+          <div class="entry-icon">🩺</div>
+          <div class="entry-body">
+            <div class="entry-title">DVT Outpatient Anticoagulation moved to Algorithms</div>
+            <div class="entry-desc">The DVT protocol was relocated from Service Agreements to Algorithms where it fits better clinically. Now available as a full algorithm card with a locally hosted PDF embed — no VPN or login required.</div>
+            <div class="entry-meta">
+              <span class="badge feat">New Feature</span>
+              <a class="entry-link" href="algorithms.html">View algorithms →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="entry" data-type="improvement">
+          <div class="entry-icon">📄</div>
+          <div class="entry-body">
+            <div class="entry-title">Service Agreements redesigned with inline PDF viewer</div>
+            <div class="entry-desc">Complete redesign with a sticky two-column layout: searchable sidebar list on the left, full agreement detail + embedded PDF on the right. PDFs for PLOS and DVT are now hosted locally so they work without KP network access.</div>
+            <div class="entry-meta">
+              <span class="badge improvement">Improvement</span>
+              <a class="entry-link" href="service-agreements.html">View agreements →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="entry" data-type="feat">
+          <div class="entry-icon">🏠</div>
+          <div class="entry-body">
+            <div class="entry-title">Homepage redesigned with tiered card layout</div>
+            <div class="entry-desc">The homepage was rebuilt with a tiered card hierarchy — two large hero cards (Dotphrases, Calculators), a clinical 4-up grid, and a secondary resources grid. Color-coded left borders help quickly identify tool categories.</div>
+            <div class="entry-meta">
+              <span class="badge feat">New Feature</span>
+              <a class="entry-link" href="index.html">Home →</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── March 22, 2026 ── -->
+    <div class="date-group">
+      <div class="date-dot"></div>
+      <div class="date-label">
+        <span class="date-text">March 22, 2026</span>
+      </div>
+      <div class="entries">
+
+        <div class="entry" data-type="feat">
+          <div class="entry-icon">📋</div>
+          <div class="entry-body">
+            <div class="entry-title">Service Request Board added to site navigation</div>
+            <div class="entry-desc">The Service Requests page was already built but unreachable — it's now linked in the navigation bar on every page and indexed in the global search. Submit dot phrase requests, report issues, and track their status.</div>
+            <div class="entry-meta">
+              <span class="badge feat">New Feature</span>
+              <a class="entry-link" href="service-requests.html">View board →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="entry" data-type="fix">
+          <div class="entry-icon">📬</div>
+          <div class="entry-body">
+            <div class="entry-title">Feedback form repaired — switched to EmailJS</div>
+            <div class="entry-desc">The feedback form was silently failing after Formspree deprecated its email endpoint. Replaced with EmailJS using the same service already configured for service requests — all submissions now deliver reliably.</div>
+            <div class="entry-meta">
+              <span class="badge fix">Fix</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── March 19–20, 2026 ── -->
+    <div class="date-group">
+      <div class="date-dot"></div>
+      <div class="date-label">
+        <span class="date-text">March 19–20, 2026</span>
+      </div>
+      <div class="entries">
+
+        <div class="entry" data-type="improvement">
+          <div class="entry-icon">📑</div>
+          <div class="entry-body">
+            <div class="entry-title">Urology/ER agreement updated with structured 4-tier layout</div>
+            <div class="entry-desc">The Urology service agreement was rebuilt with a clear 4-tier clinical decision layout: (1) Urgent/Emergent Urology call, (2) Hospital Medicine admit without overnight Urology call, (3) Outpatient Urology referral, (4) PCP follow-up. SharePoint link also added.</div>
+            <div class="entry-meta">
+              <span class="badge improvement">Improvement</span>
+              <a class="entry-link" href="service-agreements.html?id=urology">View →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="entry" data-type="feat">
+          <div class="entry-icon">⚠️</div>
+          <div class="entry-body">
+            <div class="entry-title">Issue Reporting Form added to Links page</div>
+            <div class="entry-desc">A new Reporting section on the Links page provides a direct link to the Microsoft Forms issue reporting tool covering on-call consultant delays, critical radiology delays, staff behavior concerns, and other ED issues.</div>
+            <div class="entry-meta">
+              <span class="badge feat">New Feature</span>
+              <a class="entry-link" href="links.html">Links page →</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /timeline -->
+
+  <div class="empty" id="emptyState">
+    <strong>No updates match this filter</strong>
+    Try selecting a different category above.
+  </div>
+
+</main>
+
+<script>
+(function() {
+  const buttons = document.querySelectorAll('.filter-btn');
+  const entries = document.querySelectorAll('.entry');
+  const empty = document.getElementById('emptyState');
+
+  function applyFilter(filter) {
+    let visible = 0;
+    entries.forEach(e => {
+      const type = e.dataset.type;
+      const show = filter === 'all' || type === filter;
+      e.classList.toggle('hidden', !show);
+      if (show) visible++;
+    });
+
+    // Hide date groups with no visible entries
+    document.querySelectorAll('.date-group').forEach(group => {
+      const hasVisible = Array.from(group.querySelectorAll('.entry')).some(e => !e.classList.contains('hidden'));
+      group.style.display = hasVisible ? '' : 'none';
+    });
+
+    empty.style.display = visible === 0 ? 'block' : 'none';
+  }
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      buttons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      applyFilter(btn.dataset.filter);
+    });
+  });
+
+  // Relative date labels
+  const today = new Date();
+  const todayStr = today.toDateString();
+  document.querySelectorAll('.date-group').forEach(group => {
+    const label = group.querySelector('.date-text');
+    const rel = group.querySelector('.date-relative');
+    if (!rel) return;
+    const dateText = label.textContent.trim();
+    const parsed = new Date(dateText);
+    if (isNaN(parsed)) return;
+    const diff = Math.floor((today - parsed) / 86400000);
+    if (diff === 0) rel.textContent = 'Today';
+    else if (diff === 1) rel.textContent = 'Yesterday';
+    else if (diff < 7) rel.textContent = `${diff} days ago`;
+    else if (diff < 30) rel.textContent = `${Math.floor(diff/7)} week${Math.floor(diff/7)>1?'s':''} ago`;
+    else rel.textContent = `${Math.floor(diff/30)} month${Math.floor(diff/30)>1?'s':''} ago`;
+  });
+})();
+</script>
+
+</body>
+</html>
