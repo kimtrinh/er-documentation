@@ -204,7 +204,7 @@ main>*:nth-child(4){animation-delay:.15s}
   <div class="algo-tools">
     <input id="algoSearchInput" class="algo-search" type="text" placeholder="Search algorithms (e.g. pregnancy, aortic, papilledema, floaters)..." autocomplete="off" spellcheck="false" aria-label="Search algorithms">
     <button id="algoSearchClear" class="algo-clear" type="button">Clear</button>
-    <span id="algoSearchCount" class="algo-count">9 algorithms</span>
+    <span id="algoSearchCount" class="algo-count">20 algorithms</span>
   </div>
 
   <!-- ALGORITHM SELECTOR GRID -->
@@ -277,6 +277,77 @@ main>*:nth-child(4){animation-delay:.15s}
       <div class="algo-info">
         <div class="algo-title">Outpatient DVT Anticoagulation</div>
         <div class="algo-meta">KP SBC ED &nbsp;·&nbsp; <span class="algo-badge badge-cards">Hematology</span></div>
+      </div>
+    </div>
+
+    <div class="algo-card" onclick="showAlgo('sepsissep1')" id="card-sepsissep1" data-algo="sepsissep1" data-keywords="sepsis sep-1 sirs septic shock lactate bundle antibiotics fluids" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🦠</div>
+      <div class="algo-info">
+        <div class="algo-title">Sepsis — SEP-1 Bundle</div>
+        <div class="algo-meta">KP SBC 7/2020 &nbsp;·&nbsp; <span class="algo-badge badge-cardio">Critical Care</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('preeclampsia')" id="card-preeclampsia" data-algo="preeclampsia" data-keywords="preeclampsia eclampsia hypertensive emergency pregnancy magnesium labetalol hydralazine nifedipine" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🤱</div>
+      <div class="algo-info">
+        <div class="algo-title">Pre-Eclampsia / Hypertensive Emergency</div>
+        <div class="algo-meta">ACOG 2020 + CMQCC &nbsp;·&nbsp; <span class="algo-badge badge-ob">OB/GYN</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('pitviper')" id="card-pitviper" data-algo="pitviper" data-keywords="snake bite pit viper crofab envenomation antivenom" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🐍</div>
+      <div class="algo-info">
+        <div class="algo-title">Pit Viper Envenomation — CroFab</div>
+        <div class="algo-meta">KP SBC 5/2017 &nbsp;·&nbsp; <span class="algo-badge badge-cardio">Toxicology</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('psychmeds')" id="card-psychmeds" data-algo="psychmeds" data-keywords="psychiatry delirium mania psychosis catatonia dementia agitation medications" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🧩</div>
+      <div class="algo-info">
+        <div class="algo-title">ED Psychiatry Medication Quick Ref</div>
+        <div class="algo-meta">KP SCAL 2016 &nbsp;·&nbsp; <span class="algo-badge badge-neuro">Psychiatry</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('gout')" id="card-gout" data-algo="gout" data-keywords="gout podagra colchicine nsaid steroid arthrocentesis" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🦴</div>
+      <div class="algo-info">
+        <div class="algo-title">Acute Gout</div>
+        <div class="algo-meta">KP SBC &nbsp;·&nbsp; <span class="algo-badge badge-spine">MSK</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('infectiousdiarrhea')" id="card-infectiousdiarrhea" data-algo="infectiousdiarrhea" data-keywords="infectious diarrhea c diff gi panel parasite ova stool testing" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🔬</div>
+      <div class="algo-info">
+        <div class="algo-title">Infectious Diarrhea Workup</div>
+        <div class="algo-meta">KP SCAL &nbsp;·&nbsp; <span class="algo-badge badge-cardio">Infectious Disease</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('pedsdka')" id="card-pedsdka" data-algo="pedsdka" data-keywords="peds dka diabetic ketoacidosis two bag cerebral edema insulin" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">💉</div>
+      <div class="algo-info">
+        <div class="algo-title">Peds DKA — 2-Bag System</div>
+        <div class="algo-meta">KP SBC &nbsp;·&nbsp; <span class="algo-badge badge-ob">Pediatrics</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('pedssickle')" id="card-pedssickle" data-algo="pedssickle" data-keywords="peds sickle cell fever ceftriaxone vaso-occlusive" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">⭐</div>
+      <div class="algo-info">
+        <div class="algo-title">Peds Sickle Cell Fever</div>
+        <div class="algo-meta">KP SCAL Dr. Simon 1/2022 &nbsp;·&nbsp; <span class="algo-badge badge-ob">Pediatrics</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('pedssubmersion')" id="card-pedssubmersion" data-algo="pedssubmersion" data-keywords="pediatric submersion drowning near drowning aspiration hypoxia" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🌊</div>
+      <div class="algo-info">
+        <div class="algo-title">Peds Submersion</div>
+        <div class="algo-meta">KP SBC Peds ED 6/2022 &nbsp;·&nbsp; <span class="algo-badge badge-ob">Pediatrics</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('misc')" id="card-misc" data-algo="misc" data-keywords="mis-c multisystem inflammatory syndrome children ivig steroids" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🧬</div>
+      <div class="algo-info">
+        <div class="algo-title">MIS-C Stable/Unstable</div>
+        <div class="algo-meta">KP SBC 11/2021 &nbsp;·&nbsp; <span class="algo-badge badge-ob">Pediatrics</span></div>
       </div>
     </div>
   </div>
@@ -909,6 +980,165 @@ const algos = {
     `
   },
 
+  'sepsissep1': {
+    icon: '🦠',
+    title: 'Sepsis — SEP-1 Bundle',
+    updated: 'KP SBC 7/2020 · Source Algorithm',
+    render: () => `
+      <div style="max-width:760px;margin:0 auto">
+        <div class="callout"><strong>Focus:</strong> SIRS screen, severe sepsis/shock assessment, and SEP-1 bundle timeline execution.</div>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-content"><strong>Initial trigger:</strong> suspected infection + SIRS criteria.</div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-content"><strong>Time zero:</strong> document sepsis recognition time and start bundle clock.</div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-content"><strong>Bundle actions:</strong> lactate, blood cultures, broad-spectrum antibiotics, fluid resuscitation, and repeat reassessment when indicated.</div></div>
+          <div class="step"><div class="step-num">4</div><div class="step-content"><strong>Shock pathway:</strong> persistent hypotension or high lactate prompts vasopressor/hemodynamic reassessment.</div></div>
+        </div>
+      </div>
+    `
+  },
+
+  'preeclampsia': {
+    icon: '🤱',
+    title: 'Pre-Eclampsia / Hypertensive Emergency',
+    updated: 'ACOG 2020 + CMQCC',
+    render: () => `
+      <div style="max-width:760px;margin:0 auto">
+        <div class="callout callout-yellow"><strong>Includes:</strong> BP severity classification, antihypertensive pathways (Labetalol/Hydralazine/Nifedipine), and magnesium dosing framework.</div>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-content"><strong>Classify BP:</strong> severe-range vs non-severe and identify end-organ symptoms.</div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-content"><strong>Severe-range BP:</strong> choose rapid-acting protocol (IV labetalol, IV hydralazine, or PO nifedipine) with timed reassessment.</div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-content"><strong>Seizure prophylaxis:</strong> magnesium loading + maintenance per institutional dosing.</div></div>
+          <div class="step"><div class="step-num">4</div><div class="step-content"><strong>Disposition:</strong> admit/transfer based on maternal-fetal stability and response.</div></div>
+        </div>
+      </div>
+    `
+  },
+
+  'pitviper': {
+    icon: '🐍',
+    title: 'Pit Viper Envenomation — CroFab',
+    updated: 'KP SBC 5/2017',
+    render: () => `
+      <div style="max-width:760px;margin:0 auto">
+        <div class="callout callout-green"><strong>Protocol scope:</strong> CroFab reconstitution, initial control criteria, maintenance dosing, and discharge precautions.</div>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-content"><strong>Assess severity:</strong> progression of swelling, systemic toxicity, coagulation abnormalities.</div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-content"><strong>Initial CroFab:</strong> prepare/reconstitute and infuse per protocol, then reassess for initial control.</div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-content"><strong>If controlled:</strong> follow maintenance dosing and serial labs/exams.</div></div>
+          <div class="step"><div class="step-num">4</div><div class="step-content"><strong>Discharge:</strong> provide strict return precautions for recurrent swelling/bleeding/systemic symptoms.</div></div>
+        </div>
+      </div>
+    `
+  },
+
+  'psychmeds': {
+    icon: '🧩',
+    title: 'ED Psychiatry Medication Quick Ref',
+    updated: 'KP SCAL 2016',
+    render: () => `
+      <div style="max-width:760px;margin:0 auto">
+        <div class="callout">Quick-reference table for <strong>delirium, mania, psychosis, dementia, and catatonia</strong> with common ED medication options.</div>
+        <div class="callout callout-yellow"><strong>Use:</strong> match syndrome to first-line option, route, dose range, and key cautions/QTc or respiratory concerns.</div>
+      </div>
+    `
+  },
+
+  'gout': {
+    icon: '🦴',
+    title: 'Acute Gout',
+    updated: 'KP SBC',
+    render: () => `
+      <div style="max-width:760px;margin:0 auto">
+        <div class="callout">ED treatment options for acute gout flare plus suggested discharge regimen.</div>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-content"><strong>Confirm likely gout</strong> and exclude septic joint/red-flag alternate diagnoses.</div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-content"><strong>Treat flare:</strong> NSAID, colchicine, or steroid strategy based on comorbidities/contraindications.</div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-content"><strong>Discharge:</strong> short-course anti-inflammatory plan + PCP/rheum follow-up instructions.</div></div>
+        </div>
+      </div>
+    `
+  },
+
+  'infectiousdiarrhea': {
+    icon: '🔬',
+    title: 'Infectious Diarrhea Workup',
+    updated: 'KP SCAL',
+    render: () => `
+      <div style="max-width:760px;margin:0 auto">
+        <div class="callout">Decision support for when to order <strong>C. diff testing, bacterial GI panel, and parasite studies</strong>.</div>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-content"><strong>Risk screen:</strong> recent antibiotics/healthcare exposure, travel, immunocompromise, bloody stool, severe disease.</div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-content"><strong>Test selection:</strong> C. diff criteria first, then bacterial PCR panel or ova/parasite pathway as indicated.</div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-content"><strong>Disposition:</strong> hydration strategy, selective antimicrobials, and return precautions.</div></div>
+        </div>
+      </div>
+    `
+  },
+
+  'pedsdka': {
+    icon: '💉',
+    title: 'Peds DKA — 2-Bag System',
+    updated: 'KP SBC',
+    render: () => `
+      <div style="max-width:760px;margin:0 auto">
+        <div class="callout callout-red"><strong>Highlights:</strong> 2-bag concept, dextrose/fluid adjustment table, and cerebral edema monitoring/management.</div>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-content"><strong>Start isotonic resuscitation</strong> and insulin infusion after initial stabilization.</div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-content"><strong>2-bag titration:</strong> adjust dextrose concentration by bedside glucose trend while keeping fluid goals constant.</div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-content"><strong>Watch for cerebral edema:</strong> neurologic checks and immediate hyperosmolar treatment pathway if suspected.</div></div>
+        </div>
+      </div>
+    `
+  },
+
+  'pedssickle': {
+    icon: '⭐',
+    title: 'Peds Sickle Cell Fever',
+    updated: 'KP SCAL Dr. Simon 1/2022',
+    render: () => `
+      <div style="max-width:760px;margin:0 auto">
+        <div class="callout">Includes ED ceftriaxone-first approach, workup baseline, and pediatric admission criteria.</div>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-content"><strong>Initial bundle:</strong> cultures/labs + prompt ceftriaxone unless exclusion applies.</div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-content"><strong>Risk stratify:</strong> appearance, oxygenation, chest findings, ANC/history, and follow-up reliability.</div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-content"><strong>Disposition:</strong> admit high-risk patients; discharge low-risk with strict return precautions and rapid follow-up.</div></div>
+        </div>
+      </div>
+    `
+  },
+
+  'pedssubmersion': {
+    icon: '🌊',
+    title: 'Peds Submersion',
+    updated: 'KP SBC Peds ED 6/2022',
+    render: () => `
+      <div style="max-width:760px;margin:0 auto">
+        <div class="callout">Branching pathway for <strong>asymptomatic vs symptomatic</strong> pediatric submersion events.</div>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-content"><strong>Immediate stabilization:</strong> airway, oxygenation, temperature, and trauma screening.</div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-content"><strong>Asymptomatic branch:</strong> observation window, reassessment, and discharge criteria.</div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-content"><strong>Symptomatic branch:</strong> imaging/labs as indicated, respiratory support, and admission thresholds.</div></div>
+        </div>
+      </div>
+    `
+  },
+
+  'misc': {
+    icon: '🧬',
+    title: 'MIS-C Stable/Unstable',
+    updated: 'KP SBC 11/2021',
+    render: () => `
+      <div style="max-width:760px;margin:0 auto">
+        <div class="callout callout-yellow">Comprehensive stable/unstable MIS-C pathways including <strong>IVIG and steroid dosing</strong>.</div>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-content"><strong>Recognize syndrome:</strong> persistent fever + multisystem inflammation pattern.</div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-content"><strong>Stable pathway:</strong> staged labs/consults and immunomodulator initiation per protocol.</div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-content"><strong>Unstable pathway:</strong> ICU-level resuscitation with expedited IVIG/steroid treatment.</div></div>
+        </div>
+      </div>
+    `
+  },
+
   'dvt': {
     icon: '🩸',
     title: 'Outpatient DVT Anticoagulation',
@@ -975,7 +1205,8 @@ function applyAlgoSearch() {
     const title = (card.querySelector('.algo-title') || {}).textContent || '';
     const meta = (card.querySelector('.algo-meta') || {}).textContent || '';
     const key = String(card.dataset.algo || '');
-    const haystack = `${title} ${meta} ${key}`.toLowerCase();
+    const keywords = String(card.dataset.keywords || '');
+    const haystack = `${title} ${meta} ${key} ${keywords}`.toLowerCase();
     const match = !query || haystack.includes(query);
     card.style.display = match ? '' : 'none';
     if (match) visible += 1;
