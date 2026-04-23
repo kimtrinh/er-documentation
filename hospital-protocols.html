@@ -218,6 +218,14 @@ main{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-colu
         </div>
       </div>
 
+      <div class="list-item" data-target="fmc-psg-assignments" data-keywords="FMC shift PSG point scoring assignments triage patient scoring guide ESI hourly points mod pod longest waiting distribution staffing workload">
+        <div class="li-title">FMC Shift PSG Assignments</div>
+        <div class="li-meta">
+          <span class="li-badge yellow">Operations</span>
+          <span class="li-badge blue">Reference</span>
+        </div>
+      </div>
+
       <div class="list-item" data-target="rx-signout" data-keywords="rx prescription sign-out handoff controlled substance narcotics workflow">
         <div class="li-title">Rx Sign-Out Workflow</div>
         <div class="li-meta">
@@ -530,6 +538,447 @@ main{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-colu
           <a class="pdf-open-link" href="https://view.officeapps.live.com/op/view.aspx?src=https://kimtrinh.github.io/er-documentation/assets/last-hour-assignment.docx" target="_blank" rel="noopener">Open in Word ↗</a>
         </div>
         <iframe class="pdf-iframe" src="https://view.officeapps.live.com/op/embed.aspx?src=https://kimtrinh.github.io/er-documentation/assets/last-hour-assignment.docx" title="Last Hour Assignment Protocol"></iframe>
+      </div>
+    </div>
+
+    <!-- ══ FMC SHIFT PSG ASSIGNMENTS ══ -->
+    <div class="protocol-panel" id="fmc-psg-assignments">
+      <style>
+        .psg-section-title{font-size:13px;font-weight:800;color:var(--text);text-transform:uppercase;letter-spacing:.08em;padding-bottom:6px;border-bottom:2px solid var(--blue2);margin:4px 0 14px}
+        .psg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px}
+        .psg-table{background:var(--surface2);border:1px solid var(--border);border-radius:10px;overflow:hidden;font-family:var(--mono)}
+        .psg-table-head{background:var(--blue3);border-bottom:1px solid var(--blue2);padding:7px 10px;font-size:12px;font-weight:800;color:#93c5fd;text-align:center;letter-spacing:.04em}
+        .psg-table table{width:100%;border-collapse:collapse;font-size:12px}
+        .psg-table th{background:var(--surface);color:var(--text2);font-weight:700;padding:5px 10px;border-bottom:1px solid var(--border);font-size:10px;text-transform:uppercase;letter-spacing:.06em}
+        .psg-table td{padding:4px 10px;border-bottom:1px solid var(--border);color:var(--text);text-align:center}
+        .psg-table td:first-child{text-align:left;color:var(--text2)}
+        .psg-table tr:last-child td{border-bottom:none}
+        .psg-table td.star{color:#fcd34d;font-weight:700}
+        .psg-table td.xmark{color:var(--text3)}
+        .psg-footnote{font-size:11px;color:var(--text3);text-align:center;padding:6px 8px;background:var(--surface);border-top:1px solid var(--border);font-style:italic;font-family:var(--sans)}
+        .psg-legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:10px;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;font-size:12px;color:var(--text2)}
+        .psg-legend span{display:inline-flex;align-items:center;gap:6px}
+        .psg-legend b{font-family:var(--mono);color:var(--text);font-weight:700}
+      </style>
+      <div class="info-card">
+        <div class="card-top">
+          <div>
+            <div class="card-title">FMC Shift PSG Assignments</div>
+            <div class="card-dept">Fontana Medical Center · ED Operations · Patient Scoring Guide</div>
+          </div>
+          <div class="decision-badge yellow">⚙️ Operations Reference</div>
+        </div>
+        <hr class="divider"/>
+        <div style="font-size:13px;color:var(--text2);line-height:1.55">
+          Hour-by-hour point assignments by shift block. Each cell shows the PSG point value a provider
+          should take for new patients starting at that hour. Values taper from <b>3</b> (start of shift)
+          down to <b>1</b>, then to <b>X</b> (no new patients / wrap-up).
+        </div>
+        <div class="psg-legend">
+          <span><b>3 / 2 / 1</b> — points to pick up at that hour</span>
+          <span><b style="color:#fcd34d">1*</b> — any ESI level, longest waiting</span>
+          <span><b style="color:var(--text3)">X</b> — no new patients</span>
+        </div>
+      </div>
+
+      <!-- ── SHEET 1: HH:MM format ── -->
+      <div class="info-card">
+        <div class="psg-section-title">📋 Standard Shift Blocks</div>
+        <div class="psg-grid">
+
+          <div class="psg-table">
+            <div class="psg-table-head">5a–3p</div>
+            <table><tr><th>Hour</th><th>Pts</th></tr>
+              <tr><td>05:00</td><td>3</td></tr>
+              <tr><td>06:00</td><td>2</td></tr>
+              <tr><td>07:00</td><td>2</td></tr>
+              <tr><td>08:00</td><td>2</td></tr>
+              <tr><td>09:00</td><td>2</td></tr>
+              <tr><td>10:00</td><td>2</td></tr>
+              <tr><td>11:00</td><td>1</td></tr>
+              <tr><td>12:00</td><td class="star">1*</td></tr>
+              <tr><td>13:00</td><td class="xmark">X</td></tr>
+              <tr><td>14:00</td><td class="xmark">X</td></tr>
+            </table>
+            <div class="psg-footnote">*Any ESI level, longest waiting</div>
+          </div>
+
+          <div class="psg-table">
+            <div class="psg-table-head">6a–4p</div>
+            <table><tr><th>Hour</th><th>Pts</th></tr>
+              <tr><td>06:00</td><td>3</td></tr>
+              <tr><td>07:00</td><td>2</td></tr>
+              <tr><td>08:00</td><td>2</td></tr>
+              <tr><td>09:00</td><td>2</td></tr>
+              <tr><td>10:00</td><td>2</td></tr>
+              <tr><td>11:00</td><td>2</td></tr>
+              <tr><td>12:00</td><td>1</td></tr>
+              <tr><td>13:00</td><td class="star">1*</td></tr>
+              <tr><td>14:00</td><td class="xmark">X</td></tr>
+              <tr><td>15:00</td><td class="xmark">X</td></tr>
+            </table>
+            <div class="psg-footnote">*Any ESI level, longest waiting</div>
+          </div>
+
+          <div class="psg-table">
+            <div class="psg-table-head">12p–10p</div>
+            <table><tr><th>Hour</th><th>Pts</th></tr>
+              <tr><td>12:00</td><td>3</td></tr>
+              <tr><td>13:00</td><td>2</td></tr>
+              <tr><td>14:00</td><td>2</td></tr>
+              <tr><td>15:00</td><td>2</td></tr>
+              <tr><td>16:00</td><td>2</td></tr>
+              <tr><td>17:00</td><td>2</td></tr>
+              <tr><td>18:00</td><td>1</td></tr>
+              <tr><td>19:00</td><td class="star">1*</td></tr>
+              <tr><td>20:00</td><td class="xmark">X</td></tr>
+              <tr><td>21:00</td><td class="xmark">X</td></tr>
+            </table>
+            <div class="psg-footnote">*Any ESI level, longest waiting</div>
+          </div>
+
+          <div class="psg-table">
+            <div class="psg-table-head">1p–11p</div>
+            <table><tr><th>Hour</th><th>Pts</th></tr>
+              <tr><td>13:00</td><td>3</td></tr>
+              <tr><td>14:00</td><td>2</td></tr>
+              <tr><td>15:00</td><td>2</td></tr>
+              <tr><td>16:00</td><td>2</td></tr>
+              <tr><td>17:00</td><td>2</td></tr>
+              <tr><td>18:00</td><td>2</td></tr>
+              <tr><td>19:00</td><td>1</td></tr>
+              <tr><td>20:00</td><td class="star">1*</td></tr>
+              <tr><td>21:00</td><td class="xmark">X</td></tr>
+              <tr><td>22:00</td><td class="xmark">X</td></tr>
+            </table>
+            <div class="psg-footnote">*Any ESI level, longest waiting</div>
+          </div>
+
+          <div class="psg-table">
+            <div class="psg-table-head">2p–12a</div>
+            <table><tr><th>Hour</th><th>Pts</th></tr>
+              <tr><td>14:00</td><td>3</td></tr>
+              <tr><td>15:00</td><td>2</td></tr>
+              <tr><td>16:00</td><td>2</td></tr>
+              <tr><td>17:00</td><td>2</td></tr>
+              <tr><td>18:00</td><td>2</td></tr>
+              <tr><td>19:00</td><td>2</td></tr>
+              <tr><td>20:00</td><td>1</td></tr>
+              <tr><td>21:00</td><td class="star">1*</td></tr>
+              <tr><td>22:00</td><td class="xmark">X</td></tr>
+              <tr><td>23:00</td><td class="xmark">X</td></tr>
+            </table>
+            <div class="psg-footnote">*Any ESI level, longest waiting</div>
+          </div>
+
+          <div class="psg-table">
+            <div class="psg-table-head">8p–8a</div>
+            <table><tr><th>Hour</th><th>Pts</th></tr>
+              <tr><td>20:00</td><td>3</td></tr>
+              <tr><td>21:00</td><td>2</td></tr>
+              <tr><td>22:00</td><td>2</td></tr>
+              <tr><td>23:00</td><td>2</td></tr>
+              <tr><td>00:00</td><td>2</td></tr>
+              <tr><td>01:00</td><td>2</td></tr>
+              <tr><td>02:00</td><td>2</td></tr>
+              <tr><td>03:00</td><td>1</td></tr>
+              <tr><td>04:00</td><td>1</td></tr>
+              <tr><td>05:00</td><td class="star">1*</td></tr>
+              <tr><td>06:00</td><td class="xmark">X</td></tr>
+              <tr><td>07:00</td><td class="xmark">X</td></tr>
+            </table>
+            <div class="psg-footnote">*Any ESI level, longest waiting</div>
+          </div>
+
+          <div class="psg-table">
+            <div class="psg-table-head">9p–7a</div>
+            <table><tr><th>Hour</th><th>Pts</th></tr>
+              <tr><td>21:00</td><td>3</td></tr>
+              <tr><td>22:00</td><td>2</td></tr>
+              <tr><td>23:00</td><td>2</td></tr>
+              <tr><td>00:00</td><td>2</td></tr>
+              <tr><td>01:00</td><td>2</td></tr>
+              <tr><td>02:00</td><td>2</td></tr>
+              <tr><td>03:00</td><td>1</td></tr>
+              <tr><td>04:00</td><td class="star">1*</td></tr>
+              <tr><td>05:00</td><td class="xmark">X</td></tr>
+              <tr><td>06:00</td><td class="xmark">X</td></tr>
+            </table>
+            <div class="psg-footnote">*Any ESI level, longest waiting</div>
+          </div>
+
+          <div class="psg-table">
+            <div class="psg-table-head">10p–8a</div>
+            <table><tr><th>Hour</th><th>Pts</th></tr>
+              <tr><td>22:00</td><td>3</td></tr>
+              <tr><td>23:00</td><td>2</td></tr>
+              <tr><td>00:00</td><td>2</td></tr>
+              <tr><td>01:00</td><td>2</td></tr>
+              <tr><td>02:00</td><td>2</td></tr>
+              <tr><td>03:00</td><td>2</td></tr>
+              <tr><td>04:00</td><td>1</td></tr>
+              <tr><td>05:00</td><td class="star">1*</td></tr>
+              <tr><td>06:00</td><td class="xmark">X</td></tr>
+              <tr><td>07:00</td><td class="xmark">X</td></tr>
+            </table>
+            <div class="psg-footnote">*Any ESI level, longest waiting</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── SHEET 1: Mod Pod ── -->
+      <div class="info-card">
+        <div class="psg-section-title">🏥 Mod Pod Shifts</div>
+        <div class="psg-grid">
+
+          <div class="psg-table">
+            <div class="psg-table-head">8a–8p Mod Pod</div>
+            <table><tr><th>Hour</th><th>Pts</th></tr>
+              <tr><td>08:00</td><td>3</td></tr>
+              <tr><td>09:00</td><td>2</td></tr>
+              <tr><td>10:00</td><td>2</td></tr>
+              <tr><td>11:00</td><td>2</td></tr>
+              <tr><td>12:00</td><td>2</td></tr>
+              <tr><td>13:00</td><td>2</td></tr>
+              <tr><td>14:00</td><td>2</td></tr>
+              <tr><td>15:00</td><td>2</td></tr>
+              <tr><td>16:00</td><td>2</td></tr>
+              <tr><td>17:00</td><td class="star">1*</td></tr>
+              <tr><td>18:00</td><td class="xmark">X</td></tr>
+              <tr><td>19:00</td><td class="xmark">X</td></tr>
+            </table>
+            <div class="psg-footnote">*Any ESI level, longest waiting</div>
+          </div>
+
+          <div class="psg-table">
+            <div class="psg-table-head">1p–1a Mod Pod</div>
+            <table><tr><th>Hour</th><th>Pts</th></tr>
+              <tr><td>13:00</td><td>3</td></tr>
+              <tr><td>14:00</td><td>2</td></tr>
+              <tr><td>15:00</td><td>2</td></tr>
+              <tr><td>16:00</td><td>2</td></tr>
+              <tr><td>17:00</td><td>2</td></tr>
+              <tr><td>18:00</td><td>2</td></tr>
+              <tr><td>19:00</td><td>2</td></tr>
+              <tr><td>20:00</td><td>2</td></tr>
+              <tr><td>21:00</td><td>2</td></tr>
+              <tr><td>22:00</td><td class="star">1*</td></tr>
+              <tr><td>23:00</td><td class="xmark">X</td></tr>
+              <tr><td>00:00</td><td class="xmark">X</td></tr>
+            </table>
+            <div class="psg-footnote">*Any ESI level, longest waiting</div>
+          </div>
+
+          <div class="psg-table">
+            <div class="psg-table-head">6p–6a Mod Pod</div>
+            <table><tr><th>Hour</th><th>Pts</th></tr>
+              <tr><td>18:00</td><td>3</td></tr>
+              <tr><td>19:00</td><td>2</td></tr>
+              <tr><td>20:00</td><td>2</td></tr>
+              <tr><td>21:00</td><td>2</td></tr>
+              <tr><td>22:00</td><td>2</td></tr>
+              <tr><td>23:00</td><td>2</td></tr>
+              <tr><td>00:00</td><td>2</td></tr>
+              <tr><td>01:00</td><td>2</td></tr>
+              <tr><td>02:00</td><td>2</td></tr>
+              <tr><td>03:00</td><td class="star">1*</td></tr>
+              <tr><td>04:00</td><td class="xmark">X</td></tr>
+              <tr><td>05:00</td><td class="xmark">X</td></tr>
+            </table>
+            <div class="psg-footnote">*Any ESI level, longest waiting</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── SHEET 2: 3-digit hour format ── -->
+      <div class="info-card">
+        <div class="psg-section-title">📋 Alternate Sheet — Shift Point Assignments</div>
+        <div style="font-size:12px;color:var(--text3);margin-bottom:14px;font-style:italic">Same schedule using 3-digit hour notation (e.g. 500 = 5:00, 1400 = 14:00).</div>
+        <div class="psg-grid">
+
+          <div class="psg-table">
+            <div class="psg-table-head">5a–3p</div>
+            <table><tr><th>Hour</th><th>Pts</th></tr>
+              <tr><td>500</td><td>3</td></tr>
+              <tr><td>600</td><td>2</td></tr>
+              <tr><td>700</td><td>2</td></tr>
+              <tr><td>800</td><td>2</td></tr>
+              <tr><td>900</td><td>2</td></tr>
+              <tr><td>1000</td><td>2</td></tr>
+              <tr><td>1100</td><td>1</td></tr>
+              <tr><td>1200</td><td class="star">1*</td></tr>
+              <tr><td>1300</td><td class="xmark">x</td></tr>
+              <tr><td>1400</td><td class="xmark">x</td></tr>
+            </table>
+            <div class="psg-footnote">*Any ESI lvl, longest waiting</div>
+          </div>
+
+          <div class="psg-table">
+            <div class="psg-table-head">6a–4p</div>
+            <table><tr><th>Hour</th><th>Pts</th></tr>
+              <tr><td>600</td><td>3</td></tr>
+              <tr><td>700</td><td>2</td></tr>
+              <tr><td>800</td><td>2</td></tr>
+              <tr><td>900</td><td>2</td></tr>
+              <tr><td>1000</td><td>2</td></tr>
+              <tr><td>1100</td><td>2</td></tr>
+              <tr><td>1200</td><td>1</td></tr>
+              <tr><td>1300</td><td class="star">1*</td></tr>
+              <tr><td>1400</td><td class="xmark">x</td></tr>
+              <tr><td>1500</td><td class="xmark">x</td></tr>
+            </table>
+            <div class="psg-footnote">*Any ESI lvl, longest waiting</div>
+          </div>
+
+          <div class="psg-table">
+            <div class="psg-table-head">8a–8p</div>
+            <table><tr><th>Hour</th><th>Pts</th></tr>
+              <tr><td>800</td><td>3</td></tr>
+              <tr><td>900</td><td>2</td></tr>
+              <tr><td>1000</td><td>2</td></tr>
+              <tr><td>1100</td><td>2</td></tr>
+              <tr><td>1200</td><td>2</td></tr>
+              <tr><td>1300</td><td>2</td></tr>
+              <tr><td>1400</td><td>2</td></tr>
+              <tr><td>1500</td><td>1</td></tr>
+              <tr><td>1600</td><td>1</td></tr>
+              <tr><td>1700</td><td class="star">1*</td></tr>
+              <tr><td>1800</td><td class="xmark">x</td></tr>
+              <tr><td>1900</td><td class="xmark">x</td></tr>
+            </table>
+            <div class="psg-footnote">*Any ESI lvl, longest waiting</div>
+          </div>
+
+          <div class="psg-table">
+            <div class="psg-table-head">10a–10p</div>
+            <table><tr><th>Hour</th><th>Pts</th></tr>
+              <tr><td>1000</td><td>3</td></tr>
+              <tr><td>1100</td><td>2</td></tr>
+              <tr><td>1200</td><td>2</td></tr>
+              <tr><td>1300</td><td>2</td></tr>
+              <tr><td>1400</td><td>2</td></tr>
+              <tr><td>1500</td><td>2</td></tr>
+              <tr><td>1600</td><td>2</td></tr>
+              <tr><td>1700</td><td>1</td></tr>
+              <tr><td>1800</td><td>1</td></tr>
+              <tr><td>1900</td><td class="star">1*</td></tr>
+              <tr><td>2000</td><td class="xmark">x</td></tr>
+              <tr><td>2100</td><td class="xmark">x</td></tr>
+            </table>
+            <div class="psg-footnote">*Any ESI lvl, longest waiting</div>
+          </div>
+
+          <div class="psg-table">
+            <div class="psg-table-head">12p–12a</div>
+            <table><tr><th>Hour</th><th>Pts</th></tr>
+              <tr><td>1200</td><td>3</td></tr>
+              <tr><td>1300</td><td>2</td></tr>
+              <tr><td>1400</td><td>2</td></tr>
+              <tr><td>1500</td><td>2</td></tr>
+              <tr><td>1600</td><td>2</td></tr>
+              <tr><td>1700</td><td>2</td></tr>
+              <tr><td>1800</td><td>2</td></tr>
+              <tr><td>1900</td><td>1</td></tr>
+              <tr><td>2000</td><td>1</td></tr>
+              <tr><td>2100</td><td class="star">1*</td></tr>
+              <tr><td>2200</td><td class="xmark">x</td></tr>
+              <tr><td>2300</td><td class="xmark">x</td></tr>
+            </table>
+            <div class="psg-footnote">*Any ESI lvl, longest waiting</div>
+          </div>
+
+          <div class="psg-table">
+            <div class="psg-table-head">3p–1a</div>
+            <table><tr><th>Hour</th><th>Pts</th></tr>
+              <tr><td>1500</td><td>3</td></tr>
+              <tr><td>1600</td><td>2</td></tr>
+              <tr><td>1700</td><td>2</td></tr>
+              <tr><td>1800</td><td>2</td></tr>
+              <tr><td>1900</td><td>2</td></tr>
+              <tr><td>2000</td><td>2</td></tr>
+              <tr><td>2100</td><td>1</td></tr>
+              <tr><td>2200</td><td class="star">1*</td></tr>
+              <tr><td>2300</td><td class="xmark">x</td></tr>
+              <tr><td>2400</td><td class="xmark">x</td></tr>
+            </table>
+            <div class="psg-footnote">*Any ESI lvl, longest waiting</div>
+          </div>
+
+          <div class="psg-table">
+            <div class="psg-table-head">4p–2a</div>
+            <table><tr><th>Hour</th><th>Pts</th></tr>
+              <tr><td>1600</td><td>3</td></tr>
+              <tr><td>1700</td><td>2</td></tr>
+              <tr><td>1800</td><td>2</td></tr>
+              <tr><td>1900</td><td>2</td></tr>
+              <tr><td>2000</td><td>2</td></tr>
+              <tr><td>2100</td><td>2</td></tr>
+              <tr><td>2200</td><td>1</td></tr>
+              <tr><td>2300</td><td class="star">1*</td></tr>
+              <tr><td>2400</td><td class="xmark">x</td></tr>
+              <tr><td>100</td><td class="xmark">x</td></tr>
+            </table>
+            <div class="psg-footnote">*Any ESI lvl, longest waiting</div>
+          </div>
+
+          <div class="psg-table">
+            <div class="psg-table-head">8p–8a (1/2)</div>
+            <table><tr><th>Hour</th><th>Pts</th></tr>
+              <tr><td>2000</td><td>3</td></tr>
+              <tr><td>2100</td><td>2</td></tr>
+              <tr><td>2200</td><td>2</td></tr>
+              <tr><td>2300</td><td>2</td></tr>
+              <tr><td>2400</td><td>2</td></tr>
+              <tr><td>100</td><td>2</td></tr>
+              <tr><td>200</td><td>2</td></tr>
+              <tr><td>300</td><td>1</td></tr>
+              <tr><td>400</td><td>1</td></tr>
+              <tr><td>500</td><td class="star">1*</td></tr>
+              <tr><td>600</td><td class="xmark">x</td></tr>
+              <tr><td>700</td><td class="xmark">x</td></tr>
+            </table>
+            <div class="psg-footnote">*Any ESI lvl, longest waiting</div>
+          </div>
+
+          <div class="psg-table">
+            <div class="psg-table-head">10p–8a</div>
+            <table><tr><th>Hour</th><th>Pts</th></tr>
+              <tr><td>2200</td><td>3</td></tr>
+              <tr><td>2300</td><td>2</td></tr>
+              <tr><td>2400</td><td>2</td></tr>
+              <tr><td>100</td><td>2</td></tr>
+              <tr><td>200</td><td>2</td></tr>
+              <tr><td>300</td><td>2</td></tr>
+              <tr><td>400</td><td>1</td></tr>
+              <tr><td>500</td><td class="star">1*</td></tr>
+              <tr><td>600</td><td class="xmark">x</td></tr>
+              <tr><td>700</td><td class="xmark">x</td></tr>
+            </table>
+            <div class="psg-footnote">*Any ESI lvl, longest waiting</div>
+          </div>
+
+          <div class="psg-table">
+            <div class="psg-table-head">Mod Pod 3p–3a</div>
+            <table><tr><th>Hour</th><th>Pts</th></tr>
+              <tr><td>1500</td><td>3</td></tr>
+              <tr><td>1600</td><td>2</td></tr>
+              <tr><td>1700</td><td>2</td></tr>
+              <tr><td>1800</td><td>2</td></tr>
+              <tr><td>1900</td><td>2</td></tr>
+              <tr><td>2000</td><td>2</td></tr>
+              <tr><td>2100</td><td>2</td></tr>
+              <tr><td>2200</td><td>2</td></tr>
+              <tr><td>2300</td><td>2</td></tr>
+              <tr><td>2400</td><td class="star">1*</td></tr>
+              <tr><td>100</td><td class="xmark">x</td></tr>
+              <tr><td>200</td><td class="xmark">x</td></tr>
+            </table>
+            <div class="psg-footnote">*Any ESI lvl, longest waiting</div>
+          </div>
+
+        </div>
       </div>
     </div>
 
