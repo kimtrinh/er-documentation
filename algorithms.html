@@ -205,7 +205,7 @@ main>*:nth-child(4){animation-delay:.15s}
   <div class="algo-tools">
     <input id="algoSearchInput" class="algo-search" type="text" placeholder="Search algorithms (e.g. pregnancy, aortic, papilledema, floaters)..." autocomplete="off" spellcheck="false" aria-label="Search algorithms">
     <button id="algoSearchClear" class="algo-clear" type="button">Clear</button>
-    <span id="algoSearchCount" class="algo-count">29 algorithms</span>
+    <span id="algoSearchCount" class="algo-count">40 algorithms</span>
   </div>
 
   <!-- ALGORITHM SELECTOR GRID -->
@@ -414,6 +414,83 @@ main>*:nth-child(4){animation-delay:.15s}
         <div class="algo-meta">KP SBC Hospital Protocols · 2015–2016 &nbsp;·&nbsp; <span class="algo-badge badge-cardio">Emergency Medicine · Procedures</span></div>
       </div>
     </div>
+    <div class="algo-card" onclick="showAlgo('stemi')" id="card-stemi" data-algo="stemi" data-keywords="STEMI ST elevation MI acute myocardial infarction cardiac catheterization PCI thrombolysis ICEMA" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">❤️‍🔥</div>
+      <div class="algo-info">
+        <div class="algo-title">STEMI Protocol (ICEMA)</div>
+        <div class="algo-meta">ICEMA &nbsp;·&nbsp; <span class="algo-badge badge-cardio">Cardiology</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('troponin')" id="card-troponin" data-algo="troponin" data-keywords="troponin testing high sensitivity cardiac biomarker chest pain ACS NSTEMI rule out" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🧪</div>
+      <div class="algo-info">
+        <div class="algo-title">Troponin Testing Guide</div>
+        <div class="algo-meta">KP SBC &nbsp;·&nbsp; <span class="algo-badge badge-cardio">Cardiology</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('doac-bleeding')" id="card-doac-bleeding" data-algo="doac-bleeding" data-keywords="DOAC TSOA anticoagulant reversal bleeding apixaban rivaroxaban dabigatran edoxaban andexanet idarucizumab" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🩸</div>
+      <div class="algo-info">
+        <div class="algo-title">DOAC/TSOA Bleeding Management</div>
+        <div class="algo-meta">KP Regional &nbsp;·&nbsp; <span class="algo-badge badge-vascular">Hematology</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('contrast-allergy')" id="card-contrast-allergy" data-algo="contrast-allergy" data-keywords="contrast allergy premedication prophylaxis allergic reaction IV contrast CT scan prednisone diphenhydramine" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">💉</div>
+      <div class="algo-info">
+        <div class="algo-title">Contrast Allergy Premedication</div>
+        <div class="algo-meta">KP SBC &nbsp;·&nbsp; <span class="algo-badge badge-ophtho">Radiology</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('stress-testing')" id="card-stress-testing" data-algo="stress-testing" data-keywords="non-invasive stress test cardiac stress exercise nuclear stress echo treadmill risk stratification chest pain" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🏃</div>
+      <div class="algo-info">
+        <div class="algo-title">Non-Invasive Stress Testing</div>
+        <div class="algo-meta">KP SBC &nbsp;·&nbsp; <span class="algo-badge badge-cardio">Cardiology</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('hemorrhage-protocol')" id="card-hemorrhage-protocol" data-algo="hemorrhage-protocol" data-keywords="massive transfusion protocol hemorrhage emergency release blood products MTP FFP platelets" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🆘</div>
+      <div class="algo-info">
+        <div class="algo-title">Emergency Hemorrhage Protocol</div>
+        <div class="algo-meta">KP SBC 2013 &nbsp;·&nbsp; <span class="algo-badge badge-vascular">Hematology</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('transfusion')" id="card-transfusion" data-algo="transfusion" data-keywords="transfusion protocol blood products PRBC FFP platelets crossmatch type screen indications thresholds" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🩸</div>
+      <div class="algo-info">
+        <div class="algo-title">Transfusion Protocol</div>
+        <div class="algo-meta">KP SBC &nbsp;·&nbsp; <span class="algo-badge badge-vascular">Hematology</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('pep')" id="card-pep" data-algo="pep" data-keywords="post-exposure prophylaxis PEP HIV hepatitis needlestick bloodborne occupational exposure" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🛡️</div>
+      <div class="algo-info">
+        <div class="algo-title">Post-Exposure Prophylaxis (PEP)</div>
+        <div class="algo-meta">KP SBC 2016 &nbsp;·&nbsp; <span class="algo-badge badge-ob">Infection Control</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('medical-abortion')" id="card-medical-abortion" data-algo="medical-abortion" data-keywords="mifepristone misoprostol medical abortion first trimester pregnancy termination" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">💊</div>
+      <div class="algo-info">
+        <div class="algo-title">Medical Abortion — Mifepristone</div>
+        <div class="algo-meta">KP NATL &nbsp;·&nbsp; <span class="algo-badge badge-ob">OB/GYN</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('paxlovid')" id="card-paxlovid" data-algo="paxlovid" data-keywords="paxlovid nirmatrelvir ritonavir COVID antiviral eligibility drug interactions prescribing" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">💊</div>
+      <div class="algo-info">
+        <div class="algo-title">Paxlovid Prescribing Guide</div>
+        <div class="algo-meta">KP SBC &nbsp;·&nbsp; <span class="algo-badge badge-ob">Infectious Disease</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('ed-snf-criteria')" id="card-ed-snf-criteria" data-algo="ed-snf-criteria" data-keywords="ED to SNF skilled nursing facility discharge criteria disposition clinical guidelines 2014" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🏠</div>
+      <div class="algo-info">
+        <div class="algo-title">ED to SNF Disposition Criteria</div>
+        <div class="algo-meta">KP SBC 2014 &nbsp;·&nbsp; <span class="algo-badge badge-neuro">Geriatrics</span></div>
+      </div>
+    </div>
   </div>
 
   <!-- ALGORITHM VIEWER -->
@@ -485,6 +562,14 @@ const algos = {
           </div>
         </div>
       </div>
+      <div style="max-width:760px;margin:16px auto 0">
+        <hr style="border:none;border-top:1px solid var(--border);margin:20px 0"/>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+          <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 Official Reference Document</div>
+          <a href="assets/orbital-fractures.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue2);border:1px solid var(--blue);border-radius:8px;color:#fff;font-size:12px;font-weight:600;text-decoration:none">⬇ Download / Open</a>
+        </div>
+        <iframe src="assets/orbital-fractures.pdf" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Orbital Fractures Reference"></iframe>
+      </div>
     `
   },
 
@@ -545,6 +630,14 @@ const algos = {
           <div style="font-size:12px;color:var(--text2);margin-top:6px">Discuss results with Neurologist regardless of findings</div>
         </div>
       </div>
+      <div style="max-width:760px;margin:16px auto 0">
+        <hr style="border:none;border-top:1px solid var(--border);margin:20px 0"/>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+          <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 Official Protocol Document</div>
+          <a href="assets/papilledema.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue2);border:1px solid var(--blue);border-radius:8px;color:#fff;font-size:12px;font-weight:600;text-decoration:none">⬇ Download / Open</a>
+        </div>
+        <iframe src="assets/papilledema.pdf" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Papilledema Algorithm"></iframe>
+      </div>
     `
   },
 
@@ -576,6 +669,14 @@ const algos = {
             </div>
           </div>
         </div>
+      </div>
+      <div style="max-width:760px;margin:16px auto 0">
+        <hr style="border:none;border-top:1px solid var(--border);margin:20px 0"/>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+          <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 Official Protocol Document</div>
+          <a href="assets/pneumomediastinum.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue2);border:1px solid var(--blue);border-radius:8px;color:#fff;font-size:12px;font-weight:600;text-decoration:none">⬇ Download / Open</a>
+        </div>
+        <iframe src="assets/pneumomediastinum.pdf" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Pneumomediastinum Reference"></iframe>
       </div>
     `
   },
@@ -709,6 +810,20 @@ const algos = {
           Ontario Medical Center: Vocera "OMC GYN"; Case Managers: Loan Truong or Sara Sealy.
         </div>
       </div>
+      <div style="max-width:760px;margin:16px auto 0">
+        <hr style="border:none;border-top:1px solid var(--border);margin:20px 0"/>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+          <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 Pregnant Vaginal Bleeding Protocol</div>
+          <a href="assets/pregnant-vaginal-bleeding.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue2);border:1px solid var(--blue);border-radius:8px;color:#fff;font-size:12px;font-weight:600;text-decoration:none">⬇ Download / Open</a>
+        </div>
+        <iframe src="assets/pregnant-vaginal-bleeding.pdf" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Pregnant Vaginal Bleeding Protocol"></iframe>
+        <hr style="border:none;border-top:1px solid var(--border);margin:20px 0"/>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+          <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 First Trimester Bleeding Guidelines</div>
+          <a href="https://view.officeapps.live.com/op/view.aspx?src=https://kimtrinh.github.io/er-documentation/assets/first-trimester-bleeding.doc" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue2);border:1px solid var(--blue);border-radius:8px;color:#fff;font-size:12px;font-weight:600;text-decoration:none">⬇ Open in Word</a>
+        </div>
+        <iframe src="https://view.officeapps.live.com/op/embed.aspx?src=https://kimtrinh.github.io/er-documentation/assets/first-trimester-bleeding.doc" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="First Trimester Bleeding Guidelines"></iframe>
+      </div>
     `
   },
 
@@ -760,6 +875,14 @@ const algos = {
             </div>
           </div>
         </div>
+      </div>
+      <div style="max-width:760px;margin:16px auto 0">
+        <hr style="border:none;border-top:1px solid var(--border);margin:20px 0"/>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+          <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 Official Protocol Document</div>
+          <a href="assets/aortic-dissection.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue2);border:1px solid var(--blue);border-radius:8px;color:#fff;font-size:12px;font-weight:600;text-decoration:none">⬇ Download / Open</a>
+        </div>
+        <iframe src="assets/aortic-dissection.pdf" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Aortic Dissection Reference"></iframe>
       </div>
     `
   },
@@ -826,6 +949,14 @@ const algos = {
             </div>
           </div>
         </div>
+      </div>
+      <div style="max-width:760px;margin:16px auto 0">
+        <hr style="border:none;border-top:1px solid var(--border);margin:20px 0"/>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+          <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 Official Protocol Document</div>
+          <a href="assets/flashes-floaters.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue2);border:1px solid var(--blue);border-radius:8px;color:#fff;font-size:12px;font-weight:600;text-decoration:none">⬇ Download / Open</a>
+        </div>
+        <iframe src="assets/flashes-floaters.pdf" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Flashes and Floaters Reference"></iframe>
       </div>
     `
   },
@@ -1041,6 +1172,14 @@ const algos = {
           </div>
         </div>
       </div>
+      <div style="max-width:760px;margin:16px auto 0">
+        <hr style="border:none;border-top:1px solid var(--border);margin:20px 0"/>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+          <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 Official Protocol Document</div>
+          <a href="assets/vcf-pathway.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue2);border:1px solid var(--blue);border-radius:8px;color:#fff;font-size:12px;font-weight:600;text-decoration:none">⬇ Download / Open</a>
+        </div>
+        <iframe src="assets/vcf-pathway.pdf" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="VCF Pathway"></iframe>
+      </div>
     `
   },
 
@@ -1057,6 +1196,18 @@ const algos = {
           <div class="step"><div class="step-num">3</div><div class="step-content"><strong>Bundle actions:</strong> lactate, blood cultures, broad-spectrum antibiotics, fluid resuscitation, and repeat reassessment when indicated.</div></div>
           <div class="step"><div class="step-num">4</div><div class="step-content"><strong>Shock pathway:</strong> persistent hypotension or high lactate prompts vasopressor/hemodynamic reassessment.</div></div>
         </div>
+        <hr style="border:none;border-top:1px solid var(--border);margin:20px 0"/>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+          <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 Sepsis Algorithm</div>
+          <a href="assets/sepsis-algorithm.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue2);border:1px solid var(--blue);border-radius:8px;color:#fff;font-size:12px;font-weight:600;text-decoration:none">⬇ Download / Open</a>
+        </div>
+        <iframe src="assets/sepsis-algorithm.pdf" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Sepsis Algorithm"></iframe>
+        <hr style="border:none;border-top:1px solid var(--border);margin:20px 0"/>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+          <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 Sepsis ED RN Algorithm</div>
+          <a href="assets/sepsis-rn-algorithm.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue2);border:1px solid var(--blue);border-radius:8px;color:#fff;font-size:12px;font-weight:600;text-decoration:none">⬇ Download / Open</a>
+        </div>
+        <iframe src="assets/sepsis-rn-algorithm.pdf" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Sepsis ED RN Algorithm"></iframe>
       </div>
     `
   },
@@ -1074,6 +1225,12 @@ const algos = {
           <div class="step"><div class="step-num">3</div><div class="step-content"><strong>Seizure prophylaxis:</strong> magnesium loading + maintenance per institutional dosing.</div></div>
           <div class="step"><div class="step-num">4</div><div class="step-content"><strong>Disposition:</strong> admit/transfer based on maternal-fetal stability and response.</div></div>
         </div>
+        <hr style="border:none;border-top:1px solid var(--border);margin:20px 0"/>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+          <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 Official Protocol Document</div>
+          <a href="assets/preeclampsia-algo.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue2);border:1px solid var(--blue);border-radius:8px;color:#fff;font-size:12px;font-weight:600;text-decoration:none">⬇ Download / Open</a>
+        </div>
+        <iframe src="assets/preeclampsia-algo.pdf" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Pre-Eclampsia Algorithm"></iframe>
       </div>
     `
   },
@@ -1091,6 +1248,12 @@ const algos = {
           <div class="step"><div class="step-num">3</div><div class="step-content"><strong>If controlled:</strong> follow maintenance dosing and serial labs/exams.</div></div>
           <div class="step"><div class="step-num">4</div><div class="step-content"><strong>Discharge:</strong> provide strict return precautions for recurrent swelling/bleeding/systemic symptoms.</div></div>
         </div>
+        <hr style="border:none;border-top:1px solid var(--border);margin:20px 0"/>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+          <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 Official Protocol Document</div>
+          <a href="https://view.officeapps.live.com/op/view.aspx?src=https://kimtrinh.github.io/er-documentation/assets/pitviper-crofab.docx" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue2);border:1px solid var(--blue);border-radius:8px;color:#fff;font-size:12px;font-weight:600;text-decoration:none">⬇ Open in Word</a>
+        </div>
+        <iframe src="https://view.officeapps.live.com/op/embed.aspx?src=https://kimtrinh.github.io/er-documentation/assets/pitviper-crofab.docx" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="CroFab Protocol"></iframe>
       </div>
     `
   },
@@ -1103,6 +1266,12 @@ const algos = {
       <div style="max-width:760px;margin:0 auto">
         <div class="callout">Quick-reference table for <strong>delirium, mania, psychosis, dementia, and catatonia</strong> with common ED medication options.</div>
         <div class="callout callout-yellow"><strong>Use:</strong> match syndrome to first-line option, route, dose range, and key cautions/QTc or respiratory concerns.</div>
+        <hr style="border:none;border-top:1px solid var(--border);margin:20px 0"/>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+          <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 Official Protocol Document</div>
+          <a href="https://view.officeapps.live.com/op/view.aspx?src=https://kimtrinh.github.io/er-documentation/assets/ed-psych-medications.docx" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue2);border:1px solid var(--blue);border-radius:8px;color:#fff;font-size:12px;font-weight:600;text-decoration:none">⬇ Open in Word</a>
+        </div>
+        <iframe src="https://view.officeapps.live.com/op/embed.aspx?src=https://kimtrinh.github.io/er-documentation/assets/ed-psych-medications.docx" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="ED Psychiatry Medications"></iframe>
       </div>
     `
   },
@@ -1119,6 +1288,12 @@ const algos = {
           <div class="step"><div class="step-num">2</div><div class="step-content"><strong>Treat flare:</strong> NSAID, colchicine, or steroid strategy based on comorbidities/contraindications.</div></div>
           <div class="step"><div class="step-num">3</div><div class="step-content"><strong>Discharge:</strong> short-course anti-inflammatory plan + PCP/rheum follow-up instructions.</div></div>
         </div>
+        <hr style="border:none;border-top:1px solid var(--border);margin:20px 0"/>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+          <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 Official Protocol Document</div>
+          <a href="assets/gout-treatment.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue2);border:1px solid var(--blue);border-radius:8px;color:#fff;font-size:12px;font-weight:600;text-decoration:none">⬇ Download / Open</a>
+        </div>
+        <iframe src="assets/gout-treatment.pdf" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Acute Gout Treatment"></iframe>
       </div>
     `
   },
@@ -1135,6 +1310,12 @@ const algos = {
           <div class="step"><div class="step-num">2</div><div class="step-content"><strong>Test selection:</strong> C. diff criteria first, then bacterial PCR panel or ova/parasite pathway as indicated.</div></div>
           <div class="step"><div class="step-num">3</div><div class="step-content"><strong>Disposition:</strong> hydration strategy, selective antimicrobials, and return precautions.</div></div>
         </div>
+        <hr style="border:none;border-top:1px solid var(--border);margin:20px 0"/>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+          <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 Official Protocol Document</div>
+          <a href="https://view.officeapps.live.com/op/view.aspx?src=https://kimtrinh.github.io/er-documentation/assets/infectious-diarrhea.docx" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue2);border:1px solid var(--blue);border-radius:8px;color:#fff;font-size:12px;font-weight:600;text-decoration:none">⬇ Open in Word</a>
+        </div>
+        <iframe src="https://view.officeapps.live.com/op/embed.aspx?src=https://kimtrinh.github.io/er-documentation/assets/infectious-diarrhea.docx" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Infectious Diarrhea Workup"></iframe>
       </div>
     `
   },
@@ -1151,6 +1332,12 @@ const algos = {
           <div class="step"><div class="step-num">2</div><div class="step-content"><strong>2-bag titration:</strong> adjust dextrose concentration by bedside glucose trend while keeping fluid goals constant.</div></div>
           <div class="step"><div class="step-num">3</div><div class="step-content"><strong>Watch for cerebral edema:</strong> neurologic checks and immediate hyperosmolar treatment pathway if suspected.</div></div>
         </div>
+        <hr style="border:none;border-top:1px solid var(--border);margin:20px 0"/>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+          <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📊 Official Protocol Document</div>
+          <a href="https://view.officeapps.live.com/op/view.aspx?src=https://kimtrinh.github.io/er-documentation/assets/peds-dka-2bag.pptx" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue2);border:1px solid var(--blue);border-radius:8px;color:#fff;font-size:12px;font-weight:600;text-decoration:none">⬇ Open in PowerPoint</a>
+        </div>
+        <iframe src="https://view.officeapps.live.com/op/embed.aspx?src=https://kimtrinh.github.io/er-documentation/assets/peds-dka-2bag.pptx" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Peds DKA 2-Bag System"></iframe>
       </div>
     `
   },
@@ -1167,6 +1354,12 @@ const algos = {
           <div class="step"><div class="step-num">2</div><div class="step-content"><strong>Risk stratify:</strong> appearance, oxygenation, chest findings, ANC/history, and follow-up reliability.</div></div>
           <div class="step"><div class="step-num">3</div><div class="step-content"><strong>Disposition:</strong> admit high-risk patients; discharge low-risk with strict return precautions and rapid follow-up.</div></div>
         </div>
+        <hr style="border:none;border-top:1px solid var(--border);margin:20px 0"/>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+          <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 Official Protocol Document</div>
+          <a href="https://view.officeapps.live.com/op/view.aspx?src=https://kimtrinh.github.io/er-documentation/assets/peds-sickle-cell-fever.docx" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue2);border:1px solid var(--blue);border-radius:8px;color:#fff;font-size:12px;font-weight:600;text-decoration:none">⬇ Open in Word</a>
+        </div>
+        <iframe src="https://view.officeapps.live.com/op/embed.aspx?src=https://kimtrinh.github.io/er-documentation/assets/peds-sickle-cell-fever.docx" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Peds Sickle Cell Fever"></iframe>
       </div>
     `
   },
@@ -1183,6 +1376,12 @@ const algos = {
           <div class="step"><div class="step-num">2</div><div class="step-content"><strong>Asymptomatic branch:</strong> observation window, reassessment, and discharge criteria.</div></div>
           <div class="step"><div class="step-num">3</div><div class="step-content"><strong>Symptomatic branch:</strong> imaging/labs as indicated, respiratory support, and admission thresholds.</div></div>
         </div>
+        <hr style="border:none;border-top:1px solid var(--border);margin:20px 0"/>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+          <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 Official Protocol Document</div>
+          <a href="assets/peds-submersion.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue2);border:1px solid var(--blue);border-radius:8px;color:#fff;font-size:12px;font-weight:600;text-decoration:none">⬇ Download / Open</a>
+        </div>
+        <iframe src="assets/peds-submersion.pdf" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Peds Submersion Injuries"></iframe>
       </div>
     `
   },
@@ -1199,6 +1398,18 @@ const algos = {
           <div class="step"><div class="step-num">2</div><div class="step-content"><strong>Stable pathway:</strong> staged labs/consults and immunomodulator initiation per protocol.</div></div>
           <div class="step"><div class="step-num">3</div><div class="step-content"><strong>Unstable pathway:</strong> ICU-level resuscitation with expedited IVIG/steroid treatment.</div></div>
         </div>
+        <hr style="border:none;border-top:1px solid var(--border);margin:20px 0"/>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+          <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 MIS-C Stable &amp; ED-Inpatient Pathways</div>
+          <a href="assets/misc-pathways.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue2);border:1px solid var(--blue);border-radius:8px;color:#fff;font-size:12px;font-weight:600;text-decoration:none">⬇ Download / Open</a>
+        </div>
+        <iframe src="assets/misc-pathways.pdf" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="MIS-C Pathways"></iframe>
+        <hr style="border:none;border-top:1px solid var(--border);margin:20px 0"/>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+          <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 Peds MIS-C Stable &amp; Unstable Pathways</div>
+          <a href="assets/peds-misc-pathways.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue2);border:1px solid var(--blue);border-radius:8px;color:#fff;font-size:12px;font-weight:600;text-decoration:none">⬇ Download / Open</a>
+        </div>
+        <iframe src="assets/peds-misc-pathways.pdf" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Peds MIS-C Stable and Unstable Pathways"></iframe>
       </div>
     `
   },
@@ -1256,6 +1467,16 @@ const algos = {
         <iframe src="assets/ed-code-stroke.pdf" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="ED Code Stroke Process Map"></iframe>
         <div style="margin:20px 0 12px;font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 Inpatient Code Stroke Algorithm</div>
         <iframe src="assets/inpatient-code-stroke.pdf" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Inpatient Code Stroke Algorithm"></iframe>
+        <div style="margin:20px 0 12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+          <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 2014 Stroke Clinical Reference</div>
+          <a href="assets/stroke-clinical-reference.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue2);border:1px solid var(--blue);border-radius:8px;color:#fff;font-size:12px;font-weight:600;text-decoration:none">⬇ Download / Open</a>
+        </div>
+        <iframe src="assets/stroke-clinical-reference.pdf" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="2014 Stroke Clinical Reference"></iframe>
+        <div style="margin:20px 0 12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+          <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 COVID-19 Ischemic Stroke Management</div>
+          <a href="https://view.officeapps.live.com/op/view.aspx?src=https://kimtrinh.github.io/er-documentation/assets/covid-stroke.docx" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue2);border:1px solid var(--blue);border-radius:8px;color:#fff;font-size:12px;font-weight:600;text-decoration:none">⬇ Open in Word</a>
+        </div>
+        <iframe src="https://view.officeapps.live.com/op/embed.aspx?src=https://kimtrinh.github.io/er-documentation/assets/covid-stroke.docx" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="COVID-19 Ischemic Stroke Management"></iframe>
       </div>
     `
   },
@@ -1372,6 +1593,182 @@ const algos = {
         <iframe src="assets/procedural-sedation.pdf" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Procedural Sedation Full Protocol"></iframe>
         <div style="margin:20px 0 12px;font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 Procedural Sedation FAQ (2016)</div>
         <iframe src="assets/procedural-sedation-faq.pdf" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Procedural Sedation FAQ 2016"></iframe>
+      </div>
+    `
+  },
+
+  'stemi': {
+    icon: '❤️‍🔥',
+    title: 'STEMI Protocol (ICEMA)',
+    updated: 'ICEMA SBC',
+    render: () => `
+      <div style="max-width:760px;margin:0 auto">
+        <div class="callout callout-red"><strong>STEMI Protocol:</strong> ICEMA 8120 — activation criteria, triage, cath lab notification, and time targets for ST-elevation MI.</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+          <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 Official ICEMA Protocol</div>
+          <a href="assets/stemi-icema.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue2);border:1px solid var(--blue);border-radius:8px;color:#fff;font-size:12px;font-weight:600;text-decoration:none">⬇ Download / Open</a>
+        </div>
+        <iframe src="assets/stemi-icema.pdf" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="STEMI Protocol ICEMA 8120"></iframe>
+      </div>
+    `
+  },
+
+  'troponin': {
+    icon: '🧪',
+    title: 'Troponin Testing Guide',
+    updated: 'KP SBC',
+    render: () => `
+      <div style="max-width:760px;margin:0 auto">
+        <div class="callout"><strong>Troponin Testing:</strong> Guidance on when to order, serial testing intervals, and interpretation for ACS rule-out in the ED.</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+          <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 Official Reference Memo</div>
+          <a href="https://view.officeapps.live.com/op/view.aspx?src=https://kimtrinh.github.io/er-documentation/assets/troponin-testing.doc" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue2);border:1px solid var(--blue);border-radius:8px;color:#fff;font-size:12px;font-weight:600;text-decoration:none">⬇ Open in Word</a>
+        </div>
+        <iframe src="https://view.officeapps.live.com/op/embed.aspx?src=https://kimtrinh.github.io/er-documentation/assets/troponin-testing.doc" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Troponin Testing Guide"></iframe>
+      </div>
+    `
+  },
+
+  'doac-bleeding': {
+    icon: '🩸',
+    title: 'DOAC/TSOA Bleeding Management',
+    updated: 'KP Regional',
+    render: () => `
+      <div style="max-width:760px;margin:0 auto">
+        <div class="callout callout-red"><strong>DOAC/TSOA Bleeding:</strong> Regional guideline for managing major bleeding in patients on direct oral anticoagulants — reversal agents, dosing, and escalation criteria.</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+          <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 Official Guideline</div>
+          <a href="https://view.officeapps.live.com/op/view.aspx?src=https://kimtrinh.github.io/er-documentation/assets/doac-bleeding-management.docx" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue2);border:1px solid var(--blue);border-radius:8px;color:#fff;font-size:12px;font-weight:600;text-decoration:none">⬇ Open in Word</a>
+        </div>
+        <iframe src="https://view.officeapps.live.com/op/embed.aspx?src=https://kimtrinh.github.io/er-documentation/assets/doac-bleeding-management.docx" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="DOAC TSOA Bleeding Management Guideline"></iframe>
+      </div>
+    `
+  },
+
+  'contrast-allergy': {
+    icon: '💉',
+    title: 'Contrast Allergy Premedication',
+    updated: 'KP SBC',
+    render: () => `
+      <div style="max-width:760px;margin:0 auto">
+        <div class="callout"><strong>Contrast Allergy Premedication:</strong> Prophylactic medication regimens for patients with a history of allergic reactions to IV contrast media.</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+          <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 Official Procedure Reference</div>
+          <a href="assets/contrast-allergy-premedication.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue2);border:1px solid var(--blue);border-radius:8px;color:#fff;font-size:12px;font-weight:600;text-decoration:none">⬇ Download / Open</a>
+        </div>
+        <iframe src="assets/contrast-allergy-premedication.pdf" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Contrast Allergy Premedication Protocol"></iframe>
+      </div>
+    `
+  },
+
+  'stress-testing': {
+    icon: '🏃',
+    title: 'Non-Invasive Stress Testing',
+    updated: 'KP SBC',
+    render: () => `
+      <div style="max-width:760px;margin:0 auto">
+        <div class="callout"><strong>Non-Invasive Stress Testing:</strong> Selection guide for exercise, pharmacologic, nuclear, and echo stress tests based on patient risk and functional capacity.</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+          <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 Stress Testing Infographic</div>
+          <a href="assets/non-invasive-stress-testing.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue2);border:1px solid var(--blue);border-radius:8px;color:#fff;font-size:12px;font-weight:600;text-decoration:none">⬇ Download / Open</a>
+        </div>
+        <iframe src="assets/non-invasive-stress-testing.pdf" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Non-Invasive Stress Testing Infographic"></iframe>
+      </div>
+    `
+  },
+
+  'hemorrhage-protocol': {
+    icon: '🆘',
+    title: 'Emergency Hemorrhage Protocol',
+    updated: 'KP SBC 2013',
+    render: () => `
+      <div style="max-width:760px;margin:0 auto">
+        <div class="callout callout-red"><strong>Emergency Release &amp; Hemorrhage Protocol:</strong> Massive transfusion / emergency blood release procedures — activation criteria, blood product ratios, and lab monitoring.</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+          <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 Official Protocol Document</div>
+          <a href="https://view.officeapps.live.com/op/view.aspx?src=https://kimtrinh.github.io/er-documentation/assets/emergency-hemorrhage-protocol.doc" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue2);border:1px solid var(--blue);border-radius:8px;color:#fff;font-size:12px;font-weight:600;text-decoration:none">⬇ Open in Word</a>
+        </div>
+        <iframe src="https://view.officeapps.live.com/op/embed.aspx?src=https://kimtrinh.github.io/er-documentation/assets/emergency-hemorrhage-protocol.doc" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Emergency Hemorrhage Protocol"></iframe>
+      </div>
+    `
+  },
+
+  'transfusion': {
+    icon: '🩸',
+    title: 'Transfusion Protocol',
+    updated: 'KP SBC',
+    render: () => `
+      <div style="max-width:760px;margin:0 auto">
+        <div class="callout"><strong>Transfusion Protocol:</strong> Indications, thresholds, and procedures for blood product transfusion including PRBC, FFP, and platelets.</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+          <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 Official Protocol Document</div>
+          <a href="https://view.officeapps.live.com/op/view.aspx?src=https://kimtrinh.github.io/er-documentation/assets/transfusion-protocol.doc" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue2);border:1px solid var(--blue);border-radius:8px;color:#fff;font-size:12px;font-weight:600;text-decoration:none">⬇ Open in Word</a>
+        </div>
+        <iframe src="https://view.officeapps.live.com/op/embed.aspx?src=https://kimtrinh.github.io/er-documentation/assets/transfusion-protocol.doc" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Transfusion Protocol"></iframe>
+      </div>
+    `
+  },
+
+  'pep': {
+    icon: '🛡️',
+    title: 'Post-Exposure Prophylaxis (PEP)',
+    updated: 'KP SBC 2016',
+    render: () => `
+      <div style="max-width:760px;margin:0 auto">
+        <div class="callout callout-yellow"><strong>Occupational PEP:</strong> Post-exposure prophylaxis protocol for needlestick/bloodborne pathogen occupational exposures — HIV, Hepatitis B/C risk assessment and medication guidance.</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+          <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 Official Protocol Document</div>
+          <a href="https://view.officeapps.live.com/op/view.aspx?src=https://kimtrinh.github.io/er-documentation/assets/occupational-pep.doc" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue2);border:1px solid var(--blue);border-radius:8px;color:#fff;font-size:12px;font-weight:600;text-decoration:none">⬇ Open in Word</a>
+        </div>
+        <iframe src="https://view.officeapps.live.com/op/embed.aspx?src=https://kimtrinh.github.io/er-documentation/assets/occupational-pep.doc" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Post-Exposure Prophylaxis Protocol"></iframe>
+      </div>
+    `
+  },
+
+  'medical-abortion': {
+    icon: '💊',
+    title: 'Medical Abortion — Mifepristone',
+    updated: 'KP NATL',
+    render: () => `
+      <div style="max-width:760px;margin:0 auto">
+        <div class="callout"><strong>Medical Abortion Protocol:</strong> First trimester medical abortion with mifepristone/misoprostol — eligibility, dosing, follow-up, and management of complications.</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+          <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 Official Clinical Guideline</div>
+          <a href="assets/medical-abortion.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue2);border:1px solid var(--blue);border-radius:8px;color:#fff;font-size:12px;font-weight:600;text-decoration:none">⬇ Download / Open</a>
+        </div>
+        <iframe src="assets/medical-abortion.pdf" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Medical Abortion Mifepristone Misoprostol Protocol"></iframe>
+      </div>
+    `
+  },
+
+  'paxlovid': {
+    icon: '💊',
+    title: 'Paxlovid Prescribing Guide',
+    updated: 'KP SBC',
+    render: () => `
+      <div style="max-width:760px;margin:0 auto">
+        <div class="callout callout-yellow"><strong>Paxlovid (nirmatrelvir/ritonavir):</strong> Eligibility criteria, drug interactions, dosing adjustments (renal), and prescribing guidance for COVID-19.</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+          <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📊 Prescribing Resource</div>
+          <a href="https://view.officeapps.live.com/op/view.aspx?src=https://kimtrinh.github.io/er-documentation/assets/paxlovid-prescribing.pptx" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue2);border:1px solid var(--blue);border-radius:8px;color:#fff;font-size:12px;font-weight:600;text-decoration:none">⬇ Open in PowerPoint</a>
+        </div>
+        <iframe src="https://view.officeapps.live.com/op/embed.aspx?src=https://kimtrinh.github.io/er-documentation/assets/paxlovid-prescribing.pptx" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Paxlovid Prescribing Guide"></iframe>
+      </div>
+    `
+  },
+
+  'ed-snf-criteria': {
+    icon: '🏠',
+    title: 'ED to SNF Disposition Criteria',
+    updated: 'KP SBC 2014',
+    render: () => `
+      <div style="max-width:760px;margin:0 auto">
+        <div class="callout"><strong>ED to SNF Criteria:</strong> Clinical guidelines for direct ED to skilled nursing facility disposition — eligibility criteria by diagnosis for safe SNF placement without hospitalization.</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+          <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 Official Clinical Guidelines</div>
+          <a href="assets/ed-snf-criteria.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue2);border:1px solid var(--blue);border-radius:8px;color:#fff;font-size:12px;font-weight:600;text-decoration:none">⬇ Download / Open</a>
+        </div>
+        <iframe src="assets/ed-snf-criteria.pdf" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="ED to SNF Clinical Guidelines 2014"></iframe>
       </div>
     `
   },
