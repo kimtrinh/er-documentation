@@ -1,0 +1,77 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Dot Phrases ──────────────────────────────────────────────────────────
+    // Public read. Creates require the core content fields and must start with
+    // votes = 0. Only the votes field may be mutated (upvote/downvote txns).
+    match /dotphrases/{phraseId} {
+      allow read: if true;
+
+      allow create: if request.resource.data.keys().hasAll(['id','dot','cat','text','createdAt','votes'])
+                    && request.resource.data.dot  is string && request.resource.data.dot.size()  > 0
+                    && request.resource.data.text is string && request.resource.data.text.size() > 0
+                    && request.resource.data.votes == 0;
+
+      allow update: if request.resource.data.diff(resource.data).affectedKeys().hasOnly(['votes'])
+                    && request.resource.data.votes is int;
+
+      allow delete: if false;
+    }
+
+    // ── Dot Phrase Votes ─────────────────────────────────────────────────────
+    // Each vote doc is keyed by a hash of phraseId + userId.
+    // Writes must carry the required fields; vote value must be +1 or -1.
+    // Deletes are allowed for the "unvote" path.
+    match /dotphraseVotes/{voteId} {
+      allow read: if true;
+
+      allow create, update: if request.resource.data.keys().hasAll(['phraseId','userId','vote','updatedAt'])
+                             && request.resource.data.vote in [-1, 1]
+                             && request.resource.data.userId is string
+                             && request.resource.data.userId.size() > 0;
+
+      allow delete: if true;
+    }
+
+    // ── Site Content (Announcements, etc.) ───────────────────────────────────
+    // Public read so every visitor sees the latest announcement.
+    // Writes allowed from any client — passcode enforcement is client-side.
+    match /siteContent/{docId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    // ── Service Requests ─────────────────────────────────────────────────────
+    // Public read. New submissions must start with status 'open', votes = 0.
+    // Updates are restricted to the mutable fields only.
+    // Deletes are used by the admin PIN flow (enforced client-side).
+    match /serviceRequests/{requestId} {
+      allow read: if true;
+
+      allow create: if request.resource.data.keys().hasAll(['title','status','createdAt','votes','votedBy','commentCount'])
+                    && request.resource.data.title is string
+                    && request.resource.data.title.size() > 0
+                    && request.resource.data.status == 'open'
+                    && request.resource.data.votes == 0
+                    && request.resource.data.commentCount == 0;
+
+      allow update: if request.resource.data.diff(resource.data).affectedKeys()
+                       .hasOnly(['votes','votedBy','status','commentCount']);
+
+      allow delete: if true;
+
+      // ── Comments subcollection ────────────────────────────────────────────
+      match /comments/{commentId} {
+        allow read: if true;
+
+        allow create: if request.resource.data.keys().hasAll(['text','author','createdAt'])
+                      && request.resource.data.text is string
+                      && request.resource.data.text.size() > 0;
+
+        allow delete: if true;
+      }
+    }
+
+  }
+}

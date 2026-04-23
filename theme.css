@@ -320,6 +320,105 @@ html[data-theme="light"] .kp-tag.t-neuro  { background:#fdf4ff; color:#a21caf; b
   transform: scale(1.1);
 }
 
+/* ── Sitenav overrides — fit all links + reserve space for theme-toggle ─ */
+/* The theme toggle (~36px) floats top-right; search pill sits inline in nav. */
+.sitenav .sitenav-inner {
+  padding-right: 56px !important;
+  position: relative;
+  max-width: 100% !important;   /* let nav use full viewport width */
+}
+@media (max-width: 640px) {
+  .sitenav .sitenav-inner { padding-right: 46px !important; }
+}
+
+/* Tighter nav-link spacing so all 12 items fit without clipping.
+   Uses !important because per-page inline <style> blocks declare nav-link. */
+.sitenav .nav-link {
+  padding: 5px 8px !important;
+  font-size: 12px !important;
+}
+@media (max-width: 1280px) {
+  .sitenav .nav-link { padding: 4px 6px !important; font-size: 11.5px !important; }
+}
+@media (max-width: 1024px) {
+  .sitenav .nav-link { padding: 4px 5px !important; font-size: 11px !important; }
+}
+
+/* Scroll-fade hint on the right edge of nav-links when overflowing. */
+.sitenav .nav-links {
+  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 18px), transparent 100%);
+          mask-image: linear-gradient(to right, #000 calc(100% - 18px), transparent 100%);
+}
+
+/* ── Search trigger pill — base styles (shared) ───────────────────────── */
+#om-trigger {
+  border-radius: 999px;
+  border: 1px solid var(--border2, #243d5c);
+  background: var(--surface2, #111f35);
+  color: var(--text2, #8fa8c8);
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: background .2s, border-color .2s, color .2s, transform .1s;
+  white-space: nowrap;
+}
+#om-trigger:hover {
+  background: var(--surface, #0d1829);
+  border-color: var(--blue, #3b82f6);
+  color: var(--text, #e8f0fc);
+}
+#om-trigger .om-trigger-icon { font-size: 13px; line-height: 1; }
+#om-trigger .om-trigger-label { font-weight: 600; }
+#om-trigger .om-trigger-kbd {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 5px;
+  background: var(--bg, #080f1a);
+  border: 1px solid var(--border, #1a2d48);
+  color: var(--text3, #4a6280);
+  font-weight: 700;
+  letter-spacing: .03em;
+}
+
+/* ── In-nav variant: compact pill that sits inline in the flex nav ────── */
+#om-trigger.in-nav {
+  flex: 0 0 auto;
+  height: 28px;
+  padding: 0 10px 0 9px;
+  font-size: 11.5px;
+  margin-left: 4px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.25);
+}
+@media (max-width: 900px) {
+  #om-trigger.in-nav .om-trigger-kbd { display: none; }
+  #om-trigger.in-nav { padding: 0 10px; }
+}
+@media (max-width: 640px) {
+  #om-trigger.in-nav .om-trigger-label { display: none; }
+  #om-trigger.in-nav { height: 26px; padding: 0 8px; }
+}
+
+/* ── FAB variant: floating pill for pages with no sitenav ─────────────── */
+#om-trigger.fab {
+  position: fixed;
+  top: 12px;
+  right: 60px;
+  z-index: 9999;
+  height: 36px;
+  padding: 0 12px 0 10px;
+  font-size: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.3);
+}
+@media (max-width: 640px) {
+  #om-trigger.fab { padding: 0 10px; }
+  #om-trigger.fab .om-trigger-label,
+  #om-trigger.fab .om-trigger-kbd { display: none; }
+}
+
 /* ── Feedback bubble + popup ──────────────────────────────────────────── */
 #feedback-bubble {
   position: fixed;
