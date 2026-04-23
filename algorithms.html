@@ -204,7 +204,7 @@ main>*:nth-child(4){animation-delay:.15s}
   <div class="algo-tools">
     <input id="algoSearchInput" class="algo-search" type="text" placeholder="Search algorithms (e.g. pregnancy, aortic, papilledema, floaters)..." autocomplete="off" spellcheck="false" aria-label="Search algorithms">
     <button id="algoSearchClear" class="algo-clear" type="button">Clear</button>
-    <span id="algoSearchCount" class="algo-count">20 algorithms</span>
+    <span id="algoSearchCount" class="algo-count">29 algorithms</span>
   </div>
 
   <!-- ALGORITHM SELECTOR GRID -->
@@ -348,6 +348,69 @@ main>*:nth-child(4){animation-delay:.15s}
       <div class="algo-info">
         <div class="algo-title">MIS-C Stable/Unstable</div>
         <div class="algo-meta">KP SBC 11/2021 &nbsp;·&nbsp; <span class="algo-badge badge-ob">Pediatrics</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('ed-stroke')" id="card-ed-stroke" data-algo="ed-stroke" data-keywords="stroke code stroke tPA thrombolysis NIHSS CT head neuro brain CVA ischemic hemorrhagic alert" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🧠</div>
+      <div class="algo-info">
+        <div class="algo-title">ED Code Stroke</div>
+        <div class="algo-meta">KP SBC ED · ICEMA &nbsp;·&nbsp; <span class="algo-badge badge-neuro">Neurology</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('ct-head-trauma')" id="card-ct-head-trauma" data-algo="ct-head-trauma" data-keywords="CT head trauma Canadian rule GCS loss of consciousness LOC TBI traumatic brain injury head injury" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🪖</div>
+      <div class="algo-info">
+        <div class="algo-title">CT Head for Trauma (Canadian Rule)</div>
+        <div class="algo-meta">KPSC Emergency Medicine &nbsp;·&nbsp; <span class="algo-badge badge-neuro">Neurology · Trauma</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('pe-workup')" id="card-pe-workup" data-algo="pe-workup" data-keywords="PE pulmonary embolism D-dimer CT angiography Wells score PERC rule VTE clot anticoagulation" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🫁</div>
+      <div class="algo-info">
+        <div class="algo-title">PE Workup: D-Dimer & CT Algorithm</div>
+        <div class="algo-meta">KP SBC Emergency Medicine &nbsp;·&nbsp; <span class="algo-badge badge-thoracic">Pulmonology · Hematology</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('peds-hypergly')" id="card-peds-hypergly" data-algo="peds-hypergly" data-keywords="pediatric hyperglycemia DKA diabetic ketoacidosis glucose insulin peds endocrine blood sugar no insulin drip" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🍬</div>
+      <div class="algo-info">
+        <div class="algo-title">Peds Hyperglycemia (No Insulin Drip)</div>
+        <div class="algo-meta">KP SBC Pediatrics &nbsp;·&nbsp; <span class="algo-badge badge-ob">Pediatrics · Endocrine</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('dpa')" id="card-dpa" data-algo="dpa" data-keywords="delivery prior to arrival DPA precipitous delivery born before arrival BBA neonate newborn resuscitation OB" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">👶</div>
+      <div class="algo-info">
+        <div class="algo-title">Deliveries Prior to Arrival (DPA)</div>
+        <div class="algo-meta">KP SBC Emergency Medicine &nbsp;·&nbsp; <span class="algo-badge badge-ob">OB/GYN · Emergency Medicine</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('emergency-contraception')" id="card-emergency-contraception" data-algo="emergency-contraception" data-keywords="emergency contraception Plan B ella copper IUD sexual assault pregnancy prevention NATL interregional" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">💊</div>
+      <div class="algo-info">
+        <div class="algo-title">Emergency Contraception</div>
+        <div class="algo-meta">KP Interregional Clinical Library &nbsp;·&nbsp; <span class="algo-badge badge-ob">OB/GYN</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('bariatric-ct')" id="card-bariatric-ct" data-algo="bariatric-ct" data-keywords="bariatric surgery gastric bypass sleeve gastrectomy CT scan protocol imaging post-op complication morbid obesity" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">⚖️</div>
+      <div class="algo-info">
+        <div class="algo-title">Bariatric Surgery CT Protocols</div>
+        <div class="algo-meta">KP SBC Radiology · Surgery &nbsp;·&nbsp; <span class="algo-badge badge-cardio">Surgery · Radiology</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('abusive-head-trauma')" id="card-abusive-head-trauma" data-algo="abusive-head-trauma" data-keywords="abusive head trauma shaken baby non-accidental trauma NAT child abuse TBI subdural retinal hemorrhage" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">👶</div>
+      <div class="algo-info">
+        <div class="algo-title">Abusive Head Trauma (2022)</div>
+        <div class="algo-meta">KP SBC · January 2022 &nbsp;·&nbsp; <span class="algo-badge badge-ob">Pediatrics · Child Abuse</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('procedural-sedation')" id="card-procedural-sedation" data-algo="procedural-sedation" data-keywords="procedural sedation ketamine propofol etomidate fentanyl midazolam PSA moderate deep sedation monitoring" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">💉</div>
+      <div class="algo-info">
+        <div class="algo-title">Procedural Sedation</div>
+        <div class="algo-meta">KP SBC Hospital Protocols · 2015–2016 &nbsp;·&nbsp; <span class="algo-badge badge-cardio">Emergency Medicine · Procedures</span></div>
       </div>
     </div>
   </div>
@@ -1178,7 +1241,139 @@ const algos = {
         <iframe src="assets/pp-htn-algorithm.pdf" style="width:100%;height:600px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Postpartum Severe Hypertension Algorithm"></iframe>
       </div>
     `
-  }
+  },
+  'ed-stroke': {
+    icon: '🧠',
+    title: 'ED Code Stroke',
+    updated: 'KP SBC ED · ICEMA',
+    render: () => `
+      <div style="padding:0 4px">
+        <div style="margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+          <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 ED Code Stroke Process Map</div>
+          <a href="https://drive.google.com/uc?export=download&id=1YkxC9Rr7CRPQn5BM5M6X-3JCc_WfJDkH" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue2);border:1px solid var(--blue);border-radius:8px;color:#fff;font-size:12px;font-weight:600;text-decoration:none">⬇ Download / Open</a>
+        </div>
+        <iframe src="https://drive.google.com/file/d/1YkxC9Rr7CRPQn5BM5M6X-3JCc_WfJDkH/preview" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="ED Code Stroke Process Map"></iframe>
+        <div style="margin:20px 0 12px;font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 Inpatient Code Stroke Algorithm</div>
+        <iframe src="https://drive.google.com/file/d/1wK5MF7r7qN_iSZxabk-6psD7s5rr3sLa/preview" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Inpatient Code Stroke Algorithm"></iframe>
+      </div>
+    `
+  },
+  'ct-head-trauma': {
+    icon: '🪖',
+    title: 'CT Head for Trauma (Canadian Rule)',
+    updated: 'KPSC Emergency Medicine',
+    render: () => `
+      <div style="padding:0 4px">
+        <div style="margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+          <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 Official Protocol Document</div>
+          <a href="https://drive.google.com/uc?export=download&id=1DBLOil2PGVmeNFzccdORHjzfXKnXyVS_" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue2);border:1px solid var(--blue);border-radius:8px;color:#fff;font-size:12px;font-weight:600;text-decoration:none">⬇ Download / Open</a>
+        </div>
+        <iframe src="https://drive.google.com/file/d/1DBLOil2PGVmeNFzccdORHjzfXKnXyVS_/preview" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="CT Head for Trauma — Canadian Rule"></iframe>
+      </div>
+    `
+  },
+  'pe-workup': {
+    icon: '🫁',
+    title: 'PE Workup: D-Dimer & CT Algorithm',
+    updated: 'KP SBC Emergency Medicine',
+    render: () => `
+      <div style="padding:0 4px">
+        <div style="margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+          <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 D-Dimer for PE</div>
+          <a href="https://drive.google.com/uc?export=download&id=1zkxq6V74MFZkvYQxX5C0zqg15hhXOjHk" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue2);border:1px solid var(--blue);border-radius:8px;color:#fff;font-size:12px;font-weight:600;text-decoration:none">⬇ Download / Open</a>
+        </div>
+        <iframe src="https://drive.google.com/file/d/1zkxq6V74MFZkvYQxX5C0zqg15hhXOjHk/preview" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="D-Dimer for PE"></iframe>
+        <div style="margin:20px 0 12px;font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 CT for PE Algorithm</div>
+        <iframe src="https://drive.google.com/file/d/1wDdYtxafUgrrZubQo4n8kIBo_6eCRIUB/preview" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="CT for PE Algorithm"></iframe>
+      </div>
+    `
+  },
+  'peds-hypergly': {
+    icon: '🍬',
+    title: 'Peds Hyperglycemia (No Insulin Drip)',
+    updated: 'KP SBC Pediatrics',
+    render: () => `
+      <div style="padding:0 4px">
+        <div style="margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+          <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 Official Protocol Document</div>
+          <a href="https://drive.google.com/uc?export=download&id=1gFtKKNhng31ZQpbxe0xF5qGHT0NyZoZd" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue2);border:1px solid var(--blue);border-radius:8px;color:#fff;font-size:12px;font-weight:600;text-decoration:none">⬇ Download / Open</a>
+        </div>
+        <iframe src="https://drive.google.com/file/d/1gFtKKNhng31ZQpbxe0xF5qGHT0NyZoZd/preview" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Peds Hyperglycemia — No Insulin Drip"></iframe>
+      </div>
+    `
+  },
+  'dpa': {
+    icon: '👶',
+    title: 'Deliveries Prior to Arrival (DPA)',
+    updated: 'KP SBC Emergency Medicine',
+    render: () => `
+      <div style="padding:0 4px">
+        <div style="margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+          <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 Official Protocol Document</div>
+          <a href="https://drive.google.com/uc?export=download&id=1e89nMfXXgoe3yX7Zru1ZUDXj3UfvsM5k" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue2);border:1px solid var(--blue);border-radius:8px;color:#fff;font-size:12px;font-weight:600;text-decoration:none">⬇ Download / Open</a>
+        </div>
+        <iframe src="https://drive.google.com/file/d/1e89nMfXXgoe3yX7Zru1ZUDXj3UfvsM5k/preview" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Deliveries Prior to Arrival"></iframe>
+      </div>
+    `
+  },
+  'emergency-contraception': {
+    icon: '💊',
+    title: 'Emergency Contraception',
+    updated: 'KP Interregional Clinical Library',
+    render: () => `
+      <div style="padding:0 4px">
+        <div style="margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+          <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 Official Protocol Document</div>
+          <a href="https://drive.google.com/uc?export=download&id=1d5AylcS_JqQglwHqvTOZ4sq2czB7zVno" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue2);border:1px solid var(--blue);border-radius:8px;color:#fff;font-size:12px;font-weight:600;text-decoration:none">⬇ Download / Open</a>
+        </div>
+        <iframe src="https://drive.google.com/file/d/1d5AylcS_JqQglwHqvTOZ4sq2czB7zVno/preview" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Emergency Contraception — KP Interregional NATL Clinical Library"></iframe>
+      </div>
+    `
+  },
+  'bariatric-ct': {
+    icon: '⚖️',
+    title: 'Bariatric Surgery CT Protocols',
+    updated: 'KP SBC Radiology · Surgery',
+    render: () => `
+      <div style="padding:0 4px">
+        <div style="margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+          <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 Official Protocol Document</div>
+          <a href="https://drive.google.com/uc?export=download&id=1wW1bZcoJjZfszpFahjANR1EJ7dehaEfx" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue2);border:1px solid var(--blue);border-radius:8px;color:#fff;font-size:12px;font-weight:600;text-decoration:none">⬇ Download / Open</a>
+        </div>
+        <iframe src="https://drive.google.com/file/d/1wW1bZcoJjZfszpFahjANR1EJ7dehaEfx/preview" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Bariatric Surgery CT Scan Protocols"></iframe>
+      </div>
+    `
+  },
+  'abusive-head-trauma': {
+    icon: '👶',
+    title: 'Abusive Head Trauma (2022)',
+    updated: 'KP SBC · January 2022',
+    render: () => `
+      <div style="padding:0 4px">
+        <div style="margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+          <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 Official Protocol Document</div>
+          <a href="https://drive.google.com/uc?export=download&id=1s4OO6RyRsgKuGhiNGlawkMb9aJPXztJ1" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue2);border:1px solid var(--blue);border-radius:8px;color:#fff;font-size:12px;font-weight:600;text-decoration:none">⬇ Download / Open</a>
+        </div>
+        <iframe src="https://drive.google.com/file/d/1s4OO6RyRsgKuGhiNGlawkMb9aJPXztJ1/preview" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Abusive Head Trauma 2022"></iframe>
+      </div>
+    `
+  },
+  'procedural-sedation': {
+    icon: '💉',
+    title: 'Procedural Sedation',
+    updated: 'KP SBC Hospital Protocols · 2015–2016',
+    render: () => `
+      <div style="padding:0 4px">
+        <div style="margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+          <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 Procedural Sedation — Full Protocol</div>
+          <a href="https://drive.google.com/uc?export=download&id=1qPoBBc1AQxJGzjd0IoXXEp0yNoq-ZBga" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue2);border:1px solid var(--blue);border-radius:8px;color:#fff;font-size:12px;font-weight:600;text-decoration:none">⬇ Download / Open</a>
+        </div>
+        <iframe src="https://drive.google.com/file/d/1qPoBBc1AQxJGzjd0IoXXEp0yNoq-ZBga/preview" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Procedural Sedation Full Protocol"></iframe>
+        <div style="margin:20px 0 12px;font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 Procedural Sedation FAQ (2016)</div>
+        <iframe src="https://drive.google.com/file/d/19hU6IuJ0BVqEJmIVj8cj3rrlebWA6d1b/preview" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Procedural Sedation FAQ 2016"></iframe>
+      </div>
+    `
+  },
 };
 
 let currentAlgo = null;
