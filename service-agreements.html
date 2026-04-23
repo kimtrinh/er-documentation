@@ -1014,6 +1014,16 @@ main{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-colu
     });
   });
 
+  // Deep-link from URL hash (e.g. from the sitewide search)
+  function handleHash() {
+    const hash = (window.location.hash || '').replace(/^#/, '');
+    if (hash && document.getElementById(hash)) {
+      activate(hash);
+    }
+  }
+  handleHash();
+  window.addEventListener('hashchange', handleHash);
+
   searchInput.addEventListener('input', function() {
     const q = this.value.trim().toLowerCase();
     let firstVisible = null;
