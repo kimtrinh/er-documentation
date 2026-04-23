@@ -97,7 +97,10 @@ applyTheme(getTheme());
       '</div>';
     document.body.appendChild(overlay);
 
-    // ── Visible trigger pill (top-right, next to theme toggle) ───────────
+    // ── Visible trigger pill ──────────────────────────────────────────────
+    // When the page has a .sitenav-inner, we embed the trigger INSIDE the nav
+    // so it doesn't float over and clip nav items. Otherwise, fall back to a
+    // fixed top-right FAB so every page still gets a visible search affordance.
     if (!document.getElementById('om-trigger')) {
       var trigger = document.createElement('button');
       trigger.id = 'om-trigger';
@@ -113,7 +116,14 @@ applyTheme(getTheme());
         e.stopPropagation();
         omOpen();
       });
-      document.body.appendChild(trigger);
+      var navInner = document.querySelector('.sitenav-inner');
+      if (navInner) {
+        trigger.classList.add('in-nav');
+        navInner.appendChild(trigger);
+      } else {
+        trigger.classList.add('fab');
+        document.body.appendChild(trigger);
+      }
     }
 
     var inp     = overlay.querySelector('#om-input');
