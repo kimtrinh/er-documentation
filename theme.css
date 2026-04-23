@@ -320,6 +320,14 @@ html[data-theme="light"] .kp-tag.t-neuro  { background:#fdf4ff; color:#a21caf; b
   transform: scale(1.1);
 }
 
+/* ── Reserve right-side space in sitenav for fixed search + theme buttons ─ */
+/* The search pill (~130px) + theme toggle (~36px) float over the top-right
+   corner. Without reserved padding, the last nav items get hidden behind them. */
+.sitenav .sitenav-inner { padding-right: 210px !important; }
+@media (max-width: 640px) {
+  .sitenav .sitenav-inner { padding-right: 96px !important; }
+}
+
 /* ── Search trigger pill — visible on all pages ───────────────────────── */
 #om-trigger {
   position: fixed;
