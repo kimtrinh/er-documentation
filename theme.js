@@ -97,6 +97,25 @@ applyTheme(getTheme());
       '</div>';
     document.body.appendChild(overlay);
 
+    // ── Visible trigger pill (top-right, next to theme toggle) ───────────
+    if (!document.getElementById('om-trigger')) {
+      var trigger = document.createElement('button');
+      trigger.id = 'om-trigger';
+      trigger.type = 'button';
+      trigger.setAttribute('aria-label', 'Search toolkit');
+      trigger.setAttribute('title', 'Search toolkit (\u2318K / Ctrl+K)');
+      var isMac = /Mac|iPhone|iPad|iPod/i.test(navigator.platform || navigator.userAgent);
+      trigger.innerHTML =
+        '<span class="om-trigger-icon">\ud83d\udd0d</span>' +
+        '<span class="om-trigger-label">Search</span>' +
+        '<span class="om-trigger-kbd">' + (isMac ? '\u2318K' : 'Ctrl K') + '</span>';
+      trigger.addEventListener('click', function (e) {
+        e.stopPropagation();
+        omOpen();
+      });
+      document.body.appendChild(trigger);
+    }
+
     var inp     = overlay.querySelector('#om-input');
     var results = overlay.querySelector('#om-results');
 

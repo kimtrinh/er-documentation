@@ -320,6 +320,53 @@ html[data-theme="light"] .kp-tag.t-neuro  { background:#fdf4ff; color:#a21caf; b
   transform: scale(1.1);
 }
 
+/* ── Search trigger pill — visible on all pages ───────────────────────── */
+#om-trigger {
+  position: fixed;
+  top: 12px;
+  right: 60px;
+  z-index: 9999;
+  height: 36px;
+  padding: 0 12px 0 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border2, #243d5c);
+  background: var(--surface2, #111f35);
+  color: var(--text2, #8fa8c8);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: background .2s, border-color .2s, color .2s, transform .1s;
+  box-shadow: 0 2px 8px rgba(0,0,0,.3);
+  white-space: nowrap;
+}
+#om-trigger:hover {
+  background: var(--surface, #0d1829);
+  border-color: var(--blue, #3b82f6);
+  color: var(--text, #e8f0fc);
+}
+#om-trigger .om-trigger-icon { font-size: 14px; line-height: 1; }
+#om-trigger .om-trigger-label { font-weight: 600; }
+#om-trigger .om-trigger-kbd {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 5px;
+  background: var(--bg, #080f1a);
+  border: 1px solid var(--border, #1a2d48);
+  color: var(--text3, #4a6280);
+  font-weight: 700;
+  letter-spacing: .03em;
+}
+@media (max-width: 640px) {
+  #om-trigger { padding: 0 10px; }
+  #om-trigger .om-trigger-label,
+  #om-trigger .om-trigger-kbd { display: none; }
+}
+
 /* ── Feedback bubble + popup ──────────────────────────────────────────── */
 #feedback-bubble {
   position: fixed;
