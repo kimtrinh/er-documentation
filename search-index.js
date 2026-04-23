@@ -1,6 +1,6 @@
 // ╔══════════════════════════════════════════════════════════════════╗
 // ║  KP/ER Search Index — search-index.js                           ║
-// ║  Auto-generated — 310 entries                                ║
+// ║  Auto-generated — 348 entries                                ║
 // ║                                                                  ║
 // ║  ENTRY FORMAT:                                                   ║
 // ║    type = type (phrase|calc|algo|neuro|drug|phone|imaging|staff) ║
@@ -19,7 +19,8 @@
 // ║    - CORE PAGES  (1 entry)                                 ║
 // ║    - DOTPHRASES  (127 entries)                             ║
 // ║    - CALCULATORS (13 entries)                              ║
-// ║    - ALGORITHMS  (7 entries)                               ║
+// ║    - SERVICE AGREEMENTS (17 entries)                       ║
+// ║    - ALGORITHMS  (29 entries)                              ║
 // ║    - NEURO HUB   (10 entries)                              ║
 // ║    - VASOPRESSORS (8 entries)                           ║
 // ║    - RSI MEDS    (9 entries)                               ║
@@ -181,6 +182,25 @@ const SEARCH_INDEX = [
   {type:'calc',i:'🧮',t:'PECARN Pediatric Head Injury',s:'Peds head trauma  ·  CT indication  ·  children',g:'Calculator',gc:'t-calc',u:'calculators.html#calc-pecarn'},
   {type:'calc',i:'🧮',t:'Peds Fever Risk Stratification',s:'Febrile infant  ·  0-60 days  ·  sepsis workup  ·  LP',g:'Calculator',gc:'t-calc',u:'calculators.html#calc-pedsfever'},
 
+  // ── SERVICE AGREEMENTS ─────────────────────────────────────────────────
+  {type:'sa',i:'📑',t:'Necrotizing Fasciitis',s:'necrotizing fasciitis  ·  soft tissue infection  ·  LRINEC  ·  gas gangrene  ·  surgical emergency  ·  transfer',g:'Service Agreement',gc:'t-algo',u:'service-agreements.html#necfasc'},
+  {type:'sa',i:'📑',t:'Pediatric Appendicitis',s:'peds appendicitis  ·  PAS score  ·  pediatric surgery  ·  children  ·  transfer  ·  GMC STMC',g:'Service Agreement',gc:'t-algo',u:'service-agreements.html#pedsappendix'},
+  {type:'sa',i:'📑',t:'Urology Service Agreement',s:'urology  ·  renal colic  ·  urolithiasis  ·  stone  ·  torsion  ·  urinary retention  ·  hematuria  ·  Fournier  ·  four-tier',g:'Service Agreement',gc:'t-algo',u:'service-agreements.html#urology'},
+  {type:'sa',i:'📑',t:'Hip Fracture — Ortho/Medicine',s:'hip fracture  ·  orthopedics  ·  internal medicine  ·  dual consult  ·  surgical planning  ·  admit',g:'Service Agreement',gc:'t-algo',u:'service-agreements.html#hipfracture'},
+  {type:'sa',i:'📑',t:'IM & General Surgery Admissions',s:'internal medicine  ·  general surgery  ·  biliary  ·  cholecystitis  ·  bowel obstruction  ·  diverticulitis  ·  routing  ·  admission',g:'Service Agreement',gc:'t-algo',u:'service-agreements.html#imgsurg'},
+  {type:'sa',i:'📑',t:'Atrial Fibrillation / Flutter',s:'afib  ·  atrial fibrillation  ·  flutter  ·  rate control  ·  cardioversion  ·  diltiazem  ·  metoprolol  ·  CHA2DS2-VASc',g:'Service Agreement',gc:'t-algo',u:'service-agreements.html#afib'},
+  {type:'sa',i:'📑',t:'Prolonged ED LOS (PLOS)',s:'PLOS  ·  prolonged LOS  ·  length of stay  ·  hospital medicine  ·  CWD  ·  observation  ·  disposition barrier',g:'Service Agreement',gc:'t-algo',u:'service-agreements.html#plos'},
+  {type:'sa',i:'📑',t:'Non-member Transfer Process',s:'non-member  ·  transfer  ·  authorization  ·  managed care  ·  commercial  ·  medicare  ·  medi-cal  ·  secure chat  ·  one hour rule  ·  PLOS pilot',g:'Service Agreement',gc:'t-algo',u:'service-agreements.html#nonmember-transfer'},
+  {type:'sa',i:'📑',t:'Adult Primary Care & EM',s:'adult primary care  ·  family medicine  ·  chronic disease  ·  outpatient  ·  referral  ·  consult agreement',g:'Service Agreement',gc:'t-algo',u:'service-agreements.html#adultprimarycare'},
+  {type:'sa',i:'📑',t:'OB-GYN, Urgent Care & EM',s:'obstetrics  ·  gynecology  ·  OB GYN  ·  pregnancy  ·  pelvic pain  ·  bleeding  ·  urgent care  ·  consult',g:'Service Agreement',gc:'t-algo',u:'service-agreements.html#obgyn-uc-em'},
+  {type:'sa',i:'📑',t:'Psychiatry & ED Service Agreement',s:'psychiatry  ·  psych  ·  behavioral health  ·  mental health  ·  5150  ·  hold  ·  agitation  ·  involuntary  ·  IM hospitalists',g:'Service Agreement',gc:'t-algo',u:'service-agreements.html#psych-ed'},
+  {type:'sa',i:'📑',t:'Neurosurgery ED Transfer Agreement',s:'neurosurgery  ·  neuro  ·  brain bleed  ·  ICH  ·  SDH  ·  EDH  ·  intracranial hemorrhage  ·  spinal cord  ·  spine  ·  transfer',g:'Service Agreement',gc:'t-algo',u:'service-agreements.html#neurosurg-transfer'},
+  {type:'sa',i:'📑',t:'SNF to Emergency Medicine',s:'SNF  ·  skilled nursing facility  ·  transfer  ·  return to SNF  ·  disposition  ·  ED bounce-back  ·  rehab',g:'Service Agreement',gc:'t-algo',u:'service-agreements.html#snf-em'},
+  {type:'sa',i:'📑',t:'Ophthalmology & EM',s:'ophthalmology  ·  eye  ·  vision  ·  ocular emergency  ·  retinal detachment  ·  globe rupture  ·  acute angle closure glaucoma  ·  consult',g:'Service Agreement',gc:'t-algo',u:'service-agreements.html#ophtho-em'},
+  {type:'sa',i:'📑',t:'Hospitalist / Intensivist / Cardiologist & EM',s:'hospitalist  ·  intensivist  ·  cardiologist  ·  ICU  ·  critical care  ·  STEMI  ·  cardiac arrest  ·  multi-service  ·  admit',g:'Service Agreement',gc:'t-algo',u:'service-agreements.html#hosp-intensivist-cards'},
+  {type:'sa',i:'📑',t:'Pediatrics & EM Transfer (OMC → FMC)',s:'pediatrics  ·  peds  ·  children  ·  transfer  ·  OMC  ·  FMC  ·  Fontana  ·  Ontario  ·  inter-facility',g:'Service Agreement',gc:'t-algo',u:'service-agreements.html#peds-em-transfer'},
+  {type:'sa',i:'📑',t:'IM & Code Sepsis Agreement',s:'sepsis  ·  code sepsis  ·  SIRS  ·  qSOFA  ·  lactate  ·  blood cultures  ·  antibiotics  ·  septic shock  ·  vasopressors  ·  bundle',g:'Service Agreement',gc:'t-algo',u:'service-agreements.html#im-codesepsis'},
+
   // ── ALGORITHMS ─────────────────────────────────────────────────────────
   {type:'algo',i:'🔀',t:'Orbital Fractures',s:'ophthalmology  ·  eye  ·  ocular  ·  orbital blowout  ·  trauma  ·  KP SBC ED Practice Guideline',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-orbital'},
   {type:'algo',i:'🔀',t:'Papilledema',s:'optic disc swelling  ·  elevated ICP  ·  vision  ·  neurology  ·  KP SBC ED Practice Guideline',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-papilledema'},
@@ -190,6 +210,27 @@ const SEARCH_INDEX = [
   {type:'algo',i:'🔀',t:'Visual Floaters & Flashes',s:'ophthalmology  ·  retinal detachment  ·  vitreous  ·  vision  ·  KP SBC ED Practice Guideline',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-floaters'},
   {type:'algo',i:'🔀',t:'Non-Pregnant Vaginal Bleeding',s:'GYN  ·  vaginal bleeding  ·  non-OB  ·  ectopic  ·  KP SBC ED Practice Guideline',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-nonpregvb'},
   {type:'algo',i:'🦴',t:'Vertebral Compression Fracture (VCF)',s:'spine  ·  compression fracture  ·  VCF  ·  vertebral  ·  back pain  ·  brace  ·  TLSO  ·  LSO  ·  vertebroplasty  ·  neurosurgery  ·  bone density  ·  KP SBC ED Practice Guideline',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-vcf'},
+  {type:'algo',i:'🤱',t:'Postpartum Severe Hypertension',s:'postpartum  ·  HTN  ·  eclampsia  ·  nifedipine  ·  magnesium  ·  HELLP  ·  preeclampsia  ·  OB  ·  delivery  ·  severe blood pressure  ·  KP SBC OB/ED',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-pphtн'},
+  {type:'algo',i:'🩸',t:'Outpatient DVT Anticoagulation',s:'DVT  ·  deep vein thrombosis  ·  anticoagulation  ·  outpatient  ·  enoxaparin  ·  Wells score  ·  hematology  ·  vascular  ·  KP SBC ED',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-dvt'},
+  {type:'algo',i:'🦠',t:'Sepsis — SEP-1 Bundle',s:'sepsis  ·  SEP-1  ·  SIRS  ·  septic shock  ·  lactate  ·  bundle  ·  antibiotics  ·  fluids  ·  KP SBC 7/2020',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-sepsissep1'},
+  {type:'algo',i:'🤱',t:'Pre-Eclampsia / Hypertensive Emergency',s:'preeclampsia  ·  eclampsia  ·  hypertensive emergency  ·  pregnancy  ·  magnesium  ·  labetalol  ·  hydralazine  ·  nifedipine  ·  ACOG 2020',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-preeclampsia'},
+  {type:'algo',i:'🐍',t:'Pit Viper Envenomation — CroFab',s:'snake bite  ·  pit viper  ·  CroFab  ·  envenomation  ·  antivenom  ·  toxicology  ·  KP SBC 5/2017',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-pitviper'},
+  {type:'algo',i:'🧩',t:'ED Psychiatry Medication Quick Ref',s:'psychiatry  ·  delirium  ·  mania  ·  psychosis  ·  catatonia  ·  dementia  ·  agitation  ·  medications  ·  KP SCAL 2016',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-psychmeds'},
+  {type:'algo',i:'🦴',t:'Acute Gout',s:'gout  ·  podagra  ·  colchicine  ·  NSAID  ·  steroid  ·  arthrocentesis  ·  MSK  ·  KP SBC',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-gout'},
+  {type:'algo',i:'🔬',t:'Infectious Diarrhea Workup',s:'infectious diarrhea  ·  C diff  ·  GI panel  ·  parasite  ·  ova  ·  stool testing  ·  KP SCAL',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-infectiousdiarrhea'},
+  {type:'algo',i:'💉',t:'Peds DKA — 2-Bag System',s:'peds DKA  ·  diabetic ketoacidosis  ·  two bag  ·  cerebral edema  ·  insulin  ·  pediatrics  ·  KP SBC',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-pedsdka'},
+  {type:'algo',i:'⭐',t:'Peds Sickle Cell Fever',s:'peds sickle cell  ·  fever  ·  ceftriaxone  ·  vaso-occlusive  ·  pediatrics  ·  KP SCAL Dr. Simon 1/2022',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-pedssickle'},
+  {type:'algo',i:'🌊',t:'Peds Submersion',s:'pediatric submersion  ·  drowning  ·  near drowning  ·  aspiration  ·  hypoxia  ·  KP SBC Peds ED 6/2022',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-pedssubmersion'},
+  {type:'algo',i:'🧬',t:'MIS-C Stable/Unstable',s:'MIS-C  ·  multisystem inflammatory syndrome children  ·  IVIG  ·  steroids  ·  pediatrics  ·  KP SBC 11/2021',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-misc'},
+  {type:'algo',i:'🧠',t:'ED Code Stroke',s:'stroke  ·  code stroke  ·  tPA  ·  thrombolysis  ·  NIHSS  ·  CT head  ·  neuro  ·  CVA  ·  ischemic  ·  hemorrhagic  ·  KP SBC ED ICEMA',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-ed-stroke'},
+  {type:'algo',i:'🪖',t:'CT Head for Trauma (Canadian Rule)',s:'CT head  ·  trauma  ·  Canadian rule  ·  GCS  ·  loss of consciousness  ·  LOC  ·  TBI  ·  traumatic brain injury  ·  KPSC Emergency Medicine',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-ct-head-trauma'},
+  {type:'algo',i:'🫁',t:'PE Workup: D-Dimer & CT Algorithm',s:'PE  ·  pulmonary embolism  ·  D-dimer  ·  CT angiography  ·  Wells score  ·  PERC  ·  VTE  ·  clot  ·  anticoagulation  ·  KP SBC Emergency Medicine',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-pe-workup'},
+  {type:'algo',i:'🍬',t:'Peds Hyperglycemia (No Insulin Drip)',s:'pediatric hyperglycemia  ·  DKA  ·  diabetic ketoacidosis  ·  glucose  ·  insulin  ·  peds endocrine  ·  KP SBC Pediatrics',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-peds-hypergly'},
+  {type:'algo',i:'👶',t:'Deliveries Prior to Arrival (DPA)',s:'DPA  ·  precipitous delivery  ·  born before arrival  ·  BBA  ·  neonate  ·  newborn resuscitation  ·  OB  ·  KP SBC Emergency Medicine',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-dpa'},
+  {type:'algo',i:'💊',t:'Emergency Contraception',s:'emergency contraception  ·  Plan B  ·  ella  ·  copper IUD  ·  sexual assault  ·  pregnancy prevention  ·  KP Interregional',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-emergency-contraception'},
+  {type:'algo',i:'⚖️',t:'Bariatric Surgery CT Protocols',s:'bariatric surgery  ·  gastric bypass  ·  sleeve gastrectomy  ·  CT scan protocol  ·  imaging  ·  post-op complication  ·  morbid obesity  ·  KP SBC Radiology Surgery',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-bariatric-ct'},
+  {type:'algo',i:'👶',t:'Abusive Head Trauma (2022)',s:'abusive head trauma  ·  shaken baby  ·  non-accidental trauma  ·  NAT  ·  child abuse  ·  TBI  ·  subdural  ·  retinal hemorrhage  ·  KP SBC January 2022',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-abusive-head-trauma'},
+  {type:'algo',i:'💉',t:'Procedural Sedation',s:'procedural sedation  ·  ketamine  ·  propofol  ·  etomidate  ·  fentanyl  ·  midazolam  ·  PSA  ·  moderate deep sedation  ·  monitoring  ·  KP SBC Hospital Protocols 2015-2016',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-procedural-sedation'},
 
   // ── NEURO HUB ───────────────────────────────────────────────────────────
   {type:'neuro',i:'🧠',t:'Neuro Hub — ICH Protocol Overview',s:'ICH  ·  intracerebral hemorrhage  ·  stroke  ·  neurology consult',g:'Neuro Hub',gc:'t-neuro',u:'neurohub.html'},
