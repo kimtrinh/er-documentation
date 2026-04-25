@@ -121,10 +121,14 @@ main{max-width:1100px;margin:0 auto;padding:24px 26px 80px}
 .announcement-image-row{display:flex;gap:12px;align-items:flex-start;margin-top:12px;flex-wrap:wrap}
 .announcement-image-preview{max-width:380px;max-height:300px;width:auto;height:auto;border-radius:8px;border:1px solid rgba(251,191,36,.35);object-fit:contain;background:rgba(8,15,26,.5);cursor:zoom-in}
 .announcement-image-preview[hidden]{display:none}
-.announcement-image-actions{display:flex;gap:8px;flex-direction:column}
-.announcement-image-hint{font-size:11px;color:#fdba74;margin-top:2px;max-width:200px;line-height:1.4}
+.announcement-image-actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.announcement-image-actions[hidden]{display:none}
+.announcement-image-btn-subtle{background:transparent;color:#fdba74;border:1px dashed rgba(251,191,36,.4);border-radius:6px;padding:3px 9px;font-size:11px;font-weight:600;cursor:pointer;opacity:.7;transition:opacity .15s,background .15s}
+.announcement-image-btn-subtle:hover:not(:disabled){opacity:1;background:rgba(251,191,36,.08)}
+.announcement-image-btn-subtle:disabled{opacity:.35;cursor:not-allowed}
 html[data-theme="light"] .announcement-image-preview{border-color:rgba(194,65,12,.35);background:#fffaf0}
-html[data-theme="light"] .announcement-image-hint{color:#c2410c}
+html[data-theme="light"] .announcement-image-btn-subtle{color:#c2410c;border-color:rgba(194,65,12,.4)}
+html[data-theme="light"] .announcement-image-btn-subtle:hover:not(:disabled){background:rgba(194,65,12,.08)}
 html[data-theme="light"] .announcement-banner{background:linear-gradient(135deg,#fff7ed 0%,#ffedd5 100%);border-color:rgba(194,65,12,.4);box-shadow:0 8px 18px rgba(124,45,18,.12)}
 html[data-theme="light"] .announcement-title{color:#b45309}
 html[data-theme="light"] .announcement-sub,
@@ -271,11 +275,10 @@ html[data-theme="light"] .announcement-text::placeholder{color:#ea580c}
     <textarea class="announcement-text" id="announcementText" placeholder="Post important announcements here..." disabled></textarea>
     <div class="announcement-image-row">
       <img class="announcement-image-preview" id="announcementImage" alt="Announcement image" hidden>
-      <div class="announcement-image-actions">
+      <div class="announcement-image-actions" id="announcementImageActions" hidden>
         <input type="file" accept="image/*" id="announcementImageInput" hidden>
-        <button class="announcement-btn" id="announcementImageBtn" type="button" onclick="document.getElementById('announcementImageInput').click()" disabled>📷 Add image</button>
-        <button class="announcement-btn" id="announcementImageRemoveBtn" type="button" onclick="removeAnnouncementImage()" hidden>Remove image</button>
-        <div class="announcement-image-hint">Auto-shrunk to ~800px wide. Click preview to view full size.</div>
+        <button class="announcement-image-btn-subtle" id="announcementImageBtn" type="button" onclick="document.getElementById('announcementImageInput').click()" disabled>📷 image</button>
+        <button class="announcement-image-btn-subtle" id="announcementImageRemoveBtn" type="button" onclick="removeAnnouncementImage()" hidden>remove</button>
       </div>
     </div>
   </section>
@@ -693,14 +696,18 @@ function setAnnouncementLockState(unlocked) {
   const txt = document.getElementById('announcementText');
   const status = document.getElementById('announcementStatus');
   const btn = document.getElementById('announcementUnlockBtn');
+  const imgActions = document.getElementById('announcementImageActions');
   const imgBtn = document.getElementById('announcementImageBtn');
   const imgRemoveBtn = document.getElementById('announcementImageRemoveBtn');
   const img = document.getElementById('announcementImage');
   txt.disabled = !unlocked;
+  // Hide the entire upload/remove control row when locked — viewers don't
+  // need to see admin controls. The image preview itself stays visible
+  // for everyone (it's content, not a control).
+  if (imgActions) imgActions.hidden = !unlocked;
   if (imgBtn) imgBtn.disabled = !unlocked;
   if (imgRemoveBtn) {
     imgRemoveBtn.disabled = !unlocked;
-    // Only show remove button if there's an image AND we're unlocked
     if (img && !img.hidden && unlocked) imgRemoveBtn.hidden = false;
     else imgRemoveBtn.hidden = true;
   }
