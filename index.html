@@ -110,9 +110,21 @@ main>*:nth-child(4){animation-delay:.15s}
 .announcement-text{width:100%;min-height:320px;background:rgba(8,15,26,.82);border:1px solid rgba(251,191,36,.28);border-radius:8px;color:#fef3c7;padding:14px 16px;font-size:15px;line-height:1.55;resize:vertical}
 .announcement-text:disabled{opacity:.72;cursor:not-allowed}
 .announcement-text::placeholder{color:#d97706}
-.announcement-image-row{display:flex;gap:12px;align-items:flex-start;margin-top:12px;flex-wrap:wrap}
-.announcement-image-preview{max-width:380px;max-height:300px;width:auto;height:auto;border-radius:8px;border:1px solid rgba(251,191,36,.35);object-fit:contain;background:rgba(8,15,26,.5);cursor:zoom-in}
-.announcement-image-preview[hidden]{display:none}
+.announcement-image-row{display:flex;gap:14px;align-items:flex-start;margin-top:12px;flex-wrap:wrap}
+.announcement-slideshow{position:relative;display:inline-block;line-height:0}
+.announcement-slideshow[hidden]{display:none}
+.announcement-image-preview{max-width:380px;max-height:300px;width:auto;height:auto;border-radius:8px;border:1px solid rgba(251,191,36,.35);object-fit:contain;background:rgba(8,15,26,.5);cursor:zoom-in;display:block}
+.announcement-slide-nav{position:absolute;top:calc(50% - 12px);transform:translateY(-50%);background:rgba(0,0,0,.6);color:#fef3c7;border:none;width:30px;height:46px;font-size:22px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:6px;opacity:.6;transition:opacity .15s,background .15s;padding:0}
+.announcement-slide-nav:hover{opacity:1;background:rgba(0,0,0,.8)}
+.announcement-slide-nav.prev{left:6px}
+.announcement-slide-nav.next{right:6px}
+.announcement-slide-nav[hidden]{display:none}
+.announcement-slide-meta{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:6px;line-height:1}
+.announcement-slide-dots{display:flex;gap:6px}
+.announcement-slide-dot{width:8px;height:8px;border-radius:50%;background:rgba(251,191,36,.3);border:none;cursor:pointer;padding:0;transition:background .15s,transform .15s}
+.announcement-slide-dot:hover{background:rgba(251,191,36,.6)}
+.announcement-slide-dot.active{background:#fbbf24;transform:scale(1.25)}
+.announcement-slide-counter{font-size:11px;color:#fdba74;font-variant-numeric:tabular-nums}
 .announcement-image-actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
 .announcement-image-actions[hidden]{display:none}
 .announcement-image-btn-subtle{background:transparent;color:#fdba74;border:1px dashed rgba(251,191,36,.4);border-radius:6px;padding:3px 9px;font-size:11px;font-weight:600;cursor:pointer;opacity:.7;transition:opacity .15s,background .15s}
@@ -121,6 +133,10 @@ main>*:nth-child(4){animation-delay:.15s}
 html[data-theme="light"] .announcement-image-preview{border-color:rgba(194,65,12,.35);background:#fffaf0}
 html[data-theme="light"] .announcement-image-btn-subtle{color:#c2410c;border-color:rgba(194,65,12,.4)}
 html[data-theme="light"] .announcement-image-btn-subtle:hover:not(:disabled){background:rgba(194,65,12,.08)}
+html[data-theme="light"] .announcement-slide-dot{background:rgba(194,65,12,.3)}
+html[data-theme="light"] .announcement-slide-dot:hover{background:rgba(194,65,12,.6)}
+html[data-theme="light"] .announcement-slide-dot.active{background:#c2410c}
+html[data-theme="light"] .announcement-slide-counter{color:#c2410c}
 html[data-theme="light"] .announcement-banner{background:linear-gradient(135deg,#fff7ed 0%,#ffedd5 100%);border-color:rgba(194,65,12,.4);box-shadow:0 8px 18px rgba(124,45,18,.12)}
 html[data-theme="light"] .announcement-title{color:#b45309}
 html[data-theme="light"] .announcement-sub,
@@ -299,11 +315,19 @@ main{max-width:1100px;margin:0 auto;padding:22px 24px 80px}
       <div class="announcement-status" id="announcementStatus">🔒 Locked — enter code to edit.</div>
       <textarea class="announcement-text" id="announcementText" placeholder="Post important announcements here..." disabled></textarea>
       <div class="announcement-image-row">
-        <img class="announcement-image-preview" id="announcementImage" alt="Announcement image" hidden>
+        <div class="announcement-slideshow" id="announcementSlideshow" hidden>
+          <button class="announcement-slide-nav prev" id="announcementSlidePrev" type="button" aria-label="Previous image" onclick="advanceAnnouncementSlide(-1)" hidden>‹</button>
+          <img class="announcement-image-preview" id="announcementImage" alt="Announcement image">
+          <button class="announcement-slide-nav next" id="announcementSlideNext" type="button" aria-label="Next image" onclick="advanceAnnouncementSlide(1)" hidden>›</button>
+          <div class="announcement-slide-meta" id="announcementSlideMeta" hidden>
+            <div class="announcement-slide-dots" id="announcementSlideDots"></div>
+            <div class="announcement-slide-counter" id="announcementSlideCounter"></div>
+          </div>
+        </div>
         <div class="announcement-image-actions" id="announcementImageActions" hidden>
-          <input type="file" accept="image/*" id="announcementImageInput" hidden>
-          <button class="announcement-image-btn-subtle" id="announcementImageBtn" type="button" onclick="document.getElementById('announcementImageInput').click()" disabled>📷 image</button>
-          <button class="announcement-image-btn-subtle" id="announcementImageRemoveBtn" type="button" onclick="removeAnnouncementImage()" hidden>remove</button>
+          <input type="file" accept="image/*" id="announcementImageInput" multiple hidden>
+          <button class="announcement-image-btn-subtle" id="announcementImageBtn" type="button" onclick="document.getElementById('announcementImageInput').click()" disabled>📷 add image</button>
+          <button class="announcement-image-btn-subtle" id="announcementImageRemoveBtn" type="button" onclick="removeCurrentAnnouncementSlide()" hidden>remove this</button>
         </div>
       </div>
     </section>
@@ -778,6 +802,14 @@ let announcementDocRef = null;
 let saveAnnouncementTimer = null;
 let suppressAnnouncementSave = false;
 
+// ── Slideshow state ───────────────────────────────────────────────────
+const ANNOUNCEMENT_SLIDE_INTERVAL_MS = 5000;
+const ANNOUNCEMENT_DOC_BYTE_BUDGET = 950_000; // stay safely under Firestore's 1 MiB doc limit
+let announcementSlides = [];
+let currentAnnouncementSlide = 0;
+let announcementSlideTimer = null;
+let announcementSlideHover = false;
+
 function setAnnouncementLockState(unlocked) {
   const txt = document.getElementById('announcementText');
   const status = document.getElementById('announcementStatus');
@@ -785,17 +817,12 @@ function setAnnouncementLockState(unlocked) {
   const imgActions = document.getElementById('announcementImageActions');
   const imgBtn = document.getElementById('announcementImageBtn');
   const imgRemoveBtn = document.getElementById('announcementImageRemoveBtn');
-  const img = document.getElementById('announcementImage');
   txt.disabled = !unlocked;
-  // Hide the entire upload/remove control row when locked — viewers don't
-  // need to see admin controls. The image preview itself stays visible
-  // for everyone (it's content, not a control).
   if (imgActions) imgActions.hidden = !unlocked;
   if (imgBtn) imgBtn.disabled = !unlocked;
   if (imgRemoveBtn) {
     imgRemoveBtn.disabled = !unlocked;
-    if (img && !img.hidden && unlocked) imgRemoveBtn.hidden = false;
-    else imgRemoveBtn.hidden = true;
+    imgRemoveBtn.hidden = !(unlocked && announcementSlides.length > 0);
   }
   btn.textContent = unlocked ? 'Lock' : 'Unlock';
   status.textContent = unlocked
@@ -803,19 +830,92 @@ function setAnnouncementLockState(unlocked) {
     : '🔒 Locked — enter code to edit.';
 }
 
-function setAnnouncementImage(dataUrl) {
+function renderAnnouncementSlide() {
+  const slideshow = document.getElementById('announcementSlideshow');
   const img = document.getElementById('announcementImage');
+  const prev = document.getElementById('announcementSlidePrev');
+  const next = document.getElementById('announcementSlideNext');
+  const meta = document.getElementById('announcementSlideMeta');
+  const dots = document.getElementById('announcementSlideDots');
+  const counter = document.getElementById('announcementSlideCounter');
   const removeBtn = document.getElementById('announcementImageRemoveBtn');
   const unlocked = localStorage.getItem(ANNOUNCEMENT_UNLOCK_KEY) === 'true';
-  if (dataUrl) {
-    img.src = dataUrl;
-    img.hidden = false;
-    if (removeBtn) removeBtn.hidden = !unlocked;
-  } else {
+
+  if (!announcementSlides.length) {
+    slideshow.hidden = true;
     img.removeAttribute('src');
-    img.hidden = true;
+    prev.hidden = true; next.hidden = true; meta.hidden = true;
     if (removeBtn) removeBtn.hidden = true;
+    stopAnnouncementSlideTimer();
+    return;
   }
+
+  if (currentAnnouncementSlide >= announcementSlides.length) currentAnnouncementSlide = 0;
+  slideshow.hidden = false;
+  img.src = announcementSlides[currentAnnouncementSlide];
+
+  const multi = announcementSlides.length > 1;
+  prev.hidden = !multi;
+  next.hidden = !multi;
+  meta.hidden = !multi;
+
+  if (multi) {
+    counter.textContent = `${currentAnnouncementSlide + 1} / ${announcementSlides.length}`;
+    if (dots.children.length !== announcementSlides.length) {
+      dots.innerHTML = '';
+      for (let i = 0; i < announcementSlides.length; i++) {
+        const dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = 'announcement-slide-dot';
+        dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
+        const idx = i;
+        dot.addEventListener('click', () => goToAnnouncementSlide(idx));
+        dots.appendChild(dot);
+      }
+    }
+    Array.from(dots.children).forEach((d, i) => {
+      d.classList.toggle('active', i === currentAnnouncementSlide);
+    });
+    startAnnouncementSlideTimer();
+  } else {
+    dots.innerHTML = '';
+    stopAnnouncementSlideTimer();
+  }
+
+  if (removeBtn) removeBtn.hidden = !unlocked;
+}
+
+function setAnnouncementSlides(arr) {
+  announcementSlides = Array.isArray(arr) ? arr.filter(s => typeof s === 'string' && s) : [];
+  if (currentAnnouncementSlide >= announcementSlides.length) currentAnnouncementSlide = 0;
+  renderAnnouncementSlide();
+}
+
+function advanceAnnouncementSlide(delta) {
+  if (!announcementSlides.length) return;
+  const len = announcementSlides.length;
+  currentAnnouncementSlide = ((currentAnnouncementSlide + delta) % len + len) % len;
+  renderAnnouncementSlide();
+}
+
+function goToAnnouncementSlide(i) {
+  if (!announcementSlides.length) return;
+  const len = announcementSlides.length;
+  currentAnnouncementSlide = ((i % len) + len) % len;
+  renderAnnouncementSlide();
+}
+
+function startAnnouncementSlideTimer() {
+  stopAnnouncementSlideTimer();
+  if (announcementSlides.length < 2) return;
+  announcementSlideTimer = setInterval(() => {
+    if (announcementSlideHover || document.hidden) return;
+    advanceAnnouncementSlide(1);
+  }, ANNOUNCEMENT_SLIDE_INTERVAL_MS);
+}
+
+function stopAnnouncementSlideTimer() {
+  if (announcementSlideTimer) { clearInterval(announcementSlideTimer); announcementSlideTimer = null; }
 }
 
 function downscaleImageToDataUrl(file, maxDim = 800, quality = 0.82) {
@@ -844,14 +944,18 @@ function downscaleImageToDataUrl(file, maxDim = 800, quality = 0.82) {
   });
 }
 
-async function removeAnnouncementImage() {
+async function removeCurrentAnnouncementSlide() {
   const unlocked = localStorage.getItem(ANNOUNCEMENT_UNLOCK_KEY) === 'true';
-  if (!unlocked) return;
-  setAnnouncementImage(null);
+  if (!unlocked || !announcementSlides.length) return;
+  announcementSlides.splice(currentAnnouncementSlide, 1);
+  if (currentAnnouncementSlide >= announcementSlides.length) {
+    currentAnnouncementSlide = Math.max(0, announcementSlides.length - 1);
+  }
+  renderAnnouncementSlide();
   try {
-    await saveAnnouncementImageToFirebase(null);
+    await saveAnnouncementSlidesToFirebase(announcementSlides);
   } catch (e) {
-    console.warn('Failed to remove announcement image.', e);
+    console.warn('Failed to remove slide.', e);
   }
 }
 
@@ -878,7 +982,10 @@ async function initAnnouncementFirebase() {
       document.getElementById('announcementText').value = text;
       suppressAnnouncementSave = false;
       localStorage.setItem(ANNOUNCEMENT_TEXT_KEY, text);
-      setAnnouncementImage(data.imageUrl || null);
+      const slides = Array.isArray(data.imageUrls)
+        ? data.imageUrls
+        : (data.imageUrl ? [data.imageUrl] : []);
+      setAnnouncementSlides(slides);
     }
 
     firestoreModule.onSnapshot(announcementDocRef, docSnap => {
@@ -886,10 +993,6 @@ async function initAnnouncementFirebase() {
       const data = docSnap.data();
       const text = data.text || '';
       const txt = document.getElementById('announcementText');
-      // Only overwrite the textarea value when it actually differs, and
-      // preserve cursor position if the user is currently typing in it.
-      // Skipping the no-op assignment fixes the cursor jumping to the end
-      // when the snapshot listener echoes back our own debounced save.
       if (txt.value !== text) {
         const isFocused = document.activeElement === txt;
         const start = txt.selectionStart;
@@ -902,7 +1005,12 @@ async function initAnnouncementFirebase() {
         }
       }
       localStorage.setItem(ANNOUNCEMENT_TEXT_KEY, text);
-      setAnnouncementImage(data.imageUrl || null);
+      const slides = Array.isArray(data.imageUrls)
+        ? data.imageUrls
+        : (data.imageUrl ? [data.imageUrl] : []);
+      const same = slides.length === announcementSlides.length
+        && slides.every((s, i) => s === announcementSlides[i]);
+      if (!same) setAnnouncementSlides(slides);
     });
   } catch (e) {
     console.warn('Announcement Firebase unavailable, using local-only mode.', e);
@@ -918,14 +1026,15 @@ async function saveAnnouncementToFirebase(text) {
   }, { merge: true });
 }
 
-async function saveAnnouncementImageToFirebase(dataUrl) {
+async function saveAnnouncementSlidesToFirebase(slides) {
   if (!announcementDocRef) {
-    alert('Cloud sync unavailable — image cannot be saved.');
+    alert('Cloud sync unavailable — slideshow cannot be saved.');
     return;
   }
   const firestoreModule = await import('https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js');
   await firestoreModule.setDoc(announcementDocRef, {
-    imageUrl: dataUrl,
+    imageUrls: slides,
+    imageUrl: null,
     updatedAt: firestoreModule.serverTimestamp()
   }, { merge: true });
 }
@@ -968,37 +1077,70 @@ document.getElementById('announcementCode').addEventListener('keydown', e => {
 });
 
 document.getElementById('announcementImageInput').addEventListener('change', async e => {
-  const file = e.target.files && e.target.files[0];
+  const files = Array.from(e.target.files || []);
   e.target.value = '';
-  if (!file) return;
+  if (!files.length) return;
   const unlocked = localStorage.getItem(ANNOUNCEMENT_UNLOCK_KEY) === 'true';
   if (!unlocked) { alert('Unlock the announcement section first.'); return; }
-  if (!file.type.startsWith('image/')) { alert('Please select an image file.'); return; }
   const btn = document.getElementById('announcementImageBtn');
   const originalLabel = btn.textContent;
-  btn.textContent = 'Uploading…';
   btn.disabled = true;
-  try {
-    const dataUrl = await downscaleImageToDataUrl(file, 800, 0.82);
-    if (dataUrl.length > 900_000) {
-      alert('Image is too large even after shrinking. Try a smaller picture.');
-      return;
+
+  let added = 0;
+  const skipped = [];
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    if (!file.type.startsWith('image/')) { skipped.push(`${file.name} (not an image)`); continue; }
+    btn.textContent = files.length > 1 ? `Uploading ${i + 1}/${files.length}…` : 'Uploading…';
+    try {
+      const dataUrl = await downscaleImageToDataUrl(file, 800, 0.82);
+      if (dataUrl.length > ANNOUNCEMENT_DOC_BYTE_BUDGET) {
+        skipped.push(`${file.name} (too large after shrinking)`);
+        continue;
+      }
+      const candidateTotal = announcementSlides.reduce((s, x) => s + x.length, 0) + dataUrl.length;
+      if (candidateTotal > ANNOUNCEMENT_DOC_BYTE_BUDGET) {
+        skipped.push(`${file.name} (slideshow at storage limit)`);
+        for (let j = i + 1; j < files.length; j++) skipped.push(`${files[j].name} (slideshow at storage limit)`);
+        break;
+      }
+      announcementSlides.push(dataUrl);
+      currentAnnouncementSlide = announcementSlides.length - 1;
+      added++;
+    } catch (err) {
+      console.warn('Failed to process', file.name, err);
+      skipped.push(`${file.name} (could not process)`);
     }
-    setAnnouncementImage(dataUrl);
-    await saveAnnouncementImageToFirebase(dataUrl);
-  } catch (err) {
-    console.warn('Failed to upload announcement image.', err);
-    alert('Could not process that image.');
-  } finally {
-    btn.textContent = originalLabel;
-    btn.disabled = false;
   }
+
+  if (added) {
+    renderAnnouncementSlide();
+    try {
+      await saveAnnouncementSlidesToFirebase(announcementSlides);
+    } catch (err) {
+      console.warn('Failed to save slides.', err);
+      alert('Could not save slideshow to cloud.');
+    }
+  }
+  if (skipped.length) {
+    alert(`Skipped ${skipped.length} file(s):\n• ${skipped.join('\n• ')}`);
+  }
+
+  btn.textContent = originalLabel;
+  btn.disabled = false;
 });
 
 document.getElementById('announcementImage').addEventListener('click', e => {
   const src = e.currentTarget.src;
   if (src) window.open(src, '_blank', 'noopener');
 });
+
+(function wireSlideshowHover() {
+  const sh = document.getElementById('announcementSlideshow');
+  if (!sh) return;
+  sh.addEventListener('mouseenter', () => { announcementSlideHover = true; });
+  sh.addEventListener('mouseleave', () => { announcementSlideHover = false; });
+})();
 
 window.addEventListener('storage', e => {
   if (e.key === ANNOUNCEMENT_TEXT_KEY) {
