@@ -115,9 +115,16 @@ main{max-width:1100px;margin:0 auto;padding:24px 26px 80px}
 .announcement-btn{background:#b45309;color:#fff;border:1px solid #f59e0b;border-radius:6px;padding:6px 10px;font-size:11px;font-weight:700;cursor:pointer}
 .announcement-btn:hover{background:#d97706}
 .announcement-status{font-size:11px;color:#fdba74;margin-bottom:8px}
-.announcement-text{width:100%;min-height:180px;background:rgba(8,15,26,.82);border:1px solid rgba(251,191,36,.28);border-radius:8px;color:#fef3c7;padding:14px 16px;font-size:15px;line-height:1.55;resize:vertical}
+.announcement-text{width:100%;min-height:320px;background:rgba(8,15,26,.82);border:1px solid rgba(251,191,36,.28);border-radius:8px;color:#fef3c7;padding:14px 16px;font-size:15px;line-height:1.55;resize:vertical}
 .announcement-text:disabled{opacity:.72;cursor:not-allowed}
 .announcement-text::placeholder{color:#d97706}
+.announcement-image-row{display:flex;gap:12px;align-items:flex-start;margin-top:12px;flex-wrap:wrap}
+.announcement-image-preview{max-width:380px;max-height:300px;width:auto;height:auto;border-radius:8px;border:1px solid rgba(251,191,36,.35);object-fit:contain;background:rgba(8,15,26,.5);cursor:zoom-in}
+.announcement-image-preview[hidden]{display:none}
+.announcement-image-actions{display:flex;gap:8px;flex-direction:column}
+.announcement-image-hint{font-size:11px;color:#fdba74;margin-top:2px;max-width:200px;line-height:1.4}
+html[data-theme="light"] .announcement-image-preview{border-color:rgba(194,65,12,.35);background:#fffaf0}
+html[data-theme="light"] .announcement-image-hint{color:#c2410c}
 html[data-theme="light"] .announcement-banner{background:linear-gradient(135deg,#fff7ed 0%,#ffedd5 100%);border-color:rgba(194,65,12,.4);box-shadow:0 8px 18px rgba(124,45,18,.12)}
 html[data-theme="light"] .announcement-title{color:#b45309}
 html[data-theme="light"] .announcement-sub,
@@ -262,6 +269,15 @@ html[data-theme="light"] .announcement-text::placeholder{color:#ea580c}
     </div>
     <div class="announcement-status" id="announcementStatus">🔒 Locked — enter code to edit.</div>
     <textarea class="announcement-text" id="announcementText" placeholder="Post important announcements here..." disabled></textarea>
+    <div class="announcement-image-row">
+      <img class="announcement-image-preview" id="announcementImage" alt="Announcement image" hidden>
+      <div class="announcement-image-actions">
+        <input type="file" accept="image/*" id="announcementImageInput" hidden>
+        <button class="announcement-btn" id="announcementImageBtn" type="button" onclick="document.getElementById('announcementImageInput').click()" disabled>📷 Add image</button>
+        <button class="announcement-btn" id="announcementImageRemoveBtn" type="button" onclick="removeAnnouncementImage()" hidden>Remove image</button>
+        <div class="announcement-image-hint">Auto-shrunk to ~800px wide. Click preview to view full size.</div>
+      </div>
+    </div>
   </section>
 
   <!-- TOOLS -->
@@ -677,11 +693,74 @@ function setAnnouncementLockState(unlocked) {
   const txt = document.getElementById('announcementText');
   const status = document.getElementById('announcementStatus');
   const btn = document.getElementById('announcementUnlockBtn');
+  const imgBtn = document.getElementById('announcementImageBtn');
+  const imgRemoveBtn = document.getElementById('announcementImageRemoveBtn');
+  const img = document.getElementById('announcementImage');
   txt.disabled = !unlocked;
+  if (imgBtn) imgBtn.disabled = !unlocked;
+  if (imgRemoveBtn) {
+    imgRemoveBtn.disabled = !unlocked;
+    // Only show remove button if there's an image AND we're unlocked
+    if (img && !img.hidden && unlocked) imgRemoveBtn.hidden = false;
+    else imgRemoveBtn.hidden = true;
+  }
   btn.textContent = unlocked ? 'Lock' : 'Unlock';
   status.textContent = unlocked
     ? '🔓 Unlocked — announcements can be edited and synced for everyone.'
     : '🔒 Locked — enter code to edit.';
+}
+
+function setAnnouncementImage(dataUrl) {
+  const img = document.getElementById('announcementImage');
+  const removeBtn = document.getElementById('announcementImageRemoveBtn');
+  const unlocked = localStorage.getItem(ANNOUNCEMENT_UNLOCK_KEY) === 'true';
+  if (dataUrl) {
+    img.src = dataUrl;
+    img.hidden = false;
+    if (removeBtn) removeBtn.hidden = !unlocked;
+  } else {
+    img.removeAttribute('src');
+    img.hidden = true;
+    if (removeBtn) removeBtn.hidden = true;
+  }
+}
+
+function downscaleImageToDataUrl(file, maxDim = 800, quality = 0.82) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => reject(reader.error);
+    reader.onload = () => {
+      const img = new Image();
+      img.onerror = () => reject(new Error('Could not decode image.'));
+      img.onload = () => {
+        let { width, height } = img;
+        if (width > maxDim || height > maxDim) {
+          const scale = Math.min(maxDim / width, maxDim / height);
+          width = Math.round(width * scale);
+          height = Math.round(height * scale);
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+        // Use JPEG for photos, PNG-with-alpha would be too large
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+async function removeAnnouncementImage() {
+  const unlocked = localStorage.getItem(ANNOUNCEMENT_UNLOCK_KEY) === 'true';
+  if (!unlocked) return;
+  setAnnouncementImage(null);
+  try {
+    await saveAnnouncementImageToFirebase(null);
+  } catch (e) {
+    console.warn('Failed to remove announcement image.', e);
+  }
 }
 
 function loadAnnouncement() {
@@ -701,20 +780,24 @@ async function initAnnouncementFirebase() {
 
     const snap = await firestoreModule.getDoc(announcementDocRef);
     if (snap.exists()) {
-      const text = snap.data().text || '';
+      const data = snap.data();
+      const text = data.text || '';
       suppressAnnouncementSave = true;
       document.getElementById('announcementText').value = text;
       suppressAnnouncementSave = false;
       localStorage.setItem(ANNOUNCEMENT_TEXT_KEY, text);
+      setAnnouncementImage(data.imageUrl || null);
     }
 
     firestoreModule.onSnapshot(announcementDocRef, docSnap => {
       if (!docSnap.exists()) return;
-      const text = docSnap.data().text || '';
+      const data = docSnap.data();
+      const text = data.text || '';
       suppressAnnouncementSave = true;
       document.getElementById('announcementText').value = text;
       suppressAnnouncementSave = false;
       localStorage.setItem(ANNOUNCEMENT_TEXT_KEY, text);
+      setAnnouncementImage(data.imageUrl || null);
     });
   } catch (e) {
     console.warn('Announcement Firebase unavailable, using local-only mode.', e);
@@ -726,6 +809,18 @@ async function saveAnnouncementToFirebase(text) {
   const firestoreModule = await import('https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js');
   await firestoreModule.setDoc(announcementDocRef, {
     text,
+    updatedAt: firestoreModule.serverTimestamp()
+  }, { merge: true });
+}
+
+async function saveAnnouncementImageToFirebase(dataUrl) {
+  if (!announcementDocRef) {
+    alert('Cloud sync unavailable — image cannot be saved.');
+    return;
+  }
+  const firestoreModule = await import('https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js');
+  await firestoreModule.setDoc(announcementDocRef, {
+    imageUrl: dataUrl, // null clears the field's value (Firestore stores null)
     updatedAt: firestoreModule.serverTimestamp()
   }, { merge: true });
 }
@@ -763,6 +858,40 @@ document.getElementById('announcementCode').addEventListener('keydown', e => {
     e.preventDefault();
     toggleAnnouncementLock();
   }
+});
+
+document.getElementById('announcementImageInput').addEventListener('change', async e => {
+  const file = e.target.files && e.target.files[0];
+  e.target.value = ''; // allow re-selecting same file later
+  if (!file) return;
+  const unlocked = localStorage.getItem(ANNOUNCEMENT_UNLOCK_KEY) === 'true';
+  if (!unlocked) { alert('Unlock the announcement section first.'); return; }
+  if (!file.type.startsWith('image/')) { alert('Please select an image file.'); return; }
+  const btn = document.getElementById('announcementImageBtn');
+  const originalLabel = btn.textContent;
+  btn.textContent = 'Uploading…';
+  btn.disabled = true;
+  try {
+    const dataUrl = await downscaleImageToDataUrl(file, 800, 0.82);
+    // Firestore document hard-limit is ~1 MiB total. Base64 dataURL ~33% overhead.
+    if (dataUrl.length > 900_000) {
+      alert('Image is too large even after shrinking. Try a smaller picture.');
+      return;
+    }
+    setAnnouncementImage(dataUrl);
+    await saveAnnouncementImageToFirebase(dataUrl);
+  } catch (err) {
+    console.warn('Failed to upload announcement image.', err);
+    alert('Could not process that image.');
+  } finally {
+    btn.textContent = originalLabel;
+    btn.disabled = false;
+  }
+});
+
+document.getElementById('announcementImage').addEventListener('click', e => {
+  const src = e.currentTarget.src;
+  if (src) window.open(src, '_blank', 'noopener');
 });
 
 window.addEventListener('storage', e => {
