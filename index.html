@@ -877,9 +877,22 @@ async function initAnnouncementFirebase() {
       if (!docSnap.exists()) return;
       const data = docSnap.data();
       const text = data.text || '';
-      suppressAnnouncementSave = true;
-      document.getElementById('announcementText').value = text;
-      suppressAnnouncementSave = false;
+      const txt = document.getElementById('announcementText');
+      // Only overwrite the textarea value when it actually differs, and
+      // preserve cursor position if the user is currently typing in it.
+      // Skipping the no-op assignment fixes the cursor jumping to the end
+      // when the snapshot listener echoes back our own debounced save.
+      if (txt.value !== text) {
+        const isFocused = document.activeElement === txt;
+        const start = txt.selectionStart;
+        const end = txt.selectionEnd;
+        suppressAnnouncementSave = true;
+        txt.value = text;
+        suppressAnnouncementSave = false;
+        if (isFocused) {
+          try { txt.setSelectionRange(start, end); } catch (_) { /* ignore */ }
+        }
+      }
       localStorage.setItem(ANNOUNCEMENT_TEXT_KEY, text);
       setAnnouncementImage(data.imageUrl || null);
     });
@@ -930,11 +943,13 @@ function toggleAnnouncementLock() {
 document.getElementById('announcementText').addEventListener('input', e => {
   localStorage.setItem(ANNOUNCEMENT_TEXT_KEY, e.target.value);
   if (saveAnnouncementTimer) clearTimeout(saveAnnouncementTimer);
+  // 800ms debounce — long enough that the snapshot echo doesn't fire
+  // mid-sentence and disrupt typing, short enough to feel responsive.
   saveAnnouncementTimer = setTimeout(() => {
     saveAnnouncementToFirebase(e.target.value).catch(err => {
       console.warn('Failed to save announcement to Firebase.', err);
     });
-  }, 300);
+  }, 800);
 });
 
 document.getElementById('announcementCode').addEventListener('keydown', e => {
