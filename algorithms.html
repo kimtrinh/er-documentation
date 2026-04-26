@@ -428,6 +428,13 @@ main>*:nth-child(4){animation-delay:.15s}
         <div class="algo-meta">KP SBC &nbsp;·&nbsp; <span class="algo-badge badge-cardio">Cardiology</span></div>
       </div>
     </div>
+    <div class="algo-card" onclick="showAlgo('afib')" id="card-afib" data-algo="afib" data-keywords="atrial fibrillation flutter afib AFib rate control cardioversion diltiazem metoprolol cha2ds2-vasc anticoagulation echocardiography cardiology discharge criteria" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">💗</div>
+      <div class="algo-info">
+        <div class="algo-title">Atrial Fibrillation / Flutter</div>
+        <div class="algo-meta">KP SBC Service Agreement &nbsp;·&nbsp; <span class="algo-badge badge-cardio">Cardiology</span></div>
+      </div>
+    </div>
     <div class="algo-card" onclick="showAlgo('doac-bleeding')" id="card-doac-bleeding" data-algo="doac-bleeding" data-keywords="DOAC TSOA anticoagulant reversal bleeding apixaban rivaroxaban dabigatran edoxaban andexanet idarucizumab" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
       <div class="algo-icon">🩸</div>
       <div class="algo-info">
@@ -1625,6 +1632,22 @@ const algos = {
           <a href="https://view.officeapps.live.com/op/view.aspx?src=https://kimtrinh.github.io/er-documentation/assets/troponin-testing.doc" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue2);border:1px solid var(--blue);border-radius:8px;color:#fff;font-size:12px;font-weight:600;text-decoration:none">⬇ Open in Word</a>
         </div>
         <iframe src="https://view.officeapps.live.com/op/embed.aspx?src=https://kimtrinh.github.io/er-documentation/assets/troponin-testing.doc" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Troponin Testing Guide"></iframe>
+      </div>
+    `
+  },
+
+  'afib': {
+    icon: '💗',
+    title: 'Atrial Fibrillation / Flutter',
+    updated: 'KP SBC Service Agreement · 2020',
+    render: () => `
+      <div style="max-width:760px;margin:0 auto">
+        <div class="callout callout-yellow"><strong>Atrial Fibrillation / Flutter:</strong> Hemodynamically stable AFib/AFlutter with HR &gt;100–110 → IV rate control first (diltiazem 0.25 mg/kg IV, or metoprolol 5 mg IV q15 min), transition to oral once rate-controlled. Discharge OK if HR &lt;110 on oral regimen and patient is clinically stable. Cardioversion (pharmacologic or electrical) is reasonable if symptom onset is clearly &lt;48 h, with cardiology input. Discharge plan must address: rate-control med, antithrombotic strategy by CHA₂DS₂-VASc, echo for first episode, and cardiology follow-up. <strong>Admit</strong> if active ischemia, decompensated CHF, PE, sepsis, stroke, or ongoing instability.</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+          <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 Official Service Agreement</div>
+          <a href="https://view.officeapps.live.com/op/view.aspx?src=https://kimtrinh.github.io/er-documentation/assets/afib-sa.docx" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue2);border:1px solid var(--blue);border-radius:8px;color:#fff;font-size:12px;font-weight:600;text-decoration:none">⬇ Open in Word</a>
+        </div>
+        <iframe src="https://view.officeapps.live.com/op/embed.aspx?src=https://kimtrinh.github.io/er-documentation/assets/afib-sa.docx" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Atrial Fibrillation / Flutter Service Agreement"></iframe>
       </div>
     `
   },
