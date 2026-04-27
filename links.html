@@ -26,7 +26,7 @@ main{max-width:900px;margin:0 auto;padding:28px 24px 80px}
 
 .links-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
 
-.link-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 18px;text-decoration:none;color:inherit;display:flex;align-items:flex-start;gap:14px;transition:all .2s;cursor:pointer}
+.link-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 18px;text-decoration:none;color:inherit;display:flex;align-items:flex-start;gap:14px;transition:all .2s;cursor:pointer;scroll-margin-top:80px}
 .link-card:hover{border-color:#3b82f6;background:var(--border2);transform:translateY(-1px)}
 .link-icon{font-size:26px;flex-shrink:0;margin-top:1px}
 .link-info{flex:1;min-width:0}
@@ -34,6 +34,14 @@ main{max-width:900px;margin:0 auto;padding:28px 24px 80px}
 .link-desc{font-size:12px;color:var(--text3);line-height:1.5}
 .link-arrow{color:var(--border);font-size:14px;flex-shrink:0;margin-top:3px;transition:color .2s}
 .link-card:hover .link-arrow{color:#3b82f6}
+
+/* Flash highlight when arriving from a deep-link / search result */
+@keyframes linkFlash{
+  0%{box-shadow:0 0 0 0 rgba(59,130,246,0);border-color:var(--border)}
+  20%{box-shadow:0 0 0 4px rgba(59,130,246,.55);border-color:#3b82f6}
+  100%{box-shadow:0 1px 4px rgba(0,0,0,.2);border-color:var(--border)}
+}
+.link-card.flash{animation:linkFlash 1.6s ease both}
 
 /* ===== SHARED NEW NAV ===== */
 @media(max-width:640px){}
@@ -92,7 +100,7 @@ main>*:nth-child(4){animation-delay:.15s}
   <div class="section-label">My Tools</div>
   <div class="links-grid">
 
-    <a class="link-card" href="https://kimtrinh.github.io/paycheck-calculator/" target="_blank" rel="noopener">
+    <a class="link-card" id="link-paycheck" href="https://kimtrinh.github.io/paycheck-calculator/" target="_blank" rel="noopener">
       <span class="link-icon">💵</span>
       <div class="link-info">
         <div class="link-title">Paycheck Calculator</div>
@@ -101,7 +109,7 @@ main>*:nth-child(4){animation-delay:.15s}
       <span class="link-arrow">↗</span>
     </a>
 
-    <a class="link-card" href="vertigo-helper.html">
+    <a class="link-card" id="link-vertigo" href="vertigo-helper.html">
       <span class="link-icon">🌀</span>
       <div class="link-info">
         <div class="link-title">Vertigo Helper</div>
@@ -112,10 +120,129 @@ main>*:nth-child(4){animation-delay:.15s}
 
   </div>
 
+  <div class="section-label">Trackboards</div>
+  <div class="links-grid">
+
+    <a class="link-card" id="link-trackboard-fmc-main" href="https://docs.google.com/spreadsheets/d/19ydRLTalPOsbIFr8G7DtB-4g0tFQG1a0JZ9F9bT3OmY/edit?gid=1690579853#gid=1690579853" target="_blank" rel="noopener">
+      <span class="link-icon">📊</span>
+      <div class="link-info">
+        <div class="link-title">FMC Main Trackboard</div>
+        <div class="link-desc">Fontana main ED trackboard — Google Sheet</div>
+      </div>
+      <span class="link-arrow">↗</span>
+    </a>
+
+    <a class="link-card" id="link-trackboard-omc-main" href="https://docs.google.com/spreadsheets/d/1wj3FjTKsE-99m0U2avq3B8DLaXcH1eVxpzdH9XXxI1s/edit?gid=486345685#gid=486345685" target="_blank" rel="noopener">
+      <span class="link-icon">📊</span>
+      <div class="link-info">
+        <div class="link-title">OMC Main Trackboard</div>
+        <div class="link-desc">Ontario main ED trackboard — Google Sheet</div>
+      </div>
+      <span class="link-arrow">↗</span>
+    </a>
+
+    <a class="link-card" id="link-trackboard-fmc-flex" href="https://docs.google.com/spreadsheets/d/1xwH5Wr8G98-5GiE4BcbnXOCTXOrDEdQLODaau1pCIn0/edit?gid=0#gid=0" target="_blank" rel="noopener">
+      <span class="link-icon">⚡</span>
+      <div class="link-info">
+        <div class="link-title">FMC Flex Trackboard</div>
+        <div class="link-desc">Fontana flex (mod-pod / surge) trackboard — Google Sheet</div>
+      </div>
+      <span class="link-arrow">↗</span>
+    </a>
+
+    <a class="link-card" id="link-trackboard-omc-flex" href="https://docs.google.com/spreadsheets/d/12gVlTBcdVMqrilSU91j-c_Q6Gq1_BLx7TIvv7hDggZE/edit?gid=1426424719#gid=1426424719" target="_blank" rel="noopener">
+      <span class="link-icon">⚡</span>
+      <div class="link-info">
+        <div class="link-title">OMC Flex Trackboard</div>
+        <div class="link-desc">Ontario flex (mod-pod / surge) trackboard — Google Sheet</div>
+      </div>
+      <span class="link-arrow">↗</span>
+    </a>
+
+  </div>
+
+  <div class="section-label">NEDOCS Worksheets</div>
+  <div class="links-grid">
+
+    <a class="link-card" id="link-nedocs-fontana" href="https://sp-cloud.kp.org/:x:/s/FONTANANEDOCS/EYUL1gME3LZBmPQjZHp-ooABzb_-QQG6LLtpkCclKJWMow?wdLOR=cFDF427A4-A352-4263-9466-7F75C00C6218" target="_blank" rel="noopener">
+      <span class="link-icon">📈</span>
+      <div class="link-info">
+        <div class="link-title">NEDOCS — Fontana</div>
+        <div class="link-desc">Live ED crowding score worksheet (FMC) — SharePoint Excel</div>
+      </div>
+      <span class="link-arrow">↗</span>
+    </a>
+
+    <a class="link-card" id="link-nedocs-ontario" href="https://sp-cloud.kp.org/:x:/r/sites/FONTANANEDOCS/_layouts/15/Doc2.aspx?action=edit&sourcedoc=%7b50c57f7e-1c5b-42a1-b8d4-401e1967a013%7d&wdExp=TEAMS-TREATMENT&web=1" target="_blank" rel="noopener">
+      <span class="link-icon">📈</span>
+      <div class="link-info">
+        <div class="link-title">NEDOCS — Ontario</div>
+        <div class="link-desc">Live ED crowding score worksheet (OMC) — SharePoint Excel</div>
+      </div>
+      <span class="link-arrow">↗</span>
+    </a>
+
+  </div>
+
+  <div class="section-label">Imaging &amp; Radiology</div>
+  <div class="links-grid">
+
+    <a class="link-card" id="link-telerad" href="https://miti-imisweb5.appl.kp.org/telerad/tr_applogin.php" target="_blank" rel="noopener">
+      <span class="link-icon">🩻</span>
+      <div class="link-info">
+        <div class="link-title">Telerad</div>
+        <div class="link-desc">Teleradiology read portal (MITI / IMIS)</div>
+      </div>
+      <span class="link-arrow">↗</span>
+    </a>
+
+    <a class="link-card" id="link-muse" href="https://csmusenx.appl.kp.org/muse/main.html" target="_blank" rel="noopener">
+      <span class="link-icon">💓</span>
+      <div class="link-info">
+        <div class="link-title">MUSE — ECG Repository</div>
+        <div class="link-desc">GE MUSE — search and view prior 12-lead ECGs</div>
+      </div>
+      <span class="link-arrow">↗</span>
+    </a>
+
+    <a class="link-card" id="link-pacs" href="https://sanbernardino-isite.appl.kp.org/ClientWeb/" target="_blank" rel="noopener">
+      <span class="link-icon">🖼️</span>
+      <div class="link-info">
+        <div class="link-title">PACS Radiology (iSite)</div>
+        <div class="link-desc">San Bernardino iSite — radiology image viewer</div>
+      </div>
+      <span class="link-arrow">↗</span>
+    </a>
+
+  </div>
+
+  <div class="section-label">Communications &amp; Directory</div>
+  <div class="links-grid">
+
+    <a class="link-card" id="link-scal-oncall" href="http://intelli-web-directory-oncall-fon.appl.kp.org/" target="_blank" rel="noopener">
+      <span class="link-icon">📞</span>
+      <div class="link-info">
+        <div class="link-title">SCAL On-Call Directory</div>
+        <div class="link-desc">Southern California regional on-call physician directory (intelli-web)</div>
+      </div>
+      <span class="link-arrow">↗</span>
+    </a>
+
+    <a class="link-card" id="link-vocera" href="https://sp-cloud.kp.org/sites/Fontario/SitePages/Vocera-Web.aspx" target="_blank" rel="noopener">
+      <span class="link-icon">📟</span>
+      <div class="link-info">
+        <div class="link-title">Vocera Web</div>
+        <div class="link-desc">Send Vocera voice/text pages from the browser (Fontario SharePoint)</div>
+      </div>
+      <span class="link-arrow">↗</span>
+    </a>
+
+  </div>
+
   <div class="section-label">Work Portals</div>
   <div class="links-grid">
 
-    <a class="link-card" href="https://sp-cloud.kp.org/sites/Fontario/SitePages/CollabHome.aspx" target="_blank" rel="noopener">
+    <a class="link-card" id="link-fontario" href="https://sp-cloud.kp.org/sites/Fontario/SitePages/CollabHome.aspx" target="_blank" rel="noopener">
       <span class="link-icon">🏥</span>
       <div class="link-info">
         <div class="link-title">Fontario SharePoint</div>
@@ -124,7 +251,7 @@ main>*:nth-child(4){animation-delay:.15s}
       <span class="link-arrow">↗</span>
     </a>
 
-    <a class="link-card" href="https://kpdoc.kp.org/" target="_blank" rel="noopener">
+    <a class="link-card" id="link-uptodate-ai" href="https://kpdoc.kp.org/" target="_blank" rel="noopener">
       <span class="link-icon">🤖</span>
       <div class="link-info">
         <div class="link-title">UpToDate Expert AI (in KPHC)</div>
@@ -133,7 +260,7 @@ main>*:nth-child(4){animation-delay:.15s}
       <span class="link-arrow">↗</span>
     </a>
 
-    <a class="link-card" href="https://kpdoc.kp.org/" target="_blank" rel="noopener">
+    <a class="link-card" id="link-kphc-endpoints" href="https://kpdoc.kp.org/" target="_blank" rel="noopener">
       <span class="link-icon">🔐</span>
       <div class="link-info">
         <div class="link-title">KPHC Endpoints Login</div>
@@ -147,7 +274,7 @@ main>*:nth-child(4){animation-delay:.15s}
   <div class="section-label">Reporting</div>
   <div class="links-grid">
 
-    <a class="link-card" href="https://forms.cloud.microsoft/r/Fbf0L0XCBK" target="_blank" rel="noopener">
+    <a class="link-card" id="link-issue-form" href="https://forms.cloud.microsoft/r/Fbf0L0XCBK" target="_blank" rel="noopener">
       <span class="link-icon">🚩</span>
       <div class="link-info">
         <div class="link-title">Issue Reporting Form</div>
@@ -160,7 +287,7 @@ main>*:nth-child(4){animation-delay:.15s}
 
   <div class="section-label">Beta</div>
   <div class="links-grid">
-    <a class="link-card beta-card" href="mdm.html">
+    <a class="link-card beta-card" id="link-mdm-builder" href="mdm.html">
       <span class="link-icon">🧾</span>
       <div class="link-info">
         <div class="link-title">MDM Builder <span class="beta-badge">BETA</span></div>
@@ -169,7 +296,7 @@ main>*:nth-child(4){animation-delay:.15s}
       <span class="link-arrow">→</span>
     </a>
 
-    <a class="link-card beta-card" href="mdm-slash.html">
+    <a class="link-card beta-card" id="link-mdm-slash" href="mdm-slash.html">
       <span class="link-icon">⌨️</span>
       <div class="link-info">
         <div class="link-title">Slash Editor <span class="beta-badge">BETA</span></div>
@@ -180,6 +307,31 @@ main>*:nth-child(4){animation-delay:.15s}
   </div>
 
 </main>
+
+<script>
+// Deep-link handler — when arriving with #link-…, scroll to the card
+// and play a brief flash so the search-bar match is obvious.
+(function(){
+  function handleLinkHash(){
+    const id = (window.location.hash || '').replace(/^#/,'');
+    if (!id) return;
+    const el = document.getElementById(id);
+    if (!el || !el.classList.contains('link-card')) return;
+    el.scrollIntoView({behavior:'smooth', block:'center'});
+    el.classList.remove('flash');
+    // Force reflow so the animation restarts on repeat hits.
+    void el.offsetWidth;
+    el.classList.add('flash');
+  }
+  window.addEventListener('hashchange', handleLinkHash);
+  // Run on initial load too.
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', handleLinkHash);
+  } else {
+    handleLinkHash();
+  }
+})();
+</script>
 
 <script src="search-index.js?v=2"></script>
 <script id="shared-nav-search">

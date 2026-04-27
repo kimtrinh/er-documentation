@@ -453,6 +453,27 @@ const SEARCH_INDEX = [
   {type:'page',i:'🌡️',t:'Peds Fever — 3–24 Months',s:'fever without source  ·  UTI  ·  bacteremia  ·  UA  ·  CBC  ·  occult bacteremia  ·  pneumococcal',g:'Peds Fever',gc:'t-algo',u:'pedsfever.html'},
   {type:'page',i:'🌡️',t:'Peds Fever — Older Children (>3 years)',s:'fever  ·  school age  ·  older child  ·  focal infection  ·  workup criteria  ·  antibiotics',g:'Peds Fever',gc:'t-algo',u:'pedsfever.html'},
 
+  // ── QUICK LINKS (cards on links.html — deep-linked) ─────────────────────
+  {type:'link',i:'💵',t:'Paycheck Calculator',s:'paycheck  ·  net pay  ·  taxes  ·  deductions  ·  salary  ·  withholding  ·  W-2  ·  hourly',g:'Quick Link',gc:'t-algo',u:'links.html#link-paycheck'},
+  {type:'link',i:'🌀',t:'Vertigo Helper',s:'vertigo  ·  dizziness  ·  BPPV  ·  HINTS exam  ·  nystagmus  ·  central peripheral  ·  cerebellar stroke',g:'Quick Link',gc:'t-algo',u:'links.html#link-vertigo'},
+  {type:'link',i:'📊',t:'FMC Main Trackboard',s:'FMC  ·  Fontana  ·  main  ·  trackboard  ·  ED tracking  ·  patient list  ·  google sheet  ·  spreadsheet  ·  whiteboard',g:'Quick Link',gc:'t-algo',u:'links.html#link-trackboard-fmc-main'},
+  {type:'link',i:'📊',t:'OMC Main Trackboard',s:'OMC  ·  Ontario  ·  main  ·  trackboard  ·  ED tracking  ·  patient list  ·  google sheet  ·  spreadsheet  ·  whiteboard',g:'Quick Link',gc:'t-algo',u:'links.html#link-trackboard-omc-main'},
+  {type:'link',i:'⚡',t:'FMC Flex Trackboard',s:'FMC  ·  Fontana  ·  flex  ·  mod pod  ·  surge  ·  trackboard  ·  google sheet  ·  spreadsheet  ·  ED tracking',g:'Quick Link',gc:'t-algo',u:'links.html#link-trackboard-fmc-flex'},
+  {type:'link',i:'⚡',t:'OMC Flex Trackboard',s:'OMC  ·  Ontario  ·  flex  ·  mod pod  ·  surge  ·  trackboard  ·  google sheet  ·  spreadsheet  ·  ED tracking',g:'Quick Link',gc:'t-algo',u:'links.html#link-trackboard-omc-flex'},
+  {type:'link',i:'📈',t:'NEDOCS — Fontana',s:'NEDOCS  ·  ED crowding  ·  Fontana  ·  FMC  ·  worksheet  ·  score  ·  excel  ·  sharepoint  ·  capacity',g:'Quick Link',gc:'t-algo',u:'links.html#link-nedocs-fontana'},
+  {type:'link',i:'📈',t:'NEDOCS — Ontario',s:'NEDOCS  ·  ED crowding  ·  Ontario  ·  OMC  ·  worksheet  ·  score  ·  excel  ·  sharepoint  ·  capacity',g:'Quick Link',gc:'t-algo',u:'links.html#link-nedocs-ontario'},
+  {type:'link',i:'🩻',t:'Telerad',s:'telerad  ·  teleradiology  ·  remote read  ·  MITI  ·  IMIS  ·  radiology portal  ·  imaging',g:'Quick Link',gc:'t-algo',u:'links.html#link-telerad'},
+  {type:'link',i:'💓',t:'MUSE — ECG Repository',s:'MUSE  ·  ECG  ·  EKG  ·  electrocardiogram  ·  prior tracings  ·  GE  ·  cardiology  ·  12-lead',g:'Quick Link',gc:'t-algo',u:'links.html#link-muse'},
+  {type:'link',i:'🖼️',t:'PACS Radiology (iSite)',s:'PACS  ·  radiology  ·  iSite  ·  San Bernardino  ·  imaging viewer  ·  CT  ·  MRI  ·  X-ray  ·  ultrasound',g:'Quick Link',gc:'t-algo',u:'links.html#link-pacs'},
+  {type:'link',i:'📞',t:'SCAL On-Call Directory',s:'SCAL  ·  on-call  ·  on call  ·  directory  ·  Southern California  ·  intelli-web  ·  consultant  ·  specialist',g:'Quick Link',gc:'t-algo',u:'links.html#link-scal-oncall'},
+  {type:'link',i:'📟',t:'Vocera Web',s:'Vocera  ·  voice page  ·  web pager  ·  badge  ·  hands free  ·  call  ·  text  ·  Fontario',g:'Quick Link',gc:'t-algo',u:'links.html#link-vocera'},
+  {type:'link',i:'🏥',t:'Fontario SharePoint',s:'Fontario  ·  SharePoint  ·  KP Fontana Ontario  ·  intranet  ·  collaboration hub',g:'Quick Link',gc:'t-algo',u:'links.html#link-fontario'},
+  {type:'link',i:'🤖',t:'UpToDate Expert AI (in KPHC)',s:'UpToDate  ·  Expert AI  ·  KPHC  ·  HealthConnect  ·  clinical decision support  ·  gen AI  ·  generative AI  ·  evidence',g:'Quick Link',gc:'t-algo',u:'links.html#link-uptodate-ai'},
+  {type:'link',i:'🔐',t:'KPHC Endpoints Login',s:'KPHC  ·  HealthConnect  ·  endpoints  ·  login  ·  KP credentials  ·  Epic',g:'Quick Link',gc:'t-algo',u:'links.html#link-kphc-endpoints'},
+  {type:'link',i:'🚩',t:'Issue Reporting Form',s:'report  ·  on-call delay  ·  radiology delay  ·  staff behavior  ·  complaint  ·  concern  ·  incident  ·  feedback',g:'Quick Link',gc:'t-algo',u:'links.html#link-issue-form'},
+  {type:'link',i:'🧾',t:'MDM Builder (Beta)',s:'MDM  ·  medical decision making  ·  documentation  ·  beta  ·  builder  ·  charting',g:'Quick Link',gc:'t-algo',u:'links.html#link-mdm-builder'},
+  {type:'link',i:'⌨️',t:'Slash Editor (Beta)',s:'slash editor  ·  MDM  ·  inline  ·  command  ·  documentation  ·  beta',g:'Quick Link',gc:'t-algo',u:'links.html#link-mdm-slash'},
+
   // ── SITE PAGES ──────────────────────────────────────────────────────────
   {type:'page',i:'🤝',t:'Agreements & Protocols',s:'Kaiser  ·  SCPMG  ·  department agreements  ·  policies  ·  clinical protocols',g:'Reference',gc:'t-algo',u:'service-agreements.html'},
   {type:'page',i:'🔗',t:'External Links',s:'useful links  ·  references  ·  resources  ·  clinical tools  ·  external sites',g:'Reference',gc:'t-algo',u:'links.html'},
