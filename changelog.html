@@ -143,6 +143,97 @@ main{max-width:860px;margin:0 auto;padding:32px 20px 64px}
 
   <div class="timeline" id="timeline">
 
+    <!-- ── April 26, 2026 ── -->
+    <div class="date-group">
+      <div class="date-dot"></div>
+      <div class="date-label">
+        <span class="date-text">April 26, 2026</span>
+        <span class="date-relative"></span>
+      </div>
+      <div class="entries">
+
+        <div class="entry" data-type="feat">
+          <div class="entry-icon">🔗</div>
+          <div class="entry-body">
+            <div class="entry-title">11 new entries on the Quick Links page</div>
+            <div class="entry-desc">Added Trackboards (FMC Main, OMC Main, FMC Flex, OMC Flex), NEDOCS worksheets (Fontana, Ontario), Imaging &amp; Radiology (Telerad, MUSE ECG repository, PACS iSite), and Communications &amp; Directory (SCAL On-Call, Vocera Web). Every link card now has a stable anchor and a brief flash highlight when arriving via a search-bar deep-link.</div>
+            <div class="entry-meta">
+              <span class="badge feat">New Feature</span>
+              <a class="entry-link" href="links.html">Quick Links →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="entry" data-type="improvement">
+          <div class="entry-icon">🔍</div>
+          <div class="entry-body">
+            <div class="entry-title">Every Quick Links card is searchable + cache-buster bumped</div>
+            <div class="entry-desc">Added 19 <code>type:'link'</code> entries to the omnisearch index — one per card on the Quick Links page — so typing "fmc flex", "vocera", "muse", "telerad", "scal", "nedocs fontana", etc. lands directly on the right card. Bumped <code>search-index.js?v=2 → v=3</code> across all 20 pages to bust browser caches.</div>
+            <div class="entry-meta">
+              <span class="badge improvement">Improvement</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="entry" data-type="improvement">
+          <div class="entry-icon">💗</div>
+          <div class="entry-body">
+            <div class="entry-title">Atrial Fibrillation moved from Service Agreements → Algorithms</div>
+            <div class="entry-desc">The afib content is a clinical decision guideline (rate control, cardioversion timing, CHA₂DS₂-VASc, discharge criteria), not really a department-to-department service agreement, so it now lives next to the other cardiology cards on the Algorithms page. Search now lands directly on the new card.</div>
+            <div class="entry-meta">
+              <span class="badge improvement">Improvement</span>
+              <a class="entry-link" href="algorithms.html#card-afib">View card →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="entry" data-type="feat">
+          <div class="entry-icon">🎞️</div>
+          <div class="entry-body">
+            <div class="entry-title">Announcement images become a slideshow</div>
+            <div class="entry-desc">The single-image upload on the home-page announcement banner is now a multi-image slideshow with chevron prev/next, dot indicators, "n / total" counter, and 5-second auto-advance (pauses on hover and when the tab is hidden). Each image is canvas-downscaled to ≤800px JPEG before storing as a base64 dataURL on the existing Firestore announcement doc. Capacity ≈ 5 typical photos before hitting the 1 MiB doc limit; over-budget uploads are rejected with a friendly summary.</div>
+            <div class="entry-meta">
+              <span class="badge feat">New Feature</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="entry" data-type="improvement">
+          <div class="entry-icon">📢</div>
+          <div class="entry-body">
+            <div class="entry-title">Announcement banner sized up + admin controls quieted</div>
+            <div class="entry-desc">Banner now breaks out of the page's centered container and uses up to ~1400px wide so multi-line urgent posts don't wrap awkwardly. Textarea grew from 94px to 320px tall with larger text. Image upload / remove buttons are now subtle dashed-border chips, hidden entirely when locked so viewers never see admin controls.</div>
+            <div class="entry-meta">
+              <span class="badge improvement">Improvement</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="entry" data-type="fix">
+          <div class="entry-icon">⌨️</div>
+          <div class="entry-body">
+            <div class="entry-title">Stop announcement textarea cursor jumping mid-type</div>
+            <div class="entry-desc">The Firestore snapshot listener was overwriting the textarea value on every echo of the user's own debounced save — which resets the cursor to the end. The listener now compares first and skips the no-op assignment; if the remote text genuinely differs while focused, it preserves <code>selectionStart</code> / <code>selectionEnd</code>. Also bumped the input debounce 300ms → 800ms so saves don't fire mid-sentence.</div>
+            <div class="entry-meta">
+              <span class="badge fix">Fix</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="entry" data-type="maintenance">
+          <div class="entry-icon">🆕</div>
+          <div class="entry-body">
+            <div class="entry-title">"What's New" link added to every page's nav bar</div>
+            <div class="entry-desc">Quick Links and Roadmap pages were missing the changelog nav entry — now consistent across the whole site.</div>
+            <div class="entry-meta">
+              <span class="badge maintenance">Maintenance</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
     <!-- ── April 24, 2026 ── -->
     <div class="date-group">
       <div class="date-dot"></div>
