@@ -174,6 +174,10 @@ main{max-width:1100px;margin:0 auto;padding:22px 24px 80px}
 .tc.cat-agree::before{background:#c084fc}
 .tc.cat-phone::before{background:#fbbf24}
 .tc.cat-links::before{background:#64748b}
+.tc.cat-ops::before{background:#fb7185}
+.tc.cat-track::before{background:#34d399}
+.tc.cat-protocol::before{background:#60a5fa}
+.tc-ext{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-left:auto}
 
 /* Hero cards — bigger text */
 .hero-grid .tc{padding:20px 22px;gap:8px}
@@ -356,16 +360,6 @@ main{max-width:1100px;margin:0 auto;padding:22px 24px 80px}
 
   <!-- Tier 2: Clinical tools (4-up) -->
   <div class="tool-grid">
-    <a class="tc cat-drug" href="vasopressors.html">
-      <div class="tc-ico">💊</div><div class="tc-name">Vasopressors</div>
-      <div class="tc-desc">Weight-based drip dosing + push-dose</div>
-      <div class="tc-meta"><span class="tc-count">8 agents</span><span class="tc-arr">→</span></div>
-    </a>
-    <a class="tc cat-resus" href="rsi.html">
-      <div class="tc-ico">🫁</div><div class="tc-name">RSI</div>
-      <div class="tc-desc">Induction + paralytic dosing, airway flags</div>
-      <div class="tc-meta"><span class="tc-count">Weight-based</span><span class="tc-arr">→</span></div>
-    </a>
     <a class="tc cat-algo" href="algorithms.html">
       <div class="tc-ico">🔀</div><div class="tc-name">Algorithms</div>
       <div class="tc-desc">ED Practice Guideline visual flowcharts</div>
@@ -376,21 +370,20 @@ main{max-width:1100px;margin:0 auto;padding:22px 24px 80px}
       <div class="tc-desc">ICH, tPA criteria, reversal, stroke triage</div>
       <div class="tc-meta"><span class="tc-count">ICH · tPA · Reversal</span><span class="tc-arr">→</span></div>
     </a>
-  </div>
-
-  <!-- Tier 3: Secondary tools (4-up) -->
-  <div class="tool-grid" style="margin-bottom:22px">
-    <a class="tc cat-peds" href="pedsfever.html">
-      <div class="tc-ico">🌡️</div><div class="tc-name">Peds Fever</div>
-      <div class="tc-desc">CA FIRST age-stratified workup</div>
-      <div class="tc-meta"><span class="tc-count">Age-stratified</span><span class="tc-arr">→</span></div>
-    </a>
     <a class="tc cat-agree" href="service-agreements.html">
-      <span class="badge-new">NEW</span>
       <div class="tc-ico">🤝</div><div class="tc-name">Service Agreements</div>
       <div class="tc-desc">Consult criteria &amp; escalation by specialty</div>
-      <div class="tc-meta"><span class="tc-count" style="color:var(--purple)">Add yours</span><span class="tc-arr">→</span></div>
+      <div class="tc-meta"><span class="tc-count" style="color:var(--purple)">By specialty</span><span class="tc-arr">→</span></div>
     </a>
+    <a class="tc cat-protocol" href="hospital-protocols.html">
+      <div class="tc-ico">🏥</div><div class="tc-name">Hospital Protocols</div>
+      <div class="tc-desc">ED ops, transfers, NEDOCS, policies</div>
+      <div class="tc-meta"><span class="tc-count">Clinical &amp; ops</span><span class="tc-arr">→</span></div>
+    </a>
+  </div>
+
+  <!-- Tier 3: Secondary tools (3-up) -->
+  <div class="tool-grid" style="margin-bottom:22px;grid-template-columns:repeat(3,1fr)">
     <a class="tc cat-phone" href="ed-phone-directory.html">
       <div class="tc-ico">📞</div><div class="tc-name">Phone Directory</div>
       <div class="tc-desc">OMC &amp; FMC — all extensions, pagers, lines</div>
@@ -401,26 +394,59 @@ main{max-width:1100px;margin:0 auto;padding:22px 24px 80px}
       <div class="tc-desc">Curated external references &amp; tools</div>
       <div class="tc-meta"><span class="tc-count">External</span><span class="tc-arr">→</span></div>
     </a>
+    <a class="tc cat-links" href="changelog.html">
+      <div class="tc-ico">🆕</div><div class="tc-name">What's New</div>
+      <div class="tc-desc">Recent additions, fixes, and improvements</div>
+      <div class="tc-meta"><span class="tc-count">Site updates</span><span class="tc-arr">→</span></div>
+    </a>
+  </div>
+
+  <!-- ED OPERATIONS — NEDOCS + Trackboards -->
+  <div class="sec-head"><h2>🩺 ED Operations</h2></div>
+
+  <!-- NEDOCS live worksheets — 2-up larger -->
+  <div class="hero-grid" style="margin-bottom:10px">
+    <a class="tc cat-ops" href="https://sp-cloud.kp.org/:x:/s/FONTANANEDOCS/EYUL1gME3LZBmPQjZHp-ooABzb_-QQG6LLtpkCclKJWMow?wdLOR=cFDF427A4-A352-4263-9466-7F75C00C6218" target="_blank" rel="noopener">
+      <div class="tc-ico">📈</div>
+      <div class="tc-name">NEDOCS — Fontana <span class="tc-ext">↗ live</span></div>
+      <div class="tc-desc">Live ED crowding score worksheet for FMC. Updated by charge / unit clerk every 2 hours.</div>
+      <div class="tc-meta"><span class="tc-count" style="color:#fda4af">SharePoint Excel · KP login required</span><span class="tc-arr">→</span></div>
+    </a>
+    <a class="tc cat-ops" href="https://sp-cloud.kp.org/:x:/r/sites/FONTANANEDOCS/_layouts/15/Doc2.aspx?action=edit&sourcedoc=%7b50c57f7e-1c5b-42a1-b8d4-401e1967a013%7d&wdExp=TEAMS-TREATMENT&web=1" target="_blank" rel="noopener">
+      <div class="tc-ico">📈</div>
+      <div class="tc-name">NEDOCS — Ontario <span class="tc-ext">↗ live</span></div>
+      <div class="tc-desc">Live ED crowding score worksheet for OMC. Updated by charge / unit clerk every 2 hours.</div>
+      <div class="tc-meta"><span class="tc-count" style="color:#fda4af">SharePoint Excel · KP login required</span><span class="tc-arr">→</span></div>
+    </a>
+  </div>
+
+  <!-- Trackboards — 4-up -->
+  <div class="tool-grid" style="margin-bottom:22px">
+    <a class="tc cat-track" href="https://docs.google.com/spreadsheets/d/19ydRLTalPOsbIFr8G7DtB-4g0tFQG1a0JZ9F9bT3OmY/edit?gid=1690579853#gid=1690579853" target="_blank" rel="noopener">
+      <div class="tc-ico">📊</div><div class="tc-name">FMC Main Trackboard <span class="tc-ext">↗</span></div>
+      <div class="tc-desc">Fontana main ED trackboard</div>
+      <div class="tc-meta"><span class="tc-count">Google Sheet</span><span class="tc-arr">→</span></div>
+    </a>
+    <a class="tc cat-track" href="https://docs.google.com/spreadsheets/d/1wj3FjTKsE-99m0U2avq3B8DLaXcH1eVxpzdH9XXxI1s/edit?gid=486345685#gid=486345685" target="_blank" rel="noopener">
+      <div class="tc-ico">📊</div><div class="tc-name">OMC Main Trackboard <span class="tc-ext">↗</span></div>
+      <div class="tc-desc">Ontario main ED trackboard</div>
+      <div class="tc-meta"><span class="tc-count">Google Sheet</span><span class="tc-arr">→</span></div>
+    </a>
+    <a class="tc cat-track" href="https://docs.google.com/spreadsheets/d/1xwH5Wr8G98-5GiE4BcbnXOCTXOrDEdQLODaau1pCIn0/edit?gid=0#gid=0" target="_blank" rel="noopener">
+      <div class="tc-ico">⚡</div><div class="tc-name">FMC Flex Trackboard <span class="tc-ext">↗</span></div>
+      <div class="tc-desc">Fontana flex / mod-pod / surge</div>
+      <div class="tc-meta"><span class="tc-count">Google Sheet</span><span class="tc-arr">→</span></div>
+    </a>
+    <a class="tc cat-track" href="https://docs.google.com/spreadsheets/d/12gVlTBcdVMqrilSU91j-c_Q6Gq1_BLx7TIvv7hDggZE/edit?gid=1426424719#gid=1426424719" target="_blank" rel="noopener">
+      <div class="tc-ico">⚡</div><div class="tc-name">OMC Flex Trackboard <span class="tc-ext">↗</span></div>
+      <div class="tc-desc">Ontario flex / mod-pod / surge</div>
+      <div class="tc-meta"><span class="tc-count">Google Sheet</span><span class="tc-arr">→</span></div>
+    </a>
   </div>
 
   <!-- QUICK ACCESS — compact pinned grid -->
   <div class="sec-head"><h2>Quick Access</h2></div>
   <div class="pinned-grid" style="margin-bottom:22px">
-    <a class="pin" href="dotphrase.html?q=nope">
-      <div class="pin-title">PE Rule-Out</div>
-      <div class="pin-sub">PERC · Wells · low probability</div>
-      <span class="pin-tag blue">.nope</span>
-    </a>
-    <a class="pin" href="dotphrase.html?q=noacs">
-      <div class="pin-title">ACS Rule-Out</div>
-      <div class="pin-sub">HEART score · serial troponins</div>
-      <span class="pin-tag blue">.noacs</span>
-    </a>
-    <a class="pin" href="dotphrase.html?q=nosah">
-      <div class="pin-title">SAH Rule-Out</div>
-      <div class="pin-sub">Ottawa rule · thunderclap headache</div>
-      <span class="pin-tag blue">.nosah</span>
-    </a>
     <a class="pin" href="calculators.html#calc-heart">
       <div class="pin-title">HEART Score</div>
       <div class="pin-sub">ACS chest pain risk stratification</div>
