@@ -18,7 +18,7 @@
 //  To pause analytics later, just blank the token and commit.
 // ──────────────────────────────────────────────────────────────────────
 
-const CF_BEACON_TOKEN = ''; // ← paste your Cloudflare beacon token here
+const CF_BEACON_TOKEN = 'f1ac7c0dc6e248c8927ffe424e4b98c3';
 
 (function () {
   if (!CF_BEACON_TOKEN) return;
