@@ -339,41 +339,19 @@ main{max-width:1100px;margin:0 auto;padding:22px 24px 80px}
 </div>
 
 <main>
-  <!-- CORE TOOLS — tiered hierarchy -->
+  <!-- CORE TOOLS — 6 cards in two 3-up rows -->
   <div class="sec-head"><h2>Core Tools</h2></div>
 
-  <!-- Tier 1: Hero cards (2-up, larger) -->
-  <div class="hero-grid">
-    <a class="tc cat-docs" href="dotphrase.html">
-      <div class="tc-ico">📋</div>
-      <div class="tc-name">Dotphrases</div>
-      <div class="tc-desc">Rule-out documentation templates across 20 clinical categories. Copy-paste ready for your notes.</div>
-      <div class="tc-meta"><span class="tc-count">127 phrases</span><span class="tc-arr">→</span></div>
-    </a>
-    <a class="tc cat-calc" href="calculators.html">
-      <div class="tc-ico">🧮</div>
-      <div class="tc-name">Clinical Calculators</div>
-      <div class="tc-desc">HEART, Wells PE/DVT, PERC, PECARN, CHA₂DS₂-VASc, Canadian CT Head, Centor, LRINEC</div>
-      <div class="tc-meta"><span class="tc-count">13 calculators</span><span class="tc-arr">→</span></div>
-    </a>
-  </div>
-
-  <!-- Tier 2: Clinical tools (4-up) -->
-  <div class="tool-grid">
-    <a class="tc cat-algo" href="algorithms.html">
-      <div class="tc-ico">🔀</div><div class="tc-name">Algorithms</div>
-      <div class="tc-desc">ED Practice Guideline visual flowcharts</div>
-      <div class="tc-meta"><span class="tc-count">7 algorithms</span><span class="tc-arr">→</span></div>
-    </a>
-    <a class="tc cat-neuro" href="neurohub.html">
-      <div class="tc-ico">🧠</div><div class="tc-name">Neuro Hub</div>
-      <div class="tc-desc">ICH, tPA criteria, reversal, stroke triage</div>
-      <div class="tc-meta"><span class="tc-count">ICH · tPA · Reversal</span><span class="tc-arr">→</span></div>
-    </a>
+  <div class="tool-grid" style="grid-template-columns:repeat(3,1fr)">
     <a class="tc cat-agree" href="service-agreements.html">
       <div class="tc-ico">🤝</div><div class="tc-name">Service Agreements</div>
       <div class="tc-desc">Consult criteria &amp; escalation by specialty</div>
       <div class="tc-meta"><span class="tc-count" style="color:var(--purple)">By specialty</span><span class="tc-arr">→</span></div>
+    </a>
+    <a class="tc cat-algo" href="algorithms.html">
+      <div class="tc-ico">🔀</div><div class="tc-name">Algorithms</div>
+      <div class="tc-desc">ED Practice Guideline visual flowcharts</div>
+      <div class="tc-meta"><span class="tc-count">Cardio · Neuro · OB · Tox</span><span class="tc-arr">→</span></div>
     </a>
     <a class="tc cat-protocol" href="hospital-protocols.html">
       <div class="tc-ico">🏥</div><div class="tc-name">Hospital Protocols</div>
@@ -382,22 +360,21 @@ main{max-width:1100px;margin:0 auto;padding:22px 24px 80px}
     </a>
   </div>
 
-  <!-- Tier 3: Secondary tools (3-up) -->
   <div class="tool-grid" style="margin-bottom:22px;grid-template-columns:repeat(3,1fr)">
     <a class="tc cat-phone" href="ed-phone-directory.html">
       <div class="tc-ico">📞</div><div class="tc-name">Phone Directory</div>
       <div class="tc-desc">OMC &amp; FMC — all extensions, pagers, lines</div>
       <div class="tc-meta"><span class="tc-count">200+ contacts</span><span class="tc-arr">→</span></div>
     </a>
+    <a class="tc cat-agree" href="service-requests.html">
+      <div class="tc-ico">📋</div><div class="tc-name">Service Requests</div>
+      <div class="tc-desc">Facility, equipment, IT &amp; supply requests — vote and track</div>
+      <div class="tc-meta"><span class="tc-count">Submit · vote · track</span><span class="tc-arr">→</span></div>
+    </a>
     <a class="tc cat-links" href="links.html">
       <div class="tc-ico">🔗</div><div class="tc-name">Links &amp; Resources</div>
       <div class="tc-desc">Curated external references &amp; tools</div>
       <div class="tc-meta"><span class="tc-count">External</span><span class="tc-arr">→</span></div>
-    </a>
-    <a class="tc cat-links" href="changelog.html">
-      <div class="tc-ico">🆕</div><div class="tc-name">What's New</div>
-      <div class="tc-desc">Recent additions, fixes, and improvements</div>
-      <div class="tc-meta"><span class="tc-count">Site updates</span><span class="tc-arr">→</span></div>
     </a>
   </div>
 
