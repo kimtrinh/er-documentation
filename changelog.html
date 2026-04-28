@@ -143,6 +143,29 @@ main{max-width:860px;margin:0 auto;padding:32px 20px 64px}
 
   <div class="timeline" id="timeline">
 
+    <!-- ── April 27, 2026 ── -->
+    <div class="date-group">
+      <div class="date-dot"></div>
+      <div class="date-label">
+        <span class="date-text">April 27, 2026</span>
+        <span class="date-relative"></span>
+      </div>
+      <div class="entries">
+
+        <div class="entry" data-type="feat">
+          <div class="entry-icon">📊</div>
+          <div class="entry-body">
+            <div class="entry-title">Cloudflare Web Analytics wiring (privacy-friendly site stats)</div>
+            <div class="entry-desc">Added a single shared <code>analytics.js</code> with a one-line beacon-token slot, plus a <code>&lt;script src="analytics.js"&gt;</code> loader before <code>&lt;/body&gt;</code> on all 21 routed pages. Cookie-less, no consent banner, no PII. Once the token is set, the dashboard reports unique visitors, page views, top paths, referrers, and device/country breakdowns. Leave the token blank to disable analytics with zero side effects.</div>
+            <div class="entry-meta">
+              <span class="badge feat">New Feature</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
     <!-- ── April 26, 2026 ── -->
     <div class="date-group">
       <div class="date-dot"></div>
@@ -820,5 +843,6 @@ main{max-width:860px;margin:0 auto;padding:32px 20px 64px}
 <script src="search-index.js?v=2"></script>
 <script src="theme.js?v=3"></script>
 <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
+<script src="analytics.js"></script>
 </body>
 </html>
