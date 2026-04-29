@@ -1,6 +1,6 @@
 // ╔══════════════════════════════════════════════════════════════════╗
 // ║  KP/ER Search Index — search-index.js                           ║
-// ║  Auto-generated — 348 entries                                ║
+// ║  Auto-generated — 433 entries                                ║
 // ║                                                                  ║
 // ║  ENTRY FORMAT:                                                   ║
 // ║    type = type (phrase|calc|algo|neuro|drug|phone|imaging|staff) ║
@@ -27,6 +27,7 @@
 // ║    - PHONE DIR   (92 entries)                             ║
 // ║    - IMAGING     (24 entries)                              ║
 // ║    - KEY STAFF   (16 entries)                              ║
+// ║    - KAISER DOCS (11 entries)                              ║
 // ╚══════════════════════════════════════════════════════════════════╝
 
 const SEARCH_INDEX = [
@@ -481,6 +482,19 @@ const SEARCH_INDEX = [
   {type:'page',i:'🆕',t:"What's New",s:'changelog  ·  site updates  ·  new features  ·  recent changes  ·  release notes',g:'Reference',gc:'t-algo',u:'changelog.html'},
   {type:'page',i:'🌀',t:'Vertigo Helper',s:'vertigo  ·  dizziness  ·  BPPV  ·  central vs peripheral  ·  HINTS exam  ·  nystagmus  ·  cerebellar stroke  ·  vestibular',g:'Reference',gc:'t-algo',u:'vertigo-helper.html'},
   {type:'page',i:'🚩',t:'Issue Reporting Form',s:'report  ·  on-call consultant delay  ·  critical radiology delay  ·  staff behavior  ·  complaint  ·  concern  ·  incident  ·  feedback',g:'Reference',gc:'t-algo',u:'https://forms.cloud.microsoft/r/Fbf0L0XCBK'},
+
+  // ── KAISER COMMUNICATIONS (Drive PDFs / order sets / guidelines) ────────
+  {type:'link',i:'🧪',t:'High Sensitivity Troponin Pathway (2021)',s:'high sensitivity troponin  ·  hs-TnI  ·  TnI pathway  ·  chest pain  ·  ACS  ·  rule out MI  ·  Kaiser regional  ·  2021  ·  cardiac biomarker',g:'Kaiser Doc',gc:'t-algo',u:'https://drive.google.com/file/d/1VWxJfYRgVYk0xgS3zcVdzI6d2vZWMAWT/view'},
+  {type:'link',i:'🩸',t:'Kaiser Regional TSOA Bleeding Management Guideline (DOAC reversal)',s:'TSOA  ·  DOAC  ·  reversal  ·  bleeding management  ·  apixaban  ·  rivaroxaban  ·  dabigatran  ·  andexanet  ·  idarucizumab  ·  4-factor PCC  ·  Kaiser regional  ·  2022',g:'Kaiser Doc',gc:'t-algo',u:'https://drive.google.com/file/d/1lClo7dMr90ndwQaJ6rl3yGNQE__1Ymeb/view'},
+  {type:'link',i:'🧠',t:'2022 ICH Guideline Update — ED Slides',s:'ICH  ·  intracerebral hemorrhage  ·  2022 guideline  ·  off-cycle changes  ·  neuro  ·  ED order set  ·  hypertonic saline  ·  blood pressure',g:'Kaiser Doc',gc:'t-algo',u:'https://drive.google.com/file/d/1gnrjzlheeh6l_2H6y0qL4UXT5Qc5OwOp/view'},
+  {type:'link',i:'🧠',t:'Intracranial Hemorrhage ED SCAL Order Set (Hypertonic Saline)',s:'intracranial hemorrhage  ·  ICH  ·  ED SCAL  ·  order set  ·  hypertonic saline  ·  3% NaCl  ·  mannitol  ·  hyperosmolar therapy  ·  neuro  ·  2023-2024',g:'Kaiser Doc',gc:'t-algo',u:'https://drive.google.com/file/d/1WeBxYrmOHEVT2efpuxVGNMbob2B1JDdZ/view'},
+  {type:'link',i:'🤰',t:'Preeclampsia/Eclampsia Diagnostic-Treatment Algorithm (CDPH-CMQCC)',s:'preeclampsia  ·  eclampsia  ·  HDP  ·  hypertension pregnancy  ·  diagnostic algorithm  ·  treatment algorithm  ·  CDPH  ·  CMQCC toolkit  ·  magnesium  ·  labetalol  ·  hydralazine  ·  2021',g:'Kaiser Doc',gc:'t-algo',u:'https://drive.google.com/file/d/1kkMchkeJAM09vsfb-2EfskOxlKW-QYnO/view'},
+  {type:'link',i:'🤰',t:'Preeclampsia / PIH ED SCAL Order Set',s:'preeclampsia  ·  PIH  ·  pregnancy induced hypertension  ·  ED SCAL  ·  order set  ·  net new  ·  2022  ·  magnesium  ·  severe range BP',g:'Kaiser Doc',gc:'t-algo',u:'https://drive.google.com/file/d/11zMLJF6rOQGVaeWakdLle6MTWcPIC-oc/view'},
+  {type:'link',i:'🌡️',t:'Fever CA FIRST Protocol (Peds Fever) — 2021 Source',s:'CA FIRST  ·  pediatric fever  ·  febrile infant  ·  AAP 2021 CPG  ·  Roseville protocol  ·  Kaiser NorCal  ·  source slides  ·  see also pedsfever.html',g:'Kaiser Doc',gc:'t-algo',u:'https://drive.google.com/file/d/1zMZ2TwH5a4iv4jC1ZuG57VRdmhIxoWOw/view'},
+  {type:'link',i:'💉',t:'DKA Adult ED Two-Bag System Order Set (2021)',s:'DKA  ·  diabetic ketoacidosis  ·  two-bag system  ·  2-bag  ·  adult ED  ·  order set  ·  insulin  ·  D5  ·  saline  ·  KPHC inpatient key message  ·  2021',g:'Kaiser Doc',gc:'t-algo',u:'https://drive.google.com/file/d/1iDdJgL312H_smnz5QnwzVMshlTxyjhUb/view'},
+  {type:'link',i:'🩸',t:'DVT Outpatient Anticoagulation Protocol (2019)',s:'DVT  ·  deep vein thrombosis  ·  outpatient anticoagulation  ·  protocol  ·  Kaiser  ·  2019 revision  ·  enoxaparin  ·  apixaban  ·  rivaroxaban',g:'Kaiser Doc',gc:'t-algo',u:'https://drive.google.com/file/d/1yUnfda2tiAQzVdXtaea1mJWdYZ0TutHC/view'},
+  {type:'link',i:'💉',t:'Procedural Sedation Policy SC.QRM.PCS.020 (2017)',s:'procedural sedation  ·  moderate deep sedation  ·  non-anesthesiology  ·  policy  ·  SC.QRM.PCS.020  ·  SCAL  ·  2017  ·  PSA  ·  ketamine  ·  propofol',g:'Kaiser Doc',gc:'t-algo',u:'https://drive.google.com/file/d/1LwR4XRmwx0qTkwrcqORaQS9E4ARbWf6e/view'},
+  {type:'link',i:'🧠',t:'Code Stroke Order Set — Telehealth Consult Update (2020)',s:'code stroke  ·  telehealth consult  ·  order set update  ·  ED  ·  tele-stroke  ·  KPHC inpatient key message  ·  2020  ·  neurology consult',g:'Kaiser Doc',gc:'t-algo',u:'https://drive.google.com/file/d/1hQ8Am7Zv7INg1zwdqB9sX03tEyriWa30/view'},
 
 ];
 
