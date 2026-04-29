@@ -189,31 +189,9 @@ main{max-width:1100px;margin:0 auto;padding:22px 24px 80px}
 .nedocs-bar-link{font-size:11px;font-weight:600;color:var(--text-blue);text-decoration:none;padding:4px 10px;border:1px solid var(--border2);border-radius:6px;white-space:nowrap;flex-shrink:0;transition:.15s}
 .nedocs-bar-link:hover{background:var(--blue3);border-color:var(--blue);color:#bfdbfe}
 .nedocs-iframe{width:100%;height:540px;border:0;background:#fff;display:block}
-.nedocs-iframe[hidden]{display:none}
-.nedocs-fallback{padding:14px 16px;background:var(--surface2);border-top:1px solid var(--border);font-size:12px;color:var(--text2);line-height:1.55}
-.nedocs-fallback b{color:var(--text)}
-
-/* Auth gate placeholder — shown until user signs into SharePoint once.
-   After they click "Sign in" we open SP in a new tab; after they click
-   "Load preview" we swap in the iframe and remember the choice for
-   the rest of the browser session via sessionStorage. */
-.nedocs-gate{height:540px;background:linear-gradient(180deg,var(--surface2) 0%,#0d1829 100%);border-top:1px solid var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px 28px;gap:14px}
-.nedocs-gate[hidden]{display:none}
-.nedocs-gate-icon{font-size:36px;line-height:1;opacity:.85}
-.nedocs-gate-title{font-size:15px;font-weight:700;color:var(--text);max-width:380px;line-height:1.4}
-.nedocs-gate-desc{font-size:12px;color:var(--text2);max-width:420px;line-height:1.6}
-.nedocs-gate-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:4px}
-.nedocs-gate-btn{padding:9px 18px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;border:1px solid;transition:.15s;font-family:inherit}
-.nedocs-gate-btn.primary{background:#1d4ed8;border-color:#3b82f6;color:#fff}
-.nedocs-gate-btn.primary:hover{background:#2563eb}
-.nedocs-gate-btn.primary[disabled]{background:var(--surface3);border-color:var(--border2);color:var(--text3);cursor:not-allowed}
-.nedocs-gate-btn.secondary{background:transparent;border-color:var(--border2);color:var(--text2)}
-.nedocs-gate-btn.secondary:hover{border-color:var(--blue);color:var(--text-blue)}
-.nedocs-gate-step{font-size:11px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.05em}
 
 @media(max-width:640px){
   .nedocs-iframe{height:420px}
-  .nedocs-gate{height:420px;padding:22px 20px}
   .nedocs-bar-meta{display:none}
 }
 
@@ -405,15 +383,11 @@ main{max-width:1100px;margin:0 auto;padding:22px 24px 80px}
   <div class="sec-head"><h2>🩺 ED Operations</h2></div>
 
   <!-- NEDOCS — embedded live SharePoint Excel worksheets.
-       Renders inline when the user is signed in to KP SharePoint.
-       Off-network or unauthenticated users see SharePoint's sign-in
-       prompt inside the iframe; if their CSP blocks the embed entirely,
-       the "Open full ↗" button is the guaranteed backup. -->
+       Loads inline directly. If SharePoint blocks the embed (no active
+       SP session cookie, or CSP), the "Open full ↗" button is the
+       guaranteed backup. -->
   <div class="nedocs-grid">
-    <div class="nedocs-embed"
-         data-nedocs-key="nedocs-fmc"
-         data-nedocs-auth="https://sp-cloud.kp.org/:x:/s/FONTANANEDOCS/EYUL1gME3LZBmPQjZHp-ooABzb_-QQG6LLtpkCclKJWMow?wdLOR=cFDF427A4-A352-4263-9466-7F75C00C6218"
-         data-nedocs-iframe="https://sp-cloud.kp.org/:x:/s/FONTANANEDOCS/EYUL1gME3LZBmPQjZHp-ooABzb_-QQG6LLtpkCclKJWMow?action=embedview&wdAllowInteractivity=False&wdHideGridlines=False">
+    <div class="nedocs-embed">
       <div class="nedocs-bar">
         <div class="nedocs-bar-title">
           <span class="nedocs-ico">📈</span>
@@ -422,23 +396,14 @@ main{max-width:1100px;margin:0 auto;padding:22px 24px 80px}
         </div>
         <a class="nedocs-bar-link" href="https://sp-cloud.kp.org/:x:/s/FONTANANEDOCS/EYUL1gME3LZBmPQjZHp-ooABzb_-QQG6LLtpkCclKJWMow?wdLOR=cFDF427A4-A352-4263-9466-7F75C00C6218" target="_blank" rel="noopener">Open full ↗</a>
       </div>
-      <div class="nedocs-gate">
-        <div class="nedocs-gate-icon">🔐</div>
-        <div class="nedocs-gate-title">Sign in to SharePoint to load the live preview</div>
-        <div class="nedocs-gate-desc">Microsoft blocks their sign-in page from being embedded. Click below to authenticate once in a new tab — then come back and load the preview. We'll remember the choice for the rest of your browser session.</div>
-        <div class="nedocs-gate-btns">
-          <button type="button" class="nedocs-gate-btn primary" data-action="signin">🔓 Sign in to SharePoint ↗</button>
-          <button type="button" class="nedocs-gate-btn secondary" data-action="load" disabled>Load preview</button>
-        </div>
-        <div class="nedocs-gate-step" data-step>Step 1 of 2</div>
-      </div>
-      <iframe class="nedocs-iframe" hidden title="NEDOCS — Fontana live worksheet" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      <iframe class="nedocs-iframe"
+              src="https://sp-cloud.kp.org/:x:/s/FONTANANEDOCS/EYUL1gME3LZBmPQjZHp-ooABzb_-QQG6LLtpkCclKJWMow?action=embedview&wdAllowInteractivity=False&wdHideGridlines=False"
+              title="NEDOCS — Fontana live worksheet"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"></iframe>
     </div>
 
-    <div class="nedocs-embed"
-         data-nedocs-key="nedocs-omc"
-         data-nedocs-auth="https://sp-cloud.kp.org/:x:/r/sites/FONTANANEDOCS/_layouts/15/Doc.aspx?sourcedoc=%7B7D1A25B4-00AD-4D57-B655-164FD0C970EE%7D&file=NEDOCS%20Ontario%20ED%20-%20Copy.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1"
-         data-nedocs-iframe="https://sp-cloud.kp.org/sites/FONTANANEDOCS/_layouts/15/Doc.aspx?sourcedoc=%7B7D1A25B4-00AD-4D57-B655-164FD0C970EE%7D&action=embedview&wdAllowInteractivity=False&wdHideGridlines=False">
+    <div class="nedocs-embed">
       <div class="nedocs-bar">
         <div class="nedocs-bar-title">
           <span class="nedocs-ico">📈</span>
@@ -447,71 +412,13 @@ main{max-width:1100px;margin:0 auto;padding:22px 24px 80px}
         </div>
         <a class="nedocs-bar-link" href="https://sp-cloud.kp.org/:x:/r/sites/FONTANANEDOCS/_layouts/15/Doc.aspx?sourcedoc=%7B7D1A25B4-00AD-4D57-B655-164FD0C970EE%7D&file=NEDOCS%20Ontario%20ED%20-%20Copy.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1" target="_blank" rel="noopener">Open full ↗</a>
       </div>
-      <div class="nedocs-gate">
-        <div class="nedocs-gate-icon">🔐</div>
-        <div class="nedocs-gate-title">Sign in to SharePoint to load the live preview</div>
-        <div class="nedocs-gate-desc">Microsoft blocks their sign-in page from being embedded. Click below to authenticate once in a new tab — then come back and load the preview. We'll remember the choice for the rest of your browser session.</div>
-        <div class="nedocs-gate-btns">
-          <button type="button" class="nedocs-gate-btn primary" data-action="signin">🔓 Sign in to SharePoint ↗</button>
-          <button type="button" class="nedocs-gate-btn secondary" data-action="load" disabled>Load preview</button>
-        </div>
-        <div class="nedocs-gate-step" data-step>Step 1 of 2</div>
-      </div>
-      <iframe class="nedocs-iframe" hidden title="NEDOCS — Ontario live worksheet" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      <iframe class="nedocs-iframe"
+              src="https://sp-cloud.kp.org/sites/FONTANANEDOCS/_layouts/15/Doc.aspx?sourcedoc=%7B7D1A25B4-00AD-4D57-B655-164FD0C970EE%7D&action=embedview&wdAllowInteractivity=False&wdHideGridlines=False"
+              title="NEDOCS — Ontario live worksheet"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"></iframe>
     </div>
   </div>
-
-  <script>
-  // ── NEDOCS auth gate ────────────────────────────────────────────────
-  // Microsoft refuses to iframe their SSO page (X-Frame-Options: DENY),
-  // so a hard-loaded SharePoint embed shows "can't open this page" until
-  // the user has an active SP session cookie. The gate routes the user
-  // through SP auth in a new tab, then swaps in the iframe on the second
-  // click. sessionStorage remembers the choice so subsequent home-page
-  // loads in the same browser session skip the gate entirely.
-  (function () {
-    const cards = document.querySelectorAll('.nedocs-embed[data-nedocs-key]');
-    cards.forEach(card => {
-      const key       = 'nedocs-authed-' + card.dataset.nedocsKey;
-      const authUrl   = card.dataset.nedocsAuth;
-      const iframeUrl = card.dataset.nedocsIframe;
-      const gate      = card.querySelector('.nedocs-gate');
-      const iframe    = card.querySelector('.nedocs-iframe');
-      const signinBtn = card.querySelector('[data-action="signin"]');
-      const loadBtn   = card.querySelector('[data-action="load"]');
-      const stepEl    = card.querySelector('[data-step]');
-      if (!gate || !iframe || !signinBtn || !loadBtn) return;
-
-      function loadEmbed() {
-        iframe.src = iframeUrl;
-        iframe.hidden = false;
-        gate.hidden = true;
-        try { sessionStorage.setItem(key, '1'); } catch (_) { /* private mode */ }
-      }
-
-      // Already authed in this session? Skip the gate.
-      try {
-        if (sessionStorage.getItem(key) === '1') { loadEmbed(); return; }
-      } catch (_) { /* private mode — fall through to gate */ }
-
-      signinBtn.addEventListener('click', () => {
-        // Open SP in a new tab so the user can authenticate.
-        window.open(authUrl, '_blank', 'noopener');
-        // Enable the second-step button.
-        loadBtn.disabled = false;
-        loadBtn.classList.add('primary');
-        loadBtn.classList.remove('secondary');
-        signinBtn.disabled = true;
-        signinBtn.classList.remove('primary');
-        signinBtn.classList.add('secondary');
-        signinBtn.textContent = '✓ Auth tab opened';
-        if (stepEl) stepEl.textContent = 'Step 2 — sign in there, then click Load preview';
-      });
-
-      loadBtn.addEventListener('click', loadEmbed);
-    });
-  })();
-  </script>
 
   <!-- Trackboards — 4-up -->
   <div class="tool-grid" style="margin-bottom:22px">
