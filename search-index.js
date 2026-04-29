@@ -767,9 +767,9 @@ if (typeof window !== 'undefined') {
   const safeHref = (href) => {
     const trimmed = String(href || '').trim();
     if (/^https?:\/\/[^\s]+$/i.test(trimmed)) return trimmed;
-    return /^[A-Za-z0-9._/-]+\.html(?:\?[A-Za-z0-9._%=&:+-]+)?(?:#[A-Za-z0-9._:-]+)?$/.test(trimmed)
-      ? trimmed
-      : 'index.html';
+    if (/^[A-Za-z0-9._/-]+\.html(?:\?[A-Za-z0-9._%=&:+-]+)?(?:#[A-Za-z0-9._:-]+)?$/.test(trimmed)) return trimmed;
+    if (/^assets\/[A-Za-z0-9._%-]+\.[A-Za-z0-9]+$/.test(trimmed)) return trimmed;
+    return 'index.html';
   };
   const resultHref = (item, query) => {
     const base = safeHref(item && item.u);
