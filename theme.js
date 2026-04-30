@@ -146,6 +146,10 @@ applyTheme(getTheme());
     function omOpen() {
       overlay.classList.add('open');
       omHiIdx = -1;
+      // If the input was pre-populated (e.g. mirrored from a page-local
+      // search input), render results immediately rather than waiting
+      // for the next keystroke.
+      if (inp.value && inp.value.trim()) omRun(inp.value);
       setTimeout(function(){inp.focus();inp.select();}, 30);
     }
     function omClose() {
@@ -264,6 +268,55 @@ applyTheme(getTheme());
 
       results.innerHTML = html;
     }
+
+    // Expose hooks so other scripts (page-local search inputs) can populate
+    // and open the global overlay. Both home/index and the page-local
+    // sidebars route through this so every search bar shows the same
+    // SEARCH_INDEX results.
+    window.openOmnisearch = function (query) {
+      omOpen();
+      if (typeof query === 'string') {
+        inp.value = query;
+        omRun(query);
+      }
+    };
+    window.setOmnisearchQuery = function (query) {
+      if (typeof query !== 'string') return;
+      inp.value = query;
+      if (overlay.classList.contains('open')) omRun(query);
+    };
+
+    // ── Bridge page-local search inputs to the global overlay ──────────
+    // Known page-local search inputs across the site. When the user types
+    // in any of them, the global omnisearch is updated so pressing ⌘K /
+    // clicking the trigger / pressing Enter shows the same comprehensive
+    // results. Existing in-page filtering on these inputs is preserved.
+    var LOCAL_SEARCH_IDS = [
+      'searchInput',           // hospital-protocols, service-agreements
+      'algoSearchInput',       // algorithms
+      'dotphraseSearchInput',  // mdm
+      'globalSearch',          // ed-phone-directory
+      'search'                 // dotphrase
+    ];
+    LOCAL_SEARCH_IDS.forEach(function (id) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      // Mirror typing into the global overlay's input so opening it via
+      // ⌘K / the trigger pill picks up the current query and shows the
+      // same SEARCH_INDEX results as every other search bar on the site.
+      el.addEventListener('input', function () {
+        window.setOmnisearchQuery(el.value);
+      });
+      // Enter escalates to the global overlay with the current query so
+      // any search bar on any page can land the user in the unified
+      // result set.
+      el.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' && el.value.trim()) {
+          e.preventDefault();
+          window.openOmnisearch(el.value);
+        }
+      });
+    });
   }
 
   if (document.readyState==='loading') {

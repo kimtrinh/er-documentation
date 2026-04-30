@@ -143,6 +143,30 @@ main{max-width:860px;margin:0 auto;padding:32px 20px 64px}
 
   <div class="timeline" id="timeline">
 
+    <!-- ── April 30, 2026 (unified search bridge) ── -->
+    <div class="date-group">
+      <div class="date-dot"></div>
+      <div class="date-label">
+        <span class="date-text">April 30, 2026</span>
+        <span class="date-relative"></span>
+      </div>
+      <div class="entries">
+
+        <div class="entry" data-type="improvement">
+          <div class="entry-icon">🪄</div>
+          <div class="entry-body">
+            <div class="entry-title">Every page-local search bar now feeds the same global results</div>
+            <div class="entry-desc">Each page used to ship its own sidebar/grid search that only filtered the page's own list — typing "STEMI" in the Hospital Protocols sidebar found the protocol panel but not the matching algorithm, dotphrase, or service agreement. <code>theme.js</code> now bridges every known page-local search input (Hospital Protocols, Service Agreements, Algorithms, Dotphrases, MDM, Phone Directory) to the global omnisearch overlay: typing mirrors into the overlay's input, pressing <kbd>Enter</kbd> opens the unified result set with the current query, and <kbd>⌘K</kbd> / <kbd>Ctrl K</kbd> picks up wherever you left off in the local search. The local in-page filter is preserved as a refinement layer. Net effect: every search bar on the site now surfaces the same comprehensive <code>SEARCH_INDEX</code> results. Bumped <code>theme.js?v=3 → v=4</code> across all 20 pages.</div>
+            <div class="entry-meta">
+              <span class="badge improvement">Improvement</span>
+              <a class="entry-link" href="index.html">Try search →</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
     <!-- ── April 30, 2026 (search index enrichment) ── -->
     <div class="date-group">
       <div class="date-dot"></div>
@@ -1020,7 +1044,7 @@ main{max-width:860px;margin:0 auto;padding:32px 20px 64px}
 
 <button id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">☀️</button>
 <script src="search-index.js?v=5"></script>
-<script src="theme.js?v=3"></script>
+<script src="theme.js?v=4"></script>
 <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
 <script src="analytics.js"></script>
 </body>
