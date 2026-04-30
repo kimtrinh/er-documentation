@@ -435,7 +435,7 @@ main>*:nth-child(4){animation-delay:.15s}
         <div class="algo-meta">KP SBC Service Agreement &nbsp;·&nbsp; <span class="algo-badge badge-cardio">Cardiology</span></div>
       </div>
     </div>
-    <div class="algo-card" onclick="showAlgo('doac-bleeding')" id="card-doac-bleeding" data-algo="doac-bleeding" data-keywords="DOAC TSOA anticoagulant reversal bleeding apixaban rivaroxaban dabigatran edoxaban andexanet idarucizumab" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+    <div class="algo-card" onclick="showAlgo('doac-bleeding')" id="card-doac-bleeding" data-algo="doac-bleeding" data-keywords="DOAC TSOA target specific oral anticoagulant reversal bleeding apixaban rivaroxaban dabigatran edoxaban andexanet idarucizumab praxbind kcentra profilnine bebulin feiba PCC 4-factor prothrombin complex concentrate tranexamic acid TXA pradaxa xarelto eliquis savaysa hemorrhage hematology life-threatening" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
       <div class="algo-icon">🩸</div>
       <div class="algo-info">
         <div class="algo-title">DOAC/TSOA Bleeding Management</div>
@@ -1655,12 +1655,251 @@ const algos = {
   'doac-bleeding': {
     icon: '🩸',
     title: 'DOAC/TSOA Bleeding Management',
-    updated: 'KP Regional',
+    updated: 'KP SCAL Regional Pharmacy & Therapeutic Committee · Nov 2015',
     render: () => `
-      <div style="max-width:760px;margin:0 auto">
-        <div class="callout callout-red"><strong>DOAC/TSOA Bleeding:</strong> Regional guideline for managing major bleeding in patients on direct oral anticoagulants — reversal agents, dosing, and escalation criteria.</div>
+      <div style="max-width:880px;margin:0 auto">
+        <div class="callout callout-red" style="margin-bottom:18px">
+          <strong>Regional TSOA Bleeding Management Guideline — KP SCAL.</strong> Idarucizumab (Praxbind®) was FDA-approved Oct 2015 as a specific antidote for the direct thrombin inhibitor dabigatran (Pradaxa) — a humanized monoclonal antibody fragment (Fab) that binds dabigatran and completely reverses its effect within 4 hours in 89% of patients, with onset within minutes of injection. Reversal of dabigatran restores the patient's underlying thrombotic risk — reinitiate anticoagulation as soon as medically appropriate. As of Nov 2015 there is no FDA-approved KP-formulary antidote for FXa inhibitors (apixaban, rivaroxaban, edoxaban); Praxbind does not reverse FXa inhibitors. FXa-inhibitor reversal recommendations below are based on limited data, expert consensus, and case reports.
+        </div>
+
+        <div class="callout callout-yellow" style="margin-bottom:20px">
+          <strong>Praxbind side effects:</strong> headache, hypokalemia, fever, delirium, constipation, pyrexia, pneumonia. Praxbind is indicated when rapid reversal is needed before emergency surgery / urgent procedures, or in life-threatening or uncontrolled bleeding — only for patients on dabigatran.
+        </div>
+
+        <div class="section-label" style="margin-top:8px">Initial Assessment — All Patients</div>
+        <div class="steps" style="margin-bottom:24px">
+          <div class="step"><div class="step-num">1</div><div class="step-content"><strong>Assure hemodynamic stability.</strong></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-content"><strong>Search for source of bleeding.</strong></div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-content"><strong>Check labs:</strong> CBC, creatinine / GFR.</div></div>
+          <div class="step"><div class="step-num">4</div><div class="step-content"><strong>Assess time since last dose</strong> of TSOA.</div></div>
+          <div class="step"><div class="step-num">5</div><div class="step-content"><strong>Hold all anticoagulants and antiplatelet agents</strong> including ASA — consult cardiology if patient had a recent cardiac stent before stopping ASA.</div></div>
+        </div>
+
+        <div class="section-label">Severity-Based Management</div>
+        <div class="branch-container" style="align-items:stretch;margin-bottom:24px">
+          <div class="branch" style="max-width:none;flex:1">
+            <div class="branch-label" style="color:#86efac">Mild Bleeding</div>
+            <div style="background:var(--bg);border:1px solid #166534;border-radius:10px;padding:14px;width:100%;font-size:12.5px;color:var(--text2);line-height:1.55">
+              <ul style="padding-left:18px;margin:0;display:flex;flex-direction:column;gap:8px">
+                <li>Apply <strong style="color:var(--text)">local hemostatic measures</strong> and supportive measures</li>
+                <li>Monitor patients closely until bleeding stops</li>
+                <li>Due to their short half-lives, <strong style="color:var(--text)">most anticoagulant effects dissipate within 24 hours</strong> in patients with normal renal function</li>
+              </ul>
+            </div>
+          </div>
+          <div class="branch" style="max-width:none;flex:1">
+            <div class="branch-label" style="color:#fde68a">Moderate / Clinically Significant</div>
+            <div style="background:var(--bg);border:1px solid #92400e;border-radius:10px;padding:14px;width:100%;font-size:12.5px;color:var(--text2);line-height:1.55">
+              <ul style="padding-left:18px;margin:0;display:flex;flex-direction:column;gap:8px">
+                <li>General measures: <strong style="color:var(--text)">fluid resuscitation and forced diuresis</strong></li>
+                <li>Local or procedural hemostatic measures</li>
+                <li><strong style="color:var(--text)">Transfusion support</strong> if necessary (RBC, platelets)</li>
+                <li>Monitor patient closely</li>
+                <li>If bleeding persists or patient becomes <strong style="color:var(--text)">hemodynamically unstable</strong> → follow severe-bleeding algorithm</li>
+              </ul>
+            </div>
+          </div>
+          <div class="branch" style="max-width:none;flex:1">
+            <div class="branch-label" style="color:#fca5a5">Severe / Life-Threatening</div>
+            <div style="background:#2d1b1b;border:1px solid #ef4444;border-radius:10px;padding:14px;width:100%;font-size:12.5px;color:#fecaca;line-height:1.55">
+              <ul style="padding-left:18px;margin:0;display:flex;flex-direction:column;gap:8px">
+                <li>Identify the agent — see Dabigatran vs FXa inhibitor pathways below</li>
+                <li>Administer <strong>specific reversal agent</strong> per pathway</li>
+                <li>Consider <strong>activated charcoal</strong> if ingestion &lt; 4 hours</li>
+                <li>Resume anticoagulation <strong>as soon as medically appropriate</strong> (thromboembolic risk)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-label">Severe / Life-Threatening Bleeding — Reversal Pathways</div>
+
+        <div style="background:var(--bg);border:1px solid var(--border2);border-left:3px solid #ef4444;border-radius:0 10px 10px 0;padding:14px 16px;margin-bottom:14px">
+          <div style="font-size:13px;font-weight:700;color:#fca5a5;margin-bottom:10px">For patient on Dabigatran (Pradaxa)</div>
+          <ul style="padding-left:20px;margin:0;font-size:12.5px;color:var(--text2);line-height:1.6;display:flex;flex-direction:column;gap:8px">
+            <li>Give <strong style="color:var(--text)">Idarucizumab (Praxbind®) 5 g (2 × 2.5 g)</strong> as a bolus injection (2 × 2.5 g over 2 min) or via intravenous infusion.</li>
+            <li><strong style="color:#fca5a5">WARNING — Thromboembolic risk:</strong> reversing dabigatran exposes the patient to the thrombotic risk of the underlying disease. Resume anticoagulant therapy as soon as medically appropriate.</li>
+            <li><strong style="color:var(--text)">Contains sorbitol</strong> — use caution in patients with hereditary fructose intolerance.</li>
+          </ul>
+          <div style="margin-top:12px;padding:10px 12px;background:var(--surface);border:1px dashed #f59e0b;border-radius:8px;font-size:12px;color:#fde68a">
+            <strong style="color:#fbbf24">Refractory bleeding:</strong> additional <strong>5 g dose of Praxbind</strong> may be considered if clinically significant bleeding persists or for emergency surgery / urgent procedure. If overdose or recent ingestion (&lt; 4 hours), give <strong>activated charcoal (Actidose) 50 g / 240 mL via NG × 1</strong>.
+          </div>
+        </div>
+
+        <div style="background:var(--bg);border:1px solid var(--border2);border-left:3px solid #3b82f6;border-radius:0 10px 10px 0;padding:14px 16px;margin-bottom:18px">
+          <div style="font-size:13px;font-weight:700;color:var(--text-blue);margin-bottom:10px">For patients on Factor Xa Inhibitors (apixaban, rivaroxaban, edoxaban)</div>
+          <ul style="padding-left:20px;margin:0;font-size:12.5px;color:var(--text2);line-height:1.6;display:flex;flex-direction:column;gap:8px">
+            <li>Use <strong style="color:var(--text)">PCC-4 (Kcentra) 50 units/kg IV at 8.4 mL/minute, max dose 5000 units</strong>.
+              <ul style="padding-left:20px;margin-top:6px;display:flex;flex-direction:column;gap:4px">
+                <li>Do <strong style="color:var(--text)">not</strong> repeat Kcentra.</li>
+                <li>Do <strong style="color:var(--text)">not</strong> use in patients with history of heparin-induced thrombocytopenia — Kcentra contains a small amount of heparin.</li>
+              </ul>
+            </li>
+            <li>Recommend <strong style="color:var(--text)">Profilnine 50 units/kg IV</strong> for patients with history of heparin-induced thrombocytopenia.</li>
+            <li>If overdose or recent ingestion (&lt; 4 hours), give <strong style="color:var(--text)">activated charcoal (Actidose) 50 g / 240 mL via NG × 1</strong>.</li>
+          </ul>
+          <div style="margin-top:10px;font-size:12px;color:var(--text3);font-style:italic">Most patients will clear these drugs within 24 hours; longer in patients with renal insufficiency.</div>
+        </div>
+
+        <div class="callout callout-red" style="margin-bottom:24px">
+          <strong>FFP is NOT recommended</strong> in the management of bleeding related to anticoagulants — the small amounts of coagulation factors in FFP, the volume needed to stop the bleed (resulting in volume overload), and the availability of more effective agents make FFP an inappropriate first-line reversal agent.
+        </div>
+
+        <div class="section-label">Available Pro-Coagulant Agents</div>
+        <div style="overflow-x:auto;margin-bottom:24px">
+          <table style="width:100%;border-collapse:collapse;font-size:12px;color:var(--text2);background:var(--bg);border:1px solid var(--border);border-radius:10px;overflow:hidden">
+            <thead>
+              <tr style="background:var(--border2);color:var(--text-blue-bright)">
+                <th style="padding:10px 12px;text-align:left;font-weight:700;border-bottom:1px solid var(--border)">Agent</th>
+                <th style="padding:10px 12px;text-align:left;font-weight:700;border-bottom:1px solid var(--border)">Product</th>
+                <th style="padding:10px 12px;text-align:left;font-weight:700;border-bottom:1px solid var(--border)">Mechanism</th>
+                <th style="padding:10px 12px;text-align:left;font-weight:700;border-bottom:1px solid var(--border)">Comments</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top;color:var(--text);font-weight:600">Idarucizumab (Praxbind)</td>
+                <td style="padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top">Humanized monoclonal antibody fragment (Fab)</td>
+                <td style="padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top">Binds dabigatran and its acylglucuronide metabolites; completely reverses dabigatran effect in 4 hours in 89% of patients.</td>
+                <td style="padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top">
+                  <ul style="padding-left:16px;margin:0;display:flex;flex-direction:column;gap:4px">
+                    <li>Use <strong style="color:var(--text)">only</strong> for dabigatran reversal</li>
+                    <li>Flush with sterile 0.9% NaCl before and after administration</li>
+                    <li>Give as two 2.5 g consecutive IV infusions, or as IV bolus injection via syringe (both 2.5 g vials one after another)</li>
+                    <li>Contains sorbitol — caution in hereditary fructose intolerance</li>
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <td rowspan="3" style="padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top;color:var(--text);font-weight:600">Prothrombin Complex Concentrates (PCC)</td>
+                <td style="padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top"><strong style="color:var(--text)">3-factor PCC:</strong><br>Profilnine, Bebulin</td>
+                <td style="padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top">Contain concentrated inactive forms of clotting factors II, IX, and X.</td>
+                <td style="padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top">
+                  <ul style="padding-left:16px;margin:0;display:flex;flex-direction:column;gap:4px">
+                    <li><strong style="color:var(--text)">Bebulin contains heparin</strong> — caution in HIT</li>
+                    <li><strong style="color:var(--text)">Profilnine does NOT contain heparin</strong>; 25–50 IU/kg IV; max dose 5000 IU</li>
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top"><strong style="color:var(--text)">4-factor PCC:</strong><br>Kcentra</td>
+                <td style="padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top">Contains concentrated inactive forms of clotting factors II, VII, IX, and X.</td>
+                <td style="padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top">
+                  <ul style="padding-left:16px;margin:0;display:flex;flex-direction:column;gap:4px">
+                    <li>Contains a <strong style="color:var(--text)">small amount of heparin</strong> — caution in HIT</li>
+                    <li>Max dose <strong style="color:var(--text)">5000 units</strong></li>
+                    <li>Max infusion rate <strong style="color:var(--text)">8.4 mL/minute</strong></li>
+                  </ul>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top"><strong style="color:var(--text)">4-factor PCC:</strong><br>FEIBA <span style="color:var(--text3);font-weight:400">(not in KP formulary)</span></td>
+                <td style="padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top">Contains inactive forms of prothrombin, FVII, FIX and FX, and active FVIIa.</td>
+                <td style="padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top"><strong style="color:#fca5a5">Increased incidence of thrombosis</strong> due to the presence of active FVIIa.</td>
+              </tr>
+              <tr>
+                <td style="padding:10px 12px;vertical-align:top;color:var(--text);font-weight:600">Tranexamic Acid</td>
+                <td style="padding:10px 12px;vertical-align:top"><em>—</em></td>
+                <td style="padding:10px 12px;vertical-align:top">Antifibrinolytic agent.</td>
+                <td style="padding:10px 12px;vertical-align:top"><strong style="color:var(--text)">15–30 mg/kg IV</strong> may be useful in patients with refractory bleeding.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section-label">TSOA Key Characteristics</div>
+        <div style="overflow-x:auto;margin-bottom:20px">
+          <table style="width:100%;border-collapse:collapse;font-size:11.5px;color:var(--text2);background:var(--bg);border:1px solid var(--border);border-radius:10px;overflow:hidden">
+            <thead>
+              <tr style="background:var(--border2);color:var(--text-blue-bright)">
+                <th style="padding:9px 10px;text-align:left;font-weight:700;border-bottom:1px solid var(--border)">Parameter</th>
+                <th style="padding:9px 10px;text-align:left;font-weight:700;border-bottom:1px solid var(--border)">Dabigatran<br><span style="color:var(--text3);font-weight:500">(Pradaxa)</span></th>
+                <th style="padding:9px 10px;text-align:left;font-weight:700;border-bottom:1px solid var(--border)">Rivaroxaban<br><span style="color:var(--text3);font-weight:500">(Xarelto)</span></th>
+                <th style="padding:9px 10px;text-align:left;font-weight:700;border-bottom:1px solid var(--border)">Apixaban<br><span style="color:var(--text3);font-weight:500">(Eliquis)</span></th>
+                <th style="padding:9px 10px;text-align:left;font-weight:700;border-bottom:1px solid var(--border)">Edoxaban<br><span style="color:var(--text3);font-weight:500">(Savaysa)</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding:9px 10px;border-bottom:1px solid var(--border);vertical-align:top;color:var(--text);font-weight:600">Mechanism of Action</td>
+                <td style="padding:9px 10px;border-bottom:1px solid var(--border);vertical-align:top">Direct Thrombin Inhibitor — binds active site to prevent thrombin-mediated fibrin formation, feedback activation of FV, FVIII, FXI, and platelet activation</td>
+                <td style="padding:9px 10px;border-bottom:1px solid var(--border);vertical-align:top">Direct Factor Xa Inhibitor — targets FXa active site to attenuate thrombin generation and thrombin-mediated effects</td>
+                <td style="padding:9px 10px;border-bottom:1px solid var(--border);vertical-align:top">Direct Factor Xa Inhibitor — targets FXa active site to attenuate thrombin generation and thrombin-mediated effects</td>
+                <td style="padding:9px 10px;border-bottom:1px solid var(--border);vertical-align:top">Direct Factor Xa Inhibitor — targets FXa active site to attenuate thrombin generation and thrombin-mediated effects</td>
+              </tr>
+              <tr>
+                <td style="padding:9px 10px;border-bottom:1px solid var(--border);color:var(--text);font-weight:600">Renal elimination</td>
+                <td style="padding:9px 10px;border-bottom:1px solid var(--border)">80%</td>
+                <td style="padding:9px 10px;border-bottom:1px solid var(--border)">66%</td>
+                <td style="padding:9px 10px;border-bottom:1px solid var(--border)">27%</td>
+                <td style="padding:9px 10px;border-bottom:1px solid var(--border)">50%</td>
+              </tr>
+              <tr>
+                <td style="padding:9px 10px;border-bottom:1px solid var(--border);color:var(--text);font-weight:600">Hepatic elimination</td>
+                <td style="padding:9px 10px;border-bottom:1px solid var(--border)">20%</td>
+                <td style="padding:9px 10px;border-bottom:1px solid var(--border)">33%</td>
+                <td style="padding:9px 10px;border-bottom:1px solid var(--border)">73%</td>
+                <td style="padding:9px 10px;border-bottom:1px solid var(--border)">50%</td>
+              </tr>
+              <tr>
+                <td style="padding:9px 10px;border-bottom:1px solid var(--border);color:var(--text);font-weight:600">Terminal half-life (hours)</td>
+                <td style="padding:9px 10px;border-bottom:1px solid var(--border)">12–17</td>
+                <td style="padding:9px 10px;border-bottom:1px solid var(--border)">7–11</td>
+                <td style="padding:9px 10px;border-bottom:1px solid var(--border)">9–14</td>
+                <td style="padding:9px 10px;border-bottom:1px solid var(--border)">10–14</td>
+              </tr>
+              <tr>
+                <td style="padding:9px 10px;border-bottom:1px solid var(--border);color:var(--text);font-weight:600">Onset of action (hours)</td>
+                <td style="padding:9px 10px;border-bottom:1px solid var(--border)">0.5–2</td>
+                <td style="padding:9px 10px;border-bottom:1px solid var(--border)">2–4</td>
+                <td style="padding:9px 10px;border-bottom:1px solid var(--border)">3–4</td>
+                <td style="padding:9px 10px;border-bottom:1px solid var(--border)">1–2</td>
+              </tr>
+              <tr>
+                <td style="padding:9px 10px;border-bottom:1px solid var(--border);color:var(--text);font-weight:600">Metabolism / drug interactions</td>
+                <td style="padding:9px 10px;border-bottom:1px solid var(--border)">P-gp</td>
+                <td style="padding:9px 10px;border-bottom:1px solid var(--border)">P-gp, CYP3A4, (CYP2J2)</td>
+                <td style="padding:9px 10px;border-bottom:1px solid var(--border)">P-gp, CYP3A4</td>
+                <td style="padding:9px 10px;border-bottom:1px solid var(--border)">P-gp</td>
+              </tr>
+              <tr>
+                <td style="padding:9px 10px;border-bottom:1px solid var(--border);color:var(--text);font-weight:600">Bioavailability</td>
+                <td style="padding:9px 10px;border-bottom:1px solid var(--border)">7%</td>
+                <td style="padding:9px 10px;border-bottom:1px solid var(--border)">80%</td>
+                <td style="padding:9px 10px;border-bottom:1px solid var(--border)">50%</td>
+                <td style="padding:9px 10px;border-bottom:1px solid var(--border)">62%</td>
+              </tr>
+              <tr>
+                <td style="padding:9px 10px;border-bottom:1px solid var(--border);color:var(--text);font-weight:600">Hemodialysis</td>
+                <td style="padding:9px 10px;border-bottom:1px solid var(--border)">Yes — 60% removal</td>
+                <td style="padding:9px 10px;border-bottom:1px solid var(--border)">No</td>
+                <td style="padding:9px 10px;border-bottom:1px solid var(--border)">No</td>
+                <td style="padding:9px 10px;border-bottom:1px solid var(--border)">No</td>
+              </tr>
+              <tr>
+                <td style="padding:9px 10px;border-bottom:1px solid var(--border);color:var(--text);font-weight:600">Utility of Actidose post-ingestion</td>
+                <td style="padding:9px 10px;border-bottom:1px solid var(--border)">2 to 4 hours</td>
+                <td style="padding:9px 10px;border-bottom:1px solid var(--border)">2 hours</td>
+                <td style="padding:9px 10px;border-bottom:1px solid var(--border)">4 to 6 hours</td>
+                <td style="padding:9px 10px;border-bottom:1px solid var(--border)">2 hours</td>
+              </tr>
+              <tr>
+                <td style="padding:9px 10px;color:var(--text);font-weight:600">Pre-op lab tests <span style="color:var(--text3);font-weight:400">(currently not available)</span></td>
+                <td style="padding:9px 10px">Diluted TT</td>
+                <td style="padding:9px 10px">Anti-FXa for rivaroxaban</td>
+                <td style="padding:9px 10px">Anti-FXa for apixaban</td>
+                <td style="padding:9px 10px">Anti-FXa for edoxaban</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="font-size:11px;color:var(--text3);text-align:right;margin-bottom:18px;font-style:italic">
+          Submitted to Regional Pharmacy and Therapeutic Committee SCAL for Approval — November 10, 2015.
+        </div>
+
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
-          <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 Official Guideline</div>
+          <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 Original Source Document</div>
           <a href="https://view.officeapps.live.com/op/view.aspx?src=https://kimtrinh.github.io/er-documentation/assets/doac-bleeding-management.docx" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue2);border:1px solid var(--blue);border-radius:8px;color:#fff;font-size:12px;font-weight:600;text-decoration:none">⬇ Open in Word</a>
         </div>
         <iframe src="https://view.officeapps.live.com/op/embed.aspx?src=https://kimtrinh.github.io/er-documentation/assets/doac-bleeding-management.docx" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="DOAC TSOA Bleeding Management Guideline"></iframe>
