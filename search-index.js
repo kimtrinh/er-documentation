@@ -490,6 +490,7 @@ const SEARCH_INDEX = [
   // ── SITE PAGES ──────────────────────────────────────────────────────────
   {type:'page',i:'🤝',t:'Agreements & Protocols',s:'Kaiser  ·  SCPMG  ·  department agreements  ·  policies  ·  clinical protocols',g:'Reference',gc:'t-algo',u:'service-agreements.html'},
   {type:'page',i:'🔗',t:'External Links',s:'useful links  ·  references  ·  resources  ·  clinical tools  ·  external sites',g:'Reference',gc:'t-algo',u:'links.html'},
+  {type:'page',i:'📑',t:'Site Index',s:'sitemap  ·  index  ·  table of contents  ·  TOC  ·  browse  ·  tree  ·  every page  ·  every card  ·  outline  ·  directory of contents  ·  index of everything',g:'Reference',gc:'t-algo',u:'sitemap.html'},
   {type:'page',i:'🗺️',t:'Roadmap',s:'upcoming features  ·  planned additions  ·  site roadmap',g:'Reference',gc:'t-algo',u:'roadmap.html'},
   {type:'page',i:'🆕',t:"What's New",s:'changelog  ·  site updates  ·  new features  ·  recent changes  ·  release notes',g:'Reference',gc:'t-algo',u:'changelog.html'},
   {type:'page',i:'🌀',t:'Vertigo Helper',s:'vertigo  ·  dizziness  ·  BPPV  ·  central vs peripheral  ·  HINTS exam  ·  nystagmus  ·  cerebellar stroke  ·  vestibular',g:'Reference',gc:'t-algo',u:'vertigo-helper.html'},
