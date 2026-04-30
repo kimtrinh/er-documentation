@@ -172,6 +172,7 @@ const SEARCH_INDEX = [
   {type:'calc',i:'🧮',t:'YEARS Algorithm',s:'PE  ·  d-dimer threshold  ·  CT reduction strategy  ·  hemoptysis  ·  DVT signs',g:'Calculator',gc:'t-calc',u:'calculators.html#calc-years'},
   {type:'calc',i:'🧮',t:'Wells DVT Score',s:'DVT probability  ·  D-dimer threshold  ·  deep vein thrombosis',g:'Calculator',gc:'t-calc',u:'calculators.html#calc-wellsdvt'},
   {type:'calc',i:'🧮',t:'ABCD2 Score',s:'TIA  ·  early stroke risk  ·  admission vs follow-up  ·  neurology',g:'Calculator',gc:'t-calc',u:'calculators.html#calc-abcd2'},
+  {type:'calc',i:'🧮',t:'NIHSS',s:'NIH Stroke Scale  ·  acute stroke severity  ·  thrombolysis  ·  thrombectomy  ·  neurology',g:'Calculator',gc:'t-calc',u:'calculators.html#calc-nihss'},
   {type:'calc',i:'🧮',t:'CHA2DS2-VASc Score',s:'atrial fibrillation  ·  stroke risk  ·  anticoagulation discussion',g:'Calculator',gc:'t-calc',u:'calculators.html#calc-cha2ds2vasc'},
   {type:'calc',i:'🧮',t:'Canadian CT Head Rule',s:'Head trauma  ·  CT indication  ·  minor head injury  ·  GCS',g:'Calculator',gc:'t-calc',u:'calculators.html#calc-cthead'},
   {type:'calc',i:'🧮',t:'LRINEC Score',s:'Necrotizing fasciitis  ·  soft tissue infection  ·  necrotizing',g:'Calculator',gc:'t-calc',u:'calculators.html#calc-softtissue'},
