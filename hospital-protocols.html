@@ -247,6 +247,14 @@ main{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-colu
         </div>
       </div>
 
+      <div class="list-item" data-target="bbp-exposure-protocol" data-keywords="bloodborne pathogen BBP post exposure needlestick sharps injury HIV HepC HepB HBsAG HBsAb rapid HIV PEP prophylaxis employee health KOJ Kaiser on the Job occupational exposure mucous membrane percutaneous DWC-1 SRI supervisor report injury Sedgwick Teresa Gwinn Sherri Fuchs Christine Petrovick Dr Perez Fontana Ontario fontana ontario FMC OMC source patient labs employee health 427-7060 427-3917 427-6057 427-4191 427-4198 724-2332 724-5860">
+        <div class="li-title">Bloodborne Pathogen Post-Exposure Protocol</div>
+        <div class="li-meta">
+          <span class="li-badge red">Exposure</span>
+          <span class="li-badge teal">Employee Health</span>
+        </div>
+      </div>
+
       <!-- SECTION: Bedside Mixtures & Procedures -->
       <div class="list-section-header">💊 Bedside Mixtures &amp; Procedures</div>
 
@@ -926,6 +934,248 @@ main{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-colu
           </ul>
           <div style="font-weight:700;color:var(--text);margin:14px 0 6px">Source</div>
           <div style="color:var(--text3);font-size:12px">Mike Schwartzwald (Chief, ED) · Feb 19, 2026 · internal clarification email</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ BLOODBORNE PATHOGEN POST-EXPOSURE PROTOCOL ══ -->
+    <div class="protocol-panel" id="bbp-exposure-protocol">
+      <style>
+        .bbp-callout{padding:12px 14px;background:#2f1114;border:1px solid var(--redBorder);border-left:3px solid #fca5a5;border-radius:8px;color:#fecaca;font-weight:700;font-size:13px}
+        .bbp-callout small{display:block;color:#fca5a5;font-weight:500;margin-top:4px;font-size:11px;letter-spacing:.04em;text-transform:uppercase}
+        .bbp-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+        .bbp-col{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--text2);line-height:1.55}
+        .bbp-col h4{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--text);padding-bottom:6px;border-bottom:1px solid var(--border);margin-bottom:8px}
+        .bbp-col.employee h4{color:#fcd34d}
+        .bbp-col.provider h4{color:#86efac}
+        .bbp-col.manager h4{color:#93c5fd}
+        .bbp-col ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px}
+        .bbp-col ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
+        .bbp-section-title{font-size:13px;font-weight:800;color:var(--text);text-transform:uppercase;letter-spacing:.08em;padding-bottom:6px;border-bottom:2px solid var(--blue2);margin:4px 0 12px}
+        .bbp-loc{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-size:13px;color:var(--text2);line-height:1.55}
+        .bbp-loc-name{font-weight:800;color:var(--text);font-size:12px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+        .bbp-loc-name .pill{display:inline-block;font-family:var(--mono);font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;border:1px solid var(--border2);background:var(--surface);color:var(--text2);margin-right:6px;letter-spacing:.04em;text-transform:none}
+        .bbp-phone{font-family:var(--mono);font-weight:700;color:#93c5fd}
+        .bbp-labs{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+        .bbp-lab-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--text2);line-height:1.55}
+        .bbp-lab-card h4{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--text);padding-bottom:6px;border-bottom:1px solid var(--border);margin-bottom:8px}
+        .bbp-lab-list{display:flex;flex-wrap:wrap;gap:6px}
+        .bbp-lab-list code{font-family:var(--mono);font-size:12px;font-weight:700;background:var(--surface);border:1px solid var(--border2);border-radius:6px;padding:4px 9px;color:#fcd34d}
+        .bbp-risk{background:var(--surface2);border:1px solid var(--border);border-radius:10px;overflow:hidden;font-family:var(--mono)}
+        .bbp-risk table{width:100%;border-collapse:collapse;font-size:13px}
+        .bbp-risk th{background:var(--blue3);color:#93c5fd;font-weight:800;padding:8px 12px;border-bottom:1px solid var(--blue2);font-size:11px;text-transform:uppercase;letter-spacing:.06em;text-align:left}
+        .bbp-risk td{padding:7px 12px;border-bottom:1px solid var(--border);color:var(--text)}
+        .bbp-risk td:last-child{text-align:right;color:#fcd34d;font-weight:700}
+        .bbp-risk tr:last-child td{border-bottom:none}
+        .bbp-contacts{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}
+        .bbp-contact{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-size:13px;color:var(--text2);line-height:1.5}
+        .bbp-contact-name{font-weight:700;color:var(--text);margin-bottom:2px}
+        .bbp-contact a{color:#93c5fd;text-decoration:none;font-family:var(--mono);font-size:12px;word-break:break-all}
+        .bbp-contact a:hover{text-decoration:underline}
+      </style>
+      <div class="info-card">
+        <div class="card-top">
+          <div>
+            <div class="card-title">Bloodborne Pathogen Post-Exposure Protocol</div>
+            <div class="card-dept">Employee Health · Occupational Medicine · Kaiser Fontana / Ontario</div>
+          </div>
+          <div class="decision-badge red">🩸 Post-Exposure</div>
+        </div>
+        <hr class="divider"/>
+        <div class="bbp-callout">
+          ⚠️ Treatment must be administered within <u>2 hours</u> of exposure.
+          <small>Wash affected area for 15 minutes · Notify supervisor · Report to KOJ or ED immediately</small>
+        </div>
+      </div>
+
+      <!-- ALGORITHM: Three-column actions -->
+      <div class="info-card">
+        <div class="bbp-section-title">📋 BBP Exposure Algorithm — What Next?</div>
+        <div class="bbp-cols">
+
+          <div class="bbp-col employee">
+            <h4>👤 Injured Employee</h4>
+            <ol>
+              <li><b>Immediately wash</b> affected area for <b>15 minutes</b>. If eyes exposed, use eye-wash station or saline flush.</li>
+              <li><b>Notify supervisor or manager</b> of the injury.</li>
+              <li><b>Immediately report</b> to Kaiser on the Job (KOJ) Mon–Fri 8:30 am – 5:30 pm <b>or</b> the Emergency Department. <b>Treatment must be administered within 2 hours of exposure.</b></li>
+              <li>Return completed BBP Exposure Report and DWC-1 form to direct supervisor or DA on duty.</li>
+              <li>Follow up with Employee Health <span class="bbp-phone">(909) 427-7060</span>. Completed BBP Exposure Report must be returned to Employee Health within <b>48 hours</b>.</li>
+            </ol>
+          </div>
+
+          <div class="bbp-col provider">
+            <h4>🩺 Medical Provider</h4>
+            <ol>
+              <li>MD orders appropriate labs (see BBP forms).</li>
+              <li>Evaluates injured employee. Order appropriate prescriptions (call in Rx on stat Rx line).</li>
+              <li>Completes MD portion of BBP Exposure Report. Returns report to employee.</li>
+            </ol>
+          </div>
+
+          <div class="bbp-col manager">
+            <h4>🧑‍💼 Manager / DA</h4>
+            <ol>
+              <li>With the injured employee, complete the <b>top portion of the BBP Exposure Report</b>. Form must accompany the employee to the provider. Include <b>device type, manufacturer, and body part exposed</b>.</li>
+              <li>Send the employee to the appropriate treatment location (KOJ or ED) immediately. Give employee the <b>DWC-1 form</b>.</li>
+              <li>Inform <b>source patient</b> of incident and need for blood testing. Once consent received, arrange blood testing on source patient — order by MD immediately.</li>
+              <li>Email source patient information to Employee Health: <a href="mailto:Teresa.X.Gwinn@kp.org">Teresa.X.Gwinn@kp.org</a> or <a href="mailto:Sherri.L.Fuchs@kp.org">Sherri.L.Fuchs@kp.org</a>.</li>
+              <li>Complete the <b>Supervisor's Report of Injury (SRI)</b> within <b>24 hours</b>. Fax or email all completed forms to Employee Health and Sedgwick.</li>
+            </ol>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- TREATMENT LOCATIONS -->
+      <div class="info-card">
+        <div class="bbp-section-title">📍 Where to Report — Treatment Locations</div>
+        <div class="bbp-cols">
+
+          <div class="bbp-loc">
+            <div class="bbp-loc-name"><span class="pill">FMC</span>Fontana KOJ — Occupational Medicine</div>
+            <div>MOB-3 Basement</div>
+            <div>Office hours: <b>8:30 am – 5:00 pm</b></div>
+            <div><span class="bbp-phone">(909) 427-3917</span></div>
+          </div>
+
+          <div class="bbp-loc">
+            <div class="bbp-loc-name"><span class="pill">FMC</span>Fontana Emergency Dept</div>
+            <div>Located in Main Hospital</div>
+            <div><b>After 5 pm:</b> Report to triage nurse — triage nurse will notify the MD.</div>
+          </div>
+
+          <div class="bbp-loc">
+            <div class="bbp-loc-name"><span class="pill">OMC</span>Ontario KOJ — Occupational Medicine</div>
+            <div><b>MOB-A:</b> Check in at the front desk on the first floor.</div>
+            <div>Occupational Medicine: <b>4th floor, Suite 404</b></div>
+            <div>Office hours: <b>8:30 am – 5:00 pm</b> (closed for lunch 12:10–1:10 pm)</div>
+            <div><span class="bbp-phone">(909) 724-2332</span> · if no answer call <span class="bbp-phone">(909) 427-3917</span></div>
+          </div>
+
+          <div class="bbp-loc">
+            <div class="bbp-loc-name"><span class="pill">OMC</span>Ontario Emergency Department</div>
+            <div>Located in Main Hospital, First floor.</div>
+            <div><b>After hours (5 pm – 8:30 am):</b> Inform triage nurse of BBP exposure — triage nurse will notify the MD. May call ED Charge Nurse in advance: <span class="bbp-phone">(909) 724-5860</span>.</div>
+          </div>
+
+        </div>
+        <div style="margin-top:12px;padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-left:3px solid var(--amberBorder);border-radius:8px;font-size:12px;color:var(--text2)">
+          <b style="color:#fcd34d">Reminder:</b> Employees should be seen <b>within 2 hours</b> of exposure in the ER by an MD in case PEP is indicated.
+        </div>
+      </div>
+
+      <!-- LAB ORDERS -->
+      <div class="info-card">
+        <div class="bbp-section-title">🧪 Lab Orders — Source Patient & Health Care Worker</div>
+        <div class="bbp-labs">
+
+          <div class="bbp-lab-card">
+            <h4>Source Patient Labs</h4>
+            <div class="bbp-lab-list">
+              <code>HBsAG</code>
+              <code>HepC</code>
+              <code>Rapid HIV</code>
+            </div>
+            <div style="margin-top:10px;font-size:12px">
+              Inform source patient immediately and request permission for lab draw. If unable to discuss, may add lab order to blood already drawn.
+            </div>
+            <div style="margin-top:8px;font-size:12px">
+              <b style="color:var(--text)">Who may order:</b> MD at time of incident; Nurse Manager / Charge may contact the patient. Contact source PCP or Attending to request lab order.
+            </div>
+          </div>
+
+          <div class="bbp-lab-card">
+            <h4>Health Care Worker Labs</h4>
+            <div class="bbp-lab-list">
+              <code>HBsAb</code>
+              <code>HIV</code>
+              <code>HepC</code>
+            </div>
+            <div style="margin-top:10px;font-size:12px">
+              <b style="color:var(--text)">PEP:</b> The MD will evaluate risk of exposure, educate staff, and determine if prophylaxis is warranted. Provider completes the BBP report and sends to Employee Health.
+            </div>
+          </div>
+
+        </div>
+        <div style="margin-top:12px;padding:10px 12px;background:var(--surface2);border:1px solid var(--border);border-left:3px solid var(--blue2);border-radius:8px;font-size:12px;color:var(--text2);line-height:1.55">
+          <b style="color:#93c5fd">Non-medical departments</b> (lab, environmental services, diagnostic imaging): notify the manager of the department or charge nurse where the incident occurred immediately. Also inform the HCW manager.
+        </div>
+        <div style="margin-top:8px;font-size:12px;color:var(--text3);line-height:1.55">
+          Be sure to complete required BBP form fields and a callback number. Indicate <b>type of sharps and manufacturer</b> — vital for the regional data log. Employee Health will contact the HCW to review labs once available and inform if further follow-up is needed. The source patient's PCP should report lab results to the patient.
+        </div>
+      </div>
+
+      <!-- HIV RISK TABLE -->
+      <div class="info-card">
+        <div class="bbp-section-title">📊 Estimated Per-Act Risk for HIV Acquisition</div>
+        <div class="bbp-risk">
+          <table>
+            <tr><th>Exposure route</th><th>Risk per 10,000 exposures<br/>(infected source)</th></tr>
+            <tr><td>Blood transfusion</td><td>9,000</td></tr>
+            <tr><td>Needle-sharing injection-drug use</td><td>67</td></tr>
+            <tr><td>Percutaneous needle stick</td><td>30</td></tr>
+            <tr><td>Mucous membrane exposure</td><td>9</td></tr>
+          </table>
+        </div>
+        <div style="margin-top:10px;font-size:11px;color:var(--text3);font-style:italic">Source: HCW Information Sheet — Fontana / Ontario Occupational Exposure</div>
+      </div>
+
+      <!-- HCW FOLLOW-UP -->
+      <div class="info-card">
+        <div class="bbp-section-title">📞 HCW Follow-Up & While Waiting for Lab Results</div>
+        <div class="bbp-cols">
+          <div class="bbp-col">
+            <h4 style="color:#86efac">Follow-Up Instructions</h4>
+            <ol>
+              <li>Call Employee Health — <b>Teresa Gwinn</b> @ tie line <span class="bbp-phone">8-250-7060</span> or <b>Sherri Fuchs</b> @ tie line <span class="bbp-phone">8-250-6057</span> for lab results <b>before running out of medications</b>.</li>
+              <li>Call Employee Health if you develop: fatigue, lightheadedness or dizziness, abdominal discomfort, vomiting, yellowing skin or eyes, dark urine, or muscle aches.</li>
+            </ol>
+          </div>
+          <div class="bbp-col">
+            <h4 style="color:#fcd34d">While Waiting for Lab Results</h4>
+            <ul>
+              <li>Take medications as prescribed (if medications given).</li>
+              <li>Practice safe sex.</li>
+              <li>Do <b>not</b> breastfeed.</li>
+              <li>Do <b>not</b> share toothbrushes, razors, or other devices that could be contaminated with blood.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- KEY CONTACTS -->
+      <div class="info-card">
+        <div class="bbp-section-title">☎️ Key Contacts</div>
+        <div class="bbp-contacts">
+          <div class="bbp-contact">
+            <div class="bbp-contact-name">Employee Health (FMC & OMC)</div>
+            <div><span class="bbp-phone">(909) 427-7060</span></div>
+            <div>Fax: <span class="bbp-phone">(909) 427-4240</span></div>
+            <div><a href="mailto:Teresa.X.Gwinn@kp.org">Teresa.X.Gwinn@kp.org</a></div>
+            <div><a href="mailto:Sherri.L.Fuchs@kp.org">Sherri.L.Fuchs@kp.org</a></div>
+          </div>
+          <div class="bbp-contact">
+            <div class="bbp-contact-name">Kaiser on the Job (KOJ)</div>
+            <div><span class="bbp-phone">(909) 427-3917</span> — FMC & OMC</div>
+          </div>
+          <div class="bbp-contact">
+            <div class="bbp-contact-name">Environmental Health & Safety / Workplace Safety</div>
+            <div><span class="bbp-phone">(909) 427-7300</span></div>
+          </div>
+          <div class="bbp-contact">
+            <div class="bbp-contact-name">Christine Petrovick — Injury Prevention Coordinator</div>
+            <div>Employee Health · MOB2 Basement</div>
+            <div><span class="bbp-phone">(909) 427-6057</span></div>
+            <div>Kaiser Fontana: <span class="bbp-phone">(909) 427-4191</span></div>
+          </div>
+          <div class="bbp-contact">
+            <div class="bbp-contact-name">HIV PEP Information</div>
+            <div>Dr. M. Perez — <span class="bbp-phone">(909) 427-4198</span></div>
+          </div>
+        </div>
+        <div style="margin-top:12px;font-size:11px;color:var(--text3);font-style:italic">
+          Source: Kaiser Permanente — Bloodborne Pathogen Post Exposure Protocol · Southern California Permanente Medical Group · Kaiser Foundation Hospital · Fontana / Ontario · Employee Health
         </div>
       </div>
     </div>
