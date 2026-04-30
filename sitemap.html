@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="stylesheet" href="theme.css?v=2"/>
+<title>Site Index — ER Documentation</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=DM+Sans:wght@400;500;600;700;800&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080f1a;--surface:#0d1829;--surface2:#111f35;--surface3:#162540;
+  --border:#1a2d48;--border2:#243d5c;
+  --text:#e8f0fc;--text2:#8fa8c8;--text3:#4a6280;--text-blue:#93c5fd;--text-blue-bright:#bfdbfe;
+  --blue:#3b82f6;--blue2:#1d4ed8;--blue3:#0d2038;
+  --mono:'JetBrains Mono',monospace;--sans:'DM Sans',system-ui,sans-serif;
+}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
+
+/* NAV */
+.sitenav{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.sitenav-inner{max-width:1200px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:6px;height:46px;overflow:hidden}
+.nav-logo{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--blue);white-space:nowrap;flex-shrink:0;text-decoration:none;margin-right:6px}
+.nav-links{display:flex;flex:1;min-width:0;gap:1px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;white-space:nowrap}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-link{padding:5px 10px;border-radius:6px;font-size:12px;font-weight:600;color:var(--text2);text-decoration:none;white-space:nowrap;transition:.15s}
+.nav-link:hover{background:var(--surface2);color:var(--text)}
+.nav-link.active{background:#1d4ed8;color:#fff}
+@media(max-width:640px){.nav-link{font-size:11px;padding:4px 8px}}
+
+/* HEADER */
+header{background:linear-gradient(160deg,#0f1e38 0%,#080f1a 100%);border-bottom:1px solid var(--border);padding:28px 20px}
+.header-inner{max-width:980px;margin:0 auto}
+.kicker{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.9px;font-weight:700}
+h1{font-size:28px;line-height:1.15;margin-top:6px;font-weight:800}
+.subtitle{font-size:13px;color:var(--text2);margin-top:6px;line-height:1.6}
+
+/* MAIN */
+main{max-width:980px;margin:0 auto;padding:24px 20px 80px}
+
+/* TOOLBAR */
+.idx-toolbar{position:sticky;top:46px;z-index:50;background:var(--bg);padding:14px 0 12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;border-bottom:1px solid var(--border);margin-bottom:18px}
+.idx-filter-wrap{position:relative;flex:1;min-width:240px}
+.idx-filter{width:100%;padding:10px 36px 10px 36px;background:var(--surface);border:1px solid var(--border2);border-radius:9px;color:var(--text);font-size:14px;font-family:var(--sans);outline:none;transition:.15s}
+.idx-filter:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(59,130,246,.18)}
+.idx-filter::placeholder{color:var(--text3)}
+.idx-filter-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:14px;color:var(--text3);pointer-events:none}
+.idx-filter-clear{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:transparent;border:0;color:var(--text3);font-size:16px;cursor:pointer;width:22px;height:22px;border-radius:4px;display:none;align-items:center;justify-content:center}
+.idx-filter-clear:hover{background:var(--surface2);color:var(--text)}
+.idx-filter-clear.show{display:inline-flex}
+
+.idx-stats{font-size:12px;color:var(--text3);font-variant-numeric:tabular-nums;white-space:nowrap}
+.idx-actions{display:flex;gap:6px;flex-wrap:wrap}
+.idx-btn{padding:7px 12px;border-radius:7px;border:1px solid var(--border2);background:var(--surface);color:var(--text2);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);transition:.15s}
+.idx-btn:hover{border-color:var(--blue);color:var(--text-blue);background:var(--blue3)}
+
+/* TREE */
+.tree{display:flex;flex-direction:column;gap:10px}
+
+.tree-section{border:1px solid var(--border);border-radius:12px;background:var(--surface);overflow:hidden;transition:border-color .15s}
+.tree-section:hover{border-color:var(--border2)}
+.tree-section[hidden]{display:none}
+
+.tree-section-head{display:flex;align-items:center;gap:10px;padding:13px 16px;cursor:pointer;user-select:none;background:linear-gradient(180deg,var(--surface) 0%,#0a142a 100%);transition:background .15s}
+.tree-section-head:hover{background:var(--surface2)}
+.tree-twirl{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;color:var(--text3);transition:transform .15s;flex-shrink:0;font-size:10px;font-family:var(--mono)}
+.tree-section.open > .tree-section-head .tree-twirl{transform:rotate(90deg);color:var(--text-blue)}
+.tree-section-ico{font-size:18px;flex-shrink:0;line-height:1}
+.tree-section-title{font-size:14px;font-weight:700;color:var(--text);flex:1;min-width:0;letter-spacing:-.005em}
+.tree-count{font-size:11px;color:var(--text3);font-variant-numeric:tabular-nums;font-family:var(--mono);background:var(--bg);padding:2px 8px;border-radius:20px;border:1px solid var(--border)}
+.tree-count.filtered{color:#fbbf24;border-color:#b45309;background:#2b1f0a}
+.tree-page-link{padding:4px 10px;font-size:11px;font-weight:600;color:var(--text2);text-decoration:none;border:1px solid var(--border2);border-radius:6px;transition:.15s;white-space:nowrap;flex-shrink:0;font-family:var(--sans)}
+.tree-page-link:hover{border-color:var(--blue);color:var(--text-blue);background:var(--blue3)}
+
+.tree-section-body{display:none;border-top:1px solid var(--border);padding:6px 0 8px;background:#0a142a}
+.tree-section.open > .tree-section-body{display:block}
+
+/* GROUP */
+.tree-group{padding:2px 0}
+.tree-group-head{display:flex;align-items:center;gap:8px;padding:8px 18px 6px;font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.7px;font-weight:700;cursor:pointer;user-select:none;font-family:var(--sans)}
+.tree-group-head:hover{color:var(--text2)}
+.tree-group-twirl{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;color:var(--text3);transition:transform .15s;flex-shrink:0;font-size:9px;font-family:var(--mono)}
+.tree-group.open > .tree-group-head .tree-group-twirl{transform:rotate(90deg);color:var(--text-blue)}
+.tree-group-name{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tree-group-count{font-size:10px;color:var(--text3);font-variant-numeric:tabular-nums;font-family:var(--mono)}
+
+.tree-group-items{display:none}
+.tree-group.open > .tree-group-items{display:block}
+
+/* LEAF */
+.tree-leaf{display:flex;align-items:center;gap:10px;padding:7px 16px 7px 42px;text-decoration:none;color:var(--text2);font-size:13px;transition:background .12s,color .12s;border-left:2px solid transparent;line-height:1.4}
+.tree-leaf:hover{background:var(--blue3);color:var(--text);border-left-color:var(--blue)}
+.tree-leaf-ico{font-size:13px;width:18px;flex-shrink:0;text-align:center;opacity:.7}
+.tree-leaf:hover .tree-leaf-ico{opacity:1}
+.tree-leaf-title{flex:1;min-width:0;font-weight:500}
+.tree-leaf-arrow{color:var(--text3);font-size:11px;opacity:0;transition:opacity .12s}
+.tree-leaf:hover .tree-leaf-arrow{opacity:1;color:var(--text-blue)}
+
+/* When NO sub-groups, leaves are direct children of section-body — bring them in */
+.tree-section-body > .tree-leaf{padding-left:42px}
+
+.hi{background:rgba(251,191,36,.32);color:#fef3c7;border-radius:3px;padding:0 2px;font-weight:600}
+
+/* EMPTY */
+.tree-empty{text-align:center;padding:48px 20px;color:var(--text3);font-size:14px;display:none;background:var(--surface);border:1px dashed var(--border);border-radius:12px}
+.tree-empty.show{display:block}
+.tree-empty strong{display:block;font-size:16px;color:var(--text2);margin-bottom:6px}
+
+@media(max-width:640px){
+  h1{font-size:22px}
+  .idx-toolbar{flex-direction:column;align-items:stretch}
+  .idx-actions{justify-content:flex-end}
+  .tree-leaf{padding-left:34px}
+  .tree-page-link{display:none}
+}
+</style>
+<link rel="stylesheet" href="mobile.css">
+<script>document.documentElement.setAttribute('data-theme',localStorage.getItem('theme')||'dark');</script>
+<link rel="manifest" href="/manifest.json">
+</head>
+<body>
+
+<nav class="sitenav">
+  <div class="sitenav-inner">
+    <a class="nav-logo" href="index.html">⚡</a>
+    <div class="nav-links">
+      <a class="nav-link" href="index.html">🏠 Home</a>
+      <a class="nav-link" href="dotphrase.html">🧾 Documentation</a>
+      <a class="nav-link" href="calculators.html">🧮 Decision Support</a>
+      <a class="nav-link" href="rsi.html">🚨 Resuscitation</a>
+      <a class="nav-link" href="algorithms.html">🔀 Algorithms</a>
+      <a class="nav-link" href="neurohub.html">🧠 Neuro Hub</a>
+      <a class="nav-link" href="service-agreements.html">📑 Service Agreements</a>
+      <a class="nav-link" href="hospital-protocols.html">🏥 Hospital Protocols</a>
+      <a class="nav-link" href="ed-phone-directory.html">📞 Directory</a>
+      <a class="nav-link" href="service-requests.html">📋 Requests</a>
+      <a class="nav-link" href="links.html">🔗 Links</a>
+      <a class="nav-link" href="changelog.html">🆕 What's New</a>
+      <a class="nav-link active" href="sitemap.html">📑 Index</a>
+    </div>
+  </div>
+</nav>
+
+<header>
+  <div class="header-inner">
+    <div class="kicker">Site Map</div>
+    <h1>Site Index</h1>
+    <div class="subtitle">Every page, every card — collapsible tree, deep-linked. Press <kbd style="font-family:var(--mono);background:var(--surface2);padding:1px 6px;border-radius:4px;border:1px solid var(--border)">/</kbd> to filter.</div>
+  </div>
+</header>
+
+<main>
+  <div class="idx-toolbar" role="toolbar" aria-label="Index controls">
+    <div class="idx-filter-wrap">
+      <span class="idx-filter-icon" aria-hidden="true">🔍</span>
+      <input type="search" class="idx-filter" id="filter" placeholder="Filter — title, page, keyword…" autocomplete="off" aria-label="Filter site index">
+      <button type="button" class="idx-filter-clear" id="filterClear" aria-label="Clear filter" title="Clear">×</button>
+    </div>
+    <span class="idx-stats" id="stats">— sections · — items</span>
+    <div class="idx-actions">
+      <button type="button" class="idx-btn" id="expandAll">Expand all</button>
+      <button type="button" class="idx-btn" id="collapseAll">Collapse all</button>
+    </div>
+  </div>
+
+  <div class="tree" id="tree" role="tree" aria-label="Site contents"></div>
+  <div class="tree-empty" id="empty"><strong>No matches.</strong>Try a shorter or different query.</div>
+</main>
+
+<script src="search-index.js?v=3"></script>
+<script>
+// ── Site Index — auto-builds from SEARCH_INDEX ───────────────────────
+// Bucket every search-index entry by source page, then sub-bucket by
+// its existing `g` group label, and render as a collapsible tree with
+// live filter and per-section persistence.
+
+(function () {
+  // Page meta — order here = display order in the tree.
+  const PAGES = [
+    ['algorithms.html',         '🔀', 'Algorithms'],
+    ['service-agreements.html', '🤝', 'Service Agreements'],
+    ['hospital-protocols.html', '🏥', 'Hospital Protocols'],
+    ['ed-phone-directory.html', '📞', 'Phone Directory'],
+    ['dotphrase.html',          '📋', 'Dotphrases'],
+    ['calculators.html',        '🧮', 'Calculators'],
+    ['rsi.html',                '🚨', 'Resuscitation (RSI / Vasopressors)'],
+    ['neurohub.html',           '🧠', 'Neuro Hub'],
+    ['pedsfever.html',          '🌡️', 'Peds Fever'],
+    ['links.html',              '🔗', 'Quick Links'],
+    ['vertigo-helper.html',     '🌀', 'Vertigo Helper'],
+    ['mdm.html',                '🧾', 'MDM Builder'],
+    ['mdm-slash.html',          '⌨️', 'Slash Editor'],
+  ];
+
+  const STORAGE_KEY = 'er_doc_sitemap_state_v1';
+
+  function loadState() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); }
+    catch (_) { return {}; }
+  }
+  function saveState(s) {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); } catch (_) {}
+  }
+
+  let STATE = loadState();
+
+  function buildTree() {
+    if (typeof SEARCH_INDEX === 'undefined') {
+      console.warn('SEARCH_INDEX not loaded');
+      return [];
+    }
+    // Bucket entries by source page. We include type:'page' entries because
+    // some pages-as-tools (e.g. pedsfever.html) describe their sub-sections
+    // with type:'page' rows — those are real content, not meta. We DO skip
+    // bare meta-page rows that just point at the page itself with no anchor
+    // when ANOTHER entry already covers the same URL — those are dupes.
+    const byPath = new Map();
+    for (const e of SEARCH_INDEX) {
+      if (!e || !e.u) continue;
+      if (e.u.startsWith('http://') || e.u.startsWith('https://')) continue;
+      const path = e.u.split('#')[0].split('?')[0];
+      if (!path) continue;
+      if (!byPath.has(path)) byPath.set(path, []);
+      byPath.get(path).push(e);
+    }
+    // Drop the obvious self-meta entry: when a page has many entries AND one
+    // of them is a no-anchor type:'page' row, that one's a dupe of the
+    // section header — strip it.
+    for (const [p, arr] of byPath) {
+      if (arr.length <= 1) continue;
+      const meta = arr.findIndex(e => e.type === 'page' && !e.u.includes('#'));
+      if (meta >= 0) arr.splice(meta, 1);
+    }
+
+    const sections = [];
+    for (const [path, ico, label] of PAGES) {
+      const entries = byPath.get(path);
+      if (!entries || !entries.length) continue;
+      // Sub-group by `g` field; alphabetize within each group.
+      const groupsMap = new Map();
+      for (const e of entries) {
+        const g = e.g || 'Other';
+        if (!groupsMap.has(g)) groupsMap.set(g, []);
+        groupsMap.get(g).push(e);
+      }
+      const groups = Array.from(groupsMap.entries())
+        .map(([name, items]) => ({
+          name,
+          items: items.slice().sort((a, b) => (a.t || '').localeCompare(b.t || ''))
+        }))
+        .sort((a, b) => a.name.localeCompare(b.name));
+      sections.push({ path, ico, label, total: entries.length, groups });
+    }
+    return sections;
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[c]));
+  }
+
+  function highlight(text, q) {
+    if (!q) return escapeHtml(text);
+    const t = String(text);
+    const lower = t.toLowerCase();
+    const idx = lower.indexOf(q);
+    if (idx < 0) return escapeHtml(t);
+    return escapeHtml(t.slice(0, idx))
+      + '<span class="hi">' + escapeHtml(t.slice(idx, idx + q.length)) + '</span>'
+      + escapeHtml(t.slice(idx + q.length));
+  }
+
+  function matchesItem(it, q) {
+    if (!q) return true;
+    return ((it.t || '').toLowerCase().indexOf(q) >= 0)
+        || ((it.s || '').toLowerCase().indexOf(q) >= 0);
+  }
+
+  let TREE = [];
+
+  function render(rawQuery) {
+    const root  = document.getElementById('tree');
+    const empty = document.getElementById('empty');
+    const stats = document.getElementById('stats');
+    const q = (rawQuery || '').trim().toLowerCase();
+    const parts = [];
+
+    let totalShown = 0;
+    let sectionsShown = 0;
+
+    for (const sec of TREE) {
+      // Build filtered groups for this section.
+      const filteredGroups = sec.groups
+        .map(g => ({
+          name: g.name,
+          items: q ? g.items.filter(it => matchesItem(it, q)) : g.items
+        }))
+        .filter(g => g.items.length > 0);
+
+      if (q && !filteredGroups.length) continue;
+
+      const secCount = filteredGroups.reduce((acc, g) => acc + g.items.length, 0);
+      totalShown += secCount;
+      sectionsShown++;
+
+      const sectionOpen = q ? true : (STATE[sec.path] === true);
+      const countCls = (q && secCount !== sec.total) ? ' filtered' : '';
+      const countTxt = (q && secCount !== sec.total)
+        ? `${secCount} / ${sec.total}`
+        : String(sec.total);
+
+      parts.push(
+        `<div class="tree-section${sectionOpen ? ' open' : ''}" data-path="${escapeHtml(sec.path)}" role="treeitem" aria-expanded="${sectionOpen}">`,
+          `<div class="tree-section-head" data-toggle="section">`,
+            `<span class="tree-twirl" aria-hidden="true">▶</span>`,
+            `<span class="tree-section-ico">${sec.ico}</span>`,
+            `<span class="tree-section-title">${escapeHtml(sec.label)}</span>`,
+            `<span class="tree-count${countCls}">${countTxt}</span>`,
+            `<a class="tree-page-link" href="${escapeHtml(sec.path)}" data-pagelink>Open page →</a>`,
+          `</div>`,
+          `<div class="tree-section-body" role="group">`
+      );
+
+      // If only ONE group AND its name is generic ("Other"/page-name-ish),
+      // skip the group sub-level — just render leaves directly.
+      const skipGroupLevel = filteredGroups.length === 1
+        && (filteredGroups[0].name === 'Other'
+            || filteredGroups[0].name.toLowerCase() === sec.label.toLowerCase());
+
+      if (skipGroupLevel) {
+        for (const it of filteredGroups[0].items) {
+          parts.push(
+            `<a class="tree-leaf" href="${escapeHtml(it.u)}" role="treeitem">`,
+              `<span class="tree-leaf-ico">${escapeHtml(it.i || '·')}</span>`,
+              `<span class="tree-leaf-title">${highlight(it.t || '(untitled)', q)}</span>`,
+              `<span class="tree-leaf-arrow" aria-hidden="true">→</span>`,
+            `</a>`
+          );
+        }
+      } else {
+        for (const g of filteredGroups) {
+          const groupKey = sec.path + '::' + g.name;
+          const groupOpen = q ? true : (STATE[groupKey] === true);
+          parts.push(
+            `<div class="tree-group${groupOpen ? ' open' : ''}" data-key="${escapeHtml(groupKey)}" role="treeitem" aria-expanded="${groupOpen}">`,
+              `<div class="tree-group-head" data-toggle="group">`,
+                `<span class="tree-group-twirl" aria-hidden="true">▶</span>`,
+                `<span class="tree-group-name">${escapeHtml(g.name)}</span>`,
+                `<span class="tree-group-count">${g.items.length}</span>`,
+              `</div>`,
+              `<div class="tree-group-items" role="group">`
+          );
+          for (const it of g.items) {
+            parts.push(
+              `<a class="tree-leaf" href="${escapeHtml(it.u)}" role="treeitem">`,
+                `<span class="tree-leaf-ico">${escapeHtml(it.i || '·')}</span>`,
+                `<span class="tree-leaf-title">${highlight(it.t || '(untitled)', q)}</span>`,
+                `<span class="tree-leaf-arrow" aria-hidden="true">→</span>`,
+              `</a>`
+            );
+          }
+          parts.push(`</div></div>`);
+        }
+      }
+
+      parts.push(`</div></div>`);
+    }
+
+    root.innerHTML = parts.join('');
+    stats.textContent = sectionsShown
+      ? `${sectionsShown} section${sectionsShown === 1 ? '' : 's'} · ${totalShown} item${totalShown === 1 ? '' : 's'}${q ? ' · filtered' : ''}`
+      : (q ? 'no matches' : '0 items');
+    empty.classList.toggle('show', sectionsShown === 0);
+  }
+
+  // Build & first paint.
+  TREE = buildTree();
+  render('');
+
+  // ── Interactions ────────────────────────────────────────────────────
+  const filterInput = document.getElementById('filter');
+  const filterClear = document.getElementById('filterClear');
+
+  document.getElementById('tree').addEventListener('click', e => {
+    // Don't toggle when clicking the "Open page →" pill.
+    if (e.target.closest('[data-pagelink]')) return;
+
+    const sectionHead = e.target.closest('[data-toggle="section"]');
+    if (sectionHead) {
+      const section = sectionHead.parentElement;
+      const path = section.dataset.path;
+      const wasOpen = section.classList.contains('open');
+      section.classList.toggle('open');
+      section.setAttribute('aria-expanded', String(!wasOpen));
+      STATE[path] = !wasOpen;
+      saveState(STATE);
+      return;
+    }
+    const groupHead = e.target.closest('[data-toggle="group"]');
+    if (groupHead) {
+      const group = groupHead.parentElement;
+      const key = group.dataset.key;
+      const wasOpen = group.classList.contains('open');
+      group.classList.toggle('open');
+      group.setAttribute('aria-expanded', String(!wasOpen));
+      STATE[key] = !wasOpen;
+      saveState(STATE);
+      return;
+    }
+  });
+
+  let filterTimer = null;
+  function applyFilter() {
+    const v = filterInput.value;
+    filterClear.classList.toggle('show', v.length > 0);
+    clearTimeout(filterTimer);
+    filterTimer = setTimeout(() => render(v), 60);
+  }
+  filterInput.addEventListener('input', applyFilter);
+  filterInput.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      filterInput.value = '';
+      applyFilter();
+      filterInput.blur();
+    }
+  });
+  filterClear.addEventListener('click', () => {
+    filterInput.value = '';
+    applyFilter();
+    filterInput.focus();
+  });
+
+  document.getElementById('expandAll').addEventListener('click', () => {
+    for (const sec of TREE) {
+      STATE[sec.path] = true;
+      for (const g of sec.groups) STATE[sec.path + '::' + g.name] = true;
+    }
+    saveState(STATE);
+    render(filterInput.value);
+  });
+
+  document.getElementById('collapseAll').addEventListener('click', () => {
+    for (const sec of TREE) {
+      STATE[sec.path] = false;
+      for (const g of sec.groups) STATE[sec.path + '::' + g.name] = false;
+    }
+    saveState(STATE);
+    render(filterInput.value);
+  });
+
+  // Press "/" anywhere to focus the filter (familiar shortcut).
+  document.addEventListener('keydown', e => {
+    if (e.key !== '/') return;
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    const tag = (document.activeElement && document.activeElement.tagName) || '';
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+    e.preventDefault();
+    filterInput.focus();
+    filterInput.select();
+  });
+})();
+</script>
+
+<button id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">☀️</button>
+<script src="theme.js?v=3"></script>
+<script src="analytics.js"></script>
+<script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
+</body>
+</html>

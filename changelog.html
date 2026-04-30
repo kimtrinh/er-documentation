@@ -118,7 +118,8 @@ main{max-width:860px;margin:0 auto;padding:32px 20px 64px}
       <a class="nav-link" href="ed-phone-directory.html">📞 Directory</a>
       <a class="nav-link" href="service-requests.html">📋 Requests</a>
       <a class="nav-link" href="links.html">🔗 Links</a>
-      <a class="nav-link active" href="changelog.html">🆕 What's New</a>
+      <a class="nav-link active" href="changelog.html">🆕 What&#39;s New</a>
+      <a class="nav-link" href="sitemap.html">📑 Index</a>
     </div>
   </div>
 </nav>
@@ -151,6 +152,18 @@ main{max-width:860px;margin:0 auto;padding:32px 20px 64px}
         <span class="date-relative"></span>
       </div>
       <div class="entries">
+
+        <div class="entry" data-type="feat">
+          <div class="entry-icon">📑</div>
+          <div class="entry-body">
+            <div class="entry-title">Site Index — every page, every card in one collapsible tree</div>
+            <div class="entry-desc">A new <b>Site Index</b> page (linked from the rightmost slot of every page's nav) auto-builds a hierarchical tree from the omnisearch index. Each top-level row is a page (Algorithms, Service Agreements, Hospital Protocols, etc.), each sub-row is the existing group label, and each leaf is a deep-link to the exact card. Live filter (or press <code>/</code> from anywhere on the page) — typing matches across titles AND all keyword text, expands the matched parents, and highlights the matched substring. Expand/collapse state is persisted per section in <code>localStorage</code>. No manual maintenance — every new card you add to <code>search-index.js</code> shows up here automatically.</div>
+            <div class="entry-meta">
+              <span class="badge feat">New Feature</span>
+              <a class="entry-link" href="sitemap.html">Open Site Index →</a>
+            </div>
+          </div>
+        </div>
 
         <div class="entry" data-type="feat">
           <div class="entry-icon">❤️‍🔥</div>
