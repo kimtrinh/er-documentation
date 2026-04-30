@@ -143,6 +143,30 @@ main{max-width:860px;margin:0 auto;padding:32px 20px 64px}
 
   <div class="timeline" id="timeline">
 
+    <!-- ── April 30, 2026 (search index enrichment) ── -->
+    <div class="date-group">
+      <div class="date-dot"></div>
+      <div class="date-label">
+        <span class="date-text">April 30, 2026</span>
+        <span class="date-relative"></span>
+      </div>
+      <div class="entries">
+
+        <div class="entry" data-type="improvement">
+          <div class="entry-icon">🔍</div>
+          <div class="entry-body">
+            <div class="entry-title">Enriched search keywords for stroke, STEMI, and IR protocols</div>
+            <div class="entry-desc">Expanded the omnisearch keyword strings on the three latest Hospital Protocols so common synonyms surface them. <b>STEMI</b> now matches "heart attack", "chest pain", "AMI", "primary PCI", "DIDO", "SBMC", "LLU", "SACH", "EMS", "9961 Sierra", "fibrinolytic", "reperfusion", and the "STEMI Receiving Facility / SRF" terminology. <b>Code 24 / Code Stroke</b> now matches "stroke alert", "facial droop", "slurred speech", "arm/leg weakness", "vision changes", "balance changes", "telestroke", "tele-neurologist", "LKW / last known well", "LVO / large vessel occlusion", "tPA", "alteplase", "TNK / tenecteplase", "endovascular therapy / EVT", "mechanical thrombectomy", "AIS / acute ischemic stroke", "CVA", "PSC", and "comprehensive stroke center". <b>Overnight IR</b> now matches "interventional radiology", "after hours", "next day", "non-urgent", "drain", "biopsy", "paracentesis", "thoracentesis", "PICC", "port", and "MRN". Bumped <code>search-index.js?v=4 → v=5</code> across all 20 pages to bust browser caches.</div>
+            <div class="entry-meta">
+              <span class="badge improvement">Improvement</span>
+              <a class="entry-link" href="hospital-protocols.html">Hospital Protocols →</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
     <!-- ── April 30, 2026 ── -->
     <div class="date-group">
       <div class="date-dot"></div>
@@ -995,7 +1019,7 @@ main{max-width:860px;margin:0 auto;padding:32px 20px 64px}
 </script>
 
 <button id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">☀️</button>
-<script src="search-index.js?v=4"></script>
+<script src="search-index.js?v=5"></script>
 <script src="theme.js?v=3"></script>
 <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
 <script src="analytics.js"></script>
