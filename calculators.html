@@ -133,6 +133,7 @@ main>*:nth-child(4){animation-delay:.15s}
     <button class="calc-tab" onclick="showCalc('years')">🫁 YEARS</button>
     <button class="calc-tab" onclick="showCalc('wellsdvt')">🦵 Wells DVT</button>
     <button class="calc-tab" onclick="showCalc('abcd2')">🧠 ABCD2</button>
+    <button class="calc-tab" onclick="showCalc('nihss')">🧠 NIHSS</button>
     <button class="calc-tab" onclick="showCalc('cha2ds2vasc')">❤️ CHA2DS2-VASc</button>
     <button class="calc-tab" onclick="showCalc('cthead')">🧠 Canadian CT Head</button>
     <button class="calc-tab" onclick="showCalc('softtissue')">🦠 Soft Tissue & Sepsis</button>
@@ -367,6 +368,42 @@ main>*:nth-child(4){animation-delay:.15s}
           <p><span style="color:#fde047;font-weight:700">4–5 Moderate risk</span><br/>Consider admission vs expedited stroke/TIA clinic based on resources and exam/imaging.</p>
           <br/>
           <p><span style="color:#fca5a5;font-weight:700">6–7 High risk</span><br/>High early stroke risk; admission/urgent stroke pathway strongly favored.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       NIHSS
+  ══════════════════════════════════════════ -->
+  <div id="calc-nihss" style="display:none">
+    <div class="calc-grid">
+
+      <div class="card">
+        <div class="card-title">🧠 NIH Stroke Scale <span style="font-size:12px;font-weight:400;color:var(--text3)">— 15 items, 0–42</span></div>
+        <div class="card-body">
+          <p style="font-size:12px;color:var(--text3);margin-bottom:12px">Score each item by observed performance. Do not change scores after coaching the patient. UN (untestable) is allowed for motor items only and counts as 0.</p>
+          <div id="nihss-criteria-wrap"></div>
+          <div id="nihss-result" class="result neutral">
+            <div class="result-score">—</div>
+            <div class="result-label">Score all 15 items</div>
+            <div class="result-action">NIHSS guides stroke severity, treatment eligibility, and outcomes.</div>
+          </div>
+          <button id="nihss-copy-btn" class="copy-doc-btn" onclick="copyDoc('nihss')">📋 Copy Documentation</button>
+          <button class="reset-btn" onclick="resetNIHSS()">Reset</button>
+        </div>
+      </div>
+
+      <div class="card" style="align-self:start">
+        <div class="card-title">📊 NIHSS Severity</div>
+        <div class="card-body" style="font-size:13px;line-height:1.85;color:var(--text2)">
+          <p><span style="color:#86efac;font-weight:700">0 — No stroke symptoms</span></p>
+          <p><span style="color:#86efac;font-weight:700">1–4 — Minor stroke</span></p>
+          <p><span style="color:#fde047;font-weight:700">5–15 — Moderate stroke</span></p>
+          <p><span style="color:#fca5a5;font-weight:700">16–20 — Moderate–severe stroke</span></p>
+          <p><span style="color:#fca5a5;font-weight:700">21–42 — Severe stroke</span></p>
+          <br/>
+          <p style="font-size:12px;color:var(--text3)">Use NIHSS in conjunction with last-known-well time, imaging, and contraindication review when assessing IV thrombolysis or thrombectomy eligibility. Document baseline and serial scores.</p>
         </div>
       </div>
     </div>
@@ -822,7 +859,7 @@ main>*:nth-child(4){animation-delay:.15s}
 <script src="search-index.js?v=4"></script>
 <script>
 // ── CALC TAB SWITCHING ───────────────────────────────────────
-const CALC_IDS = ['wellspe','heart','years','wellsdvt','abcd2','cha2ds2vasc','cthead','softtissue','centor','pecarn','pedsfever'];
+const CALC_IDS = ['wellspe','heart','years','wellsdvt','abcd2','nihss','cha2ds2vasc','cthead','softtissue','centor','pecarn','pedsfever'];
 function showCalc(id) {
   CALC_IDS.forEach(c => {
     document.getElementById('calc-'+c).style.display = c===id ? '' : 'none';
@@ -1003,6 +1040,21 @@ function copyDoc(type) {
     text = fmtLines([
       `ABCD2 score: ${d.total}/7 (${d.riskLabel}).`,
       'Points:',
+      ...d.items.map(x => `- ${x}`),
+      `Recommendation: ${d.reco}`
+    ]);
+  }
+
+  // ----- NIHSS -----
+  else if (type === 'nihss') {
+    if (!window.nihssDetail || window.nihssDetail.incomplete) {
+      alert('Score all NIHSS items first.');
+      return;
+    }
+    const d = window.nihssDetail;
+    text = fmtLines([
+      `NIHSS total: ${d.total}/42 (${d.severity}).`,
+      'Items:',
       ...d.items.map(x => `- ${x}`),
       `Recommendation: ${d.reco}`
     ]);
@@ -1478,6 +1530,184 @@ function resetABCD2() {
   document.getElementById('abcd2-copy-btn').classList.remove('show');
   updateABCD2();
 }
+
+// ── NIHSS ─────────────────────────────────────────────────────
+const NIHSS_ITEMS = [
+  { key:'1a', label:'1a. Level of consciousness', options:[
+    {v:0,d:'Alert; keenly responsive'},
+    {v:1,d:'Drowsy; arouses to minor stimulation'},
+    {v:2,d:'Stuporous; requires repeated/painful stimulation'},
+    {v:3,d:'Comatose; reflex motor or unresponsive'}
+  ]},
+  { key:'1b', label:'1b. LOC questions (month, age)', options:[
+    {v:0,d:'Both correct'},
+    {v:1,d:'One correct (or dysarthria/intubated/language barrier)'},
+    {v:2,d:'Neither correct (or aphasia/stupor)'}
+  ]},
+  { key:'1c', label:'1c. LOC commands (open/close eyes, grip/release)', options:[
+    {v:0,d:'Performs both tasks correctly'},
+    {v:1,d:'Performs one task correctly'},
+    {v:2,d:'Performs neither task correctly'}
+  ]},
+  { key:'2', label:'2. Best gaze (horizontal)', options:[
+    {v:0,d:'Normal'},
+    {v:1,d:'Partial gaze palsy'},
+    {v:2,d:'Forced deviation / total gaze paresis not overcome by oculocephalic'}
+  ]},
+  { key:'3', label:'3. Visual fields', options:[
+    {v:0,d:'No visual loss'},
+    {v:1,d:'Partial hemianopia'},
+    {v:2,d:'Complete hemianopia'},
+    {v:3,d:'Bilateral hemianopia (cortical blindness)'}
+  ]},
+  { key:'4', label:'4. Facial palsy', options:[
+    {v:0,d:'Normal symmetric movement'},
+    {v:1,d:'Minor paralysis (flattened nasolabial fold, asymmetric smile)'},
+    {v:2,d:'Partial paralysis (lower face)'},
+    {v:3,d:'Complete paralysis of one or both sides'}
+  ]},
+  { key:'5a', label:'5a. Motor — left arm (hold 90°/45° for 10s)', options:[
+    {v:0,d:'No drift; holds 10s'},
+    {v:1,d:'Drift before 10s, no full fall to bed'},
+    {v:2,d:'Some effort against gravity; falls to bed'},
+    {v:3,d:'No effort against gravity; falls'},
+    {v:4,d:'No movement'},
+    {v:0,d:'UN — amputation/joint fusion (explain)'}
+  ]},
+  { key:'5b', label:'5b. Motor — right arm (hold 90°/45° for 10s)', options:[
+    {v:0,d:'No drift; holds 10s'},
+    {v:1,d:'Drift before 10s, no full fall to bed'},
+    {v:2,d:'Some effort against gravity; falls to bed'},
+    {v:3,d:'No effort against gravity; falls'},
+    {v:4,d:'No movement'},
+    {v:0,d:'UN — amputation/joint fusion (explain)'}
+  ]},
+  { key:'6a', label:'6a. Motor — left leg (hold 30° for 5s)', options:[
+    {v:0,d:'No drift; holds 5s'},
+    {v:1,d:'Drift before 5s, no full fall to bed'},
+    {v:2,d:'Some effort against gravity; falls to bed'},
+    {v:3,d:'No effort against gravity; falls'},
+    {v:4,d:'No movement'},
+    {v:0,d:'UN — amputation/joint fusion (explain)'}
+  ]},
+  { key:'6b', label:'6b. Motor — right leg (hold 30° for 5s)', options:[
+    {v:0,d:'No drift; holds 5s'},
+    {v:1,d:'Drift before 5s, no full fall to bed'},
+    {v:2,d:'Some effort against gravity; falls to bed'},
+    {v:3,d:'No effort against gravity; falls'},
+    {v:4,d:'No movement'},
+    {v:0,d:'UN — amputation/joint fusion (explain)'}
+  ]},
+  { key:'7', label:'7. Limb ataxia (finger-nose, heel-shin)', options:[
+    {v:0,d:'Absent'},
+    {v:1,d:'Present in one limb'},
+    {v:2,d:'Present in two limbs'}
+  ]},
+  { key:'8', label:'8. Sensory (pinprick)', options:[
+    {v:0,d:'Normal'},
+    {v:1,d:'Mild–moderate sensory loss'},
+    {v:2,d:'Severe to total sensory loss'}
+  ]},
+  { key:'9', label:'9. Best language', options:[
+    {v:0,d:'No aphasia'},
+    {v:1,d:'Mild–moderate aphasia'},
+    {v:2,d:'Severe aphasia'},
+    {v:3,d:'Mute / global aphasia'}
+  ]},
+  { key:'10', label:'10. Dysarthria', options:[
+    {v:0,d:'Normal articulation'},
+    {v:1,d:'Mild–moderate; slurred but intelligible'},
+    {v:2,d:'Severe; unintelligible or mute/anarthric'}
+  ]},
+  { key:'11', label:'11. Extinction / inattention (neglect)', options:[
+    {v:0,d:'No abnormality'},
+    {v:1,d:'Inattention to one modality (visual, tactile, auditory)'},
+    {v:2,d:'Profound hemi-inattention or extinction to >1 modality'}
+  ]}
+];
+
+const nihssState = {};
+NIHSS_ITEMS.forEach(it => { nihssState[it.key] = null; });
+
+function renderNIHSS() {
+  const wrap = document.getElementById('nihss-criteria-wrap');
+  if (!wrap || wrap.dataset.rendered === '1') return;
+  const html = NIHSS_ITEMS.map((item, idx) => {
+    const opts = item.options.map((o, oi) => {
+      const id = `nihss-${item.key}-${oi}`;
+      const name = `nihss-${item.key}`;
+      const ptsLabel = o.d.startsWith('UN') ? 'UN' : (o.v === 0 ? '0' : '+' + o.v);
+      return `<div class="radio-option" onclick="setNIHSS('${item.key}',${oi})"><input type="radio" name="${name}" id="${id}"><span>${o.d}</span><span class="radio-pts">${ptsLabel}</span></div>`;
+    }).join('');
+    return `<div class="radio-group" style="margin-top:${idx===0?'0':'10px'}"><label>${item.label}</label>${opts}</div>`;
+  }).join('');
+  wrap.innerHTML = html;
+  wrap.dataset.rendered = '1';
+}
+
+function setNIHSS(key, optIdx) {
+  const item = NIHSS_ITEMS.find(i => i.key === key);
+  if (!item) return;
+  nihssState[key] = optIdx;
+  document.querySelectorAll(`input[name="nihss-${key}"]`).forEach((r, i) => { r.checked = (i === optIdx); });
+  updateNIHSS();
+}
+
+function updateNIHSS() {
+  const r = document.getElementById('nihss-result');
+  const btn = document.getElementById('nihss-copy-btn');
+  if (!r) return;
+  const allDone = NIHSS_ITEMS.every(it => nihssState[it.key] !== null);
+  const partial = NIHSS_ITEMS.some(it => nihssState[it.key] !== null);
+
+  if (!allDone) {
+    const done = NIHSS_ITEMS.filter(it => nihssState[it.key] !== null).length;
+    r.className = 'result neutral';
+    r.innerHTML = `<div class="result-score">${done}/15</div><div class="result-label">Score all 15 items</div><div class="result-action">${done} of 15 items scored. Complete all items to compute total.</div>`;
+    if (btn) btn.classList.toggle('show', partial);
+    window.nihssDetail = { incomplete: true };
+    return;
+  }
+
+  let total = 0;
+  const items = NIHSS_ITEMS.map(it => {
+    const opt = it.options[nihssState[it.key]];
+    total += opt.v;
+    return `${it.label}: ${opt.v} (${opt.d})`;
+  });
+
+  let cls = 'low', severity = 'No stroke symptoms', reco = 'Document baseline NIHSS; correlate with imaging and clinical context.';
+  if (total >= 21) {
+    cls = 'high'; severity = 'Severe stroke';
+    reco = 'Severe deficit. Activate stroke pathway; assess thrombolysis/thrombectomy eligibility, airway, and ICU disposition.';
+  } else if (total >= 16) {
+    cls = 'high'; severity = 'Moderate–severe stroke';
+    reco = 'Significant deficit. Activate stroke pathway; assess reperfusion eligibility (tPA/thrombectomy) and admit to stroke unit/ICU.';
+  } else if (total >= 5) {
+    cls = 'moderate'; severity = 'Moderate stroke';
+    reco = 'Moderate deficit. Activate stroke pathway; assess thrombolysis eligibility and admit to stroke unit.';
+  } else if (total >= 1) {
+    cls = 'low'; severity = 'Minor stroke';
+    reco = 'Minor deficit. Confirm diagnosis with imaging; weigh thrombolysis risks/benefits in disabling vs non-disabling deficits.';
+  }
+
+  r.className = 'result ' + cls;
+  r.innerHTML = `<div class="result-score">${total}/42</div><div class="result-label">${severity}</div><div class="result-action">${reco}</div>`;
+  if (btn) btn.classList.add('show');
+
+  window.nihssDetail = { incomplete: false, total, severity, items, reco };
+}
+
+function resetNIHSS() {
+  NIHSS_ITEMS.forEach(it => { nihssState[it.key] = null; });
+  document.querySelectorAll('#nihss-criteria-wrap input[type="radio"]').forEach(r => { r.checked = false; });
+  const btn = document.getElementById('nihss-copy-btn');
+  if (btn) btn.classList.remove('show');
+  updateNIHSS();
+}
+
+renderNIHSS();
+updateNIHSS();
 
 // ── CHA2DS2-VASc ──────────────────────────────────────────────
 const cha2State = {
