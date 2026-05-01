@@ -1,4 +1,4 @@
-const CACHE = 'em-toolkit-v3';
+const CACHE = 'em-toolkit-v4';
 
 const ASSETS = [
   '/index.html',
@@ -26,7 +26,9 @@ const ASSETS = [
   '/data/dotphrases.js',
   '/mdm_packs.json',
   '/data/service_agreements_index.json',
-  '/manifest.json'
+  '/manifest.json',
+  '/chatbot.js',
+  '/chatbot-index.json'
 ];
 
 // Install: cache everything

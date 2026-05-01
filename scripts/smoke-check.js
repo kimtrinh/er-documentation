@@ -6,6 +6,7 @@ const vm = require('vm');
 
 const ROOT = path.resolve(__dirname, '..');
 const SEARCH_INDEX_PATH = path.join(ROOT, 'search-index.js');
+const CHATBOT_INDEX_PATH = path.join(ROOT, 'chatbot-index.json');
 const HTML_FILES = fs.readdirSync(ROOT).filter((name) => name.endsWith('.html'));
 
 const errors = [];
@@ -96,11 +97,38 @@ function checkSearchIndexLinks(index) {
   }
 }
 
+function checkChatbotIndex() {
+  if (!fs.existsSync(CHATBOT_INDEX_PATH)) {
+    addError('chatbot-index.json missing — run `node scripts/build-chatbot-index.js`.');
+    return null;
+  }
+  let parsed;
+  try {
+    parsed = JSON.parse(fs.readFileSync(CHATBOT_INDEX_PATH, 'utf8'));
+  } catch (err) {
+    addError(`chatbot-index.json: ${err.message}`);
+    return null;
+  }
+  if (!parsed || !Array.isArray(parsed.chunks)) {
+    addError('chatbot-index.json: missing chunks array');
+    return null;
+  }
+  if (parsed.chunks.length === 0) {
+    addError('chatbot-index.json: chunks array is empty');
+  }
+  return parsed;
+}
+
 function run() {
   const source = checkSearchIndexSyntax();
   checkInlineScripts();
   const index = evaluateSearchIndex(source);
   checkSearchIndexLinks(index);
+  const chatbot = checkChatbotIndex();
+  const chatbotJsPath = path.join(ROOT, 'chatbot.js');
+  if (fs.existsSync(chatbotJsPath)) {
+    compileFile('chatbot.js', fs.readFileSync(chatbotJsPath, 'utf8'));
+  }
 
   if (errors.length) {
     console.error('Smoke check failed.');
@@ -112,6 +140,7 @@ function run() {
   console.log(`- HTML files checked: ${HTML_FILES.length}`);
   console.log('- search-index.js syntax checked');
   console.log(`- SEARCH_INDEX entries checked: ${index.length}`);
+  if (chatbot) console.log(`- chatbot-index.json chunks: ${chatbot.chunks.length}`);
 }
 
 run();
