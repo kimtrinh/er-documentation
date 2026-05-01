@@ -58,19 +58,19 @@ function classList(tagSrc) {
 }
 
 function tokenize(html) {
-  // Yields { kind: 'open'|'close'|'text', tag?, src?, text? }
+  // Yields { kind: 'open'|'close'|'text', tag?, src?, text?, start?, end? }
   const tokens = [];
   let i = 0;
   while (i < html.length) {
     const lt = html.indexOf('<', i);
     if (lt === -1) {
       const text = html.slice(i);
-      if (text.trim()) tokens.push({ kind: 'text', text });
+      if (text.trim()) tokens.push({ kind: 'text', text, start: i, end: html.length });
       break;
     }
     if (lt > i) {
       const text = html.slice(i, lt);
-      if (text.trim()) tokens.push({ kind: 'text', text });
+      if (text.trim()) tokens.push({ kind: 'text', text, start: i, end: lt });
     }
     const gt = html.indexOf('>', lt + 1);
     if (gt === -1) break;
@@ -80,10 +80,77 @@ function tokenize(html) {
     const tagMatch = raw.match(/^<\/?\s*([a-zA-Z0-9]+)/);
     if (!tagMatch) { i = gt + 1; continue; }
     const tag = tagMatch[1].toLowerCase();
-    tokens.push({ kind: isClose ? 'close' : 'open', tag, src: raw });
+    tokens.push({ kind: isClose ? 'close' : 'open', tag, src: raw, start: lt, end: gt + 1 });
     i = gt + 1;
   }
   return tokens;
+}
+
+function slugify(text) {
+  return String(text)
+    .toLowerCase()
+    .replace(/[—–−]/g, '-')
+    .replace(/[^a-z0-9\s-]/g, ' ')
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '')
+    .slice(0, 60)
+    .replace(/-+$/g, '');
+}
+
+const ANNOTATE_BLOCK_TAGS = new Set(['script', 'style', 'svg', 'noscript', 'nav', 'header', 'footer']);
+
+// Walks original HTML, generates slug ids for boundary elements that lack one,
+// and rewrites the file in-place. Idempotent — re-runs are no-ops once ids exist.
+function annotateHtml(filePath, html) {
+  const tokens = tokenize(html);
+  const used = new Set();
+  for (const m of html.matchAll(/\bid\s*=\s*["']([^"']+)["']/g)) used.add(m[1]);
+
+  let blockedDepth = 0;
+  const subs = [];
+
+  for (let idx = 0; idx < tokens.length; idx++) {
+    const t = tokens[idx];
+    if (t.kind === 'open' && ANNOTATE_BLOCK_TAGS.has(t.tag)) blockedDepth++;
+    if (t.kind === 'close' && ANNOTATE_BLOCK_TAGS.has(t.tag)) blockedDepth = Math.max(0, blockedDepth - 1);
+    if (blockedDepth > 0) continue;
+    if (!isBoundary(t)) continue;
+    if (getAttr(t.src, 'id')) continue;
+
+    // Capture inner text up to matching close tag.
+    let depth = 1;
+    const inner = [];
+    for (let j = idx + 1; j < tokens.length; j++) {
+      const u = tokens[j];
+      if (u.kind === 'open' && u.tag === t.tag) depth++;
+      else if (u.kind === 'close' && u.tag === t.tag) {
+        depth--;
+        if (depth === 0) break;
+      } else if (u.kind === 'text') inner.push(u.text);
+    }
+    const heading = decodeEntities(inner.join(' ')).replace(/\s+/g, ' ').trim();
+    const baseSlug = slugify(heading);
+    if (!baseSlug) continue;
+    let candidate = baseSlug;
+    let n = 2;
+    while (used.has(candidate)) candidate = `${baseSlug}-${n++}`;
+    used.add(candidate);
+
+    // Inject id="..." right after the tag name in the open tag.
+    const newSrc = t.src.replace(/^<([a-zA-Z0-9]+)/, `<$1 id="${candidate}"`);
+    subs.push({ start: t.start, end: t.end, newSrc });
+  }
+
+  if (!subs.length) return html;
+  let out = html;
+  for (let k = subs.length - 1; k >= 0; k--) {
+    const s = subs[k];
+    out = out.slice(0, s.start) + s.newSrc + out.slice(s.end);
+  }
+  fs.writeFileSync(filePath, out);
+  return out;
 }
 
 function isBoundary(token) {
@@ -247,7 +314,7 @@ function chunksFromServiceAgreements() {
   return out;
 }
 
-function chunksFromSearchIndex() {
+function chunksFromSearchIndex(pageIdsByFile) {
   const p = path.join(ROOT, 'search-index.js');
   if (!fs.existsSync(p)) return [];
   const source = fs.readFileSync(p, 'utf8');
@@ -272,13 +339,30 @@ function chunksFromSearchIndex() {
     if (!title || !url) continue;
     const text = [title, sub, group, e.type].filter(Boolean).join(' · ');
     if (text.length < MIN_CHUNK_CHARS && text.length < 20) continue;
-    const [page, anchor] = url.split('#');
+    let [page, anchor] = url.split('#');
+    // If no anchor in the curated URL, try to find one whose slug matches the
+    // entry title on that page — promotes curated hits to deep links.
+    if (!anchor && pageIdsByFile && pageIdsByFile[page]) {
+      const titleSlug = slugify(title);
+      if (titleSlug) {
+        const ids = pageIdsByFile[page];
+        if (ids.has(titleSlug)) {
+          anchor = titleSlug;
+        } else {
+          // Fuzzy: id starts with the title slug ("norepinephrine-levophed").
+          for (const id of ids) {
+            if (id.startsWith(titleSlug + '-') || id === titleSlug) { anchor = id; break; }
+          }
+        }
+      }
+    }
+    const finalUrl = anchor ? `${page}#${anchor}` : page;
     out.push({
       page,
       pageTitle: group || page,
       section: title,
       anchor: anchor || null,
-      url,
+      url: finalUrl,
       text,
       curated: true
     });
@@ -291,13 +375,21 @@ function build() {
     .filter((f) => f.endsWith('.html') && !SKIP.has(f))
     .sort();
   const chunks = [];
+  const pageIdsByFile = {};
+  let annotatedFiles = 0;
   for (const file of files) {
-    const html = fs.readFileSync(path.join(ROOT, file), 'utf8');
-    const pageChunks = chunkPage(file, html);
+    const filePath = path.join(ROOT, file);
+    const original = fs.readFileSync(filePath, 'utf8');
+    const annotated = annotateHtml(filePath, original);
+    if (annotated !== original) annotatedFiles++;
+    pageIdsByFile[file] = new Set(
+      [...annotated.matchAll(/\bid\s*=\s*["']([^"']+)["']/g)].map((m) => m[1])
+    );
+    const pageChunks = chunkPage(file, annotated);
     chunks.push(...pageChunks);
   }
   chunks.push(...chunksFromServiceAgreements());
-  chunks.push(...chunksFromSearchIndex());
+  chunks.push(...chunksFromSearchIndex(pageIdsByFile));
 
   // Dedupe near-identical chunks (same url + same first 80 chars).
   const seen = new Set();
@@ -320,6 +412,7 @@ function build() {
   const bytes = fs.statSync(OUT).size;
   console.log(`Wrote ${OUT}`);
   console.log(`  pages: ${files.length}`);
+  console.log(`  pages annotated with ids: ${annotatedFiles}`);
   console.log(`  chunks: ${deduped.length}`);
   console.log(`  size: ${(bytes / 1024).toFixed(1)} KB`);
 }

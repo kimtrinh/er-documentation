@@ -174,10 +174,12 @@
     'request maintenance'
   ];
 
-  const HTML = `
+  const FLOATING_HTML = `
 <button class="cb-launcher" id="cbLauncher" type="button" aria-label="Open assistant">
   <span class="cb-dot"></span> Ask
-</button>
+</button>`;
+
+  const PANEL_HTML = `
 <div class="cb-panel" id="cbPanel" role="dialog" aria-label="Site assistant">
   <div class="cb-head">
     <div class="cb-title">Site Assistant <div class="cb-sub">Searches every page on this toolkit</div></div>
@@ -199,15 +201,19 @@
     const style = document.createElement('style');
     style.textContent = STYLE;
     document.head.appendChild(style);
+
+    const inlineLauncher = document.getElementById('cbInlineLauncher');
     const wrap = document.createElement('div');
-    wrap.innerHTML = HTML;
+    wrap.innerHTML = (inlineLauncher ? '' : FLOATING_HTML) + PANEL_HTML;
     document.body.appendChild(wrap);
+
     panel = document.getElementById('cbPanel');
     log = document.getElementById('cbLog');
     input = document.getElementById('cbInput');
     sendBtn = document.getElementById('cbSend');
 
-    document.getElementById('cbLauncher').addEventListener('click', open);
+    const trigger = inlineLauncher || document.getElementById('cbLauncher');
+    if (trigger) trigger.addEventListener('click', open);
     document.getElementById('cbClose').addEventListener('click', close);
     document.getElementById('cbForm').addEventListener('submit', onSubmit);
     input.addEventListener('keydown', (e) => {
@@ -296,17 +302,22 @@
       addBotMessage(`<div class="cb-empty">No matches on this site. Try the <a href="javascript:void(0)" onclick="document.getElementById('si')&&document.getElementById('si').focus()">⌘K search</a> for curated tags, or browse the <a href="sitemap.html">sitemap</a>.</div>`);
       return;
     }
-    // Dedupe by URL — keep best per page+anchor.
-    const seen = new Set();
-    const top = [];
+    // Dedupe by (page, section). Within a group, prefer anchored chunks so
+    // results deep-link to the specific card; otherwise keep the higher score.
+    const groups = new Map();
     for (const r of ranked) {
       const c = chunks[r.i];
-      const key = c.url;
-      if (seen.has(key)) continue;
-      seen.add(key);
-      top.push({ ...c, _score: r.s });
-      if (top.length >= 4) break;
+      const key = `${c.page}::${(c.section || '').toLowerCase()}`;
+      const existing = groups.get(key);
+      if (!existing) { groups.set(key, { c, s: r.s }); continue; }
+      const curHasAnchor = !!existing.c.anchor;
+      const newHasAnchor = !!c.anchor;
+      if (newHasAnchor && !curHasAnchor) groups.set(key, { c, s: r.s });
     }
+    const top = [...groups.values()]
+      .sort((a, b) => b.s - a.s)
+      .slice(0, 4)
+      .map((g) => ({ ...g.c, _score: g.s }));
     const html = top.map((c) => {
       const sec = c.section && c.section !== c.pageTitle ? c.section : c.pageTitle;
       const snip = highlight(snippet(c.text, queryTerms), queryTerms);

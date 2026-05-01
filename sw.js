@@ -1,4 +1,4 @@
-const CACHE = 'em-toolkit-v4';
+const CACHE = 'em-toolkit-v5';
 
 const ASSETS = [
   '/index.html',
