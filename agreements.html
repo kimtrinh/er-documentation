@@ -126,6 +126,17 @@ main>*:nth-child(2){animation-delay:.05s}
 main>*:nth-child(3){animation-delay:.1s}
 main>*:nth-child(4){animation-delay:.15s}
 .ag-card{box-shadow:0 1px 4px rgba(0,0,0,.2)}.ag-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.4)}
+
+/* ===== NAV — More dropdown overflow ===== */
+.nav-more{position:relative;flex-shrink:0}
+.nav-more-btn{padding:5px 10px;border-radius:6px;font-size:12px;font-weight:600;color:var(--text2);background:transparent;border:0;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:4px;font-family:inherit;line-height:1;white-space:nowrap}
+.nav-more-btn:hover,.nav-more.open .nav-more-btn{background:var(--surface2);color:var(--text)}
+.nav-more-btn.active{background:#1d4ed8;color:#fff}
+.nav-more-btn .chev{font-size:9px;opacity:.6;transition:transform .15s}
+.nav-more.open .nav-more-btn .chev{transform:rotate(180deg);opacity:1}
+.nav-more-menu{position:absolute;top:calc(100% + 6px);right:0;background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:6px;min-width:200px;box-shadow:0 12px 32px rgba(0,0,0,.5);display:none;z-index:200}
+.nav-more.open .nav-more-menu{display:block}
+.nav-more-menu .nav-link{display:block;padding:7px 10px;border-radius:6px;font-size:12px;white-space:nowrap}
 </style>
 <link rel="stylesheet" href="mobile.css">
 <script>document.documentElement.setAttribute('data-theme',localStorage.getItem('theme')||'dark');</script>
@@ -135,23 +146,26 @@ main>*:nth-child(4){animation-delay:.15s}
 <nav class="sitenav">
   <div class="sitenav-inner">
     <a class="nav-logo" href="index.html">⚡</a>
-    <div class="nav-links">
+        <div class="nav-links">
       <a class="nav-link" href="index.html">🏠 Home</a>
-      <a class="nav-link" href="dotphrase.html">🧾 Documentation</a>
-
-      <a class="nav-link" href="calculators.html">🧮 Decision Support</a>
-      <a class="nav-link" href="rsi.html">🚨 Resuscitation</a>
       <a class="nav-link" href="algorithms.html">🔀 Algorithms</a>
-      <a class="nav-link" href="neurohub.html">🧠 Neuro Hub</a>
-      <a class="nav-link active" href="service-agreements.html">📑 Service Agreements</a>
-      <a class="nav-link" href="hospital-protocols.html">🏥 Hospital Protocols</a>
+      <a class="nav-link" href="service-agreements.html">🤝 Agreements</a>
+      <a class="nav-link" href="hospital-protocols.html">🏥 Protocols</a>
       <a class="nav-link" href="ed-phone-directory.html">📞 Directory</a>
-      <a class="nav-link" href="service-requests.html">📋 Requests</a>
       <a class="nav-link" href="links.html">🔗 Links</a>
-      <a class="nav-link" href="changelog.html">🆕 What&#39;s New</a>
       <a class="nav-link" href="sitemap.html">📑 Index</a>
-    </div>
-  </div>
+      <div class="nav-more" data-nav-more>
+        <button type="button" class="nav-more-btn" aria-haspopup="menu" aria-expanded="false" aria-label="More navigation">⋯ More <span class="chev" aria-hidden="true">▾</span></button>
+        <div class="nav-more-menu" role="menu">
+      <a class="nav-link" href="dotphrase.html" role="menuitem">🧾 Documentation</a>
+      <a class="nav-link" href="calculators.html" role="menuitem">🧮 Decision Support</a>
+      <a class="nav-link" href="rsi.html" role="menuitem">🚨 Resuscitation</a>
+      <a class="nav-link" href="neurohub.html" role="menuitem">🧠 Neuro Hub</a>
+      <a class="nav-link" href="service-requests.html" role="menuitem">📋 Requests</a>
+      <a class="nav-link" href="changelog.html" role="menuitem">🆕 What's New</a>
+        </div>
+      </div>
+    </div></div>
 </nav>
 <!-- NAV -->
 <header>
@@ -405,5 +419,38 @@ render();
 <script src="theme.js?v=3"></script>
 <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
 <script src="analytics.js"></script>
+<script>
+// Sitenav "⋯ More ▾" overflow dropdown — open on click, close on
+// outside-click or Escape. Data-driven so the same script works on
+// every page that includes the same nav markup.
+(function () {
+  const hosts = document.querySelectorAll('[data-nav-more]');
+  if (!hosts.length) return;
+  hosts.forEach(host => {
+    const btn = host.querySelector('.nav-more-btn');
+    if (!btn) return;
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const open = host.classList.toggle('open');
+      btn.setAttribute('aria-expanded', String(open));
+    });
+  });
+  document.addEventListener('click', () => {
+    document.querySelectorAll('[data-nav-more].open').forEach(h => {
+      h.classList.remove('open');
+      const b = h.querySelector('.nav-more-btn');
+      if (b) b.setAttribute('aria-expanded', 'false');
+    });
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    document.querySelectorAll('[data-nav-more].open').forEach(h => {
+      h.classList.remove('open');
+      const b = h.querySelector('.nav-more-btn');
+      if (b) b.setAttribute('aria-expanded', 'false');
+    });
+  });
+})();
+</script>
 </body>
 </html>
