@@ -691,3 +691,32 @@ html[data-theme="light"] .hints-test{background:var(--surface);border-color:var(
 html[data-theme="light"] .hints-test select{background:var(--surface2);border-color:var(--border);color:var(--text)}
 html[data-theme="light"] .master-reset{background:var(--surface2);border-color:var(--border);color:var(--text2)}
 html[data-theme="light"] .master-reset:hover{background:var(--surface3);color:var(--text)}
+
+/* ── Sitenav: replace broken "⋯ More ▾" dropdown with a horizontally
+   scrollable toolbar so every link is reachable in one swipe/scroll. ── */
+.sitenav .nav-more-btn { display: none !important; }
+.sitenav .nav-more,
+.sitenav .nav-more-menu { display: contents !important; }
+
+.sitenav .nav-links {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow-x: auto !important;
+  overflow-y: hidden;
+  flex-wrap: nowrap;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border2, #243d5c) transparent;
+  scroll-snap-type: x proximity;
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 16px, #000 calc(100% - 16px), transparent 100%);
+          mask-image: linear-gradient(to right, transparent 0, #000 16px, #000 calc(100% - 16px), transparent 100%);
+}
+.sitenav .nav-links::-webkit-scrollbar { height: 4px; }
+.sitenav .nav-links::-webkit-scrollbar-track { background: transparent; }
+.sitenav .nav-links::-webkit-scrollbar-thumb {
+  background: var(--border2, #243d5c);
+  border-radius: 4px;
+}
+.sitenav .nav-links::-webkit-scrollbar-thumb:hover { background: var(--blue, #3b82f6); }
+.sitenav .nav-links .nav-link { flex-shrink: 0; scroll-snap-align: start; }
