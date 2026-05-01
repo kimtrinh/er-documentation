@@ -107,6 +107,9 @@ main{max-width:860px;margin:0 auto;padding:32px 20px 64px}
 .nav-more-menu{position:absolute;top:calc(100% + 6px);right:0;background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:6px;min-width:200px;box-shadow:0 12px 32px rgba(0,0,0,.5);display:none;z-index:200}
 .nav-more.open .nav-more-menu{display:block}
 .nav-more-menu .nav-link{display:block;padding:7px 10px;border-radius:6px;font-size:12px;white-space:nowrap}
+
+/* ===== NAV — let More dropdown render below the bar ===== */
+.sitenav,.sitenav-inner{overflow:visible}
 </style>
 <link rel="stylesheet" href="mobile.css">
 <script>document.documentElement.setAttribute('data-theme',localStorage.getItem('theme')||'dark');</script>
@@ -117,12 +120,13 @@ main{max-width:860px;margin:0 auto;padding:32px 20px 64px}
 <nav class="sitenav">
   <div class="sitenav-inner">
     <a class="nav-logo" href="index.html">⚡</a>
-        <div class="nav-links">
+            <div class="nav-links">
       <a class="nav-link" href="index.html">🏠 Home</a>
       <a class="nav-link" href="algorithms.html">🔀 Algorithms</a>
       <a class="nav-link" href="service-agreements.html">🤝 Agreements</a>
       <a class="nav-link" href="hospital-protocols.html">🏥 Protocols</a>
       <a class="nav-link" href="ed-phone-directory.html">📞 Directory</a>
+      <a class="nav-link" href="service-requests.html">📋 Requests</a>
       <a class="nav-link" href="links.html">🔗 Links</a>
       <a class="nav-link" href="sitemap.html">📑 Index</a>
       <div class="nav-more" data-nav-more>
@@ -132,7 +136,6 @@ main{max-width:860px;margin:0 auto;padding:32px 20px 64px}
       <a class="nav-link" href="calculators.html" role="menuitem">🧮 Decision Support</a>
       <a class="nav-link" href="rsi.html" role="menuitem">🚨 Resuscitation</a>
       <a class="nav-link" href="neurohub.html" role="menuitem">🧠 Neuro Hub</a>
-      <a class="nav-link" href="service-requests.html" role="menuitem">📋 Requests</a>
       <a class="nav-link" href="changelog.html" role="menuitem">🆕 What's New</a>
         </div>
       </div>
@@ -158,6 +161,41 @@ main{max-width:860px;margin:0 auto;padding:32px 20px 64px}
   </div>
 
   <div class="timeline" id="timeline">
+
+    <!-- ── April 30, 2026 (latest) ── -->
+    <div class="date-group">
+      <div class="date-dot"></div>
+      <div class="date-label">
+        <span class="date-text">April 30, 2026</span>
+        <span class="date-relative"></span>
+      </div>
+      <div class="entries">
+
+        <div class="entry" data-type="fix">
+          <div class="entry-icon">🪛</div>
+          <div class="entry-body">
+            <div class="entry-title">Fix: ⋯ More dropdown was being clipped by the nav bar</div>
+            <div class="entry-desc">The dropdown menu introduced in the previous toolbar refresh wasn't visible because <code>.sitenav-inner</code> had <code>overflow:hidden</code>, which cut off any element rendered below the nav. Added <code>overflow:visible</code> override on <code>.sitenav</code> and <code>.sitenav-inner</code> so the dropdown renders properly. The horizontal-scroll behavior is unchanged — it lives on <code>.nav-links</code> itself, which still clips its own content as before.</div>
+            <div class="entry-meta">
+              <span class="badge fix">Fix</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="entry" data-type="improvement">
+          <div class="entry-icon">📋</div>
+          <div class="entry-body">
+            <div class="entry-title">Service Requests promoted back to primary nav</div>
+            <div class="entry-desc">Moved <b>📋 Requests</b> out of the ⋯ More dropdown and back into the always-visible primary nav so submitting a request is one click from anywhere. The home page <i>"Submit Service Request"</i> Core Tools card already gives a second prominent entry point.</div>
+            <div class="entry-meta">
+              <span class="badge improvement">Improvement</span>
+              <a class="entry-link" href="service-requests.html">Open Requests →</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
 
     <!-- ── April 30, 2026 (later) ── -->
     <div class="date-group">
