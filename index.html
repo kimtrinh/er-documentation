@@ -186,8 +186,12 @@ main{max-width:1100px;margin:0 auto;padding:22px 24px 80px}
 .nedocs-bar-title{font-size:13px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:8px;min-width:0}
 .nedocs-bar-title .nedocs-ico{font-size:16px;flex-shrink:0}
 .nedocs-bar-meta{font-size:10px;font-weight:600;color:#fda4af;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
-.nedocs-bar-link{font-size:11px;font-weight:600;color:var(--text-blue);text-decoration:none;padding:4px 10px;border:1px solid var(--border2);border-radius:6px;white-space:nowrap;flex-shrink:0;transition:.15s}
+.nedocs-bar-actions{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.nedocs-bar-link{font-size:11px;font-weight:600;color:var(--text-blue);text-decoration:none;padding:4px 10px;border:1px solid var(--border2);border-radius:6px;white-space:nowrap;flex-shrink:0;transition:.15s;background:transparent;cursor:pointer;font-family:inherit}
 .nedocs-bar-link:hover{background:var(--blue3);border-color:var(--blue);color:#bfdbfe}
+.nedocs-bar-refresh{padding:4px 8px;font-size:13px;line-height:1}
+.nedocs-bar-refresh.spin .nedocs-refresh-ico{display:inline-block;animation:nedocs-spin .7s linear infinite}
+@keyframes nedocs-spin{to{transform:rotate(360deg)}}
 .nedocs-iframe{width:100%;height:540px;border:0;background:#fff;display:block}
 
 @media(max-width:640px){
@@ -411,9 +415,12 @@ main{max-width:1100px;margin:0 auto;padding:22px 24px 80px}
         <div class="nedocs-bar-title">
           <span class="nedocs-ico">📈</span>
           <span>NEDOCS — Fontana</span>
-          <span class="nedocs-bar-meta">Live</span>
+          <span class="nedocs-bar-meta">Live · ↻ to refresh</span>
         </div>
-        <a class="nedocs-bar-link" href="https://sp-cloud.kp.org/:x:/r/sites/FONTANANEDOCS/_layouts/15/Doc.aspx?sourcedoc=%7B03D60B85-DC04-41B6-98F4-23647A7EA280%7D&file=NEDOCS%20Fontana%20ED.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1" target="_blank" rel="noopener">Open full ↗</a>
+        <div class="nedocs-bar-actions">
+          <button type="button" class="nedocs-bar-link nedocs-bar-refresh" title="Refresh latest NEDOCS" aria-label="Refresh NEDOCS Fontana" onclick="refreshNedocs(this)"><span class="nedocs-refresh-ico">↻</span></button>
+          <a class="nedocs-bar-link" href="https://sp-cloud.kp.org/:x:/r/sites/FONTANANEDOCS/_layouts/15/Doc.aspx?sourcedoc=%7B03D60B85-DC04-41B6-98F4-23647A7EA280%7D&file=NEDOCS%20Fontana%20ED.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1" target="_blank" rel="noopener">Open full ↗</a>
+        </div>
       </div>
       <iframe class="nedocs-iframe"
               src="https://sp-cloud.kp.org/sites/FONTANANEDOCS/_layouts/15/Doc.aspx?sourcedoc=%7B03D60B85-DC04-41B6-98F4-23647A7EA280%7D&action=embedview&wdAllowInteractivity=False&wdHideGridlines=False"
@@ -427,9 +434,12 @@ main{max-width:1100px;margin:0 auto;padding:22px 24px 80px}
         <div class="nedocs-bar-title">
           <span class="nedocs-ico">📈</span>
           <span>NEDOCS — Ontario</span>
-          <span class="nedocs-bar-meta">Live</span>
+          <span class="nedocs-bar-meta">Live · ↻ to refresh</span>
         </div>
-        <a class="nedocs-bar-link" href="https://sp-cloud.kp.org/:x:/r/sites/FONTANANEDOCS/_layouts/15/Doc.aspx?sourcedoc=%7B7D1A25B4-00AD-4D57-B655-164FD0C970EE%7D&file=NEDOCS%20Ontario%20ED%20-%20Copy.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1" target="_blank" rel="noopener">Open full ↗</a>
+        <div class="nedocs-bar-actions">
+          <button type="button" class="nedocs-bar-link nedocs-bar-refresh" title="Refresh latest NEDOCS" aria-label="Refresh NEDOCS Ontario" onclick="refreshNedocs(this)"><span class="nedocs-refresh-ico">↻</span></button>
+          <a class="nedocs-bar-link" href="https://sp-cloud.kp.org/:x:/r/sites/FONTANANEDOCS/_layouts/15/Doc.aspx?sourcedoc=%7B7D1A25B4-00AD-4D57-B655-164FD0C970EE%7D&file=NEDOCS%20Ontario%20ED%20-%20Copy.xlsx&action=default&mobileredirect=true&DefaultItemOpen=1" target="_blank" rel="noopener">Open full ↗</a>
+        </div>
       </div>
       <iframe class="nedocs-iframe"
               src="https://sp-cloud.kp.org/sites/FONTANANEDOCS/_layouts/15/Doc.aspx?sourcedoc=%7B7D1A25B4-00AD-4D57-B655-164FD0C970EE%7D&action=embedview&wdAllowInteractivity=False&wdHideGridlines=False"
@@ -1235,6 +1245,25 @@ initAnnouncementFirebase();
     });
   });
 })();
+
+// Reload a NEDOCS iframe in place when its ↻ button is clicked.
+function refreshNedocs(btn){
+  const card = btn.closest('.nedocs-embed');
+  if (!card) return;
+  const iframe = card.querySelector('iframe.nedocs-iframe');
+  if (!iframe) return;
+  btn.classList.add('spin');
+  btn.disabled = true;
+  const base = iframe.getAttribute('src').split('&_r=')[0];
+  iframe.src = base + '&_r=' + Date.now();
+  const stop = () => {
+    btn.classList.remove('spin');
+    btn.disabled = false;
+    iframe.removeEventListener('load', stop);
+  };
+  iframe.addEventListener('load', stop);
+  setTimeout(stop, 8000);
+}
 </script>
 </body>
 </html>
