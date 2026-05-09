@@ -892,6 +892,17 @@ let announcementSlideTimer = null;
 let announcementSlideHover = false;
 let announcementDocs = []; // [{name, type, dataUrl, size}]
 
+// Static docs hosted in the repo (GitHub Pages). Use for files larger than
+// the Firestore 1 MB doc limit. Always visible; not removable from the UI.
+const STATIC_ANNOUNCEMENT_DOCS = [
+  {
+    name: 'ED RADIOLOGY EPIC DOWNTIME.docx',
+    type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    size: 1224621,
+    dataUrl: 'docs/announcements/ED_RADIOLOGY_EPIC_DOWNTIME.docx'
+  }
+];
+
 function formatDocSize(bytes) {
   if (!bytes && bytes !== 0) return '';
   if (bytes < 1024) return bytes + ' B';
@@ -914,13 +925,15 @@ function renderAnnouncementDocs() {
   const wrap = document.getElementById('announcementDocs');
   if (!wrap) return;
   wrap.innerHTML = '';
-  if (!announcementDocs.length) {
+  const hasAny = STATIC_ANNOUNCEMENT_DOCS.length || announcementDocs.length;
+  if (!hasAny) {
     wrap.hidden = true;
     return;
   }
   wrap.hidden = false;
   const unlocked = localStorage.getItem(ANNOUNCEMENT_UNLOCK_KEY) === 'true';
-  announcementDocs.forEach((d, i) => {
+
+  const buildRow = (d, opts) => {
     const row = document.createElement('div');
     row.className = 'announcement-doc-row';
     const a = document.createElement('a');
@@ -942,15 +955,20 @@ function renderAnnouncementDocs() {
       sz.textContent = formatDocSize(d.size);
       row.appendChild(sz);
     }
-    const rm = document.createElement('button');
-    rm.className = 'announcement-doc-remove';
-    rm.type = 'button';
-    rm.textContent = 'remove';
-    rm.hidden = !unlocked;
-    rm.addEventListener('click', () => removeAnnouncementDoc(i));
-    row.appendChild(rm);
-    wrap.appendChild(row);
-  });
+    if (opts && opts.removable) {
+      const rm = document.createElement('button');
+      rm.className = 'announcement-doc-remove';
+      rm.type = 'button';
+      rm.textContent = 'remove';
+      rm.hidden = !unlocked;
+      rm.addEventListener('click', () => removeAnnouncementDoc(opts.index));
+      row.appendChild(rm);
+    }
+    return row;
+  };
+
+  STATIC_ANNOUNCEMENT_DOCS.forEach(d => wrap.appendChild(buildRow(d, { removable: false })));
+  announcementDocs.forEach((d, i) => wrap.appendChild(buildRow(d, { removable: true, index: i })));
 }
 
 function setAnnouncementDocs(arr) {
