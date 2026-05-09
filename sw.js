@@ -2,7 +2,6 @@ const CACHE = 'em-toolkit-v3';
 
 const ASSETS = [
   '/index.html',
-  '/home.html',
   '/mdm.html',
   '/calculators.html',
   '/rsi.html',

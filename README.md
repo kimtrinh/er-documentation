@@ -6,7 +6,7 @@ Static HTML tools for emergency medicine documentation and quick bedside calcula
 
 - `index.html`: unified landing page with cross-tool search
 - `dotphrase.html`: searchable ER dotphrases by category
-- `home.html`: legacy alias of the landing page
+- `home.html`: redirect stub → `index.html` (kept so old bookmarks still work)
 - `calculators.html`: clinical decision calculators and chart-ready text
 - `vasopressors.html`: vasopressor/inotrope infusion and push-dose guidance
 - `rsi.html`: RSI medication and drip dosing helper

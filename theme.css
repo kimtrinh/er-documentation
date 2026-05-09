@@ -624,7 +624,7 @@ html[data-theme="light"] #feedback-popup::after {
 }
 
 /* ── sdrop-* shared classes (home search + omnisearch modal) ─────────── */
-/* These are also declared inline in index.html/home.html; here they serve
+/* These are also declared inline in index.html; here they serve
    all other pages that load theme.css but not the home page inline styles. */
 .sdrop-group {
   padding: 7px 14px 3px;
