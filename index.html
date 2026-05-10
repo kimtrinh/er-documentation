@@ -894,14 +894,9 @@ let announcementDocs = []; // [{name, type, dataUrl, size}]
 
 // Static docs hosted in the repo (GitHub Pages). Use for files larger than
 // the Firestore 1 MB doc limit. Always visible; not removable from the UI.
-const STATIC_ANNOUNCEMENT_DOCS = [
-  {
-    name: 'ED RADIOLOGY EPIC DOWNTIME.docx',
-    type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    size: 1224621,
-    dataUrl: 'docs/announcements/ED_RADIOLOGY_EPIC_DOWNTIME.docx'
-  }
-];
+// Add entries as { name, type, size, dataUrl } where dataUrl is a repo-relative
+// path under docs/announcements/.
+const STATIC_ANNOUNCEMENT_DOCS = [];
 
 function formatDocSize(bytes) {
   if (!bytes && bytes !== 0) return '';
