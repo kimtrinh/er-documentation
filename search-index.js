@@ -481,6 +481,7 @@ const SEARCH_INDEX = [
   {type:'link',i:'🖼️',t:'PACS Radiology (iSite)',s:'PACS  ·  radiology  ·  iSite  ·  San Bernardino  ·  imaging viewer  ·  CT  ·  MRI  ·  X-ray  ·  ultrasound',g:'Quick Link',gc:'t-algo',u:'links.html#link-pacs'},
   {type:'link',i:'📞',t:'SCAL On-Call Directory',s:'SCAL  ·  on-call  ·  on call  ·  directory  ·  Southern California  ·  intelli-web  ·  consultant  ·  specialist',g:'Quick Link',gc:'t-algo',u:'links.html#link-scal-oncall'},
   {type:'link',i:'📟',t:'Vocera Web',s:'Vocera  ·  voice page  ·  web pager  ·  badge  ·  hands free  ·  call  ·  text  ·  Fontario',g:'Quick Link',gc:'t-algo',u:'links.html#link-vocera'},
+  {type:'link',i:'📋',t:'IM consult board',s:'IM  ·  internal medicine  ·  consult  ·  consults  ·  logbook  ·  FileMaker  ·  WebDirect  ·  board',g:'Quick Link',gc:'t-algo',u:'links.html#link-im-consult-board'},
   {type:'link',i:'🏥',t:'Fontario SharePoint',s:'Fontario  ·  SharePoint  ·  KP Fontana Ontario  ·  intranet  ·  collaboration hub',g:'Quick Link',gc:'t-algo',u:'links.html#link-fontario'},
   {type:'link',i:'🤖',t:'UpToDate Expert AI (in KPHC)',s:'UpToDate  ·  Expert AI  ·  KPHC  ·  HealthConnect  ·  clinical decision support  ·  gen AI  ·  generative AI  ·  evidence',g:'Quick Link',gc:'t-algo',u:'links.html#link-uptodate-ai'},
   {type:'link',i:'🔐',t:'KPHC Endpoints Login',s:'KPHC  ·  HealthConnect  ·  endpoints  ·  login  ·  KP credentials  ·  Epic',g:'Quick Link',gc:'t-algo',u:'links.html#link-kphc-endpoints'},
