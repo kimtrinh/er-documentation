@@ -503,7 +503,9 @@ function escapeHtml(value) {
 
 function safeHref(href) {
   const trimmed = String(href || '').trim();
-  return /^[A-Za-z0-9._/-]+\.html(?:\?[A-Za-z0-9._%=&:+-]+)?(?:#[A-Za-z0-9._:-]+)?$/.test(trimmed) ? trimmed : 'index.html';
+  const sameOrigin = /^[A-Za-z0-9._/%-]+\.(?:html|pdf|docx?|pptx?|xlsx?|csv|txt|md|png|jpe?g|svg)(?:\?[A-Za-z0-9._%=&:+-]+)?(?:#[A-Za-z0-9._:-]+)?$/i;
+  const externalHttps = /^https:\/\/[A-Za-z0-9.-]+(?::\d+)?(?:\/[A-Za-z0-9._~/%?&=:+#-]*)?$/;
+  return (sameOrigin.test(trimmed) || externalHttps.test(trimmed)) ? trimmed : 'index.html';
 }
 
 function resolveResultHref(item, query) {
