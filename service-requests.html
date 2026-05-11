@@ -154,9 +154,12 @@ main{max-width:900px;margin:0 auto;padding:24px 24px 80px}
 /* FULFILLER ACTIONS */
 .fulfiller-actions{padding:10px 16px 14px;border-top:2px solid rgba(34,197,94,.25);background:rgba(34,197,94,.04);display:flex;flex-direction:column;gap:8px}
 .fulfiller-actions-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.done-btn{padding:7px 18px;background:#16a34a;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:5px}
+.done-btn{padding:7px 18px;background:#16a34a;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
 .done-btn:hover{background:#15803d}
 .done-btn:disabled{background:var(--border2);color:var(--border);cursor:not-allowed}
+.done-section{display:flex;gap:6px;flex:1;min-width:200px}
+.done-input{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:7px 12px;color:var(--text);font-size:13px;font-family:inherit;outline:none;transition:border-color .2s}
+.done-input:focus{border-color:#16a34a}
 .cannot-section{display:flex;gap:6px;flex:1;min-width:200px}
 .cannot-input{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:7px 12px;color:var(--text);font-size:13px;font-family:inherit;outline:none;transition:border-color .2s}
 .cannot-input:focus{border-color:#f59e0b}
@@ -629,7 +632,12 @@ function cardHTML(item) {
     ${isFulfiller ? `
     <div class="fulfiller-actions">
       <div class="fulfiller-actions-row">
+        <div class="done-section">
+          <input type="text" class="done-input" id="done-input-${item.id}" placeholder="Completion note (optional)…" maxlength="200"/>
+        </div>
         <button class="done-btn" onclick="window._markDone('${item.id}')">✓ Done</button>
+      </div>
+      <div class="fulfiller-actions-row">
         <div class="cannot-section">
           <input type="text" class="cannot-input" id="cannot-input-${item.id}" placeholder="Reason cannot be completed…" maxlength="200"/>
           <button class="cannot-btn" onclick="window._postCannotComplete('${item.id}')">Cannot Complete</button>
@@ -983,12 +991,40 @@ function updateFulfillerToggle() {
 
 async function markDone(id) {
   if (!firebaseReady) return;
+  const input = document.getElementById('done-input-' + id);
+  const note = input ? input.value.trim() : '';
   try {
-    await updateDoc(doc(db, 'serviceRequests', id), { status: 'resolved' });
-    const item = allRequests.find(r => r.id === id);
-    if (item) item.status = 'resolved';
-    renderAll();
-    showToast('✓ Marked as done');
+    if (note) {
+      await addDoc(collection(db, 'serviceRequests', id, 'comments'), {
+        text: note,
+        author: '✓ Done',
+        type: 'fulfiller',
+        createdAt: serverTimestamp()
+      });
+      await updateDoc(doc(db, 'serviceRequests', id), {
+        status: 'resolved',
+        commentCount: increment(1)
+      });
+      const item = allRequests.find(r => r.id === id);
+      if (item) {
+        item.status = 'resolved';
+        item.commentCount = (item.commentCount || 0) + 1;
+      }
+      if (input) input.value = '';
+      // Open the comments panel so the note is immediately visible.
+      if (!openComments.has(id)) {
+        openComments.add(id);
+        setupRealtimeComments(id);
+      }
+      renderAll();
+      showToast('✓ Marked as done — note posted');
+    } else {
+      await updateDoc(doc(db, 'serviceRequests', id), { status: 'resolved' });
+      const item = allRequests.find(r => r.id === id);
+      if (item) item.status = 'resolved';
+      renderAll();
+      showToast('✓ Marked as done');
+    }
   } catch (e) {
     console.error('Mark done error:', e);
     showToast('Failed to update status.');
