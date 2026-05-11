@@ -423,7 +423,16 @@ const firebaseConfig = {
 const EMAILJS_PUBLIC_KEY = 'ZUkxeb4p-LrOetbHE';
 const EMAILJS_SERVICE_ID = 'service_7s9tj4j';
 const EMAILJS_TEMPLATE_ID = 'template_gkq401s';
+// Decoded order: [0] Russel (OMC), [1] David (FMC), [2] Kim, [3] Michael.
 const NOTIFY_EMAILS = atob('UnVzc2VsLlcuTWF4aWUtU3JAa3Aub3JnLERhdmlkLkouVGhpZXNzZW5Aa3Aub3JnLGtpbS54LnRyaW5oQGtwLm9yZyxNaWNoYWVsLlNjaHdhcnR6d2FsZEBrcC5vcmc=').split(',');
+// Route notifications by location: OMC → Russel/Kim/Michael, FMC → David/Kim/Michael.
+const NOTIFY_EMAILS_BY_LOCATION = {
+  OMC: [NOTIFY_EMAILS[0], NOTIFY_EMAILS[2], NOTIFY_EMAILS[3]],
+  FMC: [NOTIFY_EMAILS[1], NOTIFY_EMAILS[2], NOTIFY_EMAILS[3]]
+};
+function recipientsFor(location) {
+  return NOTIFY_EMAILS_BY_LOCATION[location] || NOTIFY_EMAILS;
+}
 
 let emailjsReady = false;
 function initEmailJS() {
@@ -439,7 +448,7 @@ function initEmailJS() {
 async function sendEmailNotification(data) {
   if (!emailjsReady) return;
   const params = {
-    to_email: NOTIFY_EMAILS.join(','),
+    to_email: recipientsFor(data.location).join(','),
     title: data.title,
     description: data.desc || '(none)',
     location: data.location,
