@@ -167,6 +167,8 @@ main{max-width:900px;margin:0 auto;padding:24px 24px 80px}
 .cannot-btn:hover{background:#92400e}
 .comment-bubble.is-fulfiller{border-color:rgba(245,158,11,.5);background:rgba(245,158,11,.07)}
 .comment-bubble.is-fulfiller .comment-author-line{color:#f59e0b}
+.comment-del-btn{background:transparent;border:none;color:var(--text3);font-size:12px;cursor:pointer;padding:2px 6px;border-radius:4px;line-height:1;transition:color .15s,background .15s;margin-left:6px}
+.comment-del-btn:hover{color:#ef4444;background:rgba(239,68,68,.1)}
 
 /* DELETE BUTTON */
 .del-btn{background:transparent;border:1px solid var(--border);border-radius:8px;padding:6px 8px;font-size:14px;cursor:pointer;transition:all .2s;flex-shrink:0;line-height:1;align-self:flex-start;margin-top:6px}
@@ -659,12 +661,16 @@ function cardHTML(item) {
   </div>`;
 }
 
-function commentHTML(c) {
+function commentHTML(c, requestId) {
   const isFulfillerNote = c.type === 'fulfiller';
+  const ownedByMe = c.submitterBrowserId && c.submitterBrowserId === BROWSER_ID;
+  const delBtn = ownedByMe
+    ? `<button class="comment-del-btn" title="Delete this comment" onclick="window._deleteComment('${requestId}','${c.id}')">🗑</button>`
+    : '';
   return `<div class="comment-bubble${isFulfillerNote ? ' is-fulfiller' : ''}">
     <div class="comment-author-line">
       <span>${esc(c.author || 'Anonymous')}</span>
-      <span>${timeAgo(c.createdAt)}</span>
+      <span>${timeAgo(c.createdAt)}${delBtn}</span>
     </div>
     <div class="comment-text">${esc(c.text)}</div>
   </div>`;
@@ -745,7 +751,7 @@ function setupRealtimeComments(id) {
     const comments = [];
     snapshot.forEach(d => comments.push({ id: d.id, ...d.data() }));
     const html = comments.length > 0
-      ? comments.map(c => commentHTML(c)).join('')
+      ? comments.map(c => commentHTML(c, id)).join('')
       : '<div class="no-comments">No comments yet</div>';
     commentsCache[id] = html;
     const el = document.getElementById('clist-' + id);
@@ -772,6 +778,7 @@ async function addComment(id) {
     await addDoc(collection(db, 'serviceRequests', id, 'comments'), {
       text: text,
       author: author,
+      submitterBrowserId: BROWSER_ID,
       createdAt: serverTimestamp()
     });
     // Update comment count on the request doc
@@ -999,6 +1006,7 @@ async function markDone(id) {
         text: note,
         author: '✓ Done',
         type: 'fulfiller',
+        submitterBrowserId: BROWSER_ID,
         createdAt: serverTimestamp()
       });
       await updateDoc(doc(db, 'serviceRequests', id), {
@@ -1048,6 +1056,7 @@ async function postCannotComplete(id) {
       text: reason,
       author: '⚠️ Cannot Complete',
       type: 'fulfiller',
+      submitterBrowserId: BROWSER_ID,
       createdAt: serverTimestamp()
     });
     await updateDoc(doc(db, 'serviceRequests', id), {
@@ -1073,11 +1082,32 @@ async function postCannotComplete(id) {
   }
 }
 
+async function deleteComment(requestId, commentId) {
+  if (!firebaseReady) return;
+  if (!confirm('Delete this comment? This cannot be undone.')) return;
+  try {
+    await deleteDoc(doc(db, 'serviceRequests', requestId, 'comments', commentId));
+    // Decrement the request's commentCount (clamped at 0 in case of drift).
+    const item = allRequests.find(r => r.id === requestId);
+    if (item) {
+      const next = Math.max(0, (item.commentCount || 0) - 1);
+      await updateDoc(doc(db, 'serviceRequests', requestId), { commentCount: next });
+      item.commentCount = next;
+      renderAll();
+    }
+    showToast('Comment deleted');
+  } catch (e) {
+    console.error('Delete comment error:', e);
+    showToast('Failed to delete comment.');
+  }
+}
+
 // ── EXPOSE TO INLINE HANDLERS ────────────────────────────────
 window._vote = vote;
 window._cycleStatus = cycleStatus;
 window._toggleComments = toggleComments;
 window._addComment = addComment;
+window._deleteComment = deleteComment;
 window._toggleAdmin = toggleAdmin;
 window._deleteRequest = deleteRequest;
 window._toggleFulfiller = toggleFulfiller;
