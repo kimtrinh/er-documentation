@@ -461,11 +461,11 @@ const SEARCH_INDEX = [
   {type:'staff',i:'👤',t:'FMC — ED Security Specialist',s:'35500  ·  key staff — fmc ed  ·  fmc',g:'FMC Key Staff',gc:'t-phone',u:'ed-phone-directory.html'},
 
   // ── PEDS FEVER ──────────────────────────────────────────────────────────
-  {type:'page',i:'🌡️',t:'Peds Fever — CA FIRST Protocol',s:'pediatric fever  ·  febrile infant  ·  age-stratified workup  ·  0-28 days  ·  1-3 months  ·  3-24 months  ·  risk stratification',g:'Peds Fever',gc:'t-algo',u:'pedsfever.html'},
-  {type:'page',i:'🌡️',t:'Peds Fever — Neonates (0–28 days)',s:'febrile neonate  ·  high risk  ·  full sepsis workup  ·  LP  ·  ceftriaxone  ·  ampicillin  ·  admit  ·  CA FIRST',g:'Peds Fever',gc:'t-algo',u:'pedsfever.html'},
-  {type:'page',i:'🌡️',t:'Peds Fever — Young Infants (29–60 days)',s:'1-3 months  ·  Step-by-Step criteria  ·  PECARN  ·  SBI risk  ·  febrile infant  ·  discharge vs admit',g:'Peds Fever',gc:'t-algo',u:'pedsfever.html'},
-  {type:'page',i:'🌡️',t:'Peds Fever — 3–24 Months',s:'fever without source  ·  UTI  ·  bacteremia  ·  UA  ·  CBC  ·  occult bacteremia  ·  pneumococcal',g:'Peds Fever',gc:'t-algo',u:'pedsfever.html'},
-  {type:'page',i:'🌡️',t:'Peds Fever — Older Children (>3 years)',s:'fever  ·  school age  ·  older child  ·  focal infection  ·  workup criteria  ·  antibiotics',g:'Peds Fever',gc:'t-algo',u:'pedsfever.html'},
+  {type:'page',i:'🌡️',t:'Peds Fever — CA FIRST Protocol',s:'pediatric fever  ·  febrile infant  ·  age-stratified workup  ·  7-90 days  ·  risk stratification  ·  AAP CPG 2021  ·  Roseville',g:'Peds Fever',gc:'t-algo',u:'pedsfever.html'},
+  {type:'page',i:'🌡️',t:'Peds Fever — Neonates (7–21 days)',s:'febrile neonate  ·  high risk  ·  full sepsis workup  ·  LP  ·  ceftriaxone  ·  ampicillin  ·  admit  ·  CA FIRST',g:'Peds Fever',gc:'t-algo',u:'pedsfever.html'},
+  {type:'page',i:'🌡️',t:'Peds Fever — Transitional (22–28 days)',s:'febrile infant  ·  transitional  ·  risk stratification  ·  inflammatory markers  ·  CSF  ·  shared decision-making  ·  CA FIRST',g:'Peds Fever',gc:'t-algo',u:'pedsfever.html'},
+  {type:'page',i:'🌡️',t:'Peds Fever — Young Infants (29–60 days)',s:'febrile infant  ·  1-2 months  ·  Step-by-Step criteria  ·  PECARN  ·  SBI risk  ·  discharge vs admit  ·  CA FIRST',g:'Peds Fever',gc:'t-algo',u:'pedsfever.html'},
+  {type:'page',i:'🌡️',t:'Peds Fever — Extended (61–90 days)',s:'febrile infant  ·  2-3 months  ·  CA FIRST extended  ·  Kaiser NorCal  ·  lower IBI risk  ·  outpatient',g:'Peds Fever',gc:'t-algo',u:'pedsfever.html'},
 
   // ── QUICK LINKS (cards on links.html — deep-linked) ─────────────────────
   {type:'link',i:'💵',t:'Paycheck Calculator',s:'paycheck  ·  net pay  ·  taxes  ·  deductions  ·  salary  ·  withholding  ·  W-2  ·  hourly',g:'Quick Link',gc:'t-algo',u:'links.html#link-paycheck'},
