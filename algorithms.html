@@ -411,11 +411,25 @@ main>*:nth-child(4){animation-delay:.15s}
         <div class="algo-meta">KP Interregional Clinical Library &nbsp;·&nbsp; <span class="algo-badge badge-ob">OB/GYN</span></div>
       </div>
     </div>
-    <div class="algo-card" onclick="showAlgo('bariatric-ct')" id="card-bariatric-ct" data-algo="bariatric-ct" data-keywords="bariatric surgery gastric bypass sleeve gastrectomy CT scan protocol imaging post-op complication morbid obesity" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+    <div class="algo-card" onclick="showAlgo('bariatric-ct')" id="card-bariatric-ct" data-algo="bariatric-ct" data-keywords="bariatric surgery gastric bypass sleeve gastrectomy CT scan protocol imaging post-op complication morbid obesity transfer criteria Roux-en-Y leak internal hernia pulmonary embolism" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
       <div class="algo-icon">⚖️</div>
       <div class="algo-info">
-        <div class="algo-title">Bariatric Surgery CT Protocols</div>
+        <div class="algo-title">Bariatric CT Protocols & Transfer Criteria</div>
         <div class="algo-meta">KP SBC Radiology · Surgery &nbsp;·&nbsp; <span class="algo-badge badge-cardio">Surgery · Radiology</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('buprenorphine')" id="card-buprenorphine" data-algo="buprenorphine" data-keywords="buprenorphine bup suboxone subutex naloxone opioid use disorder OUD MAT medication assisted treatment withdrawal COWS precipitated induction hospital quick start self-start fentanyl heroin addiction CA Bridge" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">💊</div>
+      <div class="algo-info">
+        <div class="algo-title">Buprenorphine (Bup) Hospital Quick Start &amp; Self-Start</div>
+        <div class="algo-meta">CA Bridge · September 2020 / March 2022 &nbsp;·&nbsp; <span class="algo-badge badge-neuro">Addiction Medicine</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('mri-cied')" id="card-mri-cied" data-algo="mri-cied" data-keywords="MRI CIED pacemaker ICD implantable cardiac device conditional inpatient imaging telemetry ACLS lead asystole VT VF battery longevity Medtronic Boston Scientific Biotronik Abbott St Jude" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🧲</div>
+      <div class="algo-info">
+        <div class="algo-title">Inpatient MRI in Patients with CIEDs</div>
+        <div class="algo-meta">KP SBC Radiology &nbsp;·&nbsp; <span class="algo-badge badge-cardio">Radiology · Cardiology</span></div>
       </div>
     </div>
     <div class="algo-card" onclick="showAlgo('abusive-head-trauma')" id="card-abusive-head-trauma" data-algo="abusive-head-trauma" data-keywords="abusive head trauma shaken baby non-accidental trauma NAT child abuse TBI subdural retinal hemorrhage" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
@@ -1579,15 +1593,83 @@ const algos = {
   },
   'bariatric-ct': {
     icon: '⚖️',
-    title: 'Bariatric Surgery CT Protocols',
+    title: 'Bariatric CT Protocols & Transfer Criteria',
     updated: 'KP SBC Radiology · Surgery',
     render: () => `
-      <div style="padding:0 4px">
-        <div style="margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
-          <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 Official Protocol Document</div>
+      <div style="max-width:880px;margin:0 auto">
+        <div class="callout"><strong>Bariatric Surgery CT Scan Protocols:</strong> CT scanning for patients after bariatric surgery falls into two basic groups — <strong>Early Postop</strong> (within first 30 days) and <strong>Late Postop</strong> (&gt; 30 days). Most Bariatric Protocol exams are ordered by the ED. Please look under signs and symptoms for instructions. <strong>As always review your RIS sheet for special instructions.</strong></div>
+
+        <div style="display:flex;align-items:center;justify-content:space-between;margin:18px 0 12px;flex-wrap:wrap;gap:8px">
+          <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">📄 Original Document</div>
           <a href="assets/bariatric-ct.docx" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue2);border:1px solid var(--blue);border-radius:8px;color:#fff;font-size:12px;font-weight:600;text-decoration:none">⬇ Download / Open</a>
         </div>
-        <iframe src="https://view.officeapps.live.com/op/embed.aspx?src=https://kimtrinh.github.io/er-documentation/assets/bariatric-ct.docx" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Bariatric Surgery CT Scan Protocols"></iframe>
+
+        <div class="section-label" style="margin-top:18px">Early Postop — Within First 30 Days After Surgery</div>
+        <div style="background:var(--bg);border:1px solid var(--border2);border-left:3px solid #ef4444;border-radius:0 10px 10px 0;padding:14px 16px;margin-bottom:14px">
+          <div style="font-size:12.5px;color:var(--text2);line-height:1.65;margin-bottom:10px">Suspicion for <strong style="color:var(--text)">leak</strong> and <strong style="color:var(--text)">PE</strong> are highest, and the patient cannot drink much.</div>
+          <ol style="padding-left:22px;margin:0;font-size:12.5px;color:var(--text2);line-height:1.7;display:flex;flex-direction:column;gap:6px">
+            <li>Provide <strong style="color:var(--text)">100 mL oral contrast</strong> and have the patient consume it over one hour.</li>
+            <li>Take to scanner; provide another <strong style="color:var(--text)">30 mL oral contrast</strong> on the gantry.</li>
+            <li>CT Tech &gt; CT Scout Chest/Abdomen/Pelvis, with the chest portion being an actual <strong style="color:var(--text)">PE protocol</strong>.</li>
+            <li>CT Tech &gt; Protocol set-up PE Protocol, then at <strong style="color:var(--text)">70 sec post-IV injection</strong>, scan routine Abd/Pelvis.</li>
+          </ol>
+          <div style="margin-top:12px;padding:10px 12px;background:var(--surface);border:1px dashed #f87171;border-radius:8px">
+            <div style="font-size:11px;font-weight:700;color:#fca5a5;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">Main Diagnoses of Interest</div>
+            <ul style="padding-left:20px;margin:0;font-size:12.5px;color:var(--text2);line-height:1.7">
+              <li>Extravasation of contrast — <strong style="color:var(--text)">Leak</strong></li>
+              <li>Obstruction at the gastrojejunostomy or jejunojejunostomy</li>
+              <li>Pulmonary embolism</li>
+              <li>Internal hernia</li>
+              <li>Pneumonia</li>
+              <li>Incisional hernia</li>
+              <li>Acute mesenteric venous thrombosis</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="section-label" style="margin-top:18px">Late Postop — More Than 30 Days After Surgery</div>
+        <div style="background:var(--bg);border:1px solid var(--border2);border-left:3px solid #3b82f6;border-radius:0 10px 10px 0;padding:14px 16px;margin-bottom:14px">
+          <ol style="padding-left:22px;margin:0;font-size:12.5px;color:var(--text2);line-height:1.7;display:flex;flex-direction:column;gap:6px">
+            <li>Provide the usual volume of oral contrast, and allow a <strong style="color:var(--text)">full 3 hours</strong> to consume it.</li>
+            <li>Take to scanner; provide another <strong style="color:var(--text)">30 mL oral contrast</strong> on the gantry.</li>
+            <li>CT Tech &gt; Scan Abdomen/Pelvis @ <strong style="color:var(--text)">70 sec post-IV injection</strong>.</li>
+          </ol>
+          <div style="margin-top:10px;font-size:12px;color:var(--text2);line-height:1.6;padding:8px 12px;background:var(--surface);border:1px dashed #60a5fa;border-radius:8px">
+            <strong style="color:var(--text-blue)">Ordering Physician:</strong> consider adding Chest PE protocol for patients with significant chest pain, shortness of breath, oxygen desaturation, or unilateral leg swelling.
+          </div>
+          <div style="margin-top:12px;padding:10px 12px;background:var(--surface);border:1px dashed #60a5fa;border-radius:8px">
+            <div style="font-size:11px;font-weight:700;color:var(--text-blue);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">Main Diagnoses of Interest</div>
+            <ul style="padding-left:20px;margin:0;font-size:12.5px;color:var(--text2);line-height:1.7">
+              <li>Bowel obstruction</li>
+              <li>Internal hernia</li>
+              <li>Perforation (marginal ulcer, gastric sleeve ulcer)</li>
+              <li>Incisional hernia</li>
+              <li>Intussusception</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="callout callout-yellow" style="margin-top:24px"><strong>Evaluating the Bariatric Patient — Criteria for Transferring Bariatric Patients.</strong> In order to provide optimal care for our Bariatric population, we agree to transfer the patients who have had prior Bariatric Surgery with problems related to their prior bariatric surgery. These include:</div>
+
+        <div style="background:var(--bg);border:1px solid var(--border2);border-left:3px solid #fbbf24;border-radius:0 10px 10px 0;padding:14px 16px;margin-bottom:14px">
+          <div style="font-size:13px;font-weight:700;color:#fde68a;text-transform:uppercase;letter-spacing:.04em;margin-bottom:10px">Transfer to Bariatric Surgeon</div>
+          <ul style="padding-left:20px;margin:0;font-size:12.5px;color:var(--text2);line-height:1.7;display:flex;flex-direction:column;gap:8px">
+            <li><strong style="color:var(--text)">Any gastric or small bowel perforation</strong> — the patient must be hemodynamically stable for transfer.</li>
+            <li><strong style="color:var(--text)">Small bowel obstruction.</strong> Proximal small bowel obstructions in a patient that has had a prior Roux-en-Y gastric bypass should be transferred to the Bariatric Surgeon. The Bariatric Surgeon on call will review imaging studies. He/she will place a note in the chart if he disagrees with the radiologist's interpretation of imaging studies. <em>This does not include all Sleeve Gastrectomies, since the small bowel anatomy has not been altered.</em></li>
+            <li><strong style="color:var(--text)">Any Lap Band problem.</strong></li>
+          </ul>
+        </div>
+
+        <div style="background:var(--bg);border:1px solid var(--border2);border-left:3px solid #22c55e;border-radius:0 10px 10px 0;padding:14px 16px;margin-bottom:14px">
+          <div style="font-size:13px;font-weight:700;color:#bbf7d0;text-transform:uppercase;letter-spacing:.04em;margin-bottom:10px">May Be Managed at Home Facility</div>
+          <ul style="padding-left:20px;margin:0;font-size:12.5px;color:var(--text2);line-height:1.7;display:flex;flex-direction:column;gap:8px">
+            <li>Patients with <strong style="color:var(--text)">chronic abdominal pain without a clear etiology</strong> can undergo workup at their home facility with recommendations from the Bariatric Surgeon.</li>
+            <li>Patients with <strong style="color:var(--text)">large bowel obstruction, constipation, diverticulitis, biliary disease</strong> (including gallstone associated pancreatitis and choledocholithiasis), <strong style="color:var(--text)">appendicitis</strong>, and abdominal pain of unclear etiology can be managed at their home facility.</li>
+          </ul>
+          <div style="margin-top:10px;font-size:12px;color:var(--text3);font-style:italic">The Bariatric Surgeon on call can request evaluation by the General Surgeon on call at the facility before accepting transfers.</div>
+        </div>
+
+        <div style="margin-top:18px;font-size:11px;color:var(--text3);text-align:center;font-style:italic">Source: KP SBC Bariatric Surgery CT Scan Protocols &amp; Evaluating the Bariatric Patient / Transfer Criteria</div>
       </div>
     `
   },
@@ -2033,6 +2115,279 @@ const algos = {
           <a href="https://view.officeapps.live.com/op/view.aspx?src=https://kimtrinh.github.io/er-documentation/assets/paxlovid-prescribing.pptx" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--blue2);border:1px solid var(--blue);border-radius:8px;color:#fff;font-size:12px;font-weight:600;text-decoration:none">⬇ Open in PowerPoint</a>
         </div>
         <iframe src="https://view.officeapps.live.com/op/embed.aspx?src=https://kimtrinh.github.io/er-documentation/assets/paxlovid-prescribing.pptx" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Paxlovid Prescribing Guide"></iframe>
+      </div>
+    `
+  },
+
+  'buprenorphine': {
+    icon: '💊',
+    title: 'Buprenorphine (Bup) Hospital Quick Start & Self-Start',
+    updated: 'CA Bridge · September 2020 / March 2022',
+    render: () => `
+      <div style="max-width:920px;margin:0 auto">
+        <div class="callout callout-green"><strong>CA Bridge — Buprenorphine Hospital Quick Start.</strong> Any prescriber can order Bup in the hospital, <strong>even without an x-waiver</strong>. Bup is a high-affinity, partial agonist opioid that is safe and highly effective for treating opioid use disorder. If patient is stable on methadone or prefers methadone, recommend continuation of methadone as first-line treatment.</div>
+
+        <div class="section-label" style="margin-top:22px">Hospital Quick Start — Induction Algorithm</div>
+        <div class="flow">
+          <div class="decision-card" style="width:100%;max-width:640px">
+            <div class="decision-q">Uncomplicated* opioid withdrawal?**</div>
+            <div class="decision-opts">
+              <div class="decision-opt opt-yes">
+                <span class="opt-badge badge-yes">YES</span>
+                <div class="opt-text">Stop other opioids → <strong>Administer 8 mg Bup SL</strong></div>
+              </div>
+              <div class="decision-opt opt-no">
+                <span class="opt-badge badge-no">NO</span>
+                <div class="opt-text"><strong>Start Bup after withdrawal.</strong> Supportive meds prn; stop other opioids.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="arrow-down"></div>
+          <div class="node node-process" style="max-width:520px;text-align:center;padding:14px 18px">Wait <strong>1 hour</strong> → reassess</div>
+          <div class="arrow-down"></div>
+
+          <div class="decision-card" style="width:100%;max-width:640px">
+            <div class="decision-q">Withdrawal symptoms improved?</div>
+            <div class="decision-opts">
+              <div class="decision-opt opt-yes">
+                <span class="opt-badge badge-yes">YES</span>
+                <div class="opt-text">
+                  <strong>Administer 2nd dose.</strong>
+                  <div style="font-size:12px;color:var(--text2);margin-top:4px;line-height:1.7">
+                    <strong>Inpatient:</strong> 8 mg. Subsequent days, titrate from 16 mg with additional 4–8 mg prn cravings.<br>
+                    <strong>ED:</strong> 8–24 mg. Consider discharge with higher loading dose.
+                  </div>
+                </div>
+              </div>
+              <div class="decision-opt opt-no">
+                <span class="opt-badge badge-no">NO</span>
+                <div class="opt-text">
+                  <strong>No Improvement — Differential Diagnosis:</strong>
+                  <ul style="padding-left:18px;margin:6px 0 0;font-size:12px;color:var(--text2);line-height:1.65">
+                    <li><strong>Withdrawal mimic:</strong> influenza, DKA, sepsis, thyrotoxicosis, etc. Treat underlying illness.</li>
+                    <li><strong>Incompletely treated withdrawal:</strong> occurs with lower starting doses; improves with more Bup.</li>
+                    <li><strong>Bup side-effect:</strong> nausea, headache, dysphoria. Continue Bup; treat symptoms with supportive medications.</li>
+                    <li><strong>Precipitated withdrawal:</strong> dose started too soon after opioid agonist. Usually time-limited, self-resolving with supportive medications. In complex/severe cases, OK to stop Bup and give short-acting full agonists.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="arrow-down"></div>
+          <div class="node node-action" style="max-width:520px;text-align:center;padding:14px 18px"><strong>Maintenance Treatment — 16 mg Bup SL/day.</strong> Titrate to suppress cravings; usual total dose 16–32 mg/day.</div>
+          <div class="arrow-down"></div>
+
+          <div class="node node-process" style="max-width:600px;text-align:left;padding:14px 18px">
+            <strong style="color:var(--text-blue-bright)">Discharge:</strong>
+            <ul style="padding-left:20px;margin:6px 0 0;font-size:12px;color:var(--text2);line-height:1.7">
+              <li>Document opioid withdrawal and/or opioid use disorder as a diagnosis.</li>
+              <li><strong>If no X-waiver:</strong> use loading dose up to 32 mg for long effect and give rapid follow up.</li>
+              <li><strong>If X-waiver:</strong> Check CURES (not required in Emergency Department if &le; 7 day prescription); prescribe sufficient Bup/Nx until follow-up.</li>
+            </ul>
+          </div>
+
+          <div class="arrow-down"></div>
+          <div class="node node-action-red" style="max-width:520px;text-align:center;padding:12px 18px"><strong>Overdose Education Naloxone Kit</strong><br><span style="font-size:12px">Naloxone 4 mg / 0.1 mL intranasal spray</span></div>
+        </div>
+
+        <div class="section-label" style="margin-top:24px">Buprenorphine Dosing</div>
+        <div style="background:var(--bg);border:1px solid var(--border2);border-left:3px solid #3b82f6;border-radius:0 10px 10px 0;padding:14px 16px;margin-bottom:14px">
+          <ul style="padding-left:20px;margin:0;font-size:12.5px;color:var(--text2);line-height:1.75;display:flex;flex-direction:column;gap:6px">
+            <li>Either <strong style="color:var(--text)">Bup</strong> or <strong style="color:var(--text)">Bup/Nx</strong> (buprenorphine/naloxone) films or tab sublingual (SL) are OK.</li>
+            <li>If unable to take oral/SL, try <strong style="color:var(--text)">Bup 0.3 mg IV/IM</strong>.</li>
+            <li>OK to start with lower initial dose: <strong style="color:var(--text)">Bup 2–4 mg SL</strong>.</li>
+            <li>Total initial daily dose above 16 mg may increase duration of action beyond 24 hours.</li>
+            <li>Bup SL onset <strong>15 min</strong>, peak <strong>1 hr</strong>, steady state <strong>7 days</strong>.</li>
+            <li>May dose qday or if co-existing chronic pain, split dosing TID/QID.</li>
+          </ul>
+        </div>
+
+        <div class="branch-container" style="align-items:stretch;margin-bottom:18px">
+          <div class="branch" style="max-width:none;flex:1">
+            <div class="branch-label" style="color:#fca5a5">*Complicating Factors</div>
+            <div style="background:var(--bg);border:1px solid #991b1b;border-radius:10px;padding:14px;font-size:12.5px;color:var(--text2);line-height:1.65">
+              <ul style="padding-left:18px;margin:0;display:flex;flex-direction:column;gap:6px">
+                <li>Altered mental status, delirium, intoxication</li>
+                <li>Severe acute pain, trauma or planned large surgeries</li>
+                <li>Organ failure or other severe medical illness</li>
+                <li>Recent methadone use</li>
+              </ul>
+            </div>
+          </div>
+          <div class="branch" style="max-width:none;flex:1">
+            <div class="branch-label" style="color:#fde68a">**Diagnosing Opioid Withdrawal</div>
+            <div style="background:var(--bg);border:1px solid #92400e;border-radius:10px;padding:14px;font-size:12.5px;color:var(--text2);line-height:1.65">
+              <strong style="color:var(--text)">Subjective symptoms AND one objective sign.</strong>
+              <ul style="padding-left:18px;margin:6px 0 0;display:flex;flex-direction:column;gap:4px">
+                <li><strong>Subjective:</strong> patient reports feeling "bad" due to withdrawal (nausea, stomach cramps, body aches, restlessness, hot and cold, stuffy nose).</li>
+                <li><strong>Objective (at least one):</strong> restlessness, sweating, rhinorrhea, dilated pupils, watery eyes, tachycardia, yawning, goose bumps, vomiting, diarrhea, tremor.</li>
+                <li><strong>Typical withdrawal onset:</strong> &ge; 12 hrs after short acting opioid; &ge; 24 hrs after long acting opioid; &ge; 48 hrs after methadone (can be &gt; 72 hrs).</li>
+                <li>If unsure, use <strong>COWS</strong> (clinical opioid withdrawal scale). Start if COWS &ge; 8 AND one objective sign.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div style="background:var(--bg);border:1px solid var(--border2);border-left:3px solid #f59e0b;border-radius:0 10px 10px 0;padding:14px 16px;margin-bottom:14px">
+          <div style="font-size:13px;font-weight:700;color:#fde68a;text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px">If Completed Withdrawal</div>
+          <div style="font-size:12.5px;color:var(--text2);line-height:1.65">Typically &gt; 72 hrs since last short-acting opioid, may be longer for methadone. Start <strong style="color:var(--text)">Bup 4 mg q4h prn cravings</strong>, usual dose 16–32 mg/day. Subsequent days, OK to decrease frequency to qday.</div>
+        </div>
+
+        <div style="background:var(--bg);border:1px solid var(--border2);border-left:3px solid #3b82f6;border-radius:0 10px 10px 0;padding:14px 16px;margin-bottom:14px">
+          <div style="font-size:13px;font-weight:700;color:var(--text-blue);text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px">Opioid Analgesics &amp; Supportive Meds</div>
+          <ul style="padding-left:20px;margin:0;font-size:12.5px;color:var(--text2);line-height:1.7">
+            <li><strong style="color:var(--text)">Pause opioid pain relievers</strong> when starting Bup.</li>
+            <li>OK to introduce opioid pain relievers after Bup is started for breakthrough pain. <strong style="color:var(--text)">Do not use methadone with Bup.</strong></li>
+            <li>Supportive medications can be used as needed while waiting for withdrawal or during induction process.</li>
+          </ul>
+        </div>
+
+        <div class="callout callout-green" style="margin-bottom:18px"><strong>Pregnancy:</strong> Bup monoproduct or Bup/Nx OK in pregnancy. Consider referencing buprenorphine in pregnancy guide.</div>
+
+        <hr style="border:none;border-top:1px dashed var(--border);margin:28px 0">
+
+        <div class="callout"><strong>CA Bridge — Buprenorphine Self-Start.</strong> Guidance for patients starting buprenorphine outside of hospitals or clinics. <em>Hand out as a patient-facing instruction sheet.</em></div>
+
+        <div class="section-label" style="margin-top:18px">Self-Start — Step by Step</div>
+        <div class="steps" style="margin-bottom:18px">
+          <div class="step"><div class="step-num">1</div><div class="step-content"><strong>Plan to take a day off</strong> and have a place to rest.</div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-content"><strong>Stop using and wait until you feel very sick</strong> from withdrawals (at least 12 hours is best; if using fentanyl it may take a few days).</div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-content"><strong>Dose one or two 8 mg tablets or strips UNDER your tongue</strong> (total dose 8–16 mg).</div></div>
+          <div class="step"><div class="step-num">4</div><div class="step-content"><strong>Repeat dose</strong> (another 8–16 mg) in an hour to feel well.</div></div>
+          <div class="step"><div class="step-num">5</div><div class="step-content">The next day, <strong>take 16–32 mg</strong> (2–4 tablets or films) at one time.</div></div>
+        </div>
+
+        <div class="branch-container" style="align-items:stretch;margin-bottom:18px">
+          <div class="branch" style="max-width:none;flex:1">
+            <div class="branch-label" style="color:#86efac">If you've started Bup before</div>
+            <div style="background:var(--bg);border:1px solid #166534;border-radius:10px;padding:14px;font-size:12.5px;color:var(--text2);line-height:1.65">
+              <ul style="padding-left:18px;margin:0;display:flex;flex-direction:column;gap:6px">
+                <li>If it went well, that's great! Just do that again.</li>
+                <li>If it was difficult, talk with your care team to figure out what happened and find ways to make it better this time. You may need a different dosing plan.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="branch" style="max-width:none;flex:1">
+            <div class="branch-label" style="color:#60a5fa">If you've never started Bup before</div>
+            <div style="background:var(--bg);border:1px solid #1e3a8a;border-radius:10px;padding:14px;font-size:12.5px;color:var(--text2);line-height:1.65">
+              <ul style="padding-left:18px;margin:0;display:flex;flex-direction:column;gap:6px">
+                <li>Gather your support team and if possible take a "day off."</li>
+                <li>You are going to want space to rest. <strong style="color:var(--text)">Don't drive.</strong></li>
+                <li>Using cocaine, meth, alcohol, or pills makes starting Bup harder, and mixing in alcohol or benzos can be dangerous.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="branch-container" style="align-items:stretch;margin-bottom:18px">
+          <div class="branch" style="max-width:none;flex:1">
+            <div class="branch-label" style="color:#fde68a">If you have a light habit</div>
+            <div style="background:var(--bg);border:1px solid #92400e;border-radius:10px;padding:14px;font-size:12.5px;color:var(--text2);line-height:1.65">
+              <div style="font-style:italic;color:var(--text3);margin-bottom:6px">e.g., 5 "Norco 10's" a day</div>
+              <ul style="padding-left:18px;margin:0;display:flex;flex-direction:column;gap:6px">
+                <li>Consider a <strong style="color:var(--text)">low dose</strong>: start with 4 mg and stop at 8 mg total.</li>
+                <li><strong style="color:#fca5a5">WARNING:</strong> Withdrawal will continue if you don't take enough bup.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="branch" style="max-width:none;flex:1">
+            <div class="branch-label" style="color:#fca5a5">If you have a heavy habit</div>
+            <div style="background:#2d1b1b;border:1px solid #ef4444;border-radius:10px;padding:14px;font-size:12.5px;color:#fecaca;line-height:1.65">
+              <div style="font-style:italic;color:var(--text3);margin-bottom:6px">e.g., injecting 2 g heroin/day or smoking 1 g fentanyl/day</div>
+              <ul style="padding-left:18px;margin:0;display:flex;flex-direction:column;gap:6px">
+                <li>Consider a <strong style="color:var(--text)">high dose</strong>: start with a first dose of 16 mg.</li>
+                <li>For most people, the effects of Bup max out at around <strong style="color:var(--text)">24–32 mg</strong>.</li>
+                <li><strong>WARNING:</strong> Too much Bup can make you feel sick and sleepy.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout callout-yellow" style="margin-top:18px"><strong>Not going well? Have questions?</strong> Contact your Navigator for help — call or text your Navigator.</div>
+
+        <div class="section-label" style="margin-top:24px">Provider Resources</div>
+        <div style="background:var(--bg);border:1px solid var(--border2);border-radius:10px;padding:14px 16px;margin-bottom:14px;font-size:12.5px;color:var(--text2);line-height:1.7">
+          <ul style="padding-left:20px;margin:0;display:flex;flex-direction:column;gap:6px">
+            <li><strong style="color:var(--text)">California Substance Use Line</strong> (CA Only, 24/7): <strong>1-844-326-2626</strong></li>
+            <li><strong style="color:var(--text)">UCSF Substance Use Warmline</strong> (National, M–F 6 am–5 pm; Voicemail 24/7): <strong>1-855-300-3595</strong></li>
+          </ul>
+        </div>
+
+        <div style="margin-top:14px;font-size:11px;color:var(--text3);text-align:center;line-height:1.6;font-style:italic">
+          The CA Bridge Program disseminates resources developed by an interdisciplinary team based on published evidence and medical expertise. These resources are not a substitute for clinical judgment or medical advice. Adherence to the guidance in these resources will not ensure successful patient treatments. Current best practices may change. Providers are responsible for assessing the care and needs of individual patients.<br>
+          CA Bridge is a program of the Public Health Institute. © 2022, California Department of Health Care Services. Materials made available under a Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0). · September 2020 / 3.28.22
+        </div>
+      </div>
+    `
+  },
+
+  'mri-cied': {
+    icon: '🧲',
+    title: 'Inpatient MRI in Patients with CIEDs',
+    updated: 'KP SBC Radiology',
+    render: () => `
+      <div style="max-width:880px;margin:0 auto">
+        <div class="callout"><strong>Guide for Inpatient MRI Scanning in Patients with CIEDs</strong> — cardiac implantable electronic devices (e.g. pacemakers and ICDs).</div>
+
+        <div class="section-label" style="margin-top:18px">Overview</div>
+        <div style="background:var(--bg);border:1px solid var(--border2);border-left:3px solid #3b82f6;border-radius:0 10px 10px 0;padding:14px 16px;margin-bottom:14px">
+          <ul style="padding-left:20px;margin:0;font-size:12.5px;color:var(--text2);line-height:1.75;display:flex;flex-direction:column;gap:8px">
+            <li>CIED systems must be <strong style="color:var(--text)">&ge; 6 weeks post-implant</strong>.</li>
+            <li>MRI / Radiology dept responsible for coordinating MRI scan with device rep during <strong style="color:var(--text)">agreed-upon hours (8a–4:30p M–F)</strong>. Exception: true emergency with no alternative study after hours.</li>
+            <li>There must be an <strong style="color:var(--text)">ACLS-certified RN</strong> at all MRIs that involves a CIED for continuous telemetry monitoring during MR scan.</li>
+            <li>During MRI, pacing usually <strong style="color:var(--text)">asynchronous</strong> (if dependent) or <strong style="color:var(--text)">non-tracking mode (DDI or VVI)</strong> and shocks are <strong style="color:var(--text)">DISABLED</strong>.</li>
+            <li><strong style="color:#fca5a5">Potential risks:</strong> electrical reset / loss of pacing, heating at lead tip/tissue &rarr; loss of sensing/capture leading to asystole, induced lead current &rarr; unintended stimulation &rarr; VT/VF, lead dislodgement.</li>
+          </ul>
+        </div>
+
+        <div class="section-label" style="margin-top:18px">Determine Candidacy for MRI</div>
+        <div class="callout callout-yellow"><strong>Workflow:</strong> Candidacy will be determined by <strong>NP AFTER MRI is ordered</strong> (after steps 1–3 below are complete). Please do <em>not</em> contact the NP before ordering the MRI as they are very busy with other clinical duties. If you would like to know before ordering the MRI whether the patient's ICD or pacemaker is conditional, please call the device company or check the online resources below. You can also check the problem list to see if there is a clear contraindication to MRI. Other tips are listed below.</div>
+
+        <div class="steps" style="margin-top:18px;margin-bottom:18px">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <strong>Check problem list</strong> to identify type/MFR of CIED and whether the patient has an MR-conditional system or documented contraindication.
+              <div style="margin-top:8px;padding:8px 12px;background:var(--surface);border:1px dashed #60a5fa;border-radius:8px;font-size:12px;color:var(--text2)"><strong style="color:var(--text-blue)">Tip:</strong> most new implant systems performed in the KP system from <strong>2018+ are MR conditional</strong>.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <strong>Check device clinic progress note</strong> to check for documented contraindications to MRI scanning. Contraindications include notations of:
+              <ul style="padding-left:20px;margin:8px 0 0;font-size:12.5px;color:var(--text2);line-height:1.7;display:flex;flex-direction:column;gap:8px">
+                <li><strong style="color:var(--text)">Abandoned leads, fractured leads / abnormal lead function</strong> (impedances &lt; 200 or &gt; 2000 ohms), epicardial leads. Battery longevity &le; 1 year (esp. in PPM-dependent patient) is a relative contraindication.
+                  <div style="margin-top:6px;padding:8px 12px;background:var(--surface);border:1px dashed #60a5fa;border-radius:8px;font-size:12px;color:var(--text2)"><strong style="color:var(--text-blue)">Tip:</strong> check recent chest X-ray to see if there are abandoned leads. Example: device pocket / generator might show terminal pin of lead not screwed into the header. Another tip-off — a PPM shouldn't have 2 RA leads.</div>
+                </li>
+                <li><strong style="color:var(--text)">Elevated RV threshold</strong> in pacemaker-dependent patient &ge; 2 V @ 0.4 msec. PPM dependence typically identified in clinic note; RV pacing % &gt; 95% in non-CRT device <em>may</em> indicate pacemaker dependence.
+                  <div style="margin-top:6px;padding:8px 12px;background:var(--surface);border:1px dashed #60a5fa;border-radius:8px;font-size:12px;color:var(--text2)"><strong style="color:var(--text-blue)">Tip:</strong> check device clinic note for "underlying rhythm", often near the top of the interrogation.</div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-label" style="margin-top:18px">Device Manufacturer Contacts</div>
+        <div style="background:var(--bg);border:1px solid var(--border2);border-radius:10px;padding:14px 16px;margin-bottom:14px">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;font-size:12.5px;color:var(--text2);line-height:1.7">
+            <div><strong style="color:var(--text)">Medtronic</strong> · 1-800-633-8766</div>
+            <div><strong style="color:var(--text)">Boston Scientific</strong> · 1-800-227-3422</div>
+            <div><strong style="color:var(--text)">Biotronik</strong> · 1-800-547-0394</div>
+            <div><strong style="color:var(--text)">Abbott / St. Jude</strong> · 1-800-722-3423</div>
+          </div>
+        </div>
+
+        <div class="section-label" style="margin-top:18px">Online Resources</div>
+        <div style="background:var(--bg);border:1px solid var(--border2);border-radius:10px;padding:14px 16px;margin-bottom:14px;font-size:12.5px;color:var(--text2);line-height:1.75">
+          <ul style="padding-left:20px;margin:0;display:flex;flex-direction:column;gap:6px">
+            <li><a href="http://www.mrisafety.com/" target="_blank" rel="noopener" style="color:var(--text-blue);text-decoration:none">www.mrisafety.com</a></li>
+            <li><a href="http://www.mrisurescan.com/" target="_blank" rel="noopener" style="color:var(--text-blue);text-decoration:none">www.mrisurescan.com</a> (Medtronic)</li>
+          </ul>
+        </div>
+
+        <div style="margin-top:14px;font-size:11px;color:var(--text3);text-align:center;font-style:italic">Source: KP SBC Radiology · Guide for Inpatient MRI Scanning in Patients with CIEDs</div>
       </div>
     `
   },
