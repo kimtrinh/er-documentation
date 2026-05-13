@@ -166,6 +166,10 @@ main>*{animation:pgFade .3s ease both}
 main>*:nth-child(2){animation-delay:.05s}
 main>*:nth-child(3){animation-delay:.1s}
 main>*:nth-child(4){animation-delay:.15s}
+.algo-group-header{grid-column:1 / -1;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.14em;color:var(--text2);padding:18px 4px 6px;border-bottom:1px solid var(--border);margin-top:10px}
+.algo-group-header:first-child{margin-top:0}
+.algo-group-count{font-weight:600;color:var(--text3);font-size:10px;letter-spacing:.05em;margin-left:6px}
+.algo-badge.badge-uc{background:rgba(168,85,247,.12);border:1px solid rgba(168,85,247,.35);color:#d8b4fe}
 .algo-card{box-shadow:0 1px 4px rgba(0,0,0,.2)}.algo-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.4)}
 
 /* ===== NAV — More dropdown overflow ===== */
@@ -228,20 +232,45 @@ main>*:nth-child(4){animation-delay:.15s}
 
   <!-- ALGORITHM SELECTOR GRID -->
   <div class="algo-grid" id="algoGrid">
-    <div class="algo-card" onclick="showAlgo('orbital')" id="card-orbital" data-algo="orbital" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
-      <div class="algo-icon">👁️</div>
+    <!-- ══ CARDIOVASCULAR ══ -->
+    <div class="algo-group-header">🫀 Cardiovascular <span class="algo-group-count">(5)</span></div>
+    <div class="algo-card" onclick="showAlgo('aortic')" id="card-aortic" data-algo="aortic" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🩸</div>
       <div class="algo-info">
-        <div class="algo-title">Orbital Fractures</div>
-        <div class="algo-meta">Updated 9/19/2025 &nbsp;·&nbsp; <span class="algo-badge badge-ophtho">Ophthalmology</span></div>
+        <div class="algo-title">Aortic Dissection</div>
+        <div class="algo-meta">Updated 5/12/2025 &nbsp;·&nbsp; <span class="algo-badge badge-vascular">Vascular/Cardiac</span></div>
       </div>
     </div>
-    <div class="algo-card" onclick="showAlgo('papilledema')" id="card-papilledema" data-algo="papilledema" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
-      <div class="algo-icon">🧠</div>
+    <div class="algo-card" onclick="showAlgo('stemi')" id="card-stemi" data-algo="stemi" data-keywords="STEMI ST elevation MI acute myocardial infarction cardiac catheterization PCI thrombolysis ICEMA" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">❤️‍🔥</div>
       <div class="algo-info">
-        <div class="algo-title">Papilledema</div>
-        <div class="algo-meta">Updated 10/1/2025 &nbsp;·&nbsp; <span class="algo-badge badge-neuro">Neurology</span></div>
+        <div class="algo-title">STEMI Protocol (ICEMA)</div>
+        <div class="algo-meta">ICEMA &nbsp;·&nbsp; <span class="algo-badge badge-cardio">Cardiology</span></div>
       </div>
     </div>
+    <div class="algo-card" onclick="showAlgo('troponin')" id="card-troponin" data-algo="troponin" data-keywords="troponin testing high sensitivity cardiac biomarker chest pain ACS NSTEMI rule out" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🧪</div>
+      <div class="algo-info">
+        <div class="algo-title">Troponin Testing Guide</div>
+        <div class="algo-meta">KP SBC &nbsp;·&nbsp; <span class="algo-badge badge-cardio">Cardiology</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('afib')" id="card-afib" data-algo="afib" data-keywords="atrial fibrillation flutter afib AFib rate control cardioversion diltiazem metoprolol cha2ds2-vasc anticoagulation echocardiography cardiology discharge criteria" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">💗</div>
+      <div class="algo-info">
+        <div class="algo-title">Atrial Fibrillation / Flutter</div>
+        <div class="algo-meta">KP SBC Service Agreement &nbsp;·&nbsp; <span class="algo-badge badge-cardio">Cardiology</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('stress-testing')" id="card-stress-testing" data-algo="stress-testing" data-keywords="non-invasive stress test cardiac stress exercise nuclear stress echo treadmill risk stratification chest pain" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🏃</div>
+      <div class="algo-info">
+        <div class="algo-title">Non-Invasive Stress Testing</div>
+        <div class="algo-meta">KP SBC &nbsp;·&nbsp; <span class="algo-badge badge-cardio">Cardiology</span></div>
+      </div>
+    </div>
+    <!-- ══ PULMONARY ══ -->
+    <div class="algo-group-header">🫁 Pulmonary <span class="algo-group-count">(4)</span></div>
     <div class="algo-card" onclick="showAlgo('pneumomediastinum')" id="card-pneumomediastinum" data-algo="pneumomediastinum" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
       <div class="algo-icon">🫁</div>
       <div class="algo-info">
@@ -249,18 +278,122 @@ main>*:nth-child(4){animation-delay:.15s}
         <div class="algo-meta">Updated 3/25/2025 &nbsp;·&nbsp; <span class="algo-badge badge-thoracic">Thoracic</span></div>
       </div>
     </div>
-    <div class="algo-card" onclick="showAlgo('pregvb')" id="card-pregvb" data-algo="pregvb" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
-      <div class="algo-icon">🤰</div>
+    <div class="algo-card" onclick="showAlgo('uc-steroids-uri')" id="card-uc-steroids-uri" data-algo="uc-steroids-uri" data-keywords="steroids URI upper respiratory infection cough cold prednisone dexamethasone urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">💊</div>
       <div class="algo-info">
-        <div class="algo-title">Vaginal Bleeding in Pregnancy</div>
-        <div class="algo-meta">Updated 5/3/2025 &nbsp;·&nbsp; <span class="algo-badge badge-ob">OB/GYN</span></div>
+        <div class="algo-title">Steroids in URI</div>
+        <div class="algo-meta">Dr. Chen · Apr 2023 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
       </div>
     </div>
-    <div class="algo-card" onclick="showAlgo('aortic')" id="card-aortic" data-algo="aortic" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+    <div class="algo-card" onclick="showAlgo('uc-peds-acute-cough')" id="card-uc-peds-acute-cough" data-algo="uc-peds-acute-cough" data-keywords="pediatric acute cough child bronchitis URI croup wheezing asthma RSV urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">😷</div>
+      <div class="algo-info">
+        <div class="algo-title">Pediatric Acute Cough</div>
+        <div class="algo-meta">Dr. Hoang · Nov 2023 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('uc-peds-asthma-cough-case')" id="card-uc-peds-asthma-cough-case" data-algo="uc-peds-asthma-cough-case" data-keywords="pediatric asthma cough wheezing albuterol nebulizer prednisone urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">😷</div>
+      <div class="algo-info">
+        <div class="algo-title">Pediatric Asthma + Cough — Case</div>
+        <div class="algo-meta">Dr. Hoang · Jul 2024 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <!-- ══ HEMATOLOGY & COAGULATION ══ -->
+    <div class="algo-group-header">🩸 Hematology & Coagulation <span class="algo-group-count">(6)</span></div>
+    <div class="algo-card" onclick="showAlgo('dvt')" id="card-dvt" data-algo="dvt" data-keywords="dvt deep vein thrombosis anticoagulation outpatient enoxaparin wells score hematology vascular" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
       <div class="algo-icon">🩸</div>
       <div class="algo-info">
-        <div class="algo-title">Aortic Dissection</div>
-        <div class="algo-meta">Updated 5/12/2025 &nbsp;·&nbsp; <span class="algo-badge badge-vascular">Vascular/Cardiac</span></div>
+        <div class="algo-title">Outpatient DVT Anticoagulation</div>
+        <div class="algo-meta">KP SBC ED &nbsp;·&nbsp; <span class="algo-badge badge-cards">Hematology</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('pe-workup')" id="card-pe-workup" data-algo="pe-workup" data-keywords="PE pulmonary embolism D-dimer CT angiography Wells score PERC rule VTE clot anticoagulation" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🫁</div>
+      <div class="algo-info">
+        <div class="algo-title">PE Workup: D-Dimer & CT Algorithm</div>
+        <div class="algo-meta">KP SBC Emergency Medicine &nbsp;·&nbsp; <span class="algo-badge badge-thoracic">Pulmonology · Hematology</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('doac-bleeding')" id="card-doac-bleeding" data-algo="doac-bleeding" data-keywords="DOAC TSOA target specific oral anticoagulant reversal bleeding apixaban rivaroxaban dabigatran edoxaban andexanet idarucizumab praxbind kcentra profilnine bebulin feiba PCC 4-factor prothrombin complex concentrate tranexamic acid TXA pradaxa xarelto eliquis savaysa hemorrhage hematology life-threatening" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🩸</div>
+      <div class="algo-info">
+        <div class="algo-title">DOAC/TSOA Bleeding Management</div>
+        <div class="algo-meta">KP Regional &nbsp;·&nbsp; <span class="algo-badge badge-vascular">Hematology</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('hemorrhage-protocol')" id="card-hemorrhage-protocol" data-algo="hemorrhage-protocol" data-keywords="massive transfusion protocol hemorrhage emergency release blood products MTP FFP platelets" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🆘</div>
+      <div class="algo-info">
+        <div class="algo-title">Emergency Hemorrhage Protocol</div>
+        <div class="algo-meta">KP SBC 2013 &nbsp;·&nbsp; <span class="algo-badge badge-vascular">Hematology</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('transfusion')" id="card-transfusion" data-algo="transfusion" data-keywords="transfusion protocol blood products PRBC FFP platelets crossmatch type screen indications thresholds" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🩸</div>
+      <div class="algo-info">
+        <div class="algo-title">Transfusion Protocol</div>
+        <div class="algo-meta">KP SBC &nbsp;·&nbsp; <span class="algo-badge badge-vascular">Hematology</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('uc-perioperative-anticoag')" id="card-uc-perioperative-anticoag" data-algo="uc-perioperative-anticoag" data-keywords="perioperative anticoagulant warfarin DOAC apixaban rivaroxaban heparin bridging urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">💊</div>
+      <div class="algo-info">
+        <div class="algo-title">Perioperative Anticoagulation</div>
+        <div class="algo-meta">Dr. Doshi · Nov 2023 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <!-- ══ NEUROLOGY / HEADACHE ══ -->
+    <div class="algo-group-header">🧠 Neurology / Headache <span class="algo-group-count">(6)</span></div>
+    <div class="algo-card" onclick="showAlgo('papilledema')" id="card-papilledema" data-algo="papilledema" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🧠</div>
+      <div class="algo-info">
+        <div class="algo-title">Papilledema</div>
+        <div class="algo-meta">Updated 10/1/2025 &nbsp;·&nbsp; <span class="algo-badge badge-neuro">Neurology</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('ed-stroke')" id="card-ed-stroke" data-algo="ed-stroke" data-keywords="stroke code stroke tPA thrombolysis NIHSS CT head neuro brain CVA ischemic hemorrhagic alert" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🧠</div>
+      <div class="algo-info">
+        <div class="algo-title">ED Code Stroke</div>
+        <div class="algo-meta">KP SBC ED · ICEMA &nbsp;·&nbsp; <span class="algo-badge badge-neuro">Neurology</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('ct-head-trauma')" id="card-ct-head-trauma" data-algo="ct-head-trauma" data-keywords="CT head trauma Canadian rule GCS loss of consciousness LOC TBI traumatic brain injury head injury" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🪖</div>
+      <div class="algo-info">
+        <div class="algo-title">CT Head for Trauma (Canadian Rule)</div>
+        <div class="algo-meta">KPSC Emergency Medicine &nbsp;·&nbsp; <span class="algo-badge badge-neuro">Neurology · Trauma</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('uc-cluster-headache')" id="card-uc-cluster-headache" data-algo="uc-cluster-headache" data-keywords="cluster headache stabbing unilateral nasal congestion eye tearing autonomic urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🧠</div>
+      <div class="algo-info">
+        <div class="algo-title">Cluster Headache — Case</div>
+        <div class="algo-meta">Dr. Patel · Feb 2023 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('uc-headaches-migraines')" id="card-uc-headaches-migraines" data-algo="uc-headaches-migraines" data-keywords="headache migraine tension cluster aura triptans sumatriptan rizatriptan urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🧠</div>
+      <div class="algo-info">
+        <div class="algo-title">Headaches & Migraines</div>
+        <div class="algo-meta">Dr. Doshi · Jun 2024 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('uc-head-trauma-telemed')" id="card-uc-head-trauma-telemed" data-algo="uc-head-trauma-telemed" data-keywords="head trauma concussion telemedicine virtual triage red flags LOC amnesia GCS urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🧠</div>
+      <div class="algo-info">
+        <div class="algo-title">Head Trauma — Telemed Triage</div>
+        <div class="algo-meta">Dr. Lee · Jan 2026 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <!-- ══ HEENT / OPHTHALMOLOGY ══ -->
+    <div class="algo-group-header">👁️ HEENT / Ophthalmology <span class="algo-group-count">(7)</span></div>
+    <div class="algo-card" onclick="showAlgo('orbital')" id="card-orbital" data-algo="orbital" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">👁️</div>
+      <div class="algo-info">
+        <div class="algo-title">Orbital Fractures</div>
+        <div class="algo-meta">Updated 9/19/2025 &nbsp;·&nbsp; <span class="algo-badge badge-ophtho">Ophthalmology</span></div>
       </div>
     </div>
     <div class="algo-card" onclick="showAlgo('floaters')" id="card-floaters" data-algo="floaters" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
@@ -270,61 +403,122 @@ main>*:nth-child(4){animation-delay:.15s}
         <div class="algo-meta">Updated 3/24/2025 &nbsp;·&nbsp; <span class="algo-badge badge-ophtho">Ophthalmology</span></div>
       </div>
     </div>
-    <div class="algo-card" onclick="showAlgo('nonpregvb')" id="card-nonpregvb" data-algo="nonpregvb" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
-      <div class="algo-icon">🔴</div>
+    <div class="algo-card" onclick="showAlgo('uc-peds-otitis-media')" id="card-uc-peds-otitis-media" data-algo="uc-peds-otitis-media" data-keywords="otitis media ear pain pediatric AAP watchful waiting amoxicillin urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">👂</div>
       <div class="algo-info">
-        <div class="algo-title">Non-Pregnant Vaginal Bleeding</div>
-        <div class="algo-meta">Updated 10/2/2025 &nbsp;·&nbsp; <span class="algo-badge badge-ob">OB/GYN</span></div>
+        <div class="algo-title">Pediatric Otitis Media (Watchful Waiting)</div>
+        <div class="algo-meta">Dr. Hoang · Jul 2023 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
       </div>
     </div>
+    <div class="algo-card" onclick="showAlgo('uc-allergic-rhinitis')" id="card-uc-allergic-rhinitis" data-algo="uc-allergic-rhinitis" data-keywords="allergic rhinitis seasonal allergies hay fever intranasal corticosteroid urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🤧</div>
+      <div class="algo-info">
+        <div class="algo-title">Allergic Rhinitis</div>
+        <div class="algo-meta">Dr. Koyle · Jun 2025 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('uc-pharyngitis-assessment')" id="card-uc-pharyngitis-assessment" data-algo="uc-pharyngitis-assessment" data-keywords="pharyngitis sore throat strep streptococcal centor score rapid strep urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">👅</div>
+      <div class="algo-info">
+        <div class="algo-title">Pharyngitis Assessment (Adult)</div>
+        <div class="algo-meta">Dr. Patel · Feb 2024 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('uc-sinusitis-antibiotics')" id="card-uc-sinusitis-antibiotics" data-algo="uc-sinusitis-antibiotics" data-keywords="sinusitis acute bacterial rhinosinusitis amoxicillin clavulanate augmentin urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">👃</div>
+      <div class="algo-info">
+        <div class="algo-title">Sinusitis Antibiotics</div>
+        <div class="algo-meta">Dr. Doshi · Jan 2024 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('uc-red-eye-red-flags')" id="card-uc-red-eye-red-flags" data-algo="uc-red-eye-red-flags" data-keywords="red eye conjunctivitis iritis uveitis glaucoma keratitis foreign body urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">👁️</div>
+      <div class="algo-info">
+        <div class="algo-title">Red Eye — Red Flags for Virtual Care</div>
+        <div class="algo-meta">Dr. Snarskis · Nov 2025 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <!-- ══ GI ══ -->
+    <div class="algo-group-header">🤢 GI <span class="algo-group-count">(5)</span></div>
+    <div class="algo-card" onclick="showAlgo('infectiousdiarrhea')" id="card-infectiousdiarrhea" data-algo="infectiousdiarrhea" data-keywords="infectious diarrhea c diff gi panel parasite ova stool testing" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🔬</div>
+      <div class="algo-info">
+        <div class="algo-title">Infectious Diarrhea Workup</div>
+        <div class="algo-meta">KP SCAL &nbsp;·&nbsp; <span class="algo-badge badge-cardio">Infectious Disease</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('uc-c-diff-non-severe')" id="card-uc-c-diff-non-severe" data-algo="uc-c-diff-non-severe" data-keywords="C difficile CDI clostridioides watery diarrhea vancomycin metronidazole urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🤢</div>
+      <div class="algo-info">
+        <div class="algo-title">C. difficile (Non-Severe)</div>
+        <div class="algo-meta">Dr. Koyle · Jan 2025 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('uc-acute-diarrhea-adults')" id="card-uc-acute-diarrhea-adults" data-algo="uc-acute-diarrhea-adults" data-keywords="acute diarrhea adult viral gastroenteritis traveler dehydration loperamide BRAT urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🤢</div>
+      <div class="algo-info">
+        <div class="algo-title">Approach to Acute Diarrhea (Adults)</div>
+        <div class="algo-meta">Dr. Doshi · Jun 2023 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('uc-pediatric-diarrhea')" id="card-uc-pediatric-diarrhea" data-algo="uc-pediatric-diarrhea" data-keywords="pediatric diarrhea infant child viral gastroenteritis pedialyte BRAT zinc urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🤢</div>
+      <div class="algo-info">
+        <div class="algo-title">Pediatric Diarrhea</div>
+        <div class="algo-meta">Dr. Hoang · Feb 2024 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('uc-anorectal-disorders')" id="card-uc-anorectal-disorders" data-algo="uc-anorectal-disorders" data-keywords="anorectal hemorrhoid fissure anal pain bleeding sitz bath pruritus ani urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🤢</div>
+      <div class="algo-info">
+        <div class="algo-title">Anorectal Disorders</div>
+        <div class="algo-meta">Dr. Doshi · Jul 2025 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <!-- ══ GU / RENAL ══ -->
+    <div class="algo-group-header">💧 GU / Renal <span class="algo-group-count">(5)</span></div>
+    <div class="algo-card" onclick="showAlgo('uc-uti-recurrent-women-aua-algo')" id="card-uc-uti-recurrent-women-aua-algo" data-algo="uc-uti-recurrent-women-aua-algo" data-keywords="UTI recurrent women AUA nitrofurantoin TMP-SMX fosfomycin urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">💧</div>
+      <div class="algo-info">
+        <div class="algo-title">Recurrent UTI in Women — AUA Algorithm</div>
+        <div class="algo-meta">AUA Society &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('uc-uti-management')" id="card-uc-uti-management" data-algo="uc-uti-management" data-keywords="UTI cystitis cefadroxil nitrofurantoin TMP-SMX bactrim antibiotic urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">💧</div>
+      <div class="algo-info">
+        <div class="algo-title">UTI Management (Cefadroxil First-Line)</div>
+        <div class="algo-meta">KP Gold Card · Dr. Ethnasios · Oct 2023 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('uc-uti-patient-handout')" id="card-uc-uti-patient-handout" data-algo="uc-uti-patient-handout" data-keywords="UTI patient handout home care SNAP phenazopyridine pyridium AZO urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">📋</div>
+      <div class="algo-info">
+        <div class="algo-title">UTI Patient Handout (Home Care + SNAP)</div>
+        <div class="algo-meta">Patient Handout · Nov 2025 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('uc-candida-vulvovaginitis')" id="card-uc-candida-vulvovaginitis" data-algo="uc-candida-vulvovaginitis" data-keywords="candida vulvovaginitis yeast infection fluconazole miconazole clotrimazole urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">💧</div>
+      <div class="algo-info">
+        <div class="algo-title">Candida Vulvovaginitis</div>
+        <div class="algo-meta">Dr. Doshi · Sep 2023 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('uc-kidney-health-ckd-aki')" id="card-uc-kidney-health-ckd-aki" data-algo="uc-kidney-health-ckd-aki" data-keywords="CKD AKI chronic kidney disease acute kidney injury creatinine eGFR ACEi ARB urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">💧</div>
+      <div class="algo-info">
+        <div class="algo-title">Kidney Health — CKD vs AKI</div>
+        <div class="algo-meta">Dr. Ethnasios · Mar 2026 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <!-- ══ MSK ══ -->
+    <div class="algo-group-header">🦴 MSK <span class="algo-group-count">(6)</span></div>
     <div class="algo-card" onclick="showAlgo('vcf')" id="card-vcf" data-algo="vcf" data-keywords="spine compression fracture VCF vertebral back pain brace TLSO vertebroplasty neurosurgery bone density" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
       <div class="algo-icon">🦴</div>
       <div class="algo-info">
         <div class="algo-title">Vertebral Compression Fracture (VCF)</div>
         <div class="algo-meta">Updated 3/10/2026 &nbsp;·&nbsp; <span class="algo-badge badge-spine">Spine/Ortho</span></div>
-      </div>
-    </div>
-    <div class="algo-card" onclick="showAlgo('pphtn')" id="card-pphtn" data-algo="pphtn" data-keywords="postpartum hypertension HTN eclampsia nifedipine magnesium HELLP preeclampsia OB delivery severe blood pressure" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
-      <div class="algo-icon">🤱</div>
-      <div class="algo-info">
-        <div class="algo-title">Postpartum Severe Hypertension</div>
-        <div class="algo-meta">KP SBC OB/ED &nbsp;·&nbsp; <span class="algo-badge badge-ob">OB/GYN</span></div>
-      </div>
-    </div>
-    <div class="algo-card" onclick="showAlgo('dvt')" id="card-dvt" data-algo="dvt" data-keywords="dvt deep vein thrombosis anticoagulation outpatient enoxaparin wells score hematology vascular" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
-      <div class="algo-icon">🩸</div>
-      <div class="algo-info">
-        <div class="algo-title">Outpatient DVT Anticoagulation</div>
-        <div class="algo-meta">KP SBC ED &nbsp;·&nbsp; <span class="algo-badge badge-cards">Hematology</span></div>
-      </div>
-    </div>
-
-    <div class="algo-card" onclick="showAlgo('sepsissep1')" id="card-sepsissep1" data-algo="sepsissep1" data-keywords="sepsis sep-1 sirs septic shock lactate bundle antibiotics fluids" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
-      <div class="algo-icon">🦠</div>
-      <div class="algo-info">
-        <div class="algo-title">Sepsis — SEP-1 Bundle</div>
-        <div class="algo-meta">KP SBC 7/2020 &nbsp;·&nbsp; <span class="algo-badge badge-cardio">Critical Care</span></div>
-      </div>
-    </div>
-    <div class="algo-card" onclick="showAlgo('preeclampsia')" id="card-preeclampsia" data-algo="preeclampsia" data-keywords="preeclampsia eclampsia hypertensive emergency pregnancy magnesium labetalol hydralazine nifedipine" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
-      <div class="algo-icon">🤱</div>
-      <div class="algo-info">
-        <div class="algo-title">Pre-Eclampsia / Hypertensive Emergency</div>
-        <div class="algo-meta">ACOG 2020 + CMQCC &nbsp;·&nbsp; <span class="algo-badge badge-ob">OB/GYN</span></div>
-      </div>
-    </div>
-    <div class="algo-card" onclick="showAlgo('pitviper')" id="card-pitviper" data-algo="pitviper" data-keywords="snake bite pit viper crofab envenomation antivenom" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
-      <div class="algo-icon">🐍</div>
-      <div class="algo-info">
-        <div class="algo-title">Pit Viper Envenomation — CroFab</div>
-        <div class="algo-meta">KP SBC 5/2017 &nbsp;·&nbsp; <span class="algo-badge badge-cardio">Toxicology</span></div>
-      </div>
-    </div>
-    <div class="algo-card" onclick="showAlgo('psychmeds')" id="card-psychmeds" data-algo="psychmeds" data-keywords="psychiatry delirium mania psychosis catatonia dementia agitation medications" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
-      <div class="algo-icon">🧩</div>
-      <div class="algo-info">
-        <div class="algo-title">ED Psychiatry Medication Quick Ref</div>
-        <div class="algo-meta">KP SCAL 2016 &nbsp;·&nbsp; <span class="algo-badge badge-neuro">Psychiatry</span></div>
       </div>
     </div>
     <div class="algo-card" onclick="showAlgo('gout')" id="card-gout" data-algo="gout" data-keywords="gout podagra colchicine nsaid steroid arthrocentesis" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
@@ -334,13 +528,287 @@ main>*:nth-child(4){animation-delay:.15s}
         <div class="algo-meta">KP SBC &nbsp;·&nbsp; <span class="algo-badge badge-spine">MSK</span></div>
       </div>
     </div>
-    <div class="algo-card" onclick="showAlgo('infectiousdiarrhea')" id="card-infectiousdiarrhea" data-algo="infectiousdiarrhea" data-keywords="infectious diarrhea c diff gi panel parasite ova stool testing" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
-      <div class="algo-icon">🔬</div>
+    <div class="algo-card" onclick="showAlgo('uc-coccydynia')" id="card-uc-coccydynia" data-algo="uc-coccydynia" data-keywords="coccydynia tailbone coccyx sacrum NSAIDs cushion sitting pain urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🦴</div>
       <div class="algo-info">
-        <div class="algo-title">Infectious Diarrhea Workup</div>
-        <div class="algo-meta">KP SCAL &nbsp;·&nbsp; <span class="algo-badge badge-cardio">Infectious Disease</span></div>
+        <div class="algo-title">Coccydynia (Tailbone Pain)</div>
+        <div class="algo-meta">Dr. Koyle · Jul 2023 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
       </div>
     </div>
+    <div class="algo-card" onclick="showAlgo('uc-low-back-pain-imaging')" id="card-uc-low-back-pain-imaging" data-algo="uc-low-back-pain-imaging" data-keywords="low back pain LBP imaging MRI cauda equina red flags SLR sciatica urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🦴</div>
+      <div class="algo-info">
+        <div class="algo-title">Low Back Pain — Imaging Guidelines</div>
+        <div class="algo-meta">Dr. Nepomuceno · Mar 2026 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('uc-jersey-finger')" id="card-uc-jersey-finger" data-algo="uc-jersey-finger" data-keywords="jersey finger FDP flexor digitorum profundus DIP avulsion tendon rupture urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🤚</div>
+      <div class="algo-info">
+        <div class="algo-title">Jersey Finger (FDP Rupture)</div>
+        <div class="algo-meta">Dr. Patel · Jun 2023 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('uc-neck-pain')" id="card-uc-neck-pain" data-algo="uc-neck-pain" data-keywords="neck pain cervical whiplash radiculopathy disc herniation muscle spasm urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🦴</div>
+      <div class="algo-info">
+        <div class="algo-title">Neck Pain Evaluation (Adult)</div>
+        <div class="algo-meta">Dr. Doshi · Oct 2024 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <!-- ══ SKIN / SOFT TISSUE ══ -->
+    <div class="algo-group-header">🩹 Skin / Soft Tissue <span class="algo-group-count">(5)</span></div>
+    <div class="algo-card" onclick="showAlgo('uc-derm-rash-brs-algorithm')" id="card-uc-derm-rash-brs-algorithm" data-algo="uc-derm-rash-brs-algorithm" data-keywords="rash dermatology BRS blister red scale algorithm skin lesion eruption urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🩹</div>
+      <div class="algo-info">
+        <div class="algo-title">Dermatologic Rash Algorithm (BRS)</div>
+        <div class="algo-meta">Dr. Doshi · Aug 2023 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('uc-diaper-dermatitis')" id="card-uc-diaper-dermatitis" data-algo="uc-diaper-dermatitis" data-keywords="diaper rash dermatitis candida irritant pediatric clotrimazole hydrocortisone urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">👶</div>
+      <div class="algo-info">
+        <div class="algo-title">Diaper Rash / Diaper Dermatitis</div>
+        <div class="algo-meta">Dr. Hoang · Nov 2024 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('uc-leg-mass-case')" id="card-uc-leg-mass-case" data-algo="uc-leg-mass-case" data-keywords="leg mass tender bump lipoma cyst sebaceous epidermoid cellulitis abscess urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🩹</div>
+      <div class="algo-info">
+        <div class="algo-title">Tender Leg Mass — Case Quiz</div>
+        <div class="algo-meta">Dr. Patel · May 2023 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('uc-sunburn')" id="card-uc-sunburn" data-algo="uc-sunburn" data-keywords="sunburn beach UV burn solar radiation aloe NSAIDs sunscreen photodermatitis urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">☀️</div>
+      <div class="algo-info">
+        <div class="algo-title">Sunburn — Case Quiz</div>
+        <div class="algo-meta">Dr. Patel · Aug 2023 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('uc-insect-bites')" id="card-uc-insect-bites" data-algo="uc-insect-bites" data-keywords="insect bite arthropod sting mosquito flea bedbug spider tick anaphylaxis urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🦟</div>
+      <div class="algo-info">
+        <div class="algo-title">Insect Bites & Arthropod Stings</div>
+        <div class="algo-meta">Dr. Doshi · Dec 2025 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <!-- ══ INFECTIOUS DISEASE / SEPSIS ══ -->
+    <div class="algo-group-header">🦠 Infectious Disease / Sepsis <span class="algo-group-count">(20)</span></div>
+    <div class="algo-card" onclick="showAlgo('sepsissep1')" id="card-sepsissep1" data-algo="sepsissep1" data-keywords="sepsis sep-1 sirs septic shock lactate bundle antibiotics fluids" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🦠</div>
+      <div class="algo-info">
+        <div class="algo-title">Sepsis — SEP-1 Bundle</div>
+        <div class="algo-meta">KP SBC 7/2020 &nbsp;·&nbsp; <span class="algo-badge badge-cardio">Critical Care</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('pep')" id="card-pep" data-algo="pep" data-keywords="post-exposure prophylaxis PEP HIV hepatitis needlestick bloodborne occupational exposure" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🛡️</div>
+      <div class="algo-info">
+        <div class="algo-title">Post-Exposure Prophylaxis (PEP)</div>
+        <div class="algo-meta">KP SBC 2016 &nbsp;·&nbsp; <span class="algo-badge badge-ob">Infection Control</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('paxlovid')" id="card-paxlovid" data-algo="paxlovid" data-keywords="paxlovid nirmatrelvir ritonavir COVID antiviral eligibility drug interactions prescribing" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">💊</div>
+      <div class="algo-info">
+        <div class="algo-title">Paxlovid Prescribing Guide</div>
+        <div class="algo-meta">KP SBC &nbsp;·&nbsp; <span class="algo-badge badge-ob">Infectious Disease</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('uc-pertussis')" id="card-uc-pertussis" data-algo="uc-pertussis" data-keywords="pertussis whooping cough bordetella DTaP Tdap azithromycin macrolide urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🦠</div>
+      <div class="algo-info">
+        <div class="algo-title">Pertussis (Whooping Cough)</div>
+        <div class="algo-meta">Dr. Singh · Dec 2024 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('uc-measles-faq')" id="card-uc-measles-faq" data-algo="uc-measles-faq" data-keywords="measles MMR rubeola vaccination immunity travel international serology urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🦠</div>
+      <div class="algo-info">
+        <div class="algo-title">Measles FAQ</div>
+        <div class="algo-meta">Dr. Hoang · Mar 2025 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('uc-latent-tb')" id="card-uc-latent-tb" data-algo="uc-latent-tb" data-keywords="latent TB tuberculosis LTBI QuantiFERON PPD chest x-ray isoniazid rifapentine urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🦠</div>
+      <div class="algo-info">
+        <div class="algo-title">Latent TB — Diagnosis & Treatment</div>
+        <div class="algo-meta">Dr. Ethnasios · Mar 2025 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('uc-covid-paxlovid')" id="card-uc-covid-paxlovid" data-algo="uc-covid-paxlovid" data-keywords="COVID Paxlovid nirmatrelvir ritonavir antiviral GFR CYP3A drug interaction urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🦠</div>
+      <div class="algo-info">
+        <div class="algo-title">COVID-19 + Paxlovid Procedures</div>
+        <div class="algo-meta">Dr. Patel · Aug 2023 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('uc-covid-vaccine-2025-26')" id="card-uc-covid-vaccine-2025-26" data-algo="uc-covid-vaccine-2025-26" data-keywords="COVID vaccine 2025 2026 FDA AAP pediatric high risk booster MIS-C urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">💉</div>
+      <div class="algo-info">
+        <div class="algo-title">COVID-19 Vaccine 2025-26</div>
+        <div class="algo-meta">Dr. Singh · Oct 2025 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('uc-remdesivir-covid')" id="card-uc-remdesivir-covid" data-algo="uc-remdesivir-covid" data-keywords="remdesivir COVID outpatient antiviral CKD eGFR Paxlovid alternative urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">💊</div>
+      <div class="algo-info">
+        <div class="algo-title">Remdesivir for COVID-19 (Outpatient)</div>
+        <div class="algo-meta">Dr. Singh · Sep 2023 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('uc-long-covid')" id="card-uc-long-covid" data-algo="uc-long-covid" data-keywords="long COVID PASC post-acute sequelae chronic fatigue dyspnea brain fog urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🦠</div>
+      <div class="algo-info">
+        <div class="algo-title">Long COVID (Post-Acute Sequelae)</div>
+        <div class="algo-meta">Dr. Doshi · Feb 2023 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('uc-outpatient-covid-treatment')" id="card-uc-outpatient-covid-treatment" data-algo="uc-outpatient-covid-treatment" data-keywords="outpatient COVID mild moderate hypoxemia oxygen Paxlovid molnupiravir antiviral urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🦠</div>
+      <div class="algo-info">
+        <div class="algo-title">Outpatient Mild-Moderate COVID Tx</div>
+        <div class="algo-meta">Dr. Chen · Feb 2023 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('uc-flu-like-illness-case')" id="card-uc-flu-like-illness-case" data-algo="uc-flu-like-illness-case" data-keywords="flu influenza ILI fever body aches chills cough oseltamivir tamiflu urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🤒</div>
+      <div class="algo-info">
+        <div class="algo-title">Flu-Like Illness — Adult Case</div>
+        <div class="algo-meta">Dr. Hoang · Feb 2026 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('uc-peds-strep-pharyngitis-case')" id="card-uc-peds-strep-pharyngitis-case" data-algo="uc-peds-strep-pharyngitis-case" data-keywords="pediatric sore throat strep pharyngitis fever cough child centor urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">👅</div>
+      <div class="algo-info">
+        <div class="algo-title">Pediatric Sore Throat — Case</div>
+        <div class="algo-meta">Dr. Hoang · Apr 2023 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('uc-tripledemic-vaccines')" id="card-uc-tripledemic-vaccines" data-algo="uc-tripledemic-vaccines" data-keywords="tripledemic influenza flu RSV respiratory syncytial virus COVID vaccine Arexvy nirsevimab urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">💉</div>
+      <div class="algo-info">
+        <div class="algo-title">Tripledemic Vaccines (Flu/RSV/COVID)</div>
+        <div class="algo-meta">Dr. Chen · Sep 2023 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('uc-malaria')" id="card-uc-malaria" data-algo="uc-malaria" data-keywords="malaria plasmodium falciparum vivax ovale travel fever endemic mosquito urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🦟</div>
+      <div class="algo-info">
+        <div class="algo-title">Malaria Diagnosis & Treatment</div>
+        <div class="algo-meta">Dr. Chen · Jul 2023 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('uc-sti-treatment')" id="card-uc-sti-treatment" data-algo="uc-sti-treatment" data-keywords="STI chlamydia gonorrhea doxycycline ceftriaxone cefixime azithromycin GC/CT CDC urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🦠</div>
+      <div class="algo-info">
+        <div class="algo-title">STI Treatment (Chlamydia/Gonorrhea)</div>
+        <div class="algo-meta">CDC 2021 · Dr. Singh · Nov 2023 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('uc-syphilis-treatment')" id="card-uc-syphilis-treatment" data-algo="uc-syphilis-treatment" data-keywords="syphilis treponema pallidum chancre RPR VDRL penicillin G benzathine urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🦠</div>
+      <div class="algo-info">
+        <div class="algo-title">Syphilis (Latent + Treatment)</div>
+        <div class="algo-meta">Dr. Chen · Aug 2023 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('uc-genital-herpes')" id="card-uc-genital-herpes" data-algo="uc-genital-herpes" data-keywords="genital herpes HSV-1 HSV-2 acyclovir valacyclovir famciclovir suppressive episodic urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🦠</div>
+      <div class="algo-info">
+        <div class="algo-title">Genital Herpes (Episodic + Suppressive)</div>
+        <div class="algo-meta">Dr. Koyle · Sep 2023 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('uc-hiv-prep')" id="card-uc-hiv-prep" data-algo="uc-hiv-prep" data-keywords="HIV PrEP pre-exposure prophylaxis Truvada tenofovir emtricitabine MSM CrCl urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">💊</div>
+      <div class="algo-info">
+        <div class="algo-title">HIV PrEP Guidelines</div>
+        <div class="algo-meta">Dr. Koyle · Jun 2023 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('uc-animal-bites-rabies')" id="card-uc-animal-bites-rabies" data-algo="uc-animal-bites-rabies" data-keywords="animal bite dog cat bat skunk raccoon rabies PEP reporting mandated reporter urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🐕</div>
+      <div class="algo-info">
+        <div class="algo-title">Animal Bites & Rabies Reporting</div>
+        <div class="algo-meta">Dr. Koyle · Apr 2026 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <!-- ══ OB / WOMEN'S HEALTH ══ -->
+    <div class="algo-group-header">🤰 OB / Women's Health <span class="algo-group-count">(10)</span></div>
+    <div class="algo-card" onclick="showAlgo('pregvb')" id="card-pregvb" data-algo="pregvb" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🤰</div>
+      <div class="algo-info">
+        <div class="algo-title">Vaginal Bleeding in Pregnancy</div>
+        <div class="algo-meta">Updated 5/3/2025 &nbsp;·&nbsp; <span class="algo-badge badge-ob">OB/GYN</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('nonpregvb')" id="card-nonpregvb" data-algo="nonpregvb" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🔴</div>
+      <div class="algo-info">
+        <div class="algo-title">Non-Pregnant Vaginal Bleeding</div>
+        <div class="algo-meta">Updated 10/2/2025 &nbsp;·&nbsp; <span class="algo-badge badge-ob">OB/GYN</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('pphtn')" id="card-pphtn" data-algo="pphtn" data-keywords="postpartum hypertension HTN eclampsia nifedipine magnesium HELLP preeclampsia OB delivery severe blood pressure" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🤱</div>
+      <div class="algo-info">
+        <div class="algo-title">Postpartum Severe Hypertension</div>
+        <div class="algo-meta">KP SBC OB/ED &nbsp;·&nbsp; <span class="algo-badge badge-ob">OB/GYN</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('preeclampsia')" id="card-preeclampsia" data-algo="preeclampsia" data-keywords="preeclampsia eclampsia hypertensive emergency pregnancy magnesium labetalol hydralazine nifedipine" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🤱</div>
+      <div class="algo-info">
+        <div class="algo-title">Pre-Eclampsia / Hypertensive Emergency</div>
+        <div class="algo-meta">ACOG 2020 + CMQCC &nbsp;·&nbsp; <span class="algo-badge badge-ob">OB/GYN</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('dpa')" id="card-dpa" data-algo="dpa" data-keywords="delivery prior to arrival DPA precipitous delivery born before arrival BBA neonate newborn resuscitation OB" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">👶</div>
+      <div class="algo-info">
+        <div class="algo-title">Deliveries Prior to Arrival (DPA)</div>
+        <div class="algo-meta">KP SBC Emergency Medicine &nbsp;·&nbsp; <span class="algo-badge badge-ob">OB/GYN · Emergency Medicine</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('emergency-contraception')" id="card-emergency-contraception" data-algo="emergency-contraception" data-keywords="emergency contraception Plan B ella copper IUD sexual assault pregnancy prevention NATL interregional" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">💊</div>
+      <div class="algo-info">
+        <div class="algo-title">Emergency Contraception</div>
+        <div class="algo-meta">KP Interregional Clinical Library &nbsp;·&nbsp; <span class="algo-badge badge-ob">OB/GYN</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('medical-abortion')" id="card-medical-abortion" data-algo="medical-abortion" data-keywords="mifepristone misoprostol medical abortion first trimester pregnancy termination" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">💊</div>
+      <div class="algo-info">
+        <div class="algo-title">Medical Abortion — Mifepristone</div>
+        <div class="algo-meta">KP NATL &nbsp;·&nbsp; <span class="algo-badge badge-ob">OB/GYN</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('uc-first-trimester-bleeding')" id="card-uc-first-trimester-bleeding" data-algo="uc-first-trimester-bleeding" data-keywords="first trimester bleeding pregnancy ectopic threatened abortion EPL hCG IUP urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🤰</div>
+      <div class="algo-info">
+        <div class="algo-title">First Trimester Bleeding — Algorithm</div>
+        <div class="algo-meta">Dr. Brown · Mar 2024 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('uc-ob-triage-vaginal-bleeding-1t')" id="card-uc-ob-triage-vaginal-bleeding-1t" data-algo="uc-ob-triage-vaginal-bleeding-1t" data-keywords="OB triage vaginal bleeding first trimester pregnancy ectopic SCAL on call urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🤰</div>
+      <div class="algo-info">
+        <div class="algo-title">OB Triage — Vaginal Bleeding 1T</div>
+        <div class="algo-meta">Dr. Singh · Jun 2023 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('uc-bacterial-mastitis')" id="card-uc-bacterial-mastitis" data-algo="uc-bacterial-mastitis" data-keywords="bacterial mastitis breast lactational dicloxacillin cephalexin clindamycin breastfeeding abscess urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🤱</div>
+      <div class="algo-info">
+        <div class="algo-title">Bacterial Mastitis</div>
+        <div class="algo-meta">Dr. Koyle · May 2023 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <!-- ══ PEDIATRICS ══ -->
+    <div class="algo-group-header">👶 Pediatrics <span class="algo-group-count">(9)</span></div>
     <div class="algo-card" onclick="showAlgo('pedsdka')" id="card-pedsdka" data-algo="pedsdka" data-keywords="peds dka diabetic ketoacidosis two bag cerebral edema insulin" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
       <div class="algo-icon">💉</div>
       <div class="algo-info">
@@ -369,67 +837,11 @@ main>*:nth-child(4){animation-delay:.15s}
         <div class="algo-meta">KP SBC 11/2021 &nbsp;·&nbsp; <span class="algo-badge badge-ob">Pediatrics</span></div>
       </div>
     </div>
-    <div class="algo-card" onclick="showAlgo('ed-stroke')" id="card-ed-stroke" data-algo="ed-stroke" data-keywords="stroke code stroke tPA thrombolysis NIHSS CT head neuro brain CVA ischemic hemorrhagic alert" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
-      <div class="algo-icon">🧠</div>
-      <div class="algo-info">
-        <div class="algo-title">ED Code Stroke</div>
-        <div class="algo-meta">KP SBC ED · ICEMA &nbsp;·&nbsp; <span class="algo-badge badge-neuro">Neurology</span></div>
-      </div>
-    </div>
-    <div class="algo-card" onclick="showAlgo('ct-head-trauma')" id="card-ct-head-trauma" data-algo="ct-head-trauma" data-keywords="CT head trauma Canadian rule GCS loss of consciousness LOC TBI traumatic brain injury head injury" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
-      <div class="algo-icon">🪖</div>
-      <div class="algo-info">
-        <div class="algo-title">CT Head for Trauma (Canadian Rule)</div>
-        <div class="algo-meta">KPSC Emergency Medicine &nbsp;·&nbsp; <span class="algo-badge badge-neuro">Neurology · Trauma</span></div>
-      </div>
-    </div>
-    <div class="algo-card" onclick="showAlgo('pe-workup')" id="card-pe-workup" data-algo="pe-workup" data-keywords="PE pulmonary embolism D-dimer CT angiography Wells score PERC rule VTE clot anticoagulation" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
-      <div class="algo-icon">🫁</div>
-      <div class="algo-info">
-        <div class="algo-title">PE Workup: D-Dimer & CT Algorithm</div>
-        <div class="algo-meta">KP SBC Emergency Medicine &nbsp;·&nbsp; <span class="algo-badge badge-thoracic">Pulmonology · Hematology</span></div>
-      </div>
-    </div>
     <div class="algo-card" onclick="showAlgo('peds-hypergly')" id="card-peds-hypergly" data-algo="peds-hypergly" data-keywords="pediatric hyperglycemia DKA diabetic ketoacidosis glucose insulin peds endocrine blood sugar no insulin drip" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
       <div class="algo-icon">🍬</div>
       <div class="algo-info">
         <div class="algo-title">Peds Hyperglycemia (No Insulin Drip)</div>
         <div class="algo-meta">KP SBC Pediatrics &nbsp;·&nbsp; <span class="algo-badge badge-ob">Pediatrics · Endocrine</span></div>
-      </div>
-    </div>
-    <div class="algo-card" onclick="showAlgo('dpa')" id="card-dpa" data-algo="dpa" data-keywords="delivery prior to arrival DPA precipitous delivery born before arrival BBA neonate newborn resuscitation OB" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
-      <div class="algo-icon">👶</div>
-      <div class="algo-info">
-        <div class="algo-title">Deliveries Prior to Arrival (DPA)</div>
-        <div class="algo-meta">KP SBC Emergency Medicine &nbsp;·&nbsp; <span class="algo-badge badge-ob">OB/GYN · Emergency Medicine</span></div>
-      </div>
-    </div>
-    <div class="algo-card" onclick="showAlgo('emergency-contraception')" id="card-emergency-contraception" data-algo="emergency-contraception" data-keywords="emergency contraception Plan B ella copper IUD sexual assault pregnancy prevention NATL interregional" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
-      <div class="algo-icon">💊</div>
-      <div class="algo-info">
-        <div class="algo-title">Emergency Contraception</div>
-        <div class="algo-meta">KP Interregional Clinical Library &nbsp;·&nbsp; <span class="algo-badge badge-ob">OB/GYN</span></div>
-      </div>
-    </div>
-    <div class="algo-card" onclick="showAlgo('bariatric-ct')" id="card-bariatric-ct" data-algo="bariatric-ct" data-keywords="bariatric surgery gastric bypass sleeve gastrectomy CT scan protocol imaging post-op complication morbid obesity transfer criteria Roux-en-Y leak internal hernia pulmonary embolism" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
-      <div class="algo-icon">⚖️</div>
-      <div class="algo-info">
-        <div class="algo-title">Bariatric CT Protocols & Transfer Criteria</div>
-        <div class="algo-meta">KP SBC Radiology · Surgery &nbsp;·&nbsp; <span class="algo-badge badge-cardio">Surgery · Radiology</span></div>
-      </div>
-    </div>
-    <div class="algo-card" onclick="showAlgo('buprenorphine')" id="card-buprenorphine" data-algo="buprenorphine" data-keywords="buprenorphine bup suboxone subutex naloxone opioid use disorder OUD MAT medication assisted treatment withdrawal COWS precipitated induction hospital quick start self-start fentanyl heroin addiction CA Bridge" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
-      <div class="algo-icon">💊</div>
-      <div class="algo-info">
-        <div class="algo-title">Buprenorphine (Bup) Hospital Quick Start &amp; Self-Start</div>
-        <div class="algo-meta">CA Bridge · September 2020 / March 2022 &nbsp;·&nbsp; <span class="algo-badge badge-neuro">Addiction Medicine</span></div>
-      </div>
-    </div>
-    <div class="algo-card" onclick="showAlgo('mri-cied')" id="card-mri-cied" data-algo="mri-cied" data-keywords="MRI CIED pacemaker ICD implantable cardiac device conditional inpatient imaging telemetry ACLS lead asystole VT VF battery longevity Medtronic Boston Scientific Biotronik Abbott St Jude" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
-      <div class="algo-icon">🧲</div>
-      <div class="algo-info">
-        <div class="algo-title">Inpatient MRI in Patients with CIEDs</div>
-        <div class="algo-meta">KP SBC Radiology &nbsp;·&nbsp; <span class="algo-badge badge-cardio">Radiology · Cardiology</span></div>
       </div>
     </div>
     <div class="algo-card" onclick="showAlgo('abusive-head-trauma')" id="card-abusive-head-trauma" data-algo="abusive-head-trauma" data-keywords="abusive head trauma shaken baby non-accidental trauma NAT child abuse TBI subdural retinal hemorrhage" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
@@ -439,39 +851,71 @@ main>*:nth-child(4){animation-delay:.15s}
         <div class="algo-meta">KP SBC · January 2022 &nbsp;·&nbsp; <span class="algo-badge badge-ob">Pediatrics · Child Abuse</span></div>
       </div>
     </div>
-    <div class="algo-card" onclick="showAlgo('procedural-sedation')" id="card-procedural-sedation" data-algo="procedural-sedation" data-keywords="procedural sedation ketamine propofol etomidate fentanyl midazolam PSA moderate deep sedation monitoring" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
-      <div class="algo-icon">💉</div>
+    <div class="algo-card" onclick="showAlgo('uc-pediatric-formula')" id="card-uc-pediatric-formula" data-algo="uc-pediatric-formula" data-keywords="pediatric formula infant milk lactose intolerance reflux colic switch nutrition urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">👶</div>
       <div class="algo-info">
-        <div class="algo-title">Procedural Sedation</div>
-        <div class="algo-meta">KP SBC Hospital Protocols · 2015–2016 &nbsp;·&nbsp; <span class="algo-badge badge-cardio">Emergency Medicine · Procedures</span></div>
+        <div class="algo-title">Pediatric Formula — Choosing</div>
+        <div class="algo-meta">Dr. Hoang · Jun 2023 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
       </div>
     </div>
-    <div class="algo-card" onclick="showAlgo('stemi')" id="card-stemi" data-algo="stemi" data-keywords="STEMI ST elevation MI acute myocardial infarction cardiac catheterization PCI thrombolysis ICEMA" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
-      <div class="algo-icon">❤️‍🔥</div>
+    <div class="algo-card" onclick="showAlgo('uc-child-abuse-awareness')" id="card-uc-child-abuse-awareness" data-algo="uc-child-abuse-awareness" data-keywords="child abuse mandated reporting suspected pediatric social work CPS bruises urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">👶</div>
       <div class="algo-info">
-        <div class="algo-title">STEMI Protocol (ICEMA)</div>
-        <div class="algo-meta">ICEMA &nbsp;·&nbsp; <span class="algo-badge badge-cardio">Cardiology</span></div>
+        <div class="algo-title">Child Abuse Awareness & Reporting</div>
+        <div class="algo-meta">Dr. Singh · Apr 2024 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
       </div>
     </div>
-    <div class="algo-card" onclick="showAlgo('troponin')" id="card-troponin" data-algo="troponin" data-keywords="troponin testing high sensitivity cardiac biomarker chest pain ACS NSTEMI rule out" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
-      <div class="algo-icon">🧪</div>
+    <div class="algo-card" onclick="showAlgo('uc-infant-irritability-case')" id="card-uc-infant-irritability-case" data-algo="uc-infant-irritability-case" data-keywords="infant irritability colic intussusception crying baby pediatric urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">👶</div>
       <div class="algo-info">
-        <div class="algo-title">Troponin Testing Guide</div>
-        <div class="algo-meta">KP SBC &nbsp;·&nbsp; <span class="algo-badge badge-cardio">Cardiology</span></div>
+        <div class="algo-title">Infant Irritability — Case</div>
+        <div class="algo-meta">Dr. Nepomuceno · Aug 2025 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
       </div>
     </div>
-    <div class="algo-card" onclick="showAlgo('afib')" id="card-afib" data-algo="afib" data-keywords="atrial fibrillation flutter afib AFib rate control cardioversion diltiazem metoprolol cha2ds2-vasc anticoagulation echocardiography cardiology discharge criteria" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
-      <div class="algo-icon">💗</div>
+    <!-- ══ PSYCHIATRY ══ -->
+    <div class="algo-group-header">🧠 Psychiatry <span class="algo-group-count">(4)</span></div>
+    <div class="algo-card" onclick="showAlgo('psychmeds')" id="card-psychmeds" data-algo="psychmeds" data-keywords="psychiatry delirium mania psychosis catatonia dementia agitation medications" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🧩</div>
       <div class="algo-info">
-        <div class="algo-title">Atrial Fibrillation / Flutter</div>
-        <div class="algo-meta">KP SBC Service Agreement &nbsp;·&nbsp; <span class="algo-badge badge-cardio">Cardiology</span></div>
+        <div class="algo-title">ED Psychiatry Medication Quick Ref</div>
+        <div class="algo-meta">KP SCAL 2016 &nbsp;·&nbsp; <span class="algo-badge badge-neuro">Psychiatry</span></div>
       </div>
     </div>
-    <div class="algo-card" onclick="showAlgo('doac-bleeding')" id="card-doac-bleeding" data-algo="doac-bleeding" data-keywords="DOAC TSOA target specific oral anticoagulant reversal bleeding apixaban rivaroxaban dabigatran edoxaban andexanet idarucizumab praxbind kcentra profilnine bebulin feiba PCC 4-factor prothrombin complex concentrate tranexamic acid TXA pradaxa xarelto eliquis savaysa hemorrhage hematology life-threatening" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
-      <div class="algo-icon">🩸</div>
+    <div class="algo-card" onclick="showAlgo('uc-depression-management')" id="card-uc-depression-management" data-algo="uc-depression-management" data-keywords="depression PHQ-9 SSRI SNRI sertraline escitalopram fluoxetine antidepressant suicidal urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🧠</div>
       <div class="algo-info">
-        <div class="algo-title">DOAC/TSOA Bleeding Management</div>
-        <div class="algo-meta">KP Regional &nbsp;·&nbsp; <span class="algo-badge badge-vascular">Hematology</span></div>
+        <div class="algo-title">Depression Management (Virtual)</div>
+        <div class="algo-meta">Dr. Singh · Apr 2024 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('uc-gad')" id="card-uc-gad" data-algo="uc-gad" data-keywords="generalized anxiety disorder GAD GAD-7 SSRI SNRI buspirone hydroxyzine CBT urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🧠</div>
+      <div class="algo-info">
+        <div class="algo-title">Generalized Anxiety Disorder (GAD)</div>
+        <div class="algo-meta">Dr. Nepomuceno · Aug 2024 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('uc-virtual-anxiety-care')" id="card-uc-virtual-anxiety-care" data-algo="uc-virtual-anxiety-care" data-keywords="anxiety panic attack benzodiazepine SSRI CBT relaxation breathing techniques urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🧠</div>
+      <div class="algo-info">
+        <div class="algo-title">Virtual Anxiety Care — Case</div>
+        <div class="algo-meta">Dr. Patel · Nov 2023 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <!-- ══ PHARMACOLOGY / TOXICOLOGY ══ -->
+    <div class="algo-group-header">💊 Pharmacology / Toxicology <span class="algo-group-count">(4)</span></div>
+    <div class="algo-card" onclick="showAlgo('pitviper')" id="card-pitviper" data-algo="pitviper" data-keywords="snake bite pit viper crofab envenomation antivenom" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🐍</div>
+      <div class="algo-info">
+        <div class="algo-title">Pit Viper Envenomation — CroFab</div>
+        <div class="algo-meta">KP SBC 5/2017 &nbsp;·&nbsp; <span class="algo-badge badge-cardio">Toxicology</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('buprenorphine')" id="card-buprenorphine" data-algo="buprenorphine" data-keywords="buprenorphine bup suboxone subutex naloxone opioid use disorder OUD MAT medication assisted treatment withdrawal COWS precipitated induction hospital quick start self-start fentanyl heroin addiction CA Bridge" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">💊</div>
+      <div class="algo-info">
+        <div class="algo-title">Buprenorphine (Bup) Hospital Quick Start &amp; Self-Start</div>
+        <div class="algo-meta">CA Bridge · September 2020 / March 2022 &nbsp;·&nbsp; <span class="algo-badge badge-neuro">Addiction Medicine</span></div>
       </div>
     </div>
     <div class="algo-card" onclick="showAlgo('contrast-allergy')" id="card-contrast-allergy" data-algo="contrast-allergy" data-keywords="contrast allergy premedication prophylaxis allergic reaction IV contrast CT scan prednisone diphenhydramine" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
@@ -481,53 +925,66 @@ main>*:nth-child(4){animation-delay:.15s}
         <div class="algo-meta">KP SBC &nbsp;·&nbsp; <span class="algo-badge badge-ophtho">Radiology</span></div>
       </div>
     </div>
-    <div class="algo-card" onclick="showAlgo('stress-testing')" id="card-stress-testing" data-algo="stress-testing" data-keywords="non-invasive stress test cardiac stress exercise nuclear stress echo treadmill risk stratification chest pain" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
-      <div class="algo-icon">🏃</div>
-      <div class="algo-info">
-        <div class="algo-title">Non-Invasive Stress Testing</div>
-        <div class="algo-meta">KP SBC &nbsp;·&nbsp; <span class="algo-badge badge-cardio">Cardiology</span></div>
-      </div>
-    </div>
-    <div class="algo-card" onclick="showAlgo('hemorrhage-protocol')" id="card-hemorrhage-protocol" data-algo="hemorrhage-protocol" data-keywords="massive transfusion protocol hemorrhage emergency release blood products MTP FFP platelets" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
-      <div class="algo-icon">🆘</div>
-      <div class="algo-info">
-        <div class="algo-title">Emergency Hemorrhage Protocol</div>
-        <div class="algo-meta">KP SBC 2013 &nbsp;·&nbsp; <span class="algo-badge badge-vascular">Hematology</span></div>
-      </div>
-    </div>
-    <div class="algo-card" onclick="showAlgo('transfusion')" id="card-transfusion" data-algo="transfusion" data-keywords="transfusion protocol blood products PRBC FFP platelets crossmatch type screen indications thresholds" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
-      <div class="algo-icon">🩸</div>
-      <div class="algo-info">
-        <div class="algo-title">Transfusion Protocol</div>
-        <div class="algo-meta">KP SBC &nbsp;·&nbsp; <span class="algo-badge badge-vascular">Hematology</span></div>
-      </div>
-    </div>
-    <div class="algo-card" onclick="showAlgo('pep')" id="card-pep" data-algo="pep" data-keywords="post-exposure prophylaxis PEP HIV hepatitis needlestick bloodborne occupational exposure" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
-      <div class="algo-icon">🛡️</div>
-      <div class="algo-info">
-        <div class="algo-title">Post-Exposure Prophylaxis (PEP)</div>
-        <div class="algo-meta">KP SBC 2016 &nbsp;·&nbsp; <span class="algo-badge badge-ob">Infection Control</span></div>
-      </div>
-    </div>
-    <div class="algo-card" onclick="showAlgo('medical-abortion')" id="card-medical-abortion" data-algo="medical-abortion" data-keywords="mifepristone misoprostol medical abortion first trimester pregnancy termination" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+    <div class="algo-card" onclick="showAlgo('uc-weight-loss-medications')" id="card-uc-weight-loss-medications" data-algo="uc-weight-loss-medications" data-keywords="weight loss obesity metformin phentermine topiramate bupropion naltrexone urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
       <div class="algo-icon">💊</div>
       <div class="algo-info">
-        <div class="algo-title">Medical Abortion — Mifepristone</div>
-        <div class="algo-meta">KP NATL &nbsp;·&nbsp; <span class="algo-badge badge-ob">OB/GYN</span></div>
+        <div class="algo-title">Weight Loss Medications</div>
+        <div class="algo-meta">Dr. Koyle · Sep 2024 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
       </div>
     </div>
-    <div class="algo-card" onclick="showAlgo('paxlovid')" id="card-paxlovid" data-algo="paxlovid" data-keywords="paxlovid nirmatrelvir ritonavir COVID antiviral eligibility drug interactions prescribing" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
-      <div class="algo-icon">💊</div>
-      <div class="algo-info">
-        <div class="algo-title">Paxlovid Prescribing Guide</div>
-        <div class="algo-meta">KP SBC &nbsp;·&nbsp; <span class="algo-badge badge-ob">Infectious Disease</span></div>
-      </div>
-    </div>
+    <!-- ══ GERIATRICS ══ -->
+    <div class="algo-group-header">👴 Geriatrics <span class="algo-group-count">(2)</span></div>
     <div class="algo-card" onclick="showAlgo('ed-snf-criteria')" id="card-ed-snf-criteria" data-algo="ed-snf-criteria" data-keywords="ED to SNF skilled nursing facility discharge criteria disposition clinical guidelines 2014" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
       <div class="algo-icon">🏠</div>
       <div class="algo-info">
         <div class="algo-title">ED to SNF Disposition Criteria</div>
         <div class="algo-meta">KP SBC 2014 &nbsp;·&nbsp; <span class="algo-badge badge-neuro">Geriatrics</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('uc-beers-criteria-older-adults')" id="card-uc-beers-criteria-older-adults" data-algo="uc-beers-criteria-older-adults" data-keywords="Beers criteria older adults geriatric diphenhydramine PIM polypharmacy urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">👴</div>
+      <div class="algo-info">
+        <div class="algo-title">Beers Criteria — Meds in Older Adults</div>
+        <div class="algo-meta">Dr. Snarskis · May 2025 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <!-- ══ PROCEDURAL / IMAGING ══ -->
+    <div class="algo-group-header">🏥 Procedural / Imaging <span class="algo-group-count">(3)</span></div>
+    <div class="algo-card" onclick="showAlgo('bariatric-ct')" id="card-bariatric-ct" data-algo="bariatric-ct" data-keywords="bariatric surgery gastric bypass sleeve gastrectomy CT scan protocol imaging post-op complication morbid obesity transfer criteria Roux-en-Y leak internal hernia pulmonary embolism" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">⚖️</div>
+      <div class="algo-info">
+        <div class="algo-title">Bariatric CT Protocols & Transfer Criteria</div>
+        <div class="algo-meta">KP SBC Radiology · Surgery &nbsp;·&nbsp; <span class="algo-badge badge-cardio">Surgery · Radiology</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('mri-cied')" id="card-mri-cied" data-algo="mri-cied" data-keywords="MRI CIED pacemaker ICD implantable cardiac device conditional inpatient imaging telemetry ACLS lead asystole VT VF battery longevity Medtronic Boston Scientific Biotronik Abbott St Jude" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🧲</div>
+      <div class="algo-info">
+        <div class="algo-title">Inpatient MRI in Patients with CIEDs</div>
+        <div class="algo-meta">KP SBC Radiology &nbsp;·&nbsp; <span class="algo-badge badge-cardio">Radiology · Cardiology</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('procedural-sedation')" id="card-procedural-sedation" data-algo="procedural-sedation" data-keywords="procedural sedation ketamine propofol etomidate fentanyl midazolam PSA moderate deep sedation monitoring" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">💉</div>
+      <div class="algo-info">
+        <div class="algo-title">Procedural Sedation</div>
+        <div class="algo-meta">KP SBC Hospital Protocols · 2015–2016 &nbsp;·&nbsp; <span class="algo-badge badge-cardio">Emergency Medicine · Procedures</span></div>
+      </div>
+    </div>
+    <!-- ══ PUBLIC HEALTH ══ -->
+    <div class="algo-group-header">🌎 Public Health <span class="algo-group-count">(2)</span></div>
+    <div class="algo-card" onclick="showAlgo('uc-wildfire-smoke')" id="card-uc-wildfire-smoke" data-algo="uc-wildfire-smoke" data-keywords="wildfire smoke air quality N95 MERV HEPA respiratory cardiovascular AirNow urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🌎</div>
+      <div class="algo-info">
+        <div class="algo-title">Wildfire Smoke & Health</div>
+        <div class="algo-meta">Dr. Nepomuceno · Jan 2025 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('uc-exercise-is-medicine')" id="card-uc-exercise-is-medicine" data-algo="uc-exercise-is-medicine" data-keywords="exercise physical activity AHA cardiovascular health lifestyle aerobic resistance urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🌎</div>
+      <div class="algo-info">
+        <div class="algo-title">Exercise is Medicine</div>
+        <div class="algo-meta">Dr. Nepomuceno · Apr 2024 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
       </div>
     </div>
   </div>
@@ -2406,6 +2863,788 @@ const algos = {
         <iframe src="assets/ed-snf-criteria.pdf" style="width:100%;height:640px;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="ED to SNF Clinical Guidelines 2014"></iframe>
       </div>
     `
+  },
+
+  // ═══ Urgent Care — GPC Clinical Corner (60 topics) ═══
+  'uc-derm-rash-brs-algorithm': {
+    icon: '🩹',
+    title: 'Dermatologic Rash Algorithm (BRS)',
+    updated: 'GPC Clinical Corner · Dr. Doshi · Aug 2023',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/derm-rash-brs-algorithm.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/derm-rash-brs-algorithm.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Dermatologic Rash Algorithm (BRS)"></iframe>
+    `,
+  },
+  'uc-diaper-dermatitis': {
+    icon: '👶',
+    title: 'Diaper Rash / Diaper Dermatitis',
+    updated: 'GPC Clinical Corner · Dr. Hoang · Nov 2024',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/diaper-dermatitis.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/diaper-dermatitis.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Diaper Rash / Diaper Dermatitis"></iframe>
+    `,
+  },
+  'uc-leg-mass-case': {
+    icon: '🩹',
+    title: 'Tender Leg Mass — Case Quiz',
+    updated: 'GPC Clinical Corner · Dr. Patel · May 2023',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/leg-mass-case.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/leg-mass-case.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Tender Leg Mass — Case Quiz"></iframe>
+    `,
+  },
+  'uc-sunburn': {
+    icon: '☀️',
+    title: 'Sunburn — Case Quiz',
+    updated: 'GPC Clinical Corner · Dr. Patel · Aug 2023',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/sunburn.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/sunburn.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Sunburn — Case Quiz"></iframe>
+    `,
+  },
+  'uc-insect-bites': {
+    icon: '🦟',
+    title: 'Insect Bites & Arthropod Stings',
+    updated: 'GPC Clinical Corner · Dr. Doshi · Dec 2025',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/insect-bites.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/insect-bites.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Insect Bites & Arthropod Stings"></iframe>
+    `,
+  },
+  'uc-uti-recurrent-women-aua-algo': {
+    icon: '💧',
+    title: 'Recurrent UTI in Women — AUA Algorithm',
+    updated: 'GPC Clinical Corner · AUA Society',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/uti-recurrent-women-aua-algo.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/uti-recurrent-women-aua-algo.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Recurrent UTI in Women — AUA Algorithm"></iframe>
+    `,
+  },
+  'uc-uti-management': {
+    icon: '💧',
+    title: 'UTI Management (Cefadroxil First-Line)',
+    updated: 'GPC Clinical Corner · KP Gold Card · Dr. Ethnasios · Oct 2023',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/uti-management.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/uti-management.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="UTI Management (Cefadroxil First-Line)"></iframe>
+    `,
+  },
+  'uc-uti-patient-handout': {
+    icon: '📋',
+    title: 'UTI Patient Handout (Home Care + SNAP)',
+    updated: 'GPC Clinical Corner · Patient Handout · Nov 2025',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/uti-patient-handout.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/uti-patient-handout.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="UTI Patient Handout (Home Care + SNAP)"></iframe>
+    `,
+  },
+  'uc-candida-vulvovaginitis': {
+    icon: '💧',
+    title: 'Candida Vulvovaginitis',
+    updated: 'GPC Clinical Corner · Dr. Doshi · Sep 2023',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/candida-vulvovaginitis.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/candida-vulvovaginitis.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Candida Vulvovaginitis"></iframe>
+    `,
+  },
+  'uc-kidney-health-ckd-aki': {
+    icon: '💧',
+    title: 'Kidney Health — CKD vs AKI',
+    updated: 'GPC Clinical Corner · Dr. Ethnasios · Mar 2026',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/kidney-health-ckd-aki.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/kidney-health-ckd-aki.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Kidney Health — CKD vs AKI"></iframe>
+    `,
+  },
+  'uc-c-diff-non-severe': {
+    icon: '🤢',
+    title: 'C. difficile (Non-Severe)',
+    updated: 'GPC Clinical Corner · Dr. Koyle · Jan 2025',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/c-diff-non-severe.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/c-diff-non-severe.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="C. difficile (Non-Severe)"></iframe>
+    `,
+  },
+  'uc-acute-diarrhea-adults': {
+    icon: '🤢',
+    title: 'Approach to Acute Diarrhea (Adults)',
+    updated: 'GPC Clinical Corner · Dr. Doshi · Jun 2023',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/acute-diarrhea-adults.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/acute-diarrhea-adults.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Approach to Acute Diarrhea (Adults)"></iframe>
+    `,
+  },
+  'uc-pediatric-diarrhea': {
+    icon: '🤢',
+    title: 'Pediatric Diarrhea',
+    updated: 'GPC Clinical Corner · Dr. Hoang · Feb 2024',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/pediatric-diarrhea.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/pediatric-diarrhea.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Pediatric Diarrhea"></iframe>
+    `,
+  },
+  'uc-anorectal-disorders': {
+    icon: '🤢',
+    title: 'Anorectal Disorders',
+    updated: 'GPC Clinical Corner · Dr. Doshi · Jul 2025',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/anorectal-disorders.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/anorectal-disorders.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Anorectal Disorders"></iframe>
+    `,
+  },
+  'uc-coccydynia': {
+    icon: '🦴',
+    title: 'Coccydynia (Tailbone Pain)',
+    updated: 'GPC Clinical Corner · Dr. Koyle · Jul 2023',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/coccydynia.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/coccydynia.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Coccydynia (Tailbone Pain)"></iframe>
+    `,
+  },
+  'uc-low-back-pain-imaging': {
+    icon: '🦴',
+    title: 'Low Back Pain — Imaging Guidelines',
+    updated: 'GPC Clinical Corner · Dr. Nepomuceno · Mar 2026',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/low-back-pain-imaging.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/low-back-pain-imaging.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Low Back Pain — Imaging Guidelines"></iframe>
+    `,
+  },
+  'uc-jersey-finger': {
+    icon: '🤚',
+    title: 'Jersey Finger (FDP Rupture)',
+    updated: 'GPC Clinical Corner · Dr. Patel · Jun 2023',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/jersey-finger.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/jersey-finger.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Jersey Finger (FDP Rupture)"></iframe>
+    `,
+  },
+  'uc-neck-pain': {
+    icon: '🦴',
+    title: 'Neck Pain Evaluation (Adult)',
+    updated: 'GPC Clinical Corner · Dr. Doshi · Oct 2024',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/neck-pain.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/neck-pain.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Neck Pain Evaluation (Adult)"></iframe>
+    `,
+  },
+  'uc-peds-otitis-media': {
+    icon: '👂',
+    title: 'Pediatric Otitis Media (Watchful Waiting)',
+    updated: 'GPC Clinical Corner · Dr. Hoang · Jul 2023',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/peds-otitis-media.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/peds-otitis-media.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Pediatric Otitis Media (Watchful Waiting)"></iframe>
+    `,
+  },
+  'uc-allergic-rhinitis': {
+    icon: '🤧',
+    title: 'Allergic Rhinitis',
+    updated: 'GPC Clinical Corner · Dr. Koyle · Jun 2025',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/allergic-rhinitis.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/allergic-rhinitis.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Allergic Rhinitis"></iframe>
+    `,
+  },
+  'uc-pharyngitis-assessment': {
+    icon: '👅',
+    title: 'Pharyngitis Assessment (Adult)',
+    updated: 'GPC Clinical Corner · Dr. Patel · Feb 2024',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/pharyngitis-assessment.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/pharyngitis-assessment.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Pharyngitis Assessment (Adult)"></iframe>
+    `,
+  },
+  'uc-sinusitis-antibiotics': {
+    icon: '👃',
+    title: 'Sinusitis Antibiotics',
+    updated: 'GPC Clinical Corner · Dr. Doshi · Jan 2024',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/sinusitis-antibiotics.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/sinusitis-antibiotics.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Sinusitis Antibiotics"></iframe>
+    `,
+  },
+  'uc-red-eye-red-flags': {
+    icon: '👁️',
+    title: 'Red Eye — Red Flags for Virtual Care',
+    updated: 'GPC Clinical Corner · Dr. Snarskis · Nov 2025',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/red-eye-red-flags.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/red-eye-red-flags.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Red Eye — Red Flags for Virtual Care"></iframe>
+    `,
+  },
+  'uc-steroids-uri': {
+    icon: '💊',
+    title: 'Steroids in URI',
+    updated: 'GPC Clinical Corner · Dr. Chen · Apr 2023',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/steroids-uri.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/steroids-uri.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Steroids in URI"></iframe>
+    `,
+  },
+  'uc-peds-acute-cough': {
+    icon: '😷',
+    title: 'Pediatric Acute Cough',
+    updated: 'GPC Clinical Corner · Dr. Hoang · Nov 2023',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/peds-acute-cough.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/peds-acute-cough.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Pediatric Acute Cough"></iframe>
+    `,
+  },
+  'uc-peds-asthma-cough-case': {
+    icon: '😷',
+    title: 'Pediatric Asthma + Cough — Case',
+    updated: 'GPC Clinical Corner · Dr. Hoang · Jul 2024',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/peds-asthma-cough-case.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/peds-asthma-cough-case.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Pediatric Asthma + Cough — Case"></iframe>
+    `,
+  },
+  'uc-pertussis': {
+    icon: '🦠',
+    title: 'Pertussis (Whooping Cough)',
+    updated: 'GPC Clinical Corner · Dr. Singh · Dec 2024',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/pertussis.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/pertussis.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Pertussis (Whooping Cough)"></iframe>
+    `,
+  },
+  'uc-measles-faq': {
+    icon: '🦠',
+    title: 'Measles FAQ',
+    updated: 'GPC Clinical Corner · Dr. Hoang · Mar 2025',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/measles-faq.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/measles-faq.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Measles FAQ"></iframe>
+    `,
+  },
+  'uc-latent-tb': {
+    icon: '🦠',
+    title: 'Latent TB — Diagnosis & Treatment',
+    updated: 'GPC Clinical Corner · Dr. Ethnasios · Mar 2025',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/latent-tb.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/latent-tb.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Latent TB — Diagnosis & Treatment"></iframe>
+    `,
+  },
+  'uc-covid-paxlovid': {
+    icon: '🦠',
+    title: 'COVID-19 + Paxlovid Procedures',
+    updated: 'GPC Clinical Corner · Dr. Patel · Aug 2023',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/covid-paxlovid.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/covid-paxlovid.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="COVID-19 + Paxlovid Procedures"></iframe>
+    `,
+  },
+  'uc-covid-vaccine-2025-26': {
+    icon: '💉',
+    title: 'COVID-19 Vaccine 2025-26',
+    updated: 'GPC Clinical Corner · Dr. Singh · Oct 2025',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/covid-vaccine-2025-26.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/covid-vaccine-2025-26.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="COVID-19 Vaccine 2025-26"></iframe>
+    `,
+  },
+  'uc-remdesivir-covid': {
+    icon: '💊',
+    title: 'Remdesivir for COVID-19 (Outpatient)',
+    updated: 'GPC Clinical Corner · Dr. Singh · Sep 2023',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/remdesivir-covid.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/remdesivir-covid.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Remdesivir for COVID-19 (Outpatient)"></iframe>
+    `,
+  },
+  'uc-long-covid': {
+    icon: '🦠',
+    title: 'Long COVID (Post-Acute Sequelae)',
+    updated: 'GPC Clinical Corner · Dr. Doshi · Feb 2023',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/long-covid.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/long-covid.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Long COVID (Post-Acute Sequelae)"></iframe>
+    `,
+  },
+  'uc-outpatient-covid-treatment': {
+    icon: '🦠',
+    title: 'Outpatient Mild-Moderate COVID Tx',
+    updated: 'GPC Clinical Corner · Dr. Chen · Feb 2023',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/outpatient-covid-treatment.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/outpatient-covid-treatment.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Outpatient Mild-Moderate COVID Tx"></iframe>
+    `,
+  },
+  'uc-flu-like-illness-case': {
+    icon: '🤒',
+    title: 'Flu-Like Illness — Adult Case',
+    updated: 'GPC Clinical Corner · Dr. Hoang · Feb 2026',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/flu-like-illness-case.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/flu-like-illness-case.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Flu-Like Illness — Adult Case"></iframe>
+    `,
+  },
+  'uc-peds-strep-pharyngitis-case': {
+    icon: '👅',
+    title: 'Pediatric Sore Throat — Case',
+    updated: 'GPC Clinical Corner · Dr. Hoang · Apr 2023',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/peds-strep-pharyngitis-case.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/peds-strep-pharyngitis-case.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Pediatric Sore Throat — Case"></iframe>
+    `,
+  },
+  'uc-tripledemic-vaccines': {
+    icon: '💉',
+    title: 'Tripledemic Vaccines (Flu/RSV/COVID)',
+    updated: 'GPC Clinical Corner · Dr. Chen · Sep 2023',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/tripledemic-vaccines.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/tripledemic-vaccines.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Tripledemic Vaccines (Flu/RSV/COVID)"></iframe>
+    `,
+  },
+  'uc-malaria': {
+    icon: '🦟',
+    title: 'Malaria Diagnosis & Treatment',
+    updated: 'GPC Clinical Corner · Dr. Chen · Jul 2023',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/malaria.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/malaria.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Malaria Diagnosis & Treatment"></iframe>
+    `,
+  },
+  'uc-sti-treatment': {
+    icon: '🦠',
+    title: 'STI Treatment (Chlamydia/Gonorrhea)',
+    updated: 'GPC Clinical Corner · CDC 2021 · Dr. Singh · Nov 2023',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/sti-treatment.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/sti-treatment.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="STI Treatment (Chlamydia/Gonorrhea)"></iframe>
+    `,
+  },
+  'uc-syphilis-treatment': {
+    icon: '🦠',
+    title: 'Syphilis (Latent + Treatment)',
+    updated: 'GPC Clinical Corner · Dr. Chen · Aug 2023',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/syphilis-treatment.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/syphilis-treatment.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Syphilis (Latent + Treatment)"></iframe>
+    `,
+  },
+  'uc-genital-herpes': {
+    icon: '🦠',
+    title: 'Genital Herpes (Episodic + Suppressive)',
+    updated: 'GPC Clinical Corner · Dr. Koyle · Sep 2023',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/genital-herpes.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/genital-herpes.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Genital Herpes (Episodic + Suppressive)"></iframe>
+    `,
+  },
+  'uc-hiv-prep': {
+    icon: '💊',
+    title: 'HIV PrEP Guidelines',
+    updated: 'GPC Clinical Corner · Dr. Koyle · Jun 2023',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/hiv-prep.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/hiv-prep.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="HIV PrEP Guidelines"></iframe>
+    `,
+  },
+  'uc-animal-bites-rabies': {
+    icon: '🐕',
+    title: 'Animal Bites & Rabies Reporting',
+    updated: 'GPC Clinical Corner · Dr. Koyle · Apr 2026',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/animal-bites-rabies.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/animal-bites-rabies.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Animal Bites & Rabies Reporting"></iframe>
+    `,
+  },
+  'uc-cluster-headache': {
+    icon: '🧠',
+    title: 'Cluster Headache — Case',
+    updated: 'GPC Clinical Corner · Dr. Patel · Feb 2023',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/cluster-headache.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/cluster-headache.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Cluster Headache — Case"></iframe>
+    `,
+  },
+  'uc-headaches-migraines': {
+    icon: '🧠',
+    title: 'Headaches & Migraines',
+    updated: 'GPC Clinical Corner · Dr. Doshi · Jun 2024',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/headaches-migraines.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/headaches-migraines.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Headaches & Migraines"></iframe>
+    `,
+  },
+  'uc-head-trauma-telemed': {
+    icon: '🧠',
+    title: 'Head Trauma — Telemed Triage',
+    updated: 'GPC Clinical Corner · Dr. Lee · Jan 2026',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/head-trauma-telemed.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/head-trauma-telemed.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Head Trauma — Telemed Triage"></iframe>
+    `,
+  },
+  'uc-depression-management': {
+    icon: '🧠',
+    title: 'Depression Management (Virtual)',
+    updated: 'GPC Clinical Corner · Dr. Singh · Apr 2024',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/depression-management.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/depression-management.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Depression Management (Virtual)"></iframe>
+    `,
+  },
+  'uc-gad': {
+    icon: '🧠',
+    title: 'Generalized Anxiety Disorder (GAD)',
+    updated: 'GPC Clinical Corner · Dr. Nepomuceno · Aug 2024',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/gad.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/gad.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Generalized Anxiety Disorder (GAD)"></iframe>
+    `,
+  },
+  'uc-virtual-anxiety-care': {
+    icon: '🧠',
+    title: 'Virtual Anxiety Care — Case',
+    updated: 'GPC Clinical Corner · Dr. Patel · Nov 2023',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/virtual-anxiety-care.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/virtual-anxiety-care.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Virtual Anxiety Care — Case"></iframe>
+    `,
+  },
+  'uc-pediatric-formula': {
+    icon: '👶',
+    title: 'Pediatric Formula — Choosing',
+    updated: 'GPC Clinical Corner · Dr. Hoang · Jun 2023',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/pediatric-formula.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/pediatric-formula.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Pediatric Formula — Choosing"></iframe>
+    `,
+  },
+  'uc-child-abuse-awareness': {
+    icon: '👶',
+    title: 'Child Abuse Awareness & Reporting',
+    updated: 'GPC Clinical Corner · Dr. Singh · Apr 2024',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/child-abuse-awareness.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/child-abuse-awareness.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Child Abuse Awareness & Reporting"></iframe>
+    `,
+  },
+  'uc-infant-irritability-case': {
+    icon: '👶',
+    title: 'Infant Irritability — Case',
+    updated: 'GPC Clinical Corner · Dr. Nepomuceno · Aug 2025',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/infant-irritability-case.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/infant-irritability-case.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Infant Irritability — Case"></iframe>
+    `,
+  },
+  'uc-first-trimester-bleeding': {
+    icon: '🤰',
+    title: 'First Trimester Bleeding — Algorithm',
+    updated: 'GPC Clinical Corner · Dr. Brown · Mar 2024',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/first-trimester-bleeding.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/first-trimester-bleeding.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="First Trimester Bleeding — Algorithm"></iframe>
+    `,
+  },
+  'uc-ob-triage-vaginal-bleeding-1t': {
+    icon: '🤰',
+    title: 'OB Triage — Vaginal Bleeding 1T',
+    updated: 'GPC Clinical Corner · Dr. Singh · Jun 2023',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/ob-triage-vaginal-bleeding-1t.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/ob-triage-vaginal-bleeding-1t.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="OB Triage — Vaginal Bleeding 1T"></iframe>
+    `,
+  },
+  'uc-bacterial-mastitis': {
+    icon: '🤱',
+    title: 'Bacterial Mastitis',
+    updated: 'GPC Clinical Corner · Dr. Koyle · May 2023',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/bacterial-mastitis.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/bacterial-mastitis.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Bacterial Mastitis"></iframe>
+    `,
+  },
+  'uc-beers-criteria-older-adults': {
+    icon: '👴',
+    title: 'Beers Criteria — Meds in Older Adults',
+    updated: 'GPC Clinical Corner · Dr. Snarskis · May 2025',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/beers-criteria-older-adults.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/beers-criteria-older-adults.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Beers Criteria — Meds in Older Adults"></iframe>
+    `,
+  },
+  'uc-weight-loss-medications': {
+    icon: '💊',
+    title: 'Weight Loss Medications',
+    updated: 'GPC Clinical Corner · Dr. Koyle · Sep 2024',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/weight-loss-medications.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/weight-loss-medications.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Weight Loss Medications"></iframe>
+    `,
+  },
+  'uc-perioperative-anticoag': {
+    icon: '💊',
+    title: 'Perioperative Anticoagulation',
+    updated: 'GPC Clinical Corner · Dr. Doshi · Nov 2023',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/perioperative-anticoag.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/perioperative-anticoag.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Perioperative Anticoagulation"></iframe>
+    `,
+  },
+  'uc-wildfire-smoke': {
+    icon: '🌎',
+    title: 'Wildfire Smoke & Health',
+    updated: 'GPC Clinical Corner · Dr. Nepomuceno · Jan 2025',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/wildfire-smoke.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/wildfire-smoke.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Wildfire Smoke & Health"></iframe>
+    `,
+  },
+  'uc-exercise-is-medicine': {
+    icon: '🌎',
+    title: 'Exercise is Medicine',
+    updated: 'GPC Clinical Corner · Dr. Nepomuceno · Apr 2024',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/urgent-care/exercise-is-medicine.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/urgent-care/exercise-is-medicine.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Exercise is Medicine"></iframe>
+    `,
   },
 };
 
