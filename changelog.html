@@ -162,7 +162,123 @@ main{max-width:860px;margin:0 auto;padding:32px 20px 64px}
 
   <div class="timeline" id="timeline">
 
-    <!-- ── April 30, 2026 (latest) ── -->
+    <!-- ── May 13, 2026 (latest) ── -->
+    <div class="date-group">
+      <div class="date-dot"></div>
+      <div class="date-label">
+        <span class="date-text">May 13, 2026</span>
+        <span class="date-relative"></span>
+      </div>
+      <div class="entries">
+
+        <div class="entry" data-type="feat">
+          <div class="entry-icon">🩹</div>
+          <div class="entry-body">
+            <div class="entry-title">Urgent Care library — 60 clinical references on the Algorithms page</div>
+            <div class="entry-desc">Added <b>60 weekly GPC Clinical Corner newsletters</b> from RVMC Clinical Operations as clickable cards on the Algorithms page. Each card opens its full PDF preview inline — no separate page, no download required. Topics span everything from <i>Coccydynia</i>, <i>Sunburn</i>, and <i>Insect Bites</i> to <i>Latent TB</i>, <i>Pertussis</i>, <i>Long COVID</i>, <i>UTI management</i>, <i>Sinusitis antibiotics</i>, <i>Cluster headache</i>, <i>Red eye red flags</i>, <i>Beers criteria</i>, <i>Wildfire smoke</i>, and many more. All searchable from the global home search bar.</div>
+            <div class="entry-meta">
+              <span class="badge feat">New Feature</span>
+              <a class="entry-link" href="algorithms.html#card-uc-coccydynia">Browse Urgent Care →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="entry" data-type="improvement">
+          <div class="entry-icon">🧬</div>
+          <div class="entry-body">
+            <div class="entry-title">Algorithms page reorganized by organ system</div>
+            <div class="entry-desc">The Algorithms page used to be a flat 43-card grid. It's now grouped into <b>17 organ-system sections</b> with full-width dividers: Cardiovascular, Pulmonary, Hematology, Neurology, HEENT, GI, GU/Renal, MSK, Skin/Soft Tissue, Infectious Disease, OB/Women's Health, Pediatrics, Psychiatry, Pharm/Tox, Geriatrics, Procedural/Imaging, and Public Health. Same cards, same content — just easier to scan. The new Urgent Care entries slot into the matching organ-system groups so related content sits together.</div>
+            <div class="entry-meta">
+              <span class="badge improvement">Improvement</span>
+              <a class="entry-link" href="algorithms.html">Open Algorithms →</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── May 11, 2026 ── -->
+    <div class="date-group">
+      <div class="date-dot"></div>
+      <div class="date-label">
+        <span class="date-text">May 11, 2026</span>
+        <span class="date-relative"></span>
+      </div>
+      <div class="entries">
+
+        <div class="entry" data-type="feat">
+          <div class="entry-icon">🔧</div>
+          <div class="entry-body">
+            <div class="entry-title">Fulfiller mode on Service Requests — close tasks with a note</div>
+            <div class="entry-desc">A new <b>🔧 wrench toggle</b> in the top-right of the requests page unlocks fulfiller actions on every open request. <b>✓ Done</b> now takes an optional <i>completion note</i> (e.g. "ordered new dopplers, expected 5/15") and posts it as a comment when marking the request resolved. <b>Cannot Complete</b> requires a reason, which posts as a comment and closes the request. Both notes show up under the request immediately so submitters can see what actually happened.</div>
+            <div class="entry-meta">
+              <span class="badge feat">New Feature</span>
+              <a class="entry-link" href="service-requests.html">Open Requests →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="entry" data-type="feat">
+          <div class="entry-icon">🗑</div>
+          <div class="entry-body">
+            <div class="entry-title">Delete your own comments on Service Requests</div>
+            <div class="entry-desc">A small 🗑 icon appears next to the timestamp on any comment you wrote — click it, confirm, and the comment is removed. Works for regular comments, ✓ Done completion notes, and ⚠️ Cannot Complete reasons. You only see the 🗑 on comments authored from <i>your</i> browser, so nobody can delete someone else's note.</div>
+            <div class="entry-meta">
+              <span class="badge feat">New Feature</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="entry" data-type="improvement">
+          <div class="entry-icon">🔒</div>
+          <div class="entry-body">
+            <div class="entry-title">Status badges on Service Requests now fulfiller-only</div>
+            <div class="entry-desc">Previously, anyone visiting the page could click the Open / In Progress / Resolved badge and silently cycle the status. Now the badge is only clickable when fulfiller mode is unlocked; everyone else sees it as a plain label.</div>
+            <div class="entry-meta">
+              <span class="badge improvement">Improvement</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="entry" data-type="improvement">
+          <div class="entry-icon">📧</div>
+          <div class="entry-body">
+            <div class="entry-title">Service request emails now route by location</div>
+            <div class="entry-desc">New-request EmailJS notifications now follow the submitted location instead of blasting all four addresses on every request. <b>OMC</b> requests go to Russel, Kim, and Michael. <b>FMC</b> requests go to David, Kim, and Michael. Unknown or missing location falls back to the full list as a safety net.</div>
+            <div class="entry-meta">
+              <span class="badge improvement">Improvement</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="entry" data-type="fix">
+          <div class="entry-icon">🔎</div>
+          <div class="entry-body">
+            <div class="entry-title">Fix: dead search-bar results that bounced back to the home page</div>
+            <div class="entry-desc">The home search bar's URL sanitizer only accepted <code>.html</code> URLs, so 14 results — Kaiser docs, the Issue Reporting Form, the Postpartum HTN algorithm, and others — were silently rewritten to <code>index.html</code> when clicked. Expanded the allowlist to cover <code>.pdf</code>, <code>.docx</code>, <code>.pptx</code>, <code>.xlsx</code>, and external <code>https://</code> URLs. Office files now open through the Office Online viewer so they preview as a webpage instead of triggering a raw download.</div>
+            <div class="entry-meta">
+              <span class="badge fix">Fix</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="entry" data-type="improvement">
+          <div class="entry-icon">📎</div>
+          <div class="entry-body">
+            <div class="entry-title">Larger attachments on the announcement section</div>
+            <div class="entry-desc">The announcement section now supports files larger than the previous 1 MB Firestore cap. Big files (PDFs, Word docs, etc.) live in <code>docs/announcements/</code> and surface as always-visible attachments at the top of the page. Used this to add the new <i>ED Radiology — Epic Downtime</i> document as a one-click reference for everyone.</div>
+            <div class="entry-meta">
+              <span class="badge improvement">Improvement</span>
+              <a class="entry-link" href="hospital-protocols.html#ed-radiology-epic-downtime">Open Protocol →</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── April 30, 2026 ── -->
     <div class="date-group">
       <div class="date-dot"></div>
       <div class="date-label">
