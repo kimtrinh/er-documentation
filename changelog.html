@@ -162,7 +162,87 @@ main{max-width:860px;margin:0 auto;padding:32px 20px 64px}
 
   <div class="timeline" id="timeline">
 
-    <!-- ── April 30, 2026 (latest) ── -->
+    <!-- ── May 11, 2026 (latest) ── -->
+    <div class="date-group">
+      <div class="date-dot"></div>
+      <div class="date-label">
+        <span class="date-text">May 11, 2026</span>
+        <span class="date-relative"></span>
+      </div>
+      <div class="entries">
+
+        <div class="entry" data-type="feat">
+          <div class="entry-icon">🔧</div>
+          <div class="entry-body">
+            <div class="entry-title">Fulfiller mode on Service Requests — close tasks with a note</div>
+            <div class="entry-desc">A new <b>🔧 wrench toggle</b> in the top-right of the requests page unlocks fulfiller actions on every open request. <b>✓ Done</b> now takes an optional <i>completion note</i> (e.g. "ordered new dopplers, expected 5/15") and posts it as a comment when marking the request resolved. <b>Cannot Complete</b> requires a reason, which posts as a comment and closes the request. Both notes show up under the request immediately so submitters can see what actually happened.</div>
+            <div class="entry-meta">
+              <span class="badge feat">New Feature</span>
+              <a class="entry-link" href="service-requests.html">Open Requests →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="entry" data-type="feat">
+          <div class="entry-icon">🗑</div>
+          <div class="entry-body">
+            <div class="entry-title">Delete your own comments on Service Requests</div>
+            <div class="entry-desc">Every new comment is now stamped with the writer's browser id (the same id already used for voting). A small 🗑 icon appears next to the timestamp on any comment you wrote — click it, confirm, and the comment is removed. Works for regular comments, ✓ Done completion notes, and ⚠️ Cannot Complete reasons. You only see the 🗑 on comments authored from <i>your</i> browser, so nobody can delete someone else's note.</div>
+            <div class="entry-meta">
+              <span class="badge feat">New Feature</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="entry" data-type="improvement">
+          <div class="entry-icon">🔒</div>
+          <div class="entry-body">
+            <div class="entry-title">Status badges on Service Requests now fulfiller-only</div>
+            <div class="entry-desc">Previously the Open / In Progress / Resolved badge was clickable by anyone — one click would silently cycle the status with no auth. Now the badge is only clickable inside fulfiller mode; non-fulfillers see it as a plain label. Defense-in-depth: <code>cycleStatus()</code> also rejects console calls without fulfiller mode.</div>
+            <div class="entry-meta">
+              <span class="badge improvement">Improvement</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="entry" data-type="improvement">
+          <div class="entry-icon">📧</div>
+          <div class="entry-body">
+            <div class="entry-title">Service request emails now route by location</div>
+            <div class="entry-desc">New-request EmailJS notifications now follow the submitted location instead of blasting all four addresses on every request. <b>OMC</b> goes to Russel / Kim / Michael; <b>FMC</b> goes to David / Kim / Michael. Unknown or missing location falls back to the full list as a safety net.</div>
+            <div class="entry-meta">
+              <span class="badge improvement">Improvement</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="entry" data-type="fix">
+          <div class="entry-icon">🔎</div>
+          <div class="entry-body">
+            <div class="entry-title">Fix: dead search-bar results that bounced back to the home page</div>
+            <div class="entry-desc">The search-bar's URL sanitizer only accepted <code>.html</code> URLs, so 14 results — Kaiser docs, the Issue Reporting Form, the Postpartum HTN algorithm — were silently rewritten to <code>index.html</code> when clicked. Expanded the allowlist to cover <code>.pdf</code>, <code>.docx?</code>, <code>.pptx?</code>, <code>.xlsx?</code>, images, and external <code>https://</code> URLs. Office files (<code>.docx</code>, <code>.pptx</code>) now open through the Office Online viewer so they preview as a webpage instead of triggering a raw download. Fixed a hidden Cyrillic <b>н</b> typo in the Postpartum HTN anchor while we were at it. Audit script now reports 0 dead entries across 449 search results.</div>
+            <div class="entry-meta">
+              <span class="badge fix">Fix</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="entry" data-type="improvement">
+          <div class="entry-icon">📎</div>
+          <div class="entry-body">
+            <div class="entry-title">Static attachments in the announcement section</div>
+            <div class="entry-desc">The announcement docs list now supports large files (> 1 MB Firestore cap) by hosting them under <code>docs/announcements/</code> in the repo and surfacing them through a <code>STATIC_ANNOUNCEMENT_DOCS</code> list. Always visible to everyone, not removable from the UI — managed via git. Used this to add the new <i>ED Radiology — Epic Downtime</i> protocol card on the Protocols page with an embedded preview.</div>
+            <div class="entry-meta">
+              <span class="badge improvement">Improvement</span>
+              <a class="entry-link" href="hospital-protocols.html#ed-radiology-epic-downtime">Open Protocol →</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── April 30, 2026 ── -->
     <div class="date-group">
       <div class="date-dot"></div>
       <div class="date-label">
