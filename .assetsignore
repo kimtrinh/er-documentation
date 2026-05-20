@@ -1,0 +1,13 @@
+.git/
+.github/
+.claude/
+.playwright-cli/
+node_modules/
+scripts/
+tools/
+docs/
+data/
+*.bak
+*.md
+LICENSE
+firestore.rules
