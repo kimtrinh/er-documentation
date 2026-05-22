@@ -1,0 +1,18 @@
+{
+  // Cloudflare Workers static-assets deployment for the ER Toolkit.
+  // Live URL: https://er-toolkit.kltrinh-28a.workers.dev/
+  //
+  // This repo is a flat static site — every HTML / JS / JSON / asset
+  // file lives in the repo root or a sibling directory (assets/, data/,
+  // docs/). There is no build step, so we point Workers Assets directly
+  // at the repo root. Files to exclude from the public bundle live in
+  // ./.assetsignore (gitignore-style patterns).
+  "name": "er-toolkit",
+  "compatibility_date": "2026-05-22",
+  "assets": {
+    "directory": "./",
+    // Multi-page static site: serve a real 404 page on misses rather
+    // than rewriting everything to index.html (the SPA mode).
+    "not_found_handling": "404-page"
+  }
+}
