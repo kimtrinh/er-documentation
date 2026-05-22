@@ -55,13 +55,18 @@ main{max-width:900px;margin:0 auto;padding:24px 24px 80px}
 .item-desc{font-size:12px;color:var(--text3);line-height:1.5;margin-bottom:8px}
 .item-meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .tag{display:inline-block;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:600}
+/* Status pills — larger + bolder so it's obvious when something moves
+   to In Progress or Resolved. */
+.tag-status{display:inline-flex;align-items:center;gap:5px;padding:4px 11px;border-radius:999px;font-size:12px;font-weight:800;letter-spacing:.01em;line-height:1.1}
 .item-submitter{font-size:11px;color:var(--border2);margin-left:auto}
 .item-time{font-size:11px;color:var(--text3)}
 
-/* STATUS BADGES */
-.tag-open{background:#1e3a0a;color:#86efac;border:1px solid #16a34a}
-.tag-inprogress{background:#0d2038;color:#93c5fd;border:1px solid #1d4ed8}
-.tag-resolved{background:var(--surface2);color:var(--text3);border:1px solid var(--border)}
+/* STATUS BADGES — color-coded so the state is obvious at a glance.
+   Open = green outline · In Progress = bright blue · Resolved = solid
+   green with ✓ (feels like "done", not "abandoned"). */
+.tag-open{background:rgba(34,197,94,.10);color:#86efac;border:1.5px solid #16a34a}
+.tag-inprogress{background:rgba(59,130,246,.18);color:#bfdbfe;border:1.5px solid #3b82f6;box-shadow:0 0 0 1px rgba(59,130,246,.15)}
+.tag-resolved{background:rgba(34,197,94,.22);color:#bbf7d0;border:1.5px solid #15803d;box-shadow:0 0 0 1px rgba(34,197,94,.18)}
 
 /* PRIORITY BADGES */
 .tag-priority-low{background:var(--surface2);color:var(--text3);border:1px solid var(--border)}
@@ -173,6 +178,28 @@ html[data-theme="light"] .location-opt.selected.fmc .location-opt-title{color:#1
 .fulfiller-banner-route{display:inline-flex;align-items:center;gap:6px;padding:1px 8px;border-radius:999px;font-weight:700;font-size:12px;margin-right:6px}
 .fulfiller-banner-route.omc{background:rgba(59,130,246,.15);color:#93c5fd;border:1px solid rgba(59,130,246,.35)}
 .fulfiller-banner-route.fmc{background:rgba(34,197,94,.18);color:#86efac;border:1px solid rgba(34,197,94,.4)}
+/* Big OMC/FMC location picker shown only in fulfiller mode — gives
+   fulfillers a clear, one-tap way to scope their queue. */
+.fulfiller-loc-picker{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px}
+.fulfiller-loc-picker[hidden]{display:none}
+.fulfiller-loc-btn{padding:14px 12px;border-radius:12px;border:2px solid var(--border2);background:var(--surface);cursor:pointer;text-align:center;transition:all .15s;display:flex;flex-direction:column;align-items:center;gap:2px;user-select:none;font-family:inherit}
+.fulfiller-loc-btn-title{font-size:15px;font-weight:800;color:var(--text);line-height:1.2}
+.fulfiller-loc-btn-sub{font-size:11px;color:var(--text3);font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.fulfiller-loc-btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.25)}
+.fulfiller-loc-btn.all{}
+.fulfiller-loc-btn.all.active{border-color:var(--text2);background:var(--surface2)}
+.fulfiller-loc-btn.omc:hover{border-color:#3b82f6}
+.fulfiller-loc-btn.omc.active{border-color:#3b82f6;background:rgba(59,130,246,.14)}
+.fulfiller-loc-btn.omc.active .fulfiller-loc-btn-title{color:#93c5fd}
+.fulfiller-loc-btn.fmc:hover{border-color:#22c55e}
+.fulfiller-loc-btn.fmc.active{border-color:#22c55e;background:rgba(34,197,94,.14)}
+.fulfiller-loc-btn.fmc.active .fulfiller-loc-btn-title{color:#86efac}
+.fulfiller-loc-count{display:inline-block;background:var(--surface2);color:var(--text3);border-radius:999px;padding:1px 8px;font-size:11px;font-weight:700;margin-left:6px;min-width:22px}
+.fulfiller-loc-btn.active .fulfiller-loc-count{background:rgba(0,0,0,.25);color:inherit}
+html[data-theme="light"] .fulfiller-loc-btn.omc.active{background:#dbeafe}
+html[data-theme="light"] .fulfiller-loc-btn.omc.active .fulfiller-loc-btn-title{color:#1d4ed8}
+html[data-theme="light"] .fulfiller-loc-btn.fmc.active{background:#dcfce7}
+html[data-theme="light"] .fulfiller-loc-btn.fmc.active .fulfiller-loc-btn-title{color:#15803d}
 
 /* FULFILLER ACTIONS */
 .fulfiller-actions{padding:10px 16px 14px;border-top:2px solid rgba(34,197,94,.25);background:rgba(34,197,94,.04);display:flex;flex-direction:column;gap:8px}
@@ -199,8 +226,8 @@ html[data-theme="light"] .location-opt.selected.fmc .location-opt-title{color:#1
 
 /* LIGHT MODE OVERRIDES */
 html[data-theme="light"] .tag-open{background:#f0fdf4;color:#15803d;border-color:#86efac}
-html[data-theme="light"] .tag-inprogress{background:#dbeafe;color:#1d4ed8;border-color:#93c5fd}
-html[data-theme="light"] .tag-resolved{background:#f1f5f9;color:#64748b;border-color:#cbd5e1}
+html[data-theme="light"] .tag-inprogress{background:#dbeafe;color:#1d4ed8;border-color:#3b82f6}
+html[data-theme="light"] .tag-resolved{background:#dcfce7;color:#14532d;border-color:#15803d}
 html[data-theme="light"] .tag-priority-low{background:#f1f5f9;color:#64748b;border-color:#cbd5e1}
 html[data-theme="light"] .tag-priority-medium{background:#fefce8;color:#92400e;border-color:#fde047}
 html[data-theme="light"] .tag-priority-high{background:#fef2f2;color:#991b1b;border-color:#fca5a5}
@@ -349,6 +376,22 @@ main>*:nth-child(4){animation-delay:.15s}
       &nbsp;·&nbsp;
       <span class="fulfiller-banner-route fmc">🏥 FMC</span>→ <b>David</b>, Kim, Michael
     </div>
+  </div>
+
+  <!-- BIG LOCATION PICKER FOR FULFILLERS (only visible in fulfiller mode) -->
+  <div class="fulfiller-loc-picker" id="fulfiller-loc-picker" hidden>
+    <button class="fulfiller-loc-btn all active" data-loc="all" onclick="filterLocation('all',this)">
+      <div class="fulfiller-loc-btn-title">All Requests <span class="fulfiller-loc-count" id="floc-count-all">·</span></div>
+      <div class="fulfiller-loc-btn-sub">OMC + FMC</div>
+    </button>
+    <button class="fulfiller-loc-btn omc" data-loc="OMC" onclick="filterLocation('OMC',this)">
+      <div class="fulfiller-loc-btn-title">🏥 OMC <span class="fulfiller-loc-count" id="floc-count-omc">·</span></div>
+      <div class="fulfiller-loc-btn-sub">Ontario · Russell</div>
+    </button>
+    <button class="fulfiller-loc-btn fmc" data-loc="FMC" onclick="filterLocation('FMC',this)">
+      <div class="fulfiller-loc-btn-title">🏥 FMC <span class="fulfiller-loc-count" id="floc-count-fmc">·</span></div>
+      <div class="fulfiller-loc-btn-sub">Fontana · David</div>
+    </button>
   </div>
 
   <!-- REQUEST LIST -->
@@ -587,7 +630,7 @@ function timeAgo(ts) {
   return months + 'mo ago';
 }
 
-const STATUS_LABELS = { open: 'Open', inprogress: 'In Progress', resolved: 'Resolved' };
+const STATUS_LABELS = { open: '● Open', inprogress: '⏳ In Progress', resolved: '✓ Resolved' };
 function statusLabel(s) { return STATUS_LABELS[s] || s; }
 
 function showToast(msg) {
@@ -626,6 +669,8 @@ function setupRealtimeRequests() {
 
 // ── RENDER ───────────────────────────────────────────────────
 function renderAll() {
+  // Keep the fulfiller location-picker counts fresh.
+  updateFulfillerLocCounts();
   let filtered = allRequests.filter(r => {
     if (currentLocationFilter !== 'all' && r.location !== currentLocationFilter) return false;
     if (currentCategoryFilter !== 'all' && r.category !== currentCategoryFilter) return false;
@@ -856,8 +901,12 @@ async function addComment(id) {
 // ── FILTER / SORT ────────────────────────────────────────────
 function filterLocation(loc, el) {
   currentLocationFilter = loc;
-  document.querySelectorAll('[data-filter="location"]').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
+  // Sync the legacy thin pills in the filter bar.
+  document.querySelectorAll('[data-filter="location"]').forEach(t => {
+    t.classList.toggle('active', t.dataset.value === loc);
+  });
+  // Sync the big fulfiller-only picker too.
+  syncFulfillerLocPickerActive();
   renderAll();
 }
 
@@ -1059,6 +1108,32 @@ function updateFulfillerToggle() {
   btn.classList.toggle('fulfiller-active', isFulfiller);
   const banner = document.getElementById('fulfiller-banner');
   if (banner) banner.hidden = !isFulfiller;
+  const picker = document.getElementById('fulfiller-loc-picker');
+  if (picker) picker.hidden = !isFulfiller;
+  syncFulfillerLocPickerActive();
+  updateFulfillerLocCounts();
+}
+
+// Highlight the picker button that matches the current location filter.
+function syncFulfillerLocPickerActive() {
+  document.querySelectorAll('#fulfiller-loc-picker .fulfiller-loc-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.loc === currentLocationFilter);
+  });
+}
+
+// Show open-request counts next to each location button in the picker.
+function updateFulfillerLocCounts() {
+  if (!isFulfiller || !Array.isArray(allRequests)) return;
+  const open = allRequests.filter(r => r.status !== 'resolved');
+  const counts = {
+    all: open.length,
+    OMC: open.filter(r => r.location === 'OMC').length,
+    FMC: open.filter(r => r.location === 'FMC').length,
+  };
+  const setText = (id, n) => { const el = document.getElementById(id); if (el) el.textContent = String(n); };
+  setText('floc-count-all', counts.all);
+  setText('floc-count-omc', counts.OMC);
+  setText('floc-count-fmc', counts.FMC);
 }
 
 async function markDone(id) {
