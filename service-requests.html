@@ -120,6 +120,22 @@ main{max-width:900px;margin:0 auto;padding:24px 24px 80px}
 .tag-opt{padding:4px 12px;border-radius:20px;border:1px solid var(--border);background:var(--bg);color:var(--text3);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s}
 .tag-opt:hover{border-color:#3b82f6;color:var(--text-blue)}
 .tag-opt.selected{border-color:#3b82f6;background:var(--border2);color:var(--text-blue)}
+/* Big location picker — clearer which site needs help */
+.location-selector{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.location-opt{padding:14px 16px;border-radius:12px;border:2px solid var(--border);background:var(--bg);cursor:pointer;transition:all .15s;text-align:left;display:flex;flex-direction:column;gap:2px;user-select:none}
+.location-opt:hover{border-color:#3b82f6;background:var(--surface2)}
+.location-opt-title{font-size:15px;font-weight:800;color:var(--text)}
+.location-opt-sub{font-size:11px;color:var(--text3);font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.location-opt.selected.omc{border-color:#3b82f6;background:rgba(59,130,246,.12)}
+.location-opt.selected.omc .location-opt-title{color:#93c5fd}
+.location-opt.selected.fmc{border-color:#22c55e;background:rgba(34,197,94,.12)}
+.location-opt.selected.fmc .location-opt-title{color:#86efac}
+.location-required-label{font-weight:800;color:var(--text);margin-bottom:6px}
+.location-required-label .req-marker{color:#ef4444;margin-left:2px}
+html[data-theme="light"] .location-opt.selected.omc{background:#dbeafe}
+html[data-theme="light"] .location-opt.selected.omc .location-opt-title{color:#1d4ed8}
+html[data-theme="light"] .location-opt.selected.fmc{background:#dcfce7}
+html[data-theme="light"] .location-opt.selected.fmc .location-opt-title{color:#15803d}
 .modal-footer{display:flex;gap:10px;justify-content:flex-end;margin-top:22px}
 .btn-cancel{padding:9px 18px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:14px;font-weight:600;cursor:pointer;transition:all .2s}
 .btn-cancel:hover{background:var(--border);color:var(--text)}
@@ -146,10 +162,17 @@ main{max-width:900px;margin:0 auto;padding:24px 24px 80px}
 .config-banner code{background:rgba(0,0,0,.3);padding:2px 6px;border-radius:4px;font-size:12px}
 
 /* ADMIN TOGGLE */
-.admin-toggle{background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:8px 12px;font-size:16px;cursor:pointer;transition:all .2s;line-height:1}
-.admin-toggle:hover{border-color:#3b82f6}
-.admin-toggle.admin-active{border-color:#f59e0b;box-shadow:0 0 8px rgba(245,158,11,.3)}
-.admin-toggle.fulfiller-active{border-color:#22c55e;box-shadow:0 0 8px rgba(34,197,94,.3)}
+.admin-toggle{background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:7px 12px;font-size:13px;font-weight:700;color:var(--text2);cursor:pointer;transition:all .2s;line-height:1;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.admin-toggle:hover{border-color:#3b82f6;color:var(--text)}
+.admin-toggle.admin-active{border-color:#f59e0b;box-shadow:0 0 8px rgba(245,158,11,.3);color:#fbbf24;background:rgba(245,158,11,.08)}
+.admin-toggle.fulfiller-active{border-color:#22c55e;box-shadow:0 0 8px rgba(34,197,94,.3);color:#86efac;background:rgba(34,197,94,.08)}
+.fulfiller-banner{background:linear-gradient(135deg,rgba(34,197,94,.10),rgba(34,197,94,.04));border:1px solid rgba(34,197,94,.35);border-radius:10px;padding:10px 14px;margin-bottom:16px;display:flex;align-items:flex-start;gap:10px;font-size:13px;line-height:1.5;color:var(--text)}
+.fulfiller-banner[hidden]{display:none}
+.fulfiller-banner-icon{font-size:18px;flex-shrink:0;line-height:1.2}
+.fulfiller-banner-text strong{color:#86efac;font-weight:800;letter-spacing:.02em}
+.fulfiller-banner-route{display:inline-flex;align-items:center;gap:6px;padding:1px 8px;border-radius:999px;font-weight:700;font-size:12px;margin-right:6px}
+.fulfiller-banner-route.omc{background:rgba(59,130,246,.15);color:#93c5fd;border:1px solid rgba(59,130,246,.35)}
+.fulfiller-banner-route.fmc{background:rgba(34,197,94,.18);color:#86efac;border:1px solid rgba(34,197,94,.4)}
 
 /* FULFILLER ACTIONS */
 .fulfiller-actions{padding:10px 16px 14px;border-top:2px solid rgba(34,197,94,.25);background:rgba(34,197,94,.04);display:flex;flex-direction:column;gap:8px}
@@ -312,8 +335,20 @@ main>*:nth-child(4){animation-delay:.15s}
       <option value="votes">Most Voted</option>
     </select>
 
-    <button class="admin-toggle" id="fulfillerToggle" onclick="window._toggleFulfiller()" title="Fulfiller mode">🔧</button>
-    <button class="admin-toggle" id="adminToggle" onclick="window._toggleAdmin()" title="Admin mode">🔒</button>
+    <button class="admin-toggle" id="fulfillerToggle" onclick="window._toggleFulfiller()" title="Fulfiller mode">🔧 Fulfiller mode</button>
+    <button class="admin-toggle" id="adminToggle" onclick="window._toggleAdmin()" title="Admin mode">🔒 Admin</button>
+  </div>
+
+  <!-- FULFILLER ROUTING BANNER (visible only in fulfiller mode) -->
+  <div class="fulfiller-banner" id="fulfiller-banner" hidden>
+    <div class="fulfiller-banner-icon">🔧</div>
+    <div class="fulfiller-banner-text">
+      <strong>Fulfiller mode active.</strong> New-request emails route by location:
+      <br>
+      <span class="fulfiller-banner-route omc">🏥 OMC</span>→ <b>Russell</b>, Kim, Michael
+      &nbsp;·&nbsp;
+      <span class="fulfiller-banner-route fmc">🏥 FMC</span>→ <b>David</b>, Kim, Michael
+    </div>
   </div>
 
   <!-- REQUEST LIST -->
@@ -329,10 +364,16 @@ main>*:nth-child(4){animation-delay:.15s}
     <p class="modal-sub">Submit a facility request for the ED</p>
 
     <div class="form-group">
-      <label>Location *</label>
-      <div class="tag-selector" id="location-selector">
-        <span class="tag-opt" onclick="selectOpt('location',this,'OMC')">OMC</span>
-        <span class="tag-opt" onclick="selectOpt('location',this,'FMC')">FMC</span>
+      <label class="location-required-label">Which site needs help?<span class="req-marker">*</span></label>
+      <div class="location-selector" id="location-selector">
+        <div class="location-opt omc" onclick="selectOpt('location',this,'OMC')">
+          <div class="location-opt-title">🏥 OMC</div>
+          <div class="location-opt-sub">Ontario</div>
+        </div>
+        <div class="location-opt fmc" onclick="selectOpt('location',this,'FMC')">
+          <div class="location-opt-title">🏥 FMC</div>
+          <div class="location-opt-sub">Fontana</div>
+        </div>
       </div>
     </div>
 
@@ -851,7 +892,12 @@ function handleOverlayClick(e) {
 }
 
 function selectOpt(group, el, val) {
-  el.closest('.tag-selector').querySelectorAll('.tag-opt').forEach(t => t.classList.remove('selected'));
+  // Works for both the legacy .tag-selector/.tag-opt picker and the bigger
+  // .location-selector/.location-opt picker used by the Location field.
+  const container = el.closest('.tag-selector, .location-selector');
+  if (container) {
+    container.querySelectorAll('.tag-opt, .location-opt').forEach(t => t.classList.remove('selected'));
+  }
   el.classList.add('selected');
   if (group === 'location') selectedLocation = val;
   else if (group === 'priority') selectedPriority = val;
@@ -863,7 +909,7 @@ function resetForm() {
   document.getElementById('input-desc').value = '';
   document.getElementById('input-room').value = '';
   document.getElementById('input-name').value = '';
-  document.querySelectorAll('#location-selector .tag-opt, #category-selector .tag-opt').forEach(t => t.classList.remove('selected'));
+  document.querySelectorAll('#location-selector .location-opt, #category-selector .tag-opt').forEach(t => t.classList.remove('selected'));
   // Reset priority to Medium
   document.querySelectorAll('#priority-selector .tag-opt').forEach(t => t.classList.remove('selected'));
   document.querySelector('#priority-selector .tag-opt:nth-child(2)').classList.add('selected');
@@ -948,7 +994,7 @@ function toggleAdmin() {
 function updateAdminToggle() {
   const btn = document.getElementById('adminToggle');
   if (!btn) return;
-  btn.textContent = isAdmin ? '🔓' : '🔒';
+  btn.textContent = isAdmin ? '🔓 Admin ON' : '🔒 Admin';
   btn.classList.toggle('admin-active', isAdmin);
 }
 
@@ -1009,8 +1055,10 @@ function toggleFulfiller() {
 function updateFulfillerToggle() {
   const btn = document.getElementById('fulfillerToggle');
   if (!btn) return;
-  btn.textContent = isFulfiller ? '🔓' : '🔧';
+  btn.textContent = isFulfiller ? '🔓 Fulfiller mode ON' : '🔧 Fulfiller mode';
   btn.classList.toggle('fulfiller-active', isFulfiller);
+  const banner = document.getElementById('fulfiller-banner');
+  if (banner) banner.hidden = !isFulfiller;
 }
 
 async function markDone(id) {
