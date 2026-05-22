@@ -1,0 +1,29 @@
+# Files NOT to ship as Cloudflare Workers static assets.
+# Uses gitignore-style patterns relative to the assets directory (./).
+
+# Repo / tooling
+.git/
+.github/
+.claude/
+.playwright-cli/
+node_modules/
+
+# Local-only / experimental
+_live/
+*.bak
+home.html.bak
+
+# Docs and licenses — fine in the repo, no need to expose
+CLAUDE.md
+LICENSE
+MDM_BUILDER_ANALYSIS.md
+README.md
+SERVICE_AGREEMENTS_INDEX.md
+
+# Server-side config (Firebase rules are not for the browser)
+firestore.rules
+
+# Wrangler config itself (Cloudflare strips this automatically, but
+# listing it makes the intent explicit)
+wrangler.jsonc
+wrangler.toml
