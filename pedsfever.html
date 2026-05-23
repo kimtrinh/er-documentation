@@ -33,7 +33,9 @@ main{max-width:960px;margin:0 auto;padding:20px 24px 60px}
 /* GRID */
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
 .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px}
-@media(max-width:700px){.grid,.grid-3{grid-template-columns:1fr}}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:14px}
+@media(max-width:900px){.grid-4{grid-template-columns:1fr 1fr}}
+@media(max-width:700px){.grid,.grid-3,.grid-4{grid-template-columns:1fr}}
 
 /* CARDS */
 .card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
@@ -159,7 +161,7 @@ main>*:nth-child(4){animation-delay:.15s}
 <header>
   <div class="header-inner">
     <div class="logo"><span>🌡️</span><h1>Febrile Infant — CA FIRST Algorithm</h1></div>
-    <p class="subtitle">California Febrile Infant Risk Stratification Tool · Ages 7–90 days · Fever ≥38.0°C (100.4°F)</p>
+    <p class="subtitle">California Febrile Infant Risk Stratification Tool · Ages 0–90 days · Fever ≥38.0°C (100.4°F)</p>
   </div>
 </header>
 
@@ -169,7 +171,7 @@ main>*:nth-child(4){animation-delay:.15s}
   <!-- EXCLUSIONS -->
   <div class="excl-bar">
     <strong>⛔ EXCLUSIONS — Algorithm does NOT apply if any present:</strong>
-    Prematurity (&lt;37 wks) · High-risk congenital abnormalities · Immunocompromised · Focal bacterial infection (omphalitis, cellulitis, septic arthritis) · Perinatal complications (maternal fever/chorioamnionitis/antibiotics) · Ill-appearing infant · Prior antibiotic use · Previous hospitalization
+    Prematurity (&lt;37 wks) · High-risk congenital abnormalities · Immunocompromised · Focal bacterial infection (omphalitis, cellulitis, septic arthritis, osteomyelitis — <em>viral URI symptoms do NOT count as focal infection</em>) · Perinatal complications (maternal fever/chorioamnionitis/antibiotics) · Ill-appearing infant · Prior antibiotic use · Previous hospitalization
   </div>
 
   <!-- LOW RISK CALLOUTS -->
@@ -187,6 +189,10 @@ main>*:nth-child(4){animation-delay:.15s}
 
   <!-- AGE SELECTOR -->
   <div class="age-tabs">
+    <button class="age-tab" onclick="showAge('0-6')">
+      <span class="age-days">0–6 days</span>
+      <span>Neonatal · Always Admit</span>
+    </button>
     <button class="age-tab active" onclick="showAge('7-21')">
       <span class="age-days">7–21 days</span>
       <span>Highest Risk</span>
@@ -203,6 +209,92 @@ main>*:nth-child(4){animation-delay:.15s}
       <span class="age-days">61–90 days</span>
       <span>CA FIRST Extended</span>
     </button>
+  </div>
+
+  <!-- ════════════════════════════════
+       0–6 DAYS · KP-SoCal v2.5 (Source of truth)
+  ════════════════════════════════ -->
+  <div class="algo-panel" id="panel-0-6">
+    <div id="0-6-days-neonatal-always-admit" class="section-label">0–6 Days — Neonatal · Always Admit (KP-SoCal v2.5)</div>
+
+    <div class="card risk-high" style="margin-bottom:14px">
+      <div class="card-head">🔴 ALL febrile 0–6 day infants = HIGHEST RISK — Always admit</div>
+      <div class="card-body">
+        This is the most vulnerable age band. <b>All febrile infants 0–6 days admit for full workup</b>, parenteral antibiotics, and HSV evaluation regardless of how well they look. Vertically-transmitted infections (HSV, GBS, Listeria, E. coli) dominate; sepsis can present without classic systemic signs.<br/><br/>
+        Per the official <b>KP-SoCal CA-FIRST v2.5</b> (Fitzwater, 9/10/2025) — this age band is <em>not</em> in the original AAP 2021 CPG or KP NorCal CA FIRST and is sourced directly from the KP-SoCal protocol.
+      </div>
+    </div>
+
+    <div class="card risk-neutral" style="margin-bottom:14px;border-left:4px solid #1d4ed8">
+      <div class="card-head">📋 KP-SoCal v2.5 decision flow (0–6 days)</div>
+      <div class="card-body" style="font-size:13px;line-height:1.6">
+        <b>Every patient → Admission.</b> Workup intensity depends on the clinical picture:
+        <ul style="margin:6px 0 4px 18px;padding:0">
+          <li><b>Ill-appearing OR high-risk infant:</b> Full workup (Urine + Blood + CSF + HSV) · Antibiotics yes · Consider acyclovir.</li>
+          <li><b>Well-appearing AND not high-risk:</b> Urine + Blood baseline.
+            <ul style="margin:4px 0 0 18px">
+              <li>If <b>UA / CBC positive</b> OR <b>T &gt; 38.5°C</b> → add <b>CSF + HSV</b>:
+                <ul style="margin:4px 0 0 18px">
+                  <li><b>CSF positive</b> → Admit · consider HSV based on risk · antibiotics + consider acyclovir.</li>
+                  <li><b>CSF negative, UA / CBC positive</b> → Admit · no further labs · <b>antibiotics yes</b>, consider acyclovir.</li>
+                  <li><b>CSF negative, UA / CBC negative</b> → Admit · no further labs · <b>consider withholding antibiotics</b>.</li>
+                </ul>
+              </li>
+              <li>If <b>UA / CBC negative AND T &lt; 38.5°C</b> → Admit for observation; CSF only if antibiotics are to be given; <b>consider withholding antibiotics</b>.</li>
+            </ul>
+          </li>
+        </ul>
+        <em>"High-risk infant" criteria (any one):</em> prematurity &lt;37 wk <em>(well-appearing 35–36 wk GA may not be high-risk if no other RFs)</em> · perinatal maternal fever / infection / antibiotics, excluding GBS prophylaxis <em>(only counts if infant &lt;14 days old)</em> · neonatal surgery / infection · immune compromise · congenital or chromosomal anomaly · technology-dependent / medically fragile · HSV history or exam (vesicles, seizures, mucous-membrane ulcers, maternal genital HSV).<br/><br/>
+        <em>Terminology — <b>"Consider"</b>:</em> management depends on patient circumstances (height of fever, duration of fever, severity of other risk factors). A pediatrics consult may be helpful.
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="card-head">🔬 Required Workup</div>
+        <div class="card-body">
+          <div class="step"><div class="step-num">1</div><div><strong>Urine:</strong> catheterized UA + catheterized urine culture</div></div>
+          <div class="step"><div class="step-num">2</div><div><strong>Blood:</strong> CBC with differential + bacterial culture (consider ALT if uncertain HSV risk)</div></div>
+          <div class="step"><div class="step-num">3</div><div><strong>CSF</strong> (if ill / high-risk / UA-CBC abnormal / T &gt; 38.5°C): cell count, Gram stain, glucose, protein, bacterial culture</div></div>
+          <div class="step"><div class="step-num">4</div><div><strong>HSV studies</strong> (always low threshold here): CSF HSV PCR + serum HSV PCR + surface swab PCRs (conjunctiva, NP, skin / vesicles, rectal) + ALT</div></div>
+          <div class="step"><div class="step-num">5</div><div><strong>Respiratory</strong> if symptomatic: CXR, RSV / flu / COVID testing</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">💊 Treatment & Disposition (KP-SoCal v2.5)</div>
+        <div class="card-body">
+          <div class="step"><div class="step-num red">A</div><div><strong>UTI or no focus identified:</strong><br>
+            Ampicillin 50 mg/kg IV q8h<br>
+            <b>PLUS</b> Ceftazidime 50 mg/kg IV q12h <em>or</em> Gentamicin 4 mg/kg IV q24h</div></div>
+          <div class="step"><div class="step-num red">B</div><div><strong>Meningitis suspected:</strong><br>
+            Ampicillin 100 mg/kg IV q8h<br>
+            <b>PLUS</b> Ceftazidime 50 mg/kg IV q12h, ± Gentamicin 4 mg/kg IV q24h</div></div>
+          <div class="step"><div class="step-num red">C</div><div><strong>HSV suspected:</strong> Acyclovir IV 20 mg/kg q8h. Continue until HSV PCR negative.</div></div>
+          <div class="step"><div class="step-num red">D</div><div><strong>Admit all</strong> — no outpatient management in this age band.</div></div>
+          <div style="margin-top:10px;padding:8px;background:var(--bg);border-radius:8px;font-size:11px;color:var(--text3)">
+            ⚠️ <b>No ceftriaxone in 0–6 days</b> (bilirubin displacement). Use Ceftazidime as the β-lactam.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card risk-neutral">
+      <div class="card-head">🧫 HSV — Lower threshold at this age</div>
+      <div class="card-body" style="font-size:13px;line-height:1.6">
+        <b>→ Full HSV workup + empiric IV acyclovir</b> when any of the following are present:
+        <ul style="margin:4px 0 4px 18px">
+          <li>Maternal genital HSV lesions OR maternal fever 48 h before/after delivery</li>
+          <li>Vesicles · seizures · mucous-membrane ulcers · hypothermia</li>
+          <li>CSF pleocytosis with negative Gram stain, leukopenia, thrombocytopenia</li>
+          <li><b>Elevated ALT</b> in an infant &lt;29 days old — by itself a trigger to complete a full HSV workup and start acyclovir</li>
+        </ul>
+        <b>Definitions of positive labs:</b><br/>
+        <b>Positive UA</b> = + LE on dipstick OR &gt;5 WBC/HPF (centrifuged) OR &gt;10 WBC/mm³ (uncentrifuged).<br/>
+        <b>Positive CBC</b> = WBC &lt;5,000 OR &gt;15,000 OR bands &gt;1,500.<br/>
+        <b>Positive CSF</b> = WBC with pleocytosis for age, OR traumatic tap.
+      </div>
+    </div>
   </div>
 
   <!-- ════════════════════════════════
