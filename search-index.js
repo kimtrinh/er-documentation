@@ -355,6 +355,21 @@ const SEARCH_INDEX = [
   {type:'algo',i:'💊',t:'Paxlovid Prescribing Guide',s:'paxlovid  ·  nirmatrelvir  ·  ritonavir  ·  COVID  ·  antiviral  ·  eligibility  ·  drug interactions  ·  prescribing',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-paxlovid'},
   {type:'algo',i:'🏠',t:'ED to SNF Disposition Criteria',s:'ED to SNF  ·  skilled nursing facility  ·  discharge  ·  criteria  ·  disposition  ·  clinical guidelines  ·  2014',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-ed-snf-criteria'},
 
+
+  // ── KPPC PEDS PATHWAYS (added 5/2026) ──
+  {type:'algo',i:'🩹',t:'Peds Appendicitis — KPPC Transfer SLA',s:'pediatric appendicitis · abdominal pain · PARC · PAS score · KPPC · GMC · SMC · TMC · PTAC · transfer · surgery',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-peds-appendicitis-sla'},
+  {type:'algo',i:'💊',t:'Peds Gold Card — Drug Dosing (2025)',s:'pediatric drug dosing · gold card · 2025 · antibiotic · medications reference · KPPC',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-peds-gold-card-2025'},
+  {type:'algo',i:'🌡️',t:'Peds Febrile Infant ≤90d — CA FIRST',s:'CA FIRST · febrile infant · 90 days · neonate fever · LP · HSV · acyclovir · ceftriaxone · ampicillin · gentamicin',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-peds-febrile-infant-ca-first'},
+  {type:'algo',i:'💓',t:'Peds SVT / Tachyarrhythmia Stabilization',s:'pediatric SVT · supraventricular tachycardia · adenosine · vagal maneuvers · Valsalva · ice to face · cardiology · PTAC',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-peds-svt-pathway'},
+  {type:'algo',i:'⚡',t:'Peds Seizure & Status Epilepticus',s:'pediatric seizure · status epilepticus · midazolam · lorazepam · fosphenytoin · keppra · levetiracetam · valproate · febrile · breakthrough · Valtoco',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-peds-seizure-guideline'},
+  {type:'algo',i:'🍭',t:'Peds Hypoglycemia — Outpatient Pathway',s:'pediatric hypoglycemia · glucose · D10W · glucagon · dextrose gel · sweating · tremors · PO · juice · carbs',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-peds-hypoglycemia'},
+  {type:'algo',i:'💉',t:'Peds DKA — Outpatient Pathway',s:'pediatric DKA · diabetic ketoacidosis · outpatient · MOB clinic · POC glucose · Kussmaul · ED transfer · fluids · 10mL/kg',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-peds-dka-outpatient'},
+  {type:'algo',i:'🗣️',t:'Peds Croup — Outpatient Pathway',s:'pediatric croup · barky cough · stridor · dexamethasone · racemic epinephrine · mild · moderate · severe',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-peds-croup-pathway'},
+  {type:'algo',i:'🤢',t:'Peds Acute Gastroenteritis / Dehydration',s:'pediatric gastroenteritis · dehydration · ondansetron · zofran · ORT · oral rehydration · IV bolus · NS',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-peds-gastro-dehydration'},
+  {type:'algo',i:'🫁',t:'Peds Bronchiolitis — Outpatient Pathway',s:'pediatric bronchiolitis · RSV · wheezing · suction · oxygen saturation · albuterol trial · high flow nasal cannula',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-peds-bronchiolitis-pathway'},
+  {type:'algo',i:'😮‍💨',t:'Peds Asthma Exacerbation — Outpatient',s:'pediatric asthma · exacerbation · albuterol · ipratropium · dexamethasone · prednisolone · epinephrine · MDI · nebulizer',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-peds-asthma-outpatient'},
+  {type:'algo',i:'🧠',t:'Peds Stroke — ED Algorithm',s:'pediatric stroke · code stroke · telestroke · PedNIHSS · LKWT · focal neuro deficit · Fontana · Rady',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-peds-stroke-flow'},
+  {type:'algo',i:'📘',t:'PCWD ED Peds Pathways (Master Doc)',s:'PCWD · pediatric ED pathways · master · asthma · bronchiolitis · pneumonia · gastroenteritis · seizure · croup',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-peds-ed-pathways-master'},
   // ── NEURO HUB ───────────────────────────────────────────────────────────
   {type:'neuro',i:'🧠',t:'Neuro Hub — ICH Protocol Overview',s:'ICH  ·  intracerebral hemorrhage  ·  stroke  ·  neurology consult',g:'Neuro Hub',gc:'t-neuro',u:'neurohub.html'},
   {type:'neuro',i:'🧠',t:'Neurology First Rule',s:'ICH  ·  do not page neurosurgery  ·  call neuro first  ·  866-361-2911',g:'Neuro Hub',gc:'t-neuro',u:'neurohub.html'},
