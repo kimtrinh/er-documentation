@@ -3789,10 +3789,82 @@ const algos = {
     title: 'Peds Seizure & Status Epilepticus',
     updated: 'KPPC · KPPC 2024',
     render: () => `
-      <div style="margin-bottom:10px">
-        <a href="assets/peds-kppc/peds-seizure-guideline.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">📄 Open PDF in new tab ↗</a>
+      <div class="flow">
+        <div class="node node-start">
+          Child with <strong>actively seizing</strong> presentation
+          <br><small style="color:var(--text2)">Status epilepticus = continuous seizure ≥ 5 min OR multiple seizures without return to baseline.<br>
+          Children &lt; 1 month — <b>activate EMS immediately.</b></small>
+        </div>
+        <div class="arrow-down"></div>
+
+        <div class="decision-card" style="width:100%;max-width:560px;border-color:#dc2626">
+          <div class="decision-q">0–5 min: Immediate stabilization</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:6px;line-height:1.7">
+            • Start timer. Open airway, suction secretions. Continuous O<sub>2</sub>.<br>
+            • <b>Fingerstick glucose</b> — if low: D12.5W 4 mL/kg IV (&lt; 2 yr) or D25W 2 mL/kg IV (≥ 2 yr).<br>
+            • Establish IV / IO access.<br>
+            • <b>EMS must be called by 5 minutes of continuous seizure activity.</b>
+          </div>
+        </div>
+        <div class="arrow-down"></div>
+
+        <div class="decision-card" style="width:100%;max-width:560px;border-color:#f59e0b">
+          <div class="decision-q">At 5 min — give a benzodiazepine (first-line)</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:6px;line-height:1.7">
+            Pick one based on access:<br>
+            • <b>IM Midazolam</b> (not IV): 5 mg if 13–40 kg · 10 mg if &gt; 40 kg.<br>
+            • <b>IV Lorazepam</b>: 0.1 mg/kg slow push (max 4 mg). May repeat ×1 in 5 min.<br>
+            • <b>IV Diazepam</b>: 0.15–0.2 mg/kg (max 10 mg). May repeat ×1 in 5 min.<br>
+            • If no IV AND age &gt; 2 — <b>Rectal Diazepam</b> while securing IV/IO access<br>
+            <span style="margin-left:14px">(2–5 yr: 0.5 mg/kg · 6–11 yr: 0.3 mg/kg · ≥ 12 yr: 0.2 mg/kg; max 20 mg)</span><br>
+            • <b>Intranasal Midazolam</b> if &gt; 6 yr: 0.3 mg/kg (max 10 mg).
+          </div>
+        </div>
+        <div class="arrow-down"></div>
+
+        <div class="decision-card" style="width:100%;max-width:560px;border-color:#f59e0b">
+          <div class="decision-q">At 10 min — still seizing?</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:6px;line-height:1.7">
+            <b>Repeat the benzodiazepine dose.</b>
+          </div>
+        </div>
+        <div class="arrow-down"></div>
+
+        <div class="decision-card" style="width:100%;max-width:560px;border-color:#dc2626">
+          <div class="decision-q">At 15 min — still seizing? Choose ONE second-line agent</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:6px;line-height:1.7">
+            • <b>IV Fosphenytoin</b> 20 mg PE/kg (max 1500 mg)<br>
+            • <b>IV Phenobarbital</b> 20 mg/kg (max 1000 mg)<br>
+            • <b>IV Levetiracetam (Keppra)</b> 60 mg/kg (max 4500 mg)<br>
+            • <b>IV Valproic Acid</b> 40 mg/kg (max 3000 mg)
+          </div>
+        </div>
+        <div class="arrow-down"></div>
+
+        <div class="decision-card" style="width:100%;max-width:560px;border-color:#a855f7">
+          <div class="decision-q">Refractory? Call PICU + Neurology · prepare to intubate · continuous EEG monitoring</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:6px;line-height:1.7">
+            Children treated more aggressively and with shorter episodes of status epilepticus are less likely to develop subsequent neurological deficits.
+          </div>
+        </div>
+
+        <hr class="divider" style="margin:18px 0"/>
+        <div style="font-size:12px;color:var(--text2);line-height:1.7">
+          <b>Not actively seizing on arrival?</b> Use the appropriate sub-pathway:
+          <ul style="margin:6px 0 0 18px;padding:0">
+            <li><b>Simple febrile seizure</b> (6 mo–6 yr, generalized, &lt; 15 min, only 1 in 24 h, no focal features): no labs / no LP / no Neuro referral. Treat fever, evaluate source, parent education, PCP follow-up.</li>
+            <li><b>Complex febrile seizure</b> (focality, &gt; 15 min, or &gt; 1 in 24 h): refer to Child Neurology. Admit if &gt; 2 seizures in 24 h or prolonged post-ictal.</li>
+            <li><b>First unprovoked seizure</b>: refer to Child Neurology for EEG (outpatient OK). MRI preferred over CT. Consider tox screen if age-appropriate.</li>
+            <li><b>Breakthrough seizure in known epileptic</b>: check AED level, reinforce compliance, review last Neuro note. Rule out infection.</li>
+          </ul>
+          <br><b>Home rescue:</b> Valtoco (Diazepam nasal spray) — dose by age/weight per the table in the source PDF.
+        </div>
       </div>
-      <iframe src="assets/peds-kppc/peds-seizure-guideline.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Peds Seizure & Status Epilepticus"></iframe>
+
+      <hr class="divider" style="margin:24px 0 12px"/>
+      <div style="font-size:12px;color:var(--text3);margin-bottom:8px"><b>Source PDF</b> (full official document):</div>
+      <a href="assets/peds-kppc/peds-seizure-guideline.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none;margin-bottom:10px">📄 Open PDF in new tab ↗</a>
+      <iframe src="assets/peds-kppc/peds-seizure-guideline.pdf#view=FitH" style="width:100%;height:65vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Source PDF"></iframe>
     `,
   },
   'peds-hypoglycemia': {
@@ -3893,10 +3965,88 @@ const algos = {
     title: 'Peds DKA — Outpatient Pathway',
     updated: 'KPPC · KPPC April 2024',
     render: () => `
-      <div style="margin-bottom:10px">
-        <a href="assets/peds-kppc/peds-dka-outpatient.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">📄 Open PDF in new tab ↗</a>
+      <div class="flow">
+        <div class="node node-start">
+          Child with <strong>polyuria · polydipsia · weight loss · nausea / vomiting · Kussmaul respirations · AMS / fatigue · visual changes / blurry vision · dehydration</strong>
+          <br><small style="color:var(--text2)">DKA = hyperglycemia (glucose &gt; 200) + ketosis (β-hydroxybutyrate &gt; 3 mmol/L or moderate–large urine ketones) + acidosis (venous pH &lt; 7.3 OR HCO<sub>3</sub> &lt; 15).</small>
+        </div>
+        <div class="arrow-down"></div>
+
+        <div class="decision-card" style="width:100%;max-width:560px">
+          <div class="decision-q">Visit type</div>
+          <div class="decision-opts">
+            <div class="decision-opt opt-yes" style="border-left-color:#3b82f6">
+              <span class="opt-badge" style="background:#0d2038;color:#93c5fd;border:1px solid #1d4ed8">VIRTUAL</span>
+              <div class="opt-text">
+                If concern for DKA, <b>do NOT send to lab alone</b>. Schedule same-day F2F at an MOB that can manage the DKA pathway. If no convenient MOB → ED.<br>
+                Initiate call to diabetes consultant (local Peds Endo / Hospitalist / designated service-area provider).
+              </div>
+            </div>
+            <div class="decision-opt opt-yes" style="border-left-color:#22c55e">
+              <span class="opt-badge" style="background:#052e16;color:#86efac;border:1px solid #15803d">F2F</span>
+              <div class="opt-text">
+                Rapid ABCDs (D = neuro deficits). Assess hydration. POC glucose ± urine dipstick for ketones. Proceed below ↓
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="arrow-down"></div>
+
+        <div class="decision-card" style="width:100%;max-width:560px;border-color:#dc2626">
+          <div class="decision-q">Shock? Tachycardia · reduced peripheral pulses · ↓ consciousness</div>
+          <div class="decision-opts">
+            <div class="decision-opt opt-yes">
+              <span class="opt-badge badge-yes">YES — UNSTABLE</span>
+              <div class="opt-text">
+                <strong style="color:#fca5a5">Resuscitate AND call 911 or Intensivist via PTAC.</strong><br>
+                Airway ± NG · 100% O<sub>2</sub> · large IV in AC fossa · <b>Isotonic saline 10 mL/kg bolus</b> as quickly as possible · reassess immediately · consider repeat 10 mL/kg bolus based on clinical status.
+              </div>
+            </div>
+            <div class="decision-opt opt-no">
+              <span class="opt-badge badge-no">NO — STABLE</span>
+              <div class="opt-text">Proceed to evaluation ↓</div>
+            </div>
+          </div>
+        </div>
+        <div class="arrow-down"></div>
+
+        <div class="decision-card" style="width:100%;max-width:560px;border-color:#3b82f6">
+          <div class="decision-q">POC glucose &gt; 200 mg/dL (or "HI")?</div>
+          <div class="decision-opts">
+            <div class="decision-opt opt-yes">
+              <span class="opt-badge badge-yes">YES — work up DKA</span>
+              <div class="opt-text">
+                <b>① Draw labs STAT</b> (in priority order): serum glucose · CBC/diff · electrolytes · BUN/Cr.
+                If <em>new-onset diabetes</em>: also C-peptide · insulin · HbA1c · TSH · TPO Ab · insulin auto-Ab · islet cell Ab · GAD65 Ab · ALT · lipids · celiac screen.<br>
+                <b>② Place IV.</b><br>
+                <b>③ Initiate ONE bolus of 0.9% NS 10 mL/kg over 60 min.</b><br>
+                <b>④ Recheck blood sugar + vitals + mental status after the bolus.</b><br>
+                <b>⑤ Call diabetes consultant</b> (local Peds Endo / Hospitalist / designated provider) for further mgmt and possible transfer.
+                <br><br>
+                <b>Goal:</b> from triage to fluid initiation ≤ 60 min.
+              </div>
+            </div>
+            <div class="decision-opt opt-no">
+              <span class="opt-badge badge-no">NO</span>
+              <div class="opt-text">Reconsider differential — DKA is unlikely with normal glucose. Symptom-directed workup.</div>
+            </div>
+          </div>
+        </div>
+
+        <hr class="divider" style="margin:18px 0"/>
+        <div style="font-size:12px;color:var(--text3);line-height:1.7">
+          <b>Goals of DKA therapy:</b> conservative rehydration (start 10 mL/kg NS) · start insulin AFTER the initial fluid hour (no insulin bolus — ↑ cerebral edema risk) ·
+          drop glucose by 50–100 mg/dL per hour · monitor mental status closely for cerebral edema ·
+          resolution = HCO<sub>3</sub> &gt; 15 + anion-gap closure · treat precipitating event (infection, trauma, ingestion).
+          <br><br>
+          <b>PTAC: 562-658-3980 OR 8-137-3980.</b>
+        </div>
       </div>
-      <iframe src="assets/peds-kppc/peds-dka-outpatient.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Peds DKA — Outpatient Pathway"></iframe>
+
+      <hr class="divider" style="margin:24px 0 12px"/>
+      <div style="font-size:12px;color:var(--text3);margin-bottom:8px"><b>Source PDF</b> (full official document):</div>
+      <a href="assets/peds-kppc/peds-dka-outpatient.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none;margin-bottom:10px">📄 Open PDF in new tab ↗</a>
+      <iframe src="assets/peds-kppc/peds-dka-outpatient.pdf#view=FitH" style="width:100%;height:65vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Source PDF"></iframe>
     `,
   },
   'peds-croup-pathway': {
@@ -4080,10 +4230,97 @@ const algos = {
     title: 'Peds Bronchiolitis — Outpatient Pathway',
     updated: 'KPPC · KPPC June 2024',
     render: () => `
-      <div style="margin-bottom:10px">
-        <a href="assets/peds-kppc/peds-bronchiolitis-pathway.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">📄 Open PDF in new tab ↗</a>
+      <div class="flow">
+        <div class="node node-start">
+          Child <b>&lt; 2 yr</b> with viral URI + lower respiratory symptoms
+          <br><small style="color:var(--text2)">Wheeze · ↑ WOB · cough · feeding difficulty · tachypnea · fever</small>
+        </div>
+        <div class="arrow-down"></div>
+
+        <div class="decision-card" style="width:100%;max-width:560px">
+          <div class="decision-q">Any <b>risk factors for severe disease</b>?</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:6px;line-height:1.7">
+            • Cardiac disease requiring baseline medication<br>
+            • Anatomic airway defects · neuromuscular disease · immunodeficiency · chronic lung disease<br>
+            • Gestational age &lt; 34 weeks · RR ≥ 70 · age &lt; 3 months (early in illness → likely to worsen)
+          </div>
+        </div>
+        <div class="arrow-down"></div>
+
+        <div class="decision-card" style="width:100%;max-width:560px">
+          <div class="decision-q">Assess severity</div>
+          <div class="decision-opts">
+            <div class="decision-opt opt-yes" style="border-left-color:#22c55e">
+              <span class="opt-badge" style="background:#052e16;color:#86efac;border:1px solid #15803d">MILD</span>
+              <div class="opt-text">
+                Alert / active / feeding well · minimal subcostal or abdominal retractions ·
+                RR &lt; 60 (&lt; 3 mo), &lt; 50 (3–&lt;12 mo), &lt; 40 (1–2 yr) ·
+                SpO<sub>2</sub> &gt; 93% RA.<br>
+                <b>Video visit OK</b> — manage at home with bulb / mushroom suction + frequent feeds.
+              </div>
+            </div>
+            <div class="decision-opt opt-yes" style="border-left-color:#f59e0b">
+              <span class="opt-badge" style="background:#2b1f0a;color:#fcd34d;border:1px solid #b45309">MODERATE</span>
+              <div class="opt-text">
+                Consolable but ↓ intake (still &gt; 50% normal) · mild–moderate subcostal/intercostal retractions ·
+                RR 61–80 (&lt; 3 mo), 51–70 (3–&lt;12 mo), 41–60 (1–2 yr) · SpO<sub>2</sub> 90–93% RA.<br>
+                <b>Same-day office or ED visit.</b>
+              </div>
+            </div>
+            <div class="decision-opt opt-yes" style="border-left-color:#dc2626">
+              <span class="opt-badge" style="background:#2f1114;color:#fca5a5;border:1px solid #b91c1c">SEVERE</span>
+              <div class="opt-text">
+                Fussy / difficult to console · feeding &lt; 50% normal · moderate–severe retractions (suprasternal, nasal flaring) ·
+                RR &gt; 80 / 70 / 60 by age band · SpO<sub>2</sub> &lt; 90% RA.<br>
+                <strong style="color:#fca5a5">ED / Urgent Care now.</strong> Watch for apnea + bradycardia + cyanosis → <b>911.</b>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="arrow-down"></div>
+
+        <div class="decision-card" style="width:100%;max-width:560px;border-color:#3b82f6">
+          <div class="decision-q">In-person interventions</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:4px;line-height:1.7">
+            ① Assess SpO<sub>2</sub> · supplemental O<sub>2</sub> to keep ≥ 90%.<br>
+            ② Bulb / mushroom-tip suction with saline drops.<br>
+            ③ POC glucose if oral intake &lt; 50% (hypoglycemia risk) or concern for hyperglycemia / DKA.<br>
+            ④ <b>Single trial</b> of Albuterol if: severe respiratory distress OR &gt; 12 mo with wheeze and asthma risk factors. Continue ONLY if response.<br>
+            ⑤ Suction q1 hr + PRN · feed if airway is safe for oral intake.
+          </div>
+        </div>
+        <div class="arrow-down"></div>
+
+        <div class="decision-card" style="width:100%;max-width:560px">
+          <div class="decision-q">Disposition</div>
+          <div class="decision-opts">
+            <div class="decision-opt opt-yes">
+              <span class="opt-badge badge-yes">Discharge home</span>
+              <div class="opt-text">
+                SpO<sub>2</sub> &gt; 90% RA · hydrated, ≥ 50% normal feeds · WOB mild/moderate (improved or stable) · reliable caregiver · follow-up arranged ·
+                MDI + spacer teaching if responded to albuterol.
+              </div>
+            </div>
+            <div class="decision-opt opt-no">
+              <span class="opt-badge badge-no">Call <b>PTAC 562-658-3980</b></span>
+              <div class="opt-text">
+                Connect with Pediatric Hospitalist if: risk factors for severe disease · RR consistently &gt; 60 · significant retractions · SpO<sub>2</sub> &lt; 90% RA · dehydrated / unable to feed.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <hr class="divider" style="margin:18px 0"/>
+        <div style="font-size:12px;color:var(--text3);line-height:1.7">
+          <b>Not routinely recommended:</b> chest x-ray, viral PCR (unless changes mgmt), antibiotics, systemic steroids, racemic epinephrine for typical mild–moderate disease.
+          High-flow nasal cannula and hypertonic saline are inpatient considerations.
+        </div>
       </div>
-      <iframe src="assets/peds-kppc/peds-bronchiolitis-pathway.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Peds Bronchiolitis — Outpatient Pathway"></iframe>
+
+      <hr class="divider" style="margin:24px 0 12px"/>
+      <div style="font-size:12px;color:var(--text3);margin-bottom:8px"><b>Source PDF</b> (full official document):</div>
+      <a href="assets/peds-kppc/peds-bronchiolitis-pathway.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none;margin-bottom:10px">📄 Open PDF in new tab ↗</a>
+      <iframe src="assets/peds-kppc/peds-bronchiolitis-pathway.pdf#view=FitH" style="width:100%;height:65vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Source PDF"></iframe>
     `,
   },
   'peds-asthma-outpatient': {
@@ -4091,10 +4328,81 @@ const algos = {
     title: 'Peds Asthma Exacerbation — Outpatient',
     updated: 'KPPC · KPPC June 2024',
     render: () => `
-      <div style="margin-bottom:10px">
-        <a href="assets/peds-kppc/peds-asthma-outpatient.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">📄 Open PDF in new tab ↗</a>
+      <div class="flow">
+        <div class="node node-start">
+          Child <b>&gt; 1 yr</b> with dyspnea / wheeze, known or suspected <strong>asthma</strong>
+          <br><small style="color:var(--text2)">Exclude: viral bronchiolitis, pneumonia, croup, cystic fibrosis, chronic lung disease, congenital cardiac, airway abnormality</small>
+        </div>
+        <div class="arrow-down"></div>
+
+        <div class="decision-card" style="width:100%;max-width:560px">
+          <div class="decision-q">Assess severity</div>
+          <div class="decision-opts">
+            <div class="decision-opt opt-yes" style="border-left-color:#22c55e">
+              <span class="opt-badge" style="background:#052e16;color:#86efac;border:1px solid #15803d">MILD</span>
+              <div class="opt-text">
+                Normal mental status · expiratory wheeze only · minimal WOB / retractions · tachypnea · speaks in full sentences.
+                <hr style="border:0;border-top:1px dashed var(--border);margin:6px 0"/>
+                <b>Tx:</b> <b>Albuterol</b> (MDI 2–6 puffs &lt;6 yr / 4–10 puffs ≥6 yr <em>or</em> neb 2.5 mg &lt;6 yr / 2.5–5 mg ≥6 yr) every 20 min × 3.
+                If no improvement after 2nd dose OR high-risk patient → give steroids and follow Moderate.
+              </div>
+            </div>
+            <div class="decision-opt opt-yes" style="border-left-color:#f59e0b">
+              <span class="opt-badge" style="background:#2b1f0a;color:#fcd34d;border:1px solid #b45309">MODERATE / SEVERE</span>
+              <div class="opt-text">
+                Dyspnea at rest · interfering with activities · wheeze throughout or decreased aeration · moderate ↑ WOB · target SpO<sub>2</sub> &gt; 90–92%.
+                <hr style="border:0;border-top:1px dashed var(--border);margin:6px 0"/>
+                <b>Tx (give all 3):</b><br>
+                ① <b>Steroids immediately</b> — Dexamethasone 0.6 mg/kg (max 16 mg) PO/IV/IM <em>OR</em> Prednisolone 2 mg/kg ÷ BID × 5 d.<br>
+                ② <b>Albuterol + Ipratropium</b> neb every 20 min × 3.<br>
+                ③ Observe 1 hr; if improving → consider another 1 hr.
+              </div>
+            </div>
+            <div class="decision-opt opt-yes" style="border-left-color:#dc2626">
+              <span class="opt-badge" style="background:#2f1114;color:#fca5a5;border:1px solid #b91c1c">CRITICAL</span>
+              <div class="opt-text">
+                Lethargy · obtunded · cannot repeat a short phrase · grunting · severe retractions · bradypnea/apnea · absent breath sounds.
+                <hr style="border:0;border-top:1px dashed var(--border);margin:6px 0"/>
+                <strong style="color:#fca5a5">Call 911.</strong> Steroids immediately. Albuterol/Ipratropium Q20 min × 3 → followed by Albuterol Q1 hr while awaiting EMS.
+                <b>IM Epinephrine</b> only if anaphylaxis-driven (&lt;25 kg: 0.15 mg autoinj · ≥25 kg: 0.3 mg).
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="arrow-down"></div>
+
+        <div class="decision-card" style="width:100%;max-width:560px;border-color:#3b82f6">
+          <div class="decision-q">After 1 hr (and possibly a 2nd hr): improving?</div>
+          <div class="decision-opts">
+            <div class="decision-opt opt-yes">
+              <span class="opt-badge badge-yes">YES — meets discharge criteria</span>
+              <div class="opt-text">
+                Minimal/no wheezing · SpO<sub>2</sub> &gt; 90–92% on RA · no respiratory distress · good home resources / follow-up.<br>
+                <b>Discharge plan:</b> oral steroid course (taper or 5 d) · review/update asthma action plan · prescribe controller if indicated · PCP follow-up within 1 week (TAV or office) · home med-neb / spacer arranged.
+              </div>
+            </div>
+            <div class="decision-opt opt-no">
+              <span class="opt-badge badge-no">NO — failed outpt management</span>
+              <div class="opt-text">
+                Transfer to ED or arrange direct admission. Continue Albuterol MDI/neb Q1 hr while awaiting transfer.
+                Reach <b>PTAC 562-658-3980</b> for help with disposition.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <hr class="divider" style="margin:18px 0"/>
+        <div style="font-size:12px;color:var(--text3);line-height:1.7">
+          <b>Identify high-risk patients</b> early: prior intubation, prior ICU admission, multiple ED visits / hospitalizations, oral steroid use in past year.
+          <br>
+          <b>Epinephrine IM</b> is NOT routinely indicated for asthma exacerbations without anaphylaxis.
+        </div>
       </div>
-      <iframe src="assets/peds-kppc/peds-asthma-outpatient.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Peds Asthma Exacerbation — Outpatient"></iframe>
+
+      <hr class="divider" style="margin:24px 0 12px"/>
+      <div style="font-size:12px;color:var(--text3);margin-bottom:8px"><b>Source PDF</b> (full official document):</div>
+      <a href="assets/peds-kppc/peds-asthma-outpatient.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none;margin-bottom:10px">📄 Open PDF in new tab ↗</a>
+      <iframe src="assets/peds-kppc/peds-asthma-outpatient.pdf#view=FitH" style="width:100%;height:65vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Source PDF"></iframe>
     `,
   },
   'peds-stroke-flow': {
@@ -4102,10 +4410,74 @@ const algos = {
     title: 'Peds Stroke — ED Algorithm',
     updated: 'KPPC · KP SCAL · 9/12/2023',
     render: () => `
-      <div style="margin-bottom:10px">
-        <a href="assets/peds-kppc/peds-stroke-flow.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">📄 Open PDF in new tab ↗</a>
+      <div class="flow">
+        <div class="node node-start">
+          Pediatric patient with <strong>NEW focal neurological signs / symptoms</strong>
+          <br><small style="color:var(--text2)">Vision loss · double vision · unilateral face / limb weakness or sensory change · dizziness or trouble walking · speech difficulty</small>
+        </div>
+        <div class="arrow-down"></div>
+
+        <div class="decision-card" style="width:100%;max-width:560px;border-color:#dc2626">
+          <div class="decision-q">Nurse — within 0 minutes</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:6px;line-height:1.7">
+            ① <b>Notify the ED Physician</b> (if not already aware).<br>
+            ② <b>Initiate Comprehensive Neuro Assessment</b> documentation in KP HealthConnect.
+          </div>
+        </div>
+        <div class="arrow-down"></div>
+
+        <div class="decision-card" style="width:100%;max-width:560px;border-color:#3b82f6">
+          <div class="decision-q">ED Physician — within 0 min</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:6px;line-height:1.7">
+            <b>CONSULT TeleStroke Team.</b>
+          </div>
+        </div>
+        <div class="arrow-down"></div>
+
+        <div class="decision-card" style="width:100%;max-width:560px;border-color:#a855f7">
+          <div class="decision-q">TeleStroke Team — within 30 min</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:6px;line-height:1.7">
+            • Evaluates the pediatric patient.<br>
+            • Confirms <b>Last Known Well Time (LKWT)</b>.<br>
+            • Performs initial <b>PedNIHSS / NIHSS</b> assessment.<br>
+            • Collaborates with the ED Peds team on treatment and management.
+          </div>
+        </div>
+        <div class="arrow-down"></div>
+
+        <div class="decision-card" style="width:100%;max-width:560px">
+          <div class="decision-q">Code Stroke?</div>
+          <div class="decision-opts">
+            <div class="decision-opt opt-yes">
+              <span class="opt-badge badge-yes">YES</span>
+              <div class="opt-text"><strong style="color:#fca5a5">Activate Code Stroke ≤ 30 min.</strong></div>
+            </div>
+            <div class="decision-opt opt-no">
+              <span class="opt-badge badge-no">NO</span>
+              <div class="opt-text">Further care per ED Peds team + Pediatric Neurology, based on the individual patient's clinical needs.</div>
+            </div>
+          </div>
+        </div>
+        <div class="arrow-down"></div>
+
+        <div class="decision-card" style="width:100%;max-width:560px;border-color:#22c55e">
+          <div class="decision-q">Transfer to higher level of care if local resources insufficient</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:6px;line-height:1.7">
+            Inpatient Peds team + TeleStroke call <b>PTAC 562-658-3980</b> to arrange transfer.<br>
+            Most peds stroke patients → <b>KFH Fontana</b> or <b>KFH Los Angeles</b>. San Diego patients → <b>Rady Children's</b>.
+          </div>
+        </div>
+
+        <hr class="divider" style="margin:18px 0"/>
+        <div style="font-size:12px;color:var(--text3);line-height:1.7">
+          KP SCAL Pediatric Stroke Algorithm — ED Pediatrics. Updated 9/12/2023.
+        </div>
       </div>
-      <iframe src="assets/peds-kppc/peds-stroke-flow.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Peds Stroke — ED Algorithm"></iframe>
+
+      <hr class="divider" style="margin:24px 0 12px"/>
+      <div style="font-size:12px;color:var(--text3);margin-bottom:8px"><b>Source PDF</b> (full official document):</div>
+      <a href="assets/peds-kppc/peds-stroke-flow.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none;margin-bottom:10px">📄 Open PDF in new tab ↗</a>
+      <iframe src="assets/peds-kppc/peds-stroke-flow.pdf#view=FitH" style="width:100%;height:65vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Source PDF"></iframe>
     `,
   },
   'peds-ed-pathways-master': {
