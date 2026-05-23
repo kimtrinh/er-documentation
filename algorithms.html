@@ -3767,10 +3767,21 @@ const algos = {
     title: 'Peds Febrile Infant ≤90d — CA FIRST',
     updated: 'KPPC · KP-SoCal v2.5 · 9/10/2025',
     render: () => `
-      <div style="margin-bottom:10px">
-        <a href="assets/peds-kppc/peds-febrile-infant-ca-first.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">📄 Open PDF in new tab ↗</a>
+      <div style="background:linear-gradient(135deg,rgba(59,130,246,.10),rgba(59,130,246,.04));border:1px solid rgba(59,130,246,.35);border-radius:12px;padding:18px 20px;margin-bottom:18px">
+        <div style="font-size:14px;font-weight:800;color:#93c5fd;margin-bottom:8px">🌡️ Lives on its own dedicated page</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:14px">
+          <b>CA FIRST</b> is the age-stratified workup algorithm for well-appearing febrile infants ≤ 90 days.
+          The full interactive page has clickable tabs per age band (7–21 d · 22–28 d · 29–60 d · 61–90 d)
+          plus risk-stratification details, follow-up criteria, and disposition guidance.
+        </div>
+        <a href="pedsfever.html" style="display:inline-flex;align-items:center;gap:8px;padding:10px 18px;background:#1d4ed8;color:#fff;border-radius:8px;font-size:13px;font-weight:800;text-decoration:none">
+          Open interactive Peds Fever page →
+        </a>
       </div>
-      <iframe src="assets/peds-kppc/peds-febrile-infant-ca-first.pdf#view=FitH" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Peds Febrile Infant ≤90d — CA FIRST"></iframe>
+      <hr class="divider" style="margin:18px 0"/>
+      <div style="font-size:12px;color:var(--text3);margin-bottom:8px"><b>Source PDF</b> — KP-SoCal CA-FIRST Quick Reference v2.5 (9/10/2025):</div>
+      <a href="assets/peds-kppc/peds-febrile-infant-ca-first.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none;margin-bottom:10px">📄 Open PDF in new tab ↗</a>
+      <iframe src="assets/peds-kppc/peds-febrile-infant-ca-first.pdf#view=FitH" style="width:100%;height:65vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Peds Febrile Infant — CA FIRST"></iframe>
     `,
   },
   'peds-svt-pathway': {
