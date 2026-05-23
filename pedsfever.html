@@ -164,7 +164,7 @@ main>*:nth-child(4){animation-delay:.15s}
 </header>
 
 <main>
-  <div class="disclaimer"><strong>⚠️ Clinical Disclaimer:</strong> CA FIRST is based on AAP CPG 2021 + Roseville Protocol. For well-appearing, previously healthy, full-term infants only. Clinical judgment required. Ill-appearing infants require full sepsis workup regardless of age — this algorithm does not apply.</div>
+  <div class="disclaimer"><strong>⚠️ Clinical Disclaimer:</strong> Content reconciled from AAP CPG 2021 + KP NorCal CA FIRST data + KP-SoCal CA-FIRST v2.5 protocol (Fitzwater, 9/10/2025). For well-appearing, previously healthy, full-term infants only. Clinical judgment required. Ill-appearing infants require full sepsis workup regardless of age — this algorithm does not apply.</div>
 
   <!-- EXCLUSIONS -->
   <div class="excl-bar">
@@ -211,10 +211,20 @@ main>*:nth-child(4){animation-delay:.15s}
   <div class="algo-panel active" id="panel-7-21">
     <div id="7-21-days-all-require-full-workup" class="section-label">7–21 Days — All Require Full Workup</div>
 
-    <div class="card risk-high" style="margin-bottom:14px">
-      <div class="card-head">🔴 ALL febrile infants 7–21 days = HIGH RISK — No stratification</div>
-      <div class="card-body">
-        All infants in this age group are high risk regardless of inflammatory markers. Full sepsis workup, parenteral antibiotics, and hospital admission are required. Inflammatory marker results may guide ongoing decisions but do not change initial management.
+    
+    <div class="card risk-neutral" style="margin-bottom:14px;border-left:4px solid #1d4ed8">
+      <div class="card-head">📋 KP-SoCal v2.5 alignment (7–21 days)</div>
+      <div class="card-body" style="font-size:13px;line-height:1.55">
+        Per the official KP-SoCal CA-FIRST v2.5 protocol (Fitzwater, 9/10/2025), the empiric regimen at this age is:<br/>
+        <b>Ampicillin</b> 50 mg/kg q8h (UTI / no focus) or <b>100 mg/kg q8h</b> (meningitis suspected)<br/>
+        <b>PLUS</b> either:
+        <ul style="margin:4px 0 4px 18px;padding:0">
+          <li><b>Ceftazidime</b> 50 mg/kg q8h <em>(KP-SoCal preferred)</em>, OR</li>
+          <li><b>Gentamicin</b> 4 mg/kg q24h, OR</li>
+          <li>Cefotaxime 50 mg/kg q8h <em>(only if neither of the above available)</em></li>
+        </ul>
+        <b>HSV suspected:</b> Acyclovir IV 20 mg/kg q8h.<br/>
+        <em>Note:</em> The KP-SoCal PDF also covers <b>0–6 day-olds separately</b> — manage as high-risk admission + full workup (incl. HSV PCR). See the PDF section at the bottom of this page.
       </div>
     </div>
 
@@ -266,10 +276,17 @@ main>*:nth-child(4){animation-delay:.15s}
   <div class="algo-panel" id="panel-22-28">
     <div id="22-28-days-transitional-risk-stratification" class="section-label">22–28 Days — Transitional Risk Stratification</div>
 
-    <div class="card risk-mod" style="margin-bottom:14px">
-      <div class="card-head">🟡 Transitional Zone — IMs can guide LP decision, not admission</div>
-      <div class="card-body">
-        Risk of meningitis is lower in 22–28 day group than &lt;22 days. In some circumstances, clinicians may elect to defer LP and initiate antibiotics — recognizing this limitation. Hospital admission still strongly recommended for most in this age group.
+    
+    <div class="card risk-neutral" style="margin-bottom:14px;border-left:4px solid #1d4ed8">
+      <div class="card-head">📋 KP-SoCal v2.5 alignment (22–28 days)</div>
+      <div class="card-body" style="font-size:13px;line-height:1.55">
+        The KP-SoCal CA-FIRST v2.5 protocol <b>does permit ceftriaxone at this age band</b> — different from the classic "no ceftriaxone &lt; 28 days" teaching:
+        <ul style="margin:4px 0 4px 18px;padding:0">
+          <li><b>UTI / no focus:</b> Ceftriaxone 50 mg/kg q24h (KP-SoCal protocol)</li>
+          <li><b>Meningitis suspected:</b> Ampicillin 100 mg/kg q8h <b>PLUS</b> Ceftazidime 50 mg/kg q8h, ± Gentamicin 4 mg/kg q24h</li>
+          <li><b>HSV suspected:</b> Acyclovir IV 20 mg/kg q8h</li>
+        </ul>
+        <em>Clinical judgment:</em> the bilirubin-displacement caveat is real for jaundiced or premature infants — defer to ampicillin + gentamicin/ceftazidime if jaundice / hyperbilirubinemia present.
       </div>
     </div>
 
@@ -340,8 +357,10 @@ main>*:nth-child(4){animation-delay:.15s}
           <hr style="border-color:var(--border);margin:10px 0"/>
           <div style="margin-bottom:6px"><strong style="color:#f87171">Treatment:</strong></div>
           <div class="step"><div class="step-num red">A</div><div><strong>Ceftriaxone</strong> 50 mg/kg IV q24h (safe after 28 days)</div></div>
-          <div class="step"><div class="step-num red">B</div><div>Consider ampicillin if Listeria concern (rare)</div></div>
-          <div class="step"><div class="step-num red">C</div><div><strong>Admit to hospital</strong></div></div>
+          <div class="step"><div class="step-num red">B</div><div><strong>Meningitis suspected:</strong> Ceftriaxone 50 mg/kg <b>q12h</b> PLUS <strong>Vancomycin</strong> 60 mg/kg/day ÷ q6–8h <em>(KP-SoCal v2.5)</em></div></div>
+          <div class="step"><div class="step-num red">C</div><div>Consider ampicillin if Listeria concern (rare)</div></div>
+          <div class="step"><div class="step-num red">D</div><div><strong>UTI (PO option, KP-SoCal):</strong> Cefalexin 50–100 mg/kg/day ÷ TID for clinically well outpatients with reliable follow-up</div></div>
+          <div class="step"><div class="step-num red">E</div><div><strong>Admit to hospital</strong></div></div>
         </div>
       </div>
 
@@ -427,8 +446,10 @@ main>*:nth-child(4){animation-delay:.15s}
           <hr style="border-color:var(--border);margin:10px 0"/>
           <div class="step"><div class="step-num red">A</div><div>Full workup: blood cx, UA/ucx, CBC, CMP, IMs</div></div>
           <div class="step"><div class="step-num red">B</div><div>LP at clinician discretion — lower meningitis risk at this age</div></div>
-          <div class="step"><div class="step-num red">C</div><div>Ceftriaxone 50 mg/kg IV/IM</div></div>
-          <div class="step"><div class="step-num red">D</div><div>Admit or observation depending on clinical trajectory</div></div>
+          <div class="step"><div class="step-num red">C</div><div>Ceftriaxone 50 mg/kg IV/IM (q24h non-meningitis)</div></div>
+          <div class="step"><div class="step-num red">D</div><div><strong>Meningitis suspected:</strong> Ceftriaxone 50 mg/kg q12h + Vancomycin 60 mg/kg/day ÷ q6–8h <em>(KP-SoCal v2.5)</em></div></div>
+          <div class="step"><div class="step-num red">E</div><div><strong>UTI (PO option):</strong> Cefalexin 50–100 mg/kg/day ÷ TID</div></div>
+          <div class="step"><div class="step-num red">F</div><div>Admit or observation depending on clinical trajectory</div></div>
         </div>
       </div>
 
@@ -494,7 +515,8 @@ main>*:nth-child(4){animation-delay:.15s}
     <div class="card-body" style="font-size:12px">
       CA FIRST: Greenhow TL et al. Perm J. 2023;27(3):92–98. doi:10.7812/TPP/23.030 · Kaiser Permanente Northern California ED data, n=3527 infants 7–90 days (2010–2019)<br/>
       AAP CPG: Pantell RH et al. Pediatrics. 2021;148(2):e2021052228 · PECARN prediction rule: Kuppermann N et al.<br/>
-      UCSF NorCal Consortium Febrile Infant Guidelines 2022
+      UCSF NorCal Consortium Febrile Infant Guidelines 2022<br/>
+      <b>KP-SoCal CA-FIRST v2.5</b> (Fitzwater, 9/10/2025) — abbreviated flow charts edited by Sean Fitzwater, MD MHS (Peds ID, LAMC / PC / WH / KC). Embedded below.
     </div>
   </div>
 
