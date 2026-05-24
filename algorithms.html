@@ -949,6 +949,13 @@ main>*:nth-child(4){animation-delay:.15s}
         <div class="algo-meta">KPPC June 2024 &nbsp;·&nbsp; <span class="algo-badge badge-ob">KPPC · Peds</span></div>
       </div>
     </div>
+    <div class="algo-card" onclick="showAlgo('peds-cap')" id="card-peds-cap" data-algo="peds-cap" data-keywords="pediatric pneumonia community acquired CAP amoxicillin ceftriaxone ampicillin clindamycin levofloxacin azithromycin mycoplasma legionella effusion CHOP KPPC kaiser pediatric care" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🫁</div>
+      <div class="algo-info">
+        <div class="algo-title">Peds Community-Acquired Pneumonia (CAP)</div>
+        <div class="algo-meta">KPPC · PCWD Master July 2024 &nbsp;·&nbsp; <span class="algo-badge badge-ob">KPPC · Peds</span></div>
+      </div>
+    </div>
     <div class="algo-card" onclick="showAlgo('peds-stroke-flow')" id="card-peds-stroke-flow" data-algo="peds-stroke-flow" data-keywords="pediatric stroke code stroke telestroke PedNIHSS LKWT focal neuro deficit Fontana Rady KPPC kaiser pediatric care" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
       <div class="algo-icon">🧠</div>
       <div class="algo-info">
@@ -4414,6 +4421,141 @@ const algos = {
       <div style="font-size:12px;color:var(--text3);margin-bottom:8px"><b>Source PDF</b> (full official document):</div>
       <a href="assets/peds-kppc/peds-asthma-outpatient.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none;margin-bottom:10px">📄 Open PDF in new tab ↗</a>
       <iframe src="assets/peds-kppc/peds-asthma-outpatient.pdf#view=FitH" style="width:100%;height:65vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Source PDF"></iframe>
+    `,
+  },
+  'peds-cap': {
+    icon: '🫁',
+    title: 'Peds Community-Acquired Pneumonia (CAP)',
+    updated: 'KPPC · PCWD Master · July 2024',
+    render: () => `
+      <div class="flow">
+        <div class="node node-start">
+          Child with <strong>suspected or confirmed pneumonia</strong>
+          <br><small style="color:var(--text2)">Exclude: cystic fibrosis · chronic lung disease · immunodeficiency · tracheostomy · hospital-acquired pneumonia · aspiration pneumonia</small>
+        </div>
+        <div class="arrow-down"></div>
+
+        <div class="decision-card" style="width:100%;max-width:560px">
+          <div class="decision-q">Assess severity</div>
+          <div class="decision-opts">
+            <div class="decision-opt opt-yes" style="border-left-color:#22c55e">
+              <span class="opt-badge" style="background:#052e16;color:#86efac;border:1px solid #15803d">MILD (Outpatient)</span>
+              <div class="opt-text">
+                &gt; 3 months · SpO<sub>2</sub> &gt; 90% · tolerating PO · adequate follow-up<br>
+                <small style="color:var(--text3)">CXR not needed unless diagnosis unsure · no labs</small>
+              </div>
+            </div>
+            <div class="decision-opt opt-yes" style="border-left-color:#f59e0b">
+              <span class="opt-badge" style="background:#2b1f0a;color:#fcd34d;border:1px solid #b45309">MODERATE (Admit)</span>
+              <div class="opt-text">
+                &lt; 3 months · moderate respiratory distress · SpO<sub>2</sub> &lt; 90% · not tolerating PO · no follow-up · <b>failed PO abx ≥ 48 h</b><br>
+                <small style="color:var(--text3)">CXR + CBC · RVP · MRSA nasal swab · blood culture if ill-appearing or worsening</small>
+              </div>
+            </div>
+            <div class="decision-opt opt-yes" style="border-left-color:#dc2626">
+              <span class="opt-badge" style="background:#2f1114;color:#fca5a5;border:1px solid #b91c1c">SEVERE (ICU)</span>
+              <div class="opt-text">
+                Any moderate criteria <b>plus</b> severe respiratory distress · mechanical airway support · altered mental status
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="arrow-down"></div>
+
+        <div class="decision-card" style="width:100%;max-width:560px;border-color:#3b82f6">
+          <div class="decision-q">Effusion on CXR?</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:4px;line-height:1.7">
+            <b>Mild effusion:</b> obtain lateral decubitus film.<br>
+            <b>Moderate / Severe effusion:</b> consult Pediatrics → manage as <b>Complicated Pneumonia</b>.
+          </div>
+        </div>
+
+        <hr class="divider" style="margin:18px 0"/>
+
+        <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px">💊 Initial Antibiotic Recommendations</div>
+        <div style="overflow-x:auto;margin-bottom:14px">
+          <table style="width:100%;border-collapse:collapse;font-size:12px;line-height:1.55">
+            <thead>
+              <tr style="background:var(--surface2);color:var(--text2)">
+                <th style="text-align:left;padding:8px 10px;border-bottom:1px solid var(--border)">Severity</th>
+                <th style="text-align:left;padding:8px 10px;border-bottom:1px solid var(--border)">First-line</th>
+                <th style="text-align:left;padding:8px 10px;border-bottom:1px solid var(--border)">β-lactam allergy</th>
+                <th style="text-align:left;padding:8px 10px;border-bottom:1px solid var(--border)">Duration / Notes</th>
+              </tr>
+            </thead>
+            <tbody style="color:var(--text2)">
+              <tr style="border-bottom:1px solid var(--border)">
+                <td style="padding:8px 10px;vertical-align:top"><b style="color:#86efac">Mild</b><br><small>Outpatient</small></td>
+                <td style="padding:8px 10px;vertical-align:top"><b>Amoxicillin</b> 90 mg/kg/day ÷ Q8–Q12h (max 4 g/day)</td>
+                <td style="padding:8px 10px;vertical-align:top"><b>Clindamycin</b> PO 30 mg/kg/day ÷ Q8h (max 1.8 g/day)<br><b>OR Levofloxacin</b> PO<br>· 6 mo–&lt;5 yr: 20 mg/kg/day ÷ Q12h<br>· ≥ 5 yr: 10 mg/kg/day Q24h (max 500 mg)</td>
+                <td style="padding:8px 10px;vertical-align:top"><b>7 days.</b> Targets <i>S. pneumoniae</i>. Oral cephalosporins inferior to high-dose amoxicillin. Azithromycin not recommended (≤40% resistance).</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border)">
+                <td style="padding:8px 10px;vertical-align:top"><b style="color:#fcd34d">Moderate</b><br><small>Inpatient</small></td>
+                <td style="padding:8px 10px;vertical-align:top"><b>Ampicillin</b> 300 mg/kg/day IV ÷ Q6h (max 2 g/dose)<br><i>OR</i> <b>Ceftriaxone</b> 100 mg/kg/day Q24h (max 2 g/dose) <small>— consider for unimmunized</small></td>
+                <td style="padding:8px 10px;vertical-align:top"><b>Clindamycin</b> IV 40 mg/kg/day ÷ Q8h (max 2.7 g/day)<br><b>OR Levofloxacin</b> IV (doses as above)</td>
+                <td style="padding:8px 10px;vertical-align:top"><b>7 days</b>, or at least 48 h after fever + tachypnea resolution (whichever longer), including PO step-down.</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border)">
+                <td style="padding:8px 10px;vertical-align:top"><b style="color:#fca5a5">Complicated</b><br><small>Inpatient · with effusion</small></td>
+                <td style="padding:8px 10px;vertical-align:top"><b>Clindamycin</b> IV 40 mg/kg/day ÷ Q8h (max 2.7 g/day)<br><b>AND Ceftriaxone</b> 100 mg/kg/day Q24h (max 2 g/dose)</td>
+                <td style="padding:8px 10px;vertical-align:top"><b>Clindamycin</b> IV (as above)<br><b>AND Levofloxacin</b> IV (as above)</td>
+                <td style="padding:8px 10px;vertical-align:top"><b>7 days</b> from drainage of effusion. If not drainable: 7 days from afebrile. Targets add <i>S. pyogenes</i>, <i>S. aureus</i>. Clindamycin covers ~85% CA-MRSA.</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border)">
+                <td style="padding:8px 10px;vertical-align:top"><b style="color:#fca5a5">Severe</b><br><small>ICU</small></td>
+                <td style="padding:8px 10px;vertical-align:top"><b>Vancomycin</b> IV 15 mg/kg/dose Q6h (max 500 mg/dose)<br><b>AND Ceftriaxone</b> 100 mg/kg/day Q24h (max 2 g/dose)</td>
+                <td style="padding:8px 10px;vertical-align:top"><b>Vancomycin</b> IV (as above)<br><b>AND Levofloxacin</b> IV (as above)</td>
+                <td style="padding:8px 10px;vertical-align:top"><b>7 days from afebrile.</b> Vancomycin for suspected CA-MRSA in severe / life-threatening disease.</td>
+              </tr>
+              <tr>
+                <td style="padding:8px 10px;vertical-align:top"><b style="color:#93c5fd">Atypical</b><br><small>&gt; 5 yr · any setting</small></td>
+                <td style="padding:8px 10px;vertical-align:top"colspan="2"><b>Azithromycin</b> 10 mg/kg day 1 once (max 500 mg), then 5 mg/kg/day Q24h (max 250 mg/day)<br><i>OR</i> <b>Levofloxacin</b> IV/PO (doses as above)</td>
+                <td style="padding:8px 10px;vertical-align:top">Targets <i>Mycoplasma</i>, <i>Legionella</i>. <b>Mycoplasma:</b> Azithro × 5 d or Levo × 10 d. <b>Legionella:</b> Azithro × 5–10 d or Levo × 14–21 d. Azithromycin does NOT cover typical CAP — add to typical regimen above.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="decision-card" style="width:100%;max-width:560px;border-color:#f59e0b">
+          <div class="decision-q">⚠️ Treatment failure</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:4px;line-height:1.7">
+            After <b>&gt; 48 h</b> of first-line therapy, suspect failure if: increasing respiratory distress · escalating respiratory support · worsening fever curve.
+          </div>
+        </div>
+
+        <hr class="divider" style="margin:18px 0"/>
+
+        <div class="grid">
+          <div class="card risk-low">
+            <div class="card-head">🏠 Discharge criteria</div>
+            <div class="card-body">
+              <ul style="margin:0 0 0 18px;padding:0;line-height:1.7">
+                <li>Respiratory effort normal</li>
+                <li>Fever resolved or trending to normal</li>
+                <li>No oxygen requirement</li>
+                <li>Tolerating PO</li>
+                <li>Discharge on oral antibiotics (see table above)</li>
+              </ul>
+            </div>
+          </div>
+          <div class="card" style="background:#1c1400;border-color:#ca8a04">
+            <div class="card-head" style="color:#fcd34d">🏥 Admission criteria</div>
+            <div class="card-body">
+              <ul style="margin:0 0 0 18px;padding:0;line-height:1.7">
+                <li>Does not meet discharge criteria</li>
+                <li>IV antibiotics — see Peds Pneumonia order set</li>
+                <li>Support airway as appropriate</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="divider" style="margin:24px 0 12px"/>
+      <div style="font-size:12px;color:var(--text3);margin-bottom:8px"><b>Source</b> — PCWD ED Peds Pathways Master Doc (Andrea Thorp, July 2024), CAP section (PDF page 7):</div>
+      <a href="assets/peds-kppc/peds-ed-pathways-master.pdf#page=7" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none;margin-bottom:10px">📄 Open Master PDF (CAP page) ↗</a>
+      <iframe src="assets/peds-kppc/peds-ed-pathways-master.pdf#page=7&view=FitH" style="width:100%;height:65vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Peds CAP — Master Pathway"></iframe>
     `,
   },
   'peds-stroke-flow': {
