@@ -2898,11 +2898,15 @@ main{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-colu
     });
   });
 
-  // Deep-link from URL hash (e.g. from the sitewide search)
+  // Deep-link from URL hash (e.g. from the sitewide search).
+  // Use instant scroll on the deep-link path so the embedded content lands
+  // in view immediately, without racing the browser's native anchor-scroll
+  // or the smooth-scroll animation.
   function handleHash() {
     const hash = (window.location.hash || '').replace(/^#/, '');
     if (hash && document.getElementById(hash)) {
       activate(hash);
+      window.scrollTo({ top: 0, behavior: 'auto' });
     }
   }
   handleHash();
