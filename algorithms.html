@@ -4742,7 +4742,23 @@ document.getElementById('algoGrid').addEventListener('keydown', e => {
 
 const initialAlgo = normalizeAlgoHash(window.location.hash);
 if (initialAlgo && algos[initialAlgo]) {
-  showAlgo(initialAlgo, { skipHash: true });
+  // Deep-link from sitewide search (#card-X). Open the card and land the
+  // user *instantly* on the viewer panel (where the embedded content lives).
+  // Strip the hash first so the browser can't anchor-scroll the user to the
+  // card position mid-grid, then scroll the viewer to the top of the
+  // viewport instantly. We retry on the next two animation frames to beat
+  // any late browser scroll restoration.
+  history.replaceState(null, '', window.location.pathname + window.location.search);
+  showAlgo(initialAlgo, { skipHash: true, skipScroll: true });
+  const scrollToViewer = () => {
+    const viewer = document.getElementById('algoViewer');
+    if (viewer) window.scrollTo({ top: viewer.offsetTop, behavior: 'auto' });
+  };
+  scrollToViewer();
+  requestAnimationFrame(() => {
+    scrollToViewer();
+    requestAnimationFrame(scrollToViewer);
+  });
 }
 
 window.addEventListener('hashchange', () => {

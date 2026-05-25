@@ -893,6 +893,10 @@ function showCalcFromHash() {
   const id = hash.slice(5);
   if (!CALC_IDS.includes(id)) return false;
   showCalc(id);
+  // Deep-link from sitewide search: land instantly on the calculator,
+  // not on the tab/anchor position. The selected calc is rendered at
+  // the top of the calc area, so scroll to top.
+  window.scrollTo({ top: 0, behavior: 'auto' });
   return true;
 }
 
