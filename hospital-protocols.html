@@ -379,6 +379,21 @@ main{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-colu
         </div>
       </div>
 
+      <div class="list-item" data-target="abnl-result-routing" data-keywords="abnormal result routing CC results referral dr advice recipient nurse Janna Bonjoc Susan Marie Carlin Mercedes Gonzales de la Torre Samantha Jones result note accept close CODE 24 stroke CTA brain neck">
+        <div class="li-title">Abnormal Result Routing — CC Results → Named RN</div>
+        <div class="li-meta">
+          <span class="li-badge yellow">Workflow</span>
+        </div>
+      </div>
+
+      <div class="list-item" data-target="swallow-screen-dizzy" data-keywords="swallow screen RN nursing eval dizzy dizziness vertigo stroke workup oral meds dysphagia failed inpatient formal swallow evaluation">
+        <div class="li-title">Swallow Screen — All Dizzy / Stroke-Workup Pts</div>
+        <div class="li-meta">
+          <span class="li-badge yellow">Workflow</span>
+          <span class="li-badge red">Stroke</span>
+        </div>
+      </div>
+
       <div class="list-item" data-target="radiology-safety-net" data-keywords="radiology safety net process follow-up abnormal imaging report critical finding notification">
         <div class="li-title">Radiology Safety Net Process</div>
         <div class="li-meta">
@@ -872,6 +887,23 @@ main{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-colu
           <div class="decision-badge purple">📋 Quick Reference</div>
         </div>
         <hr class="divider"/>
+        <div style="font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:12px">
+          <div style="padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-left:3px solid #c4b5fd;border-radius:8px;margin-bottom:10px">
+            <div style="font-weight:700;color:var(--text);margin-bottom:4px">Restraint types — quick orientation</div>
+            From the 5/27/26 physician meeting: when ordering restraints, choose the right type for the clinical scenario.
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <div style="padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-left:3px solid #fca5a5;border-radius:8px">
+              <div style="font-weight:700;color:#fca5a5;margin-bottom:4px">Type 1 — Intubation</div>
+              Post-intubation / mechanically ventilated patients. Restraint orders follow the standard clinical (non-violent) restraint pathway — see the cheat sheet below.
+            </div>
+            <div style="padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-left:3px solid #fcd34d;border-radius:8px">
+              <div style="font-weight:700;color:#fcd34d;margin-bottom:4px">Type 2 — Elderly / AMS</div>
+              <b>Bilateral soft wrists ONLY.</b> Do not order 4-point or hard restraints for elderly / AMS patients in the ED.
+            </div>
+          </div>
+          <div style="color:var(--text3);font-size:12px;margin-top:8px">Source: 5/27/2026 ED physician meeting · See full cheat sheet + Behavioral vs Clinical reference below.</div>
+        </div>
         <a class="download-btn" href="https://view.officeapps.live.com/op/view.aspx?src=https://kimtrinh.github.io/er-documentation/assets/md-restraint-cheatsheet.pptx" target="_blank" rel="noopener">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#86efac" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           <div><div>Open Presentation</div><div class="download-btn-sub">PowerPoint · Office Online</div></div>
@@ -2156,6 +2188,89 @@ main{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-colu
           <a class="pdf-open-link" href="https://view.officeapps.live.com/op/view.aspx?src=https://kimtrinh.github.io/er-documentation/assets/inbasket-abnormal-results.docx" target="_blank" rel="noopener">Open in Word ↗</a>
         </div>
         <iframe class="pdf-iframe" src="https://view.officeapps.live.com/op/embed.aspx?src=https://kimtrinh.github.io/er-documentation/assets/inbasket-abnormal-results.docx" title="Inbasket Abnormal Results Workflow"></iframe>
+      </div>
+    </div>
+
+    <!-- ══ ABNORMAL RESULT ROUTING (CC RESULTS → NAMED RN) ══ -->
+    <div class="protocol-panel" id="abnl-result-routing">
+      <div class="info-card">
+        <div class="card-top">
+          <div>
+            <div id="abnormal-result-routing-cc-results-named-rn" class="card-title">Abnormal Result Routing — CC Results → Named RN</div>
+            <div class="card-dept">Emergency Medicine · Operations · Result Follow-Up</div>
+          </div>
+          <div class="decision-badge yellow">⚙️ Workflow</div>
+        </div>
+        <hr class="divider"/>
+        <div style="font-size:13px;color:var(--text2);line-height:1.6">
+          <div style="padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-left:3px solid #fcd34d;border-radius:8px;margin-bottom:12px">
+            <div style="font-weight:700;color:var(--text);margin-bottom:4px">Bottom line</div>
+            For abnormal results that need outpatient nurse follow-up (e.g. an ED-resulted CTA for a stroke code), route via <b>CC Results → Referral Dr Advice</b> to one of the four ED abnormal-result RNs. Three clicks: select recipient → fill the result note → accept &amp; close.
+          </div>
+
+          <div style="font-weight:700;color:var(--text);margin:12px 0 6px">3-step flow</div>
+          <ol style="margin:0;padding-left:20px;line-height:1.7">
+            <li><b>Select a recipient.</b> Open the CC Results message (e.g. <code>CODE 24, STROKE, CTA BRAIN AND NECK</code>) → <b>Result Management</b> → recipient field → start typing one of the four nurse names below. Picking from this pool is what ensures it actually lands in someone's queue rather than the general inbasket.</li>
+            <li><b>Fill out the Result Note</b> with the appropriate action — e.g. "Page on-call physician", "Outpatient PCP follow-up scheduled", "Add to safety-net list", etc. Use the same note to add a kp.org comment if anything is patient-facing.</li>
+            <li><b>Accept and Close.</b> Confirm all selected results have been released, then mark the message as done.</li>
+          </ol>
+
+          <div style="font-weight:700;color:var(--text);margin:14px 0 6px">📌 Named abnormal-result RNs (route to one of these four)</div>
+          <ul style="margin:0;padding-left:20px;line-height:1.7">
+            <li>Janna Bonjoc</li>
+            <li>Susan Marie Carlin</li>
+            <li>Mercedes Gonzales de la Torre</li>
+            <li>Samantha Jones</li>
+          </ul>
+
+          <div style="padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-left:3px solid #93c5fd;border-radius:8px;margin-top:12px">
+            <div style="font-weight:700;color:var(--text);margin-bottom:4px">See also</div>
+            The legacy <b>Inbasket Abnormal Results Workflow v3</b> card (just above) covers the broader inbasket process. This card documents the specific CC-Results → named-RN routing pathway used for abnormal ED results that need RN follow-up.
+          </div>
+
+          <div style="color:var(--text3);font-size:12px;margin-top:8px">Source: 5/27/2026 ED physician meeting · Routing flow demonstrated by ED leadership.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ SWALLOW SCREEN — DIZZY / STROKE-WORKUP PTS ══ -->
+    <div class="protocol-panel" id="swallow-screen-dizzy">
+      <div class="info-card">
+        <div class="card-top">
+          <div>
+            <div id="swallow-screen-dizzy-stroke-workup" class="card-title">Swallow Screen — All Dizzy / Stroke-Workup Pts</div>
+            <div class="card-dept">Emergency Medicine · Nursing · Stroke Care</div>
+          </div>
+          <div class="decision-badge red">🩺 Stroke</div>
+        </div>
+        <hr class="divider"/>
+        <div style="font-size:13px;color:var(--text2);line-height:1.6">
+          <div style="padding:10px 14px;background:var(--redSoft);border:1px solid var(--redBorder);border-left:3px solid #fca5a5;border-radius:8px;margin-bottom:12px">
+            <div style="font-weight:700;color:#fca5a5;margin-bottom:4px">Bottom line</div>
+            <b>Order an RN nursing swallow eval on every patient being worked up for stroke — including all "just dizzy" patients.</b> We've fallen out on several cases that were later diagnosed with stroke. It's a simple bedside RN check.
+          </div>
+
+          <div style="font-weight:700;color:var(--text);margin:10px 0 6px">When to order</div>
+          <ul style="margin:0;padding-left:20px;line-height:1.7">
+            <li>Code 24 / stroke alert (any age band).</li>
+            <li>Isolated dizziness or vertigo presentations being worked up for posterior-circulation stroke.</li>
+            <li>Any patient where a CTA / MRI is being ordered to rule out stroke.</li>
+          </ul>
+
+          <div style="font-weight:700;color:var(--text);margin:14px 0 6px">⚠️ If the patient fails the screen</div>
+          <ul style="margin:0;padding-left:20px;line-height:1.7">
+            <li><b>The failed screen cannot be reversed in the ED.</b> A formal swallow eval (SLP) is required as an inpatient before the patient can take anything PO.</li>
+            <li><b>Do NOT ask the RN to repeat the screen.</b> Once it's failed, it's failed.</li>
+            <li><b>Do NOT order oral medications</b> — including aspirin, statins, antihypertensives — until the formal inpatient eval is done.</li>
+          </ul>
+
+          <div style="padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-left:3px solid #93c5fd;border-radius:8px;margin-top:14px">
+            <div style="font-weight:700;color:var(--text);margin-bottom:4px">Why it matters</div>
+            Aspiration of meds or PO intake after a failed screen is a documented stroke-pathway fallout. Catching the screen up front prevents downstream rework and a real safety event.
+          </div>
+
+          <div style="color:var(--text3);font-size:12px;margin-top:10px">Source: 5/27/2026 ED physician meeting · "We have fallen out on a few cases with a later dx of stroke — easy fix, simple RN bedside check."</div>
+        </div>
       </div>
     </div>
 
