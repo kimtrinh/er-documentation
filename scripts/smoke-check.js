@@ -38,6 +38,9 @@ function checkInlineScripts() {
     const html = fs.readFileSync(path.join(ROOT, file), 'utf8');
     const matches = [...html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)];
     matches.forEach((match, idx) => {
+      // ES module scripts legitimately use import/export and can't be
+      // validated as classic scripts via vm.Script — skip them.
+      if (/type\s*=\s*["']module["']/i.test(match[0])) return;
       compileFile(`${file}#inline-${idx}`, match[1]);
     });
   }
@@ -71,7 +74,6 @@ function evaluateSearchIndex(searchIndexSource) {
 }
 
 function checkSearchIndexLinks(index) {
-  const files = new Set(fs.readdirSync(ROOT));
   for (const item of index) {
     const url = String((item && item.u) || '').trim();
     const title = String((item && item.t) || '(untitled)');
@@ -80,14 +82,19 @@ function checkSearchIndexLinks(index) {
       continue;
     }
 
+    // External links (SharePoint, Microsoft Forms, Office viewer, mailto, …)
+    // can't be resolved against the local filesystem — skip them.
+    if (/^[a-z][a-z0-9+.-]*:/i.test(url)) continue;
+
     const [file, hash] = url.split('#');
-    if (!files.has(file)) {
+    const filePath = path.join(ROOT, decodeURIComponent(file));
+    if (!fs.existsSync(filePath)) {
       addError(`Missing file for search item "${title}": ${url}`);
       continue;
     }
 
     if (!hash) continue;
-    const html = fs.readFileSync(path.join(ROOT, file), 'utf8');
+    const html = fs.readFileSync(filePath, 'utf8');
     const escapedHash = escapeRegExp(hash);
     const idRe = new RegExp(`id=["']${escapedHash}["']`);
     const nameRe = new RegExp(`name=["']${escapedHash}["']`);
