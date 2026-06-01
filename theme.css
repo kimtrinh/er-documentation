@@ -720,3 +720,12 @@ html[data-theme="light"] .master-reset:hover{background:var(--surface3);color:va
 }
 .sitenav .nav-links::-webkit-scrollbar-thumb:hover { background: var(--blue, #3b82f6); }
 .sitenav .nav-links .nav-link { flex-shrink: 0; scroll-snap-align: start; }
+
+/* Global keyboard-focus indicator (accessibility) — visible only for keyboard users */
+a:focus-visible, button:focus-visible, input:focus-visible,
+select:focus-visible, textarea:focus-visible, summary:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--blue, #3b82f6);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
