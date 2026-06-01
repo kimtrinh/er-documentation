@@ -6,7 +6,6 @@ Static HTML tools for emergency medicine documentation and quick bedside calcula
 
 - `index.html`: unified landing page with cross-tool search
 - `dotphrase.html`: searchable ER dotphrases by category
-- `home.html`: legacy alias of the landing page
 - `calculators.html`: clinical decision calculators and chart-ready text
 - `vasopressors.html`: vasopressor/inotrope infusion and push-dose guidance
 - `rsi.html`: RSI medication and drip dosing helper
@@ -15,7 +14,6 @@ Static HTML tools for emergency medicine documentation and quick bedside calcula
 - `pedsfever.html`: pediatric fever protocol guidance
 - `ed-phone-directory.html`: OMC/FMC directory with local custom entries
 - `service-agreements.html`: searchable service-agreement summary library
-- `agreements.html`: legacy local-entry agreements page
 - `links.html`: curated external references
 - `roadmap.html`: feature roadmap and suggestions
 
