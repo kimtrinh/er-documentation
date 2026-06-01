@@ -19,6 +19,7 @@ LICENSE
 MDM_BUILDER_ANALYSIS.md
 README.md
 SERVICE_AGREEMENTS_INDEX.md
+SHAREPOINT_MIGRATION_AUDIT.md
 
 # Server-side config (Firebase rules are not for the browser)
 firestore.rules
