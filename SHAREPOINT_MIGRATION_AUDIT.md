@@ -22,76 +22,62 @@ steps to finish. It uses the migration pattern already established in
 | Category | Count | State |
 | --- | --- | --- |
 | Asset documents (PDF/DOCX/PPTX) in `assets/` | ~180 | ✅ Migrated; local copies deleted (commit `a9c5101`) |
-| Inline images kept in `assets/` | 2 | ⚪ Intentionally local (an `<img>` can't use an auth-gated embed) |
-| Other local documents (`docs/announcements/`) | 1 | ❌ **Still local** — the only actionable item |
+| `docs/announcements/ED_RADIOLOGY_EPIC_DOWNTIME.docx` | 1 | ✅ Migrated; local copy deleted (this PR) |
+| Inline images served publicly from `assets/` | 2 | ⚠️ **Only remaining KP-internal files on the public site** — see §3 |
 | SharePoint links not in the inventory snapshot | 2 | ⚠️ Confirm uploaded |
 | Links to other KP SharePoint sites | ~10 | ⚪ Left as-is, not validated |
 
-`scripts/check-sharepoint-links.py` currently passes (no stray local `assets/`
-dependencies), so the asset half of the migration is structurally complete.
+**No downloadable documents remain on GitHub Pages.** Every PDF/DOCX/PPTX —
+including the last `docs/announcements/` Word doc — now resolves to the
+SSO-gated SharePoint library. `scripts/check-sharepoint-links.py` and
+`scripts/smoke-check.js` both pass.
 
 ---
 
-## 2. Still hosted locally — the one actionable document
+## 2. `docs/announcements/ED_RADIOLOGY_EPIC_DOWNTIME.docx` — ✅ done
 
-**File:** `docs/announcements/ED_RADIOLOGY_EPIC_DOWNTIME.docx`
+Migrated in this PR. The file was uploaded to
+`Shared Documents/assets/docs/announcements/` and the three references in
+`hospital-protocols.html` were repointed:
 
-It is referenced **3×**, all in `hospital-protocols.html`, and all currently
-routed through the **public** Office Online viewer pointing back at github.io
-(so it renders for anyone, off-network included — unlike the migrated assets):
-
-| Line | Kind | Current target |
+| Line | Kind | New target |
 | --- | --- | --- |
-| `hospital-protocols.html:2313` | Download/open button | `view.officeapps.live.com/op/view.aspx?src=…github.io/…/ED_RADIOLOGY_EPIC_DOWNTIME.docx` |
-| `hospital-protocols.html:2321` | "Open in Word ↗" link | same `op/view.aspx` viewer URL |
-| `hospital-protocols.html:2323` | Inline preview `<iframe>` | `view.officeapps.live.com/op/embed.aspx?src=…github.io/…/…docx` |
+| download button | open link | `…/Shared%20Documents/assets/docs/announcements/ED_RADIOLOGY_EPIC_DOWNTIME.docx` |
+| "Open in Word ↗" | open link | same direct SharePoint URL |
+| inline `<iframe>` | preview | `…/_layouts/15/embed.aspx?UniqueId=5b6bec0c-8b67-4daa-b42a-ffcbebbdd23f` |
 
-It is **not** in `data/sharepoint-embeds.json` and **not** in the search or
-chatbot indexes, so it is self-contained to this one page.
-
-### Completion checklist for this document
-
-1. **Upload** `ED_RADIOLOGY_EPIC_DOWNTIME.docx` into the SharePoint library,
-   matching how assets were placed (assets live under
-   `Shared Documents/assets/assets/…`; pick the equivalent folder, e.g.
-   `Shared Documents/assets/docs/announcements/`).
-2. **Capture two values** from the signed-in SharePoint browser:
-   - the file's **`UniqueId` GUID** (for the inline preview embed), and
-   - its **direct path** under `…/Shared Documents/…` (for the open/download links).
-3. **Repoint the two open/download links** (`:2313`, `:2321`) to the direct
-   SharePoint URL — same transform as `OFFICE_OPEN_RE` in
-   `scripts/sharepoint-relink.py`:
-   `…/Shared%20Documents/assets/docs/announcements/ED_RADIOLOGY_EPIC_DOWNTIME.docx`.
-4. **Repoint the inline preview** (`:2323`) to
-   `https://sp-cloud.kp.org/sites/ERtoolkit/_layouts/15/embed.aspx?UniqueId=<GUID>`
-   — same transform as `scripts/sharepoint-embed.py` (`EMBED_BASE`).
-5. **Add the GUID to `data/sharepoint-embeds.json`** so the audit recognizes it.
-6. **Delete** the local `docs/announcements/ED_RADIOLOGY_EPIC_DOWNTIME.docx`.
-7. **Re-run the gate:** `python3 scripts/check-sharepoint-links.py` (expect no
-   FATAL) and `node scripts/smoke-check.js`.
-
-> Trade-off to confirm before doing this: the migrated copy will render **only
-> for signed-in KP staff** (off-network shows nothing), matching the rest of the
-> assets. Today this downtime doc is publicly viewable. If public visibility is
-> intentional, leave it as-is.
-
-The existing scripts hard-code a `FILES` list of pages and only handle the
-`assets/` prefix, so they won't pick up this `docs/announcements/` file without
-a small edit — the steps above are the manual equivalent.
+GUID added to `data/sharepoint-embeds.json`; local copy deleted; both gate
+scripts pass. As with the rest of the library, the inline preview now renders
+**only for signed-in KP staff** (off-network shows nothing).
 
 ---
 
-## 3. Intentionally kept local (no action needed)
+## 3. The two inline images — the remaining public exposure ⚠️
 
-These two `<img>` sources stay in the repo because an image tag can't display an
-SSO-gated SharePoint embed. Both are whitelisted as `KEEP_LOCAL` /`KEEP` in the
-migration + audit scripts:
+These are now the **only KP-internal files still served from the public GitHub
+Pages site**. Their "Open Full-Size ↗" links already point to SharePoint, but
+the inline `<img src="assets/…">` preview still loads the public copy, so the
+image itself is world-readable:
 
-- `assets/restraint-orders.jpg`
-- `assets/pnl-adult-acute-transfusion-reaction.png`
+| File | What it is | Sensitivity |
+| --- | --- | --- |
+| `assets/pnl-adult-acute-transfusion-reaction.png` | **Screenshot of a KP Epic order set** (nursing orders, drug doses) | Highest — proprietary EHR content, currently public |
+| `assets/restraint-orders.jpg` | Restraint-orders quick-reference comparison | Internal clinical reference |
 
-If you ever want these off GitHub too, they'd need to become click-through
-links to SharePoint rather than inline `<img>` previews (a UX change).
+They're whitelisted as `KEEP_LOCAL` / `KEEP` in the scripts because an `<img>`
+can't display an SSO-gated SharePoint embed.
+
+**To fully gate them (choose per image, UX trade-off):**
+- **Option A — embed iframe:** replace the `<img>` with the same
+  `embed.aspx?UniqueId=<GUID>` iframe the documents use. Gated, but renders
+  nothing off-network and image embeds preview less cleanly than docs.
+- **Option B — click-through only:** drop the inline `<img>` and keep just the
+  existing "Open Full-Size ↗" SharePoint link. Fully gated; loses the at-a-glance
+  preview.
+- **Option C — accept as public** if Compliance considers these non-confidential
+  clinical reference.
+
+The Epic order-set screenshot is the strongest candidate for A or B.
 
 ---
 
@@ -110,7 +96,23 @@ no HTML page links them:
 optionally add them to `data/sharepoint-embeds.json` to clear the warning; if
 no, those two index entries will 404 for users who click them.
 
-### 4b. Links to other KP SharePoint sites ⚪
+### 4b. Phone directory (`ed-phone-directory.html`) — low priority ⚪
+Contains ~39 phone numbers plus pager/Vocera/Cisco device references. Spot-check
+shows they are mostly toll-free / main institutional lines (e.g. `800-464-4000`,
+local `909-…` hospital numbers) rather than personal PII. It is operational
+internal info on a public site, but not document-class confidential. Flagged for
+awareness; no migration action proposed unless Compliance wants the directory
+gated.
+
+### 4c. Public text indexes — already redaction-aware ✅
+`data/service_agreements_index.json` stores **summaries** (`summary_bullets`,
+`ed_actions`, …) with an explicit `redaction_notes` field and a `sharepoint_url`
+to the gated source — not verbatim agreement text. `chatbot-index.json` /
+`search-index.js` only index text that already appears on the public HTML pages.
+So migrating the source documents did not leave their full text behind in a
+public index.
+
+### 4d. Links to other KP SharePoint sites ⚪
 Left untouched by design (the migration only owns the ERtoolkit library).
 Logged for awareness, not validated:
 
