@@ -31,8 +31,9 @@ from collections import defaultdict
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 EMBED_MAP = os.path.join(ROOT, "data", "sharepoint-embeds.json")
 
-# Inline images kept in the repo (an <img> can't point at SharePoint).
-KEEP_LOCAL = {"restraint-orders.jpg"}
+# Previously held the inline images kept in the repo; now empty since every
+# asset (images included) has been gated behind SharePoint embeds.
+KEEP_LOCAL = set()
 
 # Direct download/open link into the migrated assets library.
 DIRECT_RE = re.compile(
@@ -150,8 +151,8 @@ def main():
         print()
 
     if ok:
-        print("RESULT: no local asset dependencies remain; safe to delete the "
-              "assets/ folder (except the kept images).")
+        print("RESULT: no local asset dependencies remain; the assets/ folder "
+              "is fully migrated to SharePoint.")
         print("(Live reachability still requires a signed-in KP browser check.)")
     else:
         print("RESULT: FATAL problems found — do NOT delete assets/ yet.")

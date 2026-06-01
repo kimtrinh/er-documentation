@@ -23,7 +23,7 @@ steps to finish. It uses the migration pattern already established in
 | --- | --- | --- |
 | Asset documents (PDF/DOCX/PPTX) in `assets/` | ~180 | ✅ Migrated; local copies deleted (commit `a9c5101`) |
 | `docs/announcements/ED_RADIOLOGY_EPIC_DOWNTIME.docx` | 1 | ✅ Migrated; local copy deleted (this PR) |
-| Inline images served publicly from `assets/` | 1 | ⚪ `restraint-orders.jpg` only; the Epic order-set screenshot is now gated — see §3 |
+| Inline images served publicly from `assets/` | 0 | ✅ Both images now gated behind SharePoint embeds; `assets/` is empty — see §3 |
 | SharePoint links not in the inventory snapshot | 2 | ⚠️ Confirm uploaded |
 | Links to other KP SharePoint sites | ~10 | ⚪ Left as-is, not validated |
 
@@ -52,20 +52,19 @@ scripts pass. As with the rest of the library, the inline preview now renders
 
 ---
 
-## 3. Inline images
+## 3. Inline images — ✅ all gated
+
+Both images that were previously served publicly via `<img src="assets/…">` have
+been replaced with the SSO-gated `embed.aspx?UniqueId=<GUID>` iframe and their
+local files deleted. **`assets/` is now empty.**
 
 | File | What it is | State |
 | --- | --- | --- |
-| `assets/pnl-adult-acute-transfusion-reaction.png` | **Screenshot of a KP Epic order set** (nursing orders, drug doses) | ✅ **Gated** — inline `<img>` replaced with the `embed.aspx?UniqueId=2c5c16eb-…` SharePoint embed and the local file deleted (this PR). Also removed the verbatim drug-dose `alt` text that was previously public. Renders only for signed-in KP staff. |
-| `assets/restraint-orders.jpg` | Restraint-orders quick-reference comparison | ⚪ Still an inline `<img src="assets/…">` (world-readable). Whitelisted as `KEEP_LOCAL`/`KEEP`. Its "Open Full-Size ↗" link already points to SharePoint. |
+| `pnl-adult-acute-transfusion-reaction.png` | **Screenshot of a KP Epic order set** (nursing orders, drug doses) | ✅ Gated (`UniqueId=2c5c16eb-…`). Also removed the verbatim drug-dose `alt` text that was previously public. |
+| `restraint-orders.jpg` | Restraint-orders quick-reference comparison | ✅ Gated (`UniqueId=f3e66ce3-…`). |
 
-If you want `restraint-orders.jpg` gated too, the same two options apply:
-- **Option A — embed iframe** (what was done for the Epic screenshot): swap the
-  `<img>` for the `embed.aspx?UniqueId=<GUID>` iframe. Gated, no off-network preview.
-- **Option B — click-through only:** drop the inline `<img>`, keep the existing
-  "Open Full-Size ↗" SharePoint link. Fully gated; loses the at-a-glance preview.
-- **Option C — accept as public** if Compliance considers a restraint-orders
-  quick reference non-confidential.
+The `KEEP_LOCAL` / `KEEP` whitelists in the scripts are now empty — no asset is
+intentionally kept public anymore. Both images render only for signed-in KP staff.
 
 ---
 
