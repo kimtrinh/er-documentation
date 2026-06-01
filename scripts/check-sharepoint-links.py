@@ -32,7 +32,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 EMBED_MAP = os.path.join(ROOT, "data", "sharepoint-embeds.json")
 
 # Inline images kept in the repo (an <img> can't point at SharePoint).
-KEEP_LOCAL = {"restraint-orders.jpg", "pnl-adult-acute-transfusion-reaction.png"}
+KEEP_LOCAL = {"restraint-orders.jpg"}
 
 # Direct download/open link into the migrated assets library.
 DIRECT_RE = re.compile(

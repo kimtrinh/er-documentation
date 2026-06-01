@@ -23,7 +23,7 @@ steps to finish. It uses the migration pattern already established in
 | --- | --- | --- |
 | Asset documents (PDF/DOCX/PPTX) in `assets/` | ~180 | ✅ Migrated; local copies deleted (commit `a9c5101`) |
 | `docs/announcements/ED_RADIOLOGY_EPIC_DOWNTIME.docx` | 1 | ✅ Migrated; local copy deleted (this PR) |
-| Inline images served publicly from `assets/` | 2 | ⚠️ **Only remaining KP-internal files on the public site** — see §3 |
+| Inline images served publicly from `assets/` | 1 | ⚪ `restraint-orders.jpg` only; the Epic order-set screenshot is now gated — see §3 |
 | SharePoint links not in the inventory snapshot | 2 | ⚠️ Confirm uploaded |
 | Links to other KP SharePoint sites | ~10 | ⚪ Left as-is, not validated |
 
@@ -52,32 +52,20 @@ scripts pass. As with the rest of the library, the inline preview now renders
 
 ---
 
-## 3. The two inline images — the remaining public exposure ⚠️
+## 3. Inline images
 
-These are now the **only KP-internal files still served from the public GitHub
-Pages site**. Their "Open Full-Size ↗" links already point to SharePoint, but
-the inline `<img src="assets/…">` preview still loads the public copy, so the
-image itself is world-readable:
-
-| File | What it is | Sensitivity |
+| File | What it is | State |
 | --- | --- | --- |
-| `assets/pnl-adult-acute-transfusion-reaction.png` | **Screenshot of a KP Epic order set** (nursing orders, drug doses) | Highest — proprietary EHR content, currently public |
-| `assets/restraint-orders.jpg` | Restraint-orders quick-reference comparison | Internal clinical reference |
+| `assets/pnl-adult-acute-transfusion-reaction.png` | **Screenshot of a KP Epic order set** (nursing orders, drug doses) | ✅ **Gated** — inline `<img>` replaced with the `embed.aspx?UniqueId=2c5c16eb-…` SharePoint embed and the local file deleted (this PR). Also removed the verbatim drug-dose `alt` text that was previously public. Renders only for signed-in KP staff. |
+| `assets/restraint-orders.jpg` | Restraint-orders quick-reference comparison | ⚪ Still an inline `<img src="assets/…">` (world-readable). Whitelisted as `KEEP_LOCAL`/`KEEP`. Its "Open Full-Size ↗" link already points to SharePoint. |
 
-They're whitelisted as `KEEP_LOCAL` / `KEEP` in the scripts because an `<img>`
-can't display an SSO-gated SharePoint embed.
-
-**To fully gate them (choose per image, UX trade-off):**
-- **Option A — embed iframe:** replace the `<img>` with the same
-  `embed.aspx?UniqueId=<GUID>` iframe the documents use. Gated, but renders
-  nothing off-network and image embeds preview less cleanly than docs.
-- **Option B — click-through only:** drop the inline `<img>` and keep just the
-  existing "Open Full-Size ↗" SharePoint link. Fully gated; loses the at-a-glance
-  preview.
-- **Option C — accept as public** if Compliance considers these non-confidential
-  clinical reference.
-
-The Epic order-set screenshot is the strongest candidate for A or B.
+If you want `restraint-orders.jpg` gated too, the same two options apply:
+- **Option A — embed iframe** (what was done for the Epic screenshot): swap the
+  `<img>` for the `embed.aspx?UniqueId=<GUID>` iframe. Gated, no off-network preview.
+- **Option B — click-through only:** drop the inline `<img>`, keep the existing
+  "Open Full-Size ↗" SharePoint link. Fully gated; loses the at-a-glance preview.
+- **Option C — accept as public** if Compliance considers a restraint-orders
+  quick reference non-confidential.
 
 ---
 

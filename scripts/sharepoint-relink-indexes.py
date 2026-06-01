@@ -39,7 +39,7 @@ FILES = [
 ]
 
 # Inline images kept local (an <img> can't point at SharePoint) — never repoint.
-KEEP = {"restraint-orders.jpg", "pnl-adult-acute-transfusion-reaction.png"}
+KEEP = {"restraint-orders.jpg"}
 
 
 def _kept(tail):
