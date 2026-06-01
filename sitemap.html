@@ -57,6 +57,11 @@ main{max-width:980px;margin:0 auto;padding:24px 20px 80px}
 /* TREE */
 .tree{display:flex;flex-direction:column;gap:10px}
 
+/* DIVIDER — separates clinical specialties from operational sections */
+.tree-divider{display:flex;align-items:center;gap:10px;margin:14px 2px 2px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.9px;color:var(--text3)}
+.tree-divider::before,.tree-divider::after{content:"";flex:1;height:1px;background:var(--border)}
+.tree-divider[hidden]{display:none}
+
 .tree-section{border:1px solid var(--border);border-radius:12px;background:var(--surface);overflow:hidden;transition:border-color .15s}
 .tree-section:hover{border-color:var(--border2)}
 .tree-section[hidden]{display:none}
@@ -163,7 +168,7 @@ main{max-width:980px;margin:0 auto;padding:24px 20px 80px}
   <div class="header-inner">
     <div class="kicker">Site Map</div>
     <h1>Site Index</h1>
-    <div class="subtitle">Every page, every card — collapsible tree, deep-linked. Press <kbd style="font-family:var(--mono);background:var(--surface2);padding:1px 6px;border-radius:4px;border:1px solid var(--border)">/</kbd> to filter.</div>
+    <div class="subtitle">Organized by specialty — every card, collapsible and deep-linked. Clinical content groups by specialty (Cardiology, Neurology, OB/GYN, Peds, Surgery…); phones, staff, imaging, calculators &amp; links follow as their own sections. Press <kbd style="font-family:var(--mono);background:var(--surface2);padding:1px 6px;border-radius:4px;border:1px solid var(--border)">/</kbd> to filter.</div>
   </div>
 </header>
 
@@ -193,24 +198,129 @@ main{max-width:980px;margin:0 auto;padding:24px 20px 80px}
 // live filter and per-section persistence.
 
 (function () {
-  // Page meta — order here = display order in the tree.
-  const PAGES = [
-    ['algorithms.html',         '🔀', 'Algorithms'],
-    ['service-agreements.html', '🤝', 'Service Agreements'],
-    ['hospital-protocols.html', '🏥', 'Hospital Protocols'],
-    ['ed-phone-directory.html', '📞', 'Phone Directory'],
-    ['dotphrase.html',          '📋', 'Dotphrases'],
-    ['calculators.html',        '🧮', 'Calculators'],
-    ['rsi.html',                '🚨', 'Resuscitation (RSI / Vasopressors)'],
-    ['neurohub.html',           '🧠', 'Neuro Hub'],
-    ['pedsfever.html',          '🌡️', 'Peds Fever'],
-    ['links.html',              '🔗', 'Quick Links'],
-    ['vertigo-helper.html',     '🌀', 'Vertigo Helper'],
-    ['mdm.html',                '🧾', 'MDM Builder'],
-    ['mdm-slash.html',          '⌨️', 'Slash Editor'],
+  // ── Specialty taxonomy — display order in the tree. Clinical
+  //    specialties first, then operational / reference sections (the
+  //    hybrid layout: clinical content buckets by specialty; phones,
+  //    staff, imaging, calculators, links stay as their own sections). ──
+  const SECTIONS = [
+    { key:'peds',     ico:'🧒', label:'Pediatrics' },
+    { key:'cards',    ico:'🫀', label:'Cardiology / Vascular' },
+    { key:'pulm',     ico:'🫁', label:'Pulmonary / Respiratory' },
+    { key:'neuro',    ico:'🧠', label:'Neurology' },
+    { key:'gi',       ico:'🍽️', label:'GI / Abdominal' },
+    { key:'renal',    ico:'🧪', label:'Renal / Endocrine / Metabolic' },
+    { key:'id',       ico:'🦠', label:'Infectious Disease' },
+    { key:'heme',     ico:'🩸', label:'Hematology / Oncology' },
+    { key:'tox',      ico:'☠️', label:'Toxicology / Environmental' },
+    { key:'obgyn',    ico:'🤰', label:'OB / GYN' },
+    { key:'uro',      ico:'💧', label:'Urology / GU' },
+    { key:'surg',     ico:'🔪', label:'Surgery / Trauma / Ortho' },
+    { key:'optho',    ico:'👁️', label:'Ophthalmology' },
+    { key:'ent',      ico:'👂', label:'ENT / Head & Neck' },
+    { key:'derm',     ico:'🩹', label:'Dermatology / Wound' },
+    { key:'psych',    ico:'💬', label:'Psychiatry / Behavioral' },
+    { key:'legal',    ico:'⚖️', label:'Consent, Legal & Disposition' },
+    { key:'general',  ico:'🩺', label:'General / Reference' },
+    { key:'opsproto', ico:'🏥', label:'ED Operations & Workflow', groupHeader:'Tools & Reference' },
+    { key:'calc',     ico:'🧮', label:'Calculators & Scores' },
+    { key:'meds',     ico:'💉', label:'Resuscitation Meds (RSI / Vasopressors)' },
+    { key:'imaging',  ico:'🩻', label:'Imaging Order Sets' },
+    { key:'phone',    ico:'📞', label:'Phone Directory' },
+    { key:'staff',    ico:'👥', label:'Key Staff' },
+    { key:'links',    ico:'🔗', label:'Quick Links' },
+    { key:'tools',    ico:'🧰', label:'Site & Tools' },
   ];
 
-  const STORAGE_KEY = 'er_doc_sitemap_state_v1';
+  // Ordered keyword rules — first match wins. Matched against the entry
+  // TITLE first (most specific), then title+keywords+group as a fallback.
+  // Title-first avoids cross-contamination from shared dotphrase keyword
+  // blobs (e.g. every "Chest Pain" rule-out shares chest-pain keywords).
+  const RULES = [
+    ['peds',  /\bpeds|\bpediatric|\bpaediatric|\bchild|\binfant|\bneonat|\bnewborn|\bkppc|bronchiolitis|\bcroup|febrile infant/i],
+    ['obgyn', /\bob\b|\bobgyn|ob\/gyn|\bobstetr|\bgynec|\bpregnan|\bgestat|vaginal bleed|first trimester|\bectopic|preeclamps|\beclampsia|miscarriage|\babortion|emergency contracep|\bmastitis|vulvovagin|\bcandida|\bmenstr|\bpelvic|postpartum|\bhellp\b|placental/i],
+    ['uro',   /\burolog|\bgu\b|\buti\b|\burinary|\bhematuria|renal colic|nephrolith|kidney stone|\bureter|\bprostate|\btestic|\btorsion|\bscrotal|epididym|\bfoley|\bbladder|fournier|priapism|ovarian torsion/i],
+    ['tox',   /\btox|\boverdose|\bpoison|\bingestion|\bantidote|naloxone|withdrawal|\betoh\b|\balcohol|salicylate|envenom|snakebite|crotal|pit viper|carbon monoxide|serotonin syndrome|anticholinergic|toxidrome|heat stroke|heat illness|hyperthermia|hypothermia|opioid/i],
+    ['cards', /\bcardio|\bcardiac|chest pain|\bacs\b|\bstemi|\bnstemi|\btroponin|\bheart|\bafib|atrial fib|a-?fib|\bflutter|\bsvt\b|bradycard|tachycard|palpitation|\bsyncope|hypertens|\bhtn\b|\baortic|dissection|aneurysm|\baaa\b|\bdvt\b|pulmonary embol|\bpe\b|\bvte\b|pericard|myocard|\bchf\b|heart failure|\bwells|\bperc\b|heart score|cardiovers|limb ischemia/i],
+    ['pulm',  /\bpulmonary|\brespiratory|\basthma|\bcopd|\bpneumonia|\bpna\b|bronchospasm|\bairway|\bdyspnea|\bsob\b|\bhypox|pneumothorax|pneumomediastinum|hemoptysis|\bpleural|\bbipap|thoracent|anaphylaxis|angioedema|aspiration/i],
+    ['neuro', /\bneuro|\bstroke|\btia\b|\bseizure|\bepilep|\bheadache|\bmigraine|\bvertigo|\bdizz|\bich\b|intracran|\btpa\b|tenecteplase|\bsah\b|subarachnoid|encephalo|bell'?s palsy|\bweakness|altered mental|\bams\b|\bdelirium|papilledema|\bnihss|wernicke|cauda equina|guillain|spinal cord|cerebral venous/i],
+    ['id',    /\binfect|\bsepsis|\bseptic|cellulitis|\babscess|\bmrsa\b|antibiotic|\babx\b|\bcovid|influenza|\bflu\b|\bsti\b|\bstd\b|syphilis|gonorrh|chlamyd|\bhiv\b|\bprep\b|\bpep\b|tubercul|\btb\b|\bmalaria|\bmeasles|pertussis|meningitis|necrotizing fasc|\brabies|tetanus|\bherpes|\bzoster|diarrhea|\bc\.? ?diff|ludwig|deep space neck|mastoiditis|osteomyelitis|endocarditis|lemierre|arteritis|\bgca\b/i],
+    ['heme',  /\bhemat|\bheme\b|\banemia|sickle|transfus|anticoag|\bdoac|warfarin|coagulopath|\binr\b|thrombocyt|platelet|\bonc\b|\bcancer|malignan|neutropen|tumor lysis|hyperviscosity|hemorrhage protocol|blood product/i],
+    ['gi',    /\bgastro|\babdomin|abd pain|appendic|cholecyst|gallbladder|pancreat|diverticul|\bbowel|\bgib\b|gi bleed|hematemesis|\bmelena|\bhepat|\bliver|cirrho|\bascites|\bnausea|\bvomit|constipation|\bsbo\b|esophag|\bgerd|\bibd\b|\bcolitis|anorectal|hemorrhoid|paracent|mesenteric|epigastric|perforation/i],
+    ['renal', /\brenal|\baki\b|\bckd\b|dialysis|electrolyt|hyperkal|hypokal|hyponatr|hypernatr|hypercalc|\bdka\b|\bhhs\b|hyperglyc|hypoglyc|\bdiabet|endocrine|\bthyroid|\badrenal|\bmetabolic|rhabdo|myxedema|thyroid storm/i],
+    ['optho', /\bophthal|\bocular|\beye\b|red eye|\bvision|\bvisual|\bflashes|\bfloaters|\borbital|\bretina|\bcornea|glaucoma|\bcrao\b/i],
+    ['ent',   /\bent\b|otolaryng|head ?& ?neck|head and neck|epistax|nosebleed|\bnasal|\bsinus|pharyng|\btonsil|\bthroat|\botitis|\bear\b|\bdental|peritonsil|hoarse|dysphagia|rhinitis/i],
+    ['derm',  /\bderm|\brash|\bskin\b|\bwound|\bulcer|\bburn|sunburn|urticaria|\bhives|laceration|insect|\bsting|arthropod/i],
+    ['psych', /\bpsych|behavioral|suicid|homicid|\bdepress|\banxiety|\bgad\b|agitat|restraint|\b5150\b|mental health|substance use|bipolar|schizo|excited delirium/i],
+    ['surg',  /\btrauma|\bsurg|\bfracture|\bortho|orthopedic|dislocat|\btendon|jersey finger|\bsprain|\bmsk\b|musculoskelet|back pain|neck pain|coccyd|compartment|\bhernia|\bgout|\bjoint|arthr|bariatric|scaphoid|lisfranc|sciwora/i],
+    ['legal', /\bconsent|\blegal|forensic|\bsane\b|sexual assault|elder abuse|capacity|\bama\b|against medical advice|emtala|\bsnf\b|guardian|\bdpa\b|advance directive|polst|chaperone|return precaution|domestic violence/i],
+  ];
+  // ED operations / workflow — non-clinical protocols that shouldn't force
+  // into a specialty (NEDOCS, throughput, transfers, sign-out, etc.).
+  const OPSPROTO = /transfer|operations|\bnedocs|throughput|sign-?out|inbasket|assignment|\bpsg\b|safety net|primary care & em|shared.*care|non-?member|last hour|safe prescribing|\bscope\b|placement|disposition|epic downtime|overnight ir|md-rn/i;
+
+  function tryRules(text) {
+    for (const [k, re] of RULES) { if (re.test(text)) return k; }
+    return null;
+  }
+  function classifyClinical(e) {
+    const t = (e.t || '').toLowerCase();
+    let k = tryRules(t);
+    if (k) return k;                                            // title-first
+    const h = (t + ' ' + (e.s || '') + ' ' + (e.g || '')).toLowerCase();
+    k = tryRules(h);
+    if (k) return k;                                            // keyword fallback
+    if (OPSPROTO.test(h) || /hospital protocol/i.test(e.g || '')) return 'opsproto';
+    return 'general';
+  }
+  // Map an entry to its section key. Operational types route by `type`;
+  // clinical entries are classified by content.
+  function classify(e) {
+    const path = (e.u || '').split('#')[0].split('?')[0];
+    if (e.type === 'phone')   return 'phone';
+    if (e.type === 'staff')   return 'staff';
+    if (e.type === 'imaging') return 'imaging';
+    if (e.type === 'calc')    return 'calc';
+    if (e.type === 'drug')    return 'meds';
+    if (e.type === 'link')    return 'links';
+    if (e.type === 'page') {
+      if (path === 'pedsfever.html')      return 'peds';
+      if (path === 'vertigo-helper.html') return 'neuro';
+      return 'tools';
+    }
+    return classifyClinical(e);
+  }
+
+  // Friendly "where it lives" label — used as the sub-group within a section.
+  function sourceLabel(e) {
+    const p = (e.u || '').split('#')[0].split('?')[0];
+    switch (p) {
+      case 'dotphrase.html':         return 'Dotphrases';
+      case 'algorithms.html':        return 'Algorithms';
+      case 'hospital-protocols.html':return 'Hospital Protocols';
+      case 'neurohub.html':          return 'Neuro Hub';
+      case 'pedsfever.html':         return 'Peds Fever Protocol';
+      case 'calculators.html':       return 'Calculators';
+      case 'rsi.html':               return 'RSI Medications';
+      case 'vasopressors.html':      return 'Vasopressors';
+      case 'ed-phone-directory.html':return e.g || 'Phone Directory';
+      case 'links.html':             return 'Quick Links';
+      case 'vertigo-helper.html':    return 'Vertigo Helper';
+      case 'mdm.html':
+      case 'mdm-slash.html':         return 'MDM Builder';
+      case 'service-agreements.html': {
+        const g = e.g || '';
+        if (/urgent care/i.test(g))       return 'Urgent Care';
+        if (/consent/i.test(g))           return 'Consent';
+        if (/kaiser/i.test(g))            return 'Kaiser Docs';
+        if (/hospital protocol/i.test(g)) return 'Hospital Protocols';
+        if (/service agreement/i.test(g)) return 'Service Agreements';
+        return 'Agreements & Reference';
+      }
+      default: return e.g || 'Other';
+    }
+  }
+
+  const STORAGE_KEY = 'er_doc_sitemap_state_v2';
 
   function loadState() {
     try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); }
@@ -227,37 +337,29 @@ main{max-width:980px;margin:0 auto;padding:24px 20px 80px}
       console.warn('SEARCH_INDEX not loaded');
       return [];
     }
-    // Bucket entries by source page. We include type:'page' entries because
-    // some pages-as-tools (e.g. pedsfever.html) describe their sub-sections
-    // with type:'page' rows — those are real content, not meta. We DO skip
-    // bare meta-page rows that just point at the page itself with no anchor
-    // when ANOTHER entry already covers the same URL — those are dupes.
-    const byPath = new Map();
+    // Dedupe exact (url + title) duplicates, then bucket every entry into
+    // its section (specialty for clinical content, functional category for
+    // operational content).
+    const seen = new Set();
+    const byKey = new Map();
     for (const e of SEARCH_INDEX) {
       if (!e || !e.u) continue;
-      if (e.u.startsWith('http://') || e.u.startsWith('https://')) continue;
-      const path = e.u.split('#')[0].split('?')[0];
-      if (!path) continue;
-      if (!byPath.has(path)) byPath.set(path, []);
-      byPath.get(path).push(e);
-    }
-    // Drop the obvious self-meta entry: when a page has many entries AND one
-    // of them is a no-anchor type:'page' row, that one's a dupe of the
-    // section header — strip it.
-    for (const [p, arr] of byPath) {
-      if (arr.length <= 1) continue;
-      const meta = arr.findIndex(e => e.type === 'page' && !e.u.includes('#'));
-      if (meta >= 0) arr.splice(meta, 1);
+      const id = e.u + ' ' + (e.t || '');
+      if (seen.has(id)) continue;
+      seen.add(id);
+      const k = classify(e);
+      if (!byKey.has(k)) byKey.set(k, []);
+      byKey.get(k).push(e);
     }
 
     const sections = [];
-    for (const [path, ico, label] of PAGES) {
-      const entries = byPath.get(path);
+    for (const def of SECTIONS) {
+      const entries = byKey.get(def.key);
       if (!entries || !entries.length) continue;
-      // Sub-group by `g` field; alphabetize within each group.
+      // Sub-group by source ("where it lives"); alphabetize within each group.
       const groupsMap = new Map();
       for (const e of entries) {
-        const g = e.g || 'Other';
+        const g = sourceLabel(e);
         if (!groupsMap.has(g)) groupsMap.set(g, []);
         groupsMap.get(g).push(e);
       }
@@ -267,7 +369,10 @@ main{max-width:980px;margin:0 auto;padding:24px 20px 80px}
           items: items.slice().sort((a, b) => (a.t || '').localeCompare(b.t || ''))
         }))
         .sort((a, b) => a.name.localeCompare(b.name));
-      sections.push({ path, ico, label, total: entries.length, groups });
+      sections.push({
+        key: def.key, ico: def.ico, label: def.label,
+        groupHeader: def.groupHeader, total: entries.length, groups
+      });
     }
     return sections;
   }
@@ -322,20 +427,22 @@ main{max-width:980px;margin:0 auto;padding:24px 20px 80px}
       totalShown += secCount;
       sectionsShown++;
 
-      const sectionOpen = q ? true : (STATE[sec.path] === true);
+      const sectionOpen = q ? true : (STATE[sec.key] === true);
       const countCls = (q && secCount !== sec.total) ? ' filtered' : '';
       const countTxt = (q && secCount !== sec.total)
         ? `${secCount} / ${sec.total}`
         : String(sec.total);
 
+      // Visual divider introducing the operational / reference sections.
+      if (sec.groupHeader) parts.push(`<div class="tree-divider">${escapeHtml(sec.groupHeader)}</div>`);
+
       parts.push(
-        `<div class="tree-section${sectionOpen ? ' open' : ''}" data-path="${escapeHtml(sec.path)}" role="treeitem" aria-expanded="${sectionOpen}">`,
+        `<div class="tree-section${sectionOpen ? ' open' : ''}" data-key="${escapeHtml(sec.key)}" role="treeitem" aria-expanded="${sectionOpen}">`,
           `<div class="tree-section-head" data-toggle="section">`,
             `<span class="tree-twirl" aria-hidden="true">▶</span>`,
             `<span class="tree-section-ico">${sec.ico}</span>`,
             `<span class="tree-section-title">${escapeHtml(sec.label)}</span>`,
             `<span class="tree-count${countCls}">${countTxt}</span>`,
-            `<a class="tree-page-link" href="${escapeHtml(sec.path)}" data-pagelink>Open page →</a>`,
           `</div>`,
           `<div class="tree-section-body" role="group">`
       );
@@ -358,7 +465,7 @@ main{max-width:980px;margin:0 auto;padding:24px 20px 80px}
         }
       } else {
         for (const g of filteredGroups) {
-          const groupKey = sec.path + '::' + g.name;
+          const groupKey = sec.key + '::' + g.name;
           const groupOpen = q ? true : (STATE[groupKey] === true);
           parts.push(
             `<div class="tree-group${groupOpen ? ' open' : ''}" data-key="${escapeHtml(groupKey)}" role="treeitem" aria-expanded="${groupOpen}">`,
@@ -407,11 +514,11 @@ main{max-width:980px;margin:0 auto;padding:24px 20px 80px}
     const sectionHead = e.target.closest('[data-toggle="section"]');
     if (sectionHead) {
       const section = sectionHead.parentElement;
-      const path = section.dataset.path;
+      const key = section.dataset.key;
       const wasOpen = section.classList.contains('open');
       section.classList.toggle('open');
       section.setAttribute('aria-expanded', String(!wasOpen));
-      STATE[path] = !wasOpen;
+      STATE[key] = !wasOpen;
       saveState(STATE);
       return;
     }
@@ -451,8 +558,8 @@ main{max-width:980px;margin:0 auto;padding:24px 20px 80px}
 
   document.getElementById('expandAll').addEventListener('click', () => {
     for (const sec of TREE) {
-      STATE[sec.path] = true;
-      for (const g of sec.groups) STATE[sec.path + '::' + g.name] = true;
+      STATE[sec.key] = true;
+      for (const g of sec.groups) STATE[sec.key + '::' + g.name] = true;
     }
     saveState(STATE);
     render(filterInput.value);
@@ -460,8 +567,8 @@ main{max-width:980px;margin:0 auto;padding:24px 20px 80px}
 
   document.getElementById('collapseAll').addEventListener('click', () => {
     for (const sec of TREE) {
-      STATE[sec.path] = false;
-      for (const g of sec.groups) STATE[sec.path + '::' + g.name] = false;
+      STATE[sec.key] = false;
+      for (const g of sec.groups) STATE[sec.key + '::' + g.name] = false;
     }
     saveState(STATE);
     render(filterInput.value);
