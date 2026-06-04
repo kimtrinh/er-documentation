@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="stylesheet" href="theme.css?v=2"/>
+<title>CMR Reporting — CDPH 110c — KP SBC ED Toolkit</title>
+<meta name="description" content="Confidential Morbidity Report (CDPH 110c) — embedded printable form plus county public-health fax numbers for San Bernardino, Los Angeles, Riverside, Orange, and San Diego counties."/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#080f1a;--surface:#0d1829;--surface2:#111f35;--surface3:#162540;--border:#1a2d48;--border2:#243d5c;--text:#e8f0fc;--text2:#8fa8c8;--text3:#4a6280;--text-blue:#93c5fd;--text-blue-bright:#bfdbfe;--blue:#3b82f6;--blue2:#1d4ed8;--blue3:#0d2038;--green:#22c55e;--green2:#15803d;--green3:#0d2d1f;--amber:#f59e0b;--red:#ef4444;--purple:#a78bfa;--cyan:#22d3ee;}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
+
+header{background:linear-gradient(135deg,var(--surface),var(--bg));border-bottom:1px solid var(--border2);padding:24px 24px 20px}
+.header-inner{max-width:980px;margin:0 auto}
+.logo{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.logo span{font-size:24px}
+.logo h1{font-size:20px;font-weight:800;color:var(--text)}
+.subtitle{font-size:13px;color:var(--text3);margin-left:34px}
+
+main{max-width:980px;margin:0 auto;padding:28px 24px 80px}
+
+.section-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#3b82f6;margin:28px 0 12px;display:flex;align-items:center;gap:8px}
+.section-label::after{content:'';flex:1;height:1px;background:var(--surface)}
+
+/* Intro / what-is card */
+.intro{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px 20px;line-height:1.6;font-size:14px;color:var(--text2)}
+.intro strong{color:var(--text)}
+.intro .badge{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#93c5fd;background:#0d2038;border:1px solid #1d4ed8;border-radius:20px;padding:2px 10px;margin-bottom:10px}
+
+/* County fax grid */
+.fax-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.fax-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 18px}
+.fax-county{font-size:15px;font-weight:800;color:var(--text);display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.fax-county .pin{font-size:18px}
+.fax-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px}
+.fax-num{font-family:'JetBrains Mono','SF Mono',monospace;font-size:15px;font-weight:700;color:#bfdbfe;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:6px 12px;text-decoration:none;white-space:nowrap;transition:.15s}
+a.fax-num:hover{border-color:#3b82f6;background:var(--blue3);color:#fff}
+.fax-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text3);margin-bottom:4px}
+.fax-note{font-size:12px;color:var(--text3);line-height:1.5;margin-top:8px}
+.fax-warn{font-size:12px;color:var(--amber);line-height:1.5;margin-top:8px}
+
+/* PDF embed card (matches hospital-protocols pattern) */
+.pdf-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.pdf-bar{padding:12px 14px;border-bottom:1px solid var(--border);background:var(--surface2);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.pdf-bar-title{font-size:13px;font-weight:700;color:var(--text2);display:flex;align-items:center;gap:6px}
+.pdf-bar-actions{display:flex;gap:8px;flex-wrap:wrap}
+.pdf-open-link{font-size:12px;font-weight:700;color:#93c5fd;border:1px solid #1d4ed8;background:#0d2038;padding:6px 12px;border-radius:7px;text-decoration:none;white-space:nowrap;transition:.15s;cursor:pointer;display:inline-flex;align-items:center;gap:5px}
+.pdf-open-link:hover{background:#1d4ed8;color:#fff}
+.pdf-open-link.primary{color:#bbf7d0;border-color:#15803d;background:#0d2d1f}
+.pdf-open-link.primary:hover{background:#15803d;color:#fff}
+.pdf-iframe{width:100%;height:860px;border:none;background:#1a1a2e;display:block}
+.pdf-fallback{font-size:12px;color:var(--text3);padding:10px 14px;border-top:1px solid var(--border);line-height:1.5}
+
+/* ===== SHARED NEW NAV ===== */
+.sitenav{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;font-family:'DM Sans',system-ui,sans-serif}
+.sitenav-inner{max-width:1200px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:6px;height:46px;overflow:hidden}
+.nav-logo{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:#3b82f6;white-space:nowrap;flex-shrink:0;text-decoration:none;margin-right:6px}
+.nav-logo span{color:var(--text3)}
+.nav-links{display:flex;flex:1;min-width:0;gap:1px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;white-space:nowrap;padding-right:10px}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-link{padding:5px 10px;border-radius:6px;font-size:12px;font-weight:600;color:var(--text2);text-decoration:none;white-space:nowrap;transition:all .15s}
+.nav-link:hover{background:var(--surface2);color:var(--text)}
+.nav-link.active{background:#1d4ed8;color:#fff}
+@media(max-width:640px){.nav-link{font-size:11px;padding:4px 8px}}
+@keyframes pgFade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+main>*{animation:pgFade .3s ease both}
+main>*:nth-child(2){animation-delay:.05s}
+main>*:nth-child(3){animation-delay:.1s}
+main>*:nth-child(4){animation-delay:.15s}
+.nav-more{position:relative;flex-shrink:0}
+.nav-more-btn{padding:5px 10px;border-radius:6px;font-size:12px;font-weight:600;color:var(--text2);background:transparent;border:0;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:4px;font-family:inherit;line-height:1;white-space:nowrap}
+.nav-more-btn:hover,.nav-more.open .nav-more-btn{background:var(--surface2);color:var(--text)}
+.nav-more-btn.active{background:#1d4ed8;color:#fff}
+.nav-more-btn .chev{font-size:9px;opacity:.6;transition:transform .15s}
+.nav-more.open .nav-more-btn .chev{transform:rotate(180deg);opacity:1}
+.nav-more-menu{position:absolute;top:calc(100% + 6px);right:0;background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:6px;min-width:200px;box-shadow:0 12px 32px rgba(0,0,0,.5);display:none;z-index:200}
+.nav-more.open .nav-more-menu{display:block}
+.nav-more-menu .nav-link{display:block;padding:7px 10px;border-radius:6px;font-size:12px;white-space:nowrap}
+.sitenav,.sitenav-inner{overflow:visible}
+
+/* ===== PRINT ===== */
+@media print{
+  .sitenav,#theme-toggle,.pdf-bar-actions,.print-hint{display:none!important}
+  body{background:#fff;color:#000}
+  header{background:#fff;border-bottom:1px solid #000}
+  .logo h1,.fax-county,.intro strong{color:#000}
+  .subtitle,.fax-label,.fax-note,.intro{color:#222}
+  .intro,.fax-card,.pdf-card{border:1px solid #999;break-inside:avoid;page-break-inside:avoid;background:#fff}
+  .fax-num{color:#000;background:#fff;border:1px solid #999}
+  .section-label{color:#000}
+  .pdf-iframe{display:none}      /* the embedded gov PDF prints from its own viewer, not this page */
+  .pdf-fallback{color:#000}
+  main{padding:0}
+  main>*{animation:none}
+}
+</style>
+<link rel="stylesheet" href="mobile.css">
+<script>document.documentElement.setAttribute('data-theme',localStorage.getItem('theme')||'dark');</script>
+<link rel="manifest" href="/manifest.json">
+</head>
+<body>
+<nav class="sitenav">
+  <div class="sitenav-inner">
+    <a class="nav-logo" href="index.html">⚡</a>
+            <div class="nav-links">
+      <a class="nav-link" href="index.html">🏠 Home</a>
+      <a class="nav-link" href="algorithms.html">🔀 Algorithms</a>
+      <a class="nav-link" href="service-agreements.html">🤝 Agreements</a>
+      <a class="nav-link" href="hospital-protocols.html">🏥 Protocols</a>
+      <a class="nav-link" href="ed-phone-directory.html">📞 Directory</a>
+      <a class="nav-link" href="service-requests.html">📋 Requests</a>
+      <a class="nav-link" href="links.html">🔗 Links</a>
+      <a class="nav-link" href="sitemap.html">📑 Index</a>
+      <div class="nav-more" data-nav-more>
+        <button type="button" class="nav-more-btn active" aria-haspopup="menu" aria-expanded="false" aria-label="More navigation">⋯ More <span class="chev" aria-hidden="true">▾</span></button>
+        <div class="nav-more-menu" role="menu">
+      <a class="nav-link active" href="cmr-reporting.html" role="menuitem">🦠 CMR Reporting</a>
+      <a class="nav-link" href="dotphrase.html" role="menuitem">🧾 Documentation</a>
+      <a class="nav-link" href="calculators.html" role="menuitem">🧮 Decision Support</a>
+      <a class="nav-link" href="rsi.html" role="menuitem">🚨 Resuscitation</a>
+      <a class="nav-link" href="neurohub.html" role="menuitem">🧠 Neuro Hub</a>
+      <a class="nav-link" href="changelog.html" role="menuitem">🆕 What's New</a>
+        </div>
+      </div>
+    </div></div>
+</nav>
+<header>
+  <div class="header-inner">
+    <div class="logo"><span>🦠</span><h1>CMR Reporting — CDPH 110c</h1></div>
+    <p class="subtitle">Confidential Morbidity Report · embedded printable form &amp; county public-health fax numbers</p>
+  </div>
+</header>
+
+<main>
+
+  <div id="about" class="section-label">About</div>
+  <div class="intro">
+    <span class="badge">CDPH 110c</span>
+    <p>The <strong>Confidential Morbidity Report (CMR), CDPH 110c</strong>, is the California Department of Public Health
+    form used by clinicians to report a <strong>reportable communicable disease or condition</strong> to the
+    <strong>local health department of the patient's county of residence</strong>. Complete the form and
+    <strong>fax it to the patient's county</strong> using the numbers below. Title 17 CCR sets reporting timeframes
+    (immediate / one working day / seven days) depending on the condition.</p>
+    <p class="fax-note">⚠️ The CMR contains protected health information (PHI). Confirm the destination fax number before sending,
+    use a cover sheet, and follow your facility's confidential-fax policy.</p>
+  </div>
+
+  <div id="county-fax" class="section-label">📠 County Public-Health Fax Numbers</div>
+  <div class="fax-grid">
+
+    <div class="fax-card" id="fax-sbc">
+      <div class="fax-county"><span class="pin">📍</span> San Bernardino County</div>
+      <div class="fax-label">Fax the completed form to</div>
+      <div class="fax-row">
+        <a class="fax-num" href="tel:+19093818474">(909) 381-8474</a>
+        <a class="fax-num" href="tel:+19093876377">(909) 387-6377</a>
+      </div>
+    </div>
+
+    <div class="fax-card" id="fax-la">
+      <div class="fax-county"><span class="pin">📍</span> Los Angeles County</div>
+      <div class="fax-label">Fax</div>
+      <div class="fax-row">
+        <a class="fax-num" href="tel:+18883973778">1-888-397-3778</a>
+        <a class="fax-num" href="tel:+12134825508">(213) 482-5508</a>
+      </div>
+    </div>
+
+    <div class="fax-card" id="fax-riverside">
+      <div class="fax-county"><span class="pin">📍</span> Riverside County</div>
+      <div class="fax-label">Fax</div>
+      <div class="fax-row">
+        <a class="fax-num" href="tel:+19513585102">(951) 358-5102</a>
+      </div>
+    </div>
+
+    <div class="fax-card" id="fax-orange">
+      <div class="fax-county"><span class="pin">📍</span> Orange County</div>
+      <div class="fax-label">Fax number</div>
+      <div class="fax-row">
+        <a class="fax-num" href="tel:+17145644050">(714) 564-4050</a>
+      </div>
+      <div class="fax-note">Orange County Epidemiology &amp; Assessment Unit</div>
+    </div>
+
+    <div class="fax-card" id="fax-sandiego">
+      <div class="fax-county"><span class="pin">📍</span> San Diego County</div>
+      <div class="fax-label">Fax number</div>
+      <div class="fax-row">
+        <a class="fax-num" href="tel:+18587156458">(858) 715-6458</a>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="form" class="section-label">📄 CDPH 110c Form</div>
+  <div class="pdf-card">
+    <div class="pdf-bar">
+      <div class="pdf-bar-title"><span>🦠</span> Confidential Morbidity Report (CDPH 110c)</div>
+      <div class="pdf-bar-actions">
+        <a class="pdf-open-link primary" href="https://www.cdph.ca.gov/CDPH%20Document%20Library/ControlledForms/cdph110c.pdf" target="_blank" rel="noopener">🖨️ Open / Print</a>
+        <a class="pdf-open-link" href="https://www.cdph.ca.gov/CDPH%20Document%20Library/ControlledForms/cdph110c.pdf" download target="_blank" rel="noopener">⬇️ Download</a>
+      </div>
+    </div>
+    <iframe class="pdf-iframe" src="https://www.cdph.ca.gov/CDPH%20Document%20Library/ControlledForms/cdph110c.pdf" title="CDPH 110c — Confidential Morbidity Report" loading="lazy"></iframe>
+    <div class="pdf-fallback print-hint">
+      If the form does not display above, use <strong>🖨️ Open / Print</strong> to open the official CDPH PDF in a new
+      tab, then print from your browser's PDF viewer. Source:
+      <a class="fax-num" style="font-size:12px;padding:2px 8px" href="https://www.cdph.ca.gov/CDPH%20Document%20Library/ControlledForms/cdph110c.pdf" target="_blank" rel="noopener">cdph.ca.gov · cdph110c.pdf</a>
+    </div>
+  </div>
+
+</main>
+
+<script src="search-index.js?v=5"></script>
+
+<button id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">☀️</button>
+<script src="theme.js?v=3"></script>
+<script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
+<script src="analytics.js"></script>
+<script>
+// Sitenav "⋯ More ▾" overflow dropdown — open on click, close on
+// outside-click or Escape. Same behavior as every other page.
+(function () {
+  const hosts = document.querySelectorAll('[data-nav-more]');
+  if (!hosts.length) return;
+  hosts.forEach(host => {
+    const btn = host.querySelector('.nav-more-btn');
+    if (!btn) return;
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const open = host.classList.toggle('open');
+      btn.setAttribute('aria-expanded', String(open));
+    });
+  });
+  document.addEventListener('click', () => {
+    document.querySelectorAll('[data-nav-more].open').forEach(h => {
+      h.classList.remove('open');
+      const b = h.querySelector('.nav-more-btn');
+      if (b) b.setAttribute('aria-expanded', 'false');
+    });
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    document.querySelectorAll('[data-nav-more].open').forEach(h => {
+      h.classList.remove('open');
+      const b = h.querySelector('.nav-more-btn');
+      if (b) b.setAttribute('aria-expanded', 'false');
+    });
+  });
+})();
+</script>
+</body>
+</html>
