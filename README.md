@@ -16,6 +16,7 @@ Static HTML tools for emergency medicine documentation and quick bedside calcula
 - `service-agreements.html`: searchable service-agreement summary library
 - `links.html`: curated external references
 - `cmr-reporting.html`: Confidential Morbidity Report / "DMV reporting form" (CDPH 110c) — embedded printable form and county public-health fax numbers
+- `animal-bite-reporting.html`: animal bite / rabies reporting (17 CCR §2606) — SBC Animal Care contacts and official resources
 - `roadmap.html`: feature roadmap and suggestions
 
 ## Run Locally

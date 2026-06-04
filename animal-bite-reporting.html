@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="stylesheet" href="theme.css?v=2"/>
+<title>Animal Bite / Rabies Reporting — SBC — KP SBC ED Toolkit</title>
+<meta name="description" content="How to report an animal bite in San Bernardino County (17 CCR §2606) — local health officer / Animal Care contacts, rabies guidance, and official resources for ED clinicians."/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#080f1a;--surface:#0d1829;--surface2:#111f35;--surface3:#162540;--border:#1a2d48;--border2:#243d5c;--text:#e8f0fc;--text2:#8fa8c8;--text3:#4a6280;--text-blue:#93c5fd;--text-blue-bright:#bfdbfe;--blue:#3b82f6;--blue2:#1d4ed8;--blue3:#0d2038;--green:#22c55e;--green2:#15803d;--green3:#0d2d1f;--amber:#f59e0b;--red:#ef4444;--purple:#a78bfa;--cyan:#22d3ee;}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
+
+header{background:linear-gradient(135deg,var(--surface),var(--bg));border-bottom:1px solid var(--border2);padding:24px 24px 20px}
+.header-inner{max-width:980px;margin:0 auto}
+.logo{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.logo span{font-size:24px}
+.logo h1{font-size:20px;font-weight:800;color:var(--text)}
+.subtitle{font-size:13px;color:var(--text3);margin-left:34px}
+
+main{max-width:980px;margin:0 auto;padding:28px 24px 80px}
+
+.section-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#3b82f6;margin:28px 0 12px;display:flex;align-items:center;gap:8px}
+.section-label::after{content:'';flex:1;height:1px;background:var(--surface)}
+
+.intro{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px 20px;line-height:1.6;font-size:14px;color:var(--text2)}
+.intro strong{color:var(--text)}
+.intro .badge{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#93c5fd;background:#0d2038;border:1px solid #1d4ed8;border-radius:20px;padding:2px 10px;margin-bottom:10px}
+
+.fax-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.fax-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 18px}
+.fax-county{font-size:15px;font-weight:800;color:var(--text);display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.fax-county .pin{font-size:18px}
+.fax-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px}
+.fax-num{font-family:'JetBrains Mono','SF Mono',monospace;font-size:15px;font-weight:700;color:#bfdbfe;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:6px 12px;text-decoration:none;white-space:nowrap;transition:.15s}
+a.fax-num:hover{border-color:#3b82f6;background:var(--blue3);color:#fff}
+.fax-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text3);margin-bottom:4px}
+.fax-note{font-size:12px;color:var(--text3);line-height:1.5;margin-top:8px}
+.fax-warn{font-size:12px;color:var(--amber);line-height:1.5;margin-top:8px}
+.fax-sublabel{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text3);margin:12px 0 4px}
+.fax-card .pdf-open-link{white-space:normal;margin-top:6px}
+
+/* link/resource button (reused from CMR page pattern) */
+.pdf-open-link{font-size:12px;font-weight:700;color:#93c5fd;border:1px solid #1d4ed8;background:#0d2038;padding:6px 12px;border-radius:7px;text-decoration:none;white-space:nowrap;transition:.15s;cursor:pointer;display:inline-flex;align-items:center;gap:5px}
+.pdf-open-link:hover{background:#1d4ed8;color:#fff}
+.pdf-open-link.primary{color:#bbf7d0;border-color:#15803d;background:#0d2d1f}
+.pdf-open-link.primary:hover{background:#15803d;color:#fff}
+
+/* checklist / reminders card */
+.reminders{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px 20px;font-size:14px;line-height:1.6;color:var(--text2)}
+.reminders ul{margin:6px 0 0 18px}
+.reminders li{margin-bottom:6px}
+.reminders strong{color:var(--text)}
+
+.res-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.res-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;text-decoration:none;color:inherit;display:flex;align-items:flex-start;gap:12px;transition:.2s}
+.res-card:hover{border-color:#3b82f6;background:var(--border2);transform:translateY(-1px)}
+.res-ico{font-size:22px;flex-shrink:0}
+.res-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:2px}
+.res-desc{font-size:12px;color:var(--text3);line-height:1.5}
+
+/* ===== SHARED NEW NAV ===== */
+.sitenav{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;font-family:'DM Sans',system-ui,sans-serif}
+.sitenav-inner{max-width:1200px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:6px;height:46px;overflow:hidden}
+.nav-logo{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:#3b82f6;white-space:nowrap;flex-shrink:0;text-decoration:none;margin-right:6px}
+.nav-logo span{color:var(--text3)}
+.nav-links{display:flex;flex:1;min-width:0;gap:1px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;white-space:nowrap;padding-right:10px}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-link{padding:5px 10px;border-radius:6px;font-size:12px;font-weight:600;color:var(--text2);text-decoration:none;white-space:nowrap;transition:all .15s}
+.nav-link:hover{background:var(--surface2);color:var(--text)}
+.nav-link.active{background:#1d4ed8;color:#fff}
+@media(max-width:640px){.nav-link{font-size:11px;padding:4px 8px}}
+@keyframes pgFade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+main>*{animation:pgFade .3s ease both}
+main>*:nth-child(2){animation-delay:.05s}
+main>*:nth-child(3){animation-delay:.1s}
+main>*:nth-child(4){animation-delay:.15s}
+.nav-more{position:relative;flex-shrink:0}
+.nav-more-btn{padding:5px 10px;border-radius:6px;font-size:12px;font-weight:600;color:var(--text2);background:transparent;border:0;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:4px;font-family:inherit;line-height:1;white-space:nowrap}
+.nav-more-btn:hover,.nav-more.open .nav-more-btn{background:var(--surface2);color:var(--text)}
+.nav-more-btn.active{background:#1d4ed8;color:#fff}
+.nav-more-btn .chev{font-size:9px;opacity:.6;transition:transform .15s}
+.nav-more.open .nav-more-btn .chev{transform:rotate(180deg);opacity:1}
+.nav-more-menu{position:absolute;top:calc(100% + 6px);right:0;background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:6px;min-width:200px;box-shadow:0 12px 32px rgba(0,0,0,.5);display:none;z-index:200}
+.nav-more.open .nav-more-menu{display:block}
+.nav-more-menu .nav-link{display:block;padding:7px 10px;border-radius:6px;font-size:12px;white-space:nowrap}
+.sitenav,.sitenav-inner{overflow:visible}
+
+/* ===== PRINT ===== */
+@media print{
+  .sitenav,#theme-toggle{display:none!important}
+  body{background:#fff;color:#000}
+  header{background:#fff;border-bottom:1px solid #000}
+  .logo h1,.fax-county,.intro strong,.reminders strong,.res-title{color:#000}
+  .subtitle,.fax-label,.fax-note,.intro,.reminders,.res-desc{color:#222}
+  .intro,.fax-card,.reminders,.res-card{border:1px solid #999;break-inside:avoid;page-break-inside:avoid;background:#fff}
+  .fax-num{color:#000;background:#fff;border:1px solid #999}
+  .section-label{color:#000}
+  main{padding:0}
+  main>*{animation:none}
+}
+</style>
+<link rel="stylesheet" href="mobile.css">
+<script>document.documentElement.setAttribute('data-theme',localStorage.getItem('theme')||'dark');</script>
+<link rel="manifest" href="/manifest.json">
+</head>
+<body>
+<nav class="sitenav">
+  <div class="sitenav-inner">
+    <a class="nav-logo" href="index.html">⚡</a>
+            <div class="nav-links">
+      <a class="nav-link" href="index.html">🏠 Home</a>
+      <a class="nav-link" href="algorithms.html">🔀 Algorithms</a>
+      <a class="nav-link" href="service-agreements.html">🤝 Agreements</a>
+      <a class="nav-link" href="hospital-protocols.html">🏥 Protocols</a>
+      <a class="nav-link" href="ed-phone-directory.html">📞 Directory</a>
+      <a class="nav-link" href="service-requests.html">📋 Requests</a>
+      <a class="nav-link" href="links.html">🔗 Links</a>
+      <a class="nav-link" href="sitemap.html">📑 Index</a>
+      <div class="nav-more" data-nav-more>
+        <button type="button" class="nav-more-btn active" aria-haspopup="menu" aria-expanded="false" aria-label="More navigation">⋯ More <span class="chev" aria-hidden="true">▾</span></button>
+        <div class="nav-more-menu" role="menu">
+      <a class="nav-link" href="cmr-reporting.html" role="menuitem">🦠 CMR / DMV Form</a>
+      <a class="nav-link active" href="animal-bite-reporting.html" role="menuitem">🐾 Animal Bite Report</a>
+      <a class="nav-link" href="dotphrase.html" role="menuitem">🧾 Documentation</a>
+      <a class="nav-link" href="calculators.html" role="menuitem">🧮 Decision Support</a>
+      <a class="nav-link" href="rsi.html" role="menuitem">🚨 Resuscitation</a>
+      <a class="nav-link" href="neurohub.html" role="menuitem">🧠 Neuro Hub</a>
+      <a class="nav-link" href="changelog.html" role="menuitem">🆕 What's New</a>
+        </div>
+      </div>
+    </div></div>
+</nav>
+<header>
+  <div class="header-inner">
+    <div class="logo"><span>🐾</span><h1>Animal Bite / Rabies Reporting — San Bernardino County</h1></div>
+    <p class="subtitle">Mandatory clinician reporting of animal bites (17 CCR §2606) · who to call &amp; official resources</p>
+  </div>
+</header>
+
+<main>
+
+  <div id="about" class="section-label">About</div>
+  <div class="intro">
+    <span class="badge">17 CCR §2606</span>
+    <p>California has been declared a <strong>rabies area</strong> in all 58 counties, so under <strong>Title 17 CCR
+    §2606</strong> a clinician who treats <strong>any bite from a mammal</strong> (a species subject to rabies) must
+    <strong>report it to the local health officer immediately</strong> — regardless of whether the animal appears ill,
+    is vaccinated, or is later found healthy. Reporting triggers the standard <strong>10-day observation / quarantine</strong>
+    of the biting animal and the local rabies risk assessment.</p>
+    <p class="fax-note">📍 <strong>Jurisdiction matters:</strong> in San Bernardino County, bite reports route to the animal
+    control agency responsible for <strong>where the bite occurred</strong>. <strong>SBC Animal Care</strong> covers the
+    unincorporated areas and most contract cities, but some incorporated cities run their own animal control — route to
+    that agency when applicable.</p>
+    <p class="fax-warn">⚠️ Contact details below are compiled from public sources and should be <strong>verified against
+    current SBC Animal Care / Public Health guidance and your KP SBC ED policy</strong> before relying on them — phone/fax
+    numbers and forms change. The fax number in particular is from a secondary source; confirm before faxing PHI.</p>
+  </div>
+
+  <div id="report" class="section-label">📞 How to Report — San Bernardino County</div>
+  <div class="fax-grid">
+
+    <div class="fax-card" id="report-sbc-animalcare">
+      <div class="fax-county"><span class="pin">🐾</span> SBC Animal Care &amp; Control</div>
+      <div class="fax-sublabel" style="margin-top:0">Call to report (preferred)</div>
+      <div class="fax-row"><a class="fax-num" href="tel:+18004725609">(800) 472-5609</a></div>
+      <div class="fax-sublabel">Bite Report Form — fax <span style="color:var(--amber)">(verify)</span></div>
+      <div class="fax-row"><a class="fax-num" href="tel:+19095010684">(909) 501-0684</a></div>
+      <div class="fax-note">Animal Care &amp; Control Administration · 351 N. Mountain View Ave, 1st Floor, San Bernardino, CA.
+      Confirm the current form and fax number on the official SBC Animal Care site before sending.</div>
+      <a class="pdf-open-link primary" href="https://animalcare.sbcounty.gov/animallaws/" target="_blank" rel="noopener">🐾 SBC Animal Care — report a bite ↗</a>
+    </div>
+
+    <div class="fax-card" id="report-other-jurisdiction">
+      <div class="fax-county"><span class="pin">🏙️</span> Incorporated cities</div>
+      <div class="fax-note">Several cities operate their own animal control rather than SBC Animal Care. If the bite occurred in
+      such a city, report to that city's animal control / police non-emergency line. Confirm the responsible agency for the
+      bite location.</div>
+      <div class="fax-sublabel">After-hours / public-health rabies questions</div>
+      <div class="fax-note">For human rabies post-exposure questions, the SBC Public Health Communicable Disease Section can
+      be reached at <a class="fax-num" style="font-size:13px;padding:3px 8px" href="tel:+18007224794">(800) 722-4794</a>
+      (after hours, Public Health Duty Officer <a class="fax-num" style="font-size:13px;padding:3px 8px" href="tel:+18004722376">(800) 472-2376</a>).</div>
+    </div>
+
+  </div>
+
+  <div id="ed-reminders" class="section-label">🩺 ED Reminders</div>
+  <div class="reminders">
+    <p>Reporting is one piece — also address the clinical bite workup per current guidance:</p>
+    <ul>
+      <li><strong>Rabies risk assessment / PEP:</strong> evaluate species, provocation, vaccination/observation status, and
+      exposure type; start <strong>rabies PEP</strong> (RIG + vaccine series) when indicated per CDPH/ACIP. Bats and most
+      wild carnivores are high-risk.</li>
+      <li><strong>Wound care:</strong> copious irrigation; consider leaving high-risk wounds open; document neurovascular and
+      tendon exam.</li>
+      <li><strong>Tetanus</strong> prophylaxis per status.</li>
+      <li><strong>Antibiotics:</strong> consider prophylaxis for high-risk bites (e.g., cat/human bites, hand/face, puncture,
+      immunocompromised) per local guidance.</li>
+      <li><strong>Animal observation:</strong> a healthy dog/cat/ferret can typically be observed 10 days; report so the local
+      health officer can coordinate quarantine.</li>
+    </ul>
+    <p class="fax-warn">⚠️ Decision-support only — follow CDPH/ACIP rabies guidance, KP SBC protocols, and pharmacy/ID
+    consultation. This page does not replace clinical judgment.</p>
+  </div>
+
+  <div id="resources" class="section-label">📚 Official Resources</div>
+  <div class="res-grid">
+
+    <a class="res-card" href="https://www.cdph.ca.gov/Programs/CID/DCDC/Pages/AnimalBites.aspx" target="_blank" rel="noopener">
+      <span class="res-ico">🦠</span>
+      <div><div class="res-title">CDPH — Animal Bites &amp; Rabies</div>
+      <div class="res-desc">State guidance on bite reporting and rabies risk assessment</div></div>
+    </a>
+
+    <a class="res-card" href="https://www.cdph.ca.gov/Programs/CID/DCDC/Pages/RabiesLHDs.aspx" target="_blank" rel="noopener">
+      <span class="res-ico">📋</span>
+      <div><div class="res-title">CDPH — Rabies Info for LHDs</div>
+      <div class="res-desc">Local-health-department rabies reporting and PEP references</div></div>
+    </a>
+
+    <a class="res-card" href="https://www.law.cornell.edu/regulations/california/17-CCR-2606" target="_blank" rel="noopener">
+      <span class="res-ico">⚖️</span>
+      <div><div class="res-title">17 CCR §2606</div>
+      <div class="res-desc">The regulation requiring animal-bite reporting to the local health officer</div></div>
+    </a>
+
+    <a class="res-card" href="https://animalcare.sbcounty.gov/animallaws/" target="_blank" rel="noopener">
+      <span class="res-ico">🐾</span>
+      <div><div class="res-title">SBC Animal Care — Laws &amp; Reporting</div>
+      <div class="res-desc">San Bernardino County bite reporting, quarantine, and the Bite Report Form</div></div>
+    </a>
+
+    <a class="res-card" href="https://www.sbcounty.gov/uploads/dph/acc/content/programs/educational/rabies_quarantine_info.pdf" target="_blank" rel="noopener">
+      <span class="res-ico">📄</span>
+      <div><div class="res-title">SBC Rabies Quarantine Info (PDF)</div>
+      <div class="res-desc">San Bernardino County 10-day quarantine procedures</div></div>
+    </a>
+
+  </div>
+
+</main>
+
+<script src="search-index.js?v=5"></script>
+
+<button id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">☀️</button>
+<script src="theme.js?v=3"></script>
+<script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
+<script src="analytics.js"></script>
+<script>
+// Sitenav "⋯ More ▾" overflow dropdown — open on click, close on
+// outside-click or Escape. Same behavior as every other page.
+(function () {
+  const hosts = document.querySelectorAll('[data-nav-more]');
+  if (!hosts.length) return;
+  hosts.forEach(host => {
+    const btn = host.querySelector('.nav-more-btn');
+    if (!btn) return;
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const open = host.classList.toggle('open');
+      btn.setAttribute('aria-expanded', String(open));
+    });
+  });
+  document.addEventListener('click', () => {
+    document.querySelectorAll('[data-nav-more].open').forEach(h => {
+      h.classList.remove('open');
+      const b = h.querySelector('.nav-more-btn');
+      if (b) b.setAttribute('aria-expanded', 'false');
+    });
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    document.querySelectorAll('[data-nav-more].open').forEach(h => {
+      h.classList.remove('open');
+      const b = h.querySelector('.nav-more-btn');
+      if (b) b.setAttribute('aria-expanded', 'false');
+    });
+  });
+})();
+</script>
+</body>
+</html>
