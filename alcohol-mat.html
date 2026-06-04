@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="stylesheet" href="theme.css?v=2"/>
+<title>Alcohol MAT — ED AUD Pharmacotherapy — KP SBC ED Toolkit</title>
+<meta name="description" content="ED-initiated medications for alcohol use disorder — naltrexone, acamprosate, gabapentin — with contraindications, brief intervention (SBIRT), patient communication, and San Bernardino County referral lines. Decision-support only."/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#080f1a;--surface:#0d1829;--surface2:#111f35;--surface3:#162540;--border:#1a2d48;--border2:#243d5c;--text:#e8f0fc;--text2:#8fa8c8;--text3:#4a6280;--text-blue:#93c5fd;--text-blue-bright:#bfdbfe;--blue:#3b82f6;--blue2:#1d4ed8;--blue3:#0d2038;--green:#22c55e;--green2:#15803d;--green3:#0d2d1f;--amber:#f59e0b;--red:#ef4444;--purple:#a78bfa;--cyan:#22d3ee;}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
+
+header{background:linear-gradient(135deg,var(--surface),var(--bg));border-bottom:1px solid var(--border2);padding:24px 24px 20px}
+.header-inner{max-width:980px;margin:0 auto}
+.logo{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.logo span{font-size:24px}
+.logo h1{font-size:20px;font-weight:800;color:var(--text)}
+.subtitle{font-size:13px;color:var(--text3);margin-left:34px}
+
+main{max-width:980px;margin:0 auto;padding:28px 24px 80px}
+
+.section-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#3b82f6;margin:28px 0 12px;display:flex;align-items:center;gap:8px}
+.section-label::after{content:'';flex:1;height:1px;background:var(--surface)}
+
+.intro{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px 20px;line-height:1.6;font-size:14px;color:var(--text2)}
+.intro strong{color:var(--text)}
+.intro .badge{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#93c5fd;background:#0d2038;border:1px solid #1d4ed8;border-radius:20px;padding:2px 10px;margin-bottom:10px}
+
+.safety{background:#2a1410;border:1px solid #7f1d1d;border-radius:12px;padding:12px 16px;font-size:13px;line-height:1.55;color:#fecaca;margin-bottom:4px}
+.safety strong{color:#fff}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px 20px;font-size:14px;line-height:1.6;color:var(--text2)}
+.card strong{color:var(--text)}
+.card ul{margin:6px 0 0 18px}
+.card li{margin-bottom:6px}
+
+.tbl-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:12px}
+table.dose{width:100%;border-collapse:collapse;font-size:13px;min-width:620px;background:var(--surface)}
+table.dose th,table.dose td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.5}
+table.dose th{background:var(--surface2);color:var(--text2);font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.5px}
+table.dose td:first-child{font-weight:700;color:var(--text);white-space:nowrap}
+table.dose tr:last-child td{border-bottom:none}
+table.dose code{font-family:'JetBrains Mono',monospace;color:#bfdbfe;font-size:12px}
+
+.fax-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 18px}
+.fax-county{font-size:15px;font-weight:800;color:var(--text);display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.fax-county .pin{font-size:18px}
+.fax-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px}
+.fax-num{font-family:'JetBrains Mono','SF Mono',monospace;font-size:15px;font-weight:700;color:#bfdbfe;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:6px 12px;text-decoration:none;white-space:nowrap;transition:.15s}
+a.fax-num:hover{border-color:#3b82f6;background:var(--blue3);color:#fff}
+.fax-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.fax-sublabel{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text3);margin:12px 0 4px}
+.fax-sublabel:first-child{margin-top:0}
+.fax-note{font-size:12px;color:var(--text3);line-height:1.5;margin-top:8px}
+.fax-warn{font-size:12px;color:var(--amber);line-height:1.5;margin-top:8px}
+
+.res-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.res-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;text-decoration:none;color:inherit;display:flex;align-items:flex-start;gap:12px;transition:.2s}
+.res-card:hover{border-color:#3b82f6;background:var(--border2);transform:translateY(-1px)}
+.res-ico{font-size:22px;flex-shrink:0}
+.res-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:2px}
+.res-desc{font-size:12px;color:var(--text3);line-height:1.5}
+
+.script{background:var(--surface2);border-left:3px solid #3b82f6;border-radius:0 8px 8px 0;padding:8px 12px;margin:6px 0;font-size:13px;color:var(--text-blue-bright);font-style:italic}
+
+/* ===== SHARED NEW NAV ===== */
+.sitenav{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;font-family:'DM Sans',system-ui,sans-serif}
+.sitenav-inner{max-width:1200px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:6px;height:46px;overflow:hidden}
+.nav-logo{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:#3b82f6;white-space:nowrap;flex-shrink:0;text-decoration:none;margin-right:6px}
+.nav-logo span{color:var(--text3)}
+.nav-links{display:flex;flex:1;min-width:0;gap:1px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;white-space:nowrap;padding-right:10px}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-link{padding:5px 10px;border-radius:6px;font-size:12px;font-weight:600;color:var(--text2);text-decoration:none;white-space:nowrap;transition:all .15s}
+.nav-link:hover{background:var(--surface2);color:var(--text)}
+.nav-link.active{background:#1d4ed8;color:#fff}
+@media(max-width:640px){.nav-link{font-size:11px;padding:4px 8px}}
+@keyframes pgFade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+main>*{animation:pgFade .3s ease both}
+main>*:nth-child(2){animation-delay:.05s}
+main>*:nth-child(3){animation-delay:.1s}
+.nav-more{position:relative;flex-shrink:0}
+.nav-more-btn{padding:5px 10px;border-radius:6px;font-size:12px;font-weight:600;color:var(--text2);background:transparent;border:0;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:4px;font-family:inherit;line-height:1;white-space:nowrap}
+.nav-more-btn:hover,.nav-more.open .nav-more-btn{background:var(--surface2);color:var(--text)}
+.nav-more-btn.active{background:#1d4ed8;color:#fff}
+.nav-more-btn .chev{font-size:9px;opacity:.6;transition:transform .15s}
+.nav-more.open .nav-more-btn .chev{transform:rotate(180deg);opacity:1}
+.nav-more-menu{position:absolute;top:calc(100% + 6px);right:0;background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:6px;min-width:200px;box-shadow:0 12px 32px rgba(0,0,0,.5);display:none;z-index:200}
+.nav-more.open .nav-more-menu{display:block}
+.nav-more-menu .nav-link{display:block;padding:7px 10px;border-radius:6px;font-size:12px;white-space:nowrap}
+.sitenav,.sitenav-inner{overflow:visible}
+
+@media print{
+  .sitenav,#theme-toggle{display:none!important}
+  body{background:#fff;color:#000}
+  header{background:#fff;border-bottom:1px solid #000}
+  .logo h1,.fax-county,.intro strong,.card strong,.res-title{color:#000}
+  .subtitle,.fax-note,.intro,.card,.res-desc{color:#222}
+  .intro,.fax-card,.card,.res-card,.tbl-wrap,.safety{border:1px solid #999;break-inside:avoid;page-break-inside:avoid;background:#fff;color:#000}
+  .fax-num,table.dose code,.script{color:#000;background:#fff}
+  .section-label{color:#000}
+  main{padding:0}main>*{animation:none}
+}
+</style>
+<link rel="stylesheet" href="mobile.css">
+<script>document.documentElement.setAttribute('data-theme',localStorage.getItem('theme')||'dark');</script>
+<link rel="manifest" href="/manifest.json">
+</head>
+<body>
+<nav class="sitenav">
+  <div class="sitenav-inner">
+    <a class="nav-logo" href="index.html">⚡</a>
+            <div class="nav-links">
+      <a class="nav-link" href="index.html">🏠 Home</a>
+      <a class="nav-link" href="algorithms.html">🔀 Algorithms</a>
+      <a class="nav-link" href="service-agreements.html">🤝 Agreements</a>
+      <a class="nav-link" href="hospital-protocols.html">🏥 Protocols</a>
+      <a class="nav-link" href="ed-phone-directory.html">📞 Directory</a>
+      <a class="nav-link" href="service-requests.html">📋 Requests</a>
+      <a class="nav-link" href="links.html">🔗 Links</a>
+      <a class="nav-link" href="sitemap.html">📑 Index</a>
+      <div class="nav-more" data-nav-more>
+        <button type="button" class="nav-more-btn active" aria-haspopup="menu" aria-expanded="false" aria-label="More navigation">⋯ More <span class="chev" aria-hidden="true">▾</span></button>
+        <div class="nav-more-menu" role="menu">
+      <a class="nav-link" href="cmr-reporting.html" role="menuitem">🦠 CMR / DMV Form</a>
+      <a class="nav-link" href="animal-bite-reporting.html" role="menuitem">🐾 Animal Bite Report</a>
+      <a class="nav-link" href="opioid-mat.html" role="menuitem">💊 Opioid MAT</a>
+      <a class="nav-link active" href="alcohol-mat.html" role="menuitem">🍺 Alcohol MAT</a>
+      <a class="nav-link" href="dotphrase.html" role="menuitem">🧾 Documentation</a>
+      <a class="nav-link" href="calculators.html" role="menuitem">🧮 Decision Support</a>
+      <a class="nav-link" href="rsi.html" role="menuitem">🚨 Resuscitation</a>
+      <a class="nav-link" href="neurohub.html" role="menuitem">🧠 Neuro Hub</a>
+      <a class="nav-link" href="changelog.html" role="menuitem">🆕 What's New</a>
+        </div>
+      </div>
+    </div></div>
+</nav>
+<header>
+  <div class="header-inner">
+    <div class="logo"><span>🍺</span><h1>Alcohol MAT — ED AUD Pharmacotherapy</h1></div>
+    <p class="subtitle">Medication for alcohol use disorder (AUD) · naltrexone · acamprosate · gabapentin · SBIRT · referral</p>
+  </div>
+</header>
+
+<main>
+
+  <div id="about" class="section-label">Why This Matters</div>
+  <div class="intro">
+    <span class="badge">Start in the ED</span>
+    <p>Most EDs never start treatment for alcohol use disorder despite millions of alcohol-related visits. Yet AUD
+    medications are <strong>safe, effective, and easy to begin in the ED</strong>, and same-visit initiation plus warm
+    referral increases follow-up. A brief <strong>SBIRT</strong> (Screening, Brief Intervention, Referral to Treatment)
+    takes minutes and reduces drinking and repeat visits.</p>
+    <p class="fax-warn">⚠️ Decision-support summary — <strong>verify doses, contraindications, and interactions against current
+    references and your KP SBC ED / Addiction Medicine protocol</strong>, and confirm with pharmacy. Not a substitute for
+    clinical judgment.</p>
+  </div>
+
+  <div id="withdrawal" class="section-label">Withdrawal ≠ AUD Pharmacotherapy</div>
+  <div class="safety">⚠️ <strong>Treat alcohol withdrawal first.</strong> Maintenance AUD medications below are <em>not</em> withdrawal
+  management. Assess withdrawal (e.g., CIWA-Ar) and treat moderate–severe withdrawal with benzodiazepines/phenobarbital per
+  protocol before or alongside starting maintenance pharmacotherapy.</div>
+
+  <div id="meds" class="section-label">💊 AUD Medications</div>
+  <div class="tbl-wrap" style="margin-top:12px">
+    <table class="dose">
+      <thead><tr><th>Medication</th><th>Typical dose</th><th>Notes / cautions</th></tr></thead>
+      <tbody>
+        <tr><td>Naltrexone (PO)<br><span style="font-weight:400;color:var(--text3)">first-line</span></td><td><code>50 mg</code> PO daily (some start <code>25 mg</code>)</td><td>Can start while still drinking. <strong>Contraindicated with current opioid use/dependence</strong> (need ~7–10 opioid-free days) and in <strong>acute hepatitis / liver failure</strong>; caution in active liver disease — check LFTs.</td></tr>
+        <tr><td>Naltrexone (IM XR)</td><td><code>380 mg</code> IM every 4 weeks</td><td>Improves adherence; same opioid/hepatic cautions as oral.</td></tr>
+        <tr><td>Acamprosate</td><td><code>666 mg</code> PO three times daily</td><td>No hepatic metabolism → good in <strong>liver disease</strong> and when <strong>opioids are needed</strong>. Renally cleared: reduce to <code>333 mg</code> TID if moderate renal impairment; <strong>avoid in severe renal impairment (CrCl &lt; 30)</strong>.</td></tr>
+        <tr><td>Gabapentin<br><span style="font-weight:400;color:var(--text3)">second-line / off-label</span></td><td>Per protocol (titrated)</td><td>May reduce cravings/withdrawal symptoms; consider misuse/dependence potential and renal dosing.</td></tr>
+        <tr><td>Topiramate / Disulfiram</td><td>Specialist / selected patients</td><td>Topiramate off-label (titrate, cognitive/teratogenic cautions). Disulfiram only with abstinence commitment + supervision.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="fax-note">Pick by comorbidity: <strong>liver disease or on opioids → acamprosate</strong>; <strong>otherwise naltrexone</strong>
+  (esp. if reducing heavy drinking is the goal). Start in the ED and refer for ongoing management.</p>
+
+  <div id="talk" class="section-label">💬 How to Talk to the Patient</div>
+  <div class="card">
+    <p>Use <strong>SBIRT</strong>: screen, give brief feedback, and refer — non-judgmentally, with permission.</p>
+    <div class="script">"Would it be okay if we talked about your drinking for a minute?"</div>
+    <div class="script">"There are medications that reduce cravings and help people cut back or stop — and we can start one today if you're open to it."</div>
+    <div class="script">"This is common and treatable, and I'm not here to judge. What, if anything, worries you about your drinking?"</div>
+    <ul>
+      <li>Ask permission; offer clear, nonjudgmental feedback linking the visit to alcohol when relevant.</li>
+      <li>Use person-first language ("person with alcohol use disorder").</li>
+      <li>Offer a concrete next step (medication today + a referral) rather than only advice to "cut down."</li>
+    </ul>
+  </div>
+
+  <div id="referral" class="section-label">📞 Referral & Local Lines</div>
+  <div class="fax-grid">
+    <div class="fax-card" id="ref-sbc-dbh">
+      <div class="fax-county"><span class="pin">📍</span> SBC DBH — Substance Use (SUDRS)</div>
+      <div class="fax-sublabel">24/7 access line</div>
+      <div class="fax-row"><a class="fax-num" href="tel:+18009682636">(800) 968-2636</a></div>
+      <div class="fax-note">San Bernardino County DBH Substance Use Disorder &amp; Recovery Services — withdrawal management, outpatient, residential.</div>
+    </div>
+    <div class="fax-card" id="ref-kp">
+      <div class="fax-county"><span class="pin">🏥</span> KP Fontana — Addiction Medicine / CDRP</div>
+      <div class="fax-sublabel">Main line (MOB 5)</div>
+      <div class="fax-row"><a class="fax-num" href="tel:+19094275128">(909) 427-5128</a></div>
+      <div class="fax-sublabel">KP Behavioral Health Member Help Line (24/7)</div>
+      <div class="fax-row"><a class="fax-num" href="tel:+18009003277">1-800-900-3277</a></div>
+      <div class="fax-note"><strong>Hours:</strong> Inpatient 24/7 · Outpatient M–Th 8a–9p, F 8a–7p, Sat/Sun/holidays 8a–5p · Assessment M–Th 8a–8p, F 8a–7p.</div>
+      <div class="fax-warn">⚠️ Main line is the tie-line 8-127-5128 converted to an outside number — verify. KP members; warm handoff to CDRP / Addiction Medicine.</div>
+    </div>
+    <div class="fax-card" id="ref-national">
+      <div class="fax-county"><span class="pin">☎️</span> National</div>
+      <div class="fax-sublabel">SAMHSA National Helpline</div>
+      <div class="fax-row"><a class="fax-num" href="tel:+18006624357">1-800-662-4357</a></div>
+      <div class="fax-sublabel">988 Suicide &amp; Crisis Lifeline</div>
+      <div class="fax-row"><a class="fax-num" href="tel:988">988</a></div>
+    </div>
+  </div>
+
+  <div id="resources" class="section-label">📚 Resources</div>
+  <div class="res-grid">
+    <a class="res-card" href="https://www.aafp.org/pubs/afp/issues/2016/0315/p457.html" target="_blank" rel="noopener">
+      <span class="res-ico">📄</span><div><div class="res-title">AAFP — Medications for AUD</div><div class="res-desc">Naltrexone, acamprosate, disulfiram overview</div></div></a>
+    <a class="res-card" href="https://www.niaaa.nih.gov/health-professionals-communities/core-resource-on-alcohol" target="_blank" rel="noopener">
+      <span class="res-ico">🧪</span><div><div class="res-title">NIAAA — Core Resource on Alcohol</div><div class="res-desc">Clinician guidance on AUD screening &amp; medications</div></div></a>
+    <a class="res-card" href="https://www.samhsa.gov/find-help/national-helpline" target="_blank" rel="noopener">
+      <span class="res-ico">☎️</span><div><div class="res-title">SAMHSA National Helpline</div><div class="res-desc">1-800-662-HELP — 24/7 treatment referral</div></div></a>
+    <a class="res-card" href="https://bridgetotreatment.org/" target="_blank" rel="noopener">
+      <span class="res-ico">🌉</span><div><div class="res-title">CA Bridge</div><div class="res-desc">ED-based substance use treatment &amp; navigator model</div></div></a>
+  </div>
+
+  <p class="fax-note" style="margin-top:18px">See also: <a class="fax-num" style="font-size:12px;padding:3px 8px" href="opioid-mat.html">💊 Opioid MAT →</a></p>
+
+</main>
+
+<script src="search-index.js?v=5"></script>
+<button id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">☀️</button>
+<script src="theme.js?v=3"></script>
+<script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
+<script src="analytics.js"></script>
+<script>
+(function () {
+  const hosts = document.querySelectorAll('[data-nav-more]');
+  if (!hosts.length) return;
+  hosts.forEach(host => {
+    const btn = host.querySelector('.nav-more-btn');
+    if (!btn) return;
+    btn.addEventListener('click', e => { e.stopPropagation(); const open = host.classList.toggle('open'); btn.setAttribute('aria-expanded', String(open)); });
+  });
+  document.addEventListener('click', () => { document.querySelectorAll('[data-nav-more].open').forEach(h => { h.classList.remove('open'); const b = h.querySelector('.nav-more-btn'); if (b) b.setAttribute('aria-expanded', 'false'); }); });
+  document.addEventListener('keydown', e => { if (e.key !== 'Escape') return; document.querySelectorAll('[data-nav-more].open').forEach(h => { h.classList.remove('open'); const b = h.querySelector('.nav-more-btn'); if (b) b.setAttribute('aria-expanded', 'false'); }); });
+})();
+</script>
+</body>
+</html>
