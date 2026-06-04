@@ -15,6 +15,7 @@ Static HTML tools for emergency medicine documentation and quick bedside calcula
 - `ed-phone-directory.html`: OMC/FMC directory with local custom entries
 - `service-agreements.html`: searchable service-agreement summary library
 - `links.html`: curated external references
+- `cmr-reporting.html`: Confidential Morbidity Report (CDPH 110c) — embedded printable form and county public-health fax numbers
 - `roadmap.html`: feature roadmap and suggestions
 
 ## Run Locally

@@ -573,6 +573,14 @@ const SEARCH_INDEX = [
   {type:'link',i:'🤖',t:'UpToDate Expert AI (in KPHC)',s:'UpToDate  ·  Expert AI  ·  KPHC  ·  HealthConnect  ·  clinical decision support  ·  gen AI  ·  generative AI  ·  evidence',g:'Quick Link',gc:'t-algo',u:'links.html#link-uptodate-ai'},
   {type:'link',i:'🔐',t:'KPHC Endpoints Login',s:'KPHC  ·  HealthConnect  ·  endpoints  ·  login  ·  KP credentials  ·  Epic',g:'Quick Link',gc:'t-algo',u:'links.html#link-kphc-endpoints'},
   {type:'link',i:'🚩',t:'Issue Reporting Form',s:'report  ·  on-call delay  ·  radiology delay  ·  staff behavior  ·  complaint  ·  concern  ·  incident  ·  feedback',g:'Quick Link',gc:'t-algo',u:'links.html#link-issue-form'},
+
+  // ── PUBLIC HEALTH REPORTING — CMR / CDPH 110c ───────────────────────────
+  {type:'page',i:'🦠',t:'CMR Reporting — CDPH 110c',s:'CMR  ·  confidential morbidity report  ·  CDPH 110c  ·  cdph110c  ·  reportable disease  ·  communicable disease  ·  notifiable condition  ·  public health  ·  county health department  ·  Title 17  ·  fax form  ·  embedded printable form',g:'Reporting',gc:'t-algo',u:'cmr-reporting.html'},
+  {type:'phone',i:'📠',t:'San Bernardino County — CMR Fax (CDPH 110c)',s:'San Bernardino  ·  SBC  ·  CMR fax  ·  confidential morbidity report  ·  public health  ·  reportable disease  ·  (909) 381-8474  ·  9093818474  ·  (909) 387-6377  ·  9093876377',g:'Reporting',gc:'t-phone',u:'cmr-reporting.html#fax-sbc'},
+  {type:'phone',i:'📠',t:'Los Angeles County — CMR Fax (CDPH 110c)',s:'Los Angeles  ·  LA County  ·  CMR fax  ·  confidential morbidity report  ·  public health  ·  reportable disease  ·  1-888-397-3778  ·  18883973778  ·  (213) 482-5508  ·  2134825508',g:'Reporting',gc:'t-phone',u:'cmr-reporting.html#fax-la'},
+  {type:'phone',i:'📠',t:'Riverside County — CMR Fax (CDPH 110c)',s:'Riverside County  ·  CMR fax  ·  confidential morbidity report  ·  public health  ·  reportable disease  ·  (951) 358-5102  ·  9513585102',g:'Reporting',gc:'t-phone',u:'cmr-reporting.html#fax-riverside'},
+  {type:'phone',i:'📠',t:'Orange County — CMR Fax (CDPH 110c)',s:'Orange County  ·  OC  ·  Epidemiology and Assessment Unit  ·  CMR fax  ·  confidential morbidity report  ·  public health  ·  reportable disease  ·  (714) 564-4050  ·  7145644050',g:'Reporting',gc:'t-phone',u:'cmr-reporting.html#fax-orange'},
+  {type:'phone',i:'📠',t:'San Diego County — CMR Fax (CDPH 110c)',s:'San Diego County  ·  CMR fax  ·  confidential morbidity report  ·  public health  ·  reportable disease  ·  epidemiology  ·  (858) 715-645',g:'Reporting',gc:'t-phone',u:'cmr-reporting.html#fax-sandiego'},
   {type:'link',i:'🧾',t:'MDM Builder (Beta)',s:'MDM  ·  medical decision making  ·  documentation  ·  beta  ·  builder  ·  charting',g:'Quick Link',gc:'t-algo',u:'links.html#link-mdm-builder'},
   {type:'link',i:'⌨️',t:'Slash Editor (Beta)',s:'slash editor  ·  MDM  ·  inline  ·  command  ·  documentation  ·  beta',g:'Quick Link',gc:'t-algo',u:'links.html#link-mdm-slash'},
 
