@@ -39,6 +39,8 @@ a.fax-num:hover{border-color:#3b82f6;background:var(--blue3);color:#fff}
 .fax-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text3);margin-bottom:4px}
 .fax-note{font-size:12px;color:var(--text3);line-height:1.5;margin-top:8px}
 .fax-warn{font-size:12px;color:var(--amber);line-height:1.5;margin-top:8px}
+.fax-sublabel{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text3);margin:12px 0 4px}
+.fax-card .pdf-open-link{white-space:normal;margin-top:6px}
 
 /* PDF embed card (matches hospital-protocols pattern) */
 .pdf-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
@@ -143,10 +145,14 @@ main>*:nth-child(4){animation-delay:.15s}
     <strong>fax it to the patient's county</strong> using the numbers below. Title 17 CCR sets reporting timeframes
     (immediate / one working day / seven days) depending on the condition.</p>
     <p>This is also the form often referred to locally as the <strong>"DMV reporting form."</strong> Under California
-    Health &amp; Safety Code §103900, clinicians use the CDPH 110c to report a patient with a
+    Health &amp; Safety Code §103900, clinicians report a patient with a
     <strong>disorder characterized by lapses of consciousness</strong> (e.g., seizure, syncope, dementia, or other
     condition that may impair safe driving) to the county health officer, who then forwards the report to the
-    <strong>California DMV</strong>. Use the same county fax numbers below.</p>
+    <strong>California DMV</strong>.</p>
+    <p class="fax-note">📍 <strong>Los Angeles area exception:</strong> for lapses-of-consciousness / DMV reporting,
+    <strong>LA County</strong> Public Health uses its <strong>own</strong> form (linked on the LA card below), while
+    <strong>Long Beach</strong> and <strong>Pasadena</strong> — separate health jurisdictions — use the CDPH 110c
+    with their own fax numbers. Check the card for the patient's jurisdiction before sending.</p>
     <p class="fax-note">⚠️ The CMR contains protected health information (PHI). Confirm the destination fax number before sending,
     use a cover sheet, and follow your facility's confidential-fax policy.</p>
   </div>
@@ -165,11 +171,32 @@ main>*:nth-child(4){animation-delay:.15s}
 
     <div class="fax-card" id="fax-la">
       <div class="fax-county"><span class="pin">📍</span> Los Angeles County</div>
-      <div class="fax-label">Fax</div>
+      <div class="fax-sublabel" style="margin-top:0">CMR — communicable disease (CDPH 110c) · fax</div>
       <div class="fax-row">
         <a class="fax-num" href="tel:+18883973778">1-888-397-3778</a>
         <a class="fax-num" href="tel:+12134825508">(213) 482-5508</a>
       </div>
+      <div class="fax-sublabel">DMV — lapses of consciousness</div>
+      <div class="fax-note">LA County DPH uses its <strong>own</strong> form (not the CDPH 110c). Submission instructions are on the form itself.</div>
+      <a class="pdf-open-link primary" href="https://publichealth.lacounty.gov/clinicians/docs/PhysicianReportLapsesConsciousness.pdf" target="_blank" rel="noopener">🖨️ Open / Print — LA County Physician Report (Lapses of Consciousness)</a>
+    </div>
+
+    <div class="fax-card" id="fax-longbeach">
+      <div class="fax-county"><span class="pin">📍</span> Long Beach</div>
+      <div class="fax-note">Health &amp; Human Services — separate LA-area health jurisdiction. Uses the <strong>CDPH 110c</strong> (form below).</div>
+      <div class="fax-sublabel">Fax the completed form to</div>
+      <div class="fax-row"><a class="fax-num" href="tel:+15625704374">(562) 570-4374</a></div>
+      <div class="fax-sublabel">Or call</div>
+      <div class="fax-row"><a class="fax-num" href="tel:+15625704302">(562) 570-4302</a></div>
+    </div>
+
+    <div class="fax-card" id="fax-pasadena">
+      <div class="fax-county"><span class="pin">📍</span> Pasadena</div>
+      <div class="fax-note">Public Health Department — separate LA-area health jurisdiction. Uses the <strong>CDPH 110c</strong> (form below).</div>
+      <div class="fax-sublabel">Fax the completed form to</div>
+      <div class="fax-row"><a class="fax-num" href="tel:+16267446115">(626) 744-6115</a></div>
+      <div class="fax-sublabel">Or call</div>
+      <div class="fax-row"><a class="fax-num" href="tel:+16267446043">(626) 744-6043</a></div>
     </div>
 
     <div class="fax-card" id="fax-riverside">
@@ -200,6 +227,8 @@ main>*:nth-child(4){animation-delay:.15s}
   </div>
 
   <div id="form" class="section-label">📄 CDPH 110c Form</div>
+  <div class="fax-note" style="margin:0 0 12px">Used by most California counties for the CMR, and by <strong>Long Beach</strong> and
+  <strong>Pasadena</strong> for lapses-of-consciousness / DMV reporting. (LA County DPH uses its own form — see below.)</div>
   <div class="pdf-card">
     <div class="pdf-bar">
       <div class="pdf-bar-title"><span>🦠</span> Confidential Morbidity Report / DMV Reporting Form (CDPH 110c)</div>
@@ -213,6 +242,25 @@ main>*:nth-child(4){animation-delay:.15s}
       If the form does not display above, use <strong>🖨️ Open / Print</strong> to open the official CDPH PDF in a new
       tab, then print from your browser's PDF viewer. Source:
       <a class="fax-num" style="font-size:12px;padding:2px 8px" href="https://www.cdph.ca.gov/CDPH%20Document%20Library/ControlledForms/cdph110c.pdf" target="_blank" rel="noopener">cdph.ca.gov · cdph110c.pdf</a>
+    </div>
+  </div>
+
+  <div id="form-la" class="section-label">📄 LA County — Lapses of Consciousness (DMV) Form</div>
+  <div class="fax-note" style="margin:0 0 12px">Use this form (not the CDPH 110c) for <strong>Los Angeles County</strong> DMV /
+  lapses-of-consciousness reporting. Submission instructions are printed on the form.</div>
+  <div class="pdf-card">
+    <div class="pdf-bar">
+      <div class="pdf-bar-title"><span>🚗</span> LA County Physician Report — Disorders Characterized by Lapses of Consciousness</div>
+      <div class="pdf-bar-actions">
+        <a class="pdf-open-link primary" href="https://publichealth.lacounty.gov/clinicians/docs/PhysicianReportLapsesConsciousness.pdf" target="_blank" rel="noopener">🖨️ Open / Print</a>
+        <a class="pdf-open-link" href="https://publichealth.lacounty.gov/clinicians/docs/PhysicianReportLapsesConsciousness.pdf" download target="_blank" rel="noopener">⬇️ Download</a>
+      </div>
+    </div>
+    <iframe class="pdf-iframe" src="https://publichealth.lacounty.gov/clinicians/docs/PhysicianReportLapsesConsciousness.pdf" title="LA County Physician Report — Disorders Characterized by Lapses of Consciousness" loading="lazy"></iframe>
+    <div class="pdf-fallback print-hint">
+      If the form does not display above, use <strong>🖨️ Open / Print</strong> to open the LA County PDF in a new
+      tab, then print from your browser's PDF viewer. Source:
+      <a class="fax-num" style="font-size:12px;padding:2px 8px" href="https://publichealth.lacounty.gov/clinicians/docs/PhysicianReportLapsesConsciousness.pdf" target="_blank" rel="noopener">publichealth.lacounty.gov · PhysicianReportLapsesConsciousness.pdf</a>
     </div>
   </div>
 
