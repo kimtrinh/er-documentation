@@ -394,61 +394,6 @@
       "sharepoint_url": null
     },
     {
-      "id": "kaiser-afib-protocol",
-      "title": "Kaiser Afib Protocol",
-      "source_filename": "Service agreements/Kaiser Afib Protocol.docx",
-      "file_type": "docx",
-      "departments": [
-        "Emergency Medicine",
-        "Cardiology"
-      ],
-      "last_updated": null,
-      "tags": [
-        "consult-workflow",
-        "disposition",
-        "sepsis",
-        "quality-safety",
-        "escalation",
-        "ownership"
-      ],
-      "summary_bullets": [
-        "Decision points: If CHA2DS2VASc score ≥ 1, consider warfarin.",
-        "Key rule: Arrange outpatient echocardiography if first episode.",
-        "Practical note: Consult cardiology for possible pharmacologic vs electrical cardioversion if indicated.",
-        "Practical note: If Heart Rate > 100-110 bpm.",
-        "Practical note: Metoprolol IV (5 mg doses every 15 min); convert to oral Metoprolol 25-50 mg BID if heart rate < 100 bpm.",
-        "Practical note: If onset is clear and < 48 hr, Pharmacologic or electrical cardioversion is safe.",
-        "Practical note: Home within 1 hour after receiving oral medication and HR remains controlled (<110)."
-      ],
-      "ed_actions": [
-        "Stabilize immediate threats and document objective severity findings before handoff.",
-        "Initiate pathway-specific treatment and diagnostics before consultant transfer of ownership.",
-        "Record all consultant communication and explicit ownership in the chart.",
-        "Complete sepsis bundle steps and reassess perfusion while disposition is being arranged."
-      ],
-      "consults_and_escalation": [
-        "Consult flow: Consult cardiology for possible pharmacologic vs electrical cardioversion if indicated.",
-        "Engage the designated specialty once inclusion criteria are met.",
-        "Escalate to attending/chief pathways when callback is delayed or recommendations conflict.",
-        "Document closed-loop communication for each escalation step."
-      ],
-      "disposition_or_ownership": [
-        "Ownership/disposition: Arrange outpatient echocardiography if first episode.",
-        "Ownership/disposition: Discharge home on diltiazem (or metoprolol).",
-        "ED retains active ownership until receiving service acceptance is explicitly documented.",
-        "Receiving service assumes ongoing plan after acceptance criteria are satisfied.",
-        "If status changes before transfer/admission, disposition should be re-evaluated under ED oversight."
-      ],
-      "timing_targets": [
-        "Timing expectation: Diltiazem IV (0.25 mg/kg over 10 min; repeat at.",
-        "Timing expectation: Metoprolol IV (5 mg doses every 15 min); convert to oral Metoprolol 25-50 mg BID if heart rate < 100.",
-        "Timing expectation: If onset is clear and < 48 hr, Pharmacologic or electrical cardioversion is safe.",
-        "Timing expectation: Home within 1 hour after receiving oral medication and HR remains controlled (<110)."
-      ],
-      "redaction_notes": "No explicit sensitive fields were carried into output; summaries are intentionally high-level.",
-      "sharepoint_url": null
-    },
-    {
       "id": "kaiser-bariatric-surgery-ct-scan-protocols",
       "title": "Kaiser Bariatric Surgery CT Scan Protocols",
       "source_filename": "Service agreements/Kaiser Bariatric Surgery CT Scan Protocols.docx",

@@ -411,6 +411,15 @@ def normalize_title(filename: str) -> str:
     return title
 
 
+# Source documents intentionally excluded from the published index.
+# The Kaiser Afib Protocol is already covered by the Atrial Fibrillation /
+# Flutter algorithm (algorithms.html#card-afib); its standalone
+# service-agreement entry produced a broken search result and was removed.
+EXCLUDED_SOURCE_NAMES = {
+    "kaiser afib protocol.docx",
+}
+
+
 def should_skip_file(path: Path, sibling_names: Set[str]) -> bool:
     name = path.name
     if name.startswith("._"):
@@ -418,6 +427,8 @@ def should_skip_file(path: Path, sibling_names: Set[str]) -> bool:
     if name.startswith("~$"):
         return True
     if name.startswith("_") and name[1:] in sibling_names:
+        return True
+    if name.lower() in EXCLUDED_SOURCE_NAMES:
         return True
     return False
 
