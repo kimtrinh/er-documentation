@@ -2964,22 +2964,38 @@ main{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-colu
         <div style="margin-top:10px;font-size:11px;color:var(--text3)">External links open in a new tab and are provided for clinician reference. Follow KP SBC protocols and RT guidance. Questions / feedback → Andy or RT.</div>
       </div>
 
-      <!--
-        DOCUMENT EMBED PLACEHOLDER — Andy's attached RT info sheet.
-        The site embeds PDFs via the ERtoolkit SharePoint, which needs a per-document UniqueId GUID.
-        To embed the attachment here like the other protocol PDFs:
-          1. Upload the file to the ERtoolkit SharePoint (Shared Documents/assets/assets/).
-          2. Register its UniqueId in data/sharepoint-embeds.json, e.g. "aerogen-ultra-rt-info.pdf": "<GUID>".
-          3. Uncomment the pdf-card below, then replace <UNIQUE_ID> and the Open-link href.
+      <!-- Embedded documents Andy shared. Source files are committed in /assets and served by Cloudflare Workers / GitHub Pages.
+           Diagram = Aerogen manufacturer slide deck (rendered as a lazy-loaded image gallery, since browsers can't preview .docx inline). -->
+      <div class="info-card">
+        <div style="font-weight:800;font-size:14px;color:var(--text);text-transform:uppercase;letter-spacing:.06em;padding-bottom:6px;border-bottom:2px solid var(--blue2);margin-bottom:10px">🖼️ Device diagram &amp; manufacturer overview</div>
+        <div style="font-size:12px;color:var(--text3);margin-bottom:12px">The reference slides Andy shared — Aerogen vibrating-mesh device anatomy, lung-deposition data, and an ED patient-flow comparison. Click any image to open it full size.</div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <a href="assets/aerogen-diagram/slide-01.png" target="_blank" rel="noopener" style="display:block"><img src="assets/aerogen-diagram/slide-01.png" loading="lazy" alt="Aerogen Solo/Ultra cutaway diagram with labeled parts (mouthpiece, Solo nebuliser, aerosol chamber, exhaust/inlet valves, oxygen nipple) and dimensions" style="width:100%;height:auto;display:block;background:#fff;border:1px solid var(--border);border-radius:10px;padding:6px;box-sizing:border-box;cursor:zoom-in"/></a>
+          <a href="assets/aerogen-diagram/slide-02.png" target="_blank" rel="noopener" style="display:block"><img src="assets/aerogen-diagram/slide-02.png" loading="lazy" alt="Aerogen Ultra with Solo attached in correct orientation — annotated components, controller options, masks and oxygen port" style="width:100%;height:auto;display:block;background:#fff;border:1px solid var(--border);border-radius:10px;padding:6px;box-sizing:border-box;cursor:zoom-in"/></a>
+          <a href="assets/aerogen-diagram/slide-03.png" target="_blank" rel="noopener" style="display:block"><img src="assets/aerogen-diagram/slide-03.png" loading="lazy" alt="Aerogen Solo close-up — medication fill cap, power connector, 6 mL medication cup, and vibrating-mesh aperture plate" style="width:100%;height:auto;display:block;background:#fff;border:1px solid var(--border);border-radius:10px;padding:6px;box-sizing:border-box;cursor:zoom-in"/></a>
+          <a href="assets/aerogen-diagram/slide-04.png" target="_blank" rel="noopener" style="display:block"><img src="assets/aerogen-diagram/slide-04.png" loading="lazy" alt="Aerogen vibrating mesh technology — about 1,000 precision holes, 128,000 vibrations per second, 1-5 micron droplets" style="width:100%;height:auto;display:block;background:#fff;border:1px solid var(--border);border-radius:10px;padding:6px;box-sizing:border-box;cursor:zoom-in"/></a>
+          <a href="assets/aerogen-diagram/slide-05.png" target="_blank" rel="noopener" style="display:block"><img src="assets/aerogen-diagram/slide-05.png" loading="lazy" alt="Medication use and waste — jet nebulizer leaves 62.3% in the cup vs 2.8% for vibrating mesh; about 6x more drug to the lungs (deposition table)" style="width:100%;height:auto;display:block;background:#fff;border:1px solid var(--border);border-radius:10px;padding:6px;box-sizing:border-box;cursor:zoom-in"/></a>
+          <a href="assets/aerogen-diagram/slide-06.png" target="_blank" rel="noopener" style="display:block"><img src="assets/aerogen-diagram/slide-06.png" loading="lazy" alt="Most frequent reasons for an ED visit — bar chart of primary diagnoses, treat-and-release vs hospital admission" style="width:100%;height:auto;display:block;background:#fff;border:1px solid var(--border);border-radius:10px;padding:6px;box-sizing:border-box;cursor:zoom-in"/></a>
+          <a href="assets/aerogen-diagram/slide-07.png" target="_blank" rel="noopener" style="display:block"><img src="assets/aerogen-diagram/slide-07.png" loading="lazy" alt="It's always a race against time — rising ED length of stay (3+ hours), ~120 minutes of jet-neb treatment, 91% overcrowding" style="width:100%;height:auto;display:block;background:#fff;border:1px solid var(--border);border-radius:10px;padding:6px;box-sizing:border-box;cursor:zoom-in"/></a>
+          <a href="assets/aerogen-diagram/slide-08.png" target="_blank" rel="noopener" style="display:block"><img src="assets/aerogen-diagram/slide-08.png" loading="lazy" alt="SPECT-CT lung deposition comparison — 6x more medication delivered to the lungs with vibrating mesh vs jet nebulizer" style="width:100%;height:auto;display:block;background:#fff;border:1px solid var(--border);border-radius:10px;padding:6px;box-sizing:border-box;cursor:zoom-in"/></a>
+          <a href="assets/aerogen-diagram/slide-09.png" target="_blank" rel="noopener" style="display:block"><img src="assets/aerogen-diagram/slide-09.png" loading="lazy" alt="Clinical evidence summary table — Dunne & Shortt 2018, Moody 2020, Crumm 2025, Andoh 2025 (ED length of stay, admissions, fewer treatments, cost savings)" style="width:100%;height:auto;display:block;background:#fff;border:1px solid var(--border);border-radius:10px;padding:6px;box-sizing:border-box;cursor:zoom-in"/></a>
+          <a href="assets/aerogen-diagram/slide-10.png" target="_blank" rel="noopener" style="display:block"><img src="assets/aerogen-diagram/slide-10.png" loading="lazy" alt="Clinical evidence summary table with QR code linking to the source references" style="width:100%;height:auto;display:block;background:#fff;border:1px solid var(--border);border-radius:10px;padding:6px;box-sizing:border-box;cursor:zoom-in"/></a>
+          <a href="assets/aerogen-diagram/slide-11.png" target="_blank" rel="noopener" style="display:block"><img src="assets/aerogen-diagram/slide-11.png" loading="lazy" alt="Patient flow in a typical ED — standard jet-neb pathway (DuoNeb, repeat doses, continuous albuterol, ~3.3 hours) vs Aerogen Ultra (symptom control on first treatment, 6x more to lungs, 2.5 mg albuterol in 7-9 minutes)" style="width:100%;height:auto;display:block;background:#fff;border:1px solid var(--border);border-radius:10px;padding:6px;box-sizing:border-box;cursor:zoom-in"/></a>
+        </div>
+        <div style="margin-top:10px;font-size:11px;color:var(--text3)">Source: Aerogen manufacturer material (vendor data; figures are manufacturer-reported). For device anatomy and clinical-rationale reference only — follow KP SBC protocols and RT guidance.</div>
+      </div>
 
       <div class="pdf-card">
         <div class="pdf-bar">
-          <div class="pdf-bar-title"><span>📄</span> Aerogen Ultra — RT Info Sheet</div>
-          <a class="pdf-open-link" href="https://sp-cloud.kp.org/sites/ERtoolkit/Shared%20Documents/assets/assets/aerogen-ultra-rt-info.pdf" target="_blank" rel="noopener">Open ↗</a>
+          <div class="pdf-bar-title"><span>📄</span> Pediatric Protocol — Evidence Summary</div>
+          <a class="pdf-open-link" href="assets/pediatric-protocol-evidence-summary.pdf" target="_blank" rel="noopener">Open full PDF ↗</a>
         </div>
-        <iframe class="pdf-iframe" src="https://sp-cloud.kp.org/sites/ERtoolkit/_layouts/15/embed.aspx?UniqueId=<UNIQUE_ID>" title="Aerogen Ultra RT Info Sheet"></iframe>
+        <!-- Pages rendered inline as images so they preview reliably on phones too (raw PDF-in-iframe is unreliable on mobile); the bar link opens the real PDF. -->
+        <div style="padding:12px;display:flex;flex-direction:column;gap:12px;background:var(--surface2)">
+          <a href="assets/pediatric-protocol-evidence-summary.pdf" target="_blank" rel="noopener" style="display:block"><img src="assets/evidence-summary/page-01.png" loading="lazy" alt="Clinical Evidence Summary: Protocol-Based Studies in Aerosol Delivery (pediatric) — page 1: Moody 2020 and Crumm 2025 study design, results, and ED protocol snapshots" style="width:100%;height:auto;display:block;background:#fff;border:1px solid var(--border);border-radius:8px;cursor:zoom-in"/></a>
+          <a href="assets/pediatric-protocol-evidence-summary.pdf" target="_blank" rel="noopener" style="display:block"><img src="assets/evidence-summary/page-02.png" loading="lazy" alt="Clinical Evidence Summary page 2: Okay 2025 and Andoh 2025 study design, results, treatment protocols, and references" style="width:100%;height:auto;display:block;background:#fff;border:1px solid var(--border);border-radius:8px;cursor:zoom-in"/></a>
+        </div>
       </div>
-      -->
     </div>
 
     <!-- ══ PRIAPISM ══ -->
