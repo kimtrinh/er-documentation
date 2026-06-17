@@ -215,6 +215,11 @@ html[data-theme="light"] .fulfiller-loc-btn.fmc.active .fulfiller-loc-btn-title{
 .cannot-input:focus{border-color:#f59e0b}
 .cannot-btn{padding:7px 14px;background:#b45309;color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap}
 .cannot-btn:hover{background:#92400e}
+/* In Progress toggle (fulfiller) — outline when not active, solid blue when the request is in progress. */
+.inprogress-btn{padding:7px 16px;background:transparent;color:#3b82f6;border:1.5px solid #3b82f6;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.inprogress-btn:hover{background:rgba(59,130,246,.12)}
+.inprogress-btn.active{background:#3b82f6;color:#fff}
+.inprogress-btn.active:hover{background:#2563eb}
 .comment-bubble.is-fulfiller{border-color:rgba(245,158,11,.5);background:rgba(245,158,11,.07)}
 .comment-bubble.is-fulfiller .comment-author-line{color:#f59e0b}
 .comment-del-btn{background:transparent;border:none;color:var(--text3);font-size:12px;cursor:pointer;padding:2px 6px;border-radius:4px;line-height:1;transition:color .15s,background .15s;margin-left:6px}
@@ -731,6 +736,9 @@ function cardHTML(item) {
     ${isFulfiller ? `
     <div class="fulfiller-actions">
       <div class="fulfiller-actions-row">
+        <button class="inprogress-btn${item.status === 'inprogress' ? ' active' : ''}" onclick="window._markInProgress('${item.id}')" title="${item.status === 'inprogress' ? 'Currently in progress — tap to set back to Open' : 'Mark this request as In Progress'}">⏳ In Progress</button>
+      </div>
+      <div class="fulfiller-actions-row">
         <div class="done-section">
           <input type="text" class="done-input" id="done-input-${item.id}" placeholder="Completion note (optional)…" maxlength="200"/>
         </div>
@@ -829,6 +837,30 @@ async function cycleStatus(id) {
     showToast('Status updated to ' + statusLabel(next));
   } catch (e) {
     console.error('Status update error:', e);
+    showToast('Failed to update status.');
+  }
+}
+
+// ── IN PROGRESS (fulfiller toggle) ───────────────────────────
+// Lets a fulfiller explicitly flag a request as "In Progress" (or tap again
+// to set it back to Open), instead of only Open ↔ Resolved via Done.
+async function markInProgress(id) {
+  if (!firebaseReady) return;
+  if (!isFulfiller) {
+    showToast('Only fulfillers can change status.');
+    return;
+  }
+  const item = allRequests.find(r => r.id === id);
+  if (!item) return;
+
+  const next = item.status === 'inprogress' ? 'open' : 'inprogress';
+  try {
+    await updateDoc(doc(db, 'serviceRequests', id), { status: next });
+    item.status = next;
+    renderAll();
+    showToast('Status updated to ' + statusLabel(next));
+  } catch (e) {
+    console.error('In-progress update error:', e);
     showToast('Failed to update status.');
   }
 }
@@ -1245,6 +1277,7 @@ async function deleteComment(requestId, commentId) {
 // ── EXPOSE TO INLINE HANDLERS ────────────────────────────────
 window._vote = vote;
 window._cycleStatus = cycleStatus;
+window._markInProgress = markInProgress;
 window._toggleComments = toggleComments;
 window._addComment = addComment;
 window._deleteComment = deleteComment;
