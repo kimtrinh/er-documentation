@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="stylesheet" href="theme.css?v=2"/>
+<title>ICH Protocol — KP SBC ED Toolkit</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#080f1a;--surface:#0d1829;--surface2:#111f35;--surface3:#162540;--border:#1a2d48;--border2:#243d5c;--text:#e8f0fc;--text2:#8fa8c8;--text3:#4a6280;--text-blue:#93c5fd;--text-blue-bright:#bfdbfe;--blue:#3b82f6;--blue2:#1d4ed8;--blue3:#0d2038;--green:#22c55e;--green2:#15803d;--green3:#0d2d1f;--amber:#f59e0b;--red:#ef4444;--purple:#a78bfa;--cyan:#22d3ee;}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
+
+/* NAV */
+
+
+/* HEADER */
+header{background:linear-gradient(135deg,#1e1b4b,var(--bg));border-bottom:2px solid #4f46e5;padding:24px 24px 20px}
+.header-inner{max-width:1000px;margin:0 auto}
+.logo{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+.logo span{font-size:28px}
+.logo h1{font-size:22px;font-weight:800;color:var(--text);letter-spacing:-.3px}
+.logo .badge{background:#4f46e5;color:#e0e7ff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:.5px;text-transform:uppercase}
+.subtitle{font-size:13px;color:#818cf8;margin-left:40px}
+
+/* STATUS ALERT */
+.status-alert{max-width:1000px;margin:16px auto 0;padding:0 24px}
+.alert-box{border-radius:10px;padding:12px 18px;font-size:13px;line-height:1.6;display:flex;align-items:flex-start;gap:12px}
+.alert-box.expanded{background:#1a2e1a;border:1px solid #22c55e;color:#86efac}
+.alert-box.expanded .alert-icon{font-size:18px;margin-top:1px;flex-shrink:0}
+.alert-box.standard{background:var(--surface);border:1px solid var(--border);color:var(--text2)}
+
+main{max-width:1000px;margin:0 auto;padding:24px 24px 80px}
+
+/* SECTION HEADINGS */
+.section-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#6366f1;margin:32px 0 12px;padding-left:2px;display:flex;align-items:center;gap:8px}
+.section-label::after{content:'';flex:1;height:1px;background:var(--surface)}
+
+/* GRID */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+@media(max-width:700px){.grid-2,.grid-3{grid-template-columns:1fr}}
+
+/* CARDS */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.card-head{padding:13px 18px;border-bottom:1px solid var(--border);font-weight:700;font-size:14px;display:flex;align-items:center;gap:8px;color:var(--text)}
+.card-body{padding:16px 18px;font-size:13px;line-height:1.8;color:var(--text2)}
+
+/* CTA BOXES */
+.cta-phone{background:linear-gradient(135deg,#312e81,#1e1b4b);border:2px solid #6366f1;border-radius:14px;padding:20px 24px;text-align:center}
+.cta-phone .label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#a5b4fc;margin-bottom:6px}
+.cta-phone .number{font-size:34px;font-weight:900;color:#ffffff;letter-spacing:1px;margin-bottom:4px;font-variant-numeric:tabular-nums}
+.cta-phone .sublabel{font-size:12px;color:#818cf8}
+
+.cta-hours{background:linear-gradient(135deg,#0c1a2e,var(--surface));border:2px solid #0ea5e9;border-radius:14px;padding:20px 24px;text-align:center}
+.cta-hours .label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#7dd3fc;margin-bottom:8px}
+.cta-hours .time{font-size:26px;font-weight:900;color:#f0f9ff;margin-bottom:4px}
+.cta-hours .days{font-size:13px;color:#7dd3fc;font-weight:600}
+
+/* RULE BOX — NEUROLOGY FIRST */
+.rule-box{background:#1c0a0a;border:2px solid #dc2626;border-radius:14px;padding:18px 22px}
+.rule-box .rule-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.rule-box .rule-head .icon{font-size:22px}
+.rule-box .rule-head h3{font-size:16px;font-weight:800;color:#f87171}
+.rule-box .rule-body{font-size:13px;color:#fca5a5;line-height:1.7}
+.rule-box .rule-body strong{color:#fff;font-weight:700}
+
+/* TRIGGER LIST */
+.trigger-list{list-style:none;padding:0}
+.trigger-list li{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--bg);font-size:13px;color:var(--text2);line-height:1.5}
+.trigger-list li:last-child{border-bottom:none}
+.trigger-list .dot{width:8px;height:8px;border-radius:50%;background:#f59e0b;flex-shrink:0;margin-top:5px}
+.trigger-list .dot.red{background:#ef4444}
+.trigger-list .dot.green{background:#22c55e}
+
+/* CALLBACK BADGE */
+.callback-badge{display:inline-flex;align-items:center;gap:6px;background:#1c1400;border:1px solid #f59e0b;color:#fde68a;border-radius:8px;padding:5px 12px;font-size:12px;font-weight:700;margin-bottom:12px}
+
+/* FLOWCHART */
+.flow{display:flex;flex-direction:column;gap:0}
+.flow-step{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 18px;position:relative}
+.flow-step.red{background:#1a0808;border-color:#dc2626}
+.flow-step.yellow{background:#1c1400;border-color:#ca8a04}
+.flow-step.green{background:#052e16;border-color:#16a34a}
+.flow-step.purple{background:#1e1b4b;border-color:#4f46e5}
+.flow-step.blue{background:#0c1a2e;border-color:#0ea5e9}
+.flow-step-num{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;font-size:11px;font-weight:800;margin-right:8px;flex-shrink:0}
+.step-head{display:flex;align-items:center;font-weight:700;font-size:13px;color:var(--text);margin-bottom:4px}
+.step-body{font-size:12px;color:var(--text2);line-height:1.6;margin-left:30px}
+.step-body strong{color:var(--text)}
+.flow-arrow{text-align:center;color:var(--border);font-size:20px;padding:2px 0;line-height:1}
+
+/* DECISION BOX */
+.decision-box{background:var(--bg);border:2px dashed var(--border);border-radius:10px;padding:10px 16px;margin:2px 0;text-align:center;font-size:12px;color:var(--text3)}
+.decision-box strong{color:var(--text2)}
+
+/* DISPOSITION */
+.dispo-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:600px){.dispo-grid{grid-template-columns:1fr}}
+.dispo-card{border-radius:12px;padding:16px 18px;font-size:13px;line-height:1.7}
+.dispo-card.no-surg{background:#052e16;border:1px solid #16a34a;color:#86efac}
+.dispo-card.surg{background:#1e1b4b;border:1px solid #4f46e5;color:#c7d2fe}
+.dispo-card h4{font-size:14px;font-weight:700;margin-bottom:8px}
+
+/* EXCLUSION BOX */
+.exclusion{background:#1c1400;border:1px solid #ca8a04;border-radius:10px;padding:12px 16px;font-size:12px;color:#fde68a;line-height:1.7;margin-top:10px}
+.exclusion strong{color:#fbbf24}
+
+/* REVERSAL TABLE */
+.rev-table{width:100%;border-collapse:collapse;font-size:12.5px}
+.rev-table th{text-align:left;color:var(--text3);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:8px 12px;border-bottom:1px solid var(--border)}
+.rev-table td{padding:9px 12px;border-bottom:1px solid var(--bg);color:var(--text2);vertical-align:top}
+.rev-table tr:last-child td{border-bottom:none}
+.rev-table .drug{color:#a5b4fc;font-weight:700}
+.rev-table .dose{color:#38bdf8;font-weight:600}
+
+/* PILLS */
+.pill{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;margin:2px 2px 2px 0}
+.pill-red{background:#1f0707;color:#f87171;border:1px solid #dc2626}
+.pill-green{background:#052e16;color:#86efac;border:1px solid #16a34a}
+.pill-yellow{background:#1c1400;color:#fbbf24;border:1px solid #ca8a04}
+.pill-purple{background:#1e1b4b;color:#c4b5fd;border:1px solid #7c3aed}
+.pill-blue{background:#0c1a2e;color:#7dd3fc;border:1px solid #0ea5e9}
+
+/* ===== SHARED NEW NAV ===== */
+@media(max-width:640px){}
+.sitenav{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;font-family:'DM Sans',system-ui,sans-serif}
+.sitenav-inner{max-width:1200px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:6px;height:46px;overflow:hidden}
+.nav-logo{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:#3b82f6;white-space:nowrap;flex-shrink:0;text-decoration:none;margin-right:6px}
+.nav-logo span{color:var(--text3)}
+.nav-links{display:flex;flex:1;min-width:0;gap:1px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;white-space:nowrap;padding-right:10px}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-link{padding:5px 10px;border-radius:6px;font-size:12px;font-weight:600;color:var(--text2);text-decoration:none;white-space:nowrap;transition:all .15s}
+.nav-link:hover{background:var(--surface2);color:var(--text)}
+.nav-link.active{background:#1d4ed8;color:#fff}
+@media(max-width:640px){.nav-link{font-size:11px;padding:4px 8px}}
+@keyframes pgFade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+main>*{animation:pgFade .3s ease both}
+main>*:nth-child(2){animation-delay:.05s}
+main>*:nth-child(3){animation-delay:.1s}
+main>*:nth-child(4){animation-delay:.15s}
+.card{box-shadow:0 1px 4px rgba(0,0,0,.2)}
+
+/* ===== NAV — More dropdown overflow ===== */
+.nav-more{position:relative;flex-shrink:0}
+.nav-more-btn{padding:5px 10px;border-radius:6px;font-size:12px;font-weight:600;color:var(--text2);background:transparent;border:0;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:4px;font-family:inherit;line-height:1;white-space:nowrap}
+.nav-more-btn:hover,.nav-more.open .nav-more-btn{background:var(--surface2);color:var(--text)}
+.nav-more-btn.active{background:#1d4ed8;color:#fff}
+.nav-more-btn .chev{font-size:9px;opacity:.6;transition:transform .15s}
+.nav-more.open .nav-more-btn .chev{transform:rotate(180deg);opacity:1}
+.nav-more-menu{position:absolute;top:calc(100% + 6px);right:0;background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:6px;min-width:200px;box-shadow:0 12px 32px rgba(0,0,0,.5);display:none;z-index:200}
+.nav-more.open .nav-more-menu{display:block}
+.nav-more-menu .nav-link{display:block;padding:7px 10px;border-radius:6px;font-size:12px;white-space:nowrap}
+
+/* ===== NAV — let More dropdown render below the bar ===== */
+.sitenav,.sitenav-inner{overflow:visible}
+</style>
+<link rel="stylesheet" href="mobile.css">
+<script>document.documentElement.setAttribute('data-theme',localStorage.getItem('theme')||'dark');</script>
+<link rel="manifest" href="/manifest.json">
+</head>
+<body>
+<nav class="sitenav">
+  <div class="sitenav-inner">
+    <a class="nav-logo" href="index.html">⚡</a>
+            <div class="nav-links">
+      <a class="nav-link" href="index.html">🏠 Home</a>
+      <a class="nav-link" href="algorithms.html">🔀 Algorithms</a>
+      <a class="nav-link" href="service-agreements.html">🤝 Agreements</a>
+      <a class="nav-link" href="hospital-protocols.html">🏥 Protocols</a>
+      <a class="nav-link" href="ed-phone-directory.html">📞 Directory</a>
+      <a class="nav-link" href="service-requests.html">📋 Requests</a>
+      <a class="nav-link" href="links.html">🔗 Links</a>
+      <a class="nav-link" href="sitemap.html">📑 Index</a>
+      <div class="nav-more" data-nav-more>
+        <button type="button" class="nav-more-btn" aria-haspopup="menu" aria-expanded="false" aria-label="More navigation">⋯ More <span class="chev" aria-hidden="true">▾</span></button>
+        <div class="nav-more-menu" role="menu">
+      <a class="nav-link" href="dotphrase.html" role="menuitem">🧾 Documentation</a>
+      <a class="nav-link" href="calculators.html" role="menuitem">🧮 Decision Support</a>
+      <a class="nav-link" href="rsi.html" role="menuitem">🚨 Resuscitation</a>
+      <a class="nav-link" href="neurohub.html" role="menuitem">🧠 Neuro Hub</a>
+      <a class="nav-link" href="changelog.html" role="menuitem">🆕 What's New</a>
+        </div>
+      </div>
+    </div></div>
+</nav>
+<!-- SITE NAV -->
+
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <span>🧠</span>
+      <h1>ICH Protocol</h1>
+      <span class="badge">Clinical Algorithm</span>
+    </div>
+    <p class="subtitle">Acute Intracerebral Hemorrhage — ED Management · 2022 AHA/ASA · KP SCAL 2026</p>
+  </div>
+</header>
+
+<!-- STATUS ALERT -->
+<div class="status-alert">
+  <div class="alert-box standard">
+    <span class="alert-icon">🧠</span>
+    <div>
+      Clinical decision-support for <strong>acute spontaneous intracerebral hemorrhage</strong> in the ED — BP, anticoagulant/antiplatelet reversal, seizure, ICP/edema, and disposition. See the related <a href="neurohub.html">Neuro Hub pathway</a> for vascular-neurology / neurosurgery access.
+    </div>
+</div>
+</div>
+
+<main>
+
+  <!-- ══════════════ ED QUICK SUMMARY ══════════════ -->
+  <div id="ich-summary" class="section-label">ED Quick Summary</div>
+  <div class="rule-box">
+    <div class="rule-head">
+      <span class="icon">🧠</span>
+      <h3 id="acute-ich-first-moves-in-the-ed">Acute ICH — First Moves in the ED</h3>
+    </div>
+    <div class="rule-body">
+      <ul style="margin:0;padding-left:18px;line-height:1.9">
+        <li><strong>Initiate the ICH ED order set</strong> in Health Connect.</li>
+        <li>Target <strong>SBP 130–150 mmHg</strong> in the ED (avoid dropping &lt;130 in mild–moderate ICH — see below).</li>
+        <li><strong>Reverse oral anticoagulation rapidly</strong> — stop the agent and give the right reversal as soon as possible.</li>
+        <li><strong>Do NOT give levetiracetam (Keppra) to all ICH patients</strong> — only for confirmed/suspected seizure.</li>
+        <li>Call early per the <a href="neurohub.html" style="color:#a5b4fc;font-weight:700">Neuro Hub pathway</a> for vascular neurology / neurosurgery input.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="exclusion" style="margin-top:14px">
+    <strong>Decision-support only.</strong> Adapted from the <em>2026 ICH Update — SBC ED Education</em> (N. Sangha, MD, KP SCAL) and the <em>2022 AHA/ASA Guideline for the Management of Patients With Spontaneous Intracerebral Hemorrhage</em> (Greenberg et al., <em>Stroke</em> 2022). Parenthetical tags are the guideline <strong>Class of Recommendation (COR)</strong>. Always follow the current order set, pharmacy verification, and neuro/neurosurgery guidance.
+  </div>
+
+  <!-- ══════════════ BLOOD PRESSURE ══════════════ -->
+  <div id="bp-management" class="section-label">Blood Pressure Management</div>
+  <div class="card">
+    <div class="card-head">🩸 Lowering BP in Acute ICH</div>
+    <div class="card-body">
+      <ul style="margin:0;padding-left:18px;line-height:1.9">
+        <li>Mild–moderate ICH presenting with <strong>SBP 150–220</strong> → acutely lower to a <strong>target of 140</strong>, maintaining <strong>130–150</strong>. <span class="pill pill-yellow">COR 2b</span></li>
+        <li><strong>Start treatment within 2 h</strong> of onset and <strong>reach target within 1 h</strong> to reduce hematoma expansion. <span class="pill pill-blue">COR 2a</span></li>
+        <li>Titrate for <strong>smooth, sustained control</strong> — avoid peaks and large SBP variability. <span class="pill pill-blue">COR 2a</span></li>
+        <li>Large/severe ICH or those needing surgical decompression → safety/efficacy of <strong>intensive</strong> lowering is <strong>not well established</strong>. <span class="pill pill-yellow">COR 2b</span></li>
+        <li>If mild–moderate ICH presenting with <strong>SBP &gt;150</strong>, acutely lowering to <strong>&lt;130 is potentially harmful</strong>. <span class="pill pill-red">3: Harm</span></li>
+      </ul>
+      <div class="decision-box" style="margin-top:12px;text-align:left">
+        <strong>Goal in the ED:</strong> SBP 130–150. Use a titratable IV agent (e.g., nicardipine or clevidipine infusion) for smooth control.
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ ANTICOAGULANT REVERSAL ══════════════ -->
+  <div id="anticoagulation-reversal" class="section-label">Anticoagulant Reversal</div>
+  <div class="rule-box" style="background:#1c0a0a;border-color:#dc2626">
+    <div class="rule-body" style="color:#fca5a5">
+      <strong>Discontinue anticoagulation immediately. Rapid reversal should be performed as soon as possible.</strong> <span class="pill pill-green">COR 1</span>
+      &nbsp;Take a history of <strong>when the last dose was taken</strong>. For DOACs, give <strong>activated charcoal if last dose &lt;2 h</strong> (potential efficacy up to 8 h). <span class="pill pill-yellow">COR 2b</span>
+    </div>
+  </div>
+  <div class="card" style="margin-top:14px">
+    <div class="card-head">💉 Reversal by Agent</div>
+    <div class="card-body" style="padding:0">
+      <table class="rev-table">
+        <thead>
+          <tr><th>Anticoagulant</th><th>Reversal</th><th>Notes</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="drug">Vitamin K antagonist<br/>(warfarin) — INR 1.3–1.9</td>
+            <td class="dose">4F-PCC 10–20 IU/kg <span class="pill pill-yellow">2b</span></td>
+            <td>Add <strong>IV vitamin K</strong>. <span class="pill pill-green">1</span></td>
+          </tr>
+          <tr>
+            <td class="drug">Vitamin K antagonist<br/>(warfarin) — INR ≥2.0</td>
+            <td class="dose">4F-PCC 25–50 IU/kg <span class="pill pill-green">1</span></td>
+            <td>Add <strong>IV vitamin K</strong>. <span class="pill pill-green">1</span></td>
+          </tr>
+          <tr>
+            <td class="drug">Dabigatran</td>
+            <td class="dose">Idarucizumab <span class="pill pill-blue">2a</span></td>
+            <td>If unavailable → PCC/aPCC and/or renal replacement therapy. <span class="pill pill-yellow">2b</span> Charcoal if &lt;2 h.</td>
+          </tr>
+          <tr>
+            <td class="drug">Factor Xa inhibitor<br/>(apixaban, rivaroxaban)</td>
+            <td class="dose">Andexanet alfa <span class="pill pill-blue">2a</span></td>
+            <td>If unavailable → 4F-PCC or aPCC. <span class="pill pill-yellow">2b</span> Charcoal if &lt;2 h.</td>
+          </tr>
+          <tr>
+            <td class="drug">Unfractionated heparin</td>
+            <td class="dose">Protamine <span class="pill pill-blue">2a</span></td>
+            <td>Dose per heparin given / time since dose.</td>
+          </tr>
+          <tr>
+            <td class="drug">Low-molecular-weight heparin</td>
+            <td class="dose">Protamine <span class="pill pill-yellow">2b</span></td>
+            <td>Partial reversal of anti-Xa effect.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="exclusion" style="margin-top:10px">
+    <strong>4F-PCC</strong> = four-factor prothrombin complex concentrate · <strong>aPCC</strong> = activated PCC · <strong>DOAC</strong> = direct oral anticoagulant. Idarucizumab and andexanet alfa availability vary by site.
+  </div>
+
+  <!-- ══════════════ ANTIPLATELET ══════════════ -->
+  <div id="antiplatelet" class="section-label">Antiplatelet-Related Hemorrhage</div>
+  <div class="card">
+    <div class="card-head">🧫 Aspirin / P2Y12 (clopidogrel, ticagrelor)</div>
+    <div class="card-body">
+      <div class="dispo-grid">
+        <div class="dispo-card no-surg">
+          <h4 id="not-having-neurosurgery">✓ Not having neurosurgery</h4>
+          Hold antiplatelet agents and <strong>DO NOT order a platelet transfusion</strong>. Platelet transfusion is associated with harm (PATCH). The order set <strong>auto-checks</strong> "Do Not Give Platelets for patients taking aspirin who are not undergoing a surgical procedure."
+        </div>
+        <div class="dispo-card surg">
+          <h4 id="going-to-neurosurgery">🔪 Going to neurosurgery</h4>
+          Platelet transfusion may be considered in conjunction with the operative plan — coordinate with neurosurgery.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ HEMOSTATICS ══════════════ -->
+  <div id="hemostatic" class="section-label">General Hemostatic Treatments</div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-head">🩹 rFVIIa &amp; TXA</div>
+      <div class="card-body">
+        <ul style="margin:0;padding-left:18px;line-height:1.9">
+          <li><strong>Recombinant factor VIIa</strong> (with or without the spot sign) — effect on functional outcome is <strong>unclear</strong>. <span class="pill pill-yellow">COR 2b</span></li>
+          <li><strong>Tranexamic acid (TXA)</strong> (with or without spot/black-hole/blend sign) — benefit is <strong>not well established</strong>. <span class="pill pill-yellow">COR 2b</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-head">🧪 FASTEST Trial (rFVIIa)</div>
+      <div class="card-body">
+        Randomized rFVIIa vs placebo for acute ICH, ages 18–80, treated <strong>≤120 min</strong> (with spot sign) or <strong>≤90 min</strong> (without) of last-known-well; baseline non-contrast CT + CTA only.
+        <strong>Kaiser Fontana is an enrolling SCAL site</strong> — consider trial eligibility on qualifying patients.
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ DIAGNOSIS & IMAGING ══════════════ -->
+  <div id="diagnosis" class="section-label">Diagnosis &amp; Assessment</div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-head">🧪 Initial Labs</div>
+      <div class="card-body">
+        <strong>Serum:</strong> CBC · BUN/Cr · LFTs · glucose · ESR and/or CRP · aPTT and PT/INR · <strong>specific tests for DOACs</strong>.<br/><br/>
+        <strong>Urine:</strong> tox screen · pregnancy test.
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-head">🩻 Vascular Imaging Strategy</div>
+      <div class="card-body">
+        <div style="margin-bottom:10px">Look for an underlying macrovascular cause in higher-yield patients:</div>
+        <ul style="margin:0;padding-left:18px;line-height:1.8">
+          <li><strong>Lobar ICH &lt;70 yrs</strong>, or <strong>deep/posterior-fossa ICH &lt;45 yrs</strong>, or <strong>45–70 yrs with no HTN</strong> → <strong>CTA/CTV recommended</strong> <span class="pill pill-green">1</span>; MRI+MRA or cerebral angiogram reasonable <span class="pill pill-blue">2a</span>.</li>
+          <li><strong>Spontaneous IVH with no parenchymal hemorrhage</strong> (any age), or <strong>CTA/MRA suggestive of a macrovascular etiology</strong> → <strong>cerebral angiogram recommended</strong>. <span class="pill pill-green">1</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ SEIZURE ══════════════ -->
+  <div id="seizure" class="section-label">Seizure &amp; AED Prophylaxis</div>
+  <div class="card">
+    <div class="card-head">⚡ Do ICH patients need AED prophylaxis?</div>
+    <div class="card-body">
+      <div class="dispo-grid">
+        <div class="dispo-card no-surg">
+          <h4 id="no-seizure">No seizure</h4>
+          <strong>Avoid AEDs</strong> — do not routinely load levetiracetam (Keppra). <span class="pill pill-red">3: No benefit</span>
+        </div>
+        <div class="dispo-card surg" style="background:#1a0f2e;border-color:#7c3aed;color:#ddd6fe">
+          <h4 id="seizure-concern-for-seizure">Seizure / concern for seizure</h4>
+          Confirmed clinical or electrographic seizure → <strong>administer an AED</strong>. <span class="pill pill-green">1</span><br/><br/>
+          Unexplained/fluctuating mental status or suspicion of seizure → <strong>cEEG (≥24 h)</strong> to detect electrographic seizures. <span class="pill pill-blue">2a</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ ICP & EDEMA ══════════════ -->
+  <div id="icp-edema" class="section-label">ICP &amp; Cerebral Edema</div>
+  <div class="card">
+    <div class="card-head">🧠 ICP Monitoring &amp; Hyperosmolar Therapy</div>
+    <div class="card-body">
+      <ul style="margin:0 0 12px;padding-left:18px;line-height:1.9">
+        <li><strong>Ventricular drainage (EVD)</strong> should be performed to reduce mortality. <span class="pill pill-green">COR 1</span></li>
+        <li>ICP monitoring and treatment <strong>might be considered</strong>. <span class="pill pill-yellow">2b</span></li>
+        <li><strong>Bolus</strong> hyperosmolar therapy may be considered to transiently reduce ICP. <span class="pill pill-yellow">2b</span> Early <strong>prophylactic</strong> hyperosmolar therapy is not well established. <span class="pill pill-yellow">2b</span></li>
+        <li><strong>Do not give corticosteroids</strong> for elevated ICP <span class="pill pill-red">3: No benefit</span> — OK only for hemorrhage related to a mass/tumor.</li>
+      </ul>
+      <div class="decision-box" style="text-align:left">
+        <strong>Hypertonic saline (3% NaCl) order set:</strong>
+        <ul style="margin:6px 0 0;padding-left:18px;line-height:1.8">
+          <li><strong>Bolus:</strong> 3% NaCl <strong>250 mL IV over 15 min ×1</strong> — may run via a peripheral IV.</li>
+          <li><strong>Continuous:</strong> 3% NaCl <strong>30–100 mL/hr</strong> (per local center agreement) ×72 h — via two separate peripheral IVs, or a central line / PICC.</li>
+          <li><strong>Mannitol</strong> is an alternative hyperosmolar agent.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ GENERAL ED CARE ══════════════ -->
+  <div id="general-care" class="section-label">General ED Care, Nursing, Glucose &amp; Temp</div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-head">🏥 Disposition &amp; Nursing</div>
+      <div class="card-body">
+        <ul style="margin:0;padding-left:18px;line-height:1.85">
+          <li>Care in a <strong>specialized inpatient unit with a multidisciplinary team</strong> (incl. virtual telestroke/neurosurgery). <span class="pill pill-green">1</span></li>
+          <li>If unavailable → <strong>transfer</strong> to a center with full high-acuity care. <span class="pill pill-green">1</span></li>
+          <li>Clinical hydrocephalus → transfer to a <strong>neurosurgical-capable center</strong> (EVD). <span class="pill pill-green">1</span></li>
+          <li>Use <strong>standardized order sets</strong>. <span class="pill pill-green">1</span></li>
+          <li><strong>Formal dysphagia screen before any PO intake</strong>. <span class="pill pill-green">1</span></li>
+          <li><strong>Continuous cardiac monitoring 24–72 h</strong>. <span class="pill pill-blue">2a</span></li>
+          <li><strong>Frequent neuro checks incl. GCS</strong> in the hyperacute phase. <span class="pill pill-green">1</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-head">🌡️ Glucose &amp; Temperature</div>
+      <div class="card-body">
+        <ul style="margin:0;padding-left:18px;line-height:1.85">
+          <li>Monitor serum glucose (avoid hyper- and hypoglycemia). <span class="pill pill-green">1</span></li>
+          <li>Treat glucose <strong>&lt;40–60 mg/dL</strong>. <span class="pill pill-green">1</span></li>
+          <li>Treat moderate–severe <strong>hyperglycemia (&gt;180–200 mg/dL)</strong>. <span class="pill pill-blue">2a</span></li>
+          <li>Pharmacologically <strong>treat elevated temperature</strong>. <span class="pill pill-yellow">2b</span></li>
+          <li>Therapeutic hypothermia (&lt;35 °C) — usefulness unclear. <span class="pill pill-yellow">2b</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ NEURO HUB PATHWAY ══════════════ -->
+  <div id="neuro-hub" class="section-label">Neuro Hub Pathway</div>
+  <div class="card">
+    <div class="card-head">🧠 Regional Neuro Hub — a Pathway for ICH Management</div>
+    <div class="card-body">
+      The <strong>Regional Neuro Hub</strong> brings vascular neurology and neurosurgery into ICH care early via telemedicine — helping you <strong>keep stable patients at their initial location</strong> when safe, and <strong>facilitating transfers</strong> (with ETAP) when escalation is needed. SCAL ED metrics show a meaningful <strong>door-in–door-out (DIDO) reduction</strong> and fast CT read / call-back times.
+      <div style="margin-top:14px">
+        <a href="neurohub.html" class="callback-badge" style="text-decoration:none">🧠 Open the Neuro Hub page — access hours &amp; contact number →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ REFERENCES ══════════════ -->
+  <div id="references" class="section-label">References &amp; Source</div>
+  <div class="card">
+    <div class="card-head">📚 Source Material</div>
+    <div class="card-body">
+      <ul style="margin:0;padding-left:18px;line-height:1.8">
+        <li><strong>2026 ICH Update — SBC ED Education</strong>, Navdeep Sangha, MD (Regional Physician Director, Stroke &amp; Telestroke, KP SCAL).</li>
+        <li>Greenberg SM, et al. <strong>2022 Guideline for the Management of Patients With Spontaneous Intracerebral Hemorrhage</strong> (AHA/ASA). <em>Stroke.</em> 2022;53(7):e282–e361.</li>
+      </ul>
+      <!-- ░░ PLACEHOLDER: the official slide-deck PDF will be embedded here from SharePoint later (per maintainer). ░░
+           To embed like other protocol PDFs, drop a .pdf-card / iframe (embed.aspx?UniqueId=…) below this comment. -->
+    </div>
+  </div>
+
+</main>
+
+<script src="search-index.js?v=5"></script>
+<script id="shared-nav-search">
+</script>
+
+<div class="mobile-nav">
+  <a class="mob-item" href="index.html"><span class="mob-icon">🏠</span>Home</a>
+  <a class="mob-item" href="dotphrase.html"><span class="mob-icon">📋</span>Phrases</a>
+  <a class="mob-item" href="calculators.html"><span class="mob-icon">🧮</span>Calcs</a>
+  <a class="mob-item" href="rsi.html"><span class="mob-icon">🚨</span>Resus</a>
+  <a class="mob-item" href="ed-phone-directory.html"><span class="mob-icon">📞</span>Directory</a>
+</div>
+<button id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">☀️</button>
+<script src="theme.js?v=3"></script>
+<script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
+<script src="analytics.js"></script>
+<script>
+// Sitenav "⋯ More ▾" overflow dropdown — open on click, close on
+// outside-click or Escape. Data-driven so the same script works on
+// every page that includes the same nav markup.
+(function () {
+  const hosts = document.querySelectorAll('[data-nav-more]');
+  if (!hosts.length) return;
+  hosts.forEach(host => {
+    const btn = host.querySelector('.nav-more-btn');
+    if (!btn) return;
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const open = host.classList.toggle('open');
+      btn.setAttribute('aria-expanded', String(open));
+    });
+  });
+  document.addEventListener('click', () => {
+    document.querySelectorAll('[data-nav-more].open').forEach(h => {
+      h.classList.remove('open');
+      const b = h.querySelector('.nav-more-btn');
+      if (b) b.setAttribute('aria-expanded', 'false');
+    });
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    document.querySelectorAll('[data-nav-more].open').forEach(h => {
+      h.classList.remove('open');
+      const b = h.querySelector('.nav-more-btn');
+      if (b) b.setAttribute('aria-expanded', 'false');
+    });
+  });
+})();
+</script>
+</body>
+</html>

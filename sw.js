@@ -10,6 +10,7 @@ const ASSETS = [
   '/vasopressors.html',
   '/algorithms.html',
   '/neurohub.html',
+  '/ich-protocol.html',
   '/pedsfever.html',
   '/dotphrase.html',
   '/links.html',
