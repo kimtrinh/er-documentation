@@ -1,0 +1,61 @@
+# Weekly automatic reminder to service-request fulfillers about STILL-OPEN tickets.
+#
+# Emails Russell (OMC) and David Thiessen (FMC) a list of their location's
+# open/in-progress tickets and kindly asks them to click "Resolve" on anything
+# already done. Clearly labeled as an automated reminder.
+#
+# This lives under .github/ which is excluded from the Cloudflare asset bundle
+# (see .assetsignore), so it does NOT affect the live site — it only runs on
+# GitHub's schedule.
+#
+# ── One-time setup (repo owner) ──────────────────────────────────────────────
+#   1. Create an EmailJS template for the reminder (params: to_email, to_name,
+#      location, count, tickets, site_url) and copy its Template ID.
+#   2. EmailJS -> Account: enable "Allow EmailJS API for non-browser applications".
+#   3. Add repo secrets (Settings -> Secrets and variables -> Actions):
+#        EMAILJS_PRIVATE_KEY           (EmailJS -> Account -> API Keys -> Private Key)
+#        EMAILJS_REMINDER_TEMPLATE_ID  (the template ID from step 1)
+#   Everything else below is public (already in service-requests.html).
+
+name: Weekly service-request reminder
+
+on:
+  schedule:
+    # Mondays 16:00 UTC (≈ 8 AM Pacific). GitHub cron is UTC.
+    - cron: '0 16 * * 1'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Print emails instead of sending (true/false)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sr-reminder
+  cancel-in-progress: false
+
+jobs:
+  remind:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Send open-request reminders
+        env:
+          # Public config (safe to keep here — already public in the client):
+          FIREBASE_PROJECT_ID: er-docu
+          FIREBASE_API_KEY: AIzaSyCH1td6zhupmO-ZT3ruRN2-yZqidXqzgl4
+          EMAILJS_SERVICE_ID: service_7s9tj4j
+          EMAILJS_PUBLIC_KEY: ZUkxeb4p-LrOetbHE
+          SITE_URL: https://er-toolkit.kltrinh-28a.workers.dev/service-requests.html
+          # Secrets (add these in repo settings):
+          EMAILJS_PRIVATE_KEY: ${{ secrets.EMAILJS_PRIVATE_KEY }}
+          EMAILJS_REMINDER_TEMPLATE_ID: ${{ secrets.EMAILJS_REMINDER_TEMPLATE_ID }}
+          # Manual dry-run toggle (scheduled runs always send):
+          DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run && '1' || '' }}
+        run: node scripts/send-open-request-reminders.js
