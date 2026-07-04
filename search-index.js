@@ -561,6 +561,8 @@ const SEARCH_INDEX = [
   {type:'page',i:'🌡️',t:'Peds Fever — Older Children (>3 years)',s:'fever  ·  school age  ·  older child  ·  focal infection  ·  workup criteria  ·  antibiotics',g:'Peds Fever',gc:'t-algo',u:'pedsfever.html'},
 
   // ── QUICK LINKS (cards on links.html — deep-linked) ─────────────────────
+  {type:'link',i:'💊',t:'Adult Gold Card — Empiric ID Guidelines',s:'gold card  ·  adult gold card  ·  empiric antibiotics  ·  infectious disease  ·  ID guidelines  ·  antibiotic guideline  ·  CA empiric  ·  clinical library  ·  antibiotics adults',g:'Quick Link',gc:'t-algo',u:'links.html#link-adult-gold-card'},
+  {type:'link',i:'🧒',t:'Peds Gold Card — Empiric ID Guidelines',s:'gold card  ·  peds gold card  ·  pediatric gold card  ·  empiric antibiotics  ·  infectious disease  ·  ID guidelines  ·  antibiotic guideline  ·  CA empiric  ·  clinical library  ·  antibiotics pediatric',g:'Quick Link',gc:'t-algo',u:'links.html#link-peds-gold-card'},
   {type:'link',i:'💵',t:'Paycheck Calculator',s:'paycheck  ·  net pay  ·  taxes  ·  deductions  ·  salary  ·  withholding  ·  W-2  ·  hourly',g:'Quick Link',gc:'t-algo',u:'links.html#link-paycheck'},
   {type:'link',i:'🌀',t:'Vertigo Helper',s:'vertigo  ·  dizziness  ·  BPPV  ·  HINTS exam  ·  nystagmus  ·  central peripheral  ·  cerebellar stroke',g:'Quick Link',gc:'t-algo',u:'links.html#link-vertigo'},
   {type:'link',i:'🏡',t:'CPM — Chronic Population Management',s:'CPM  ·  chronic population management  ·  909-609-2910  ·  homebound  ·  ≥65  ·  geriatric  ·  case management  ·  primary care  ·  San Bernardino  ·  SBC  ·  CCSFOFON CHRONIC POP MGMT  ·  19352  ·  HealthConnect  ·  disposition  ·  outpatient program',g:'Quick Link',gc:'t-algo',u:'links.html#link-cpm'},
