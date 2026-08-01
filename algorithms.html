@@ -594,7 +594,7 @@ main>*:nth-child(4){animation-delay:.15s}
       </div>
     </div>
     <!-- ══ INFECTIOUS DISEASE / SEPSIS ══ -->
-    <div class="algo-group-header">🦠 Infectious Disease / Sepsis <span class="algo-group-count">(22)</span></div>
+    <div class="algo-group-header">🦠 Infectious Disease / Sepsis <span class="algo-group-count">(24)</span></div>
     <div class="algo-card" onclick="showAlgo('cdiff-2step-testing')" id="card-cdiff-2step-testing" data-algo="cdiff-2step-testing" data-keywords="c diff c. difficile clostridioides NAAT PCR toxin antigen two step testing lab workflow stool diarrhea TAT turnaround positive negative" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
       <div class="algo-icon">🧫</div>
       <div class="algo-info">
@@ -747,6 +747,20 @@ main>*:nth-child(4){animation-delay:.15s}
       <div class="algo-info">
         <div class="algo-title">Animal Bites & Rabies Reporting</div>
         <div class="algo-meta">Dr. Koyle · Apr 2026 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('cyclosporiasis-faq')" id="card-cyclosporiasis-faq" data-algo="cyclosporiasis-faq" data-keywords="cyclospora cyclosporiasis cayetanensis parasite watery diarrhea outbreak lettuce Taylor Farms TMP-SMX bactrim trimethoprim sulfamethoxazole stool O&P ova parasite cryptosporidium cystoisospora smear 87207U KPHC regional ID infectious disease FAQ travel immunocompromised reportable" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🦠</div>
+      <div class="algo-info">
+        <div class="algo-title">Cyclosporiasis — Regional ID FAQ</div>
+        <div class="algo-meta">Regional ID · Updated Jul 28, 2026 &nbsp;·&nbsp; <span class="algo-badge badge-ob">Infectious Disease</span></div>
+      </div>
+    </div>
+    <div class="algo-card" onclick="showAlgo('uc-cyclospora-test-treat')" id="card-uc-cyclospora-test-treat" data-algo="uc-cyclospora-test-treat" data-keywords="cyclospora cyclosporiasis test or treat clinical corner case quiz acute diarrhea virtual care hydration TMP-SMX bactrim outbreak GCN Dr Hoang RVMC GPC clinical corner urgent care when to test when to treat" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+      <div class="algo-icon">🦠</div>
+      <div class="algo-info">
+        <div class="algo-title">Cyclospora — Test or Treat? (Clinical Corner)</div>
+        <div class="algo-meta">GPC Clinical Corner · Dr. Hoang · Jul 2026 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
       </div>
     </div>
     <!-- ══ OB / WOMEN'S HEALTH ══ -->
@@ -3483,6 +3497,32 @@ const algos = {
         </a>
       </div>
       <iframe src="https://sp-cloud.kp.org/sites/ERtoolkit/_layouts/15/embed.aspx?UniqueId=0f740f17-1751-44a5-aace-4bd78a6e5b64" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Measles FAQ"></iframe>
+    `,
+  },
+  'cyclosporiasis-faq': {
+    icon: '🦠',
+    title: 'Cyclosporiasis — Regional ID FAQ',
+    updated: 'Regional Infectious Disease · Updated Jul 28, 2026',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/cyclospora/regional-faq.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/cyclospora/regional-faq.pdf" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Cyclosporiasis — Regional ID FAQ"></iframe>
+    `,
+  },
+  'uc-cyclospora-test-treat': {
+    icon: '🦠',
+    title: 'Cyclospora — Test or Treat? (Clinical Corner)',
+    updated: 'GPC Clinical Corner · Dr. Hoang · Jul 29, 2026',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="assets/cyclospora/clinical-corner-2026-07-29.pdf" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open PDF in new tab ↗
+        </a>
+      </div>
+      <iframe src="assets/cyclospora/clinical-corner-2026-07-29.pdf" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Cyclospora — Test or Treat? (Clinical Corner)"></iframe>
     `,
   },
   'uc-latent-tb': {
