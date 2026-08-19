@@ -745,13 +745,16 @@ function doSearch(q) {
     return tokens.every(tok => words.some(w => w.startsWith(tok)));
   });
 
-  // Boost title-starts-with matches (on first token)
-  results.sort((a, b) => {
-    const firstToken = tokens[0] || lo;
-    const at = a.t.toLowerCase().startsWith(firstToken) ? 0 : 1;
-    const bt = b.t.toLowerCase().startsWith(firstToken) ? 0 : 1;
-    return at - bt;
-  });
+  // Rank by where the match lives: title-prefix beats any-title-word beats
+  // keyword-only — so typing "vocera" puts "Vocera Web" above entries that
+  // only mention vocera in their keyword blob.
+  const firstToken = tokens[0] || lo;
+  const rankOf = item => {
+    const t = item.t.toLowerCase();
+    if (t.startsWith(firstToken)) return 0;
+    return t.split(/[\s\-\/(),.:;]+/).some(w => w && w.startsWith(firstToken)) ? 1 : 2;
+  };
+  results.sort((a, b) => rankOf(a) - rankOf(b));
 
   const total = results.length;
   results = results.slice(0, 22);
@@ -774,7 +777,12 @@ function doSearch(q) {
 
   let html = '';
   let rowIdx = 0;
-  getOrderedGroups(groups).forEach(grp => {
+  // The group holding the best-ranked item renders first; the stable sort
+  // keeps the static priority order for ties (results are rank-sorted, so
+  // groups[g][0] is each group's best item).
+  getOrderedGroups(groups)
+    .sort((a, b) => rankOf(groups[a][0]) - rankOf(groups[b][0]))
+    .forEach(grp => {
     if (!groups[grp]) return;
     html += `<div class="sdrop-group">${escapeHtml(grp)}</div>`;
     groups[grp].forEach(item => {
@@ -1422,7 +1430,7 @@ loadAnnouncement();
 initAnnouncementFirebase();
 </script>
 <button id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">☀️</button>
-<script src="theme.js?v=3"></script>
+<script src="theme.js?v=4"></script>
 <script src="chatbot.js?v=2" defer></script>
 <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
 <script src="analytics.js"></script>
