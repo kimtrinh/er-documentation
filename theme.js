@@ -224,11 +224,20 @@ applyTheme(getTheme());
         return tokens.every(function(tok){ return words.some(function(w){ return w.startsWith(tok); }); });
       });
 
-      // Boost title-starts-with (on first token)
+      // Rank by where the match lives: title-prefix beats any-title-word
+      // beats keyword-only — so "vocera" puts "Vocera Web" above entries
+      // that only mention vocera in their keyword blob.
       var firstToken = tokens[0] || lo;
-      found.sort(function(a,b){
-        return (a.t.toLowerCase().indexOf(firstToken)===0?0:1) - (b.t.toLowerCase().indexOf(firstToken)===0?0:1);
-      });
+      function omRank(item){
+        var t = item.t.toLowerCase();
+        if (t.indexOf(firstToken)===0) return 0;
+        var ws = t.split(/[\s\-\/(),.:;]+/);
+        for (var wi=0; wi<ws.length; wi++){
+          if (ws[wi] && ws[wi].indexOf(firstToken)===0) return 1;
+        }
+        return 2;
+      }
+      found.sort(function(a,b){ return omRank(a)-omRank(b); });
 
       var total = found.length;
       found = found.slice(0, 40);
@@ -244,7 +253,12 @@ applyTheme(getTheme());
 
       var html = '';
       var ri   = 0;
-      omOrderGroups(groups).forEach(function(grp){
+      // Group holding the best-ranked item renders first (stable sort keeps
+      // the static priority order for ties; found is rank-sorted, so
+      // groups[g][0] is each group's best item).
+      omOrderGroups(groups).sort(function(a,b){
+        return omRank(groups[a][0]) - omRank(groups[b][0]);
+      }).forEach(function(grp){
         if (!groups[grp]) return;
         html += '<div class="sdrop-group">'+omEsc(grp)+'</div>';
         groups[grp].forEach(function(item){
