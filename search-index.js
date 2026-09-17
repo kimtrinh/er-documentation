@@ -476,6 +476,7 @@ const SEARCH_INDEX = [
   {type:'phone',i:'📞',t:'FMC — Orthopedics PA',s:'p1651  ·  7a–10p  ·  consults  ·  fmc',g:'FMC',gc:'t-phone',u:'ed-phone-directory.html'},
   {type:'phone',i:'📞',t:'FMC — Orthopedics',s:'Attending  ·  10p–7a  ·  consults  ·  fmc',g:'FMC',gc:'t-phone',u:'ed-phone-directory.html'},
   {type:'phone',i:'📞',t:'FMC — Pain Clinic',s:'73185  ·  Beeper 7117  ·  consults  ·  fmc',g:'FMC',gc:'t-phone',u:'ed-phone-directory.html'},
+  {type:'phone',i:'📞',t:'FMC — Toxicology Consult (on-call)',s:'(888) 928-9995  ·  8889289995  ·  toxicology  ·  tox  ·  toxicologist  ·  poisoning  ·  overdose  ·  antidote  ·  page before placing inpatient toxicology consult order  ·  SSD 26-0780  ·  consults  ·  fmc',g:'FMC',gc:'t-phone',u:'ed-phone-directory.html'},
   {type:'phone',i:'📞',t:'FMC — Dialysis – HEMO 6th Floor',s:'28600 / 28608  ·  Ext 26511 (5 North)  ·  consults  ·  fmc',g:'FMC',gc:'t-phone',u:'ed-phone-directory.html'},
   {type:'phone',i:'📞',t:'FMC — PICC Line RN – 5 North',s:'26511  ·  Beeper 1404  ·  consults  ·  fmc',g:'FMC',gc:'t-phone',u:'ed-phone-directory.html'},
   {type:'phone',i:'📞',t:'FMC — Radiology (File Room)',s:'76600  ·  7a–11:30p  ·  consults  ·  fmc',g:'FMC',gc:'t-phone',u:'ed-phone-directory.html'},

@@ -57,9 +57,24 @@ service cloud.firestore {
                     && request.resource.data.commentCount == 0;
 
       allow update: if request.resource.data.diff(resource.data).affectedKeys()
-                       .hasOnly(['votes','votedBy','status','commentCount']);
+                       .hasOnly(['votes','votedBy','status','commentCount','photoCount']);
 
       allow delete: if true;
+
+      // ── Photos subcollection ──────────────────────────────────────────────
+      // Photos live here rather than on the request doc: the board listens to
+      // the whole serviceRequests collection, so images on the parent would be
+      // downloaded by every client on every load. Each photo is its own doc
+      // (base64 dataURL), fetched on demand when the lightbox opens.
+      match /photos/{photoId} {
+        allow read: if true;
+
+        allow create: if request.resource.data.keys().hasAll(['dataUrl','createdAt'])
+                      && request.resource.data.dataUrl is string
+                      && request.resource.data.dataUrl.size() > 0;
+
+        allow delete: if true;
+      }
 
       // ── Comments subcollection ────────────────────────────────────────────
       match /comments/{commentId} {

@@ -148,6 +148,33 @@ html[data-theme="light"] .location-opt.selected.fmc .location-opt-title{color:#1
 .btn-submit:hover{background:#2563eb}
 .btn-submit:disabled{background:var(--border2);color:var(--border);cursor:not-allowed}
 
+/* PHOTOS — picker, card chip, lightbox */
+.photo-picker{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.photo-btn{padding:8px 14px;border-radius:8px;border:1px dashed var(--border2);background:var(--bg);color:var(--text2);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;font-family:inherit}
+.photo-btn:hover:not(:disabled){border-color:#3b82f6;color:var(--text-blue)}
+.photo-btn:disabled{opacity:.5;cursor:not-allowed}
+.photo-hint{font-size:11px;color:var(--text3)}
+.photo-previews{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.photo-previews:empty{display:none}
+.photo-thumb{position:relative;width:72px;height:72px;border-radius:8px;overflow:hidden;border:1px solid var(--border);background:var(--bg)}
+.photo-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.photo-thumb-remove{position:absolute;top:2px;right:2px;width:20px;height:20px;border-radius:50%;border:none;background:rgba(0,0,0,.72);color:#fff;font-size:13px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
+.photo-thumb-remove:hover{background:#dc2626}
+.photo-attach-row{display:flex;align-items:center;gap:10px;margin-top:8px;flex-wrap:wrap}
+.tag-photos{background:var(--border2);color:var(--text2);cursor:pointer;border:1px solid transparent}
+.tag-photos:hover{border-color:#3b82f6;color:var(--text-blue)}
+.photo-overlay{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:1200;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:24px;opacity:0;pointer-events:none;transition:opacity .2s}
+.photo-overlay.open{opacity:1;pointer-events:all}
+.photo-stage{max-width:min(100%,1000px);display:flex;align-items:center;justify-content:center}
+.photo-stage img{max-width:100%;max-height:76vh;border-radius:10px;box-shadow:0 12px 40px rgba(0,0,0,.6);display:block}
+.photo-bar{display:flex;align-items:center;gap:14px;color:#e8f0fc;font-size:13px;font-weight:700}
+.photo-bar[hidden]{display:none}
+.photo-nav{width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.28);background:rgba(0,0,0,.5);color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
+.photo-nav:hover{background:rgba(255,255,255,.16)}
+.photo-close{position:absolute;top:16px;right:20px;width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.28);background:rgba(0,0,0,.5);color:#fff;font-size:20px;line-height:1;cursor:pointer}
+.photo-close:hover{background:#dc2626}
+.photo-loading{color:#8fa8c8;font-size:13px}
+
 /* TOAST */
 .toast{position:fixed;bottom:24px;right:24px;background:var(--surface);border:1px solid #22c55e;color:#86efac;padding:12px 20px;border-radius:10px;font-size:13px;font-weight:600;z-index:2000;transform:translateY(80px);opacity:0;transition:all .3s}
 .toast.show{transform:translateY(0);opacity:1}
@@ -275,6 +302,7 @@ main>*:nth-child(4){animation-delay:.15s}
   .item-top{padding:12px}
   .comment-form{flex-direction:column}
   .comment-author-input{min-width:100%}
+  .photo-thumb{width:60px;height:60px}
 }
 
 /* ===== NAV — More dropdown overflow ===== */
@@ -441,6 +469,16 @@ main>*:nth-child(4){animation-delay:.15s}
     </div>
 
     <div class="form-group">
+      <label>Photos (optional)</label>
+      <div class="photo-picker">
+        <input type="file" accept="image/*" id="input-photos" multiple hidden/>
+        <button type="button" class="photo-btn" id="photo-btn" onclick="document.getElementById('input-photos').click()">&#128247; Add photo</button>
+        <span class="photo-hint" id="photo-hint">0/3 &middot; JPG/PNG</span>
+      </div>
+      <div class="photo-previews" id="photo-previews"></div>
+    </div>
+
+    <div class="form-group">
       <label>Priority</label>
       <div class="tag-selector" id="priority-selector">
         <span class="tag-opt" onclick="selectOpt('priority',this,'Low')">Low</span>
@@ -475,6 +513,18 @@ main>*:nth-child(4){animation-delay:.15s}
 </div>
 
 <div class="toast" id="toast"></div>
+
+<!-- PHOTO LIGHTBOX -->
+<div class="photo-overlay" id="photo-overlay" onclick="if(event.target===this)window._closePhotos()">
+  <button class="photo-close" onclick="window._closePhotos()" aria-label="Close photo">&times;</button>
+  <div class="photo-stage" id="photo-stage"></div>
+  <div class="photo-bar" id="photo-bar" hidden>
+    <button class="photo-nav" onclick="window._photoNav(-1)" aria-label="Previous photo">&lsaquo;</button>
+    <span id="photo-counter"></span>
+    <button class="photo-nav" onclick="window._photoNav(1)" aria-label="Next photo">&rsaquo;</button>
+  </div>
+</div>
+<input type="file" accept="image/*" id="existing-photo-input" hidden/>
 
 <script type="module">
 // ── FIREBASE SETUP ──────────────────────────────────────────────
@@ -534,7 +584,7 @@ function initEmailJS() {
   }
 }
 
-async function sendEmailNotification(data) {
+async function sendEmailNotification(data, photoCount = 0) {
   if (!emailjsReady) return;
   const params = {
     to_email: recipientsFor(data.location).join(','),
@@ -544,7 +594,10 @@ async function sendEmailNotification(data) {
     room: data.room || '(not specified)',
     priority: data.priority,
     category: data.category,
-    submitter: data.submitter
+    submitter: data.submitter,
+    // Flag only — never send the base64 dataURL, it would blow past
+    // EmailJS's request size limit. Add {{has_photo}} to the template.
+    has_photo: photoCount ? `Yes (${photoCount})` : 'No'
   };
   try {
     await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params);
@@ -612,6 +665,12 @@ let selectedLocation = null;
 let selectedPriority = 'Medium';
 let selectedCategory = null;
 
+// Photo state
+let pendingPhotos = [];    // dataURLs staged in the New Request modal
+let photoTargetId = null;  // request id being attached to from a card
+let lightboxPhotos = [];
+let lightboxIndex = 0;
+
 // ── HELPERS ──────────────────────────────────────────────────
 function esc(str) {
   const d = document.createElement('div');
@@ -644,6 +703,244 @@ function showToast(msg) {
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 3200);
 }
+
+// ── PHOTOS ───────────────────────────────────────────────────
+// Photos are stored as base64 dataURLs in a `photos` SUBCOLLECTION
+// (serviceRequests/{id}/photos/{photoId}) rather than on the request
+// document itself. setupRealtimeRequests() listens to the entire
+// serviceRequests collection, so anything living on a parent doc is
+// downloaded by every client on every load — photos there would make
+// the whole board heavy. The parent carries only a small `photoCount`,
+// and the images are fetched on demand when the lightbox opens.
+const MAX_PHOTOS = 3;
+const PHOTO_MAX_DIM = 1400;                    // longest side, px
+const PHOTO_JPEG_QUALITY = 0.75;
+const PHOTO_MAX_DATAURL = 900000;              // stay under Firestore's 1 MiB/doc
+const PHOTO_MAX_RAW_BYTES = 25 * 1024 * 1024;  // reject before decoding
+
+// Only render an image we can prove is an inline image dataURL. esc()
+// escapes < > and & but NOT quotes, so it is not safe inside an
+// attribute — and these values come from a public-write collection.
+// Validate, then assign through the DOM property rather than markup.
+const IMAGE_DATAURL_RE = /^data:image\/(jpeg|png|webp|gif);base64,[A-Za-z0-9+/]+={0,2}$/;
+function isSafeImageDataUrl(v) {
+  return typeof v === 'string' && v.length <= 1200000 && IMAGE_DATAURL_RE.test(v);
+}
+
+// Canvas downscale — same approach as the home-page announcement uploader.
+function downscaleImageToDataUrl(file, maxDim = PHOTO_MAX_DIM, quality = PHOTO_JPEG_QUALITY) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => reject(reader.error);
+    reader.onload = () => {
+      const img = new Image();
+      img.onerror = () => reject(new Error('Could not decode image.'));
+      img.onload = () => {
+        let { width, height } = img;
+        if (width > maxDim || height > maxDim) {
+          const scale = Math.min(maxDim / width, maxDim / height);
+          width = Math.round(width * scale);
+          height = Math.round(height * scale);
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+// File -> storable dataURL, or { err } explaining why not. The raw-size
+// check runs BEFORE decoding so a huge phone photo can't hang the tab.
+async function prepPhoto(file) {
+  if (!file.type.startsWith('image/')) return { err: `${file.name} is not an image` };
+  if (file.size > PHOTO_MAX_RAW_BYTES) return { err: `${file.name} is too large (max 25 MB)` };
+  try {
+    const dataUrl = await downscaleImageToDataUrl(file);
+    if (dataUrl.length > PHOTO_MAX_DATAURL) return { err: `${file.name} is still too large` };
+    return { dataUrl };
+  } catch (e) {
+    console.warn('Photo processing failed:', file.name, e);
+    return { err: `${file.name} could not be processed` };
+  }
+}
+
+function renderPhotoPreviews() {
+  const wrap = document.getElementById('photo-previews');
+  if (!wrap) return;
+  wrap.innerHTML = '';
+  pendingPhotos.forEach((src, i) => {
+    const cell = document.createElement('div');
+    cell.className = 'photo-thumb';
+    const img = document.createElement('img');
+    img.alt = `Photo ${i + 1}`;
+    if (isSafeImageDataUrl(src)) img.src = src;
+    const rm = document.createElement('button');
+    rm.type = 'button';
+    rm.className = 'photo-thumb-remove';
+    rm.title = 'Remove photo';
+    rm.textContent = '×';
+    rm.addEventListener('click', () => removePendingPhoto(i));
+    cell.appendChild(img);
+    cell.appendChild(rm);
+    wrap.appendChild(cell);
+  });
+  const btn = document.getElementById('photo-btn');
+  const hint = document.getElementById('photo-hint');
+  if (btn) btn.disabled = pendingPhotos.length >= MAX_PHOTOS;
+  if (hint) hint.textContent = `${pendingPhotos.length}/${MAX_PHOTOS} · JPG/PNG`;
+}
+
+function removePendingPhoto(i) {
+  pendingPhotos.splice(i, 1);
+  renderPhotoPreviews();
+}
+
+// Write photos into the request's subcollection. Returns true on full
+// success — a failure here must never lose the request itself.
+async function uploadPhotoDocs(requestId, dataUrls, author) {
+  try {
+    for (const dataUrl of dataUrls) {
+      await addDoc(collection(db, 'serviceRequests', requestId, 'photos'), {
+        dataUrl: dataUrl,
+        author: author || 'Anonymous',
+        submitterBrowserId: BROWSER_ID,
+        createdAt: serverTimestamp()
+      });
+    }
+    return true;
+  } catch (e) {
+    console.error('Photo upload error:', e);
+    return false;
+  }
+}
+
+// Attach a photo to a request that already exists on the board.
+function pickPhotoFor(id) {
+  photoTargetId = id;
+  const input = document.getElementById('existing-photo-input');
+  input.value = '';
+  input.click();
+}
+
+async function handleExistingPhotoPick(files) {
+  const id = photoTargetId;
+  photoTargetId = null;
+  if (!id || !files.length) return;
+  if (!firebaseReady) { showToast('Firebase is not configured.'); return; }
+
+  const item = allRequests.find(r => r.id === id);
+  const already = (item && item.photoCount) || 0;
+  const room = MAX_PHOTOS - already;
+  if (room <= 0) { showToast(`Already at ${MAX_PHOTOS} photos.`); return; }
+
+  showToast('Processing photo…');
+  const accepted = [];
+  const errs = [];
+  for (const file of Array.from(files).slice(0, room)) {
+    const { dataUrl, err } = await prepPhoto(file);
+    if (err) errs.push(err); else accepted.push(dataUrl);
+  }
+  if (!accepted.length) { showToast(errs[0] || 'No photo added.'); return; }
+
+  if (!(await uploadPhotoDocs(id, accepted, 'Anonymous'))) {
+    showToast('Failed to attach photo.');
+    return;
+  }
+  try {
+    await updateDoc(doc(db, 'serviceRequests', id), { photoCount: increment(accepted.length) });
+  } catch (e) {
+    // Count bump needs 'photoCount' in the rules update allowlist; the
+    // photo itself is already saved, so don't fail the whole action.
+    console.warn('photoCount update failed (deploy firestore.rules?):', e);
+  }
+  showToast(errs.length ? `Photo added · ${errs.length} skipped` : 'Photo added.');
+}
+
+// ── PHOTO LIGHTBOX ───────────────────────────────────────────
+async function openPhotos(id) {
+  const overlay = document.getElementById('photo-overlay');
+  const stage = document.getElementById('photo-stage');
+  overlay.classList.add('open');
+  stage.innerHTML = '<div class="photo-loading">Loading photo…</div>';
+  document.getElementById('photo-bar').hidden = true;
+  lightboxPhotos = [];
+  lightboxIndex = 0;
+  try {
+    const snap = await getDocs(query(
+      collection(db, 'serviceRequests', id, 'photos'), orderBy('createdAt', 'asc')));
+    snap.forEach(d => {
+      const src = (d.data() || {}).dataUrl;
+      if (isSafeImageDataUrl(src)) lightboxPhotos.push(src);
+    });
+  } catch (e) {
+    console.error('Load photos error:', e);
+  }
+  if (!lightboxPhotos.length) {
+    stage.innerHTML = '<div class="photo-loading">No photo available.</div>';
+    return;
+  }
+  renderLightbox();
+}
+
+function renderLightbox() {
+  const stage = document.getElementById('photo-stage');
+  stage.innerHTML = '';
+  const img = document.createElement('img');
+  img.alt = `Photo ${lightboxIndex + 1}`;
+  img.src = lightboxPhotos[lightboxIndex]; // validated in openPhotos()
+  stage.appendChild(img);
+  const multi = lightboxPhotos.length > 1;
+  document.getElementById('photo-bar').hidden = !multi;
+  if (multi) {
+    document.getElementById('photo-counter').textContent =
+      `${lightboxIndex + 1} / ${lightboxPhotos.length}`;
+  }
+}
+
+function photoNav(delta) {
+  if (lightboxPhotos.length < 2) return;
+  const len = lightboxPhotos.length;
+  lightboxIndex = ((lightboxIndex + delta) % len + len) % len;
+  renderLightbox();
+}
+
+function closePhotos() {
+  document.getElementById('photo-overlay').classList.remove('open');
+  document.getElementById('photo-stage').innerHTML = '';
+  lightboxPhotos = [];
+}
+
+// Staged picker (New Request modal)
+document.getElementById('input-photos').addEventListener('change', async e => {
+  const files = Array.from(e.target.files || []);
+  e.target.value = '';
+  if (!files.length) return;
+  const btn = document.getElementById('photo-btn');
+  const label = btn.textContent;
+  btn.disabled = true;
+  const errs = [];
+  for (const file of files) {
+    if (pendingPhotos.length >= MAX_PHOTOS) { errs.push(`${file.name} (max ${MAX_PHOTOS})`); continue; }
+    btn.textContent = 'Processing…';
+    const { dataUrl, err } = await prepPhoto(file);
+    if (err) errs.push(err); else pendingPhotos.push(dataUrl);
+  }
+  btn.textContent = label;
+  renderPhotoPreviews();
+  if (errs.length) showToast(`Skipped: ${errs[0]}${errs.length > 1 ? ` (+${errs.length - 1})` : ''}`);
+});
+
+// Picker for requests already on the board
+document.getElementById('existing-photo-input').addEventListener('change', e => {
+  const files = Array.from(e.target.files || []);
+  e.target.value = '';
+  handleExistingPhotoPick(files);
+});
 
 // ── REALTIME REQUESTS ────────────────────────────────────────
 function setupRealtimeRequests() {
@@ -705,6 +1002,7 @@ function cardHTML(item) {
   const votedBy = item.votedBy || [];
   const voted = votedBy.includes(BROWSER_ID);
   const commentCount = item.commentCount || 0;
+  const photoCount = item.photoCount || 0;
   const isOpen = openComments.has(item.id);
   const pulse = changedVoteIds.has(item.id);
   if (pulse) changedVoteIds.delete(item.id);
@@ -727,6 +1025,7 @@ function cardHTML(item) {
           <span class="tag tag-location-${(item.location || '').toLowerCase()}">${esc(item.location)}</span>
           ${item.room ? `<span class="tag tag-room">Rm ${esc(item.room)}</span>` : ''}
           <span class="tag tag-category">${esc(item.category || 'Other')}</span>
+          ${photoCount > 0 ? `<span class="tag tag-photos" onclick="event.stopPropagation();window._openPhotos('${item.id}')" title="View ${photoCount} photo${photoCount !== 1 ? 's' : ''}">&#128247; ${photoCount}</span>` : ''}
           <span class="item-time">${timeAgo(item.createdAt)}</span>
           ${item.submitter ? `<span class="item-submitter">${esc(item.submitter)}</span>` : ''}
         </div>
@@ -761,6 +1060,10 @@ function cardHTML(item) {
         <input type="text" class="comment-input" id="cinput-${item.id}" placeholder="Add a comment..." maxlength="300"/>
         <input type="text" class="comment-author-input" id="cauthor-${item.id}" placeholder="Name" maxlength="40"/>
         <button class="comment-submit" onclick="window._addComment('${item.id}')">Post</button>
+      </div>
+      <div class="photo-attach-row">
+        <button class="photo-btn" onclick="window._pickPhotoFor('${item.id}')"${photoCount >= MAX_PHOTOS ? ' disabled' : ''}>&#128247; Attach photo</button>
+        <span class="photo-hint">${photoCount}/${MAX_PHOTOS} attached</span>
       </div>
     </div>` : ''}
   </div>`;
@@ -997,6 +1300,8 @@ function resetForm() {
   selectedLocation = null;
   selectedPriority = 'Medium';
   selectedCategory = null;
+  pendingPhotos = [];
+  renderPhotoPreviews();
 }
 
 async function submitRequest() {
@@ -1034,13 +1339,26 @@ async function submitRequest() {
       votes: 0,
       votedBy: [],
       commentCount: 0,
+      photoCount: pendingPhotos.length,
       createdAt: serverTimestamp()
     };
 
-    await addDoc(collection(db, 'serviceRequests'), data);
-    sendEmailNotification(data);
+    const ref = await addDoc(collection(db, 'serviceRequests'), data);
+
+    // Photos go to the subcollection AFTER the request exists. If this
+    // fails the request itself is already safely saved — say so rather
+    // than losing the submission.
+    let photoFailed = false;
+    if (pendingPhotos.length) {
+      btn.textContent = 'Uploading photos...';
+      photoFailed = !(await uploadPhotoDocs(ref.id, pendingPhotos, data.submitter));
+    }
+
+    sendEmailNotification(data, pendingPhotos.length);
     closeModal();
-    showToast('Request submitted successfully!'); // listener auto-updates the list
+    showToast(photoFailed
+      ? 'Request submitted, but the photo upload failed.'
+      : 'Request submitted successfully!'); // listener auto-updates the list
   } catch (e) {
     console.error('Submit error:', e);
     showToast('Failed to submit. Please try again.');
@@ -1295,10 +1613,22 @@ window.filterLocation = filterLocation;
 window.filterCategory = filterCategory;
 window.filterStatus = filterStatus;
 window.sortItems = sortItems;
+window._openPhotos = openPhotos;
+window._closePhotos = closePhotos;
+window._photoNav = photoNav;
+window._pickPhotoFor = pickPhotoFor;
 
 // ── KEYBOARD ─────────────────────────────────────────────────
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeModal();
+  const lightboxOpen = document.getElementById('photo-overlay').classList.contains('open');
+  if (e.key === 'Escape') {
+    if (lightboxOpen) closePhotos();
+    else closeModal();
+    return;
+  }
+  if (!lightboxOpen) return;
+  if (e.key === 'ArrowLeft') photoNav(-1);
+  else if (e.key === 'ArrowRight') photoNav(1);
 });
 
 // ── INIT ─────────────────────────────────────────────────────
