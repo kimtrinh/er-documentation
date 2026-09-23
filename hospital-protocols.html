@@ -365,6 +365,9 @@ main{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-colu
 
       <!-- SECTION: ED Operations & Workflows -->
       <div class="list-section-header">⚙️ ED Operations &amp; Workflows</div>
+      <div class="list-item" data-target="imaging-utilization" data-keywords="imaging utilization iMagic fallout outlier CT head syncope echo dyspnea BNP D-dimer DVT Wells bilateral ordering radiology standard deviation metrics">
+        <div class="li-title">Imaging Utilization — Avoiding Fallouts</div>
+      </div>
 
       <div class="list-item" data-target="last-hour-assignment" data-keywords="last hour assignment end of shift late arrivals coverage protocol staffing">
         <div class="li-title">Last Hour Assignment Protocol</div>
@@ -892,6 +895,45 @@ main{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-colu
       </div>
     </div>
 
+    <!-- ══ IMAGING UTILIZATION ══ -->
+    <div class="protocol-panel" id="imaging-utilization">
+      <div class="info-card">
+        <div class="card-top">
+          <div>
+            <div id="imaging-utilization-avoiding-fallouts" class="card-title">Imaging Utilization — Avoiding Fallouts</div>
+            <div class="card-dept">Emergency Medicine · Radiology Stewardship</div>
+          </div>
+          <div class="decision-badge blue">🩻 Ordering Guide</div>
+        </div>
+        <hr class="divider"/>
+        <div style="font-size:13px;color:var(--text2);line-height:1.6">
+          <div style="padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-left:3px solid #93c5fd;border-radius:8px;margin-bottom:12px">
+            <div style="font-weight:700;color:var(--text);margin-bottom:4px">What&rsquo;s tracked</div>
+            <b>CT head, MRI brain, CT abdomen/pelvis, and CT angio chest</b>, normalized to patient encounters. Red = <b>2+ standard deviations</b> from the norm, yellow = 1&ndash;2 SD, and ~90% of physicians fall within &plusmn;1 SD. <b>It is not adjusted for PIT shifts.</b> Nothing financial is attached &mdash; it is reported to leadership.
+          </div>
+          <div style="font-weight:700;color:var(--text);margin-bottom:6px">The four rules</div>
+          <div style="padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-left:3px solid #fca5a5;border-radius:8px;margin-bottom:8px">
+            <div style="font-weight:700;color:#fca5a5;margin-bottom:4px">1 · Head CT for syncope</div>
+            A faint alone does not need a head CT. If you order one, your diagnosis must also include <b>traumatic brain injury, intracranial hemorrhage, or headache</b> &mdash; those are excluded. <b>Syncope alone + head CT = fallout.</b>
+            <div style="margin-top:6px;color:var(--text3);font-size:12px">This measure is being sunset in the near future.</div>
+          </div>
+          <div style="padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-left:3px solid #fcd34d;border-radius:8px;margin-bottom:8px">
+            <div style="font-weight:700;color:#fcd34d;margin-bottom:4px">2 · Echo for dyspnea</div>
+            Ordering an outpatient echo with the indication <b>dyspnea</b> and <b>no abnormal BNP = fallout</b>. If it is only for shortness of breath, <b>check a BNP and make sure it is abnormal</b>. Ordering for a <b>murmur, AFib, or heart failure</b>? Check that box instead and it will not count.
+          </div>
+          <div style="padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-left:3px solid #86efac;border-radius:8px;margin-bottom:8px">
+            <div style="font-weight:700;color:#86efac;margin-bottom:4px">3 · D-dimer before DVT ultrasound</div>
+            The DVT order contains a <b>Wells score</b>. If the patient is <b>high risk you do not need a D-dimer &mdash; but you must click the boxes</b> that establish high risk. <b>Low risk + ultrasound without an abnormal D-dimer = fallout.</b>
+          </div>
+          <div style="padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-left:3px solid #c4b5fd;border-radius:8px">
+            <div style="font-weight:700;color:#c4b5fd;margin-bottom:4px">4 · Bilateral DVT studies — coming</div>
+            Being added as a measure because of the very high negative rate on bilateral studies.
+          </div>
+          <div style="color:var(--text3);font-size:12px;margin-top:10px">Outlier emails go out to physicians 2+ SD from the norm; no email means you are in the average group. Source: 9/23/2026 ED physician meeting.</div>
+        </div>
+      </div>
+    </div>
+
     <!-- ══ MD RESTRAINT ══ -->
     <div class="protocol-panel" id="md-restraint">
       <div class="info-card">
@@ -905,20 +947,31 @@ main{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-colu
         <hr class="divider"/>
         <div style="font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:12px">
           <div style="padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-left:3px solid #c4b5fd;border-radius:8px;margin-bottom:10px">
-            <div style="font-weight:700;color:var(--text);margin-bottom:4px">Restraint types — quick orientation</div>
-            From the 5/27/26 physician meeting: when ordering restraints, choose the right type for the clinical scenario.
+            <div style="font-weight:700;color:var(--text);margin-bottom:4px">First decide: behavioral or clinical?</div>
+            The restraint type follows from that branch — the two are ordered differently, and picking the wrong one is a documented audit finding. <b>CMS reviews restraint orders during site visits.</b>
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
             <div style="padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-left:3px solid #fca5a5;border-radius:8px">
-              <div style="font-weight:700;color:#fca5a5;margin-bottom:4px">Type 1 — Intubation</div>
-              Post-intubation / mechanically ventilated patients. Restraint orders follow the standard clinical (non-violent) restraint pathway — see the cheat sheet below.
+              <div style="font-weight:700;color:#fca5a5;margin-bottom:4px">Behavioral / violent</div>
+              Psychiatric and violent patients. <b>Order four-point HARD restraints</b> &mdash; not &ldquo;hard locking,&rdquo; not &ldquo;hard Velcro.&rdquo; Just <i>hard</i>.
+              <div style="margin-top:6px;color:var(--text3);font-size:12px">Why four-point every time: the RN must use the least restrictive effective option, and can <b>de-escalate below</b> your order but <b>never escalate above</b> it. Ordering four-point lets them take off a limb at a time; ordering less boxes them in.</div>
             </div>
             <div style="padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-left:3px solid #fcd34d;border-radius:8px">
-              <div style="font-weight:700;color:#fcd34d;margin-bottom:4px">Type 2 — Elderly / AMS</div>
-              <b>Bilateral soft wrists ONLY.</b> Do not order 4-point or hard restraints for elderly / AMS patients in the ED.
+              <div style="font-weight:700;color:#fcd34d;margin-bottom:4px">Clinical / non-violent</div>
+              Intubated, or pulling at lines / the ET tube. <b>Never four-point.</b> Bilateral soft wrists.
+              <div style="margin-top:6px;color:var(--text3);font-size:12px"><b>Type 1 &mdash; Intubation:</b> post-intubation / mechanically ventilated; standard clinical (non-violent) pathway.<br/><b>Type 2 &mdash; Elderly / AMS:</b> bilateral soft wrists ONLY &mdash; do not order 4-point or hard restraints.</div>
             </div>
           </div>
-          <div style="color:var(--text3);font-size:12px;margin-top:8px">Source: 5/27/2026 ED physician meeting · See full cheat sheet + Behavioral vs Clinical reference below.</div>
+          <div style="padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-left:3px solid #fca5a5;border-radius:8px;margin-top:10px">
+            <div style="font-weight:700;color:var(--text);margin-bottom:4px">The usual miss: the renewal order</div>
+            Initial orders generally get placed &mdash; it is the <b>renewal</b> that gets forgotten, and that is what surfaces on audit. If you miss the window you can edit the time of onset, and write the actual order time into your note so there is a paper trail.
+            <div style="margin-top:6px;color:var(--text3);font-size:12px">⚠️ The renewal interval was given as ~2 hours at the 9/23/26 meeting but was not confirmed on the call &mdash; verify against current policy.</div>
+          </div>
+          <div style="padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-left:3px solid #93c5fd;border-radius:8px;margin-top:10px">
+            <div style="font-weight:700;color:var(--text);margin-bottom:4px">Finding them in the order set</div>
+            <b>hard ankle bilateral</b> and <b>hard wrist bilateral</b> sit in two separate spots near the bottom &mdash; you have to search and click both. A regional request is in to move them to the top of the list.
+          </div>
+          <div style="color:var(--text3);font-size:12px;margin-top:8px">Source: 5/27/2026 and 9/23/2026 ED physician meetings · See full cheat sheet + Behavioral vs Clinical reference below.</div>
         </div>
         <a class="download-btn" href="https://sp-cloud.kp.org/sites/ERtoolkit/Shared%20Documents/assets/assets/md-restraint-cheatsheet.pptx" target="_blank" rel="noopener">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#86efac" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
@@ -1020,6 +1073,22 @@ main{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-colu
           <div class="decision-badge teal">🧠 Geriatric Behavioral</div>
         </div>
         <hr class="divider"/>
+        <div style="font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:12px">
+          <div style="padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-left:3px solid #fca5a5;border-radius:8px;margin-bottom:10px">
+            <div style="font-weight:700;color:var(--text);margin-bottom:4px">Escalating agitation &mdash; consult Internal Medicine, not geriatrics</div>
+            If the patient needs <b>restraints, a 1:1 sitter, or multiple IM medications</b> to control agitation, they should be <b>consulted to Internal Medicine</b>. Do not hold them in the ED 18&ndash;24 hours waiting for geriatrics to recommend changing Seroquel 12.5 &rarr; 25 and adding trazodone at night &mdash; that will not acutely manage the behavior.
+          </div>
+          <div style="padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-left:3px solid #fcd34d;border-radius:8px;margin-bottom:10px">
+            <div style="font-weight:700;color:var(--text);margin-bottom:4px">Work up medical causes first</div>
+            <b>Infection, constipation, day&ndash;night disruption, insomnia</b> &mdash; all cause acute delirium and should be treated medically.
+            <div style="margin-top:6px;color:var(--text3);font-size:12px">Once a patient is moved into the &ldquo;placement&rdquo; category, it is very hard to pull them back into acute care.</div>
+          </div>
+          <div style="padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-left:3px solid #93c5fd;border-radius:8px">
+            <div style="font-weight:700;color:var(--text);margin-bottom:4px">Finding geriatrics on call</div>
+            Geriatrics consult is listed <b>between the Fontana (FMC) and Ontario (OMC) sections</b> of the on-call list &mdash; <b>not</b> in alphabetical order with the other specialists who cover both hospitals.
+          </div>
+          <div style="color:var(--text3);font-size:12px;margin-top:8px">Getting pushback on an admission? Cases are being collected &mdash; send them to ED leadership. Source: 9/23/2026 ED physician meeting.</div>
+        </div>
         <a class="download-btn" href="https://sp-cloud.kp.org/sites/ERtoolkit/Shared%20Documents/assets/assets/dementia-behavioral-ed-workflow.docx" target="_blank" rel="noopener">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#86efac" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           <div><div>Open Document</div><div class="download-btn-sub">Word · Office Online</div></div>
