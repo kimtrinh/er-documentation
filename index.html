@@ -105,6 +105,8 @@ main>*:nth-child(4){animation-delay:.15s}
 .announcement-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;margin-bottom:8px}
 .announcement-title{font-size:13px;font-weight:800;letter-spacing:.4px;color:#fbbf24;text-transform:uppercase}
 .announcement-sub{font-size:11px;color:#fdba74;margin-top:2px}
+.announcement-archive-link{color:#fdba74;text-decoration:underline;text-underline-offset:2px}
+.announcement-archive-link:hover{color:#fef3c7}
 .announcement-controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .announcement-code{background:rgba(8,15,26,.8);border:1px solid rgba(251,191,36,.35);border-radius:6px;color:var(--text);padding:6px 8px;font-family:var(--mono);font-size:12px;min-width:84px}
 .announcement-btn{background:#b45309;color:#fff;border:1px solid #f59e0b;border-radius:6px;padding:6px 10px;font-size:11px;font-weight:700;cursor:pointer}
@@ -327,6 +329,7 @@ main{max-width:1100px;margin:0 auto;padding:22px 24px 80px}
       <a class="nav-link" href="rsi.html" role="menuitem">🚨 Resuscitation</a>
       <a class="nav-link" href="neurohub.html" role="menuitem">🧠 Neuro Hub</a>
       <a class="nav-link" href="changelog.html" role="menuitem">🆕 What's New</a>
+      <a class="nav-link" href="announcements.html" role="menuitem">📚 Past Announcements</a>
         </div>
       </div>
     </div></div>
@@ -354,11 +357,12 @@ main{max-width:1100px;margin:0 auto;padding:22px 24px 80px}
       <div class="announcement-head">
         <div>
           <div class="announcement-title" id="announcementTitle">🚨 Important Announcements</div>
-          <div class="announcement-sub">Locked section for urgent department-wide updates.</div>
+          <div class="announcement-sub">Locked section for urgent department-wide updates. &middot; <a class="announcement-archive-link" href="announcements.html">📚 past announcements</a></div>
         </div>
         <div class="announcement-controls">
           <input class="announcement-code" id="announcementCode" type="password" inputmode="numeric" placeholder="Enter code" aria-label="Announcement unlock code" maxlength="4">
           <button class="announcement-btn" id="announcementUnlockBtn" type="button" onclick="toggleAnnouncementLock()">Unlock</button>
+          <button class="announcement-btn" id="announcementArchiveBtn" type="button" onclick="archiveAnnouncement()" title="File this announcement in the archive and clear the box" hidden>📁 Archive &amp; clear</button>
         </div>
       </div>
       <div class="announcement-status" id="announcementStatus">🔒 Locked — enter code to edit.</div>
@@ -1015,7 +1019,9 @@ function setAnnouncementLockState(unlocked) {
   const imgRemoveBtn = document.getElementById('announcementImageRemoveBtn');
   const docActions = document.getElementById('announcementDocActions');
   const docBtn = document.getElementById('announcementDocBtn');
+  const archiveBtn = document.getElementById('announcementArchiveBtn');
   txt.disabled = !unlocked;
+  if (archiveBtn) archiveBtn.hidden = !unlocked;
   if (imgActions) imgActions.hidden = !unlocked;
   if (imgBtn) imgBtn.disabled = !unlocked;
   if (imgRemoveBtn) {
@@ -1252,6 +1258,83 @@ async function saveAnnouncementDocsToFirebase(docs) {
     docs,
     updatedAt: firestoreModule.serverTimestamp()
   }, { merge: true });
+}
+
+// ── ARCHIVE ──────────────────────────────────────────────────────────
+// Files the current announcement as a sibling doc in siteContent, then
+// clears the live one. Sibling docs are already permitted by the existing
+// rule (match /siteContent/{docId}), so this needs no rules deploy. The
+// archive keeps TEXT ONLY — images and attachments are dropped, which the
+// confirm() below names explicitly so it can't surprise anyone.
+async function archiveAnnouncement() {
+  if (localStorage.getItem(ANNOUNCEMENT_UNLOCK_KEY) !== 'true') {
+    alert('Unlock the announcement section first.');
+    return;
+  }
+  const txt = document.getElementById('announcementText');
+  const text = (txt.value || '').trim();
+  if (!text) {
+    alert('Nothing to archive — the announcement is empty.');
+    return;
+  }
+  if (!announcementDb || !announcementDocRef) {
+    alert('Cloud sync unavailable — cannot archive right now.');
+    return;
+  }
+
+  const nImg = announcementSlides.length;
+  const nDoc = announcementDocs.length;
+  let warn = '';
+  if (nImg || nDoc) {
+    const bits = [];
+    if (nImg) bits.push(nImg + ' image' + (nImg === 1 ? '' : 's'));
+    if (nDoc) bits.push(nDoc + ' attachment' + (nDoc === 1 ? '' : 's'));
+    warn = '\n\nThe archive keeps the text only — ' + bits.join(' and ') +
+           ' will NOT be saved and will be removed from the announcement.';
+  }
+  if (!confirm('Archive this announcement and clear the box?' + warn)) return;
+
+  const btn = document.getElementById('announcementArchiveBtn');
+  const label = btn ? btn.textContent : '';
+  if (btn) { btn.disabled = true; btn.textContent = 'Archiving…'; }
+
+  try {
+    const fs = await import('https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js');
+    // Deterministic id keeps entries self-describing and ordered in the console.
+    const id = 'archive_' + new Date().toISOString().replace(/[:.]/g, '-');
+    await fs.setDoc(fs.doc(announcementDb, 'siteContent', id), {
+      type: 'announcementArchive',   // the field the archive page filters on
+      text: text,
+      hadImages: nImg,
+      hadDocs: nDoc,
+      archivedAt: fs.serverTimestamp()
+    });
+
+    // Clear the live announcement.
+    await fs.setDoc(announcementDocRef, {
+      text: '',
+      imageUrls: [],
+      imageUrl: null,
+      docs: [],
+      updatedAt: fs.serverTimestamp()
+    }, { merge: true });
+
+    // Reset local state/UI. suppressAnnouncementSave mirrors the read path so
+    // clearing the textarea doesn't re-trigger the debounced save.
+    suppressAnnouncementSave = true;
+    txt.value = '';
+    suppressAnnouncementSave = false;
+    localStorage.setItem(ANNOUNCEMENT_TEXT_KEY, '');
+    setAnnouncementSlides([]);
+    setAnnouncementDocs([]);
+
+    alert('Archived. The box is clear and ready for the next announcement.\nView past announcements at announcements.html');
+  } catch (e) {
+    console.warn('Failed to archive announcement.', e);
+    alert('Could not archive — nothing was changed. Check the connection and try again.');
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = label; }
+  }
 }
 
 function toggleAnnouncementLock() {
