@@ -622,6 +622,7 @@ const SEARCH_INDEX = [
   {type:'page',i:'📑',t:'Site Index',s:'sitemap  ·  index  ·  table of contents  ·  TOC  ·  browse  ·  tree  ·  every page  ·  every card  ·  outline  ·  directory of contents  ·  index of everything',g:'Reference',gc:'t-algo',u:'sitemap.html'},
   {type:'page',i:'🗺️',t:'Roadmap',s:'upcoming features  ·  planned additions  ·  site roadmap',g:'Reference',gc:'t-algo',u:'roadmap.html'},
   {type:'page',i:'🆕',t:"What's New",s:'changelog  ·  site updates  ·  new features  ·  recent changes  ·  release notes',g:'Reference',gc:'t-algo',u:'changelog.html'},
+  {type:'page',i:'📚',t:'Past Announcements',s:'past announcements  ·  announcement archive  ·  archived announcements  ·  previous announcements  ·  announcement history  ·  old announcements  ·  bulletin  ·  archive',g:'Reference',gc:'t-algo',u:'announcements.html'},
   {type:'page',i:'🌀',t:'Vertigo Helper',s:'vertigo  ·  dizziness  ·  BPPV  ·  central vs peripheral  ·  HINTS exam  ·  nystagmus  ·  cerebellar stroke  ·  vestibular',g:'Reference',gc:'t-algo',u:'vertigo-helper.html'},
   {type:'page',i:'🚩',t:'Issue Reporting Form',s:'report  ·  on-call consultant delay  ·  critical radiology delay  ·  staff behavior  ·  complaint  ·  concern  ·  incident  ·  feedback',g:'Reference',gc:'t-algo',u:'https://forms.cloud.microsoft/r/Fbf0L0XCBK'},
 
