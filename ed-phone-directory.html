@@ -589,6 +589,7 @@ main>*:nth-child(4){animation-delay:.15s}
       <a class="nav-link" href="rsi.html" role="menuitem">🚨 Resuscitation</a>
       <a class="nav-link" href="neurohub.html" role="menuitem">🧠 Neuro Hub</a>
       <a class="nav-link" href="changelog.html" role="menuitem">🆕 What's New</a>
+      <a class="nav-link" href="announcements.html" role="menuitem">📚 Past Announcements</a>
         </div>
       </div>
     </div></div>
@@ -929,6 +930,9 @@ const data = {
       { name: "Respiratory", number: "28998 / 28871 Cisco", type: "ext", note: "Beeper 1404" },
       { name: "Radiology (File Room)", number: "76600", type: "ext", note: "7a–11:30p" },
       { name: "Radiology (STAT reads)", number: "76600", type: "ext", note: "7a–7p" },
+      { name: "Radiology — Evening Supervisor", number: "(909) 427-7666", type: "phone", note: "M–F 3p–11:30p · Adriana Urquidez / Lead Tech" },
+      { name: "Radiology — File Room (evening)", number: "(909) 427-7660", type: "phone", note: "7 days 3p–11:30p · Carmichael / Aguilar / Green · also Teams" },
+      { name: "Radiology — Graveyard System Admin", number: "(909) 302-4112", type: "phone", note: "7 days 12a–8a · Gonzalez / Ntim · also Teams" },
       { name: "Substance Abuse", number: "29119", type: "ext", note: "7:30a–3:30p M–F" },
       { name: "Toxicology Consult (on-call)", number: "(888) 928-9995", type: "phone", note: "Page before placing Inpatient Tox Consult order" },
       { name: "Wound RN", number: "29652", type: "ext" },
@@ -1070,7 +1074,7 @@ const data = {
       { name: "Ectopic Watch", number: "Fwd chart to Jessica Dasco", type: "ext" },
       { name: "GYN Case Managers", number: "Traci Brennan or Noelle Miranda", type: "ext", note: `Vocera "GYN"` },
       { name: "Occupational Exposure", number: "Fwd chart to Gina Cummings", type: "ext" },
-      { name: "OnRad Delays (>3 hrs) 12p–7a", number: "(909) 302-4112", type: "phone" },
+      { name: "OnRad Delays (>3 hrs) 12p–7a", number: "(909) 302-4112", type: "phone", note: "Graveyard System Admin line · Gonzalez / Ntim 12a–8a" },
       { name: "Radiology Schedule: KP Telerad M–Th 7p–7a", number: "OnRad F–Su 7p–7a", type: "ext" },
       { name: "Ontario ER – Pod A Ambulance", number: "8-264-5810", type: "ext" },
       { name: "Ontario ER – Pod B", number: "8-264-5820", type: "ext" },
@@ -1189,7 +1193,13 @@ function fullNumberPrefixForHospital(hospital) {
 function extensionToFullNumber(extValue, hospital) {
   const ext = String(extValue || '').trim();
   if (!/^\d{5}$/.test(ext)) return null;
-  if (hospital === 'omc' && ext.startsWith('7')) {
+  // Fontana numbering: 2xxxx -> (909) 302-xxxx, 7xxxx -> (909) 427-xxxx.
+  // The 7 -> 427 rule holds whichever directory you are viewing, so it must
+  // not be gated on hospital. Confirmed by numbers written independently
+  // elsewhere: Security ext 75500 carries the note (909) 427-5500, the FMC
+  // main line is (909) 427-5000, and OCC MED ext 73917 matches the
+  // (909) 427-3917 used on the bloodborne-pathogen card.
+  if (ext.startsWith('7')) {
     return `(909) 427-${ext.slice(1)}`;
   }
   const prefix = fullNumberPrefixForHospital(hospital);

@@ -1,4 +1,4 @@
-const CACHE = 'em-toolkit-v7';
+const CACHE = 'em-toolkit-v8';
 
 // Precache the full set of pages + assets needed for offline bedside use.
 const ASSETS = [
@@ -16,6 +16,7 @@ const ASSETS = [
   '/links.html',
   '/roadmap.html',
   '/changelog.html',
+  '/announcements.html',
   '/feedback.html',
   '/sitemap.html',
   '/vertigo-helper.html',
