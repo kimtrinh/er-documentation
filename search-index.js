@@ -795,11 +795,15 @@ function getSearchIndex() {
   const add = (item) => {
     const normalized = kpNormalizeSearchItem(item);
     if (!normalized) return;
+    // Dedupe on identity only (type + title + target). The keyword blob `s`
+    // differs between the hand-written phone rows in SEARCH_INDEX and the
+    // ones ed-phone-directory.html exports to localStorage, so including it
+    // let both survive — every phone entry appeared twice once a user had
+    // opened the directory. Genuinely custom entries have their own title
+    // and still come through.
     const key = [
       normalized.type,
       normalized.t.toLowerCase(),
-      normalized.s.toLowerCase(),
-      normalized.g.toLowerCase(),
       normalized.u.toLowerCase(),
     ].join('|');
     if (seen.has(key)) return;
@@ -813,10 +817,64 @@ function getSearchIndex() {
   return merged;
 }
 
+// ── SHARED SEARCH ──────────────────────────────────────────────────────
+// One matcher for every search box on the site. Previously there were three
+// (this file's nav bar, theme.js's Cmd-K modal, index.html's hero) with
+// different rules, so the same query gave different answers depending on
+// which box you used.
+const KP_SEARCH_SPLIT = /[\s\-\/(),.:;]+/;
+const KP_SEARCH_LIMIT = 25;
+
+// Union of both historical behaviours: the whole query appearing as a
+// substring (what the nav bar did) OR every token being the prefix of some
+// word (what the hero and modal did). A superset of each, so nothing that
+// was findable before stops being findable, and reversed word order
+// ("turnaround radiology") now works everywhere.
+function kpSearchMatch(item, lo, tokens) {
+  const hay = [item.t, item.s, item.g].join(' ').toLowerCase();
+  if (hay.indexOf(lo) >= 0) return true;
+  const words = hay.split(KP_SEARCH_SPLIT).filter(Boolean);
+  return tokens.every((tok) => words.some((w) => w.startsWith(tok)));
+}
+
+// Rank by where the match lives: title-prefix > title-word > keyword-only.
+function kpSearchRank(item, firstToken) {
+  const t = (item.t || '').toLowerCase();
+  if (t.indexOf(firstToken) === 0) return 0;
+  const words = t.split(KP_SEARCH_SPLIT);
+  for (let i = 0; i < words.length; i++) {
+    if (words[i] && words[i].startsWith(firstToken)) return 1;
+  }
+  return 2;
+}
+
+// `filter` lets each UI apply its own filter chips. Dotphrases are excluded
+// unless asked for: there are ~100 of them and they would swamp every query.
+function kpRunSearch(query, options) {
+  const opts = options || {};
+  const lo = String(query || '').trim().toLowerCase();
+  if (!lo) return { results: [], total: 0 };
+  const tokens = lo.split(/\s+/).filter(Boolean);
+
+  const matched = getSearchIndex().filter((item) => {
+    if (!opts.includePhrases && item.type === 'phrase') return false;
+    if (typeof opts.filter === 'function' && !opts.filter(item)) return false;
+    return kpSearchMatch(item, lo, tokens);
+  });
+
+  const first = tokens[0] || lo;
+  matched.sort((a, b) => kpSearchRank(a, first) - kpSearchRank(b, first));
+
+  const limit = opts.limit || KP_SEARCH_LIMIT;
+  return { results: matched.slice(0, limit), total: matched.length };
+}
+
 if (typeof window !== 'undefined') {
   window.getSearchIndex = getSearchIndex;
   window.KP_ER_SEARCH = {
     getSearchIndex,
+    runSearch: kpRunSearch,
+    searchLimit: KP_SEARCH_LIMIT,
     phoneIndexStorageKey: KP_PHONE_INDEX_STORAGE_KEY,
     serviceAgreementsStorageKey: KP_SERVICE_AGREEMENTS_STORAGE_KEY,
   };
@@ -966,28 +1024,9 @@ if (typeof window !== 'undefined') {
       return;
     }
 
-    const lo = query.toLowerCase();
-    const idx = getSearchIndex();
-    let results = idx.filter((item) => (
-      item.t.toLowerCase().includes(lo) ||
-      item.s.toLowerCase().includes(lo) ||
-      item.g.toLowerCase().includes(lo)
-    ));
-
-    results.sort((a, b) => {
-      const aStarts = a.t.toLowerCase().startsWith(lo) ? 0 : 1;
-      const bStarts = b.t.toLowerCase().startsWith(lo) ? 0 : 1;
-      if (aStarts !== bStarts) return aStarts - bStarts;
-
-      const aTitle = a.t.toLowerCase().includes(lo) ? 0 : 1;
-      const bTitle = b.t.toLowerCase().includes(lo) ? 0 : 1;
-      if (aTitle !== bTitle) return aTitle - bTitle;
-
-      return a.t.localeCompare(b.t);
-    });
-
-    const total = results.length;
-    results = results.slice(0, 24);
+    const ran = kpRunSearch(query);
+    let results = ran.results;
+    const total = ran.total;
     hiIdx = -1;
 
     if (!results.length) {
@@ -1006,7 +1045,17 @@ if (typeof window !== 'undefined') {
 
     let html = '';
     let rowIndex = 0;
-    orderedGroups(grouped).forEach((groupName) => {
+    // results is already rank-sorted by the shared runner, so order groups by
+    // where each one's best result lands in that list. Keeps the rendered
+    // order consistent with the hero and the Cmd-K modal, which do the same.
+    const groupPos = {};
+    results.forEach((item, i) => {
+      const g = getGroup(item);
+      if (!(g in groupPos)) groupPos[g] = i;
+    });
+    orderedGroups(grouped)
+      .sort((a, b) => (groupPos[a] || 0) - (groupPos[b] || 0))
+      .forEach((groupName) => {
       html += `<div class="kp-sg">${escapeHtml(groupName)}</div>`;
       grouped[groupName].forEach((item) => {
         const rowId = `kp-sr-${rowIndex++}`;
@@ -1022,7 +1071,7 @@ if (typeof window !== 'undefined') {
     });
 
     if (total > 24) {
-      html += `<div class="kp-foot">Showing 24 of ${total} results</div>`;
+      html += `<div class="kp-foot">Showing ${results.length} of ${total} results</div>`;
     }
 
     dd.innerHTML = html;

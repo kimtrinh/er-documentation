@@ -129,6 +129,9 @@ main{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-colu
 
 /* ===== NAV — let More dropdown render below the bar ===== */
 .sitenav,.sitenav-inner{overflow:visible}
+.kp-filter-hatch{display:none;padding:11px 13px;margin:8px 0 0;font-size:12px;line-height:1.6;color:var(--text2);background:var(--surface2);border:1px dashed var(--border2);border-radius:8px}
+.kp-filter-hatch.show{display:block}
+.kp-filter-hatch b{color:var(--text)}
 </style>
 <link rel="stylesheet" href="mobile.css">
 <script>document.documentElement.setAttribute('data-theme',localStorage.getItem('theme')||'dark');</script>
@@ -178,7 +181,10 @@ main{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-colu
     <div class="list-search">
       <div class="search-wrap">
         <span class="search-icon">🔍</span>
-        <input id="searchInput" type="text" placeholder="Search protocols…" autocomplete="off"/>
+        <input id="searchInput" type="text" placeholder="Filter this page…" autocomplete="off" aria-describedby="kpFilterHatch"/>
+      </div>
+      <div class="kp-filter-hatch" id="kpFilterHatch" role="status" aria-live="polite">
+        No matches <b>on this page</b>. This box only filters what&rsquo;s listed here &mdash; press <b>&#8984;K</b> (or <b>Ctrl&#8209;K</b>) to search the whole toolkit.
       </div>
     </div>
     <div class="list-items" id="listItems">
@@ -3403,13 +3409,15 @@ main{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-colu
     document.querySelectorAll('.list-section-header').forEach(header => {
       header.style.display = '';
     });
+    const hatch = document.getElementById('kpFilterHatch');
+    if (hatch) hatch.classList.toggle('show', !!q && !firstVisible);
   });
 })();
 </script>
 
 <button id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">☀️</button>
-<script src="search-index.js?v=5"></script>
-<script src="theme.js?v=4"></script>
+<script src="search-index.js?v=6"></script>
+<script src="theme.js?v=5"></script>
 <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
 <script src="analytics.js"></script>
 <script>
