@@ -190,6 +190,7 @@ const SEARCH_INDEX = [
   {type:'calc',i:'🧮',t:'COWS — Clinical Opiate Withdrawal Scale',s:'opioid withdrawal  ·  COWS 8  ·  buprenorphine induction  ·  MAT  ·  precipitated withdrawal  ·  bupe',g:'Calculator',gc:'t-calc',u:'calculators.html#calc-withdrawal'},
   {type:'calc',i:'🧮',t:'CIWA-Ar — Alcohol Withdrawal',s:'alcohol withdrawal  ·  CIWA  ·  benzodiazepine  ·  phenobarbital  ·  symptom-triggered  ·  delirium tremens  ·  seizure',g:'Calculator',gc:'t-calc',u:'calculators.html#calc-withdrawal'},
   {type:'calc',i:'🧮',t:'sPESI — Simplified PE Severity Index',s:'pulmonary embolism  ·  outpatient PE  ·  30-day mortality  ·  disposition  ·  PESI  ·  confirmed PE',g:'Calculator',gc:'t-calc',u:'calculators.html#calc-wellspe'},
+  {type:'calc',i:'🧮',t:'Creatinine Clearance (Cockcroft-Gault)',s:'CrCl  ·  creatinine clearance  ·  Cockcroft-Gault  ·  renal dosing  ·  DOAC dose  ·  apixaban  ·  rivaroxaban  ·  dabigatran  ·  enoxaparin  ·  eGFR  ·  ideal body weight  ·  adjusted body weight',g:'Calculator',gc:'t-calc',u:'calculators.html#calc-crcl'},
 
   // ── SERVICE AGREEMENTS ─────────────────────────────────────────────────
   {type:'sa',i:'📑',t:'Necrotizing Fasciitis',s:'necrotizing fasciitis  ·  soft tissue infection  ·  LRINEC  ·  gas gangrene  ·  surgical emergency  ·  transfer',g:'Service Agreement',gc:'t-algo',u:'service-agreements.html#necfasc'},

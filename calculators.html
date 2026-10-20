@@ -154,6 +154,7 @@ main>*:nth-child(4){animation-delay:.15s}
     <button class="calc-tab" data-calc="abcd2" onclick="showCalc('abcd2')">🧠 ABCD2</button>
     <button class="calc-tab" data-calc="nihss" onclick="showCalc('nihss')">🧠 NIHSS</button>
     <button class="calc-tab" data-calc="cha2ds2vasc" onclick="showCalc('cha2ds2vasc')">❤️ CHA2DS2-VASc</button>
+    <button class="calc-tab" data-calc="crcl" onclick="showCalc('crcl')">💧 CrCl</button>
     <button class="calc-tab" data-calc="cthead" onclick="showCalc('cthead')">🧠 Canadian CT Head</button>
     <button class="calc-tab" data-calc="cspine" onclick="showCalc('cspine')">🦴 C-Spine</button>
     <button class="calc-tab" data-calc="syncope" onclick="showCalc('syncope')">😵 Syncope</button>
@@ -547,6 +548,83 @@ main>*:nth-child(4){animation-delay:.15s}
           <p><span style="color:#fde047;font-weight:700">2–6 — Moderate probability</span><br/>DVT prevalence ~17%. Compression ultrasound. If negative + D-dimer negative → DVT excluded.</p>
           <br/>
           <p><span style="color:#fca5a5;font-weight:700">≥7 — High probability</span><br/>DVT prevalence ~53%. Compression ultrasound regardless of D-dimer. If negative, repeat in 1 week or MRI.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       CREATININE CLEARANCE (Cockcroft-Gault)
+  ══════════════════════════════════════════ -->
+  <div id="calc-crcl" style="display:none">
+    <div class="calc-grid">
+
+      <div class="card">
+        <div id="creatinine-clearance-cockcroft-gault" class="card-title">💧 Creatinine Clearance <span style="font-size:12px;font-weight:400;color:var(--text3)">— Cockcroft-Gault</span></div>
+        <div class="card-body">
+          <p style="font-size:12px;color:var(--text3);margin-bottom:12px">Use this — <strong style="color:var(--text)">not the lab's eGFR</strong> — whenever you are checking a drug label's renal threshold. Anticoagulant labels are written in Cockcroft-Gault CrCl (mL/min); eGFR is normalised to 1.73 m² body surface area and is not the same number.</p>
+
+          <div class="radio-group">
+            <label>Sex</label>
+            <div class="radio-option" onclick="setCrclSex('male')"><input type="radio" name="crcl-sex" value="male"><span>Male</span><span class="radio-pts">×1.0</span></div>
+            <div class="radio-option" onclick="setCrclSex('female')"><input type="radio" name="crcl-sex" value="female"><span>Female</span><span class="radio-pts">×0.85</span></div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-top:12px">
+            <div>
+              <label style="display:block;font-size:11px;color:var(--text3);margin-bottom:4px;font-weight:600">Age (years)</label>
+              <input id="crcl-age" class="input" type="number" inputmode="numeric" min="0" placeholder="e.g., 78" oninput="calcCrCl()"/>
+            </div>
+            <div>
+              <label style="display:block;font-size:11px;color:var(--text3);margin-bottom:4px;font-weight:600">Serum creatinine (mg/dL)</label>
+              <input id="crcl-scr" class="input" type="number" inputmode="decimal" min="0" step="0.01" placeholder="e.g., 1.4" oninput="calcCrCl()"/>
+            </div>
+            <div>
+              <label style="display:block;font-size:11px;color:var(--text3);margin-bottom:4px;font-weight:600">Weight (kg)</label>
+              <input id="crcl-wt" class="input" type="number" inputmode="decimal" min="0" placeholder="e.g., 58" oninput="calcCrCl()"/>
+            </div>
+            <div>
+              <label style="display:block;font-size:11px;color:var(--text3);margin-bottom:4px;font-weight:600">Height</label>
+              <input id="crcl-ht" class="input" type="number" inputmode="decimal" min="0" placeholder="e.g., 165" oninput="calcCrCl()"/>
+            </div>
+          </div>
+
+          <div class="radio-group" style="margin-top:10px">
+            <label>Height units</label>
+            <div class="radio-option" onclick="setCrclHtUnit('cm')"><input type="radio" name="crcl-htunit" value="cm" checked><span>Centimetres</span></div>
+            <div class="radio-option" onclick="setCrclHtUnit('in')"><input type="radio" name="crcl-htunit" value="in"><span>Inches</span></div>
+          </div>
+          <p style="font-size:11px;color:var(--text3);margin-top:6px">Height is only used for ideal and adjusted body weight. Without it you still get the actual-body-weight result.</p>
+
+          <div id="crcl-result" class="result neutral">
+            <div class="result-score">—</div>
+            <div class="result-label">Enter sex, age, creatinine and weight</div>
+            <div class="result-action">Cockcroft-Gault: (140 − age) × weight ÷ (72 × serum creatinine), × 0.85 if female.</div>
+          </div>
+          <div id="crcl-breakdown" style="font-size:12px;color:var(--text3);line-height:1.8;margin-top:10px"></div>
+          <button id="crcl-copy-btn" class="copy-doc-btn" onclick="copyDoc('crcl')">📋 Copy Documentation</button>
+          <button class="reset-btn" onclick="resetCrCl()">Reset</button>
+        </div>
+      </div>
+
+      <div class="card" style="align-self:start">
+        <div id="crcl-interpretation" class="card-title">📊 Which weight, and what it changes</div>
+        <div class="card-body" style="font-size:13px;line-height:1.85;color:var(--text2)">
+          <p style="margin-bottom:10px;color:var(--text3);font-size:12px">There is no national consensus on which body weight to use. This tool follows the common BMI-based convention and shows you every basis so you can see when the choice crosses a dose threshold:</p>
+          <p><span style="color:#86efac;font-weight:700">BMI &lt; 18.5 — actual body weight</span></p>
+          <p><span style="color:#fde047;font-weight:700">BMI 18.5–29.9 — actual and ideal both shown</span><br/>No consensus in this range; if the two land either side of a threshold, ask pharmacy.</p>
+          <p><span style="color:#fca5a5;font-weight:700">BMI ≥ 30 — adjusted body weight</span><br/>IBW + 0.4 × (actual − IBW). Actual body weight overestimates and IBW underestimates measured clearance in obesity.</p>
+          <br/>
+          <p style="font-size:12px;color:var(--text3)">Ideal body weight (Devine): 50 kg (male) / 45.5 kg (female) + 2.3 kg per inch over 5 ft.</p>
+          <br/>
+          <p style="color:var(--text2);font-weight:700">Renal thresholds that change ED management</p>
+          <p style="font-size:12px;color:var(--text3)">Reference only — confirm every dose against the current label and your pharmacist.</p>
+          <p style="font-size:12px;color:var(--text3)">· <strong style="color:var(--text2)">Enoxaparin</strong> — treatment dosing drops to 1 mg/kg <em>daily</em> at CrCl &lt; 30, per the <a href="algorithms.html#card-dvt" style="color:#60a5fa">outpatient DVT pathway</a>.<br/>
+          · <strong style="color:var(--text2)">Rivaroxaban (AF)</strong> — 15 mg daily at CrCl 15–50; avoid below 15.<br/>
+          · <strong style="color:var(--text2)">Dabigatran (AF)</strong> — US label 75 mg BID at CrCl 15–30; some guidance avoids it below 30 entirely.<br/>
+          · <strong style="color:var(--text2)">Apixaban (AF)</strong> — <strong style="color:#fca5a5">not a CrCl rule.</strong> Reduce to 2.5 mg BID only if <strong style="color:var(--text2)">2 of 3</strong>: age ≥ 80, weight ≤ 60 kg, serum creatinine ≥ 1.5 mg/dL.</p>
+          <br/>
+          <p style="font-size:11px;color:#475569;border-top:1px solid var(--border);padding-top:10px">⚠️ <strong style="color:var(--text2)">eGFR is not interchangeable with CrCl.</strong> Substituting the lab's eGFR for Cockcroft-Gault CrCl misdoses DOACs — and the error skews toward <strong style="color:var(--text2)">overdosing</strong>, concentrated in patients over 75 and under 50 kg, the ones least able to tolerate it. One cohort found the two equations disagreed on dose in 45% of patients. When eGFR and CrCl fall either side of a threshold, use the equation the label specifies.<br/><br/>Cockcroft-Gault estimates clearance; it is less accurate at extremes of age, weight and renal function, and assumes a stable creatinine — it is not valid in acute kidney injury. KDIGO now prefers eGFR for CKD staging, but drug labels still carry Cockcroft-Gault thresholds, which is why this tool exists.<br/><br/><span style="color:#475569">Sources: Cockcroft &amp; Gault, Nephron 1976; Devine 1974 (ideal body weight); DOAC thresholds per current US product labeling.</span></p>
         </div>
       </div>
     </div>
@@ -1156,7 +1234,7 @@ main>*:nth-child(4){animation-delay:.15s}
 <script>
 // ── CALC TAB SWITCHING ───────────────────────────────────────
 const CALC_IDS = ['wellspe','heart','years','wellsdvt','abcd2','nihss','cha2ds2vasc',
-                  'cthead','cspine','syncope','gibleed','withdrawal','softtissue',
+                  'crcl','cthead','cspine','syncope','gibleed','withdrawal','softtissue',
                   'centor','pecarn','pedsfever'];
 function showCalc(id) {
   CALC_IDS.forEach(c => {
@@ -1593,6 +1671,7 @@ function copyDoc(type) {
   else if (type === 'gbs')     { text = copyDocFromDetail('gbs',     'Enter sex, BUN, hemoglobin and systolic BP first.'); }
   else if (type === 'cows')    { text = copyDocFromDetail('cows',    'Score at least one COWS item first.'); }
   else if (type === 'ciwa')    { text = copyDocFromDetail('ciwa',    'Score at least one CIWA-Ar item first.'); }
+  else if (type === 'crcl')    { text = copyDocFromDetail('crcl',    'Enter sex, age, serum creatinine and weight first.'); }
 
   // ----- Peds fever note -----
   else if (type === 'pedsfever') {
@@ -3381,6 +3460,186 @@ updateCCS();
 updateNexus();
 updateSpesi();
 calcGBS();
+
+// ── CREATININE CLEARANCE (Cockcroft-Gault) ─────────────────────
+// Cockcroft & Gault, Nephron 1976; ideal body weight per Devine 1974.
+// Anticoagulant labels state renal thresholds in Cockcroft-Gault CrCl
+// (absolute mL/min), which is NOT the lab's BSA-normalised eGFR.
+const crclState = { sex: '', htUnit: 'cm' };
+
+function setCrclSex(value) {
+  crclState.sex = value;
+  document.querySelectorAll('input[name="crcl-sex"]').forEach((r) => { r.checked = (r.value === value); });
+  calcCrCl();
+}
+
+function setCrclHtUnit(value) {
+  crclState.htUnit = value;
+  document.querySelectorAll('input[name="crcl-htunit"]').forEach((r) => { r.checked = (r.value === value); });
+  const ht = document.getElementById('crcl-ht');
+  if (ht) ht.placeholder = value === 'cm' ? 'e.g., 165' : 'e.g., 65';
+  calcCrCl();
+}
+
+function cockcroftGault(age, weightKg, scr, sex) {
+  const v = ((140 - age) * weightKg) / (72 * scr);
+  return sex === 'female' ? v * 0.85 : v;
+}
+
+// Lower CrCl is worse, so the colour scale runs the opposite way to a risk score.
+function crclBand(v) {
+  if (v < 15) return ['high',     'Kidney failure range'];
+  if (v < 30) return ['high',     'Severe reduction'];
+  if (v < 60) return ['moderate', 'Moderate reduction'];
+  return         ['low',      'Normal to mild reduction'];
+}
+
+// Named drug thresholds the value sits on or below. Reference only.
+function crclThresholdNotes(v) {
+  const out = [];
+  if (v < 15) out.push('Below 15: most DOACs are not recommended — involve pharmacy, and nephrology if dialysis is in play.');
+  if (v < 30) out.push('Below 30: enoxaparin treatment dosing drops to 1 mg/kg daily; dabigatran US label is 75 mg BID at CrCl 15–30, and some guidance avoids it below 30 entirely.');
+  if (v >= 15 && v <= 50) out.push('Within 15–50: rivaroxaban for AF is 15 mg daily rather than 20 mg.');
+  if (!out.length) out.push('No standard anticoagulant renal threshold is crossed at this clearance, but always confirm against the current label.');
+  out.push('Apixaban is the exception — its AF reduction to 2.5 mg BID is not a CrCl rule, but 2 of 3: age ≥ 80, weight ≤ 60 kg, serum creatinine ≥ 1.5 mg/dL.');
+  return out;
+}
+
+function calcCrCl() {
+  const num = (id) => parseFloat((document.getElementById(id) || {}).value);
+  const age = num('crcl-age'), scr = num('crcl-scr'), wt = num('crcl-wt'), htRaw = num('crcl-ht');
+  const btn = document.getElementById('crcl-copy-btn');
+  const bd = document.getElementById('crcl-breakdown');
+  const clear = (msg, action) => {
+    setResult('crcl-result','neutral','—', msg, action);
+    if (bd) bd.innerHTML = '';
+    if (btn) btn.classList.remove('show');
+    window.crclDetail = { incomplete:true };
+  };
+
+  if (![age, scr, wt, htRaw].some((v) => !Number.isNaN(v)) && !crclState.sex) {
+    clear('Enter sex, age, creatinine and weight', 'Cockcroft-Gault: (140 − age) × weight ÷ (72 × serum creatinine), × 0.85 if female.');
+    return;
+  }
+
+  const missing = [];
+  if (!crclState.sex) missing.push('sex');
+  if (Number.isNaN(age)) missing.push('age');
+  if (Number.isNaN(scr)) missing.push('serum creatinine');
+  if (Number.isNaN(wt)) missing.push('weight');
+  if (missing.length) {
+    clear(`Still needed: ${missing.join(', ')}`, 'All four of sex, age, serum creatinine and weight are required — unlike a points score, a partial result here would be meaningless.');
+    return;
+  }
+  // Guard the inputs that would produce a nonsense or infinite result.
+  if (scr <= 0 || wt <= 0 || age < 0) {
+    clear('Check the values entered', 'Serum creatinine and weight must be greater than zero, and age cannot be negative.');
+    return;
+  }
+  if (age >= 140) {
+    clear('Check the age entered', 'Cockcroft-Gault uses (140 − age), so it cannot be applied at an age of 140 or above.');
+    return;
+  }
+
+  const htCm = Number.isNaN(htRaw) ? NaN : (crclState.htUnit === 'in' ? htRaw * 2.54 : htRaw);
+  const htIn = Number.isNaN(htCm) ? NaN : htCm / 2.54;
+  const haveHt = !Number.isNaN(htCm) && htCm > 0;
+
+  const r1 = (x) => (Math.round(x * 10) / 10).toFixed(1);
+  const crclABW = cockcroftGault(age, wt, scr, crclState.sex);
+
+  let ibw = NaN, adj = NaN, bmi = NaN, crclIBW = NaN, crclAdj = NaN;
+  if (haveHt) {
+    const base = crclState.sex === 'female' ? 45.5 : 50;
+    ibw = base + 2.3 * Math.max(0, htIn - 60);
+    adj = ibw + 0.4 * (wt - ibw);
+    bmi = wt / Math.pow(htCm / 100, 2);
+    crclIBW = cockcroftGault(age, ibw, scr, crclState.sex);
+    crclAdj = cockcroftGault(age, adj, scr, crclState.sex);
+  }
+
+  // Pick the weight basis by BMI, per the common convention. In the
+  // 18.5-29.9 band there is no consensus, so both values are reported.
+  let basis, shown, scoreText, rangeLow, rangeHigh;
+  if (!haveHt) {
+    basis = 'actual body weight';
+    shown = crclABW;
+    scoreText = r1(crclABW);
+  } else if (bmi < 18.5) {
+    basis = 'actual body weight (BMI < 18.5)';
+    shown = crclABW;
+    scoreText = r1(crclABW);
+  } else if (bmi < 30) {
+    basis = 'actual and ideal body weight (BMI 18.5–29.9, no consensus)';
+    rangeLow = Math.min(crclABW, crclIBW);
+    rangeHigh = Math.max(crclABW, crclIBW);
+    shown = rangeLow;                       // band on the more conservative end
+    scoreText = `${r1(rangeLow)}–${r1(rangeHigh)}`;
+  } else {
+    basis = 'adjusted body weight (BMI ≥ 30)';
+    shown = crclAdj;
+    scoreText = r1(crclAdj);
+  }
+
+  const [cls, bandLabel] = crclBand(shown);
+  const notes = crclThresholdNotes(shown);
+  let label = `${bandLabel} — ${basis}`;
+  let action = notes[0];
+
+  // When the range straddles a dose threshold the choice of weight changes
+  // the dose, which is exactly when a pharmacist should be asked.
+  let straddle = '';
+  if (typeof rangeLow === 'number') {
+    const cut = [15, 30, 50, 60].find((c) => rangeLow < c && rangeHigh >= c);
+    if (typeof cut === 'number') {
+      straddle = `The actual- and ideal-weight results fall either side of ${cut} mL/min, so the weight basis changes the dose here — confirm with pharmacy.`;
+      action = `${straddle} ${action}`;
+    }
+  }
+  setResult('crcl-result', cls, `${scoreText} <span style="font-size:13px;font-weight:600">mL/min</span>`, label, action);
+
+  if (bd) {
+    const rows = [`Cockcroft-Gault on actual body weight (${r1(wt)} kg): <strong style="color:var(--text2)">${r1(crclABW)} mL/min</strong>`];
+    if (haveHt) {
+      rows.push(`BMI ${r1(bmi)} · ideal body weight ${r1(ibw)} kg · adjusted body weight ${r1(adj)} kg`);
+      rows.push(`On ideal body weight: <strong style="color:var(--text2)">${r1(crclIBW)} mL/min</strong> · on adjusted body weight: <strong style="color:var(--text2)">${r1(crclAdj)} mL/min</strong>`);
+    } else {
+      rows.push('Enter a height to also get ideal and adjusted body weight.');
+    }
+    bd.innerHTML = rows.map((x) => `<div>${x}</div>`).join('');
+  }
+
+  if (btn) btn.classList.add('show');
+  const items = [`Cockcroft-Gault on actual body weight (${r1(wt)} kg): ${r1(crclABW)} mL/min`];
+  if (haveHt) {
+    items.push(`BMI ${r1(bmi)}; ideal body weight ${r1(ibw)} kg; adjusted body weight ${r1(adj)} kg`);
+    items.push(`On ideal body weight: ${r1(crclIBW)} mL/min; on adjusted body weight: ${r1(crclAdj)} mL/min`);
+  }
+  items.push(`Inputs — ${crclState.sex}, age ${r1(age)} y, serum creatinine ${scr} mg/dL${haveHt ? `, height ${r1(htCm)} cm` : ''}`);
+  window.crclDetail = {
+    incomplete: false,
+    headline: `Creatinine clearance (Cockcroft-Gault): ${scoreText} mL/min, using ${basis}.`,
+    itemsLabel: 'Working:',
+    items,
+    reco: `${straddle ? straddle + ' ' : ''}${notes.join(' ')} Estimated by Cockcroft-Gault rather than the laboratory eGFR, because anticoagulant renal thresholds are defined that way.`
+  };
+}
+
+function resetCrCl() {
+  crclState.sex = '';
+  crclState.htUnit = 'cm';
+  document.querySelectorAll('input[name="crcl-sex"]').forEach((r) => { r.checked = false; });
+  document.querySelectorAll('input[name="crcl-htunit"]').forEach((r) => { r.checked = (r.value === 'cm'); });
+  ['crcl-age','crcl-scr','crcl-wt','crcl-ht'].forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  const btn = document.getElementById('crcl-copy-btn');
+  if (btn) btn.classList.remove('show');
+  calcCrCl();
+}
+
+calcCrCl();
 </script>
 
 <script id="shared-nav-search">
