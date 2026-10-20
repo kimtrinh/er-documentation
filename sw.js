@@ -23,6 +23,7 @@ const ASSETS = [
   '/ed-phone-directory.html',
   '/service-agreements.html',
   '/service-requests.html',
+  '/head-neck-surgery.html',
   '/theme.css',
   '/mobile.css',
   '/theme.js',
