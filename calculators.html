@@ -139,7 +139,7 @@ main>*:nth-child(4){animation-delay:.15s}
 <header>
   <div class="header-inner">
     <div class="logo"><span>🧮</span><h1>ER Clinical Calculators</h1></div>
-    <p class="subtitle">Wells PE · PERC · HEART · YEARS · ABCD2 · CHA2DS2-VASc · and more — tap score to copy documentation</p>
+    <p class="subtitle">Wells PE · PERC · sPESI · HEART · CSRS · C-Spine · Glasgow-Blatchford · COWS · CIWA-Ar · and more — tap score to copy documentation</p>
   </div>
 </header>
 
@@ -147,18 +147,22 @@ main>*:nth-child(4){animation-delay:.15s}
   <div class="disclaimer"><strong>⚠️ Clinical Disclaimer:</strong> Calculators are decision-support tools only. Always apply clinical judgment. Scores do not replace physician assessment.</div>
 
   <div class="calc-tabs">
-    <button class="calc-tab active" onclick="showCalc('wellspe')">🫁 Wells PE + PERC</button>
-    <button class="calc-tab" onclick="showCalc('heart')">❤️ HEART Score</button>
-    <button class="calc-tab" onclick="showCalc('years')">🫁 YEARS</button>
-    <button class="calc-tab" onclick="showCalc('wellsdvt')">🦵 Wells DVT</button>
-    <button class="calc-tab" onclick="showCalc('abcd2')">🧠 ABCD2</button>
-    <button class="calc-tab" onclick="showCalc('nihss')">🧠 NIHSS</button>
-    <button class="calc-tab" onclick="showCalc('cha2ds2vasc')">❤️ CHA2DS2-VASc</button>
-    <button class="calc-tab" onclick="showCalc('cthead')">🧠 Canadian CT Head</button>
-    <button class="calc-tab" onclick="showCalc('softtissue')">🦠 Soft Tissue & Sepsis</button>
-    <button class="calc-tab" onclick="showCalc('centor')">🦠 Centor</button>
-    <button class="calc-tab" onclick="showCalc('pecarn')">👶 PECARN</button>
-    <button class="calc-tab" onclick="showCalc('pedsfever')">🌡️ Peds Fever</button>
+    <button class="calc-tab active" data-calc="wellspe" onclick="showCalc('wellspe')">🫁 PE — Wells/PERC/sPESI</button>
+    <button class="calc-tab" data-calc="heart" onclick="showCalc('heart')">❤️ HEART Score</button>
+    <button class="calc-tab" data-calc="years" onclick="showCalc('years')">🫁 YEARS</button>
+    <button class="calc-tab" data-calc="wellsdvt" onclick="showCalc('wellsdvt')">🦵 Wells DVT</button>
+    <button class="calc-tab" data-calc="abcd2" onclick="showCalc('abcd2')">🧠 ABCD2</button>
+    <button class="calc-tab" data-calc="nihss" onclick="showCalc('nihss')">🧠 NIHSS</button>
+    <button class="calc-tab" data-calc="cha2ds2vasc" onclick="showCalc('cha2ds2vasc')">❤️ CHA2DS2-VASc</button>
+    <button class="calc-tab" data-calc="cthead" onclick="showCalc('cthead')">🧠 Canadian CT Head</button>
+    <button class="calc-tab" data-calc="cspine" onclick="showCalc('cspine')">🦴 C-Spine</button>
+    <button class="calc-tab" data-calc="syncope" onclick="showCalc('syncope')">😵 Syncope</button>
+    <button class="calc-tab" data-calc="gibleed" onclick="showCalc('gibleed')">🩸 GI Bleed</button>
+    <button class="calc-tab" data-calc="withdrawal" onclick="showCalc('withdrawal')">💊 Withdrawal</button>
+    <button class="calc-tab" data-calc="softtissue" onclick="showCalc('softtissue')">🦠 Soft Tissue &amp; Sepsis</button>
+    <button class="calc-tab" data-calc="centor" onclick="showCalc('centor')">🦠 Centor</button>
+    <button class="calc-tab" data-calc="pecarn" onclick="showCalc('pecarn')">👶 PECARN</button>
+    <button class="calc-tab" data-calc="pedsfever" onclick="showCalc('pedsfever')">🌡️ Peds Fever</button>
   </div>
 
   <!-- ══════════════════════════════════════════
@@ -211,6 +215,30 @@ main>*:nth-child(4){animation-delay:.15s}
           </div>
           <button id="wellspe-copy-btn" class="copy-doc-btn" onclick="copyDoc('wellspe')">📋 Copy Documentation</button>
           <button class="reset-btn" onclick="resetWellsPE()">Reset</button>
+        </div>
+      </div>
+
+      <!-- sPESI -->
+      <div class="card">
+        <div id="spesi-simplified-pe-severity-index" class="card-title">📉 sPESI <span style="font-size:12px;font-weight:400;color:var(--text3)">— severity of <em>confirmed</em> PE</span></div>
+        <div class="card-body">
+          <p style="font-size:12px;color:var(--text3);margin-bottom:12px">For PE already <strong style="color:var(--text)">confirmed</strong> — this is a prognostic/disposition tool, not a diagnostic one. 1 point each; any point = high risk.</p>
+          <div id="spesi-criteria">
+            <div class="criterion" onclick="toggleSpesi(0)"><input type="checkbox" id="spesi0"><span class="criterion-label">Age &gt; 80 years</span><span class="criterion-pts">+1</span></div>
+            <div class="criterion" onclick="toggleSpesi(1)"><input type="checkbox" id="spesi1"><span class="criterion-label">History of cancer</span><span class="criterion-pts">+1</span></div>
+            <div class="criterion" onclick="toggleSpesi(2)"><input type="checkbox" id="spesi2"><span class="criterion-label">Chronic cardiopulmonary disease (heart failure or chronic lung disease)</span><span class="criterion-pts">+1</span></div>
+            <div class="criterion" onclick="toggleSpesi(3)"><input type="checkbox" id="spesi3"><span class="criterion-label">Heart rate ≥ 110 bpm</span><span class="criterion-pts">+1</span></div>
+            <div class="criterion" onclick="toggleSpesi(4)"><input type="checkbox" id="spesi4"><span class="criterion-label">Systolic BP &lt; 100 mmHg</span><span class="criterion-pts">+1</span></div>
+            <div class="criterion" onclick="toggleSpesi(5)"><input type="checkbox" id="spesi5"><span class="criterion-label">SpO₂ &lt; 90% (with or without supplemental O₂)</span><span class="criterion-pts">+1</span></div>
+          </div>
+          <div id="spesi-result" class="result neutral">
+            <div class="result-score">—</div>
+            <div class="result-label">Check criteria above</div>
+            <div class="result-action">sPESI 0 = low risk (30-day mortality ~1%). Any criterion = high risk (~11%).</div>
+          </div>
+          <button id="spesi-copy-btn" class="copy-doc-btn" onclick="copyDoc('spesi')">📋 Copy Documentation</button>
+          <button class="reset-btn" onclick="resetSpesi()">Reset</button>
+          <p style="font-size:11px;color:var(--text3);margin-top:10px;border-top:1px solid var(--border);padding-top:8px">sPESI 0 supports consideration of outpatient management, but that decision additionally assumes <strong style="color:var(--text2)">no RV dysfunction</strong> and <strong style="color:var(--text2)">no troponin elevation</strong>, plus adequate social support and follow-up.<br/><span style="color:#475569">Source: Jiménez et al., Arch Intern Med 2010.</span></p>
         </div>
       </div>
     </div>
@@ -596,6 +624,255 @@ main>*:nth-child(4){animation-delay:.15s}
 
 
   <!-- ══════════════════════════════════════════
+       C-SPINE (Canadian C-Spine Rule + NEXUS)
+  ══════════════════════════════════════════ -->
+  <div id="calc-cspine" style="display:none">
+    <div class="calc-grid">
+
+      <!-- CANADIAN C-SPINE RULE -->
+      <div class="card">
+        <div id="canadian-c-spine-rule" class="card-title">🦴 Canadian C-Spine Rule <span style="font-size:12px;font-weight:400;color:var(--text3)">— 3 steps, in order</span></div>
+        <div class="card-body">
+          <p style="font-size:12px;color:var(--text3);margin-bottom:12px"><strong style="color:var(--text)">Step 0 — applicability.</strong> Check any that apply; if any is checked the rule does not apply and imaging is a clinical decision.</p>
+          <div id="ccspine-exclusions">
+            <div class="criterion" onclick="toggleCCS('ex',0)"><input type="checkbox" id="ccsx0"><span class="criterion-label">GCS &lt; 15 / not alert, or hemodynamically unstable</span></div>
+            <div class="criterion" onclick="toggleCCS('ex',1)"><input type="checkbox" id="ccsx1"><span class="criterion-label">Age &lt; 16 years</span></div>
+            <div class="criterion" onclick="toggleCCS('ex',2)"><input type="checkbox" id="ccsx2"><span class="criterion-label">Known vertebral disease (ankylosing spondylitis, RA, stenosis, prior cervical surgery)</span></div>
+            <div class="criterion" onclick="toggleCCS('ex',3)"><input type="checkbox" id="ccsx3"><span class="criterion-label">Non-trauma presentation, or injury &gt; 48 h ago</span></div>
+          </div>
+
+          <p style="font-size:12px;color:var(--text3);margin:14px 0 8px"><strong style="color:var(--text)">Step 1 — high-risk factors.</strong> Any present → imaging.</p>
+          <div id="ccspine-highrisk">
+            <div class="criterion" onclick="toggleCCS('hr',0)"><input type="checkbox" id="ccsh0"><span class="criterion-label">Age ≥ 65 years</span></div>
+            <div class="criterion" onclick="toggleCCS('hr',1)"><input type="checkbox" id="ccsh1"><span class="criterion-label">Dangerous mechanism (fall &gt; 1 m / 5 stairs, axial load, MVC &gt; 100 km/h or rollover/ejection, motorised recreational vehicle, bicycle collision)</span></div>
+            <div class="criterion" onclick="toggleCCS('hr',2)"><input type="checkbox" id="ccsh2"><span class="criterion-label">Paresthesias in extremities</span></div>
+          </div>
+
+          <p style="font-size:12px;color:var(--text3);margin:14px 0 8px"><strong style="color:var(--text)">Step 2 — low-risk factors.</strong> At least one required before rotation can be tested.</p>
+          <div id="ccspine-lowrisk">
+            <div class="criterion" onclick="toggleCCS('lr',0)"><input type="checkbox" id="ccsl0"><span class="criterion-label">Simple rear-end MVC (excludes pushed into traffic, hit by bus/large truck, rollover, hit by high-speed vehicle)</span></div>
+            <div class="criterion" onclick="toggleCCS('lr',1)"><input type="checkbox" id="ccsl1"><span class="criterion-label">Ambulatory at any time since injury</span></div>
+            <div class="criterion" onclick="toggleCCS('lr',2)"><input type="checkbox" id="ccsl2"><span class="criterion-label">Sitting upright in the ED</span></div>
+            <div class="criterion" onclick="toggleCCS('lr',3)"><input type="checkbox" id="ccsl3"><span class="criterion-label">Delayed onset of neck pain (not immediate)</span></div>
+            <div class="criterion" onclick="toggleCCS('lr',4)"><input type="checkbox" id="ccsl4"><span class="criterion-label">Absence of midline cervical spine tenderness</span></div>
+          </div>
+
+          <div class="radio-group" style="margin-top:14px">
+            <label>Step 3 — active rotation 45° left and right</label>
+            <div class="radio-option" onclick="setCCSRotation('able')"><input type="radio" name="ccs-rot" value="able"><span>Able to rotate 45° both ways</span></div>
+            <div class="radio-option" onclick="setCCSRotation('unable')"><input type="radio" name="ccs-rot" value="unable"><span>Unable to rotate 45°</span></div>
+            <div class="radio-option" onclick="setCCSRotation('na')"><input type="radio" name="ccs-rot" value="na"><span>Not yet assessed</span></div>
+          </div>
+
+          <div id="ccspine-result" class="result neutral">
+            <div class="result-label">Work through steps 0 → 3</div>
+            <div class="result-action">The rule is applied in order — any high-risk factor means imaging regardless of the later steps.</div>
+          </div>
+          <button id="ccspine-copy-btn" class="copy-doc-btn" onclick="copyDoc('ccspine')">📋 Copy Documentation</button>
+          <button class="reset-btn" onclick="resetCCS()">Reset</button>
+          <p style="font-size:11px;color:var(--text3);margin-top:10px;border-top:1px solid var(--border);padding-top:8px">Derived sensitivity 100%, specificity ~43% for clinically important cervical spine injury.<br/><span style="color:#475569">Source: Stiell et al., JAMA 2001.</span></p>
+        </div>
+      </div>
+
+      <!-- NEXUS -->
+      <div class="card">
+        <div id="nexus-c-spine-criteria" class="card-title">🦴 NEXUS C-Spine <span style="font-size:12px;font-weight:400;color:var(--text3)">— all 5 must be absent</span></div>
+        <div class="card-body">
+          <p style="font-size:12px;color:var(--text3);margin-bottom:12px">All 5 must be <strong style="color:var(--text)">absent</strong> to clear the cervical spine without imaging. Check any that are <strong style="color:var(--text)">present</strong>.</p>
+          <div id="nexus-criteria">
+            <div class="criterion" onclick="toggleNexus(0)"><input type="checkbox" id="nexus0"><span class="criterion-label">Posterior midline cervical tenderness</span></div>
+            <div class="criterion" onclick="toggleNexus(1)"><input type="checkbox" id="nexus1"><span class="criterion-label">Focal neurologic deficit</span></div>
+            <div class="criterion" onclick="toggleNexus(2)"><input type="checkbox" id="nexus2"><span class="criterion-label">Altered level of alertness</span></div>
+            <div class="criterion" onclick="toggleNexus(3)"><input type="checkbox" id="nexus3"><span class="criterion-label">Evidence of intoxication</span></div>
+            <div class="criterion" onclick="toggleNexus(4)"><input type="checkbox" id="nexus4"><span class="criterion-label">Painful distracting injury</span></div>
+          </div>
+          <div id="nexus-result" class="result neutral">
+            <div class="result-label">Check criteria above</div>
+            <div class="result-action">All 5 absent → no cervical spine imaging required by NEXUS.</div>
+          </div>
+          <button id="nexus-copy-btn" class="copy-doc-btn" onclick="copyDoc('nexus')">📋 Copy Documentation</button>
+          <button class="reset-btn" onclick="resetNexus()">Reset</button>
+          <p style="font-size:11px;color:var(--text3);margin-top:10px;border-top:1px solid var(--border);padding-top:8px">The Canadian C-Spine Rule and NEXUS are alternative rules for the same decision; CCR has the higher specificity head-to-head, so it spares more imaging. Use whichever your local protocol specifies.<br/><span style="color:#475569">Source: Hoffman et al., NEJM 2000.</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SYNCOPE (Canadian Syncope Risk Score)
+  ══════════════════════════════════════════ -->
+  <div id="calc-syncope" style="display:none">
+    <div class="calc-grid">
+
+      <div class="card">
+        <div id="canadian-syncope-risk-score-csrs" class="card-title">😵 Canadian Syncope Risk Score <span style="font-size:12px;font-weight:400;color:var(--text3)">— CSRS, −3 to +11</span></div>
+        <div class="card-body">
+          <p style="font-size:12px;color:var(--text3);margin-bottom:12px">For adults presenting within 24 h of syncope <strong style="color:var(--text)">after ED evaluation found no serious underlying cause</strong>. Not for persistent altered mental status, witnessed seizure, head trauma causing LOC, or severe intoxication.</p>
+          <div id="csrs-criteria">
+            <div class="criterion" onclick="toggleCSRS('vasovagal')"><input type="checkbox" id="csrs-vasovagal"><span class="criterion-label">Predisposition to vasovagal symptoms (warm crowded place, prolonged standing, fear, emotion, pain)</span><span class="criterion-pts">−1</span></div>
+            <div class="criterion" onclick="toggleCSRS('heartdz')"><input type="checkbox" id="csrs-heartdz"><span class="criterion-label">History of heart disease (CAD, AF/flutter, CHF, valvular disease)</span><span class="criterion-pts">+1</span></div>
+            <div class="criterion" onclick="toggleCSRS('sbp')"><input type="checkbox" id="csrs-sbp"><span class="criterion-label">Any systolic BP &lt; 90 or &gt; 180 mmHg (triage or during ED stay)</span><span class="criterion-pts">+2</span></div>
+            <div class="criterion" onclick="toggleCSRS('trop')"><input type="checkbox" id="csrs-trop"><span class="criterion-label">Troponin above 99th percentile for the normal population</span><span class="criterion-pts">+2</span></div>
+            <div class="criterion" onclick="toggleCSRS('axis')"><input type="checkbox" id="csrs-axis"><span class="criterion-label">Abnormal QRS axis (&lt; −30° or &gt; 100°)</span><span class="criterion-pts">+1</span></div>
+            <div class="criterion" onclick="toggleCSRS('qrs')"><input type="checkbox" id="csrs-qrs"><span class="criterion-label">QRS duration &gt; 130 ms</span><span class="criterion-pts">+1</span></div>
+            <div class="criterion" onclick="toggleCSRS('qtc')"><input type="checkbox" id="csrs-qtc"><span class="criterion-label">Corrected QT interval &gt; 480 ms</span><span class="criterion-pts">+2</span></div>
+          </div>
+
+          <div class="radio-group" style="margin-top:12px">
+            <label>ED diagnosis impression</label>
+            <div class="radio-option" onclick="setCSRSDx('vasovagal')"><input type="radio" name="csrs-dx" value="vasovagal"><span>Vasovagal syncope</span><span class="radio-pts">−2</span></div>
+            <div class="radio-option" onclick="setCSRSDx('other')"><input type="radio" name="csrs-dx" value="other"><span>Other / unclear</span><span class="radio-pts">0</span></div>
+            <div class="radio-option" onclick="setCSRSDx('cardiac')"><input type="radio" name="csrs-dx" value="cardiac"><span>Cardiac syncope</span><span class="radio-pts">+2</span></div>
+          </div>
+
+          <div id="csrs-result" class="result neutral">
+            <div class="result-score">—</div>
+            <div class="result-label">Select an ED diagnosis impression</div>
+            <div class="result-action">CSRS cannot be scored until a diagnosis impression is chosen.</div>
+          </div>
+          <button id="csrs-copy-btn" class="copy-doc-btn" onclick="copyDoc('csrs')">📋 Copy Documentation</button>
+          <button class="reset-btn" onclick="resetCSRS()">Reset</button>
+        </div>
+      </div>
+
+      <div class="card" style="align-self:start">
+        <div id="csrs-interpretation" class="card-title">📊 CSRS Interpretation</div>
+        <div class="card-body" style="font-size:13px;line-height:1.85;color:var(--text2)">
+          <p style="margin-bottom:10px;color:var(--text3);font-size:12px">Risk of a serious adverse event within 30 days of ED disposition — death, arrhythmia, MI, structural heart disease, PE, serious hemorrhage, or procedural intervention:</p>
+          <p><span style="color:#86efac;font-weight:700">−3 to −2 — Very low</span><br/>~0.3%. Discharge generally appropriate.</p>
+          <br/>
+          <p><span style="color:#86efac;font-weight:700">−1 to 0 — Low</span><br/>~0.7%. Discharge with outpatient follow-up.</p>
+          <br/>
+          <p><span style="color:#fde047;font-weight:700">1 to 3 — Medium</span><br/>Cautious disposition and close follow-up. Consider ~6 h of ED cardiac monitoring, and 15-day outpatient rhythm monitoring if discharged.</p>
+          <br/>
+          <p><span style="color:#fca5a5;font-weight:700">4 to 5 — High</span><br/>Monitored admission and urgent cardiac evaluation.</p>
+          <br/>
+          <p><span style="color:#fca5a5;font-weight:700">6 to 11 — Very high</span><br/>~51.3%. Admission on an urgent monitored pathway.</p>
+          <br/>
+          <p style="font-size:11px;color:#475569;border-top:1px solid var(--border);padding-top:10px">Percentages are the observed 30-day rates from the multicentre ED validation, for the very low, low and very high bands only. The medium and high bands carry guidance without a figure: that cohort does not report a single verified combined rate for them, and the numbers often quoted (~8% and ~19%) come from the earlier derivation cohort.<br/><br/>Monitoring: arrhythmias were detected within ~2 h in low-risk patients and within ~6 h in medium- and high-risk patients.<br/><br/>⚠️ CSRS does <strong style="color:var(--text2)">not</strong> apply when the ED workup has already identified a serious cause, and does not override clinical judgment.<br/><br/><span style="color:#475569">Sources: derivation — Thiruganasambandamoorthy et al., CMAJ 2016 (PMID 27378464); validation — multicentre ED validation 2020 (PMID 32202605); monitoring — Circulation 2019 (PMID 30661373).</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       GI BLEED (Glasgow-Blatchford Score)
+  ══════════════════════════════════════════ -->
+  <div id="calc-gibleed" style="display:none">
+    <div class="calc-grid">
+
+      <div class="card">
+        <div id="glasgow-blatchford-score-gbs" class="card-title">🩸 Glasgow-Blatchford Score <span style="font-size:12px;font-weight:400;color:var(--text3)">— upper GI bleed, 0–23</span></div>
+        <div class="card-body">
+          <p style="font-size:12px;color:var(--text3);margin-bottom:12px">Pre-endoscopy risk score for upper GI bleeding. Identifies patients who may not need inpatient intervention. Enter what you have — the score is provisional until all fields are filled.</p>
+
+          <div class="radio-group">
+            <label>Sex (hemoglobin thresholds are sex-specific)</label>
+            <div class="radio-option" onclick="setGbsSex('male')"><input type="radio" name="gbs-sex" value="male"><span>Male</span></div>
+            <div class="radio-option" onclick="setGbsSex('female')"><input type="radio" name="gbs-sex" value="female"><span>Female</span></div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-top:12px">
+            <div>
+              <label style="display:block;font-size:11px;color:var(--text3);margin-bottom:4px;font-weight:600">BUN (mg/dL)</label>
+              <input id="gbs-bun" class="input" type="number" inputmode="decimal" min="0" placeholder="e.g., 24" oninput="calcGBS()"/>
+            </div>
+            <div>
+              <label style="display:block;font-size:11px;color:var(--text3);margin-bottom:4px;font-weight:600">Hemoglobin (g/dL)</label>
+              <input id="gbs-hgb" class="input" type="number" inputmode="decimal" min="0" placeholder="e.g., 11.4" oninput="calcGBS()"/>
+            </div>
+            <div>
+              <label style="display:block;font-size:11px;color:var(--text3);margin-bottom:4px;font-weight:600">Systolic BP (mmHg)</label>
+              <input id="gbs-sbp" class="input" type="number" inputmode="numeric" min="0" placeholder="e.g., 104" oninput="calcGBS()"/>
+            </div>
+            <div>
+              <label style="display:block;font-size:11px;color:var(--text3);margin-bottom:4px;font-weight:600">Pulse (bpm)</label>
+              <input id="gbs-pulse" class="input" type="number" inputmode="numeric" min="0" placeholder="e.g., 98" oninput="calcGBS()"/>
+            </div>
+          </div>
+
+          <div id="gbs-criteria" style="margin-top:12px">
+            <div class="criterion" onclick="toggleGBS('melena')"><input type="checkbox" id="gbs-melena"><span class="criterion-label">Presentation with melena</span><span class="criterion-pts">+1</span></div>
+            <div class="criterion" onclick="toggleGBS('syncope')"><input type="checkbox" id="gbs-syncope"><span class="criterion-label">Presentation with syncope</span><span class="criterion-pts">+2</span></div>
+            <div class="criterion" onclick="toggleGBS('hepatic')"><input type="checkbox" id="gbs-hepatic"><span class="criterion-label">Hepatic disease (known history or clinical/lab evidence)</span><span class="criterion-pts">+2</span></div>
+            <div class="criterion" onclick="toggleGBS('cardiac')"><input type="checkbox" id="gbs-cardiac"><span class="criterion-label">Cardiac failure (known history or clinical/echo evidence)</span><span class="criterion-pts">+2</span></div>
+          </div>
+
+          <div id="gbs-result" class="result neutral">
+            <div class="result-score">—</div>
+            <div class="result-label">Enter sex and labs above</div>
+            <div class="result-action">GBS 0–1 identifies patients who may be suitable for outpatient management.</div>
+          </div>
+          <button id="gbs-copy-btn" class="copy-doc-btn" onclick="copyDoc('gbs')">📋 Copy Documentation</button>
+          <button class="reset-btn" onclick="resetGBS()">Reset</button>
+        </div>
+      </div>
+
+      <div class="card" style="align-self:start">
+        <div id="gbs-interpretation" class="card-title">📊 GBS Interpretation</div>
+        <div class="card-body" style="font-size:13px;line-height:1.85;color:var(--text2)">
+          <p><span style="color:#86efac;font-weight:700">0–1 — Low risk</span><br/>Consider outpatient management with early outpatient endoscopy; very low rate of need for transfusion, endoscopic intervention, surgery or death.</p>
+          <br/>
+          <p><span style="color:#fde047;font-weight:700">2–5 — Moderate</span><br/>Inpatient assessment generally warranted; timing of endoscopy per GI.</p>
+          <br/>
+          <p><span style="color:#fca5a5;font-weight:700">≥ 6 — High risk</span><br/>Higher likelihood of needing transfusion or endoscopic intervention. Resuscitate, type and screen, early GI involvement.</p>
+          <br/>
+          <p style="font-size:12px;color:var(--text3)">Component thresholds:</p>
+          <p style="font-size:12px;color:var(--text3)">BUN &lt;18.2 = 0 · 18.2–22.3 = +2 · 22.4–27.9 = +3 · 28–69.9 = +4 · ≥70 = +6<br/>
+          Hgb (male) ≥13 = 0 · 12–12.9 = +1 · 10–11.9 = +3 · &lt;10 = +6<br/>
+          Hgb (female) ≥12 = 0 · 10–11.9 = +1 · &lt;10 = +6<br/>
+          SBP ≥110 = 0 · 100–109 = +1 · 90–99 = +2 · &lt;90 = +3<br/>
+          Pulse ≥100 = +1</p>
+          <br/>
+          <p style="font-size:11px;color:#475569;border-top:1px solid var(--border);padding-top:10px">⚠️ The score is pre-endoscopic risk stratification only. Hemodynamic instability, suspected variceal bleeding or anticoagulation may warrant admission regardless of score.<br/><br/><span style="color:#475569">Source: Blatchford et al., Lancet 2000.</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       WITHDRAWAL (COWS + CIWA-Ar)
+  ══════════════════════════════════════════ -->
+  <div id="calc-withdrawal" style="display:none">
+    <div class="calc-grid">
+
+      <!-- COWS -->
+      <div class="card">
+        <div id="cows-clinical-opiate-withdrawal-scale" class="card-title">💊 COWS <span style="font-size:12px;font-weight:400;color:var(--text3)">— Clinical Opiate Withdrawal Scale, 0–48</span></div>
+        <div class="card-body">
+          <p style="font-size:12px;color:var(--text3);margin-bottom:12px">Score observed signs of opioid withdrawal. Where the patient had pain before withdrawal, score only the additional component attributable to withdrawal.</p>
+          <div id="cows-criteria-wrap"></div>
+          <div id="cows-result" class="result neutral">
+            <div class="result-score">—</div>
+            <div class="result-label">Score all 11 items</div>
+            <div class="result-action">COWS guides timing of buprenorphine induction and symptom management.</div>
+          </div>
+          <button id="cows-copy-btn" class="copy-doc-btn" onclick="copyDoc('cows')">📋 Copy Documentation</button>
+          <button class="reset-btn" onclick="resetCOWS()">Reset</button>
+          <p style="font-size:11px;color:var(--text3);margin-top:10px;border-top:1px solid var(--border);padding-top:8px">Severity: 5–12 mild · 13–24 moderate · 25–36 moderately severe · &gt;36 severe. Top-band labels vary between published versions of the form.<br/><br/><strong style="color:var(--text2)">Local protocol:</strong> standard observed buprenorphine induction requires objective withdrawal at <strong style="color:var(--text2)">COWS ≥ 8</strong>; borderline COWS 8–9 favours start-low-go-slow. See <a href="opioid-mat.html#induction" style="color:#60a5fa">ED-initiated buprenorphine →</a><br/><br/><span style="color:#475569">Source: Wesson &amp; Ling, J Psychoactive Drugs 2003;35(2):253–259.</span></p>
+        </div>
+      </div>
+
+      <!-- CIWA-Ar -->
+      <div class="card">
+        <div id="ciwa-ar-alcohol-withdrawal" class="card-title">🍺 CIWA-Ar <span style="font-size:12px;font-weight:400;color:var(--text3)">— alcohol withdrawal, 0–67</span></div>
+        <div class="card-body">
+          <p style="font-size:12px;color:var(--text3);margin-bottom:12px">Ten items — nine scored 0–7 plus orientation scored 0–4. Requires a cooperative, communicative patient; it is not a diagnostic test for withdrawal and performs poorly in delirium or when communication is impaired.</p>
+          <div id="ciwa-criteria-wrap"></div>
+          <div id="ciwa-result" class="result neutral">
+            <div class="result-score">—</div>
+            <div class="result-label">Score all 10 items</div>
+            <div class="result-action">CIWA-Ar drives symptom-triggered benzodiazepine or phenobarbital dosing.</div>
+          </div>
+          <button id="ciwa-copy-btn" class="copy-doc-btn" onclick="copyDoc('ciwa')">📋 Copy Documentation</button>
+          <button class="reset-btn" onclick="resetCIWA()">Reset</button>
+          <p style="font-size:11px;color:var(--text3);margin-top:10px;border-top:1px solid var(--border);padding-top:8px">Bands used here: &lt;8 minimal · 8–15 moderate · &gt;15 severe.<br/><br/>⚠️ <strong style="color:var(--text2)">Published cutoffs genuinely differ</strong> — ≤10/11–15/≥16, &lt;8/8–15/≥15, and 0–9/10–20/≥20 all appear in the literature. Your local symptom-triggered protocol governs the treatment threshold.<br/><br/>See <a href="alcohol-mat.html#withdrawal" style="color:#60a5fa">Alcohol withdrawal &amp; AUD medications →</a><br/><br/><span style="color:#475569">Source: Sullivan et al., Br J Addict 1989;84(11):1353–1357.</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
        SOFT TISSUE & SEPSIS
   ═══════════════════════════════════════════ -->
   <div id="calc-softtissue" style="display:none">
@@ -875,16 +1152,23 @@ main>*:nth-child(4){animation-delay:.15s}
 
 </main>
 
-<script src="search-index.js?v=7"></script>
+<script src="search-index.js?v=8"></script>
 <script>
 // ── CALC TAB SWITCHING ───────────────────────────────────────
-const CALC_IDS = ['wellspe','heart','years','wellsdvt','abcd2','nihss','cha2ds2vasc','cthead','softtissue','centor','pecarn','pedsfever'];
+const CALC_IDS = ['wellspe','heart','years','wellsdvt','abcd2','nihss','cha2ds2vasc',
+                  'cthead','cspine','syncope','gibleed','withdrawal','softtissue',
+                  'centor','pecarn','pedsfever'];
 function showCalc(id) {
   CALC_IDS.forEach(c => {
-    document.getElementById('calc-'+c).style.display = c===id ? '' : 'none';
+    // Null-guarded: a missing panel makes that one tab inert instead of
+    // throwing partway through and leaving every later tab unswitchable.
+    const el = document.getElementById('calc-'+c);
+    if (el) el.style.display = c===id ? '' : 'none';
   });
-  document.querySelectorAll('.calc-tab').forEach((btn,i) => {
-    btn.classList.toggle('active', CALC_IDS[i]===id);
+  // Match on data-calc rather than array index, so tab order and CALC_IDS
+  // order no longer have to agree.
+  document.querySelectorAll('.calc-tab').forEach((btn) => {
+    btn.classList.toggle('active', btn.dataset.calc === id);
   });
 }
 
@@ -936,6 +1220,21 @@ function flashCopied(btn) {
 
 function fmtLines(lines) {
   return lines.filter(Boolean).join('\n');
+}
+
+// Generic window.<type>Detail -> chart text. Returns '' (and nudges the user)
+// when the calculator has not been filled in far enough to document.
+// Expects: { incomplete, headline, items: [string], itemsLabel?, reco }
+function copyDocFromDetail(type, promptMsg) {
+  const d = window[type + 'Detail'];
+  if (!d || d.incomplete) { alert(promptMsg); return ''; }
+  const items = d.items || [];
+  return fmtLines([
+    d.headline,
+    items.length ? (d.itemsLabel || 'Findings:') : '',
+    ...items.map(x => `- ${x}`),
+    `Recommendation: ${d.reco}`
+  ]);
 }
 
 function centorInterpretation(score) {
@@ -1285,6 +1584,15 @@ function copyDoc(type) {
       `Recommendation: ${d.reco}`
     ]);
   }
+
+  // ----- New calculators (generic *Detail -> chart text) -----
+  else if (type === 'csrs')    { text = copyDocFromDetail('csrs',    'Select the CSRS items and an ED diagnosis impression first.'); }
+  else if (type === 'ccspine') { text = copyDocFromDetail('ccspine', 'Work through the Canadian C-Spine steps first — rotation still needs recording.'); }
+  else if (type === 'nexus')   { text = copyDocFromDetail('nexus',   'Review the 5 NEXUS criteria first.'); }
+  else if (type === 'spesi')   { text = copyDocFromDetail('spesi',   'Review the 6 sPESI criteria first.'); }
+  else if (type === 'gbs')     { text = copyDocFromDetail('gbs',     'Enter sex, BUN, hemoglobin and systolic BP first.'); }
+  else if (type === 'cows')    { text = copyDocFromDetail('cows',    'Score at least one COWS item first.'); }
+  else if (type === 'ciwa')    { text = copyDocFromDetail('ciwa',    'Score at least one CIWA-Ar item first.'); }
 
   // ----- Peds fever note -----
   else if (type === 'pedsfever') {
@@ -2420,6 +2728,659 @@ function resetPecarn(){
   updatePecarn();
 }
 
+
+// ── GRADED SCALE ENGINE (shared by COWS + CIWA-Ar) ─────────────
+// items: [{ key, label, options:[{v, d}] }] — same shape as NIHSS_ITEMS.
+// Every id and radio name is namespaced by `ns`, because COWS and CIWA-Ar
+// share item names (tremor, anxiety, sweats). Without the namespace the two
+// radio groups merge and scoring one scale silently clears the other.
+const gradedState = {};
+const gradedUpdaters = {};
+
+function renderGraded(ns, wrapId, items, updaterFn) {
+  const wrap = document.getElementById(wrapId);
+  if (!wrap) return;
+  gradedUpdaters[ns] = updaterFn;
+  if (!gradedState[ns]) gradedState[ns] = {};
+  items.forEach(it => { if (!(it.key in gradedState[ns])) gradedState[ns][it.key] = null; });
+  if (wrap.dataset.rendered === '1') return;
+  wrap.innerHTML = items.map((item, idx) => {
+    const opts = item.options.map((o, oi) => {
+      const name = `${ns}-${item.key}`;
+      const id = `${ns}-${item.key}-${oi}`;
+      const pts = o.v === 0 ? '0' : '+' + o.v;
+      return `<div class="radio-option" onclick="setGraded('${ns}','${item.key}',${oi})"><input type="radio" name="${name}" id="${id}"><span>${o.d}</span><span class="radio-pts">${pts}</span></div>`;
+    }).join('');
+    return `<div class="radio-group" style="margin-top:${idx===0?'0':'10px'}"><label>${item.label}</label>${opts}</div>`;
+  }).join('');
+  wrap.dataset.rendered = '1';
+}
+
+function setGraded(ns, key, optIdx) {
+  if (!gradedState[ns]) gradedState[ns] = {};
+  gradedState[ns][key] = optIdx;
+  const el = document.getElementById(`${ns}-${key}-${optIdx}`);
+  if (el) el.checked = true;
+  const fn = gradedUpdaters[ns];
+  if (typeof fn === 'function') fn();
+}
+
+function gradedSummary(ns, items) {
+  const st = gradedState[ns] || {};
+  let total = 0, answered = 0;
+  const lines = [], missing = [];
+  items.forEach(item => {
+    const oi = st[item.key];
+    if (oi === null || typeof oi === 'undefined') { missing.push(item.label); return; }
+    const opt = item.options[oi];
+    total += opt.v;
+    answered++;
+    lines.push(`${item.label}: ${opt.v} (${opt.d})`);
+  });
+  const max = items.reduce((s, it) => s + Math.max(...it.options.map(o => o.v)), 0);
+  return { total, answered, count: items.length, max, allDone: answered === items.length, lines, missing };
+}
+
+function resetGraded(ns, items, btnId) {
+  gradedState[ns] = {};
+  items.forEach(it => {
+    gradedState[ns][it.key] = null;
+    it.options.forEach((_, oi) => {
+      const el = document.getElementById(`${ns}-${it.key}-${oi}`);
+      if (el) el.checked = false;
+    });
+  });
+  const btn = document.getElementById(btnId);
+  if (btn) btn.classList.remove('show');
+}
+
+// ── COWS — Clinical Opiate Withdrawal Scale (0–48) ─────────────
+// Wesson & Ling, J Psychoactive Drugs 2003;35(2):253–259.
+const COWS_ITEMS = [
+  { key:'pulse', label:'1. Resting pulse rate (after sitting or lying 1 min)', options:[
+    {v:0,d:'≤ 80 bpm'},{v:1,d:'81–100 bpm'},{v:2,d:'101–120 bpm'},{v:4,d:'> 120 bpm'}]},
+  { key:'sweating', label:'2. Sweating (past ½ h, not from room temperature or activity)', options:[
+    {v:0,d:'No report of chills or flushing'},{v:1,d:'Subjective report of chills or flushing'},{v:2,d:'Flushed or observable moistness on face'},{v:3,d:'Beads of sweat on brow or face'},{v:4,d:'Sweat streaming off face'}]},
+  { key:'restless', label:'3. Restlessness (observation during assessment)', options:[
+    {v:0,d:'Able to sit still'},{v:1,d:'Reports difficulty sitting still, but is able to do so'},{v:3,d:'Frequent shifting or extraneous movements of legs/arms'},{v:5,d:'Unable to sit still for more than a few seconds'}]},
+  { key:'pupil', label:'4. Pupil size', options:[
+    {v:0,d:'Pinned or normal size for room light'},{v:1,d:'Possibly larger than normal for room light'},{v:2,d:'Moderately dilated'},{v:5,d:'So dilated that only the rim of the iris is visible'}]},
+  { key:'aches', label:'5. Bone or joint aches (score only the component attributable to withdrawal)', options:[
+    {v:0,d:'Not present'},{v:1,d:'Mild diffuse discomfort'},{v:2,d:'Severe diffuse aching of joints/muscles'},{v:4,d:'Rubbing joints or muscles, unable to sit still from discomfort'}]},
+  { key:'nose', label:'6. Runny nose or tearing (not from cold symptoms or allergies)', options:[
+    {v:0,d:'Not present'},{v:1,d:'Nasal stuffiness or unusually moist eyes'},{v:2,d:'Nose running or tearing'},{v:4,d:'Nose constantly running or tears streaming down cheeks'}]},
+  { key:'gi', label:'7. GI upset (over last ½ h)', options:[
+    {v:0,d:'No GI symptoms'},{v:1,d:'Stomach cramps'},{v:2,d:'Nausea or loose stool'},{v:3,d:'Vomiting or diarrhea'},{v:5,d:'Multiple episodes of diarrhea or vomiting'}]},
+  { key:'tremor', label:'8. Tremor (observation of outstretched hands)', options:[
+    {v:0,d:'No tremor'},{v:1,d:'Tremor can be felt, but not observed'},{v:2,d:'Slight tremor observable'},{v:4,d:'Gross tremor or muscle twitching'}]},
+  { key:'yawning', label:'9. Yawning (observation during assessment)', options:[
+    {v:0,d:'No yawning'},{v:1,d:'Yawning once or twice during assessment'},{v:2,d:'Yawning three or more times during assessment'},{v:4,d:'Yawning several times per minute'}]},
+  { key:'anxiety', label:'10. Anxiety or irritability', options:[
+    {v:0,d:'None'},{v:1,d:'Reports increasing irritability or anxiousness'},{v:2,d:'Obviously irritable or anxious'},{v:4,d:'So irritable or anxious that participation in the assessment is difficult'}]},
+  { key:'gooseflesh', label:'11. Gooseflesh skin', options:[
+    {v:0,d:'Skin is smooth'},{v:3,d:'Piloerection can be felt or hairs standing up on arms'},{v:5,d:'Prominent piloerection'}]}
+];
+
+function cowsBand(total) {
+  if (total > 36)   return ['high',     'Severe withdrawal',            'COWS > 36.'];
+  if (total >= 25)  return ['high',     'Moderately severe withdrawal', 'COWS 25–36.'];
+  if (total >= 13)  return ['moderate', 'Moderate withdrawal',          'COWS 13–24.'];
+  if (total >= 5)   return ['low',      'Mild withdrawal',              'COWS 5–12.'];
+  return             ['neutral',  'Minimal / no withdrawal',      'COWS < 5.'];
+}
+
+function updateCOWS() {
+  const s = gradedSummary('cows', COWS_ITEMS);
+  const btn = document.getElementById('cows-copy-btn');
+  if (s.answered === 0) {
+    setResult('cows-result','neutral','—','Score all 11 items','COWS guides timing of buprenorphine induction and symptom management.');
+    if (btn) btn.classList.remove('show');
+    window.cowsDetail = { incomplete:true };
+    return;
+  }
+  let [cls, label, action] = cowsBand(s.total);
+  const induction = s.total >= 8
+    ? 'COWS ≥ 8: objective withdrawal present — standard observed buprenorphine induction is appropriate per local protocol (8–9 favours start-low-go-slow).'
+    : 'COWS < 8: below the local threshold of COWS ≥ 8 for standard observed induction — inducing now carries precipitated-withdrawal risk.';
+  action = `${action} ${induction}`;
+  if (!s.allDone) {
+    label += ' (provisional)';
+    cls = 'neutral';
+    action = `Based on ${s.answered} of ${s.count} items scored; the total can only rise. ${action}`;
+  }
+  setResult('cows-result', cls, `${s.total}/48`, label, action);
+  if (btn) btn.classList.add('show');
+  window.cowsDetail = {
+    incomplete: false,
+    headline: `COWS (Clinical Opiate Withdrawal Scale): ${s.total}/48 — ${label}.`,
+    itemsLabel: s.allDone ? 'Items scored:' : `Items scored (${s.answered} of ${s.count}):`,
+    items: s.lines,
+    reco: induction
+  };
+}
+
+function resetCOWS() {
+  resetGraded('cows', COWS_ITEMS, 'cows-copy-btn');
+  updateCOWS();
+}
+
+// ── CIWA-Ar — Alcohol withdrawal (0–67) ────────────────────────
+// Sullivan et al., Br J Addict 1989;84(11):1353–1357.
+// Levels 2, 3, 5 and 6 are deliberately unanchored on the published form for
+// the first five items; they are offered here as intermediate steps.
+function ciwaAnchored(a) {
+  // a = {0:'...',1:'...',4:'...',7:'...'} ; gaps become '(intermediate)'
+  return [0,1,2,3,4,5,6,7].map(v => ({ v, d: a[v] || '(intermediate)' }));
+}
+const CIWA_ITEMS = [
+  { key:'nausea', label:'1. Nausea and vomiting', options: ciwaAnchored({
+    0:'No nausea, no vomiting', 1:'Mild nausea, no vomiting',
+    4:'Intermittent nausea with dry heaves', 7:'Constant nausea, frequent dry heaves and vomiting'})},
+  { key:'tremor', label:'2. Tremor (arms extended, fingers apart)', options: ciwaAnchored({
+    0:'No tremor', 1:'Not visible, but can be felt fingertip to fingertip',
+    4:'Moderate, with arms extended', 7:'Severe, even with arms not extended'})},
+  { key:'sweats', label:'3. Paroxysmal sweats', options: ciwaAnchored({
+    0:'No sweat visible', 1:'Barely perceptible sweating, palms moist',
+    4:'Beads of sweat obvious on forehead', 7:'Drenching sweats'})},
+  { key:'anxiety', label:'4. Anxiety', options: ciwaAnchored({
+    0:'No anxiety, at ease', 1:'Mildly anxious',
+    4:'Moderately anxious, or guarded, so anxiety is inferred', 7:'Equivalent to acute panic state'})},
+  { key:'agitation', label:'5. Agitation', options: ciwaAnchored({
+    0:'Normal activity', 1:'Somewhat more than normal activity',
+    4:'Moderately fidgety and restless', 7:'Paces or constantly thrashes about'})},
+  { key:'tactile', label:'6. Tactile disturbances', options: [
+    {v:0,d:'None'},{v:1,d:'Very mild itching, pins and needles, burning or numbness'},
+    {v:2,d:'Mild itching, pins and needles, burning or numbness'},{v:3,d:'Moderate itching, pins and needles, burning or numbness'},
+    {v:4,d:'Moderately severe hallucinations'},{v:5,d:'Severe hallucinations'},
+    {v:6,d:'Extremely severe hallucinations'},{v:7,d:'Continuous hallucinations'}]},
+  { key:'auditory', label:'7. Auditory disturbances', options: [
+    {v:0,d:'Not present'},{v:1,d:'Very mild harshness or ability to frighten'},
+    {v:2,d:'Mild harshness or ability to frighten'},{v:3,d:'Moderate harshness or ability to frighten'},
+    {v:4,d:'Moderately severe hallucinations'},{v:5,d:'Severe hallucinations'},
+    {v:6,d:'Extremely severe hallucinations'},{v:7,d:'Continuous hallucinations'}]},
+  { key:'visual', label:'8. Visual disturbances', options: [
+    {v:0,d:'Not present'},{v:1,d:'Very mild sensitivity'},
+    {v:2,d:'Mild sensitivity'},{v:3,d:'Moderate sensitivity'},
+    {v:4,d:'Moderately severe hallucinations'},{v:5,d:'Severe hallucinations'},
+    {v:6,d:'Extremely severe hallucinations'},{v:7,d:'Continuous hallucinations'}]},
+  { key:'headache', label:'9. Headache, fullness in head (do not rate dizziness or light-headedness)', options: [
+    {v:0,d:'Not present'},{v:1,d:'Very mild'},{v:2,d:'Mild'},{v:3,d:'Moderate'},
+    {v:4,d:'Moderately severe'},{v:5,d:'Severe'},{v:6,d:'Very severe'},{v:7,d:'Extremely severe'}]},
+  { key:'orientation', label:'10. Orientation and clouding of sensorium (0–4)', options: [
+    {v:0,d:'Oriented and can do serial additions'},
+    {v:1,d:'Cannot do serial additions or is uncertain about the date'},
+    {v:2,d:'Disoriented for date by no more than 2 calendar days'},
+    {v:3,d:'Disoriented for date by more than 2 calendar days'},
+    {v:4,d:'Disoriented for place and/or person'}]}
+];
+
+function updateCIWA() {
+  const s = gradedSummary('ciwa', CIWA_ITEMS);
+  const btn = document.getElementById('ciwa-copy-btn');
+  if (s.answered === 0) {
+    setResult('ciwa-result','neutral','—','Score all 10 items','CIWA-Ar drives symptom-triggered benzodiazepine or phenobarbital dosing.');
+    if (btn) btn.classList.remove('show');
+    window.ciwaDetail = { incomplete:true };
+    return;
+  }
+  let cls, label, action;
+  if (s.total > 15)      { cls='high';     label='Severe withdrawal';   action='CIWA-Ar > 15. Treat per symptom-triggered protocol; consider escalated dosing, monitored setting and seizure/DT precautions.'; }
+  else if (s.total >= 8) { cls='moderate'; label='Moderate withdrawal'; action='CIWA-Ar 8–15. Symptom-triggered benzodiazepine or phenobarbital dosing per protocol, with reassessment.'; }
+  else                   { cls='low';      label='Minimal withdrawal';  action='CIWA-Ar < 8. Usually no pharmacotherapy for withdrawal; reassess on the protocol interval.'; }
+  action += ' Published cutoffs vary (≤10/11–15/≥16 and 0–9/10–20/≥20 also appear) — local protocol governs.';
+  if (!s.allDone) {
+    label += ' (provisional)';
+    cls = 'neutral';
+    action = `Based on ${s.answered} of ${s.count} items scored; the total can only rise. ${action}`;
+  }
+  setResult('ciwa-result', cls, `${s.total}/67`, label, action);
+  if (btn) btn.classList.add('show');
+  window.ciwaDetail = {
+    incomplete: false,
+    headline: `CIWA-Ar (alcohol withdrawal): ${s.total}/67 — ${label}.`,
+    itemsLabel: s.allDone ? 'Items scored:' : `Items scored (${s.answered} of ${s.count}):`,
+    items: s.lines,
+    reco: action
+  };
+}
+
+function resetCIWA() {
+  resetGraded('ciwa', CIWA_ITEMS, 'ciwa-copy-btn');
+  updateCIWA();
+}
+
+renderGraded('cows', 'cows-criteria-wrap', COWS_ITEMS, updateCOWS);
+renderGraded('ciwa', 'ciwa-criteria-wrap', CIWA_ITEMS, updateCIWA);
+updateCOWS();
+updateCIWA();
+
+// Result box for pass/fail decision rules, which have no numeric score.
+function setRuleResult(elId, cls, label, action) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  el.className = 'result ' + cls;
+  el.innerHTML = `<div class="result-label">${label}</div><div class="result-action">${action}</div>`;
+}
+
+// ── CSRS — Canadian Syncope Risk Score (−3 to +11) ─────────────
+// Derivation CMAJ 2016 (PMID 27378464); validation 2020 (PMID 32202605).
+const CSRS_POINTS = { vasovagal:-1, heartdz:1, sbp:2, trop:2, axis:1, qrs:1, qtc:2 };
+const CSRS_LABELS = {
+  vasovagal:'Predisposition to vasovagal symptoms',
+  heartdz:'History of heart disease',
+  sbp:'Any systolic BP < 90 or > 180 mmHg',
+  trop:'Troponin above 99th percentile',
+  axis:'Abnormal QRS axis (< −30° or > 100°)',
+  qrs:'QRS duration > 130 ms',
+  qtc:'Corrected QT interval > 480 ms'
+};
+const csrsState = { vasovagal:false, heartdz:false, sbp:false, trop:false, axis:false, qrs:false, qtc:false, dx:'' };
+
+function toggleCSRS(key) {
+  if (!Object.prototype.hasOwnProperty.call(CSRS_POINTS, key)) return;
+  csrsState[key] = !csrsState[key];
+  const el = document.getElementById('csrs-' + key);
+  if (el) el.checked = csrsState[key];
+  updateCSRS();
+}
+
+function setCSRSDx(value) {
+  csrsState.dx = value;
+  document.querySelectorAll('input[name="csrs-dx"]').forEach((r) => { r.checked = (r.value === value); });
+  updateCSRS();
+}
+
+// Percentages appear only for the three bands with a verified rate in the
+// 2020 validation cohort; medium and high carry guidance without a figure.
+function csrsBand(score) {
+  if (score >= 6)  return ['high','Very high risk','~51.3% 30-day serious adverse event. Admission on an urgent monitored pathway.'];
+  if (score >= 4)  return ['high','High risk','Monitored admission and urgent cardiac evaluation.'];
+  if (score >= 1)  return ['moderate','Medium risk','Cautious disposition with close follow-up. Consider ~6 h of ED cardiac monitoring, and 15-day outpatient rhythm monitoring if discharged.'];
+  if (score >= -1) return ['low','Low risk','~0.7% 30-day serious adverse event. Discharge with outpatient follow-up.'];
+  return             ['low','Very low risk','~0.3% 30-day serious adverse event. Discharge generally appropriate.'];
+}
+
+function updateCSRS() {
+  const btn = document.getElementById('csrs-copy-btn');
+  if (!csrsState.dx) {
+    setResult('csrs-result','neutral','—','Select an ED diagnosis impression','CSRS cannot be scored until a diagnosis impression is chosen.');
+    if (btn) btn.classList.remove('show');
+    window.csrsDetail = { incomplete:true };
+    return;
+  }
+  const dxPts = csrsState.dx === 'vasovagal' ? -2 : (csrsState.dx === 'cardiac' ? 2 : 0);
+  let score = dxPts;
+  const items = [];
+  Object.keys(CSRS_POINTS).forEach((k) => {
+    if (csrsState[k]) {
+      score += CSRS_POINTS[k];
+      items.push(`${CSRS_LABELS[k]}: ${CSRS_POINTS[k] > 0 ? '+' : ''}${CSRS_POINTS[k]}`);
+    }
+  });
+  const dxLabel = csrsState.dx === 'vasovagal' ? 'Vasovagal syncope' : (csrsState.dx === 'cardiac' ? 'Cardiac syncope' : 'Other / unclear');
+  items.push(`ED diagnosis impression — ${dxLabel}: ${dxPts > 0 ? '+' : ''}${dxPts}`);
+  const [cls, label, action] = csrsBand(score);
+  setResult('csrs-result', cls, score, label, action);
+  if (btn) btn.classList.add('show');
+  window.csrsDetail = {
+    incomplete: false,
+    headline: `Canadian Syncope Risk Score: ${score} (${label.toLowerCase()}).`,
+    itemsLabel: 'Components present:',
+    items,
+    reco: action
+  };
+}
+
+function resetCSRS() {
+  Object.keys(CSRS_POINTS).forEach((k) => {
+    csrsState[k] = false;
+    const el = document.getElementById('csrs-' + k);
+    if (el) el.checked = false;
+  });
+  csrsState.dx = '';
+  document.querySelectorAll('input[name="csrs-dx"]').forEach((r) => { r.checked = false; });
+  updateCSRS();
+}
+
+// ── CANADIAN C-SPINE RULE (3 steps, in order) ──────────────────
+// Stiell et al., JAMA 2001.
+const CCS_EX = ['GCS < 15 / not alert, or hemodynamically unstable','Age < 16 years','Known vertebral disease or prior cervical spine surgery','Non-trauma presentation, or injury > 48 h ago'];
+const CCS_HR = ['Age ≥ 65 years','Dangerous mechanism','Paresthesias in extremities'];
+const CCS_LR = ['Simple rear-end MVC','Ambulatory at any time since injury','Sitting upright in the ED','Delayed onset of neck pain','Absence of midline cervical spine tenderness'];
+const ccsState = { ex: Array(4).fill(false), hr: Array(3).fill(false), lr: Array(5).fill(false), rot: '' };
+const CCS_PREFIX = { ex:'ccsx', hr:'ccsh', lr:'ccsl' };
+let ccsTouched = false;
+
+function toggleCCS(group, i) {
+  if (!ccsState[group]) return;
+  ccsTouched = true;
+  ccsState[group][i] = !ccsState[group][i];
+  const el = document.getElementById(CCS_PREFIX[group] + i);
+  if (el) el.checked = ccsState[group][i];
+  updateCCS();
+}
+
+function setCCSRotation(value) {
+  ccsTouched = true;
+  ccsState.rot = value === 'na' ? '' : value;
+  document.querySelectorAll('input[name="ccs-rot"]').forEach((r) => { r.checked = (r.value === value); });
+  updateCCS();
+}
+
+function updateCCS() {
+  const btn = document.getElementById('ccspine-copy-btn');
+  const names = (list, flags) => list.filter((_, i) => flags[i]);
+  const ex = names(CCS_EX, ccsState.ex);
+  const hr = names(CCS_HR, ccsState.hr);
+  const lr = names(CCS_LR, ccsState.lr);
+
+  if (!ccsTouched) {
+    setRuleResult('ccspine-result','neutral','Work through steps 0 → 3','The rule is applied in order — any high-risk factor means imaging regardless of the later steps.');
+    if (btn) btn.classList.remove('show');
+    window.ccspineDetail = { incomplete:true };
+    return;
+  }
+
+  let cls, label, action, items = [];
+  if (ex.length) {
+    cls = 'neutral';
+    label = 'Rule not applicable';
+    action = 'The Canadian C-Spine Rule was validated only in alert, stable adult blunt-trauma patients. Imaging is a clinical decision here. Note that NEXUS treats altered alertness and intoxication as positive criteria, so it would call for imaging rather than excluding the patient.';
+    items = ex.map((x) => `Excluded: ${x}`);
+  } else if (hr.length) {
+    cls = 'high';
+    label = 'Imaging indicated — Step 1';
+    action = 'A high-risk factor is present, so cervical spine imaging is indicated regardless of the low-risk factors or rotation.';
+    items = hr.map((x) => `High-risk factor: ${x}`);
+  } else if (!lr.length) {
+    cls = 'high';
+    label = 'Imaging indicated — Step 2';
+    action = 'No low-risk factor is present, so active rotation cannot be safely assessed. Cervical spine imaging is indicated.';
+    items = ['No high-risk factors present', 'No low-risk factor present — rotation cannot be safely assessed'];
+  } else if (ccsState.rot === 'unable') {
+    cls = 'high';
+    label = 'Imaging indicated — Step 3';
+    action = 'Unable to actively rotate the neck 45° in both directions. Cervical spine imaging is indicated.';
+    items = ['No high-risk factors present'].concat(lr.map((x) => `Low-risk factor: ${x}`), ['Unable to actively rotate 45° both ways']);
+  } else if (ccsState.rot === 'able') {
+    cls = 'low';
+    label = 'No imaging required by CCR';
+    action = 'No high-risk factor, at least one low-risk factor, and able to actively rotate 45° in both directions — the cervical spine is cleared by the Canadian C-Spine Rule.';
+    items = ['No high-risk factors present'].concat(lr.map((x) => `Low-risk factor: ${x}`), ['Able to actively rotate 45° both ways']);
+  } else {
+    cls = 'moderate';
+    label = 'Assess active rotation (Step 3)';
+    action = 'No high-risk factor and at least one low-risk factor, so rotation can be tested safely. Record whether the patient can actively rotate 45° left and right.';
+    setRuleResult('ccspine-result', cls, label, action);
+    if (btn) btn.classList.remove('show');
+    window.ccspineDetail = { incomplete:true };
+    return;
+  }
+
+  setRuleResult('ccspine-result', cls, label, action);
+  if (btn) btn.classList.add('show');
+  window.ccspineDetail = {
+    incomplete: false,
+    headline: `Canadian C-Spine Rule: ${label}.`,
+    itemsLabel: 'Findings:',
+    items,
+    reco: action
+  };
+}
+
+function resetCCS() {
+  ['ex','hr','lr'].forEach((g) => {
+    ccsState[g] = ccsState[g].map(() => false);
+    ccsState[g].forEach((_, i) => {
+      const el = document.getElementById(CCS_PREFIX[g] + i);
+      if (el) el.checked = false;
+    });
+  });
+  ccsState.rot = '';
+  document.querySelectorAll('input[name="ccs-rot"]').forEach((r) => { r.checked = false; });
+  ccsTouched = false;
+  updateCCS();
+}
+
+// ── NEXUS C-SPINE ──────────────────────────────────────────────
+// Hoffman et al., NEJM 2000.
+const NEXUS_LABELS = ['Posterior midline cervical tenderness','Focal neurologic deficit','Altered level of alertness','Evidence of intoxication','Painful distracting injury'];
+const nexusChecked = Array(5).fill(false);
+let nexusTouched = false;
+
+function toggleNexus(i) {
+  nexusTouched = true;
+  nexusChecked[i] = !nexusChecked[i];
+  const el = document.getElementById('nexus' + i);
+  if (el) el.checked = nexusChecked[i];
+  updateNexus();
+}
+
+function updateNexus() {
+  const btn = document.getElementById('nexus-copy-btn');
+  const present = NEXUS_LABELS.filter((_, i) => nexusChecked[i]);
+  if (!nexusTouched) {
+    setRuleResult('nexus-result','neutral','Check criteria above','All 5 absent → no cervical spine imaging required by NEXUS.');
+    if (btn) btn.classList.remove('show');
+    window.nexusDetail = { incomplete:true };
+    return;
+  }
+  const cls = present.length ? 'high' : 'low';
+  const label = present.length ? `NEXUS positive (${present.length}/5 present)` : 'NEXUS negative (0/5 present)';
+  const action = present.length
+    ? 'At least one NEXUS criterion is present, so the cervical spine cannot be cleared clinically. Imaging is indicated.'
+    : 'All 5 NEXUS criteria are absent, so no cervical spine imaging is required.';
+  setRuleResult('nexus-result', cls, label, action);
+  if (btn) btn.classList.add('show');
+  window.nexusDetail = {
+    incomplete: false,
+    headline: `NEXUS C-Spine criteria: ${label}.`,
+    itemsLabel: present.length ? 'Criteria present:' : 'Criteria present: (none)',
+    items: present,
+    reco: action
+  };
+}
+
+function resetNexus() {
+  for (let i = 0; i < nexusChecked.length; i++) {
+    nexusChecked[i] = false;
+    const el = document.getElementById('nexus' + i);
+    if (el) el.checked = false;
+  }
+  nexusTouched = false;
+  updateNexus();
+}
+
+// ── sPESI — Simplified PE Severity Index ───────────────────────
+// Jiménez et al., Arch Intern Med 2010.
+const SPESI_LABELS = ['Age > 80 years','History of cancer','Chronic cardiopulmonary disease','Heart rate ≥ 110 bpm','Systolic BP < 100 mmHg','SpO₂ < 90%'];
+const spesiChecked = Array(6).fill(false);
+let spesiTouched = false;
+
+function toggleSpesi(i) {
+  spesiTouched = true;
+  spesiChecked[i] = !spesiChecked[i];
+  const el = document.getElementById('spesi' + i);
+  if (el) el.checked = spesiChecked[i];
+  updateSpesi();
+}
+
+function updateSpesi() {
+  const btn = document.getElementById('spesi-copy-btn');
+  const present = SPESI_LABELS.filter((_, i) => spesiChecked[i]);
+  const score = present.length;
+  if (!spesiTouched) {
+    setResult('spesi-result','neutral','—','Check criteria above','sPESI 0 = low risk (30-day mortality ~1%). Any criterion = high risk (~11%).');
+    if (btn) btn.classList.remove('show');
+    window.spesiDetail = { incomplete:true };
+    return;
+  }
+  const cls = score === 0 ? 'low' : 'high';
+  const label = score === 0 ? 'Low risk' : 'High risk';
+  const action = score === 0
+    ? '30-day mortality ~1.0% (95% CI 0.0–2.1%). Outpatient management may be considered, provided there is no RV dysfunction and no troponin elevation, plus adequate social support and follow-up.'
+    : '30-day mortality ~10.9% (95% CI 8.5–13.2%). Not a candidate for outpatient management; admit and assess for RV dysfunction and troponin elevation.';
+  setResult('spesi-result', cls, score, label, action);
+  if (btn) btn.classList.add('show');
+  window.spesiDetail = {
+    incomplete: false,
+    headline: `sPESI: ${score} (${label.toLowerCase()}).`,
+    itemsLabel: score ? 'Criteria present:' : 'Criteria present: (none)',
+    items: present,
+    reco: action
+  };
+}
+
+function resetSpesi() {
+  for (let i = 0; i < spesiChecked.length; i++) {
+    spesiChecked[i] = false;
+    const el = document.getElementById('spesi' + i);
+    if (el) el.checked = false;
+  }
+  spesiTouched = false;
+  updateSpesi();
+}
+
+// ── GLASGOW-BLATCHFORD SCORE (0–23) ────────────────────────────
+// Blatchford et al., Lancet 2000.
+// fgRangeScore returns the FIRST matching range and falls through to 0, so
+// these tables are descending and min-only with a catch-all row. Writing the
+// published bands literally (18.2–22.3, then 22.4–27.9, ...) would leave gaps
+// in which a value like 22.35 matches nothing and silently scores 0.
+const GBS_BUN = [
+  { min:70,   max:null, score:6 },
+  { min:28,   max:null, score:4 },
+  { min:22.4, max:null, score:3 },
+  { min:18.2, max:null, score:2 },
+  { min:null, max:null, score:0 }
+];
+const GBS_HGB_M = [
+  { min:13,   max:null, score:0 },
+  { min:12,   max:null, score:1 },
+  { min:10,   max:null, score:3 },
+  { min:null, max:null, score:6 }
+];
+const GBS_HGB_F = [            // no +3 band exists for women
+  { min:12,   max:null, score:0 },
+  { min:10,   max:null, score:1 },
+  { min:null, max:null, score:6 }
+];
+const GBS_SBP = [
+  { min:110,  max:null, score:0 },
+  { min:100,  max:null, score:1 },
+  { min:90,   max:null, score:2 },
+  { min:null, max:null, score:3 }
+];
+const GBS_CHECKS = {
+  melena:  ['Presentation with melena', 1],
+  syncope: ['Presentation with syncope', 2],
+  hepatic: ['Hepatic disease', 2],
+  cardiac: ['Cardiac failure', 2]
+};
+const gbsState = { sex:'', melena:false, syncope:false, hepatic:false, cardiac:false };
+
+function setGbsSex(value) {
+  gbsState.sex = value;
+  document.querySelectorAll('input[name="gbs-sex"]').forEach((r) => { r.checked = (r.value === value); });
+  calcGBS();
+}
+
+function toggleGBS(key) {
+  if (!Object.prototype.hasOwnProperty.call(GBS_CHECKS, key)) return;
+  gbsState[key] = !gbsState[key];
+  const el = document.getElementById('gbs-' + key);
+  if (el) el.checked = gbsState[key];
+  calcGBS();
+}
+
+function calcGBS() {
+  const num = (id) => parseFloat((document.getElementById(id) || {}).value);
+  const bun = num('gbs-bun'), hgb = num('gbs-hgb'), sbp = num('gbs-sbp'), pulse = num('gbs-pulse');
+  const btn = document.getElementById('gbs-copy-btn');
+  const anyCheck = Object.keys(GBS_CHECKS).some((k) => gbsState[k]);
+
+  if (![bun, hgb, sbp, pulse].some((v) => !Number.isNaN(v)) && !gbsState.sex && !anyCheck) {
+    setResult('gbs-result','neutral','—','Enter sex and labs above','GBS 0–1 identifies patients who may be suitable for outpatient management.');
+    if (btn) btn.classList.remove('show');
+    window.gbsDetail = { incomplete:true };
+    return;
+  }
+
+  const missing = [], items = [];
+  let total = 0;
+
+  const bunPts = fgRangeScore(bun, GBS_BUN);
+  if (bunPts === null) missing.push('BUN');
+  else { total += bunPts; items.push(`BUN ${bun} mg/dL: +${bunPts}`); }
+
+  // Hemoglobin thresholds are sex-specific, so Hgb is unscoreable without sex.
+  if (!gbsState.sex) missing.push('sex');
+  if (Number.isNaN(hgb)) missing.push('hemoglobin');
+  if (gbsState.sex && !Number.isNaN(hgb)) {
+    const hgbPts = fgRangeScore(hgb, gbsState.sex === 'male' ? GBS_HGB_M : GBS_HGB_F);
+    total += hgbPts;
+    items.push(`Hemoglobin ${hgb} g/dL (${gbsState.sex}): +${hgbPts}`);
+  }
+
+  const sbpPts = fgRangeScore(sbp, GBS_SBP);
+  if (sbpPts === null) missing.push('systolic BP');
+  else { total += sbpPts; items.push(`Systolic BP ${sbp} mmHg: +${sbpPts}`); }
+
+  if (Number.isNaN(pulse)) missing.push('pulse');
+  else { const p = pulse >= 100 ? 1 : 0; total += p; items.push(`Pulse ${pulse} bpm: +${p}`); }
+
+  Object.keys(GBS_CHECKS).forEach((k) => {
+    if (gbsState[k]) { const [lab, pts] = GBS_CHECKS[k]; total += pts; items.push(`${lab}: +${pts}`); }
+  });
+
+  let cls, label, action;
+  if (total >= 6)      { cls='high';     label='High risk';     action='GBS ≥ 6. Higher likelihood of needing transfusion or endoscopic intervention — resuscitate, type and screen, and involve GI early.'; }
+  else if (total >= 2) { cls='moderate'; label='Moderate risk'; action='GBS 2–5. Inpatient assessment generally warranted; timing of endoscopy per GI.'; }
+  else                 { cls='low';      label='Low risk';      action='GBS 0–1. May be suitable for outpatient management with early outpatient endoscopy, if hemodynamically stable with adequate follow-up.'; }
+
+  const incomplete = missing.length > 0;
+  if (incomplete) {
+    label += ' (provisional)';
+    cls = 'neutral';
+    action = `Based on available data; missing: ${missing.join(', ')}. The total can only rise as values are added. ${action}`;
+  }
+
+  setResult('gbs-result', cls, total, label, action);
+  if (btn) btn.classList.add('show');
+  window.gbsDetail = {
+    incomplete: false,
+    headline: `Glasgow-Blatchford Score: ${total}/23 — ${label}.`,
+    itemsLabel: 'Components:',
+    items: items.concat(incomplete ? [`Not available: ${missing.join(', ')}`] : []),
+    reco: action
+  };
+}
+
+function resetGBS() {
+  gbsState.sex = '';
+  Object.keys(GBS_CHECKS).forEach((k) => {
+    gbsState[k] = false;
+    const el = document.getElementById('gbs-' + k);
+    if (el) el.checked = false;
+  });
+  document.querySelectorAll('input[name="gbs-sex"]').forEach((r) => { r.checked = false; });
+  ['gbs-bun','gbs-hgb','gbs-sbp','gbs-pulse'].forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  const btn = document.getElementById('gbs-copy-btn');
+  if (btn) btn.classList.remove('show');
+  calcGBS();
+}
+
+// Paint the neutral result boxes for the new calculators. These run here
+// rather than in the "Initialize defaults" block above, which is defined
+// earlier in the file than these functions.
+updateCSRS();
+updateCCS();
+updateNexus();
+updateSpesi();
+calcGBS();
 </script>
 
 <script id="shared-nav-search">

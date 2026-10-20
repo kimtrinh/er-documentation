@@ -183,6 +183,13 @@ const SEARCH_INDEX = [
   {type:'calc',i:'🧮',t:'Centor / McIsaac Score',s:'Strep pharyngitis  ·  throat culture  ·  antibiotics',g:'Calculator',gc:'t-calc',u:'calculators.html#calc-centor'},
   {type:'calc',i:'🧮',t:'PECARN Pediatric Head Injury',s:'Peds head trauma  ·  CT indication  ·  children',g:'Calculator',gc:'t-calc',u:'calculators.html#calc-pecarn'},
   {type:'calc',i:'🧮',t:'Peds Fever Risk Stratification',s:'Febrile infant  ·  0-60 days  ·  sepsis workup  ·  LP',g:'Calculator',gc:'t-calc',u:'calculators.html#calc-pedsfever'},
+  {type:'calc',i:'🧮',t:'Canadian Syncope Risk Score (CSRS)',s:'syncope  ·  CSRS  ·  30-day serious adverse event  ·  troponin  ·  QTc  ·  disposition  ·  cardiac monitoring',g:'Calculator',gc:'t-calc',u:'calculators.html#calc-syncope'},
+  {type:'calc',i:'🧮',t:'Canadian C-Spine Rule',s:'cervical spine  ·  neck trauma  ·  C-spine imaging  ·  rotation 45 degrees  ·  CCR  ·  dangerous mechanism  ·  clearance',g:'Calculator',gc:'t-calc',u:'calculators.html#calc-cspine'},
+  {type:'calc',i:'🧮',t:'NEXUS C-Spine Criteria',s:'cervical spine  ·  neck trauma  ·  low-risk criteria  ·  midline tenderness  ·  distracting injury  ·  intoxication',g:'Calculator',gc:'t-calc',u:'calculators.html#calc-cspine'},
+  {type:'calc',i:'🧮',t:'Glasgow-Blatchford Score (GBS)',s:'upper GI bleed  ·  UGIB  ·  hematemesis  ·  melena  ·  BUN  ·  endoscopy  ·  outpatient management',g:'Calculator',gc:'t-calc',u:'calculators.html#calc-gibleed'},
+  {type:'calc',i:'🧮',t:'COWS — Clinical Opiate Withdrawal Scale',s:'opioid withdrawal  ·  COWS 8  ·  buprenorphine induction  ·  MAT  ·  precipitated withdrawal  ·  bupe',g:'Calculator',gc:'t-calc',u:'calculators.html#calc-withdrawal'},
+  {type:'calc',i:'🧮',t:'CIWA-Ar — Alcohol Withdrawal',s:'alcohol withdrawal  ·  CIWA  ·  benzodiazepine  ·  phenobarbital  ·  symptom-triggered  ·  delirium tremens  ·  seizure',g:'Calculator',gc:'t-calc',u:'calculators.html#calc-withdrawal'},
+  {type:'calc',i:'🧮',t:'sPESI — Simplified PE Severity Index',s:'pulmonary embolism  ·  outpatient PE  ·  30-day mortality  ·  disposition  ·  PESI  ·  confirmed PE',g:'Calculator',gc:'t-calc',u:'calculators.html#calc-wellspe'},
 
   // ── SERVICE AGREEMENTS ─────────────────────────────────────────────────
   {type:'sa',i:'📑',t:'Necrotizing Fasciitis',s:'necrotizing fasciitis  ·  soft tissue infection  ·  LRINEC  ·  gas gangrene  ·  surgical emergency  ·  transfer',g:'Service Agreement',gc:'t-algo',u:'service-agreements.html#necfasc'},
