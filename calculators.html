@@ -1316,6 +1316,141 @@ function copyDocFromDetail(type, promptMsg) {
   ]);
 }
 
+// ── CRITERIA-BASED DOCUMENTATION ──────────────────────────────
+// Builds chart text that names EVERY criterion — including the ones that
+// scored nothing, and why. The documented negatives are the point of the
+// note, not noise: "no tender adenopathy" and "never assessed" are
+// different clinical statements, and the old text could not tell them apart.
+//
+// d = { incomplete, name, score, max, band, criteria:[...], reco,
+//       criteriaLabel?, notes?[] }
+// criterion = {
+//   label,   // the full on-screen wording, so the note matches the screen
+//   pts,     // signed contribution
+//   state,   // 'pos' contributed | 'neg' did not | 'info' a selected band
+//            // or measured value | 'na' could not be assessed
+//   found,   // the clinical finding: 'present', 'cough present', '30 mg/dL'
+//   clause,  // optional phrasing for the narrative sentence, where the
+//            // default would read badly (absence-of-X criteria)
+//   notMet   // absence-of-X criterion that was not met — prefix NOT MET,
+//            // because "Absence of cough: absent" is nonsense
+// }
+function critPts(p) {
+  const n = Number(p) || 0;
+  if (n > 0) return `+${n}`;
+  if (n < 0) return `−${Math.abs(n)}`;   // U+2212, matching the on-screen badges
+  return '0';
+}
+
+function critLine(c) {
+  const lead = c.notMet ? 'NOT MET — ' : '';
+  const pts = (c.pts === null || typeof c.pts === 'undefined') ? '' : ` (${critPts(c.pts)})`;
+  return `- ${c.label}: ${lead}${c.found}${pts}`;
+}
+
+function critClause(c) {
+  const lab = lowerFirst(c.label);
+  if (c.state === 'na') return lab;     // "Not assessed: sodium, potassium"
+  if (c.clause) return c.clause;
+  if (c.state === 'pos') return lab;
+  if (c.state === 'neg') return 'no ' + lab;
+  return c.found || lab;
+}
+
+// Criteria for a plain checkbox list. `pts` may be a per-item array, a single
+// number applied when ticked, or null for presence rules that are not scored.
+// Unticked boxes still produce a criterion, because the documented negative is
+// the whole point: "no hemoptysis" and "hemoptysis never assessed" differ.
+// Lowercase a label for mid-sentence use without wrecking acronyms:
+// "Hemoptysis" -> "hemoptysis", but "HR >90" and "SpO₂ <95%" are left alone.
+function lowerFirst(str) {
+  const first = String(str).split(/\s/)[0];
+  if (/[A-Z]/.test(first.slice(1))) return str;
+  return str.charAt(0).toLowerCase() + str.slice(1);
+}
+
+// Criteria for a plain checkbox list. `spec` items are either a label string
+// or { label, pos, neg } where `neg` is how the negative reads in prose —
+// threshold criteria need their inverse stated ("age <50"), because "no age
+// ≥ 50" is not something anyone would write in a note.
+function boxCriteria(spec, checked, pts, o) {
+  o = o || {};
+  return spec.map((item, i) => {
+    const c = (typeof item === 'string') ? { label: item } : item;
+    const on = !!checked[i];
+    const p = (pts === null) ? null : (Array.isArray(pts) ? pts[i] : pts);
+    return {
+      label: c.label,
+      pts: (p === null) ? null : (on ? p : 0),
+      state: on ? 'pos' : 'neg',
+      found: on ? (c.pos || o.present || 'present') : (c.negFound || o.absent || 'absent'),
+      clause: on ? lowerFirst(c.label) : (c.neg || 'no ' + lowerFirst(c.label))
+    };
+  });
+}
+
+function docFromCriteria(type, promptMsg) {
+  // '__fgsi' documents a deliberately partial score, so it bypasses the
+  // incomplete guard while still reporting what is missing in `notes`.
+  const d = (type === '__fgsi') ? Object.assign({}, window.fgsiDetail, { incomplete: false }) : window[type + 'Detail'];
+  if (!d || d.incomplete) { if (promptMsg) alert(promptMsg); return ''; }
+  const crit = d.criteria || [];
+  // A ticked criterion worth negative points lowers the score, so it must not
+  // be filed under "Positive" — on Wells DVT and CSRS that inverts the meaning.
+  const cred = crit.filter((c) => c.pts < 0);
+  const pos  = crit.filter((c) => c.state === 'pos' && !(c.pts < 0));
+  const neg  = crit.filter((c) => c.state === 'neg' && !(c.pts < 0));
+  const info = crit.filter((c) => c.state === 'info');
+  const na   = crit.filter((c) => c.state === 'na');
+
+  const scored = (typeof d.score !== 'undefined' && d.score !== null);
+  const head = !scored
+    ? `${d.name}${d.band ? `: ${d.band}` : ''}.`
+    : `${d.name} = ${(Number(d.score) < 0) ? critPts(d.score) : d.score}${(d.max === null || typeof d.max === 'undefined') ? '' : ` of ${d.max}`}${d.band ? ` (${d.band})` : ''}.`;
+
+  const grouped = crit.some((c) => c.group);
+  const bits = [head];
+  if (grouped) {
+    // For a branching rule the Positive/Negative split is wrong — "eligibility
+    // met" is not a risk finding. Summarise per step instead.
+    const seenG = [];
+    crit.forEach((c) => { if (seenG.indexOf(c.group) === -1) seenG.push(c.group); });
+    seenG.forEach((g) => {
+      const inG = crit.filter((c) => c.group === g);
+      const hit = inG.filter((c) => c.state === 'pos');
+      const all = hit.length === inG.length;
+      bits.push(`${g}: ${hit.length} of ${inG.length}${(hit.length && !all) ? ' — ' + hit.map(critClause).join(', ') : ''}.`);
+    });
+  }
+  if (!grouped && pos.length)  bits.push(`Positive: ${pos.map(critClause).join(', ')}.`);
+  if (!grouped && cred.length) bits.push(`Subtracts: ${cred.map((c) => `${critClause(c)} (${critPts(c.pts)})`).join(', ')}.`);
+  if (!grouped && neg.length)  bits.push(`Negative: ${neg.map(critClause).join(', ')}.`);
+  if (!grouped && info.length) {
+    const t = info.map(critClause).join('; ');
+    bits.push(`${t.charAt(0).toUpperCase()}${t.slice(1)}.`);
+  }
+  if (!grouped && na.length)   bits.push(`Not assessed: ${na.map(critClause).join(', ')}.`);
+
+  // Built with join rather than fmtLines: fmtLines drops falsy entries, so it
+  // cannot emit the blank lines that keep this readable pasted into a note.
+  const out = [bits.join(' ')];
+  if (crit.length && crit.some((c) => c.group)) {
+    // Branching rules (CT Head, C-Spine, PECARN) are read step by step, so the
+    // note keeps the steps rather than flattening them into one list.
+    const seen = [];
+    crit.forEach((c) => { if (seen.indexOf(c.group) === -1) seen.push(c.group); });
+    seen.forEach((g) => {
+      out.push('', g + ':');
+      crit.filter((c) => c.group === g).forEach((c) => out.push(critLine(c)));
+    });
+  } else if (crit.length) {
+    out.push('', d.criteriaLabel || 'Criteria:', ...crit.map(critLine));
+  }
+  if (d.notes && d.notes.length) out.push('', ...d.notes);
+  if (d.reco) out.push('', `Recommendation: ${d.reco}`);
+  return out.join('\n');
+}
+
 function centorInterpretation(score) {
   // McIsaac/Centor typical guidance (local protocols may vary)
   if (score <= 1) return 'Low likelihood of GAS. No testing or antibiotics typically indicated; symptomatic care.';
@@ -1331,291 +1466,37 @@ function copyDoc(type) {
   const btn = document.getElementById(type + '-copy-btn');
 
   // ----- PERC -----
-  if (type === 'perc') {
-    const labels = [
-      'Age ≥50',
-      'HR ≥100 bpm',
-      'SpO₂ <95% on room air',
-      'Unilateral leg swelling',
-      'Hemoptysis',
-      'Recent surgery or trauma (≤4 weeks)',
-      'Prior PE or DVT',
-      'Hormone use (OCP/HRT/estrogen)',
-    ];
-    const present = labels.filter((_,i)=>percChecked[i]);
-    if (present.length === 0) {
-      text = fmtLines([
-        'PERC (PE Rule-Out Criteria): PERC negative (0/8).',
-        'All PERC criteria absent: age <50, HR <100, SpO₂ ≥95% RA, no unilateral leg swelling, no hemoptysis, no recent surgery/trauma, no prior PE/DVT, no estrogen use.',
-        'Recommendation: If low pre-test probability, PE can be ruled out without D-dimer/CTPA per PERC.'
-      ]);
-    } else {
-      text = fmtLines([
-        `PERC (PE Rule-Out Criteria): PERC positive (${present.length}/8).`,
-        'Criteria present:',
-        ...present.map(x => `- ${x}`),
-        'Recommendation: Cannot rule out PE by PERC alone. Proceed with Wells PE + D-dimer/CTPA as indicated.'
-      ]);
-    }
-  }
+  if (type === 'perc') { text = docFromCriteria('perc', 'Review the 8 PERC criteria first.'); }
 
   // ----- Wells PE -----
-  else if (type === 'wellspe') {
-    const labels = [
-      'Clinical signs/symptoms of DVT',
-      'PE is #1 diagnosis OR equally likely',
-      'HR >100 bpm',
-      'Immobilization ≥3 days OR surgery in past 4 weeks',
-      'Prior PE or DVT',
-      'Hemoptysis',
-      'Malignancy (treatment within 6 months or palliative)',
-    ];
-    const score = wpeChecked.reduce((s,c,i)=>s+(c?wpePoints[i]:0),0);
-    const items = labels.map((lab,i)=>({lab, pts:wpePoints[i], on:wpeChecked[i]})).filter(x=>x.on);
-
-    let risk, plan;
-    if (score <= 1) { risk='Low'; plan='If PERC negative, no further PE workup. If PERC positive, obtain D-dimer; if positive → CTPA (or V/Q as appropriate).'; }
-    else if (score <= 6) { risk='Moderate'; plan='Obtain D-dimer; if positive → CTPA (or V/Q as appropriate).'; }
-    else { risk='High'; plan='Proceed directly to imaging (CTPA) and consider empiric anticoagulation as clinically appropriate.'; }
-
-    text = fmtLines([
-      `Wells PE score: ${score} (${risk} pre-test probability).`,
-      (items.length ? 'Points:' : 'Points: (no criteria selected)'),
-      ...items.map(x => `- ${x.lab} (${x.pts} point${x.pts===1?'':'s'})`),
-      `Recommendation: ${plan}`
-    ]);
-  }
-
-  // ----- HEART -----
-  else if (type === 'heart') {
-    const filled = ['h','e','a','r','t'].every(k=>heartScores[k]!==null);
-    if (!filled) {
-      alert('Please complete all 5 HEART score categories first.');
-      return;
-    }
-    const score = ['h','e','a','r','t'].reduce((s,k)=>s+(heartScores[k]??0),0);
-    const hDesc = ['Slightly suspicious','Moderately suspicious','Highly suspicious'][heartScores['h']];
-    const eDesc = ['Normal','Non-specific repolarization disturbance','Significant ST deviation'][heartScores['e']];
-    const aDesc = ['Age <45','Age 45–64','Age ≥65'][heartScores['a']];
-    const rDesc = ['No risk factors','1–2 risk factors','≥3 risk factors or known CAD'][heartScores['r']];
-    const tDesc = ['≤1× ULN','1–3× ULN','>3× ULN'][heartScores['t']];
-
-    let risk, plan;
-    if (score <= 3) { risk='Low risk'; plan='If serial troponins negative and no concerning features, consider discharge with follow-up and return precautions.'; }
-    else if (score <= 6) { risk='Moderate risk'; plan='Observation / further risk stratification (e.g., stress testing/CTA) per local protocol; consider cardiology input.'; }
-    else { risk='High risk'; plan='Admit; cardiology consult for early invasive strategy as indicated.'; }
-
-    text = fmtLines([
-      `HEART score: ${score}/10 (${risk}).`,
-      'Breakdown:',
-      `- History: ${heartScores['h']}/2 (${hDesc})`,
-      `- EKG: ${heartScores['e']}/2 (${eDesc})`,
-      `- Age: ${heartScores['a']}/2 (${aDesc})`,
-      `- Risk factors: ${heartScores['r']}/2 (${rDesc})`,
-      `- Troponin: ${heartScores['t']}/2 (${tDesc})`,
-      `Recommendation: ${plan}`
-    ]);
-  }
-
+  else if (type === 'wellspe') { text = docFromCriteria('wellspe', 'Select Wells PE criteria first.'); }
+  else if (type === 'heart')   { text = docFromCriteria('heart',   'Score all five HEART domains first.'); }
   // ----- YEARS -----
-  else if (type === 'years') {
-    if (!window.yearsDetail || window.yearsDetail.incomplete) {
-      alert('Complete YEARS criteria and D-dimer first.');
-      return;
-    }
-    const d = window.yearsDetail;
-    text = fmtLines([
-      `YEARS algorithm: ${d.criteriaCount} criteria; D-dimer ${d.dDimer} ng/mL FEU.`,
-      `Interpretation: ${d.interpretation}.`,
-      `Recommendation: ${d.reco}`
-    ]);
-  }
+  else if (type === 'years') { text = docFromCriteria('years', 'Complete YEARS criteria and D-dimer first.'); }
 
   // ----- ABCD2 -----
-  else if (type === 'abcd2') {
-    if (!window.abcd2Detail || window.abcd2Detail.incomplete) {
-      alert('Complete ABCD2 clinical feature and duration first.');
-      return;
-    }
-    const d = window.abcd2Detail;
-    text = fmtLines([
-      `ABCD2 score: ${d.total}/7 (${d.riskLabel}).`,
-      'Points:',
-      ...d.items.map(x => `- ${x}`),
-      `Recommendation: ${d.reco}`
-    ]);
-  }
+  else if (type === 'abcd2') { text = docFromCriteria('abcd2', 'Complete the ABCD2 inputs first.'); }
 
   // ----- NIHSS -----
-  else if (type === 'nihss') {
-    if (!window.nihssDetail || window.nihssDetail.incomplete) {
-      alert('Score all NIHSS items first.');
-      return;
-    }
-    const d = window.nihssDetail;
-    text = fmtLines([
-      `NIHSS total: ${d.total}/42 (${d.severity}).`,
-      'Items:',
-      ...d.items.map(x => `- ${x}`),
-      `Recommendation: ${d.reco}`
-    ]);
-  }
+  else if (type === 'nihss') { text = docFromCriteria('nihss', 'Score all 15 NIHSS items first.'); }
 
   // ----- CHA2DS2-VASc -----
-  else if (type === 'cha2ds2vasc') {
-    if (!window.cha2Detail || window.cha2Detail.incomplete) {
-      alert('Select sex and age for CHA2DS2-VASc first.');
-      return;
-    }
-    const d = window.cha2Detail;
-    text = fmtLines([
-      `CHA2DS2-VASc score: ${d.total} (${d.interpretation}).`,
-      'Points:',
-      ...d.items.map(x => `- ${x}`),
-      `Recommendation: ${d.reco}`
-    ]);
-  }
+  else if (type === 'cha2ds2vasc') { text = docFromCriteria('cha2ds2vasc', 'Select sex and age first.'); }
 
   // ----- Wells DVT -----
-  else if (type === 'wellsdvt') {
-    const labels = [
-      'Active cancer',
-      'Paralysis/paresis/recent immobilization of lower extremity',
-      'Bedridden >3 days OR major surgery within 12 weeks (requiring general/regional anesthesia)',
-      'Localized tenderness along deep venous system',
-      'Entire leg swollen',
-      'Calf swelling >3 cm compared with asymptomatic leg',
-      'Pitting edema confined to symptomatic leg',
-      'Collateral superficial veins (nonvaricose)',
-      'Alternative diagnosis at least as likely (subtract)',
-    ];
-    const score = wdvtChecked.reduce((s,c,i)=>s+(c?wdvtPoints[i]:0),0);
-    const items = labels.map((lab,i)=>({lab, pts:wdvtPoints[i], on:wdvtChecked[i]})).filter(x=>x.on);
-
-    let risk, plan;
-    if (score <= 1) { risk='Low'; plan='Consider D-dimer; if positive → compression ultrasound. If D-dimer negative → DVT excluded in appropriate context.'; }
-    else if (score <= 6) { risk='Moderate'; plan='Compression ultrasound; consider D-dimer/serial imaging per protocol if initial US negative.'; }
-    else { risk='High'; plan='Compression ultrasound regardless of D-dimer; if initial US negative but suspicion high → repeat imaging in ~1 week or alternative imaging.'; }
-
-    text = fmtLines([
-      `Wells DVT score: ${score} (${risk} pre-test probability).`,
-      (items.length ? 'Points:' : 'Points: (no criteria selected)'),
-      ...items.map(x => `- ${x.lab} (${x.pts>0?'+':''}${x.pts})`),
-      `Recommendation: ${plan}`
-    ]);
-  }
-
+  else if (type === 'wellsdvt') { text = docFromCriteria('wellsdvt', 'Select Wells DVT criteria first.'); }
   // ----- Canadian CT Head -----
-  else if (type === 'cthead') {
-    const eligible = cteChecked.every(Boolean);
-    const highLabels = [
-      'GCS <15 at 2 hours post-injury',
-      'Suspected open/depressed skull fracture',
-      'Signs of basal skull fracture',
-      'Vomiting ≥2 episodes',
-      'Age ≥65',
-    ];
-    const medLabels = [
-      'Amnesia before impact ≥30 minutes',
-      'Dangerous mechanism',
-    ];
-    const high = highLabels.filter((_,i)=>cthChecked[i]);
-    const med  = medLabels.filter((_,i)=>ctmChecked[i]);
-
-    if (!eligible) {
-      text = fmtLines([
-        'Canadian CT Head Rule: Not eligible (rule criteria not fully met).',
-        'Recommendation: Use clinical judgment; consider CT head based on overall risk factors/anticoagulation/abnormal exam.'
-      ]);
-    } else if (high.length === 0 && med.length === 0) {
-      text = fmtLines([
-        'Canadian CT Head Rule: Eligible patient with minor head injury.',
-        'High-risk factors: none.',
-        'Medium-risk factors: none.',
-        'Recommendation: CT head not required per CCHR; observe as appropriate + provide concussion/return precautions.'
-      ]);
-    } else {
-      text = fmtLines([
-        'Canadian CT Head Rule: Eligible patient with minor head injury.',
-        (high.length ? 'High-risk factors present:' : 'High-risk factors: none.'),
-        ...high.map(x=>`- ${x}`),
-        (med.length ? 'Medium-risk factors present:' : 'Medium-risk factors: none.'),
-        ...med.map(x=>`- ${x}`),
-        'Recommendation: CT head indicated per CCHR.'
-      ]);
-    }
-  }
+  else if (type === 'cthead') { text = docFromCriteria('cthead', 'Work through the eligibility check first.'); }
 
   // ----- LRINEC -----
-  else if (type === 'lrinec') {
-    if (!window.lrinecDetail) {
-      alert('Enter LRINEC labs first.');
-      return;
-    }
-    const d = window.lrinecDetail;
-
-    // Interpretation (common convention): ≤5 low, 6–7 intermediate, ≥8 high
-    let interp = d.interpretation;
-    if (!interp) {
-      const s = d.total ?? 0;
-      if (s >= 8) interp = 'High risk (LRINEC ≥ 8)';
-      else if (s >= 6) interp = 'Intermediate risk (LRINEC 6–7)';
-      else interp = 'Lower risk (LRINEC ≤ 5)';
-      if (d.incomplete) interp += ' — based on available data';
-    }
-
-    text = fmtLines([
-      `LRINEC score: ${d.total}.`,
-      `Interpretation: ${interp}.`,
-      (d.incomplete && d.missing && d.missing.length ? `Missing: ${d.missing.join(', ')}.` : ''),
-      'Points:',
-      ...d.items.map(it => `- ${it.name}: ${it.value} → ${it.points} point${it.points===1?'':'s'} (${it.rule})`),
-      `Recommendation: ${d.reco}`
-    ]);
-  }
-
+  else if (type === 'lrinec') { text = docFromCriteria('lrinec', 'Enter LRINEC labs first.'); }
   // ----- FGSI -----
-  else if (type === 'fgsi') {
-    if (!window.fgsiDetail) { alert('Enter FGSI vitals/labs first.'); return; }
-    const d = window.fgsiDetail;
-
-    const interp = d.interpretation
-      ? d.interpretation + (d.incomplete ? '' : '')
-      : ((d.total > 9) ? 'High mortality risk (FGSI > 9)' : 'Lower mortality risk (FGSI ≤ 9)') + (d.incomplete ? ' — based on available data' : '');
-
-    text = fmtLines([
-      `FGSI (Fournier’s Gangrene Severity Index): ${d.total}.`,
-      `Interpretation: ${interp}.`,
-      (d.incomplete && d.missing && d.missing.length ? `Missing: ${d.missing.join(', ')}.` : ''),
-      'Points:',
-      ...d.items.map(it => `- ${it.name}: ${it.value} → ${it.points}`),
-      `Recommendation: ${d.reco}`
-    ]);
-  }
-
+  else if (type === 'fgsi') { const d0 = window.fgsiDetail; text = (d0 && d0.criteria) ? docFromCriteria('__fgsi', '') : ''; if (!text && !d0) alert('Enter FGSI vitals/labs first.'); }
   // ----- SIRS -----
-  else if (type === 'sirs') {
-    const labels = ['Temp >38°C or <36°C','HR >90','RR >20 or PaCO₂ <32','WBC >12 or <4 or >10% bands'];
-    const pos = labels.filter((_,i)=>sirsChecked[i]);
-    text = fmtLines([
-      `SIRS: ${pos.length}/4 positive (${pos.length>=2?'SIRS positive':'SIRS negative'}).`,
-      (pos.length ? 'Positive criteria:' : 'Positive criteria: none.'),
-      ...pos.map(x=>`- ${x}`),
-      'Recommendation: SIRS supports systemic inflammatory response in appropriate context; manage/disposition based on suspected source and overall clinical picture.'
-    ]);
-  }
+  else if (type === 'sirs') { text = docFromCriteria('sirs', 'Check the SIRS criteria first.'); }
 
   // ----- qSOFA -----
-  else if (type === 'qsofa') {
-    const labels = ['RR ≥22','SBP ≤100','Altered mental status (GCS<15)'];
-    const pos = labels.filter((_,i)=>qsofaChecked[i]);
-    text = fmtLines([
-      `qSOFA: ${pos.length}/3.`,
-      (pos.length ? 'Positive criteria:' : 'Positive criteria: none.'),
-      ...pos.map(x=>`- ${x}`),
-      'Recommendation: Elevated qSOFA suggests higher risk; supports escalation/close monitoring in the appropriate clinical context.'
-    ]);
-  }
+  else if (type === 'qsofa') { text = docFromCriteria('qsofa', 'Check the qSOFA criteria first.'); }
 
   // ----- Shock Index -----
   else if (type === 'shock') {
@@ -1626,7 +1507,10 @@ function copyDoc(type) {
       return;
     }
     const si = (hr/sbp).toFixed(2);
-    const concern = (parseFloat(si) > 0.90) ? 'elevated' : 'not elevated';
+    const v = parseFloat(si);
+    // Mirror the on-screen tiers: the note used to know only >0.9, so a shock
+    // index of 1.4 was documented as merely "elevated".
+    const concern = v >= 1.3 ? 'markedly elevated (high concern)' : (v > 0.90 ? 'elevated' : 'not elevated');
     text = fmtLines([
       `Shock Index (HR/SBP): ${si}. (HR ${hr}, SBP ${sbp}).`,
       `Interpretation: Shock index is ${concern} (threshold often cited >0.9, context dependent).`,
@@ -1635,43 +1519,19 @@ function copyDoc(type) {
   }
 
   // ----- Centor / McIsaac -----
-  else if (type === 'centor') {
-    if (!window.centorDetail) { alert('Select criteria first.'); return; }
-    const d = window.centorDetail;
-    text = fmtLines([
-      `Centor/McIsaac score: ${d.total}.`,
-      `Interpretation: ${centorInterpretation(d.total)}.`,
-      'Points:',
-      ...d.items.map(it => `- ${it}`),
-      `Recommendation: ${d.reco}`
-    ]);
-  }
+  else if (type === 'centor') { text = docFromCriteria('centor', 'Select criteria first.'); }
 
   // ----- PECARN -----
-  else if (type === 'pecarn') {
-    if (!window.pecarnDetail || window.pecarnDetail.incomplete) {
-      alert('Select age group and findings first.');
-      return;
-    }
-    const d = window.pecarnDetail;
-    text = fmtLines([
-      `PECARN Pediatric Head Injury (${d.ageGroup}):`,
-      (d.high.length ? 'High-risk findings:' : 'High-risk findings: none.'),
-      ...d.high.map(x=>`- ${x}`),
-      (d.intermediate.length ? 'Intermediate-risk findings:' : 'Intermediate-risk findings: none.'),
-      ...d.intermediate.map(x=>`- ${x}`),
-      `Recommendation: ${d.reco}`
-    ]);
-  }
+  else if (type === 'pecarn') { text = docFromCriteria('pecarn', 'Select an age group and findings first.'); }
 
   // ----- New calculators (generic *Detail -> chart text) -----
-  else if (type === 'csrs')    { text = copyDocFromDetail('csrs',    'Select the CSRS items and an ED diagnosis impression first.'); }
-  else if (type === 'ccspine') { text = copyDocFromDetail('ccspine', 'Work through the Canadian C-Spine steps first — rotation still needs recording.'); }
-  else if (type === 'nexus')   { text = copyDocFromDetail('nexus',   'Review the 5 NEXUS criteria first.'); }
-  else if (type === 'spesi')   { text = copyDocFromDetail('spesi',   'Review the 6 sPESI criteria first.'); }
-  else if (type === 'gbs')     { text = copyDocFromDetail('gbs',     'Enter sex, BUN, hemoglobin and systolic BP first.'); }
-  else if (type === 'cows')    { text = copyDocFromDetail('cows',    'Score at least one COWS item first.'); }
-  else if (type === 'ciwa')    { text = copyDocFromDetail('ciwa',    'Score at least one CIWA-Ar item first.'); }
+  else if (type === 'csrs')    { text = docFromCriteria('csrs',    'Select the CSRS items and an ED diagnosis impression first.'); }
+  else if (type === 'ccspine') { text = docFromCriteria('ccspine', 'Work through the Canadian C-Spine steps first — rotation still needs recording.'); }
+  else if (type === 'nexus')   { text = docFromCriteria('nexus',   'Review the 5 NEXUS criteria first.'); }
+  else if (type === 'spesi')   { text = docFromCriteria('spesi',   'Review the 6 sPESI criteria first.'); }
+  else if (type === 'gbs')     { text = docFromCriteria('gbs',     'Enter sex, BUN, hemoglobin and systolic BP first.'); }
+  else if (type === 'cows')    { text = docFromCriteria('cows',    'Score at least one COWS item first.'); }
+  else if (type === 'ciwa')    { text = docFromCriteria('ciwa',    'Score at least one CIWA-Ar item first.'); }
   else if (type === 'crcl')    { text = copyDocFromDetail('crcl',    'Enter sex, age, serum creatinine and weight first.'); }
 
   // ----- Peds fever note -----
@@ -1688,6 +1548,16 @@ function copyDoc(type) {
 
 
 // ── PERC ─────────────────────────────────────────────────────
+const PERC_LABELS = [
+  { label:'Age ≥ 50',                              neg:'age <50' },
+  { label:'HR ≥ 100 bpm',                          neg:'HR <100' },
+  { label:'SpO₂ < 95% on room air',                neg:'SpO₂ ≥95% on room air' },
+  { label:'Unilateral leg swelling',               neg:'no unilateral leg swelling' },
+  { label:'Hemoptysis',                            neg:'no hemoptysis' },
+  { label:'Recent surgery or trauma (≤4 weeks)',   neg:'no recent surgery or trauma' },
+  { label:'Prior PE or DVT',                       neg:'no prior PE or DVT' },
+  { label:'Hormone use (OCP, HRT, or estrogenic)', neg:'no estrogen use' }
+];
 const percChecked = Array(8).fill(false);
 let percTouched = false;
 function togglePerc(i) {
@@ -1713,6 +1583,16 @@ function updatePerc() {
     r.className='result high';
     r.innerHTML='<div class="result-label">⚠️ PERC Positive — Cannot Rule Out PE</div><div class="result-action">One or more PERC criteria present. Proceed with Wells PE score + D-dimer or CT-PA as indicated.</div>';
   }
+  const n = percChecked.filter(Boolean).length;
+  window.percDetail = {
+    incomplete: !percTouched,
+    name: 'PERC (PE Rule-Out Criteria)', score: n, max: 8,
+    band: n === 0 ? 'PERC negative' : 'PERC positive',
+    criteria: boxCriteria(PERC_LABELS, percChecked, null),
+    reco: n === 0
+      ? 'All 8 PERC criteria absent. If pre-test probability is low (Wells <2), PE is excluded without D-dimer or CTPA.'
+      : 'Cannot rule out PE by PERC alone. Proceed with Wells PE + D-dimer/CTPA as indicated.'
+  };
 }
 function resetPerc() {
   percTouched = false; percChecked.fill(false);
@@ -1722,6 +1602,15 @@ function resetPerc() {
 }
 
 // ── WELLS PE ──────────────────────────────────────────────────
+const WELLSPE_LABELS = [
+  { label:'Clinical signs/symptoms of DVT',                       neg:'no clinical signs of DVT' },
+  { label:'PE is #1 diagnosis OR equally likely',                 neg:'an alternative diagnosis is more likely than PE' },
+  { label:'HR > 100 bpm',                                         neg:'HR ≤100' },
+  { label:'Immobilization ≥3 days OR surgery in past 4 weeks',    neg:'no recent immobilization or surgery' },
+  { label:'Prior PE or DVT',                                      neg:'no prior PE or DVT' },
+  { label:'Hemoptysis',                                           neg:'no hemoptysis' },
+  { label:'Malignancy (treatment within 6 months or palliative)', neg:'no active malignancy' }
+];
 const wpePoints = [3,3,1.5,1.5,1.5,1,1];
 const wpeChecked = Array(7).fill(false);
 let wpeTouched = false;
@@ -1744,6 +1633,13 @@ function updateWellsPE() {
   else{cls='high';label='High Probability (Wells ≥7)';action='PE prevalence ~41%. Proceed directly to CT-PA. Consider empiric anticoagulation while awaiting imaging.';}
   r.className='result '+cls;
   r.innerHTML=`<div class="result-score">${score}</div><div class="result-label">${label}</div><div class="result-action">${action}</div>`;
+  window.wellspeDetail = {
+    incomplete: !wpeTouched,
+    name: 'Wells PE score', score, max: 12.5,
+    band: label.replace(/ \(Wells[^)]*\)/, '').replace(/ ?Probability/i, '').toLowerCase() + ' pre-test probability',
+    criteria: boxCriteria(WELLSPE_LABELS, wpeChecked, wpePoints),
+    reco: action
+  };
 }
 function resetWellsPE() {
   wpeTouched=false; wpeChecked.fill(false);
@@ -1776,6 +1672,26 @@ function updateHEART() {
   else{cls='high';label='High Risk — HEART Score '+score+'/10';action='MACE risk ~50–65%. Cardiology consulted. Admission and early invasive strategy indicated.';}
   r.className='result '+cls;
   r.innerHTML=`<div class="result-score">${score}/10</div><div class="result-label">${label}</div><div class="result-action">${action}</div>`;
+  const HEART_DESC = {
+    h: ['Slightly suspicious','Moderately suspicious','Highly suspicious'],
+    e: ['Normal ECG','Non-specific repolarization disturbance','Significant ST deviation'],
+    a: ['Age <45','Age 45–64','Age ≥65'],
+    r: ['No known risk factors','1–2 risk factors','≥3 risk factors or known CAD'],
+    t: ['Troponin ≤1× ULN','Troponin 1–3× ULN','Troponin >3× ULN']
+  };
+  const HEART_NAME = { h:'History', e:'ECG', a:'Age', r:'Risk factors', t:'Troponin' };
+  window.heartDetail = {
+    incomplete: false,
+    name: 'HEART score', score, max: 10,
+    band: label.replace(/ — HEART Score.*$/, '').toLowerCase(),
+    criteria: ['h','e','a','r','t'].map((k) => ({
+      label: HEART_NAME[k], pts: heartScores[k],
+      state: heartScores[k] > 0 ? 'pos' : 'info',
+      found: HEART_DESC[k][heartScores[k]],
+      clause: HEART_DESC[k][heartScores[k]].toLowerCase()
+    })),
+    reco: action
+  };
 }
 function resetHEART() {
   ['h','e','a','r','t'].forEach(k=>heartScores[k]=null);
@@ -1785,6 +1701,11 @@ function resetHEART() {
 }
 
 // ── YEARS ─────────────────────────────────────────────────────
+const YEARS_LABELS = [
+  { label:'Clinical signs of DVT',    neg:'no clinical signs of DVT' },
+  { label:'Hemoptysis',               neg:'no hemoptysis' },
+  { label:'PE most likely diagnosis', neg:'PE is not the most likely diagnosis' }
+];
 const yearsChecked = [false,false,false];
 function toggleYEARS(i) {
   yearsChecked[i] = !yearsChecked[i];
@@ -1819,15 +1740,23 @@ function updateYEARS() {
   r.innerHTML=`<div class="result-score">${criteriaCount} criteria</div><div class="result-label">${label}</div><div class="result-action">${action}</div>`;
   btn.classList.add('show');
 
+  const yearsCriteria = boxCriteria(YEARS_LABELS, yearsChecked, null);
+  yearsCriteria.push({
+    label: 'D-dimer',
+    pts: null, state: 'info',
+    found: `${dDimer} ng/mL FEU (threshold ${threshold} for ${criteriaCount} YEARS ${criteriaCount === 1 ? 'criterion' : 'criteria'})`,
+    clause: `D-dimer ${dDimer} ng/mL FEU against a threshold of ${threshold}`
+  });
   window.yearsDetail = {
     incomplete: false,
-    criteriaCount,
-    dDimer: dDimer,
-    threshold,
-    interpretation: label,
+    name: 'YEARS algorithm', score: criteriaCount, max: 3,
+    band: label,
+    criteria: yearsCriteria,
+    criteriaLabel: 'Criteria and D-dimer:',
     reco: ruledOut
       ? 'In low/intermediate risk context, PE can be excluded without CTA by YEARS threshold.'
-      : 'PE cannot be excluded by YEARS; proceed with definitive imaging as clinically indicated.'
+      : 'PE cannot be excluded by YEARS; proceed with definitive imaging as clinically indicated.',
+    criteriaCount, dDimer, threshold, interpretation: label
   };
 }
 function resetYEARS() {
@@ -1910,20 +1839,27 @@ function updateABCD2() {
   r.innerHTML=`<div class=\"result-score\">${total}/7</div><div class=\"result-label\">${riskLabel}</div><div class=\"result-action\">${reco}</div>`;
   btn.classList.add('show');
 
-  const items = [
-    `Age >=60: ${agePts}`,
-    `BP >=140/90: ${bpPts}`,
-    `Clinical feature (${abcd2State.clinical}): ${clinicalPts}`,
-    `Duration (${abcd2State.duration}): ${durationPts}`,
-    `Diabetes: ${dmPts}`
+  // Previously printed raw enum tokens — "Clinical feature (other): 0" — which
+  // is not something you can put in a chart.
+  const ABCD2_CLIN = { other:'neither unilateral weakness nor speech disturbance', speech:'speech disturbance without weakness', weakness:'unilateral weakness' };
+  const ABCD2_DUR  = { lt10:'symptoms <10 minutes', '10to59':'symptoms 10–59 minutes', ge60:'symptoms ≥60 minutes' };
+  const criteria = [
+    { label:'Age ≥60', pts:agePts, state:agePts?'pos':'neg', found:agePts?'yes':'age <60', clause:agePts?'age ≥60':'age <60' },
+    { label:'BP ≥140/90 at presentation', pts:bpPts, state:bpPts?'pos':'neg', found:bpPts?'yes':'BP <140/90', clause:bpPts?'BP ≥140/90':'BP <140/90' },
+    { label:'Clinical features', pts:clinicalPts, state:clinicalPts?'pos':'info',
+      found:ABCD2_CLIN[abcd2State.clinical] || String(abcd2State.clinical), clause:ABCD2_CLIN[abcd2State.clinical] },
+    { label:'Duration', pts:durationPts, state:durationPts?'pos':'info',
+      found:ABCD2_DUR[abcd2State.duration] || String(abcd2State.duration), clause:ABCD2_DUR[abcd2State.duration] },
+    { label:'Diabetes', pts:dmPts, state:dmPts?'pos':'neg', found:dmPts?'present':'absent' }
   ];
 
   window.abcd2Detail = {
     incomplete: false,
-    total,
-    riskLabel,
-    items,
-    reco
+    name: 'ABCD2 score', score: total, max: 7,
+    band: riskLabel.toLowerCase(),
+    criteria,
+    reco,
+    total, riskLabel
   };
 }
 
@@ -2106,7 +2042,25 @@ function updateNIHSS() {
   r.innerHTML = `<div class="result-score">${total}/42</div><div class="result-label">${severity}</div><div class="result-action">${reco}</div>`;
   if (btn) btn.classList.add('show');
 
-  window.nihssDetail = { incomplete: false, total, severity, items, reco };
+  // A 0 is normal EXCEPT the motor "UN" options (amputation/joint fusion),
+  // which score 0 without being a normal finding — flag those as not assessable.
+  const criteria = NIHSS_ITEMS.map((it) => {
+    const opt = it.options[nihssState[it.key]];
+    const un = /^UN/.test(opt.d);
+    return {
+      label: it.label, pts: opt.v,
+      state: un ? 'na' : (opt.v > 0 ? 'pos' : 'info'),
+      found: un ? 'untestable — ' + opt.d.replace(/^UN\s*—?\s*/, '') : opt.d
+    };
+  });
+  window.nihssDetail = {
+    incomplete: false,
+    name: 'NIHSS', score: total, max: 42,
+    band: severity.toLowerCase(),
+    criteria, criteriaLabel: 'Items:',
+    reco,
+    total, severity, items
+  };
 }
 
 function resetNIHSS() {
@@ -2205,21 +2159,26 @@ function updateCHA2() {
   r.innerHTML=`<div class=\"result-score\">${total}</div><div class=\"result-label\">${interpretation}</div><div class=\"result-action\">${reco}</div>`;
   btn.classList.add('show');
 
-  window.cha2Detail = {
+  const CHA2_AGE = { lt65:'age <65', '65to74':'age 65–74', ge75:'age ≥75' };
+  const criteria = [
+    { label:'Sex', pts:sexPts, state:sexPts?'pos':'info', found:cha2State.sex === 'female' ? 'female' : 'male', clause:cha2State.sex === 'female' ? 'female' : 'male' },
+    { label:'Age', pts:agePts, state:agePts?'pos':'info', found:CHA2_AGE[cha2State.age] || String(cha2State.age), clause:CHA2_AGE[cha2State.age] },
+    { label:'Congestive heart failure / LV dysfunction', pts:chfPts, state:chfPts?'pos':'neg', found:chfPts?'present':'absent' },
+    { label:'Hypertension', pts:htnPts, state:htnPts?'pos':'neg', found:htnPts?'present':'absent' },
+    { label:'Diabetes mellitus', pts:dmPts, state:dmPts?'pos':'neg', found:dmPts?'present':'absent' },
+    { label:'Prior stroke / TIA / thromboembolism', pts:strokePts, state:strokePts?'pos':'neg', found:strokePts?'present':'absent' },
+    { label:'Vascular disease (MI / PAD / aortic plaque)', pts:vascularPts, state:vascularPts?'pos':'neg', found:vascularPts?'present':'absent' }
+  ];
+  // Named for the copyDoc type key so the shared formatter can find it; the
+  // old cha2Detail name is kept for anything still reading it.
+  window.cha2ds2vascDetail = {
     incomplete: false,
-    total,
-    interpretation,
-    items: [
-      `Sex (${cha2State.sex}): ${sexPts}`,
-      `Age (${cha2State.age}): ${agePts}`,
-      `CHF/LV dysfunction: ${chfPts}`,
-      `Hypertension: ${htnPts}`,
-      `Diabetes: ${dmPts}`,
-      `Prior stroke/TIA/thromboembolism: ${strokePts}`,
-      `Vascular disease: ${vascularPts}`
-    ],
+    name: 'CHA₂DS₂-VASc score', score: total, max: 9,
+    band: interpretation.toLowerCase(),
+    criteria,
     reco
   };
+  window.cha2Detail = window.cha2ds2vascDetail;
 }
 
 function resetCHA2() {
@@ -2241,6 +2200,20 @@ function resetCHA2() {
 }
 
 // ── WELLS DVT ─────────────────────────────────────────────────
+const WELLSDVT_LABELS = [
+  { label:'Active cancer (treatment ongoing, within 6 months, or palliative)',              neg:'no active cancer' },
+  { label:'Paralysis, paresis, or recent plaster immobilization of lower extremity',        neg:'no paralysis, paresis or recent immobilization' },
+  { label:'Bedridden >3 days OR major surgery within 12 weeks requiring GA/regional anesthesia', neg:'not bedridden >3 days and no major surgery within 12 weeks' },
+  { label:'Localized tenderness along deep venous system',                                  neg:'no localized tenderness along the deep venous system' },
+  { label:'Entire leg swollen',                                                             neg:'entire leg not swollen' },
+  { label:'Calf swelling >3cm vs asymptomatic leg (10cm below tibial tuberosity)',          neg:'calf swelling ≤3cm vs the asymptomatic leg' },
+  { label:'Pitting edema confined to symptomatic leg',                                      neg:'no pitting edema confined to the symptomatic leg' },
+  { label:'Collateral superficial veins (non-varicose)',                                    neg:'no non-varicose collateral superficial veins' },
+  // -2 item: NOT ticking it means no equally likely alternative, which raises
+  // suspicion for DVT. "Not met - 0" would invert the clinical sense.
+  { label:'Alternative diagnosis at least as likely as DVT',                                neg:'no alternative diagnosis as likely as DVT (−2 not applied)',
+    negFound:'no alternative diagnosis as likely — −2 credit not applied' }
+];
 const wdvtPoints = [1,1,1,1,1,1,1,1,-2];
 const wdvtChecked = Array(9).fill(false);
 let wdvtTouched = false;
@@ -2263,6 +2236,13 @@ function updateWellsDVT() {
   else{cls='high';label='High Probability (Wells ≥7)';action='DVT prevalence ~53%. Compression ultrasound regardless of D-dimer. If negative, consider repeat in 1 week or MRI.';}
   r.className='result '+cls;
   r.innerHTML=`<div class="result-score">${score}</div><div class="result-label">${label}</div><div class="result-action">${action}</div>`;
+  window.wellsdvtDetail = {
+    incomplete: !wdvtTouched,
+    name: 'Wells DVT score', score, max: 8,
+    band: label.replace(/ \(Wells[^)]*\)/, '').replace(/ ?Probability/i, '').toLowerCase() + ' pre-test probability',
+    criteria: boxCriteria(WELLSDVT_LABELS, wdvtChecked, wdvtPoints),
+    reco: action
+  };
 }
 function resetWellsDVT() {
   wdvtTouched=false; wdvtChecked.fill(false);
@@ -2272,6 +2252,24 @@ function resetWellsDVT() {
 }
 
 // ── CANADIAN CT HEAD ──────────────────────────────────────────
+const CTHEAD_ELIG = [
+  { label:'GCS score of 13–15',                            neg:'GCS outside 13–15 or not confirmed' },
+  { label:'Witnessed loss of consciousness, amnesia, or confusion', neg:'no witnessed LOC, amnesia or confusion' },
+  { label:'Age ≥ 16 years',                                neg:'age <16' },
+  { label:'Injury within last 24 hours',                   neg:'injury not within 24 hours' },
+  { label:'No coagulopathy / not on anticoagulants',       neg:'coagulopathy or anticoagulation present, or not confirmed' }
+];
+const CTHEAD_HIGH = [
+  { label:'GCS < 15 at 2 hours post-injury',               neg:'GCS 15 at 2 hours' },
+  { label:'Suspected open or depressed skull fracture',    neg:'no suspected open or depressed skull fracture' },
+  { label:"Any sign of basal skull fracture (hemotympanum, raccoon eyes, CSF leak, Battle's sign)", neg:'no signs of basal skull fracture' },
+  { label:'Vomiting ≥ 2 episodes',                         neg:'fewer than 2 vomiting episodes' },
+  { label:'Age ≥ 65',                                      neg:'age <65' }
+];
+const CTHEAD_MED = [
+  { label:'Amnesia before impact ≥ 30 minutes',            neg:'retrograde amnesia <30 minutes' },
+  { label:'Dangerous mechanism (pedestrian struck by MVC, ejected, fall >3 feet or 5 stairs)', neg:'no dangerous mechanism' }
+];
 const cteChecked = Array(5).fill(false);
 const cthChecked = Array(5).fill(false);
 const ctmChecked = Array(2).fill(false);
@@ -2307,6 +2305,24 @@ function updateCTHead() {
     overall.innerHTML='<div class="result-label">✓ CT Not Required by Canadian CT Head Rule</div><div class="result-action">No high- or medium-risk factors in eligible patient. CT not indicated per validated rule. Apply clinical judgment.</div>';
     btn.classList.add('show');
   }
+  // The eligibility criteria were never documented before, so a note could not
+  // show WHY the rule did or did not apply.
+  const tag = (list, group) => (c) => Object.assign(c, { group });
+  const criteria = []
+    .concat(boxCriteria(CTHEAD_ELIG, cteChecked, null, { present:'met', absent:'not met' }).map(tag(null, 'Rule eligibility (all five required)')))
+    .concat(boxCriteria(CTHEAD_HIGH, cthChecked, null).map(tag(null, 'High-risk factors (CT if any present)')))
+    .concat(boxCriteria(CTHEAD_MED,  ctmChecked, null).map(tag(null, 'Medium-risk factors (CT if any present)')));
+  window.ctheadDetail = {
+    incomplete: cteChecked.every((c) => !c) && !anyHigh && !anyMed,
+    name: 'Canadian CT Head Rule',
+    band: !eligible ? 'rule not applicable — eligibility criteria not all met'
+        : (anyHigh || anyMed ? 'CT head indicated' : 'CT head not required'),
+    criteria,
+    reco: !eligible
+      ? 'The rule was not applied because its eligibility criteria were not all met. Use clinical judgment; consider CT on overall risk, anticoagulation and exam.'
+      : (anyHigh || anyMed ? 'CT head indicated per the Canadian CT Head Rule.'
+         : 'CT head not required per the Canadian CT Head Rule. Observe as appropriate and give concussion/return precautions.')
+  };
 }
 function resetCTHead(){
   cteChecked.fill(false);cthChecked.fill(false);ctmChecked.fill(false);
@@ -2377,6 +2393,20 @@ function calcLRINEC() {
     missing: missingNames,
     total: score,
     interpretation: (score >= 8 ? 'High risk (LRINEC ≥ 8)' : (score >= 6 ? 'Intermediate risk (LRINEC 6–7)' : 'Lower risk (LRINEC ≤ 5)')) + (incomplete ? ' — based on available data' : ''),
+    name: 'LRINEC score', score, max: 13,
+    band: (score >= 8 ? 'high risk' : (score >= 6 ? 'intermediate risk' : 'lower risk')) + (incomplete ? ', based on available data' : ''),
+    criteriaLabel: 'Components:',
+    notes: incomplete && missingNames.length ? [`Not available: ${missingNames.join(', ')}.`] : [],
+    criteria: [
+      ['CRP', crp, 'mg/L', crpPts, '≥150 = 4'],
+      ['WBC', wbc, '×10³/µL', wbcPts, '15–25 = 1; >25 = 2'],
+      ['Hemoglobin', hgb, 'g/dL', hgbPts, '11–13.5 = 1; <11 = 2'],
+      ['Sodium', na, 'mmol/L', naPts, '<135 = 2'],
+      ['Creatinine', cr, 'mg/dL', crPts, '>1.6 = 2'],
+      ['Glucose', glu, 'mg/dL', gluPts, '>180 = 1']
+    ].map(([nm, val, unit, pts, rule]) => Number.isNaN(val)
+      ? { label: nm, pts: null, state: 'na', found: 'not entered' }
+      : { label: nm, pts, state: pts > 0 ? 'pos' : 'info', found: `${val} ${unit} (${rule})`, clause: `${nm.toLowerCase()} ${val} ${unit}` }),
     items: [
       {name:'CRP', value: (Number.isNaN(crp)?'—':crp)+' mg/L', points: crpPts, rule:'≥150 = 4'},
       {name:'WBC', value: (Number.isNaN(wbc)?'—':wbc)+' ×10³/µL', points: wbcPts, rule:'15–25 = 1; >25 = 2'},
@@ -2555,6 +2585,21 @@ function calcFGSI() {
 
     window.fgsiDetail = {
       incomplete: true,
+      name: 'FGSI (Fournier\u2019s Gangrene Severity Index)', score: partialTotal, max: 36,
+      band: lowerFirst(interpretation),
+      criteriaLabel: 'Parameters:',
+      notes: [`Not available: ${missingNames.join(', ')}. The final score requires all 9 parameters and can only rise.`],
+    criteria: [
+      ['Temperature', t, '°C', tempScore], ['Heart rate', hr, 'bpm', hrScore],
+      ['Respiratory rate', rr, '/min', rrScore], ['Sodium', na, 'mmol/L', naScore],
+      ['Potassium', k, 'mmol/L', kScore], ['Creatinine', cr, 'mg/dL', crScore],
+      ['Hematocrit', hct, '%', hctScore], ['WBC', wbc, '×10³/µL', wbcScore],
+      ['Bicarbonate', hco3, 'mmol/L', hco3Score]
+    ].map(([nm, val, unit, pts]) => Number.isNaN(val)
+      ? { label: nm, pts: null, state: 'na', found: 'not entered' }
+      : { label: nm, pts, state: pts > 0 ? 'pos' : 'info',
+          found: `${val} ${unit}${pts === 0 ? ' (within normal band)' : ''}`,
+          clause: `${nm.toLowerCase()} ${val} ${unit}` }),
       missing: missingNames,
       total: partialTotal,
       interpretation: interpretation,
@@ -2584,6 +2629,20 @@ function calcFGSI() {
   // Build detail for documentation copy
   window.fgsiDetail = {
     incomplete: false,
+    name: 'FGSI (Fournier\u2019s Gangrene Severity Index)', score: total, max: 36,
+    band: label.toLowerCase(),
+    criteriaLabel: 'Parameters:',
+    criteria: [
+      ['Temperature', t, '°C', tempScore], ['Heart rate', hr, 'bpm', hrScore],
+      ['Respiratory rate', rr, '/min', rrScore], ['Sodium', na, 'mmol/L', naScore],
+      ['Potassium', k, 'mmol/L', kScore], ['Creatinine', cr, 'mg/dL', crScore],
+      ['Hematocrit', hct, '%', hctScore], ['WBC', wbc, '×10³/µL', wbcScore],
+      ['Bicarbonate', hco3, 'mmol/L', hco3Score]
+    ].map(([nm, val, unit, pts]) => Number.isNaN(val)
+      ? { label: nm, pts: null, state: 'na', found: 'not entered' }
+      : { label: nm, pts, state: pts > 0 ? 'pos' : 'info',
+          found: `${val} ${unit}${pts === 0 ? ' (within normal band)' : ''}`,
+          clause: `${nm.toLowerCase()} ${val} ${unit}` }),
     total: total,
     items: [
       {name:'Temp (°C)', value: t, points: tempScore},
@@ -2616,12 +2675,25 @@ function toggleSIRS(i){
   if(box) box.checked = sirsChecked[i];
   updateSIRS();
 }
+const SIRS_LABELS = [
+  { label:'Temp >38°C or <36°C',           neg:'temp 36–38°C' },
+  { label:'HR >90',                        neg:'HR ≤90' },
+  { label:'RR >20 or PaCO₂ <32',           neg:'RR ≤20 with PaCO₂ ≥32' },
+  { label:'WBC >12 or <4 or bands >10%',   neg:'WBC 4–12 without bandemia' }
+];
 function updateSIRS(){
   const n = sirsChecked.filter(Boolean).length;
   const cls = (n>=2) ? 'moderate' : 'neutral';
   setResult('sirs-result', cls, String(n), (n>=2?'SIRS positive':'SIRS not met'), 'SIRS is supportive context; not a sepsis definition by itself.');
   const btn = document.getElementById('sirs-copy-btn');
   if(btn) btn.classList.toggle('show', n>0);
+  window.sirsDetail = {
+    incomplete: false,
+    name: 'SIRS', score: n, max: 4,
+    band: n >= 2 ? 'SIRS positive' : 'SIRS not met',
+    criteria: boxCriteria(SIRS_LABELS, sirsChecked, 1),
+    reco: 'SIRS supports a systemic inflammatory response in the appropriate context; manage and disposition on the suspected source and overall picture.'
+  };
 }
 function resetSIRS(){
   sirsChecked=[false,false,false,false];
@@ -2637,12 +2709,24 @@ function toggleQSOFA(i){
   if(box) box.checked = qsofaChecked[i];
   updateQSOFA();
 }
+const QSOFA_LABELS = [
+  { label:'RR ≥22',            neg:'RR <22' },
+  { label:'SBP ≤100',          neg:'SBP >100' },
+  { label:'Altered mentation', neg:'mentation normal' }
+];
 function updateQSOFA(){
   const n = qsofaChecked.filter(Boolean).length;
   const cls = (n>=2) ? 'high' : (n===1 ? 'moderate' : 'neutral');
   setResult('qsofa-result', cls, String(n), (n>=2?'High risk':'qSOFA score'), 'qSOFA is a mortality risk screen; escalate care when concerning.');
   const btn = document.getElementById('qsofa-copy-btn');
   if(btn) btn.classList.toggle('show', n>0);
+  window.qsofaDetail = {
+    incomplete: false,
+    name: 'qSOFA', score: n, max: 3,
+    band: n >= 2 ? 'high risk' : 'below the qSOFA threshold',
+    criteria: boxCriteria(QSOFA_LABELS, qsofaChecked, 1),
+    reco: 'An elevated qSOFA suggests higher mortality risk and supports escalation and close monitoring in the appropriate clinical context.'
+  };
 }
 function resetQSOFA(){
   qsofaChecked=[false,false,false];
@@ -2686,14 +2770,37 @@ updateQSOFA();
 // ── CENTOR / MCISAAC ─────────────────────────────────────────
 const centorChecked = [false,false,false,false];
 let centorAgeAdj = 0;
+let centorTouched = false;
+// Labels mirror the on-screen wording so the note matches what was clicked.
+const CENTOR_CRITERIA = [
+  { label:'Tonsillar exudates',               present:'present', absent:'absent' },
+  { label:'Tender anterior cervical adenopathy', present:'present', absent:'absent' },
+  { label:'Fever (subjective or ≥38°C)',      present:'present', absent:'absent',
+    posClause:'fever', negClause:'no fever' },
+  { label:'Absence of cough',                 present:'no cough', absent:'cough present',
+    absenceCriterion:true, posClause:'cough absent', negClause:'cough present' }
+];
+const CENTOR_AGE = {
+  '1':  { label:'Age 3–14',  clause:'age 3–14' },
+  '0':  { label:'Age 15–44', clause:'age 15–44 (no adjustment)' },
+  '-1': { label:'Age ≥45',   clause:'age ≥45' }
+};
+function centorInterpretationShort(score) {
+  if (score <= 1) return 'low likelihood of GAS';
+  if (score === 2) return 'intermediate likelihood of GAS';
+  if (score === 3) return 'moderate likelihood of GAS';
+  return 'high likelihood of GAS';
+}
 
 function toggleCentor(i){
+  centorTouched = true;
   centorChecked[i] = !centorChecked[i];
   const box = document.getElementById('centor'+i);
   if (box) box.checked = centorChecked[i];
   updateCentor();
 }
 function setCentorAge(v, el){
+  centorTouched = true;
   centorAgeAdj = v;
   // mark radio visually
   document.querySelectorAll('input[name="centor-age"]').forEach(r => r.checked = (parseInt(r.value,10)===v));
@@ -2717,13 +2824,36 @@ function updateCentor(){
 
   setResult('centor-result', cls, String(total), label, action);
 
-  const ageLabel = centorAgeAdj===1 ? 'Age 3–14 (+1)' : (centorAgeAdj===0 ? 'Age 15–44 (+0)' : 'Age ≥45 (−1)');
-  const items = [];
-  const labels = ['Tonsillar exudates (+1)','Tender anterior cervical adenopathy (+1)','Fever (+1)','Absence of cough (+1)'];
-  labels.forEach((l,i)=>{ if(centorChecked[i]) items.push(l); });
-  items.push(ageLabel);
+  // Every criterion is documented, scored or not. 'Absence of cough' needs the
+  // notMet treatment: scoring 0 there means the cough IS present, and
+  // "Absence of cough: absent" would be nonsense in a note.
+  const criteria = CENTOR_CRITERIA.map((c, i) => {
+    const on = centorChecked[i];
+    return {
+      label: c.label,
+      pts: on ? 1 : 0,
+      state: on ? 'pos' : 'neg',
+      found: on ? c.present : c.absent,
+      clause: on ? c.posClause : c.negClause,
+      notMet: !on && !!c.absenceCriterion
+    };
+  });
+  const ageOpt = CENTOR_AGE[String(centorAgeAdj)];
+  criteria.push({
+    label: ageOpt.label, pts: centorAgeAdj, state: centorAgeAdj === 0 ? 'info' : (centorAgeAdj > 0 ? 'pos' : 'neg'),
+    found: centorAgeAdj === 0 ? 'no age adjustment' : 'McIsaac age adjustment',
+    clause: ageOpt.clause
+  });
 
-  window.centorDetail = { total, items, reco: action.replace(/^Score \d+–\d+: /,'').replace(/^Score \d+: /,'') };
+  window.centorDetail = {
+    incomplete: centorTouched ? false : true,
+    name: 'Centor/McIsaac score',
+    score: total, max: 5,
+    band: centorInterpretationShort(total),
+    criteria,
+    reco: action.replace(/^Score \d+–\d+: /,'').replace(/^Score \d+: /,''),
+    total, items: criteria.map(critLine).map(x => x.replace(/^- /,''))
+  };
 }
 function resetCentor(){
   centorChecked.fill(false);
@@ -2797,7 +2927,21 @@ function updatePecarn(){
   else if (intermediate.length) { cls='moderate'; label='Intermediate risk'; action='Intermediate-risk feature(s) present → observation vs CT based on shared decision-making, exam trajectory, and clinician judgment.'; }
 
   setResult('pecarn-result', cls, (high.length? 'CT' : (intermediate.length? 'Observe/CT' : 'No CT')), label, action);
-  window.pecarnDetail = { incomplete:false, ageGroup:pecarnAgeGroup, high, intermediate, reco: action.replace(/^[^—]*—\s*/,'') };
+  // Criteria are read from pecarnDefs for the SELECTED age group — the two
+  // groups have different criteria and share one flat checkbox index space.
+  const ageText = pecarnAgeGroup === '<2' ? 'age under 2 years' : 'age 2 years and over';
+  const withGroup = (arr, g) => arr.map((c) => Object.assign(c, { group: g }));
+  const criteria = []
+    .concat(withGroup(boxCriteria(def.high, pecarnChecked.slice(0, def.high.length), null), 'High-risk findings (CT recommended if any)'))
+    .concat(withGroup(boxCriteria(def.intermediate, pecarnChecked.slice(def.high.length), null), 'Intermediate-risk findings'));
+  window.pecarnDetail = {
+    incomplete: false,
+    name: `PECARN pediatric head injury (${ageText})`,
+    band: label.toLowerCase(),
+    criteria,
+    reco: action.replace(/^[^—]*—\s*/,''),
+    ageGroup: pecarnAgeGroup, high, intermediate
+  };
 }
 function resetPecarn(){
   pecarnAgeGroup = null;
@@ -2858,7 +3002,17 @@ function gradedSummary(ns, items) {
     lines.push(`${item.label}: ${opt.v} (${opt.d})`);
   });
   const max = items.reduce((s, it) => s + Math.max(...it.options.map(o => o.v)), 0);
-  return { total, answered, count: items.length, max, allDone: answered === items.length, lines, missing };
+  // Unanswered items are returned as 'na' criteria, not silently dropped:
+  // "not assessed" and "scored 0" are different clinical statements.
+  const criteria = items.map((item) => {
+    const oi = st[item.key];
+    if (oi === null || typeof oi === 'undefined') {
+      return { label: item.label, pts: null, state: 'na', found: 'not assessed' };
+    }
+    const opt = item.options[oi];
+    return { label: item.label, pts: opt.v, state: opt.v > 0 ? 'pos' : 'info', found: opt.d.replace(/^\((.*)\)$/, '$1') };
+  });
+  return { total, answered, count: items.length, max, allDone: answered === items.length, lines, missing, criteria };
 }
 
 function resetGraded(ns, items, btnId) {
@@ -2932,9 +3086,10 @@ function updateCOWS() {
   if (btn) btn.classList.add('show');
   window.cowsDetail = {
     incomplete: false,
-    headline: `COWS (Clinical Opiate Withdrawal Scale): ${s.total}/48 — ${label}.`,
-    itemsLabel: s.allDone ? 'Items scored:' : `Items scored (${s.answered} of ${s.count}):`,
-    items: s.lines,
+    name: 'COWS (Clinical Opiate Withdrawal Scale)', score: s.total, max: 48,
+    band: label,
+    criteria: s.criteria,
+    criteriaLabel: s.allDone ? 'Items scored:' : `Items (${s.answered} of ${s.count} scored):`,
     reco: induction
   };
 }
@@ -3017,9 +3172,10 @@ function updateCIWA() {
   if (btn) btn.classList.add('show');
   window.ciwaDetail = {
     incomplete: false,
-    headline: `CIWA-Ar (alcohol withdrawal): ${s.total}/67 — ${label}.`,
-    itemsLabel: s.allDone ? 'Items scored:' : `Items scored (${s.answered} of ${s.count}):`,
-    items: s.lines,
+    name: 'CIWA-Ar (alcohol withdrawal)', score: s.total, max: 67,
+    band: label,
+    criteria: s.criteria,
+    criteriaLabel: s.allDone ? 'Items scored:' : `Items (${s.answered} of ${s.count} scored):`,
     reco: action
   };
 }
@@ -3045,6 +3201,25 @@ function setRuleResult(elId, cls, label, action) {
 // ── CSRS — Canadian Syncope Risk Score (−3 to +11) ─────────────
 // Derivation CMAJ 2016 (PMID 27378464); validation 2020 (PMID 32202605).
 const CSRS_POINTS = { vasovagal:-1, heartdz:1, sbp:2, trop:2, axis:1, qrs:1, qtc:2 };
+// Negative phrasings: these are mostly threshold/finding criteria, and the
+// vasovagal one inverts (absent = higher risk), so it is spelled out.
+const CSRS_NEG = {
+  vasovagal: 'no vasovagal predisposition (−1 credit not applied)',
+  heartdz:   'no history of heart disease',
+  sbp:       'systolic BP stayed 90–180 mmHg',
+  trop:      'troponin not above the 99th percentile',
+  axis:      'QRS axis normal',
+  qrs:       'QRS duration ≤130 ms',
+  qtc:       'corrected QT ≤480 ms'
+};
+const CSRS_NEGFOUND = {
+  vasovagal: 'absent — −1 credit not applied',
+  sbp:       'BP stayed within 90–180 mmHg',
+  trop:      'not elevated',
+  axis:      'normal axis',
+  qrs:       '≤130 ms',
+  qtc:       '≤480 ms'
+};
 const CSRS_LABELS = {
   vasovagal:'Predisposition to vasovagal symptoms',
   heartdz:'History of heart disease',
@@ -3090,23 +3265,37 @@ function updateCSRS() {
   }
   const dxPts = csrsState.dx === 'vasovagal' ? -2 : (csrsState.dx === 'cardiac' ? 2 : 0);
   let score = dxPts;
-  const items = [];
-  Object.keys(CSRS_POINTS).forEach((k) => {
-    if (csrsState[k]) {
-      score += CSRS_POINTS[k];
-      items.push(`${CSRS_LABELS[k]}: ${CSRS_POINTS[k] > 0 ? '+' : ''}${CSRS_POINTS[k]}`);
-    }
+  // Every component is documented. The vasovagal item is a −1 CREDIT, so not
+  // ticking it means no vasovagal predisposition — which is the HIGHER-risk
+  // direction. "Not met — 0" would read backwards for that one.
+  const criteria = Object.keys(CSRS_POINTS).map((k) => {
+    const on = !!csrsState[k];
+    if (on) score += CSRS_POINTS[k];
+    const n = CSRS_NEG[k] || ('no ' + lowerFirst(CSRS_LABELS[k]));
+    return {
+      label: CSRS_LABELS[k],
+      pts: on ? CSRS_POINTS[k] : 0,
+      state: on ? 'pos' : 'neg',
+      found: on ? 'present' : (CSRS_NEGFOUND[k] || 'absent'),
+      clause: on ? lowerFirst(CSRS_LABELS[k]) : n
+    };
   });
   const dxLabel = csrsState.dx === 'vasovagal' ? 'Vasovagal syncope' : (csrsState.dx === 'cardiac' ? 'Cardiac syncope' : 'Other / unclear');
-  items.push(`ED diagnosis impression — ${dxLabel}: ${dxPts > 0 ? '+' : ''}${dxPts}`);
+  criteria.push({
+    label: 'ED diagnosis impression',
+    pts: dxPts,
+    state: dxPts > 0 ? 'pos' : (dxPts < 0 ? 'neg' : 'info'),
+    found: dxLabel,
+    clause: `ED diagnosis impression ${dxLabel.toLowerCase()}`
+  });
   const [cls, label, action] = csrsBand(score);
   setResult('csrs-result', cls, score, label, action);
   if (btn) btn.classList.add('show');
   window.csrsDetail = {
     incomplete: false,
-    headline: `Canadian Syncope Risk Score: ${score} (${label.toLowerCase()}).`,
-    itemsLabel: 'Components present:',
-    items,
+    name: 'Canadian Syncope Risk Score', score, max: 11,
+    band: label.toLowerCase(),
+    criteria,
     reco: action
   };
 }
@@ -3124,6 +3313,9 @@ function resetCSRS() {
 
 // ── CANADIAN C-SPINE RULE (3 steps, in order) ──────────────────
 // Stiell et al., JAMA 2001.
+const CCS_EX_NEG = ['alert with stable vitals','age ≥16','no known vertebral disease or prior cervical surgery','blunt trauma within 48 h'];
+const CCS_HR_NEG = ['age <65','no dangerous mechanism','no paresthesias in extremities'];
+const CCS_LR_NEG = ['not a simple rear-end MVC','not ambulatory since injury','not sitting upright in the ED','neck pain immediate, not delayed','midline cervical tenderness present or untested'];
 const CCS_EX = ['GCS < 15 / not alert, or hemodynamically unstable','Age < 16 years','Known vertebral disease or prior cervical spine surgery','Non-trauma presentation, or injury > 48 h ago'];
 const CCS_HR = ['Age ≥ 65 years','Dangerous mechanism','Paresthesias in extremities'];
 const CCS_LR = ['Simple rear-end MVC','Ambulatory at any time since injury','Sitting upright in the ED','Delayed onset of neck pain','Absence of midline cervical spine tenderness'];
@@ -3199,11 +3391,24 @@ function updateCCS() {
 
   setRuleResult('ccspine-result', cls, label, action);
   if (btn) btn.classList.add('show');
+  // Document every step's criteria, not just the ones that fired, so the note
+  // shows why the rule landed where it did.
+  const withGroup = (arr, g) => arr.map((c) => Object.assign(c, { group: g }));
+  const rotFound = ccsState.rot === 'able' ? 'able to rotate 45° both ways'
+                 : (ccsState.rot === 'unable' ? 'unable to rotate 45°' : 'not assessed');
+  const criteria = []
+    .concat(withGroup(boxCriteria(CCS_EX.map((l, i) => ({ label:l, neg:CCS_EX_NEG[i] })), ccsState.ex, null,
+            { present:'applies — rule excluded', absent:'does not apply' }), 'Step 0 — applicability (any one excludes the rule)'))
+    .concat(withGroup(boxCriteria(CCS_HR.map((l, i) => ({ label:l, neg:CCS_HR_NEG[i] })), ccsState.hr, null), 'Step 1 — high-risk factors (imaging if any)'))
+    .concat(withGroup(boxCriteria(CCS_LR.map((l, i) => ({ label:l, neg:CCS_LR_NEG[i] })), ccsState.lr, null), 'Step 2 — low-risk factors (at least one needed)'))
+    .concat([{ label:'Active rotation 45° left and right', pts:null,
+               state: ccsState.rot === 'able' ? 'pos' : (ccsState.rot === 'unable' ? 'neg' : 'na'),
+               found: rotFound, clause: rotFound, group:'Step 3 — rotation' }]);
   window.ccspineDetail = {
     incomplete: false,
-    headline: `Canadian C-Spine Rule: ${label}.`,
-    itemsLabel: 'Findings:',
-    items,
+    name: 'Canadian C-Spine Rule',
+    band: label.toLowerCase(),
+    criteria,
     reco: action
   };
 }
@@ -3253,10 +3458,10 @@ function updateNexus() {
   setRuleResult('nexus-result', cls, label, action);
   if (btn) btn.classList.add('show');
   window.nexusDetail = {
-    incomplete: false,
-    headline: `NEXUS C-Spine criteria: ${label}.`,
-    itemsLabel: present.length ? 'Criteria present:' : 'Criteria present: (none)',
-    items: present,
+    incomplete: !nexusTouched,
+    name: 'NEXUS C-Spine criteria', score: present.length, max: 5,
+    band: present.length ? 'NEXUS positive' : 'NEXUS negative',
+    criteria: boxCriteria(NEXUS_LABELS, nexusChecked, null),
     reco: action
   };
 }
@@ -3273,7 +3478,14 @@ function resetNexus() {
 
 // ── sPESI — Simplified PE Severity Index ───────────────────────
 // Jiménez et al., Arch Intern Med 2010.
-const SPESI_LABELS = ['Age > 80 years','History of cancer','Chronic cardiopulmonary disease','Heart rate ≥ 110 bpm','Systolic BP < 100 mmHg','SpO₂ < 90%'];
+const SPESI_LABELS = [
+  { label:'Age > 80 years',                                                    neg:'age ≤80' },
+  { label:'History of cancer',                                                 neg:'no cancer history' },
+  { label:'Chronic cardiopulmonary disease (heart failure or chronic lung disease)', neg:'no chronic cardiopulmonary disease' },
+  { label:'Heart rate ≥ 110 bpm',                                              neg:'HR <110' },
+  { label:'Systolic BP < 100 mmHg',                                            neg:'SBP ≥100' },
+  { label:'SpO₂ < 90% (with or without supplemental O₂)',                      neg:'SpO₂ ≥90%' }
+];
 const spesiChecked = Array(6).fill(false);
 let spesiTouched = false;
 
@@ -3303,10 +3515,10 @@ function updateSpesi() {
   setResult('spesi-result', cls, score, label, action);
   if (btn) btn.classList.add('show');
   window.spesiDetail = {
-    incomplete: false,
-    headline: `sPESI: ${score} (${label.toLowerCase()}).`,
-    itemsLabel: score ? 'Criteria present:' : 'Criteria present: (none)',
-    items: present,
+    incomplete: !spesiTouched,
+    name: 'sPESI', score, max: 6,
+    band: label.toLowerCase(),
+    criteria: boxCriteria(SPESI_LABELS, spesiChecked, 1),
     reco: action
   };
 }
@@ -3386,12 +3598,18 @@ function calcGBS() {
     return;
   }
 
-  const missing = [], items = [];
+  const missing = [], items = [], criteria = [];
   let total = 0;
 
-  const bunPts = fgRangeScore(bun, GBS_BUN);
-  if (bunPts === null) missing.push('BUN');
-  else { total += bunPts; items.push(`BUN ${bun} mg/dL: +${bunPts}`); }
+  // A value that was never entered is 'na' — distinct from one that scored 0.
+  const numCrit = (label, val, unit, pts) => {
+    if (pts === null) { missing.push(label); criteria.push({ label, pts: null, state: 'na', found: 'not entered' }); return; }
+    total += pts;
+    criteria.push({ label, pts, state: pts > 0 ? 'pos' : 'info', found: `${val} ${unit}`, clause: `${lowerFirst(label)} ${val} ${unit}` });
+    items.push(`${label} ${val} ${unit}: +${pts}`);
+  };
+
+  numCrit('BUN', bun, 'mg/dL', fgRangeScore(bun, GBS_BUN));
 
   // Hemoglobin thresholds are sex-specific, so Hgb is unscoreable without sex.
   if (!gbsState.sex) missing.push('sex');
@@ -3399,18 +3617,26 @@ function calcGBS() {
   if (gbsState.sex && !Number.isNaN(hgb)) {
     const hgbPts = fgRangeScore(hgb, gbsState.sex === 'male' ? GBS_HGB_M : GBS_HGB_F);
     total += hgbPts;
+    criteria.push({ label: 'Hemoglobin', pts: hgbPts, state: hgbPts > 0 ? 'pos' : 'info',
+      found: `${hgb} g/dL (${gbsState.sex} thresholds)`, clause: `hemoglobin ${hgb} g/dL` });
     items.push(`Hemoglobin ${hgb} g/dL (${gbsState.sex}): +${hgbPts}`);
+  } else {
+    criteria.push({ label: 'Hemoglobin', pts: null, state: 'na',
+      found: gbsState.sex ? 'not entered' : 'not scoreable without sex' });
   }
 
-  const sbpPts = fgRangeScore(sbp, GBS_SBP);
-  if (sbpPts === null) missing.push('systolic BP');
-  else { total += sbpPts; items.push(`Systolic BP ${sbp} mmHg: +${sbpPts}`); }
-
-  if (Number.isNaN(pulse)) missing.push('pulse');
-  else { const p = pulse >= 100 ? 1 : 0; total += p; items.push(`Pulse ${pulse} bpm: +${p}`); }
+  numCrit('Systolic BP', sbp, 'mmHg', fgRangeScore(sbp, GBS_SBP));
+  numCrit('Pulse', pulse, 'bpm', Number.isNaN(pulse) ? null : (pulse >= 100 ? 1 : 0));
 
   Object.keys(GBS_CHECKS).forEach((k) => {
-    if (gbsState[k]) { const [lab, pts] = GBS_CHECKS[k]; total += pts; items.push(`${lab}: +${pts}`); }
+    const [lab, pts] = GBS_CHECKS[k];
+    const on = !!gbsState[k];
+    if (on) { total += pts; items.push(`${lab}: +${pts}`); }
+    criteria.push({
+      label: lab, pts: on ? pts : 0, state: on ? 'pos' : 'neg',
+      found: on ? 'present' : 'absent',
+      clause: on ? lowerFirst(lab) : 'no ' + lowerFirst(lab).replace(/^presentation with /, '')
+    });
   });
 
   let cls, label, action;
@@ -3429,9 +3655,11 @@ function calcGBS() {
   if (btn) btn.classList.add('show');
   window.gbsDetail = {
     incomplete: false,
-    headline: `Glasgow-Blatchford Score: ${total}/23 — ${label}.`,
-    itemsLabel: 'Components:',
-    items: items.concat(incomplete ? [`Not available: ${missing.join(', ')}`] : []),
+    name: 'Glasgow-Blatchford Score', score: total, max: 23,
+    band: label.toLowerCase(),
+    criteria,
+    criteriaLabel: 'Components:',
+    notes: incomplete ? [`Not available: ${missing.join(', ')}. The total can only rise as these are added.`] : [],
     reco: action
   };
 }
