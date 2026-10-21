@@ -1,4 +1,4 @@
-const CACHE = 'em-toolkit-v9';
+const CACHE = 'em-toolkit-v10';
 
 // Precache the full set of pages + assets needed for offline bedside use.
 const ASSETS = [
@@ -27,6 +27,7 @@ const ASSETS = [
   '/theme.css',
   '/mobile.css',
   '/theme.js',
+  '/sp-embed.js',
   '/search-index.js',
   '/mdm.js',
   '/mdm_slash.js',

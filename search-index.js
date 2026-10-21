@@ -194,6 +194,7 @@ const SEARCH_INDEX = [
 
   // ── SERVICE AGREEMENTS ─────────────────────────────────────────────────
   {type:'sa',i:'👂',t:'EM & Head and Neck Surgery — Practice Guidelines',s:'head and neck surgery  ·  HNS  ·  ENT  ·  otolaryngology  ·  practice guidelines  ·  urgent referral  ·  secure chat  ·  do not call at night  ·  on-call',g:'Service Agreement',gc:'t-algo',u:'head-neck-surgery.html#referrals'},
+  {type:'algo',i:'👂',t:'Head & Neck Surgery (Algorithms)',s:'head and neck  ·  HNS  ·  ENT  ·  otolaryngology  ·  algorithms page  ·  HEENT',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-head-neck'},
   {type:'sa',i:'👂',t:'Epistaxis (Nosebleed) — HNS Guideline',s:'epistaxis  ·  nosebleed  ·  nasal packing  ·  TXA  ·  tranexamic acid  ·  nebulized TXA  ·  anticoagulation  ·  head and neck  ·  HNS',g:'Service Agreement',gc:'t-algo',u:'head-neck-surgery.html#epistaxis'},
   {type:'sa',i:'👂',t:'Tonsil Bleed — Pediatric & Adult',s:'tonsil bleed  ·  post-tonsillectomy hemorrhage  ·  tonsillectomy  ·  clot  ·  TXA  ·  observation  ·  pediatric  ·  adult  ·  head and neck  ·  HNS',g:'Service Agreement',gc:'t-algo',u:'head-neck-surgery.html#tonsil-bleed'},
   {type:'sa',i:'👂',t:'Facial Fractures — Referral Routing',s:'facial fracture  ·  nasal fracture  ·  mandible fracture  ·  orbital fracture  ·  entrapment  ·  oculoplastics  ·  zygomatic  ·  maxillary  ·  facial laceration  ·  plastic surgery  ·  ophthalmology  ·  HNS',g:'Service Agreement',gc:'t-algo',u:'head-neck-surgery.html#facial-fractures'},
