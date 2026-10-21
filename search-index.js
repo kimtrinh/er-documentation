@@ -183,8 +183,25 @@ const SEARCH_INDEX = [
   {type:'calc',i:'🧮',t:'Centor / McIsaac Score',s:'Strep pharyngitis  ·  throat culture  ·  antibiotics',g:'Calculator',gc:'t-calc',u:'calculators.html#calc-centor'},
   {type:'calc',i:'🧮',t:'PECARN Pediatric Head Injury',s:'Peds head trauma  ·  CT indication  ·  children',g:'Calculator',gc:'t-calc',u:'calculators.html#calc-pecarn'},
   {type:'calc',i:'🧮',t:'Peds Fever Risk Stratification',s:'Febrile infant  ·  0-60 days  ·  sepsis workup  ·  LP',g:'Calculator',gc:'t-calc',u:'calculators.html#calc-pedsfever'},
+  {type:'calc',i:'🧮',t:'Canadian Syncope Risk Score (CSRS)',s:'syncope  ·  CSRS  ·  30-day serious adverse event  ·  troponin  ·  QTc  ·  disposition  ·  cardiac monitoring',g:'Calculator',gc:'t-calc',u:'calculators.html#calc-syncope'},
+  {type:'calc',i:'🧮',t:'Canadian C-Spine Rule',s:'cervical spine  ·  neck trauma  ·  C-spine imaging  ·  rotation 45 degrees  ·  CCR  ·  dangerous mechanism  ·  clearance',g:'Calculator',gc:'t-calc',u:'calculators.html#calc-cspine'},
+  {type:'calc',i:'🧮',t:'NEXUS C-Spine Criteria',s:'cervical spine  ·  neck trauma  ·  low-risk criteria  ·  midline tenderness  ·  distracting injury  ·  intoxication',g:'Calculator',gc:'t-calc',u:'calculators.html#calc-cspine'},
+  {type:'calc',i:'🧮',t:'Glasgow-Blatchford Score (GBS)',s:'upper GI bleed  ·  UGIB  ·  hematemesis  ·  melena  ·  BUN  ·  endoscopy  ·  outpatient management',g:'Calculator',gc:'t-calc',u:'calculators.html#calc-gibleed'},
+  {type:'calc',i:'🧮',t:'COWS — Clinical Opiate Withdrawal Scale',s:'opioid withdrawal  ·  COWS 8  ·  buprenorphine induction  ·  MAT  ·  precipitated withdrawal  ·  bupe',g:'Calculator',gc:'t-calc',u:'calculators.html#calc-withdrawal'},
+  {type:'calc',i:'🧮',t:'CIWA-Ar — Alcohol Withdrawal',s:'alcohol withdrawal  ·  CIWA  ·  benzodiazepine  ·  phenobarbital  ·  symptom-triggered  ·  delirium tremens  ·  seizure',g:'Calculator',gc:'t-calc',u:'calculators.html#calc-withdrawal'},
+  {type:'calc',i:'🧮',t:'sPESI — Simplified PE Severity Index',s:'pulmonary embolism  ·  outpatient PE  ·  30-day mortality  ·  disposition  ·  PESI  ·  confirmed PE',g:'Calculator',gc:'t-calc',u:'calculators.html#calc-wellspe'},
+  {type:'calc',i:'🧮',t:'Creatinine Clearance (Cockcroft-Gault)',s:'CrCl  ·  creatinine clearance  ·  Cockcroft-Gault  ·  renal dosing  ·  DOAC dose  ·  apixaban  ·  rivaroxaban  ·  dabigatran  ·  enoxaparin  ·  eGFR  ·  ideal body weight  ·  adjusted body weight',g:'Calculator',gc:'t-calc',u:'calculators.html#calc-crcl'},
 
   // ── SERVICE AGREEMENTS ─────────────────────────────────────────────────
+  {type:'sa',i:'👂',t:'EM & Head and Neck Surgery — Practice Guidelines',s:'head and neck surgery  ·  HNS  ·  ENT  ·  otolaryngology  ·  practice guidelines  ·  urgent referral  ·  secure chat  ·  do not call at night  ·  on-call',g:'Service Agreement',gc:'t-algo',u:'head-neck-surgery.html#referrals'},
+  {type:'algo',i:'👂',t:'Head & Neck Surgery (Algorithms)',s:'head and neck  ·  HNS  ·  ENT  ·  otolaryngology  ·  algorithms page  ·  HEENT',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-head-neck'},
+  {type:'sa',i:'👂',t:'Epistaxis (Nosebleed) — HNS Guideline',s:'epistaxis  ·  nosebleed  ·  nasal packing  ·  TXA  ·  tranexamic acid  ·  nebulized TXA  ·  anticoagulation  ·  head and neck  ·  HNS',g:'Service Agreement',gc:'t-algo',u:'head-neck-surgery.html#epistaxis'},
+  {type:'sa',i:'👂',t:'Tonsil Bleed — Pediatric & Adult',s:'tonsil bleed  ·  post-tonsillectomy hemorrhage  ·  tonsillectomy  ·  clot  ·  TXA  ·  observation  ·  pediatric  ·  adult  ·  head and neck  ·  HNS',g:'Service Agreement',gc:'t-algo',u:'head-neck-surgery.html#tonsil-bleed'},
+  {type:'sa',i:'👂',t:'Facial Fractures — Referral Routing',s:'facial fracture  ·  nasal fracture  ·  mandible fracture  ·  orbital fracture  ·  entrapment  ·  oculoplastics  ·  zygomatic  ·  maxillary  ·  facial laceration  ·  plastic surgery  ·  ophthalmology  ·  HNS',g:'Service Agreement',gc:'t-algo',u:'head-neck-surgery.html#facial-fractures'},
+  {type:'sa',i:'👂',t:'Peritonsillar Abscess (PTA) — HNS Guideline',s:'peritonsillar abscess  ·  PTA  ·  quinsy  ·  Unasyn  ·  clindamycin  ·  ceftriaxone  ·  dexamethasone  ·  Augmentin  ·  tonsillectomy  ·  head and neck  ·  HNS',g:'Service Agreement',gc:'t-algo',u:'head-neck-surgery.html#pta'},
+  {type:'sa',i:'👂',t:'Ear Pain & Mastoiditis — HNS Guideline',s:'ear pain  ·  otitis  ·  mastoiditis  ·  facial nerve  ·  facial palsy  ·  postauricular  ·  head and neck  ·  HNS',g:'Service Agreement',gc:'t-algo',u:'head-neck-surgery.html#ear-pain'},
+  {type:'sa',i:'👂',t:'Sudden Hearing Loss — HNS Guideline',s:'sudden hearing loss  ·  sudden sensorineural hearing loss  ·  SSNHL  ·  prednisone  ·  audiology  ·  cerumen  ·  head and neck  ·  HNS',g:'Service Agreement',gc:'t-algo',u:'head-neck-surgery.html#hearing-loss'},
+  {type:'sa',i:'📄',t:'Head & Neck Surgery Guideline — Official PDF',s:'head and neck surgery PDF  ·  official guideline  ·  HNS practice guidelines  ·  SharePoint  ·  download',g:'Service Agreement',gc:'t-algo',u:'head-neck-surgery.html#pdf'},
   {type:'sa',i:'📑',t:'Necrotizing Fasciitis',s:'necrotizing fasciitis  ·  soft tissue infection  ·  LRINEC  ·  gas gangrene  ·  surgical emergency  ·  transfer',g:'Service Agreement',gc:'t-algo',u:'service-agreements.html#necfasc'},
   {type:'sa',i:'📑',t:'Pediatric Appendicitis',s:'peds appendicitis  ·  PAS score  ·  pediatric surgery  ·  children  ·  transfer  ·  GMC STMC',g:'Service Agreement',gc:'t-algo',u:'service-agreements.html#pedsappendix'},
   {type:'sa',i:'📑',t:'Urology Service Agreement',s:'urology  ·  renal colic  ·  urolithiasis  ·  stone  ·  torsion  ·  urinary retention  ·  hematuria  ·  Fournier  ·  four-tier',g:'Service Agreement',gc:'t-algo',u:'service-agreements.html#urology'},
@@ -332,7 +349,7 @@ const SEARCH_INDEX = [
   {type:'algo',i:'🔀',t:'Aortic Dissection',s:'chest pain  ·  tearing  ·  CTA  ·  type A type B  ·  vascular  ·  KP SBC ED Practice Guideline',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-aortic'},
   {type:'algo',i:'🔀',t:'Visual Floaters & Flashes',s:'ophthalmology  ·  retinal detachment  ·  vitreous  ·  vision  ·  KP SBC ED Practice Guideline',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-floaters'},
   {type:'algo',i:'🔀',t:'Non-Pregnant Vaginal Bleeding',s:'GYN  ·  vaginal bleeding  ·  non-OB  ·  ectopic  ·  KP SBC ED Practice Guideline',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-nonpregvb'},
-  {type:'algo',i:'🦴',t:'Vertebral Compression Fracture (VCF)',s:'spine  ·  compression fracture  ·  VCF  ·  vertebral  ·  back pain  ·  brace  ·  TLSO  ·  LSO  ·  vertebroplasty  ·  neurosurgery  ·  bone density  ·  KP SBC ED Practice Guideline',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-vcf'},
+  {type:'algo',i:'🦴',t:'Vertebral Compression Fracture (VCF)',s:'spine  ·  compression fracture  ·  VCF  ·  vertebral  ·  back pain  ·  brace  ·  TLSO  ·  LSO  ·  vertebroplasty  ·  neurosurgery  ·  bone density  ·  KP SBC ED Practice Guideline  ·  redlands prosthetics  ·  orthotics  ·  DME  ·  brace does not fit  ·  minerva  ·  ortho tech',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-vcf'},
   {type:'algo',i:'🤱',t:'Postpartum Severe Hypertension',s:'postpartum  ·  HTN  ·  eclampsia  ·  nifedipine  ·  magnesium  ·  HELLP  ·  preeclampsia  ·  OB  ·  delivery  ·  severe blood pressure  ·  KP SBC OB/ED',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-pphtn'},
   {type:'algo',i:'🩸',t:'Outpatient DVT Anticoagulation',s:'DVT  ·  deep vein thrombosis  ·  anticoagulation  ·  outpatient  ·  enoxaparin  ·  Wells score  ·  hematology  ·  vascular  ·  KP SBC ED',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-dvt'},
   {type:'algo',i:'🦠',t:'Sepsis — SEP-1 Bundle',s:'sepsis  ·  SEP-1  ·  SIRS  ·  septic shock  ·  lactate  ·  bundle  ·  antibiotics  ·  fluids  ·  KP SBC 7/2020',g:'Algorithm',gc:'t-algo',u:'algorithms.html#card-sepsissep1'},
@@ -458,6 +475,7 @@ const SEARCH_INDEX = [
   {type:'phone',i:'📞',t:'OMC — ED Copay / ED Financial Counselor',s:'43194  ·  Alt 43193  ·  internal services  ·  omc',g:'OMC',gc:'t-phone',u:'ed-phone-directory.html'},
   {type:'phone',i:'📞',t:'OMC — ETAP',s:'(562) 658-3998  ·  Fax 42199  ·  external services  ·  omc',g:'OMC',gc:'t-phone',u:'ed-phone-directory.html'},
   {type:'phone',i:'📞',t:'OMC — Member Services',s:'800-464-4000  ·  8-279-3333  ·  external services  ·  omc',g:'OMC',gc:'t-phone',u:'ed-phone-directory.html'},
+  {type:'phone',i:'🦴',t:'OMC — Redlands Prosthetics (Orthotics / DME)',s:'(909) 798-5853  ·  9097985853  ·  Pager (909) 385-1776  ·  9093851776  ·  Fax (909) 798-0602  ·  9097980602  ·  redlands  ·  prosthetics  ·  orthotics  ·  DME  ·  brace  ·  braces  ·  TLSO  ·  LSO  ·  minerva  ·  brace does not fit  ·  custom fitting  ·  external services  ·  omc',g:'OMC',gc:'t-phone',u:'ed-phone-directory.html'},
   {type:'phone',i:'📞',t:'OMC — Ethics Consultation',s:'909-209-4688  ·  Fax 909-609-3659 / OMC Ph → 42841  ·  external services  ·  omc',g:'OMC',gc:'t-phone',u:'ed-phone-directory.html'},
   {type:'phone',i:'📞',t:'OMC — Case Manager / Utilization',s:'47333  ·  8:30a–10:30p  ·  physician support  ·  omc',g:'OMC',gc:'t-phone',u:'ed-phone-directory.html'},
   {type:'phone',i:'📞',t:'OMC — Social Work After-Hours Line',s:'43322  ·  909-724-3322  ·  after hours  ·  M–F after 5p  ·  Sat/Sun 8:30a–11p  ·  medical social work  ·  social services  ·  social worker  ·  SW  ·  physician support  ·  omc',g:'OMC',gc:'t-phone',u:'ed-phone-directory.html'},
@@ -498,6 +516,7 @@ const SEARCH_INDEX = [
   {type:'phone',i:'📞',t:'FMC — Pharmacy – Outpatient',s:'28018  ·  Fax 5146  ·  internal services  ·  fmc',g:'FMC',gc:'t-phone',u:'ed-phone-directory.html'},
   {type:'phone',i:'📞',t:'FMC — ICU – 2 North (201-221)',s:'29200  ·  Beeper 1110  ·  internal services  ·  fmc',g:'FMC',gc:'t-phone',u:'ed-phone-directory.html'},
   {type:'phone',i:'📞',t:'FMC — ETAP / Burn Transfers (Member)',s:'(562) 658-3998  ·  8-122-4000  ·  external services  ·  fmc',g:'FMC',gc:'t-phone',u:'ed-phone-directory.html'},
+  {type:'phone',i:'🦴',t:'FMC — Redlands Prosthetics (Orthotics / DME)',s:'(909) 798-5853  ·  9097985853  ·  Pager (909) 385-1776  ·  9093851776  ·  Fax (909) 798-0602  ·  9097980602  ·  redlands  ·  prosthetics  ·  orthotics  ·  DME  ·  brace  ·  braces  ·  TLSO  ·  LSO  ·  minerva  ·  brace does not fit  ·  custom fitting  ·  external services  ·  fmc',g:'FMC',gc:'t-phone',u:'ed-phone-directory.html'},
   {type:'phone',i:'📞',t:'FMC — EPRP Call Center',s:'1-800-447-3777  ·  Beeper 8-320-3000  ·  external services  ·  fmc',g:'FMC',gc:'t-phone',u:'ed-phone-directory.html'},
   {type:'phone',i:'📞',t:'FMC — IT National Service Desk',s:'1-888-457-4872  ·  8-279-3333  ·  external services  ·  fmc',g:'FMC',gc:'t-phone',u:'ed-phone-directory.html'},
   {type:'phone',i:'📞',t:'FMC — Case Manager',s:'(909) 491-1014  ·  8a–5p  ·  physician support  ·  fmc',g:'FMC',gc:'t-phone',u:'ed-phone-directory.html'},
@@ -795,11 +814,15 @@ function getSearchIndex() {
   const add = (item) => {
     const normalized = kpNormalizeSearchItem(item);
     if (!normalized) return;
+    // Dedupe on identity only (type + title + target). The keyword blob `s`
+    // differs between the hand-written phone rows in SEARCH_INDEX and the
+    // ones ed-phone-directory.html exports to localStorage, so including it
+    // let both survive — every phone entry appeared twice once a user had
+    // opened the directory. Genuinely custom entries have their own title
+    // and still come through.
     const key = [
       normalized.type,
       normalized.t.toLowerCase(),
-      normalized.s.toLowerCase(),
-      normalized.g.toLowerCase(),
       normalized.u.toLowerCase(),
     ].join('|');
     if (seen.has(key)) return;
@@ -813,10 +836,64 @@ function getSearchIndex() {
   return merged;
 }
 
+// ── SHARED SEARCH ──────────────────────────────────────────────────────
+// One matcher for every search box on the site. Previously there were three
+// (this file's nav bar, theme.js's Cmd-K modal, index.html's hero) with
+// different rules, so the same query gave different answers depending on
+// which box you used.
+const KP_SEARCH_SPLIT = /[\s\-\/(),.:;]+/;
+const KP_SEARCH_LIMIT = 25;
+
+// Union of both historical behaviours: the whole query appearing as a
+// substring (what the nav bar did) OR every token being the prefix of some
+// word (what the hero and modal did). A superset of each, so nothing that
+// was findable before stops being findable, and reversed word order
+// ("turnaround radiology") now works everywhere.
+function kpSearchMatch(item, lo, tokens) {
+  const hay = [item.t, item.s, item.g].join(' ').toLowerCase();
+  if (hay.indexOf(lo) >= 0) return true;
+  const words = hay.split(KP_SEARCH_SPLIT).filter(Boolean);
+  return tokens.every((tok) => words.some((w) => w.startsWith(tok)));
+}
+
+// Rank by where the match lives: title-prefix > title-word > keyword-only.
+function kpSearchRank(item, firstToken) {
+  const t = (item.t || '').toLowerCase();
+  if (t.indexOf(firstToken) === 0) return 0;
+  const words = t.split(KP_SEARCH_SPLIT);
+  for (let i = 0; i < words.length; i++) {
+    if (words[i] && words[i].startsWith(firstToken)) return 1;
+  }
+  return 2;
+}
+
+// `filter` lets each UI apply its own filter chips. Dotphrases are excluded
+// unless asked for: there are ~100 of them and they would swamp every query.
+function kpRunSearch(query, options) {
+  const opts = options || {};
+  const lo = String(query || '').trim().toLowerCase();
+  if (!lo) return { results: [], total: 0 };
+  const tokens = lo.split(/\s+/).filter(Boolean);
+
+  const matched = getSearchIndex().filter((item) => {
+    if (!opts.includePhrases && item.type === 'phrase') return false;
+    if (typeof opts.filter === 'function' && !opts.filter(item)) return false;
+    return kpSearchMatch(item, lo, tokens);
+  });
+
+  const first = tokens[0] || lo;
+  matched.sort((a, b) => kpSearchRank(a, first) - kpSearchRank(b, first));
+
+  const limit = opts.limit || KP_SEARCH_LIMIT;
+  return { results: matched.slice(0, limit), total: matched.length };
+}
+
 if (typeof window !== 'undefined') {
   window.getSearchIndex = getSearchIndex;
   window.KP_ER_SEARCH = {
     getSearchIndex,
+    runSearch: kpRunSearch,
+    searchLimit: KP_SEARCH_LIMIT,
     phoneIndexStorageKey: KP_PHONE_INDEX_STORAGE_KEY,
     serviceAgreementsStorageKey: KP_SERVICE_AGREEMENTS_STORAGE_KEY,
   };
@@ -966,28 +1043,9 @@ if (typeof window !== 'undefined') {
       return;
     }
 
-    const lo = query.toLowerCase();
-    const idx = getSearchIndex();
-    let results = idx.filter((item) => (
-      item.t.toLowerCase().includes(lo) ||
-      item.s.toLowerCase().includes(lo) ||
-      item.g.toLowerCase().includes(lo)
-    ));
-
-    results.sort((a, b) => {
-      const aStarts = a.t.toLowerCase().startsWith(lo) ? 0 : 1;
-      const bStarts = b.t.toLowerCase().startsWith(lo) ? 0 : 1;
-      if (aStarts !== bStarts) return aStarts - bStarts;
-
-      const aTitle = a.t.toLowerCase().includes(lo) ? 0 : 1;
-      const bTitle = b.t.toLowerCase().includes(lo) ? 0 : 1;
-      if (aTitle !== bTitle) return aTitle - bTitle;
-
-      return a.t.localeCompare(b.t);
-    });
-
-    const total = results.length;
-    results = results.slice(0, 24);
+    const ran = kpRunSearch(query);
+    let results = ran.results;
+    const total = ran.total;
     hiIdx = -1;
 
     if (!results.length) {
@@ -1006,7 +1064,17 @@ if (typeof window !== 'undefined') {
 
     let html = '';
     let rowIndex = 0;
-    orderedGroups(grouped).forEach((groupName) => {
+    // results is already rank-sorted by the shared runner, so order groups by
+    // where each one's best result lands in that list. Keeps the rendered
+    // order consistent with the hero and the Cmd-K modal, which do the same.
+    const groupPos = {};
+    results.forEach((item, i) => {
+      const g = getGroup(item);
+      if (!(g in groupPos)) groupPos[g] = i;
+    });
+    orderedGroups(grouped)
+      .sort((a, b) => (groupPos[a] || 0) - (groupPos[b] || 0))
+      .forEach((groupName) => {
       html += `<div class="kp-sg">${escapeHtml(groupName)}</div>`;
       grouped[groupName].forEach((item) => {
         const rowId = `kp-sr-${rowIndex++}`;
@@ -1022,7 +1090,7 @@ if (typeof window !== 'undefined') {
     });
 
     if (total > 24) {
-      html += `<div class="kp-foot">Showing 24 of ${total} results</div>`;
+      html += `<div class="kp-foot">Showing ${results.length} of ${total} results</div>`;
     }
 
     dd.innerHTML = html;

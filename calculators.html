@@ -139,7 +139,7 @@ main>*:nth-child(4){animation-delay:.15s}
 <header>
   <div class="header-inner">
     <div class="logo"><span>🧮</span><h1>ER Clinical Calculators</h1></div>
-    <p class="subtitle">Wells PE · PERC · HEART · YEARS · ABCD2 · CHA2DS2-VASc · and more — tap score to copy documentation</p>
+    <p class="subtitle">Wells PE · PERC · sPESI · HEART · CSRS · C-Spine · Glasgow-Blatchford · COWS · CIWA-Ar · and more — tap score to copy documentation</p>
   </div>
 </header>
 
@@ -147,18 +147,23 @@ main>*:nth-child(4){animation-delay:.15s}
   <div class="disclaimer"><strong>⚠️ Clinical Disclaimer:</strong> Calculators are decision-support tools only. Always apply clinical judgment. Scores do not replace physician assessment.</div>
 
   <div class="calc-tabs">
-    <button class="calc-tab active" onclick="showCalc('wellspe')">🫁 Wells PE + PERC</button>
-    <button class="calc-tab" onclick="showCalc('heart')">❤️ HEART Score</button>
-    <button class="calc-tab" onclick="showCalc('years')">🫁 YEARS</button>
-    <button class="calc-tab" onclick="showCalc('wellsdvt')">🦵 Wells DVT</button>
-    <button class="calc-tab" onclick="showCalc('abcd2')">🧠 ABCD2</button>
-    <button class="calc-tab" onclick="showCalc('nihss')">🧠 NIHSS</button>
-    <button class="calc-tab" onclick="showCalc('cha2ds2vasc')">❤️ CHA2DS2-VASc</button>
-    <button class="calc-tab" onclick="showCalc('cthead')">🧠 Canadian CT Head</button>
-    <button class="calc-tab" onclick="showCalc('softtissue')">🦠 Soft Tissue & Sepsis</button>
-    <button class="calc-tab" onclick="showCalc('centor')">🦠 Centor</button>
-    <button class="calc-tab" onclick="showCalc('pecarn')">👶 PECARN</button>
-    <button class="calc-tab" onclick="showCalc('pedsfever')">🌡️ Peds Fever</button>
+    <button class="calc-tab active" data-calc="wellspe" onclick="showCalc('wellspe')">🫁 PE — Wells/PERC/sPESI</button>
+    <button class="calc-tab" data-calc="heart" onclick="showCalc('heart')">❤️ HEART Score</button>
+    <button class="calc-tab" data-calc="years" onclick="showCalc('years')">🫁 YEARS</button>
+    <button class="calc-tab" data-calc="wellsdvt" onclick="showCalc('wellsdvt')">🦵 Wells DVT</button>
+    <button class="calc-tab" data-calc="abcd2" onclick="showCalc('abcd2')">🧠 ABCD2</button>
+    <button class="calc-tab" data-calc="nihss" onclick="showCalc('nihss')">🧠 NIHSS</button>
+    <button class="calc-tab" data-calc="cha2ds2vasc" onclick="showCalc('cha2ds2vasc')">❤️ CHA2DS2-VASc</button>
+    <button class="calc-tab" data-calc="crcl" onclick="showCalc('crcl')">💧 CrCl</button>
+    <button class="calc-tab" data-calc="cthead" onclick="showCalc('cthead')">🧠 Canadian CT Head</button>
+    <button class="calc-tab" data-calc="cspine" onclick="showCalc('cspine')">🦴 C-Spine</button>
+    <button class="calc-tab" data-calc="syncope" onclick="showCalc('syncope')">😵 Syncope</button>
+    <button class="calc-tab" data-calc="gibleed" onclick="showCalc('gibleed')">🩸 GI Bleed</button>
+    <button class="calc-tab" data-calc="withdrawal" onclick="showCalc('withdrawal')">💊 Withdrawal</button>
+    <button class="calc-tab" data-calc="softtissue" onclick="showCalc('softtissue')">🦠 Soft Tissue &amp; Sepsis</button>
+    <button class="calc-tab" data-calc="centor" onclick="showCalc('centor')">🦠 Centor</button>
+    <button class="calc-tab" data-calc="pecarn" onclick="showCalc('pecarn')">👶 PECARN</button>
+    <button class="calc-tab" data-calc="pedsfever" onclick="showCalc('pedsfever')">🌡️ Peds Fever</button>
   </div>
 
   <!-- ══════════════════════════════════════════
@@ -211,6 +216,30 @@ main>*:nth-child(4){animation-delay:.15s}
           </div>
           <button id="wellspe-copy-btn" class="copy-doc-btn" onclick="copyDoc('wellspe')">📋 Copy Documentation</button>
           <button class="reset-btn" onclick="resetWellsPE()">Reset</button>
+        </div>
+      </div>
+
+      <!-- sPESI -->
+      <div class="card">
+        <div id="spesi-simplified-pe-severity-index" class="card-title">📉 sPESI <span style="font-size:12px;font-weight:400;color:var(--text3)">— severity of <em>confirmed</em> PE</span></div>
+        <div class="card-body">
+          <p style="font-size:12px;color:var(--text3);margin-bottom:12px">For PE already <strong style="color:var(--text)">confirmed</strong> — this is a prognostic/disposition tool, not a diagnostic one. 1 point each; any point = high risk.</p>
+          <div id="spesi-criteria">
+            <div class="criterion" onclick="toggleSpesi(0)"><input type="checkbox" id="spesi0"><span class="criterion-label">Age &gt; 80 years</span><span class="criterion-pts">+1</span></div>
+            <div class="criterion" onclick="toggleSpesi(1)"><input type="checkbox" id="spesi1"><span class="criterion-label">History of cancer</span><span class="criterion-pts">+1</span></div>
+            <div class="criterion" onclick="toggleSpesi(2)"><input type="checkbox" id="spesi2"><span class="criterion-label">Chronic cardiopulmonary disease (heart failure or chronic lung disease)</span><span class="criterion-pts">+1</span></div>
+            <div class="criterion" onclick="toggleSpesi(3)"><input type="checkbox" id="spesi3"><span class="criterion-label">Heart rate ≥ 110 bpm</span><span class="criterion-pts">+1</span></div>
+            <div class="criterion" onclick="toggleSpesi(4)"><input type="checkbox" id="spesi4"><span class="criterion-label">Systolic BP &lt; 100 mmHg</span><span class="criterion-pts">+1</span></div>
+            <div class="criterion" onclick="toggleSpesi(5)"><input type="checkbox" id="spesi5"><span class="criterion-label">SpO₂ &lt; 90% (with or without supplemental O₂)</span><span class="criterion-pts">+1</span></div>
+          </div>
+          <div id="spesi-result" class="result neutral">
+            <div class="result-score">—</div>
+            <div class="result-label">Check criteria above</div>
+            <div class="result-action">sPESI 0 = low risk (30-day mortality ~1%). Any criterion = high risk (~11%).</div>
+          </div>
+          <button id="spesi-copy-btn" class="copy-doc-btn" onclick="copyDoc('spesi')">📋 Copy Documentation</button>
+          <button class="reset-btn" onclick="resetSpesi()">Reset</button>
+          <p style="font-size:11px;color:var(--text3);margin-top:10px;border-top:1px solid var(--border);padding-top:8px">sPESI 0 supports consideration of outpatient management, but that decision additionally assumes <strong style="color:var(--text2)">no RV dysfunction</strong> and <strong style="color:var(--text2)">no troponin elevation</strong>, plus adequate social support and follow-up.<br/><span style="color:#475569">Source: Jiménez et al., Arch Intern Med 2010.</span></p>
         </div>
       </div>
     </div>
@@ -525,6 +554,83 @@ main>*:nth-child(4){animation-delay:.15s}
   </div>
 
   <!-- ══════════════════════════════════════════
+       CREATININE CLEARANCE (Cockcroft-Gault)
+  ══════════════════════════════════════════ -->
+  <div id="calc-crcl" style="display:none">
+    <div class="calc-grid">
+
+      <div class="card">
+        <div id="creatinine-clearance-cockcroft-gault" class="card-title">💧 Creatinine Clearance <span style="font-size:12px;font-weight:400;color:var(--text3)">— Cockcroft-Gault</span></div>
+        <div class="card-body">
+          <p style="font-size:12px;color:var(--text3);margin-bottom:12px">Use this — <strong style="color:var(--text)">not the lab's eGFR</strong> — whenever you are checking a drug label's renal threshold. Anticoagulant labels are written in Cockcroft-Gault CrCl (mL/min); eGFR is normalised to 1.73 m² body surface area and is not the same number.</p>
+
+          <div class="radio-group">
+            <label>Sex</label>
+            <div class="radio-option" onclick="setCrclSex('male')"><input type="radio" name="crcl-sex" value="male"><span>Male</span><span class="radio-pts">×1.0</span></div>
+            <div class="radio-option" onclick="setCrclSex('female')"><input type="radio" name="crcl-sex" value="female"><span>Female</span><span class="radio-pts">×0.85</span></div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-top:12px">
+            <div>
+              <label style="display:block;font-size:11px;color:var(--text3);margin-bottom:4px;font-weight:600">Age (years)</label>
+              <input id="crcl-age" class="input" type="number" inputmode="numeric" min="0" placeholder="e.g., 78" oninput="calcCrCl()"/>
+            </div>
+            <div>
+              <label style="display:block;font-size:11px;color:var(--text3);margin-bottom:4px;font-weight:600">Serum creatinine (mg/dL)</label>
+              <input id="crcl-scr" class="input" type="number" inputmode="decimal" min="0" step="0.01" placeholder="e.g., 1.4" oninput="calcCrCl()"/>
+            </div>
+            <div>
+              <label style="display:block;font-size:11px;color:var(--text3);margin-bottom:4px;font-weight:600">Weight (kg)</label>
+              <input id="crcl-wt" class="input" type="number" inputmode="decimal" min="0" placeholder="e.g., 58" oninput="calcCrCl()"/>
+            </div>
+            <div>
+              <label style="display:block;font-size:11px;color:var(--text3);margin-bottom:4px;font-weight:600">Height</label>
+              <input id="crcl-ht" class="input" type="number" inputmode="decimal" min="0" placeholder="e.g., 165" oninput="calcCrCl()"/>
+            </div>
+          </div>
+
+          <div class="radio-group" style="margin-top:10px">
+            <label>Height units</label>
+            <div class="radio-option" onclick="setCrclHtUnit('cm')"><input type="radio" name="crcl-htunit" value="cm" checked><span>Centimetres</span></div>
+            <div class="radio-option" onclick="setCrclHtUnit('in')"><input type="radio" name="crcl-htunit" value="in"><span>Inches</span></div>
+          </div>
+          <p style="font-size:11px;color:var(--text3);margin-top:6px">Height is only used for ideal and adjusted body weight. Without it you still get the actual-body-weight result.</p>
+
+          <div id="crcl-result" class="result neutral">
+            <div class="result-score">—</div>
+            <div class="result-label">Enter sex, age, creatinine and weight</div>
+            <div class="result-action">Cockcroft-Gault: (140 − age) × weight ÷ (72 × serum creatinine), × 0.85 if female.</div>
+          </div>
+          <div id="crcl-breakdown" style="font-size:12px;color:var(--text3);line-height:1.8;margin-top:10px"></div>
+          <button id="crcl-copy-btn" class="copy-doc-btn" onclick="copyDoc('crcl')">📋 Copy Documentation</button>
+          <button class="reset-btn" onclick="resetCrCl()">Reset</button>
+        </div>
+      </div>
+
+      <div class="card" style="align-self:start">
+        <div id="crcl-interpretation" class="card-title">📊 Which weight, and what it changes</div>
+        <div class="card-body" style="font-size:13px;line-height:1.85;color:var(--text2)">
+          <p style="margin-bottom:10px;color:var(--text3);font-size:12px">There is no national consensus on which body weight to use. This tool follows the common BMI-based convention and shows you every basis so you can see when the choice crosses a dose threshold:</p>
+          <p><span style="color:#86efac;font-weight:700">BMI &lt; 18.5 — actual body weight</span></p>
+          <p><span style="color:#fde047;font-weight:700">BMI 18.5–29.9 — actual and ideal both shown</span><br/>No consensus in this range; if the two land either side of a threshold, ask pharmacy.</p>
+          <p><span style="color:#fca5a5;font-weight:700">BMI ≥ 30 — adjusted body weight</span><br/>IBW + 0.4 × (actual − IBW). Actual body weight overestimates and IBW underestimates measured clearance in obesity.</p>
+          <br/>
+          <p style="font-size:12px;color:var(--text3)">Ideal body weight (Devine): 50 kg (male) / 45.5 kg (female) + 2.3 kg per inch over 5 ft.</p>
+          <br/>
+          <p style="color:var(--text2);font-weight:700">Renal thresholds that change ED management</p>
+          <p style="font-size:12px;color:var(--text3)">Reference only — confirm every dose against the current label and your pharmacist.</p>
+          <p style="font-size:12px;color:var(--text3)">· <strong style="color:var(--text2)">Enoxaparin</strong> — treatment dosing drops to 1 mg/kg <em>daily</em> at CrCl &lt; 30, per the <a href="algorithms.html#card-dvt" style="color:#60a5fa">outpatient DVT pathway</a>.<br/>
+          · <strong style="color:var(--text2)">Rivaroxaban (AF)</strong> — 15 mg daily at CrCl 15–50; avoid below 15.<br/>
+          · <strong style="color:var(--text2)">Dabigatran (AF)</strong> — US label 75 mg BID at CrCl 15–30; some guidance avoids it below 30 entirely.<br/>
+          · <strong style="color:var(--text2)">Apixaban (AF)</strong> — <strong style="color:#fca5a5">not a CrCl rule.</strong> Reduce to 2.5 mg BID only if <strong style="color:var(--text2)">2 of 3</strong>: age ≥ 80, weight ≤ 60 kg, serum creatinine ≥ 1.5 mg/dL.</p>
+          <br/>
+          <p style="font-size:11px;color:#475569;border-top:1px solid var(--border);padding-top:10px">⚠️ <strong style="color:var(--text2)">eGFR is not interchangeable with CrCl.</strong> Substituting the lab's eGFR for Cockcroft-Gault CrCl misdoses DOACs — and the error skews toward <strong style="color:var(--text2)">overdosing</strong>, concentrated in patients over 75 and under 50 kg, the ones least able to tolerate it. One cohort found the two equations disagreed on dose in 45% of patients. When eGFR and CrCl fall either side of a threshold, use the equation the label specifies.<br/><br/>Cockcroft-Gault estimates clearance; it is less accurate at extremes of age, weight and renal function, and assumes a stable creatinine — it is not valid in acute kidney injury. KDIGO now prefers eGFR for CKD staging, but drug labels still carry Cockcroft-Gault thresholds, which is why this tool exists.<br/><br/><span style="color:#475569">Sources: Cockcroft &amp; Gault, Nephron 1976; Devine 1974 (ideal body weight); DOAC thresholds per current US product labeling.</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
        CANADIAN CT HEAD RULE
   ══════════════════════════════════════════ -->
   <div id="calc-cthead" style="display:none">
@@ -594,6 +700,255 @@ main>*:nth-child(4){animation-delay:.15s}
   </div>
 
 
+
+  <!-- ══════════════════════════════════════════
+       C-SPINE (Canadian C-Spine Rule + NEXUS)
+  ══════════════════════════════════════════ -->
+  <div id="calc-cspine" style="display:none">
+    <div class="calc-grid">
+
+      <!-- CANADIAN C-SPINE RULE -->
+      <div class="card">
+        <div id="canadian-c-spine-rule" class="card-title">🦴 Canadian C-Spine Rule <span style="font-size:12px;font-weight:400;color:var(--text3)">— 3 steps, in order</span></div>
+        <div class="card-body">
+          <p style="font-size:12px;color:var(--text3);margin-bottom:12px"><strong style="color:var(--text)">Step 0 — applicability.</strong> Check any that apply; if any is checked the rule does not apply and imaging is a clinical decision.</p>
+          <div id="ccspine-exclusions">
+            <div class="criterion" onclick="toggleCCS('ex',0)"><input type="checkbox" id="ccsx0"><span class="criterion-label">GCS &lt; 15 / not alert, or hemodynamically unstable</span></div>
+            <div class="criterion" onclick="toggleCCS('ex',1)"><input type="checkbox" id="ccsx1"><span class="criterion-label">Age &lt; 16 years</span></div>
+            <div class="criterion" onclick="toggleCCS('ex',2)"><input type="checkbox" id="ccsx2"><span class="criterion-label">Known vertebral disease (ankylosing spondylitis, RA, stenosis, prior cervical surgery)</span></div>
+            <div class="criterion" onclick="toggleCCS('ex',3)"><input type="checkbox" id="ccsx3"><span class="criterion-label">Non-trauma presentation, or injury &gt; 48 h ago</span></div>
+          </div>
+
+          <p style="font-size:12px;color:var(--text3);margin:14px 0 8px"><strong style="color:var(--text)">Step 1 — high-risk factors.</strong> Any present → imaging.</p>
+          <div id="ccspine-highrisk">
+            <div class="criterion" onclick="toggleCCS('hr',0)"><input type="checkbox" id="ccsh0"><span class="criterion-label">Age ≥ 65 years</span></div>
+            <div class="criterion" onclick="toggleCCS('hr',1)"><input type="checkbox" id="ccsh1"><span class="criterion-label">Dangerous mechanism (fall &gt; 1 m / 5 stairs, axial load, MVC &gt; 100 km/h or rollover/ejection, motorised recreational vehicle, bicycle collision)</span></div>
+            <div class="criterion" onclick="toggleCCS('hr',2)"><input type="checkbox" id="ccsh2"><span class="criterion-label">Paresthesias in extremities</span></div>
+          </div>
+
+          <p style="font-size:12px;color:var(--text3);margin:14px 0 8px"><strong style="color:var(--text)">Step 2 — low-risk factors.</strong> At least one required before rotation can be tested.</p>
+          <div id="ccspine-lowrisk">
+            <div class="criterion" onclick="toggleCCS('lr',0)"><input type="checkbox" id="ccsl0"><span class="criterion-label">Simple rear-end MVC (excludes pushed into traffic, hit by bus/large truck, rollover, hit by high-speed vehicle)</span></div>
+            <div class="criterion" onclick="toggleCCS('lr',1)"><input type="checkbox" id="ccsl1"><span class="criterion-label">Ambulatory at any time since injury</span></div>
+            <div class="criterion" onclick="toggleCCS('lr',2)"><input type="checkbox" id="ccsl2"><span class="criterion-label">Sitting upright in the ED</span></div>
+            <div class="criterion" onclick="toggleCCS('lr',3)"><input type="checkbox" id="ccsl3"><span class="criterion-label">Delayed onset of neck pain (not immediate)</span></div>
+            <div class="criterion" onclick="toggleCCS('lr',4)"><input type="checkbox" id="ccsl4"><span class="criterion-label">Absence of midline cervical spine tenderness</span></div>
+          </div>
+
+          <div class="radio-group" style="margin-top:14px">
+            <label>Step 3 — active rotation 45° left and right</label>
+            <div class="radio-option" onclick="setCCSRotation('able')"><input type="radio" name="ccs-rot" value="able"><span>Able to rotate 45° both ways</span></div>
+            <div class="radio-option" onclick="setCCSRotation('unable')"><input type="radio" name="ccs-rot" value="unable"><span>Unable to rotate 45°</span></div>
+            <div class="radio-option" onclick="setCCSRotation('na')"><input type="radio" name="ccs-rot" value="na"><span>Not yet assessed</span></div>
+          </div>
+
+          <div id="ccspine-result" class="result neutral">
+            <div class="result-label">Work through steps 0 → 3</div>
+            <div class="result-action">The rule is applied in order — any high-risk factor means imaging regardless of the later steps.</div>
+          </div>
+          <button id="ccspine-copy-btn" class="copy-doc-btn" onclick="copyDoc('ccspine')">📋 Copy Documentation</button>
+          <button class="reset-btn" onclick="resetCCS()">Reset</button>
+          <p style="font-size:11px;color:var(--text3);margin-top:10px;border-top:1px solid var(--border);padding-top:8px">Derived sensitivity 100%, specificity ~43% for clinically important cervical spine injury.<br/><span style="color:#475569">Source: Stiell et al., JAMA 2001.</span></p>
+        </div>
+      </div>
+
+      <!-- NEXUS -->
+      <div class="card">
+        <div id="nexus-c-spine-criteria" class="card-title">🦴 NEXUS C-Spine <span style="font-size:12px;font-weight:400;color:var(--text3)">— all 5 must be absent</span></div>
+        <div class="card-body">
+          <p style="font-size:12px;color:var(--text3);margin-bottom:12px">All 5 must be <strong style="color:var(--text)">absent</strong> to clear the cervical spine without imaging. Check any that are <strong style="color:var(--text)">present</strong>.</p>
+          <div id="nexus-criteria">
+            <div class="criterion" onclick="toggleNexus(0)"><input type="checkbox" id="nexus0"><span class="criterion-label">Posterior midline cervical tenderness</span></div>
+            <div class="criterion" onclick="toggleNexus(1)"><input type="checkbox" id="nexus1"><span class="criterion-label">Focal neurologic deficit</span></div>
+            <div class="criterion" onclick="toggleNexus(2)"><input type="checkbox" id="nexus2"><span class="criterion-label">Altered level of alertness</span></div>
+            <div class="criterion" onclick="toggleNexus(3)"><input type="checkbox" id="nexus3"><span class="criterion-label">Evidence of intoxication</span></div>
+            <div class="criterion" onclick="toggleNexus(4)"><input type="checkbox" id="nexus4"><span class="criterion-label">Painful distracting injury</span></div>
+          </div>
+          <div id="nexus-result" class="result neutral">
+            <div class="result-label">Check criteria above</div>
+            <div class="result-action">All 5 absent → no cervical spine imaging required by NEXUS.</div>
+          </div>
+          <button id="nexus-copy-btn" class="copy-doc-btn" onclick="copyDoc('nexus')">📋 Copy Documentation</button>
+          <button class="reset-btn" onclick="resetNexus()">Reset</button>
+          <p style="font-size:11px;color:var(--text3);margin-top:10px;border-top:1px solid var(--border);padding-top:8px">The Canadian C-Spine Rule and NEXUS are alternative rules for the same decision; CCR has the higher specificity head-to-head, so it spares more imaging. Use whichever your local protocol specifies.<br/><span style="color:#475569">Source: Hoffman et al., NEJM 2000.</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SYNCOPE (Canadian Syncope Risk Score)
+  ══════════════════════════════════════════ -->
+  <div id="calc-syncope" style="display:none">
+    <div class="calc-grid">
+
+      <div class="card">
+        <div id="canadian-syncope-risk-score-csrs" class="card-title">😵 Canadian Syncope Risk Score <span style="font-size:12px;font-weight:400;color:var(--text3)">— CSRS, −3 to +11</span></div>
+        <div class="card-body">
+          <p style="font-size:12px;color:var(--text3);margin-bottom:12px">For adults presenting within 24 h of syncope <strong style="color:var(--text)">after ED evaluation found no serious underlying cause</strong>. Not for persistent altered mental status, witnessed seizure, head trauma causing LOC, or severe intoxication.</p>
+          <div id="csrs-criteria">
+            <div class="criterion" onclick="toggleCSRS('vasovagal')"><input type="checkbox" id="csrs-vasovagal"><span class="criterion-label">Predisposition to vasovagal symptoms (warm crowded place, prolonged standing, fear, emotion, pain)</span><span class="criterion-pts">−1</span></div>
+            <div class="criterion" onclick="toggleCSRS('heartdz')"><input type="checkbox" id="csrs-heartdz"><span class="criterion-label">History of heart disease (CAD, AF/flutter, CHF, valvular disease)</span><span class="criterion-pts">+1</span></div>
+            <div class="criterion" onclick="toggleCSRS('sbp')"><input type="checkbox" id="csrs-sbp"><span class="criterion-label">Any systolic BP &lt; 90 or &gt; 180 mmHg (triage or during ED stay)</span><span class="criterion-pts">+2</span></div>
+            <div class="criterion" onclick="toggleCSRS('trop')"><input type="checkbox" id="csrs-trop"><span class="criterion-label">Troponin above 99th percentile for the normal population</span><span class="criterion-pts">+2</span></div>
+            <div class="criterion" onclick="toggleCSRS('axis')"><input type="checkbox" id="csrs-axis"><span class="criterion-label">Abnormal QRS axis (&lt; −30° or &gt; 100°)</span><span class="criterion-pts">+1</span></div>
+            <div class="criterion" onclick="toggleCSRS('qrs')"><input type="checkbox" id="csrs-qrs"><span class="criterion-label">QRS duration &gt; 130 ms</span><span class="criterion-pts">+1</span></div>
+            <div class="criterion" onclick="toggleCSRS('qtc')"><input type="checkbox" id="csrs-qtc"><span class="criterion-label">Corrected QT interval &gt; 480 ms</span><span class="criterion-pts">+2</span></div>
+          </div>
+
+          <div class="radio-group" style="margin-top:12px">
+            <label>ED diagnosis impression</label>
+            <div class="radio-option" onclick="setCSRSDx('vasovagal')"><input type="radio" name="csrs-dx" value="vasovagal"><span>Vasovagal syncope</span><span class="radio-pts">−2</span></div>
+            <div class="radio-option" onclick="setCSRSDx('other')"><input type="radio" name="csrs-dx" value="other"><span>Other / unclear</span><span class="radio-pts">0</span></div>
+            <div class="radio-option" onclick="setCSRSDx('cardiac')"><input type="radio" name="csrs-dx" value="cardiac"><span>Cardiac syncope</span><span class="radio-pts">+2</span></div>
+          </div>
+
+          <div id="csrs-result" class="result neutral">
+            <div class="result-score">—</div>
+            <div class="result-label">Select an ED diagnosis impression</div>
+            <div class="result-action">CSRS cannot be scored until a diagnosis impression is chosen.</div>
+          </div>
+          <button id="csrs-copy-btn" class="copy-doc-btn" onclick="copyDoc('csrs')">📋 Copy Documentation</button>
+          <button class="reset-btn" onclick="resetCSRS()">Reset</button>
+        </div>
+      </div>
+
+      <div class="card" style="align-self:start">
+        <div id="csrs-interpretation" class="card-title">📊 CSRS Interpretation</div>
+        <div class="card-body" style="font-size:13px;line-height:1.85;color:var(--text2)">
+          <p style="margin-bottom:10px;color:var(--text3);font-size:12px">Risk of a serious adverse event within 30 days of ED disposition — death, arrhythmia, MI, structural heart disease, PE, serious hemorrhage, or procedural intervention:</p>
+          <p><span style="color:#86efac;font-weight:700">−3 to −2 — Very low</span><br/>~0.3%. Discharge generally appropriate.</p>
+          <br/>
+          <p><span style="color:#86efac;font-weight:700">−1 to 0 — Low</span><br/>~0.7%. Discharge with outpatient follow-up.</p>
+          <br/>
+          <p><span style="color:#fde047;font-weight:700">1 to 3 — Medium</span><br/>Cautious disposition and close follow-up. Consider ~6 h of ED cardiac monitoring, and 15-day outpatient rhythm monitoring if discharged.</p>
+          <br/>
+          <p><span style="color:#fca5a5;font-weight:700">4 to 5 — High</span><br/>Monitored admission and urgent cardiac evaluation.</p>
+          <br/>
+          <p><span style="color:#fca5a5;font-weight:700">6 to 11 — Very high</span><br/>~51.3%. Admission on an urgent monitored pathway.</p>
+          <br/>
+          <p style="font-size:11px;color:#475569;border-top:1px solid var(--border);padding-top:10px">Percentages are the observed 30-day rates from the multicentre ED validation, for the very low, low and very high bands only. The medium and high bands carry guidance without a figure: that cohort does not report a single verified combined rate for them, and the numbers often quoted (~8% and ~19%) come from the earlier derivation cohort.<br/><br/>Monitoring: arrhythmias were detected within ~2 h in low-risk patients and within ~6 h in medium- and high-risk patients.<br/><br/>⚠️ CSRS does <strong style="color:var(--text2)">not</strong> apply when the ED workup has already identified a serious cause, and does not override clinical judgment.<br/><br/><span style="color:#475569">Sources: derivation — Thiruganasambandamoorthy et al., CMAJ 2016 (PMID 27378464); validation — multicentre ED validation 2020 (PMID 32202605); monitoring — Circulation 2019 (PMID 30661373).</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       GI BLEED (Glasgow-Blatchford Score)
+  ══════════════════════════════════════════ -->
+  <div id="calc-gibleed" style="display:none">
+    <div class="calc-grid">
+
+      <div class="card">
+        <div id="glasgow-blatchford-score-gbs" class="card-title">🩸 Glasgow-Blatchford Score <span style="font-size:12px;font-weight:400;color:var(--text3)">— upper GI bleed, 0–23</span></div>
+        <div class="card-body">
+          <p style="font-size:12px;color:var(--text3);margin-bottom:12px">Pre-endoscopy risk score for upper GI bleeding. Identifies patients who may not need inpatient intervention. Enter what you have — the score is provisional until all fields are filled.</p>
+
+          <div class="radio-group">
+            <label>Sex (hemoglobin thresholds are sex-specific)</label>
+            <div class="radio-option" onclick="setGbsSex('male')"><input type="radio" name="gbs-sex" value="male"><span>Male</span></div>
+            <div class="radio-option" onclick="setGbsSex('female')"><input type="radio" name="gbs-sex" value="female"><span>Female</span></div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-top:12px">
+            <div>
+              <label style="display:block;font-size:11px;color:var(--text3);margin-bottom:4px;font-weight:600">BUN (mg/dL)</label>
+              <input id="gbs-bun" class="input" type="number" inputmode="decimal" min="0" placeholder="e.g., 24" oninput="calcGBS()"/>
+            </div>
+            <div>
+              <label style="display:block;font-size:11px;color:var(--text3);margin-bottom:4px;font-weight:600">Hemoglobin (g/dL)</label>
+              <input id="gbs-hgb" class="input" type="number" inputmode="decimal" min="0" placeholder="e.g., 11.4" oninput="calcGBS()"/>
+            </div>
+            <div>
+              <label style="display:block;font-size:11px;color:var(--text3);margin-bottom:4px;font-weight:600">Systolic BP (mmHg)</label>
+              <input id="gbs-sbp" class="input" type="number" inputmode="numeric" min="0" placeholder="e.g., 104" oninput="calcGBS()"/>
+            </div>
+            <div>
+              <label style="display:block;font-size:11px;color:var(--text3);margin-bottom:4px;font-weight:600">Pulse (bpm)</label>
+              <input id="gbs-pulse" class="input" type="number" inputmode="numeric" min="0" placeholder="e.g., 98" oninput="calcGBS()"/>
+            </div>
+          </div>
+
+          <div id="gbs-criteria" style="margin-top:12px">
+            <div class="criterion" onclick="toggleGBS('melena')"><input type="checkbox" id="gbs-melena"><span class="criterion-label">Presentation with melena</span><span class="criterion-pts">+1</span></div>
+            <div class="criterion" onclick="toggleGBS('syncope')"><input type="checkbox" id="gbs-syncope"><span class="criterion-label">Presentation with syncope</span><span class="criterion-pts">+2</span></div>
+            <div class="criterion" onclick="toggleGBS('hepatic')"><input type="checkbox" id="gbs-hepatic"><span class="criterion-label">Hepatic disease (known history or clinical/lab evidence)</span><span class="criterion-pts">+2</span></div>
+            <div class="criterion" onclick="toggleGBS('cardiac')"><input type="checkbox" id="gbs-cardiac"><span class="criterion-label">Cardiac failure (known history or clinical/echo evidence)</span><span class="criterion-pts">+2</span></div>
+          </div>
+
+          <div id="gbs-result" class="result neutral">
+            <div class="result-score">—</div>
+            <div class="result-label">Enter sex and labs above</div>
+            <div class="result-action">GBS 0–1 identifies patients who may be suitable for outpatient management.</div>
+          </div>
+          <button id="gbs-copy-btn" class="copy-doc-btn" onclick="copyDoc('gbs')">📋 Copy Documentation</button>
+          <button class="reset-btn" onclick="resetGBS()">Reset</button>
+        </div>
+      </div>
+
+      <div class="card" style="align-self:start">
+        <div id="gbs-interpretation" class="card-title">📊 GBS Interpretation</div>
+        <div class="card-body" style="font-size:13px;line-height:1.85;color:var(--text2)">
+          <p><span style="color:#86efac;font-weight:700">0–1 — Low risk</span><br/>Consider outpatient management with early outpatient endoscopy; very low rate of need for transfusion, endoscopic intervention, surgery or death.</p>
+          <br/>
+          <p><span style="color:#fde047;font-weight:700">2–5 — Moderate</span><br/>Inpatient assessment generally warranted; timing of endoscopy per GI.</p>
+          <br/>
+          <p><span style="color:#fca5a5;font-weight:700">≥ 6 — High risk</span><br/>Higher likelihood of needing transfusion or endoscopic intervention. Resuscitate, type and screen, early GI involvement.</p>
+          <br/>
+          <p style="font-size:12px;color:var(--text3)">Component thresholds:</p>
+          <p style="font-size:12px;color:var(--text3)">BUN &lt;18.2 = 0 · 18.2–22.3 = +2 · 22.4–27.9 = +3 · 28–69.9 = +4 · ≥70 = +6<br/>
+          Hgb (male) ≥13 = 0 · 12–12.9 = +1 · 10–11.9 = +3 · &lt;10 = +6<br/>
+          Hgb (female) ≥12 = 0 · 10–11.9 = +1 · &lt;10 = +6<br/>
+          SBP ≥110 = 0 · 100–109 = +1 · 90–99 = +2 · &lt;90 = +3<br/>
+          Pulse ≥100 = +1</p>
+          <br/>
+          <p style="font-size:11px;color:#475569;border-top:1px solid var(--border);padding-top:10px">⚠️ The score is pre-endoscopic risk stratification only. Hemodynamic instability, suspected variceal bleeding or anticoagulation may warrant admission regardless of score.<br/><br/><span style="color:#475569">Source: Blatchford et al., Lancet 2000.</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       WITHDRAWAL (COWS + CIWA-Ar)
+  ══════════════════════════════════════════ -->
+  <div id="calc-withdrawal" style="display:none">
+    <div class="calc-grid">
+
+      <!-- COWS -->
+      <div class="card">
+        <div id="cows-clinical-opiate-withdrawal-scale" class="card-title">💊 COWS <span style="font-size:12px;font-weight:400;color:var(--text3)">— Clinical Opiate Withdrawal Scale, 0–48</span></div>
+        <div class="card-body">
+          <p style="font-size:12px;color:var(--text3);margin-bottom:12px">Score observed signs of opioid withdrawal. Where the patient had pain before withdrawal, score only the additional component attributable to withdrawal.</p>
+          <div id="cows-criteria-wrap"></div>
+          <div id="cows-result" class="result neutral">
+            <div class="result-score">—</div>
+            <div class="result-label">Score all 11 items</div>
+            <div class="result-action">COWS guides timing of buprenorphine induction and symptom management.</div>
+          </div>
+          <button id="cows-copy-btn" class="copy-doc-btn" onclick="copyDoc('cows')">📋 Copy Documentation</button>
+          <button class="reset-btn" onclick="resetCOWS()">Reset</button>
+          <p style="font-size:11px;color:var(--text3);margin-top:10px;border-top:1px solid var(--border);padding-top:8px">Severity: 5–12 mild · 13–24 moderate · 25–36 moderately severe · &gt;36 severe. Top-band labels vary between published versions of the form.<br/><br/><strong style="color:var(--text2)">Local protocol:</strong> standard observed buprenorphine induction requires objective withdrawal at <strong style="color:var(--text2)">COWS ≥ 8</strong>; borderline COWS 8–9 favours start-low-go-slow. See <a href="opioid-mat.html#induction" style="color:#60a5fa">ED-initiated buprenorphine →</a><br/><br/><span style="color:#475569">Source: Wesson &amp; Ling, J Psychoactive Drugs 2003;35(2):253–259.</span></p>
+        </div>
+      </div>
+
+      <!-- CIWA-Ar -->
+      <div class="card">
+        <div id="ciwa-ar-alcohol-withdrawal" class="card-title">🍺 CIWA-Ar <span style="font-size:12px;font-weight:400;color:var(--text3)">— alcohol withdrawal, 0–67</span></div>
+        <div class="card-body">
+          <p style="font-size:12px;color:var(--text3);margin-bottom:12px">Ten items — nine scored 0–7 plus orientation scored 0–4. Requires a cooperative, communicative patient; it is not a diagnostic test for withdrawal and performs poorly in delirium or when communication is impaired.</p>
+          <div id="ciwa-criteria-wrap"></div>
+          <div id="ciwa-result" class="result neutral">
+            <div class="result-score">—</div>
+            <div class="result-label">Score all 10 items</div>
+            <div class="result-action">CIWA-Ar drives symptom-triggered benzodiazepine or phenobarbital dosing.</div>
+          </div>
+          <button id="ciwa-copy-btn" class="copy-doc-btn" onclick="copyDoc('ciwa')">📋 Copy Documentation</button>
+          <button class="reset-btn" onclick="resetCIWA()">Reset</button>
+          <p style="font-size:11px;color:var(--text3);margin-top:10px;border-top:1px solid var(--border);padding-top:8px">Bands used here: &lt;8 minimal · 8–15 moderate · &gt;15 severe.<br/><br/>⚠️ <strong style="color:var(--text2)">Published cutoffs genuinely differ</strong> — ≤10/11–15/≥16, &lt;8/8–15/≥15, and 0–9/10–20/≥20 all appear in the literature. Your local symptom-triggered protocol governs the treatment threshold.<br/><br/>See <a href="alcohol-mat.html#withdrawal" style="color:#60a5fa">Alcohol withdrawal &amp; AUD medications →</a><br/><br/><span style="color:#475569">Source: Sullivan et al., Br J Addict 1989;84(11):1353–1357.</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- ══════════════════════════════════════════
        SOFT TISSUE & SEPSIS
@@ -875,16 +1230,23 @@ main>*:nth-child(4){animation-delay:.15s}
 
 </main>
 
-<script src="search-index.js?v=5"></script>
+<script src="search-index.js?v=8"></script>
 <script>
 // ── CALC TAB SWITCHING ───────────────────────────────────────
-const CALC_IDS = ['wellspe','heart','years','wellsdvt','abcd2','nihss','cha2ds2vasc','cthead','softtissue','centor','pecarn','pedsfever'];
+const CALC_IDS = ['wellspe','heart','years','wellsdvt','abcd2','nihss','cha2ds2vasc',
+                  'crcl','cthead','cspine','syncope','gibleed','withdrawal','softtissue',
+                  'centor','pecarn','pedsfever'];
 function showCalc(id) {
   CALC_IDS.forEach(c => {
-    document.getElementById('calc-'+c).style.display = c===id ? '' : 'none';
+    // Null-guarded: a missing panel makes that one tab inert instead of
+    // throwing partway through and leaving every later tab unswitchable.
+    const el = document.getElementById('calc-'+c);
+    if (el) el.style.display = c===id ? '' : 'none';
   });
-  document.querySelectorAll('.calc-tab').forEach((btn,i) => {
-    btn.classList.toggle('active', CALC_IDS[i]===id);
+  // Match on data-calc rather than array index, so tab order and CALC_IDS
+  // order no longer have to agree.
+  document.querySelectorAll('.calc-tab').forEach((btn) => {
+    btn.classList.toggle('active', btn.dataset.calc === id);
   });
 }
 
@@ -938,6 +1300,156 @@ function fmtLines(lines) {
   return lines.filter(Boolean).join('\n');
 }
 
+// Generic window.<type>Detail -> chart text. Returns '' (and nudges the user)
+// when the calculator has not been filled in far enough to document.
+// Expects: { incomplete, headline, items: [string], itemsLabel?, reco }
+function copyDocFromDetail(type, promptMsg) {
+  const d = window[type + 'Detail'];
+  if (!d || d.incomplete) { alert(promptMsg); return ''; }
+  const items = d.items || [];
+  return fmtLines([
+    d.headline,
+    items.length ? (d.itemsLabel || 'Findings:') : '',
+    ...items.map(x => `- ${x}`),
+    `Recommendation: ${d.reco}`
+  ]);
+}
+
+// ── CRITERIA-BASED DOCUMENTATION ──────────────────────────────
+// Builds chart text that names EVERY criterion — including the ones that
+// scored nothing, and why. The documented negatives are the point of the
+// note, not noise: "no tender adenopathy" and "never assessed" are
+// different clinical statements, and the old text could not tell them apart.
+//
+// d = { incomplete, name, score, max, band, criteria:[...], reco,
+//       criteriaLabel?, notes?[] }
+// criterion = {
+//   label,   // the full on-screen wording, so the note matches the screen
+//   pts,     // signed contribution
+//   state,   // 'pos' contributed | 'neg' did not | 'info' a selected band
+//            // or measured value | 'na' could not be assessed
+//   found,   // the clinical finding: 'present', 'cough present', '30 mg/dL'
+//   clause,  // optional phrasing for the narrative sentence, where the
+//            // default would read badly (absence-of-X criteria)
+//   notMet   // absence-of-X criterion that was not met — prefix NOT MET,
+//            // because "Absence of cough: absent" is nonsense
+// }
+function critPts(p) {
+  const n = Number(p) || 0;
+  if (n > 0) return `+${n}`;
+  if (n < 0) return `−${Math.abs(n)}`;   // U+2212, matching the on-screen badges
+  return '0';
+}
+
+function critLine(c) {
+  const lead = c.notMet ? 'NOT MET — ' : '';
+  const pts = (c.pts === null || typeof c.pts === 'undefined') ? '' : ` (${critPts(c.pts)})`;
+  return `- ${c.label}: ${lead}${c.found}${pts}`;
+}
+
+function critClause(c) {
+  const lab = lowerFirst(c.label);
+  if (c.state === 'na') return lab;     // "Not assessed: sodium, potassium"
+  if (c.clause) return c.clause;
+  if (c.state === 'pos') return lab;
+  if (c.state === 'neg') return 'no ' + lab;
+  return c.found || lab;
+}
+
+// Criteria for a plain checkbox list. `pts` may be a per-item array, a single
+// number applied when ticked, or null for presence rules that are not scored.
+// Unticked boxes still produce a criterion, because the documented negative is
+// the whole point: "no hemoptysis" and "hemoptysis never assessed" differ.
+// Lowercase a label for mid-sentence use without wrecking acronyms:
+// "Hemoptysis" -> "hemoptysis", but "HR >90" and "SpO₂ <95%" are left alone.
+function lowerFirst(str) {
+  const first = String(str).split(/\s/)[0];
+  if (/[A-Z]/.test(first.slice(1))) return str;
+  return str.charAt(0).toLowerCase() + str.slice(1);
+}
+
+// Criteria for a plain checkbox list. `spec` items are either a label string
+// or { label, pos, neg } where `neg` is how the negative reads in prose —
+// threshold criteria need their inverse stated ("age <50"), because "no age
+// ≥ 50" is not something anyone would write in a note.
+function boxCriteria(spec, checked, pts, o) {
+  o = o || {};
+  return spec.map((item, i) => {
+    const c = (typeof item === 'string') ? { label: item } : item;
+    const on = !!checked[i];
+    const p = (pts === null) ? null : (Array.isArray(pts) ? pts[i] : pts);
+    return {
+      label: c.label,
+      pts: (p === null) ? null : (on ? p : 0),
+      state: on ? 'pos' : 'neg',
+      found: on ? (c.pos || o.present || 'present') : (c.negFound || o.absent || 'absent'),
+      clause: on ? lowerFirst(c.label) : (c.neg || 'no ' + lowerFirst(c.label))
+    };
+  });
+}
+
+function docFromCriteria(type, promptMsg) {
+  // '__fgsi' documents a deliberately partial score, so it bypasses the
+  // incomplete guard while still reporting what is missing in `notes`.
+  const d = (type === '__fgsi') ? Object.assign({}, window.fgsiDetail, { incomplete: false }) : window[type + 'Detail'];
+  if (!d || d.incomplete) { if (promptMsg) alert(promptMsg); return ''; }
+  const crit = d.criteria || [];
+  // A ticked criterion worth negative points lowers the score, so it must not
+  // be filed under "Positive" — on Wells DVT and CSRS that inverts the meaning.
+  const cred = crit.filter((c) => c.pts < 0);
+  const pos  = crit.filter((c) => c.state === 'pos' && !(c.pts < 0));
+  const neg  = crit.filter((c) => c.state === 'neg' && !(c.pts < 0));
+  const info = crit.filter((c) => c.state === 'info');
+  const na   = crit.filter((c) => c.state === 'na');
+
+  const scored = (typeof d.score !== 'undefined' && d.score !== null);
+  const head = !scored
+    ? `${d.name}${d.band ? `: ${d.band}` : ''}.`
+    : `${d.name} = ${(Number(d.score) < 0) ? critPts(d.score) : d.score}${(d.max === null || typeof d.max === 'undefined') ? '' : ` of ${d.max}`}${d.band ? ` (${d.band})` : ''}.`;
+
+  const grouped = crit.some((c) => c.group);
+  const bits = [head];
+  if (grouped) {
+    // For a branching rule the Positive/Negative split is wrong — "eligibility
+    // met" is not a risk finding. Summarise per step instead.
+    const seenG = [];
+    crit.forEach((c) => { if (seenG.indexOf(c.group) === -1) seenG.push(c.group); });
+    seenG.forEach((g) => {
+      const inG = crit.filter((c) => c.group === g);
+      const hit = inG.filter((c) => c.state === 'pos');
+      const all = hit.length === inG.length;
+      bits.push(`${g}: ${hit.length} of ${inG.length}${(hit.length && !all) ? ' — ' + hit.map(critClause).join(', ') : ''}.`);
+    });
+  }
+  if (!grouped && pos.length)  bits.push(`Positive: ${pos.map(critClause).join(', ')}.`);
+  if (!grouped && cred.length) bits.push(`Subtracts: ${cred.map((c) => `${critClause(c)} (${critPts(c.pts)})`).join(', ')}.`);
+  if (!grouped && neg.length)  bits.push(`Negative: ${neg.map(critClause).join(', ')}.`);
+  if (!grouped && info.length) {
+    const t = info.map(critClause).join('; ');
+    bits.push(`${t.charAt(0).toUpperCase()}${t.slice(1)}.`);
+  }
+  if (!grouped && na.length)   bits.push(`Not assessed: ${na.map(critClause).join(', ')}.`);
+
+  // Built with join rather than fmtLines: fmtLines drops falsy entries, so it
+  // cannot emit the blank lines that keep this readable pasted into a note.
+  const out = [bits.join(' ')];
+  if (crit.length && crit.some((c) => c.group)) {
+    // Branching rules (CT Head, C-Spine, PECARN) are read step by step, so the
+    // note keeps the steps rather than flattening them into one list.
+    const seen = [];
+    crit.forEach((c) => { if (seen.indexOf(c.group) === -1) seen.push(c.group); });
+    seen.forEach((g) => {
+      out.push('', g + ':');
+      crit.filter((c) => c.group === g).forEach((c) => out.push(critLine(c)));
+    });
+  } else if (crit.length) {
+    out.push('', d.criteriaLabel || 'Criteria:', ...crit.map(critLine));
+  }
+  if (d.notes && d.notes.length) out.push('', ...d.notes);
+  if (d.reco) out.push('', `Recommendation: ${d.reco}`);
+  return out.join('\n');
+}
+
 function centorInterpretation(score) {
   // McIsaac/Centor typical guidance (local protocols may vary)
   if (score <= 1) return 'Low likelihood of GAS. No testing or antibiotics typically indicated; symptomatic care.';
@@ -953,291 +1465,37 @@ function copyDoc(type) {
   const btn = document.getElementById(type + '-copy-btn');
 
   // ----- PERC -----
-  if (type === 'perc') {
-    const labels = [
-      'Age ≥50',
-      'HR ≥100 bpm',
-      'SpO₂ <95% on room air',
-      'Unilateral leg swelling',
-      'Hemoptysis',
-      'Recent surgery or trauma (≤4 weeks)',
-      'Prior PE or DVT',
-      'Hormone use (OCP/HRT/estrogen)',
-    ];
-    const present = labels.filter((_,i)=>percChecked[i]);
-    if (present.length === 0) {
-      text = fmtLines([
-        'PERC (PE Rule-Out Criteria): PERC negative (0/8).',
-        'All PERC criteria absent: age <50, HR <100, SpO₂ ≥95% RA, no unilateral leg swelling, no hemoptysis, no recent surgery/trauma, no prior PE/DVT, no estrogen use.',
-        'Recommendation: If low pre-test probability, PE can be ruled out without D-dimer/CTPA per PERC.'
-      ]);
-    } else {
-      text = fmtLines([
-        `PERC (PE Rule-Out Criteria): PERC positive (${present.length}/8).`,
-        'Criteria present:',
-        ...present.map(x => `- ${x}`),
-        'Recommendation: Cannot rule out PE by PERC alone. Proceed with Wells PE + D-dimer/CTPA as indicated.'
-      ]);
-    }
-  }
+  if (type === 'perc') { text = docFromCriteria('perc', 'Review the 8 PERC criteria first.'); }
 
   // ----- Wells PE -----
-  else if (type === 'wellspe') {
-    const labels = [
-      'Clinical signs/symptoms of DVT',
-      'PE is #1 diagnosis OR equally likely',
-      'HR >100 bpm',
-      'Immobilization ≥3 days OR surgery in past 4 weeks',
-      'Prior PE or DVT',
-      'Hemoptysis',
-      'Malignancy (treatment within 6 months or palliative)',
-    ];
-    const score = wpeChecked.reduce((s,c,i)=>s+(c?wpePoints[i]:0),0);
-    const items = labels.map((lab,i)=>({lab, pts:wpePoints[i], on:wpeChecked[i]})).filter(x=>x.on);
-
-    let risk, plan;
-    if (score <= 1) { risk='Low'; plan='If PERC negative, no further PE workup. If PERC positive, obtain D-dimer; if positive → CTPA (or V/Q as appropriate).'; }
-    else if (score <= 6) { risk='Moderate'; plan='Obtain D-dimer; if positive → CTPA (or V/Q as appropriate).'; }
-    else { risk='High'; plan='Proceed directly to imaging (CTPA) and consider empiric anticoagulation as clinically appropriate.'; }
-
-    text = fmtLines([
-      `Wells PE score: ${score} (${risk} pre-test probability).`,
-      (items.length ? 'Points:' : 'Points: (no criteria selected)'),
-      ...items.map(x => `- ${x.lab} (${x.pts} point${x.pts===1?'':'s'})`),
-      `Recommendation: ${plan}`
-    ]);
-  }
-
-  // ----- HEART -----
-  else if (type === 'heart') {
-    const filled = ['h','e','a','r','t'].every(k=>heartScores[k]!==null);
-    if (!filled) {
-      alert('Please complete all 5 HEART score categories first.');
-      return;
-    }
-    const score = ['h','e','a','r','t'].reduce((s,k)=>s+(heartScores[k]??0),0);
-    const hDesc = ['Slightly suspicious','Moderately suspicious','Highly suspicious'][heartScores['h']];
-    const eDesc = ['Normal','Non-specific repolarization disturbance','Significant ST deviation'][heartScores['e']];
-    const aDesc = ['Age <45','Age 45–64','Age ≥65'][heartScores['a']];
-    const rDesc = ['No risk factors','1–2 risk factors','≥3 risk factors or known CAD'][heartScores['r']];
-    const tDesc = ['≤1× ULN','1–3× ULN','>3× ULN'][heartScores['t']];
-
-    let risk, plan;
-    if (score <= 3) { risk='Low risk'; plan='If serial troponins negative and no concerning features, consider discharge with follow-up and return precautions.'; }
-    else if (score <= 6) { risk='Moderate risk'; plan='Observation / further risk stratification (e.g., stress testing/CTA) per local protocol; consider cardiology input.'; }
-    else { risk='High risk'; plan='Admit; cardiology consult for early invasive strategy as indicated.'; }
-
-    text = fmtLines([
-      `HEART score: ${score}/10 (${risk}).`,
-      'Breakdown:',
-      `- History: ${heartScores['h']}/2 (${hDesc})`,
-      `- EKG: ${heartScores['e']}/2 (${eDesc})`,
-      `- Age: ${heartScores['a']}/2 (${aDesc})`,
-      `- Risk factors: ${heartScores['r']}/2 (${rDesc})`,
-      `- Troponin: ${heartScores['t']}/2 (${tDesc})`,
-      `Recommendation: ${plan}`
-    ]);
-  }
-
+  else if (type === 'wellspe') { text = docFromCriteria('wellspe', 'Select Wells PE criteria first.'); }
+  else if (type === 'heart')   { text = docFromCriteria('heart',   'Score all five HEART domains first.'); }
   // ----- YEARS -----
-  else if (type === 'years') {
-    if (!window.yearsDetail || window.yearsDetail.incomplete) {
-      alert('Complete YEARS criteria and D-dimer first.');
-      return;
-    }
-    const d = window.yearsDetail;
-    text = fmtLines([
-      `YEARS algorithm: ${d.criteriaCount} criteria; D-dimer ${d.dDimer} ng/mL FEU.`,
-      `Interpretation: ${d.interpretation}.`,
-      `Recommendation: ${d.reco}`
-    ]);
-  }
+  else if (type === 'years') { text = docFromCriteria('years', 'Complete YEARS criteria and D-dimer first.'); }
 
   // ----- ABCD2 -----
-  else if (type === 'abcd2') {
-    if (!window.abcd2Detail || window.abcd2Detail.incomplete) {
-      alert('Complete ABCD2 clinical feature and duration first.');
-      return;
-    }
-    const d = window.abcd2Detail;
-    text = fmtLines([
-      `ABCD2 score: ${d.total}/7 (${d.riskLabel}).`,
-      'Points:',
-      ...d.items.map(x => `- ${x}`),
-      `Recommendation: ${d.reco}`
-    ]);
-  }
+  else if (type === 'abcd2') { text = docFromCriteria('abcd2', 'Complete the ABCD2 inputs first.'); }
 
   // ----- NIHSS -----
-  else if (type === 'nihss') {
-    if (!window.nihssDetail || window.nihssDetail.incomplete) {
-      alert('Score all NIHSS items first.');
-      return;
-    }
-    const d = window.nihssDetail;
-    text = fmtLines([
-      `NIHSS total: ${d.total}/42 (${d.severity}).`,
-      'Items:',
-      ...d.items.map(x => `- ${x}`),
-      `Recommendation: ${d.reco}`
-    ]);
-  }
+  else if (type === 'nihss') { text = docFromCriteria('nihss', 'Score all 15 NIHSS items first.'); }
 
   // ----- CHA2DS2-VASc -----
-  else if (type === 'cha2ds2vasc') {
-    if (!window.cha2Detail || window.cha2Detail.incomplete) {
-      alert('Select sex and age for CHA2DS2-VASc first.');
-      return;
-    }
-    const d = window.cha2Detail;
-    text = fmtLines([
-      `CHA2DS2-VASc score: ${d.total} (${d.interpretation}).`,
-      'Points:',
-      ...d.items.map(x => `- ${x}`),
-      `Recommendation: ${d.reco}`
-    ]);
-  }
+  else if (type === 'cha2ds2vasc') { text = docFromCriteria('cha2ds2vasc', 'Select sex and age first.'); }
 
   // ----- Wells DVT -----
-  else if (type === 'wellsdvt') {
-    const labels = [
-      'Active cancer',
-      'Paralysis/paresis/recent immobilization of lower extremity',
-      'Bedridden >3 days OR major surgery within 12 weeks (requiring general/regional anesthesia)',
-      'Localized tenderness along deep venous system',
-      'Entire leg swollen',
-      'Calf swelling >3 cm compared with asymptomatic leg',
-      'Pitting edema confined to symptomatic leg',
-      'Collateral superficial veins (nonvaricose)',
-      'Alternative diagnosis at least as likely (subtract)',
-    ];
-    const score = wdvtChecked.reduce((s,c,i)=>s+(c?wdvtPoints[i]:0),0);
-    const items = labels.map((lab,i)=>({lab, pts:wdvtPoints[i], on:wdvtChecked[i]})).filter(x=>x.on);
-
-    let risk, plan;
-    if (score <= 1) { risk='Low'; plan='Consider D-dimer; if positive → compression ultrasound. If D-dimer negative → DVT excluded in appropriate context.'; }
-    else if (score <= 6) { risk='Moderate'; plan='Compression ultrasound; consider D-dimer/serial imaging per protocol if initial US negative.'; }
-    else { risk='High'; plan='Compression ultrasound regardless of D-dimer; if initial US negative but suspicion high → repeat imaging in ~1 week or alternative imaging.'; }
-
-    text = fmtLines([
-      `Wells DVT score: ${score} (${risk} pre-test probability).`,
-      (items.length ? 'Points:' : 'Points: (no criteria selected)'),
-      ...items.map(x => `- ${x.lab} (${x.pts>0?'+':''}${x.pts})`),
-      `Recommendation: ${plan}`
-    ]);
-  }
-
+  else if (type === 'wellsdvt') { text = docFromCriteria('wellsdvt', 'Select Wells DVT criteria first.'); }
   // ----- Canadian CT Head -----
-  else if (type === 'cthead') {
-    const eligible = cteChecked.every(Boolean);
-    const highLabels = [
-      'GCS <15 at 2 hours post-injury',
-      'Suspected open/depressed skull fracture',
-      'Signs of basal skull fracture',
-      'Vomiting ≥2 episodes',
-      'Age ≥65',
-    ];
-    const medLabels = [
-      'Amnesia before impact ≥30 minutes',
-      'Dangerous mechanism',
-    ];
-    const high = highLabels.filter((_,i)=>cthChecked[i]);
-    const med  = medLabels.filter((_,i)=>ctmChecked[i]);
-
-    if (!eligible) {
-      text = fmtLines([
-        'Canadian CT Head Rule: Not eligible (rule criteria not fully met).',
-        'Recommendation: Use clinical judgment; consider CT head based on overall risk factors/anticoagulation/abnormal exam.'
-      ]);
-    } else if (high.length === 0 && med.length === 0) {
-      text = fmtLines([
-        'Canadian CT Head Rule: Eligible patient with minor head injury.',
-        'High-risk factors: none.',
-        'Medium-risk factors: none.',
-        'Recommendation: CT head not required per CCHR; observe as appropriate + provide concussion/return precautions.'
-      ]);
-    } else {
-      text = fmtLines([
-        'Canadian CT Head Rule: Eligible patient with minor head injury.',
-        (high.length ? 'High-risk factors present:' : 'High-risk factors: none.'),
-        ...high.map(x=>`- ${x}`),
-        (med.length ? 'Medium-risk factors present:' : 'Medium-risk factors: none.'),
-        ...med.map(x=>`- ${x}`),
-        'Recommendation: CT head indicated per CCHR.'
-      ]);
-    }
-  }
+  else if (type === 'cthead') { text = docFromCriteria('cthead', 'Work through the eligibility check first.'); }
 
   // ----- LRINEC -----
-  else if (type === 'lrinec') {
-    if (!window.lrinecDetail) {
-      alert('Enter LRINEC labs first.');
-      return;
-    }
-    const d = window.lrinecDetail;
-
-    // Interpretation (common convention): ≤5 low, 6–7 intermediate, ≥8 high
-    let interp = d.interpretation;
-    if (!interp) {
-      const s = d.total ?? 0;
-      if (s >= 8) interp = 'High risk (LRINEC ≥ 8)';
-      else if (s >= 6) interp = 'Intermediate risk (LRINEC 6–7)';
-      else interp = 'Lower risk (LRINEC ≤ 5)';
-      if (d.incomplete) interp += ' — based on available data';
-    }
-
-    text = fmtLines([
-      `LRINEC score: ${d.total}.`,
-      `Interpretation: ${interp}.`,
-      (d.incomplete && d.missing && d.missing.length ? `Missing: ${d.missing.join(', ')}.` : ''),
-      'Points:',
-      ...d.items.map(it => `- ${it.name}: ${it.value} → ${it.points} point${it.points===1?'':'s'} (${it.rule})`),
-      `Recommendation: ${d.reco}`
-    ]);
-  }
-
+  else if (type === 'lrinec') { text = docFromCriteria('lrinec', 'Enter LRINEC labs first.'); }
   // ----- FGSI -----
-  else if (type === 'fgsi') {
-    if (!window.fgsiDetail) { alert('Enter FGSI vitals/labs first.'); return; }
-    const d = window.fgsiDetail;
-
-    const interp = d.interpretation
-      ? d.interpretation + (d.incomplete ? '' : '')
-      : ((d.total > 9) ? 'High mortality risk (FGSI > 9)' : 'Lower mortality risk (FGSI ≤ 9)') + (d.incomplete ? ' — based on available data' : '');
-
-    text = fmtLines([
-      `FGSI (Fournier’s Gangrene Severity Index): ${d.total}.`,
-      `Interpretation: ${interp}.`,
-      (d.incomplete && d.missing && d.missing.length ? `Missing: ${d.missing.join(', ')}.` : ''),
-      'Points:',
-      ...d.items.map(it => `- ${it.name}: ${it.value} → ${it.points}`),
-      `Recommendation: ${d.reco}`
-    ]);
-  }
-
+  else if (type === 'fgsi') { const d0 = window.fgsiDetail; text = (d0 && d0.criteria) ? docFromCriteria('__fgsi', '') : ''; if (!text && !d0) alert('Enter FGSI vitals/labs first.'); }
   // ----- SIRS -----
-  else if (type === 'sirs') {
-    const labels = ['Temp >38°C or <36°C','HR >90','RR >20 or PaCO₂ <32','WBC >12 or <4 or >10% bands'];
-    const pos = labels.filter((_,i)=>sirsChecked[i]);
-    text = fmtLines([
-      `SIRS: ${pos.length}/4 positive (${pos.length>=2?'SIRS positive':'SIRS negative'}).`,
-      (pos.length ? 'Positive criteria:' : 'Positive criteria: none.'),
-      ...pos.map(x=>`- ${x}`),
-      'Recommendation: SIRS supports systemic inflammatory response in appropriate context; manage/disposition based on suspected source and overall clinical picture.'
-    ]);
-  }
+  else if (type === 'sirs') { text = docFromCriteria('sirs', 'Check the SIRS criteria first.'); }
 
   // ----- qSOFA -----
-  else if (type === 'qsofa') {
-    const labels = ['RR ≥22','SBP ≤100','Altered mental status (GCS<15)'];
-    const pos = labels.filter((_,i)=>qsofaChecked[i]);
-    text = fmtLines([
-      `qSOFA: ${pos.length}/3.`,
-      (pos.length ? 'Positive criteria:' : 'Positive criteria: none.'),
-      ...pos.map(x=>`- ${x}`),
-      'Recommendation: Elevated qSOFA suggests higher risk; supports escalation/close monitoring in the appropriate clinical context.'
-    ]);
-  }
+  else if (type === 'qsofa') { text = docFromCriteria('qsofa', 'Check the qSOFA criteria first.'); }
 
   // ----- Shock Index -----
   else if (type === 'shock') {
@@ -1248,7 +1506,10 @@ function copyDoc(type) {
       return;
     }
     const si = (hr/sbp).toFixed(2);
-    const concern = (parseFloat(si) > 0.90) ? 'elevated' : 'not elevated';
+    const v = parseFloat(si);
+    // Mirror the on-screen tiers: the note used to know only >0.9, so a shock
+    // index of 1.4 was documented as merely "elevated".
+    const concern = v >= 1.3 ? 'markedly elevated (high concern)' : (v > 0.90 ? 'elevated' : 'not elevated');
     text = fmtLines([
       `Shock Index (HR/SBP): ${si}. (HR ${hr}, SBP ${sbp}).`,
       `Interpretation: Shock index is ${concern} (threshold often cited >0.9, context dependent).`,
@@ -1257,34 +1518,20 @@ function copyDoc(type) {
   }
 
   // ----- Centor / McIsaac -----
-  else if (type === 'centor') {
-    if (!window.centorDetail) { alert('Select criteria first.'); return; }
-    const d = window.centorDetail;
-    text = fmtLines([
-      `Centor/McIsaac score: ${d.total}.`,
-      `Interpretation: ${centorInterpretation(d.total)}.`,
-      'Points:',
-      ...d.items.map(it => `- ${it}`),
-      `Recommendation: ${d.reco}`
-    ]);
-  }
+  else if (type === 'centor') { text = docFromCriteria('centor', 'Select criteria first.'); }
 
   // ----- PECARN -----
-  else if (type === 'pecarn') {
-    if (!window.pecarnDetail || window.pecarnDetail.incomplete) {
-      alert('Select age group and findings first.');
-      return;
-    }
-    const d = window.pecarnDetail;
-    text = fmtLines([
-      `PECARN Pediatric Head Injury (${d.ageGroup}):`,
-      (d.high.length ? 'High-risk findings:' : 'High-risk findings: none.'),
-      ...d.high.map(x=>`- ${x}`),
-      (d.intermediate.length ? 'Intermediate-risk findings:' : 'Intermediate-risk findings: none.'),
-      ...d.intermediate.map(x=>`- ${x}`),
-      `Recommendation: ${d.reco}`
-    ]);
-  }
+  else if (type === 'pecarn') { text = docFromCriteria('pecarn', 'Select an age group and findings first.'); }
+
+  // ----- New calculators (generic *Detail -> chart text) -----
+  else if (type === 'csrs')    { text = docFromCriteria('csrs',    'Select the CSRS items and an ED diagnosis impression first.'); }
+  else if (type === 'ccspine') { text = docFromCriteria('ccspine', 'Work through the Canadian C-Spine steps first — rotation still needs recording.'); }
+  else if (type === 'nexus')   { text = docFromCriteria('nexus',   'Review the 5 NEXUS criteria first.'); }
+  else if (type === 'spesi')   { text = docFromCriteria('spesi',   'Review the 6 sPESI criteria first.'); }
+  else if (type === 'gbs')     { text = docFromCriteria('gbs',     'Enter sex, BUN, hemoglobin and systolic BP first.'); }
+  else if (type === 'cows')    { text = docFromCriteria('cows',    'Score at least one COWS item first.'); }
+  else if (type === 'ciwa')    { text = docFromCriteria('ciwa',    'Score at least one CIWA-Ar item first.'); }
+  else if (type === 'crcl')    { text = copyDocFromDetail('crcl',    'Enter sex, age, serum creatinine and weight first.'); }
 
   // ----- Peds fever note -----
   else if (type === 'pedsfever') {
@@ -1300,6 +1547,16 @@ function copyDoc(type) {
 
 
 // ── PERC ─────────────────────────────────────────────────────
+const PERC_LABELS = [
+  { label:'Age ≥ 50',                              neg:'age <50' },
+  { label:'HR ≥ 100 bpm',                          neg:'HR <100' },
+  { label:'SpO₂ < 95% on room air',                neg:'SpO₂ ≥95% on room air' },
+  { label:'Unilateral leg swelling',               neg:'no unilateral leg swelling' },
+  { label:'Hemoptysis',                            neg:'no hemoptysis' },
+  { label:'Recent surgery or trauma (≤4 weeks)',   neg:'no recent surgery or trauma' },
+  { label:'Prior PE or DVT',                       neg:'no prior PE or DVT' },
+  { label:'Hormone use (OCP, HRT, or estrogenic)', neg:'no estrogen use' }
+];
 const percChecked = Array(8).fill(false);
 let percTouched = false;
 function togglePerc(i) {
@@ -1325,6 +1582,16 @@ function updatePerc() {
     r.className='result high';
     r.innerHTML='<div class="result-label">⚠️ PERC Positive — Cannot Rule Out PE</div><div class="result-action">One or more PERC criteria present. Proceed with Wells PE score + D-dimer or CT-PA as indicated.</div>';
   }
+  const n = percChecked.filter(Boolean).length;
+  window.percDetail = {
+    incomplete: !percTouched,
+    name: 'PERC (PE Rule-Out Criteria)', score: n, max: 8,
+    band: n === 0 ? 'PERC negative' : 'PERC positive',
+    criteria: boxCriteria(PERC_LABELS, percChecked, null),
+    reco: n === 0
+      ? 'All 8 PERC criteria absent. If pre-test probability is low (Wells <2), PE is excluded without D-dimer or CTPA.'
+      : 'Cannot rule out PE by PERC alone. Proceed with Wells PE + D-dimer/CTPA as indicated.'
+  };
 }
 function resetPerc() {
   percTouched = false; percChecked.fill(false);
@@ -1334,6 +1601,15 @@ function resetPerc() {
 }
 
 // ── WELLS PE ──────────────────────────────────────────────────
+const WELLSPE_LABELS = [
+  { label:'Clinical signs/symptoms of DVT',                       neg:'no clinical signs of DVT' },
+  { label:'PE is #1 diagnosis OR equally likely',                 neg:'an alternative diagnosis is more likely than PE' },
+  { label:'HR > 100 bpm',                                         neg:'HR ≤100' },
+  { label:'Immobilization ≥3 days OR surgery in past 4 weeks',    neg:'no recent immobilization or surgery' },
+  { label:'Prior PE or DVT',                                      neg:'no prior PE or DVT' },
+  { label:'Hemoptysis',                                           neg:'no hemoptysis' },
+  { label:'Malignancy (treatment within 6 months or palliative)', neg:'no active malignancy' }
+];
 const wpePoints = [3,3,1.5,1.5,1.5,1,1];
 const wpeChecked = Array(7).fill(false);
 let wpeTouched = false;
@@ -1356,6 +1632,13 @@ function updateWellsPE() {
   else{cls='high';label='High Probability (Wells ≥7)';action='PE prevalence ~41%. Proceed directly to CT-PA. Consider empiric anticoagulation while awaiting imaging.';}
   r.className='result '+cls;
   r.innerHTML=`<div class="result-score">${score}</div><div class="result-label">${label}</div><div class="result-action">${action}</div>`;
+  window.wellspeDetail = {
+    incomplete: !wpeTouched,
+    name: 'Wells PE score', score, max: 12.5,
+    band: label.replace(/ \(Wells[^)]*\)/, '').replace(/ ?Probability/i, '').toLowerCase() + ' pre-test probability',
+    criteria: boxCriteria(WELLSPE_LABELS, wpeChecked, wpePoints),
+    reco: action
+  };
 }
 function resetWellsPE() {
   wpeTouched=false; wpeChecked.fill(false);
@@ -1388,6 +1671,26 @@ function updateHEART() {
   else{cls='high';label='High Risk — HEART Score '+score+'/10';action='MACE risk ~50–65%. Cardiology consulted. Admission and early invasive strategy indicated.';}
   r.className='result '+cls;
   r.innerHTML=`<div class="result-score">${score}/10</div><div class="result-label">${label}</div><div class="result-action">${action}</div>`;
+  const HEART_DESC = {
+    h: ['Slightly suspicious','Moderately suspicious','Highly suspicious'],
+    e: ['Normal ECG','Non-specific repolarization disturbance','Significant ST deviation'],
+    a: ['Age <45','Age 45–64','Age ≥65'],
+    r: ['No known risk factors','1–2 risk factors','≥3 risk factors or known CAD'],
+    t: ['Troponin ≤1× ULN','Troponin 1–3× ULN','Troponin >3× ULN']
+  };
+  const HEART_NAME = { h:'History', e:'ECG', a:'Age', r:'Risk factors', t:'Troponin' };
+  window.heartDetail = {
+    incomplete: false,
+    name: 'HEART score', score, max: 10,
+    band: label.replace(/ — HEART Score.*$/, '').toLowerCase(),
+    criteria: ['h','e','a','r','t'].map((k) => ({
+      label: HEART_NAME[k], pts: heartScores[k],
+      state: heartScores[k] > 0 ? 'pos' : 'info',
+      found: HEART_DESC[k][heartScores[k]],
+      clause: HEART_DESC[k][heartScores[k]].toLowerCase()
+    })),
+    reco: action
+  };
 }
 function resetHEART() {
   ['h','e','a','r','t'].forEach(k=>heartScores[k]=null);
@@ -1397,6 +1700,11 @@ function resetHEART() {
 }
 
 // ── YEARS ─────────────────────────────────────────────────────
+const YEARS_LABELS = [
+  { label:'Clinical signs of DVT',    neg:'no clinical signs of DVT' },
+  { label:'Hemoptysis',               neg:'no hemoptysis' },
+  { label:'PE most likely diagnosis', neg:'PE is not the most likely diagnosis' }
+];
 const yearsChecked = [false,false,false];
 function toggleYEARS(i) {
   yearsChecked[i] = !yearsChecked[i];
@@ -1431,15 +1739,23 @@ function updateYEARS() {
   r.innerHTML=`<div class="result-score">${criteriaCount} criteria</div><div class="result-label">${label}</div><div class="result-action">${action}</div>`;
   btn.classList.add('show');
 
+  const yearsCriteria = boxCriteria(YEARS_LABELS, yearsChecked, null);
+  yearsCriteria.push({
+    label: 'D-dimer',
+    pts: null, state: 'info',
+    found: `${dDimer} ng/mL FEU (threshold ${threshold} for ${criteriaCount} YEARS ${criteriaCount === 1 ? 'criterion' : 'criteria'})`,
+    clause: `D-dimer ${dDimer} ng/mL FEU against a threshold of ${threshold}`
+  });
   window.yearsDetail = {
     incomplete: false,
-    criteriaCount,
-    dDimer: dDimer,
-    threshold,
-    interpretation: label,
+    name: 'YEARS algorithm', score: criteriaCount, max: 3,
+    band: label,
+    criteria: yearsCriteria,
+    criteriaLabel: 'Criteria and D-dimer:',
     reco: ruledOut
       ? 'In low/intermediate risk context, PE can be excluded without CTA by YEARS threshold.'
-      : 'PE cannot be excluded by YEARS; proceed with definitive imaging as clinically indicated.'
+      : 'PE cannot be excluded by YEARS; proceed with definitive imaging as clinically indicated.',
+    criteriaCount, dDimer, threshold, interpretation: label
   };
 }
 function resetYEARS() {
@@ -1522,20 +1838,27 @@ function updateABCD2() {
   r.innerHTML=`<div class=\"result-score\">${total}/7</div><div class=\"result-label\">${riskLabel}</div><div class=\"result-action\">${reco}</div>`;
   btn.classList.add('show');
 
-  const items = [
-    `Age >=60: ${agePts}`,
-    `BP >=140/90: ${bpPts}`,
-    `Clinical feature (${abcd2State.clinical}): ${clinicalPts}`,
-    `Duration (${abcd2State.duration}): ${durationPts}`,
-    `Diabetes: ${dmPts}`
+  // Previously printed raw enum tokens — "Clinical feature (other): 0" — which
+  // is not something you can put in a chart.
+  const ABCD2_CLIN = { other:'neither unilateral weakness nor speech disturbance', speech:'speech disturbance without weakness', weakness:'unilateral weakness' };
+  const ABCD2_DUR  = { lt10:'symptoms <10 minutes', '10to59':'symptoms 10–59 minutes', ge60:'symptoms ≥60 minutes' };
+  const criteria = [
+    { label:'Age ≥60', pts:agePts, state:agePts?'pos':'neg', found:agePts?'yes':'age <60', clause:agePts?'age ≥60':'age <60' },
+    { label:'BP ≥140/90 at presentation', pts:bpPts, state:bpPts?'pos':'neg', found:bpPts?'yes':'BP <140/90', clause:bpPts?'BP ≥140/90':'BP <140/90' },
+    { label:'Clinical features', pts:clinicalPts, state:clinicalPts?'pos':'info',
+      found:ABCD2_CLIN[abcd2State.clinical] || String(abcd2State.clinical), clause:ABCD2_CLIN[abcd2State.clinical] },
+    { label:'Duration', pts:durationPts, state:durationPts?'pos':'info',
+      found:ABCD2_DUR[abcd2State.duration] || String(abcd2State.duration), clause:ABCD2_DUR[abcd2State.duration] },
+    { label:'Diabetes', pts:dmPts, state:dmPts?'pos':'neg', found:dmPts?'present':'absent' }
   ];
 
   window.abcd2Detail = {
     incomplete: false,
-    total,
-    riskLabel,
-    items,
-    reco
+    name: 'ABCD2 score', score: total, max: 7,
+    band: riskLabel.toLowerCase(),
+    criteria,
+    reco,
+    total, riskLabel
   };
 }
 
@@ -1718,7 +2041,25 @@ function updateNIHSS() {
   r.innerHTML = `<div class="result-score">${total}/42</div><div class="result-label">${severity}</div><div class="result-action">${reco}</div>`;
   if (btn) btn.classList.add('show');
 
-  window.nihssDetail = { incomplete: false, total, severity, items, reco };
+  // A 0 is normal EXCEPT the motor "UN" options (amputation/joint fusion),
+  // which score 0 without being a normal finding — flag those as not assessable.
+  const criteria = NIHSS_ITEMS.map((it) => {
+    const opt = it.options[nihssState[it.key]];
+    const un = /^UN/.test(opt.d);
+    return {
+      label: it.label, pts: opt.v,
+      state: un ? 'na' : (opt.v > 0 ? 'pos' : 'info'),
+      found: un ? 'untestable — ' + opt.d.replace(/^UN\s*—?\s*/, '') : opt.d
+    };
+  });
+  window.nihssDetail = {
+    incomplete: false,
+    name: 'NIHSS', score: total, max: 42,
+    band: severity.toLowerCase(),
+    criteria, criteriaLabel: 'Items:',
+    reco,
+    total, severity, items
+  };
 }
 
 function resetNIHSS() {
@@ -1817,21 +2158,26 @@ function updateCHA2() {
   r.innerHTML=`<div class=\"result-score\">${total}</div><div class=\"result-label\">${interpretation}</div><div class=\"result-action\">${reco}</div>`;
   btn.classList.add('show');
 
-  window.cha2Detail = {
+  const CHA2_AGE = { lt65:'age <65', '65to74':'age 65–74', ge75:'age ≥75' };
+  const criteria = [
+    { label:'Sex', pts:sexPts, state:sexPts?'pos':'info', found:cha2State.sex === 'female' ? 'female' : 'male', clause:cha2State.sex === 'female' ? 'female' : 'male' },
+    { label:'Age', pts:agePts, state:agePts?'pos':'info', found:CHA2_AGE[cha2State.age] || String(cha2State.age), clause:CHA2_AGE[cha2State.age] },
+    { label:'Congestive heart failure / LV dysfunction', pts:chfPts, state:chfPts?'pos':'neg', found:chfPts?'present':'absent' },
+    { label:'Hypertension', pts:htnPts, state:htnPts?'pos':'neg', found:htnPts?'present':'absent' },
+    { label:'Diabetes mellitus', pts:dmPts, state:dmPts?'pos':'neg', found:dmPts?'present':'absent' },
+    { label:'Prior stroke / TIA / thromboembolism', pts:strokePts, state:strokePts?'pos':'neg', found:strokePts?'present':'absent' },
+    { label:'Vascular disease (MI / PAD / aortic plaque)', pts:vascularPts, state:vascularPts?'pos':'neg', found:vascularPts?'present':'absent' }
+  ];
+  // Named for the copyDoc type key so the shared formatter can find it; the
+  // old cha2Detail name is kept for anything still reading it.
+  window.cha2ds2vascDetail = {
     incomplete: false,
-    total,
-    interpretation,
-    items: [
-      `Sex (${cha2State.sex}): ${sexPts}`,
-      `Age (${cha2State.age}): ${agePts}`,
-      `CHF/LV dysfunction: ${chfPts}`,
-      `Hypertension: ${htnPts}`,
-      `Diabetes: ${dmPts}`,
-      `Prior stroke/TIA/thromboembolism: ${strokePts}`,
-      `Vascular disease: ${vascularPts}`
-    ],
+    name: 'CHA₂DS₂-VASc score', score: total, max: 9,
+    band: interpretation.toLowerCase(),
+    criteria,
     reco
   };
+  window.cha2Detail = window.cha2ds2vascDetail;
 }
 
 function resetCHA2() {
@@ -1853,6 +2199,20 @@ function resetCHA2() {
 }
 
 // ── WELLS DVT ─────────────────────────────────────────────────
+const WELLSDVT_LABELS = [
+  { label:'Active cancer (treatment ongoing, within 6 months, or palliative)',              neg:'no active cancer' },
+  { label:'Paralysis, paresis, or recent plaster immobilization of lower extremity',        neg:'no paralysis, paresis or recent immobilization' },
+  { label:'Bedridden >3 days OR major surgery within 12 weeks requiring GA/regional anesthesia', neg:'not bedridden >3 days and no major surgery within 12 weeks' },
+  { label:'Localized tenderness along deep venous system',                                  neg:'no localized tenderness along the deep venous system' },
+  { label:'Entire leg swollen',                                                             neg:'entire leg not swollen' },
+  { label:'Calf swelling >3cm vs asymptomatic leg (10cm below tibial tuberosity)',          neg:'calf swelling ≤3cm vs the asymptomatic leg' },
+  { label:'Pitting edema confined to symptomatic leg',                                      neg:'no pitting edema confined to the symptomatic leg' },
+  { label:'Collateral superficial veins (non-varicose)',                                    neg:'no non-varicose collateral superficial veins' },
+  // -2 item: NOT ticking it means no equally likely alternative, which raises
+  // suspicion for DVT. "Not met - 0" would invert the clinical sense.
+  { label:'Alternative diagnosis at least as likely as DVT',                                neg:'no alternative diagnosis as likely as DVT (−2 not applied)',
+    negFound:'no alternative diagnosis as likely — −2 credit not applied' }
+];
 const wdvtPoints = [1,1,1,1,1,1,1,1,-2];
 const wdvtChecked = Array(9).fill(false);
 let wdvtTouched = false;
@@ -1875,6 +2235,13 @@ function updateWellsDVT() {
   else{cls='high';label='High Probability (Wells ≥7)';action='DVT prevalence ~53%. Compression ultrasound regardless of D-dimer. If negative, consider repeat in 1 week or MRI.';}
   r.className='result '+cls;
   r.innerHTML=`<div class="result-score">${score}</div><div class="result-label">${label}</div><div class="result-action">${action}</div>`;
+  window.wellsdvtDetail = {
+    incomplete: !wdvtTouched,
+    name: 'Wells DVT score', score, max: 8,
+    band: label.replace(/ \(Wells[^)]*\)/, '').replace(/ ?Probability/i, '').toLowerCase() + ' pre-test probability',
+    criteria: boxCriteria(WELLSDVT_LABELS, wdvtChecked, wdvtPoints),
+    reco: action
+  };
 }
 function resetWellsDVT() {
   wdvtTouched=false; wdvtChecked.fill(false);
@@ -1884,6 +2251,24 @@ function resetWellsDVT() {
 }
 
 // ── CANADIAN CT HEAD ──────────────────────────────────────────
+const CTHEAD_ELIG = [
+  { label:'GCS score of 13–15',                            neg:'GCS outside 13–15 or not confirmed' },
+  { label:'Witnessed loss of consciousness, amnesia, or confusion', neg:'no witnessed LOC, amnesia or confusion' },
+  { label:'Age ≥ 16 years',                                neg:'age <16' },
+  { label:'Injury within last 24 hours',                   neg:'injury not within 24 hours' },
+  { label:'No coagulopathy / not on anticoagulants',       neg:'coagulopathy or anticoagulation present, or not confirmed' }
+];
+const CTHEAD_HIGH = [
+  { label:'GCS < 15 at 2 hours post-injury',               neg:'GCS 15 at 2 hours' },
+  { label:'Suspected open or depressed skull fracture',    neg:'no suspected open or depressed skull fracture' },
+  { label:"Any sign of basal skull fracture (hemotympanum, raccoon eyes, CSF leak, Battle's sign)", neg:'no signs of basal skull fracture' },
+  { label:'Vomiting ≥ 2 episodes',                         neg:'fewer than 2 vomiting episodes' },
+  { label:'Age ≥ 65',                                      neg:'age <65' }
+];
+const CTHEAD_MED = [
+  { label:'Amnesia before impact ≥ 30 minutes',            neg:'retrograde amnesia <30 minutes' },
+  { label:'Dangerous mechanism (pedestrian struck by MVC, ejected, fall >3 feet or 5 stairs)', neg:'no dangerous mechanism' }
+];
 const cteChecked = Array(5).fill(false);
 const cthChecked = Array(5).fill(false);
 const ctmChecked = Array(2).fill(false);
@@ -1919,6 +2304,24 @@ function updateCTHead() {
     overall.innerHTML='<div class="result-label">✓ CT Not Required by Canadian CT Head Rule</div><div class="result-action">No high- or medium-risk factors in eligible patient. CT not indicated per validated rule. Apply clinical judgment.</div>';
     btn.classList.add('show');
   }
+  // The eligibility criteria were never documented before, so a note could not
+  // show WHY the rule did or did not apply.
+  const tag = (list, group) => (c) => Object.assign(c, { group });
+  const criteria = []
+    .concat(boxCriteria(CTHEAD_ELIG, cteChecked, null, { present:'met', absent:'not met' }).map(tag(null, 'Rule eligibility (all five required)')))
+    .concat(boxCriteria(CTHEAD_HIGH, cthChecked, null).map(tag(null, 'High-risk factors (CT if any present)')))
+    .concat(boxCriteria(CTHEAD_MED,  ctmChecked, null).map(tag(null, 'Medium-risk factors (CT if any present)')));
+  window.ctheadDetail = {
+    incomplete: cteChecked.every((c) => !c) && !anyHigh && !anyMed,
+    name: 'Canadian CT Head Rule',
+    band: !eligible ? 'rule not applicable — eligibility criteria not all met'
+        : (anyHigh || anyMed ? 'CT head indicated' : 'CT head not required'),
+    criteria,
+    reco: !eligible
+      ? 'The rule was not applied because its eligibility criteria were not all met. Use clinical judgment; consider CT on overall risk, anticoagulation and exam.'
+      : (anyHigh || anyMed ? 'CT head indicated per the Canadian CT Head Rule.'
+         : 'CT head not required per the Canadian CT Head Rule. Observe as appropriate and give concussion/return precautions.')
+  };
 }
 function resetCTHead(){
   cteChecked.fill(false);cthChecked.fill(false);ctmChecked.fill(false);
@@ -1989,6 +2392,20 @@ function calcLRINEC() {
     missing: missingNames,
     total: score,
     interpretation: (score >= 8 ? 'High risk (LRINEC ≥ 8)' : (score >= 6 ? 'Intermediate risk (LRINEC 6–7)' : 'Lower risk (LRINEC ≤ 5)')) + (incomplete ? ' — based on available data' : ''),
+    name: 'LRINEC score', score, max: 13,
+    band: (score >= 8 ? 'high risk' : (score >= 6 ? 'intermediate risk' : 'lower risk')) + (incomplete ? ', based on available data' : ''),
+    criteriaLabel: 'Components:',
+    notes: incomplete && missingNames.length ? [`Not available: ${missingNames.join(', ')}.`] : [],
+    criteria: [
+      ['CRP', crp, 'mg/L', crpPts, '≥150 = 4'],
+      ['WBC', wbc, '×10³/µL', wbcPts, '15–25 = 1; >25 = 2'],
+      ['Hemoglobin', hgb, 'g/dL', hgbPts, '11–13.5 = 1; <11 = 2'],
+      ['Sodium', na, 'mmol/L', naPts, '<135 = 2'],
+      ['Creatinine', cr, 'mg/dL', crPts, '>1.6 = 2'],
+      ['Glucose', glu, 'mg/dL', gluPts, '>180 = 1']
+    ].map(([nm, val, unit, pts, rule]) => Number.isNaN(val)
+      ? { label: nm, pts: null, state: 'na', found: 'not entered' }
+      : { label: nm, pts, state: pts > 0 ? 'pos' : 'info', found: `${val} ${unit} (${rule})`, clause: `${nm.toLowerCase()} ${val} ${unit}` }),
     items: [
       {name:'CRP', value: (Number.isNaN(crp)?'—':crp)+' mg/L', points: crpPts, rule:'≥150 = 4'},
       {name:'WBC', value: (Number.isNaN(wbc)?'—':wbc)+' ×10³/µL', points: wbcPts, rule:'15–25 = 1; >25 = 2'},
@@ -2167,6 +2584,21 @@ function calcFGSI() {
 
     window.fgsiDetail = {
       incomplete: true,
+      name: 'FGSI (Fournier\u2019s Gangrene Severity Index)', score: partialTotal, max: 36,
+      band: lowerFirst(interpretation),
+      criteriaLabel: 'Parameters:',
+      notes: [`Not available: ${missingNames.join(', ')}. The final score requires all 9 parameters and can only rise.`],
+    criteria: [
+      ['Temperature', t, '°C', tempScore], ['Heart rate', hr, 'bpm', hrScore],
+      ['Respiratory rate', rr, '/min', rrScore], ['Sodium', na, 'mmol/L', naScore],
+      ['Potassium', k, 'mmol/L', kScore], ['Creatinine', cr, 'mg/dL', crScore],
+      ['Hematocrit', hct, '%', hctScore], ['WBC', wbc, '×10³/µL', wbcScore],
+      ['Bicarbonate', hco3, 'mmol/L', hco3Score]
+    ].map(([nm, val, unit, pts]) => Number.isNaN(val)
+      ? { label: nm, pts: null, state: 'na', found: 'not entered' }
+      : { label: nm, pts, state: pts > 0 ? 'pos' : 'info',
+          found: `${val} ${unit}${pts === 0 ? ' (within normal band)' : ''}`,
+          clause: `${nm.toLowerCase()} ${val} ${unit}` }),
       missing: missingNames,
       total: partialTotal,
       interpretation: interpretation,
@@ -2196,6 +2628,20 @@ function calcFGSI() {
   // Build detail for documentation copy
   window.fgsiDetail = {
     incomplete: false,
+    name: 'FGSI (Fournier\u2019s Gangrene Severity Index)', score: total, max: 36,
+    band: label.toLowerCase(),
+    criteriaLabel: 'Parameters:',
+    criteria: [
+      ['Temperature', t, '°C', tempScore], ['Heart rate', hr, 'bpm', hrScore],
+      ['Respiratory rate', rr, '/min', rrScore], ['Sodium', na, 'mmol/L', naScore],
+      ['Potassium', k, 'mmol/L', kScore], ['Creatinine', cr, 'mg/dL', crScore],
+      ['Hematocrit', hct, '%', hctScore], ['WBC', wbc, '×10³/µL', wbcScore],
+      ['Bicarbonate', hco3, 'mmol/L', hco3Score]
+    ].map(([nm, val, unit, pts]) => Number.isNaN(val)
+      ? { label: nm, pts: null, state: 'na', found: 'not entered' }
+      : { label: nm, pts, state: pts > 0 ? 'pos' : 'info',
+          found: `${val} ${unit}${pts === 0 ? ' (within normal band)' : ''}`,
+          clause: `${nm.toLowerCase()} ${val} ${unit}` }),
     total: total,
     items: [
       {name:'Temp (°C)', value: t, points: tempScore},
@@ -2228,12 +2674,25 @@ function toggleSIRS(i){
   if(box) box.checked = sirsChecked[i];
   updateSIRS();
 }
+const SIRS_LABELS = [
+  { label:'Temp >38°C or <36°C',           neg:'temp 36–38°C' },
+  { label:'HR >90',                        neg:'HR ≤90' },
+  { label:'RR >20 or PaCO₂ <32',           neg:'RR ≤20 with PaCO₂ ≥32' },
+  { label:'WBC >12 or <4 or bands >10%',   neg:'WBC 4–12 without bandemia' }
+];
 function updateSIRS(){
   const n = sirsChecked.filter(Boolean).length;
   const cls = (n>=2) ? 'moderate' : 'neutral';
   setResult('sirs-result', cls, String(n), (n>=2?'SIRS positive':'SIRS not met'), 'SIRS is supportive context; not a sepsis definition by itself.');
   const btn = document.getElementById('sirs-copy-btn');
   if(btn) btn.classList.toggle('show', n>0);
+  window.sirsDetail = {
+    incomplete: false,
+    name: 'SIRS', score: n, max: 4,
+    band: n >= 2 ? 'SIRS positive' : 'SIRS not met',
+    criteria: boxCriteria(SIRS_LABELS, sirsChecked, 1),
+    reco: 'SIRS supports a systemic inflammatory response in the appropriate context; manage and disposition on the suspected source and overall picture.'
+  };
 }
 function resetSIRS(){
   sirsChecked=[false,false,false,false];
@@ -2249,12 +2708,24 @@ function toggleQSOFA(i){
   if(box) box.checked = qsofaChecked[i];
   updateQSOFA();
 }
+const QSOFA_LABELS = [
+  { label:'RR ≥22',            neg:'RR <22' },
+  { label:'SBP ≤100',          neg:'SBP >100' },
+  { label:'Altered mentation', neg:'mentation normal' }
+];
 function updateQSOFA(){
   const n = qsofaChecked.filter(Boolean).length;
   const cls = (n>=2) ? 'high' : (n===1 ? 'moderate' : 'neutral');
   setResult('qsofa-result', cls, String(n), (n>=2?'High risk':'qSOFA score'), 'qSOFA is a mortality risk screen; escalate care when concerning.');
   const btn = document.getElementById('qsofa-copy-btn');
   if(btn) btn.classList.toggle('show', n>0);
+  window.qsofaDetail = {
+    incomplete: false,
+    name: 'qSOFA', score: n, max: 3,
+    band: n >= 2 ? 'high risk' : 'below the qSOFA threshold',
+    criteria: boxCriteria(QSOFA_LABELS, qsofaChecked, 1),
+    reco: 'An elevated qSOFA suggests higher mortality risk and supports escalation and close monitoring in the appropriate clinical context.'
+  };
 }
 function resetQSOFA(){
   qsofaChecked=[false,false,false];
@@ -2298,14 +2769,37 @@ updateQSOFA();
 // ── CENTOR / MCISAAC ─────────────────────────────────────────
 const centorChecked = [false,false,false,false];
 let centorAgeAdj = 0;
+let centorTouched = false;
+// Labels mirror the on-screen wording so the note matches what was clicked.
+const CENTOR_CRITERIA = [
+  { label:'Tonsillar exudates',               present:'present', absent:'absent' },
+  { label:'Tender anterior cervical adenopathy', present:'present', absent:'absent' },
+  { label:'Fever (subjective or ≥38°C)',      present:'present', absent:'absent',
+    posClause:'fever', negClause:'no fever' },
+  { label:'Absence of cough',                 present:'no cough', absent:'cough present',
+    absenceCriterion:true, posClause:'cough absent', negClause:'cough present' }
+];
+const CENTOR_AGE = {
+  '1':  { label:'Age 3–14',  clause:'age 3–14' },
+  '0':  { label:'Age 15–44', clause:'age 15–44 (no adjustment)' },
+  '-1': { label:'Age ≥45',   clause:'age ≥45' }
+};
+function centorInterpretationShort(score) {
+  if (score <= 1) return 'low likelihood of GAS';
+  if (score === 2) return 'intermediate likelihood of GAS';
+  if (score === 3) return 'moderate likelihood of GAS';
+  return 'high likelihood of GAS';
+}
 
 function toggleCentor(i){
+  centorTouched = true;
   centorChecked[i] = !centorChecked[i];
   const box = document.getElementById('centor'+i);
   if (box) box.checked = centorChecked[i];
   updateCentor();
 }
 function setCentorAge(v, el){
+  centorTouched = true;
   centorAgeAdj = v;
   // mark radio visually
   document.querySelectorAll('input[name="centor-age"]').forEach(r => r.checked = (parseInt(r.value,10)===v));
@@ -2329,13 +2823,36 @@ function updateCentor(){
 
   setResult('centor-result', cls, String(total), label, action);
 
-  const ageLabel = centorAgeAdj===1 ? 'Age 3–14 (+1)' : (centorAgeAdj===0 ? 'Age 15–44 (+0)' : 'Age ≥45 (−1)');
-  const items = [];
-  const labels = ['Tonsillar exudates (+1)','Tender anterior cervical adenopathy (+1)','Fever (+1)','Absence of cough (+1)'];
-  labels.forEach((l,i)=>{ if(centorChecked[i]) items.push(l); });
-  items.push(ageLabel);
+  // Every criterion is documented, scored or not. 'Absence of cough' needs the
+  // notMet treatment: scoring 0 there means the cough IS present, and
+  // "Absence of cough: absent" would be nonsense in a note.
+  const criteria = CENTOR_CRITERIA.map((c, i) => {
+    const on = centorChecked[i];
+    return {
+      label: c.label,
+      pts: on ? 1 : 0,
+      state: on ? 'pos' : 'neg',
+      found: on ? c.present : c.absent,
+      clause: on ? c.posClause : c.negClause,
+      notMet: !on && !!c.absenceCriterion
+    };
+  });
+  const ageOpt = CENTOR_AGE[String(centorAgeAdj)];
+  criteria.push({
+    label: ageOpt.label, pts: centorAgeAdj, state: centorAgeAdj === 0 ? 'info' : (centorAgeAdj > 0 ? 'pos' : 'neg'),
+    found: centorAgeAdj === 0 ? 'no age adjustment' : 'McIsaac age adjustment',
+    clause: ageOpt.clause
+  });
 
-  window.centorDetail = { total, items, reco: action.replace(/^Score \d+–\d+: /,'').replace(/^Score \d+: /,'') };
+  window.centorDetail = {
+    incomplete: centorTouched ? false : true,
+    name: 'Centor/McIsaac score',
+    score: total, max: 5,
+    band: centorInterpretationShort(total),
+    criteria,
+    reco: action.replace(/^Score \d+–\d+: /,'').replace(/^Score \d+: /,''),
+    total, items: criteria.map(critLine).map(x => x.replace(/^- /,''))
+  };
 }
 function resetCentor(){
   centorChecked.fill(false);
@@ -2409,7 +2926,21 @@ function updatePecarn(){
   else if (intermediate.length) { cls='moderate'; label='Intermediate risk'; action='Intermediate-risk feature(s) present → observation vs CT based on shared decision-making, exam trajectory, and clinician judgment.'; }
 
   setResult('pecarn-result', cls, (high.length? 'CT' : (intermediate.length? 'Observe/CT' : 'No CT')), label, action);
-  window.pecarnDetail = { incomplete:false, ageGroup:pecarnAgeGroup, high, intermediate, reco: action.replace(/^[^—]*—\s*/,'') };
+  // Criteria are read from pecarnDefs for the SELECTED age group — the two
+  // groups have different criteria and share one flat checkbox index space.
+  const ageText = pecarnAgeGroup === '<2' ? 'age under 2 years' : 'age 2 years and over';
+  const withGroup = (arr, g) => arr.map((c) => Object.assign(c, { group: g }));
+  const criteria = []
+    .concat(withGroup(boxCriteria(def.high, pecarnChecked.slice(0, def.high.length), null), 'High-risk findings (CT recommended if any)'))
+    .concat(withGroup(boxCriteria(def.intermediate, pecarnChecked.slice(def.high.length), null), 'Intermediate-risk findings'));
+  window.pecarnDetail = {
+    incomplete: false,
+    name: `PECARN pediatric head injury (${ageText})`,
+    band: label.toLowerCase(),
+    criteria,
+    reco: action.replace(/^[^—]*—\s*/,''),
+    ageGroup: pecarnAgeGroup, high, intermediate
+  };
 }
 function resetPecarn(){
   pecarnAgeGroup = null;
@@ -2420,6 +2951,923 @@ function resetPecarn(){
   updatePecarn();
 }
 
+
+// ── GRADED SCALE ENGINE (shared by COWS + CIWA-Ar) ─────────────
+// items: [{ key, label, options:[{v, d}] }] — same shape as NIHSS_ITEMS.
+// Every id and radio name is namespaced by `ns`, because COWS and CIWA-Ar
+// share item names (tremor, anxiety, sweats). Without the namespace the two
+// radio groups merge and scoring one scale silently clears the other.
+const gradedState = {};
+const gradedUpdaters = {};
+
+function renderGraded(ns, wrapId, items, updaterFn) {
+  const wrap = document.getElementById(wrapId);
+  if (!wrap) return;
+  gradedUpdaters[ns] = updaterFn;
+  if (!gradedState[ns]) gradedState[ns] = {};
+  items.forEach(it => { if (!(it.key in gradedState[ns])) gradedState[ns][it.key] = null; });
+  if (wrap.dataset.rendered === '1') return;
+  wrap.innerHTML = items.map((item, idx) => {
+    const opts = item.options.map((o, oi) => {
+      const name = `${ns}-${item.key}`;
+      const id = `${ns}-${item.key}-${oi}`;
+      const pts = o.v === 0 ? '0' : '+' + o.v;
+      return `<div class="radio-option" onclick="setGraded('${ns}','${item.key}',${oi})"><input type="radio" name="${name}" id="${id}"><span>${o.d}</span><span class="radio-pts">${pts}</span></div>`;
+    }).join('');
+    return `<div class="radio-group" style="margin-top:${idx===0?'0':'10px'}"><label>${item.label}</label>${opts}</div>`;
+  }).join('');
+  wrap.dataset.rendered = '1';
+}
+
+function setGraded(ns, key, optIdx) {
+  if (!gradedState[ns]) gradedState[ns] = {};
+  gradedState[ns][key] = optIdx;
+  const el = document.getElementById(`${ns}-${key}-${optIdx}`);
+  if (el) el.checked = true;
+  const fn = gradedUpdaters[ns];
+  if (typeof fn === 'function') fn();
+}
+
+function gradedSummary(ns, items) {
+  const st = gradedState[ns] || {};
+  let total = 0, answered = 0;
+  const lines = [], missing = [];
+  items.forEach(item => {
+    const oi = st[item.key];
+    if (oi === null || typeof oi === 'undefined') { missing.push(item.label); return; }
+    const opt = item.options[oi];
+    total += opt.v;
+    answered++;
+    lines.push(`${item.label}: ${opt.v} (${opt.d})`);
+  });
+  const max = items.reduce((s, it) => s + Math.max(...it.options.map(o => o.v)), 0);
+  // Unanswered items are returned as 'na' criteria, not silently dropped:
+  // "not assessed" and "scored 0" are different clinical statements.
+  const criteria = items.map((item) => {
+    const oi = st[item.key];
+    if (oi === null || typeof oi === 'undefined') {
+      return { label: item.label, pts: null, state: 'na', found: 'not assessed' };
+    }
+    const opt = item.options[oi];
+    return { label: item.label, pts: opt.v, state: opt.v > 0 ? 'pos' : 'info', found: opt.d.replace(/^\((.*)\)$/, '$1') };
+  });
+  return { total, answered, count: items.length, max, allDone: answered === items.length, lines, missing, criteria };
+}
+
+function resetGraded(ns, items, btnId) {
+  gradedState[ns] = {};
+  items.forEach(it => {
+    gradedState[ns][it.key] = null;
+    it.options.forEach((_, oi) => {
+      const el = document.getElementById(`${ns}-${it.key}-${oi}`);
+      if (el) el.checked = false;
+    });
+  });
+  const btn = document.getElementById(btnId);
+  if (btn) btn.classList.remove('show');
+}
+
+// ── COWS — Clinical Opiate Withdrawal Scale (0–48) ─────────────
+// Wesson & Ling, J Psychoactive Drugs 2003;35(2):253–259.
+const COWS_ITEMS = [
+  { key:'pulse', label:'1. Resting pulse rate (after sitting or lying 1 min)', options:[
+    {v:0,d:'≤ 80 bpm'},{v:1,d:'81–100 bpm'},{v:2,d:'101–120 bpm'},{v:4,d:'> 120 bpm'}]},
+  { key:'sweating', label:'2. Sweating (past ½ h, not from room temperature or activity)', options:[
+    {v:0,d:'No report of chills or flushing'},{v:1,d:'Subjective report of chills or flushing'},{v:2,d:'Flushed or observable moistness on face'},{v:3,d:'Beads of sweat on brow or face'},{v:4,d:'Sweat streaming off face'}]},
+  { key:'restless', label:'3. Restlessness (observation during assessment)', options:[
+    {v:0,d:'Able to sit still'},{v:1,d:'Reports difficulty sitting still, but is able to do so'},{v:3,d:'Frequent shifting or extraneous movements of legs/arms'},{v:5,d:'Unable to sit still for more than a few seconds'}]},
+  { key:'pupil', label:'4. Pupil size', options:[
+    {v:0,d:'Pinned or normal size for room light'},{v:1,d:'Possibly larger than normal for room light'},{v:2,d:'Moderately dilated'},{v:5,d:'So dilated that only the rim of the iris is visible'}]},
+  { key:'aches', label:'5. Bone or joint aches (score only the component attributable to withdrawal)', options:[
+    {v:0,d:'Not present'},{v:1,d:'Mild diffuse discomfort'},{v:2,d:'Severe diffuse aching of joints/muscles'},{v:4,d:'Rubbing joints or muscles, unable to sit still from discomfort'}]},
+  { key:'nose', label:'6. Runny nose or tearing (not from cold symptoms or allergies)', options:[
+    {v:0,d:'Not present'},{v:1,d:'Nasal stuffiness or unusually moist eyes'},{v:2,d:'Nose running or tearing'},{v:4,d:'Nose constantly running or tears streaming down cheeks'}]},
+  { key:'gi', label:'7. GI upset (over last ½ h)', options:[
+    {v:0,d:'No GI symptoms'},{v:1,d:'Stomach cramps'},{v:2,d:'Nausea or loose stool'},{v:3,d:'Vomiting or diarrhea'},{v:5,d:'Multiple episodes of diarrhea or vomiting'}]},
+  { key:'tremor', label:'8. Tremor (observation of outstretched hands)', options:[
+    {v:0,d:'No tremor'},{v:1,d:'Tremor can be felt, but not observed'},{v:2,d:'Slight tremor observable'},{v:4,d:'Gross tremor or muscle twitching'}]},
+  { key:'yawning', label:'9. Yawning (observation during assessment)', options:[
+    {v:0,d:'No yawning'},{v:1,d:'Yawning once or twice during assessment'},{v:2,d:'Yawning three or more times during assessment'},{v:4,d:'Yawning several times per minute'}]},
+  { key:'anxiety', label:'10. Anxiety or irritability', options:[
+    {v:0,d:'None'},{v:1,d:'Reports increasing irritability or anxiousness'},{v:2,d:'Obviously irritable or anxious'},{v:4,d:'So irritable or anxious that participation in the assessment is difficult'}]},
+  { key:'gooseflesh', label:'11. Gooseflesh skin', options:[
+    {v:0,d:'Skin is smooth'},{v:3,d:'Piloerection can be felt or hairs standing up on arms'},{v:5,d:'Prominent piloerection'}]}
+];
+
+function cowsBand(total) {
+  if (total > 36)   return ['high',     'Severe withdrawal',            'COWS > 36.'];
+  if (total >= 25)  return ['high',     'Moderately severe withdrawal', 'COWS 25–36.'];
+  if (total >= 13)  return ['moderate', 'Moderate withdrawal',          'COWS 13–24.'];
+  if (total >= 5)   return ['low',      'Mild withdrawal',              'COWS 5–12.'];
+  return             ['neutral',  'Minimal / no withdrawal',      'COWS < 5.'];
+}
+
+function updateCOWS() {
+  const s = gradedSummary('cows', COWS_ITEMS);
+  const btn = document.getElementById('cows-copy-btn');
+  if (s.answered === 0) {
+    setResult('cows-result','neutral','—','Score all 11 items','COWS guides timing of buprenorphine induction and symptom management.');
+    if (btn) btn.classList.remove('show');
+    window.cowsDetail = { incomplete:true };
+    return;
+  }
+  let [cls, label, action] = cowsBand(s.total);
+  const induction = s.total >= 8
+    ? 'COWS ≥ 8: objective withdrawal present — standard observed buprenorphine induction is appropriate per local protocol (8–9 favours start-low-go-slow).'
+    : 'COWS < 8: below the local threshold of COWS ≥ 8 for standard observed induction — inducing now carries precipitated-withdrawal risk.';
+  action = `${action} ${induction}`;
+  if (!s.allDone) {
+    label += ' (provisional)';
+    cls = 'neutral';
+    action = `Based on ${s.answered} of ${s.count} items scored; the total can only rise. ${action}`;
+  }
+  setResult('cows-result', cls, `${s.total}/48`, label, action);
+  if (btn) btn.classList.add('show');
+  window.cowsDetail = {
+    incomplete: false,
+    name: 'COWS (Clinical Opiate Withdrawal Scale)', score: s.total, max: 48,
+    band: label,
+    criteria: s.criteria,
+    criteriaLabel: s.allDone ? 'Items scored:' : `Items (${s.answered} of ${s.count} scored):`,
+    reco: induction
+  };
+}
+
+function resetCOWS() {
+  resetGraded('cows', COWS_ITEMS, 'cows-copy-btn');
+  updateCOWS();
+}
+
+// ── CIWA-Ar — Alcohol withdrawal (0–67) ────────────────────────
+// Sullivan et al., Br J Addict 1989;84(11):1353–1357.
+// Levels 2, 3, 5 and 6 are deliberately unanchored on the published form for
+// the first five items; they are offered here as intermediate steps.
+function ciwaAnchored(a) {
+  // a = {0:'...',1:'...',4:'...',7:'...'} ; gaps become '(intermediate)'
+  return [0,1,2,3,4,5,6,7].map(v => ({ v, d: a[v] || '(intermediate)' }));
+}
+const CIWA_ITEMS = [
+  { key:'nausea', label:'1. Nausea and vomiting', options: ciwaAnchored({
+    0:'No nausea, no vomiting', 1:'Mild nausea, no vomiting',
+    4:'Intermittent nausea with dry heaves', 7:'Constant nausea, frequent dry heaves and vomiting'})},
+  { key:'tremor', label:'2. Tremor (arms extended, fingers apart)', options: ciwaAnchored({
+    0:'No tremor', 1:'Not visible, but can be felt fingertip to fingertip',
+    4:'Moderate, with arms extended', 7:'Severe, even with arms not extended'})},
+  { key:'sweats', label:'3. Paroxysmal sweats', options: ciwaAnchored({
+    0:'No sweat visible', 1:'Barely perceptible sweating, palms moist',
+    4:'Beads of sweat obvious on forehead', 7:'Drenching sweats'})},
+  { key:'anxiety', label:'4. Anxiety', options: ciwaAnchored({
+    0:'No anxiety, at ease', 1:'Mildly anxious',
+    4:'Moderately anxious, or guarded, so anxiety is inferred', 7:'Equivalent to acute panic state'})},
+  { key:'agitation', label:'5. Agitation', options: ciwaAnchored({
+    0:'Normal activity', 1:'Somewhat more than normal activity',
+    4:'Moderately fidgety and restless', 7:'Paces or constantly thrashes about'})},
+  { key:'tactile', label:'6. Tactile disturbances', options: [
+    {v:0,d:'None'},{v:1,d:'Very mild itching, pins and needles, burning or numbness'},
+    {v:2,d:'Mild itching, pins and needles, burning or numbness'},{v:3,d:'Moderate itching, pins and needles, burning or numbness'},
+    {v:4,d:'Moderately severe hallucinations'},{v:5,d:'Severe hallucinations'},
+    {v:6,d:'Extremely severe hallucinations'},{v:7,d:'Continuous hallucinations'}]},
+  { key:'auditory', label:'7. Auditory disturbances', options: [
+    {v:0,d:'Not present'},{v:1,d:'Very mild harshness or ability to frighten'},
+    {v:2,d:'Mild harshness or ability to frighten'},{v:3,d:'Moderate harshness or ability to frighten'},
+    {v:4,d:'Moderately severe hallucinations'},{v:5,d:'Severe hallucinations'},
+    {v:6,d:'Extremely severe hallucinations'},{v:7,d:'Continuous hallucinations'}]},
+  { key:'visual', label:'8. Visual disturbances', options: [
+    {v:0,d:'Not present'},{v:1,d:'Very mild sensitivity'},
+    {v:2,d:'Mild sensitivity'},{v:3,d:'Moderate sensitivity'},
+    {v:4,d:'Moderately severe hallucinations'},{v:5,d:'Severe hallucinations'},
+    {v:6,d:'Extremely severe hallucinations'},{v:7,d:'Continuous hallucinations'}]},
+  { key:'headache', label:'9. Headache, fullness in head (do not rate dizziness or light-headedness)', options: [
+    {v:0,d:'Not present'},{v:1,d:'Very mild'},{v:2,d:'Mild'},{v:3,d:'Moderate'},
+    {v:4,d:'Moderately severe'},{v:5,d:'Severe'},{v:6,d:'Very severe'},{v:7,d:'Extremely severe'}]},
+  { key:'orientation', label:'10. Orientation and clouding of sensorium (0–4)', options: [
+    {v:0,d:'Oriented and can do serial additions'},
+    {v:1,d:'Cannot do serial additions or is uncertain about the date'},
+    {v:2,d:'Disoriented for date by no more than 2 calendar days'},
+    {v:3,d:'Disoriented for date by more than 2 calendar days'},
+    {v:4,d:'Disoriented for place and/or person'}]}
+];
+
+function updateCIWA() {
+  const s = gradedSummary('ciwa', CIWA_ITEMS);
+  const btn = document.getElementById('ciwa-copy-btn');
+  if (s.answered === 0) {
+    setResult('ciwa-result','neutral','—','Score all 10 items','CIWA-Ar drives symptom-triggered benzodiazepine or phenobarbital dosing.');
+    if (btn) btn.classList.remove('show');
+    window.ciwaDetail = { incomplete:true };
+    return;
+  }
+  let cls, label, action;
+  if (s.total > 15)      { cls='high';     label='Severe withdrawal';   action='CIWA-Ar > 15. Treat per symptom-triggered protocol; consider escalated dosing, monitored setting and seizure/DT precautions.'; }
+  else if (s.total >= 8) { cls='moderate'; label='Moderate withdrawal'; action='CIWA-Ar 8–15. Symptom-triggered benzodiazepine or phenobarbital dosing per protocol, with reassessment.'; }
+  else                   { cls='low';      label='Minimal withdrawal';  action='CIWA-Ar < 8. Usually no pharmacotherapy for withdrawal; reassess on the protocol interval.'; }
+  action += ' Published cutoffs vary (≤10/11–15/≥16 and 0–9/10–20/≥20 also appear) — local protocol governs.';
+  if (!s.allDone) {
+    label += ' (provisional)';
+    cls = 'neutral';
+    action = `Based on ${s.answered} of ${s.count} items scored; the total can only rise. ${action}`;
+  }
+  setResult('ciwa-result', cls, `${s.total}/67`, label, action);
+  if (btn) btn.classList.add('show');
+  window.ciwaDetail = {
+    incomplete: false,
+    name: 'CIWA-Ar (alcohol withdrawal)', score: s.total, max: 67,
+    band: label,
+    criteria: s.criteria,
+    criteriaLabel: s.allDone ? 'Items scored:' : `Items (${s.answered} of ${s.count} scored):`,
+    reco: action
+  };
+}
+
+function resetCIWA() {
+  resetGraded('ciwa', CIWA_ITEMS, 'ciwa-copy-btn');
+  updateCIWA();
+}
+
+renderGraded('cows', 'cows-criteria-wrap', COWS_ITEMS, updateCOWS);
+renderGraded('ciwa', 'ciwa-criteria-wrap', CIWA_ITEMS, updateCIWA);
+updateCOWS();
+updateCIWA();
+
+// Result box for pass/fail decision rules, which have no numeric score.
+function setRuleResult(elId, cls, label, action) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  el.className = 'result ' + cls;
+  el.innerHTML = `<div class="result-label">${label}</div><div class="result-action">${action}</div>`;
+}
+
+// ── CSRS — Canadian Syncope Risk Score (−3 to +11) ─────────────
+// Derivation CMAJ 2016 (PMID 27378464); validation 2020 (PMID 32202605).
+const CSRS_POINTS = { vasovagal:-1, heartdz:1, sbp:2, trop:2, axis:1, qrs:1, qtc:2 };
+// Negative phrasings: these are mostly threshold/finding criteria, and the
+// vasovagal one inverts (absent = higher risk), so it is spelled out.
+const CSRS_NEG = {
+  vasovagal: 'no vasovagal predisposition (−1 credit not applied)',
+  heartdz:   'no history of heart disease',
+  sbp:       'systolic BP stayed 90–180 mmHg',
+  trop:      'troponin not above the 99th percentile',
+  axis:      'QRS axis normal',
+  qrs:       'QRS duration ≤130 ms',
+  qtc:       'corrected QT ≤480 ms'
+};
+const CSRS_NEGFOUND = {
+  vasovagal: 'absent — −1 credit not applied',
+  sbp:       'BP stayed within 90–180 mmHg',
+  trop:      'not elevated',
+  axis:      'normal axis',
+  qrs:       '≤130 ms',
+  qtc:       '≤480 ms'
+};
+const CSRS_LABELS = {
+  vasovagal:'Predisposition to vasovagal symptoms',
+  heartdz:'History of heart disease',
+  sbp:'Any systolic BP < 90 or > 180 mmHg',
+  trop:'Troponin above 99th percentile',
+  axis:'Abnormal QRS axis (< −30° or > 100°)',
+  qrs:'QRS duration > 130 ms',
+  qtc:'Corrected QT interval > 480 ms'
+};
+const csrsState = { vasovagal:false, heartdz:false, sbp:false, trop:false, axis:false, qrs:false, qtc:false, dx:'' };
+
+function toggleCSRS(key) {
+  if (!Object.prototype.hasOwnProperty.call(CSRS_POINTS, key)) return;
+  csrsState[key] = !csrsState[key];
+  const el = document.getElementById('csrs-' + key);
+  if (el) el.checked = csrsState[key];
+  updateCSRS();
+}
+
+function setCSRSDx(value) {
+  csrsState.dx = value;
+  document.querySelectorAll('input[name="csrs-dx"]').forEach((r) => { r.checked = (r.value === value); });
+  updateCSRS();
+}
+
+// Percentages appear only for the three bands with a verified rate in the
+// 2020 validation cohort; medium and high carry guidance without a figure.
+function csrsBand(score) {
+  if (score >= 6)  return ['high','Very high risk','~51.3% 30-day serious adverse event. Admission on an urgent monitored pathway.'];
+  if (score >= 4)  return ['high','High risk','Monitored admission and urgent cardiac evaluation.'];
+  if (score >= 1)  return ['moderate','Medium risk','Cautious disposition with close follow-up. Consider ~6 h of ED cardiac monitoring, and 15-day outpatient rhythm monitoring if discharged.'];
+  if (score >= -1) return ['low','Low risk','~0.7% 30-day serious adverse event. Discharge with outpatient follow-up.'];
+  return             ['low','Very low risk','~0.3% 30-day serious adverse event. Discharge generally appropriate.'];
+}
+
+function updateCSRS() {
+  const btn = document.getElementById('csrs-copy-btn');
+  if (!csrsState.dx) {
+    setResult('csrs-result','neutral','—','Select an ED diagnosis impression','CSRS cannot be scored until a diagnosis impression is chosen.');
+    if (btn) btn.classList.remove('show');
+    window.csrsDetail = { incomplete:true };
+    return;
+  }
+  const dxPts = csrsState.dx === 'vasovagal' ? -2 : (csrsState.dx === 'cardiac' ? 2 : 0);
+  let score = dxPts;
+  // Every component is documented. The vasovagal item is a −1 CREDIT, so not
+  // ticking it means no vasovagal predisposition — which is the HIGHER-risk
+  // direction. "Not met — 0" would read backwards for that one.
+  const criteria = Object.keys(CSRS_POINTS).map((k) => {
+    const on = !!csrsState[k];
+    if (on) score += CSRS_POINTS[k];
+    const n = CSRS_NEG[k] || ('no ' + lowerFirst(CSRS_LABELS[k]));
+    return {
+      label: CSRS_LABELS[k],
+      pts: on ? CSRS_POINTS[k] : 0,
+      state: on ? 'pos' : 'neg',
+      found: on ? 'present' : (CSRS_NEGFOUND[k] || 'absent'),
+      clause: on ? lowerFirst(CSRS_LABELS[k]) : n
+    };
+  });
+  const dxLabel = csrsState.dx === 'vasovagal' ? 'Vasovagal syncope' : (csrsState.dx === 'cardiac' ? 'Cardiac syncope' : 'Other / unclear');
+  criteria.push({
+    label: 'ED diagnosis impression',
+    pts: dxPts,
+    state: dxPts > 0 ? 'pos' : (dxPts < 0 ? 'neg' : 'info'),
+    found: dxLabel,
+    clause: `ED diagnosis impression ${dxLabel.toLowerCase()}`
+  });
+  const [cls, label, action] = csrsBand(score);
+  setResult('csrs-result', cls, score, label, action);
+  if (btn) btn.classList.add('show');
+  window.csrsDetail = {
+    incomplete: false,
+    name: 'Canadian Syncope Risk Score', score, max: 11,
+    band: label.toLowerCase(),
+    criteria,
+    reco: action
+  };
+}
+
+function resetCSRS() {
+  Object.keys(CSRS_POINTS).forEach((k) => {
+    csrsState[k] = false;
+    const el = document.getElementById('csrs-' + k);
+    if (el) el.checked = false;
+  });
+  csrsState.dx = '';
+  document.querySelectorAll('input[name="csrs-dx"]').forEach((r) => { r.checked = false; });
+  updateCSRS();
+}
+
+// ── CANADIAN C-SPINE RULE (3 steps, in order) ──────────────────
+// Stiell et al., JAMA 2001.
+const CCS_EX_NEG = ['alert with stable vitals','age ≥16','no known vertebral disease or prior cervical surgery','blunt trauma within 48 h'];
+const CCS_HR_NEG = ['age <65','no dangerous mechanism','no paresthesias in extremities'];
+const CCS_LR_NEG = ['not a simple rear-end MVC','not ambulatory since injury','not sitting upright in the ED','neck pain immediate, not delayed','midline cervical tenderness present or untested'];
+const CCS_EX = ['GCS < 15 / not alert, or hemodynamically unstable','Age < 16 years','Known vertebral disease or prior cervical spine surgery','Non-trauma presentation, or injury > 48 h ago'];
+const CCS_HR = ['Age ≥ 65 years','Dangerous mechanism','Paresthesias in extremities'];
+const CCS_LR = ['Simple rear-end MVC','Ambulatory at any time since injury','Sitting upright in the ED','Delayed onset of neck pain','Absence of midline cervical spine tenderness'];
+const ccsState = { ex: Array(4).fill(false), hr: Array(3).fill(false), lr: Array(5).fill(false), rot: '' };
+const CCS_PREFIX = { ex:'ccsx', hr:'ccsh', lr:'ccsl' };
+let ccsTouched = false;
+
+function toggleCCS(group, i) {
+  if (!ccsState[group]) return;
+  ccsTouched = true;
+  ccsState[group][i] = !ccsState[group][i];
+  const el = document.getElementById(CCS_PREFIX[group] + i);
+  if (el) el.checked = ccsState[group][i];
+  updateCCS();
+}
+
+function setCCSRotation(value) {
+  ccsTouched = true;
+  ccsState.rot = value === 'na' ? '' : value;
+  document.querySelectorAll('input[name="ccs-rot"]').forEach((r) => { r.checked = (r.value === value); });
+  updateCCS();
+}
+
+function updateCCS() {
+  const btn = document.getElementById('ccspine-copy-btn');
+  const names = (list, flags) => list.filter((_, i) => flags[i]);
+  const ex = names(CCS_EX, ccsState.ex);
+  const hr = names(CCS_HR, ccsState.hr);
+  const lr = names(CCS_LR, ccsState.lr);
+
+  if (!ccsTouched) {
+    setRuleResult('ccspine-result','neutral','Work through steps 0 → 3','The rule is applied in order — any high-risk factor means imaging regardless of the later steps.');
+    if (btn) btn.classList.remove('show');
+    window.ccspineDetail = { incomplete:true };
+    return;
+  }
+
+  let cls, label, action, items = [];
+  if (ex.length) {
+    cls = 'neutral';
+    label = 'Rule not applicable';
+    action = 'The Canadian C-Spine Rule was validated only in alert, stable adult blunt-trauma patients. Imaging is a clinical decision here. Note that NEXUS treats altered alertness and intoxication as positive criteria, so it would call for imaging rather than excluding the patient.';
+    items = ex.map((x) => `Excluded: ${x}`);
+  } else if (hr.length) {
+    cls = 'high';
+    label = 'Imaging indicated — Step 1';
+    action = 'A high-risk factor is present, so cervical spine imaging is indicated regardless of the low-risk factors or rotation.';
+    items = hr.map((x) => `High-risk factor: ${x}`);
+  } else if (!lr.length) {
+    cls = 'high';
+    label = 'Imaging indicated — Step 2';
+    action = 'No low-risk factor is present, so active rotation cannot be safely assessed. Cervical spine imaging is indicated.';
+    items = ['No high-risk factors present', 'No low-risk factor present — rotation cannot be safely assessed'];
+  } else if (ccsState.rot === 'unable') {
+    cls = 'high';
+    label = 'Imaging indicated — Step 3';
+    action = 'Unable to actively rotate the neck 45° in both directions. Cervical spine imaging is indicated.';
+    items = ['No high-risk factors present'].concat(lr.map((x) => `Low-risk factor: ${x}`), ['Unable to actively rotate 45° both ways']);
+  } else if (ccsState.rot === 'able') {
+    cls = 'low';
+    label = 'No imaging required by CCR';
+    action = 'No high-risk factor, at least one low-risk factor, and able to actively rotate 45° in both directions — the cervical spine is cleared by the Canadian C-Spine Rule.';
+    items = ['No high-risk factors present'].concat(lr.map((x) => `Low-risk factor: ${x}`), ['Able to actively rotate 45° both ways']);
+  } else {
+    cls = 'moderate';
+    label = 'Assess active rotation (Step 3)';
+    action = 'No high-risk factor and at least one low-risk factor, so rotation can be tested safely. Record whether the patient can actively rotate 45° left and right.';
+    setRuleResult('ccspine-result', cls, label, action);
+    if (btn) btn.classList.remove('show');
+    window.ccspineDetail = { incomplete:true };
+    return;
+  }
+
+  setRuleResult('ccspine-result', cls, label, action);
+  if (btn) btn.classList.add('show');
+  // Document every step's criteria, not just the ones that fired, so the note
+  // shows why the rule landed where it did.
+  const withGroup = (arr, g) => arr.map((c) => Object.assign(c, { group: g }));
+  const rotFound = ccsState.rot === 'able' ? 'able to rotate 45° both ways'
+                 : (ccsState.rot === 'unable' ? 'unable to rotate 45°' : 'not assessed');
+  const criteria = []
+    .concat(withGroup(boxCriteria(CCS_EX.map((l, i) => ({ label:l, neg:CCS_EX_NEG[i] })), ccsState.ex, null,
+            { present:'applies — rule excluded', absent:'does not apply' }), 'Step 0 — applicability (any one excludes the rule)'))
+    .concat(withGroup(boxCriteria(CCS_HR.map((l, i) => ({ label:l, neg:CCS_HR_NEG[i] })), ccsState.hr, null), 'Step 1 — high-risk factors (imaging if any)'))
+    .concat(withGroup(boxCriteria(CCS_LR.map((l, i) => ({ label:l, neg:CCS_LR_NEG[i] })), ccsState.lr, null), 'Step 2 — low-risk factors (at least one needed)'))
+    .concat([{ label:'Active rotation 45° left and right', pts:null,
+               state: ccsState.rot === 'able' ? 'pos' : (ccsState.rot === 'unable' ? 'neg' : 'na'),
+               found: rotFound, clause: rotFound, group:'Step 3 — rotation' }]);
+  window.ccspineDetail = {
+    incomplete: false,
+    name: 'Canadian C-Spine Rule',
+    band: label.toLowerCase(),
+    criteria,
+    reco: action
+  };
+}
+
+function resetCCS() {
+  ['ex','hr','lr'].forEach((g) => {
+    ccsState[g] = ccsState[g].map(() => false);
+    ccsState[g].forEach((_, i) => {
+      const el = document.getElementById(CCS_PREFIX[g] + i);
+      if (el) el.checked = false;
+    });
+  });
+  ccsState.rot = '';
+  document.querySelectorAll('input[name="ccs-rot"]').forEach((r) => { r.checked = false; });
+  ccsTouched = false;
+  updateCCS();
+}
+
+// ── NEXUS C-SPINE ──────────────────────────────────────────────
+// Hoffman et al., NEJM 2000.
+const NEXUS_LABELS = ['Posterior midline cervical tenderness','Focal neurologic deficit','Altered level of alertness','Evidence of intoxication','Painful distracting injury'];
+const nexusChecked = Array(5).fill(false);
+let nexusTouched = false;
+
+function toggleNexus(i) {
+  nexusTouched = true;
+  nexusChecked[i] = !nexusChecked[i];
+  const el = document.getElementById('nexus' + i);
+  if (el) el.checked = nexusChecked[i];
+  updateNexus();
+}
+
+function updateNexus() {
+  const btn = document.getElementById('nexus-copy-btn');
+  const present = NEXUS_LABELS.filter((_, i) => nexusChecked[i]);
+  if (!nexusTouched) {
+    setRuleResult('nexus-result','neutral','Check criteria above','All 5 absent → no cervical spine imaging required by NEXUS.');
+    if (btn) btn.classList.remove('show');
+    window.nexusDetail = { incomplete:true };
+    return;
+  }
+  const cls = present.length ? 'high' : 'low';
+  const label = present.length ? `NEXUS positive (${present.length}/5 present)` : 'NEXUS negative (0/5 present)';
+  const action = present.length
+    ? 'At least one NEXUS criterion is present, so the cervical spine cannot be cleared clinically. Imaging is indicated.'
+    : 'All 5 NEXUS criteria are absent, so no cervical spine imaging is required.';
+  setRuleResult('nexus-result', cls, label, action);
+  if (btn) btn.classList.add('show');
+  window.nexusDetail = {
+    incomplete: !nexusTouched,
+    name: 'NEXUS C-Spine criteria', score: present.length, max: 5,
+    band: present.length ? 'NEXUS positive' : 'NEXUS negative',
+    criteria: boxCriteria(NEXUS_LABELS, nexusChecked, null),
+    reco: action
+  };
+}
+
+function resetNexus() {
+  for (let i = 0; i < nexusChecked.length; i++) {
+    nexusChecked[i] = false;
+    const el = document.getElementById('nexus' + i);
+    if (el) el.checked = false;
+  }
+  nexusTouched = false;
+  updateNexus();
+}
+
+// ── sPESI — Simplified PE Severity Index ───────────────────────
+// Jiménez et al., Arch Intern Med 2010.
+const SPESI_LABELS = [
+  { label:'Age > 80 years',                                                    neg:'age ≤80' },
+  { label:'History of cancer',                                                 neg:'no cancer history' },
+  { label:'Chronic cardiopulmonary disease (heart failure or chronic lung disease)', neg:'no chronic cardiopulmonary disease' },
+  { label:'Heart rate ≥ 110 bpm',                                              neg:'HR <110' },
+  { label:'Systolic BP < 100 mmHg',                                            neg:'SBP ≥100' },
+  { label:'SpO₂ < 90% (with or without supplemental O₂)',                      neg:'SpO₂ ≥90%' }
+];
+const spesiChecked = Array(6).fill(false);
+let spesiTouched = false;
+
+function toggleSpesi(i) {
+  spesiTouched = true;
+  spesiChecked[i] = !spesiChecked[i];
+  const el = document.getElementById('spesi' + i);
+  if (el) el.checked = spesiChecked[i];
+  updateSpesi();
+}
+
+function updateSpesi() {
+  const btn = document.getElementById('spesi-copy-btn');
+  const present = SPESI_LABELS.filter((_, i) => spesiChecked[i]);
+  const score = present.length;
+  if (!spesiTouched) {
+    setResult('spesi-result','neutral','—','Check criteria above','sPESI 0 = low risk (30-day mortality ~1%). Any criterion = high risk (~11%).');
+    if (btn) btn.classList.remove('show');
+    window.spesiDetail = { incomplete:true };
+    return;
+  }
+  const cls = score === 0 ? 'low' : 'high';
+  const label = score === 0 ? 'Low risk' : 'High risk';
+  const action = score === 0
+    ? '30-day mortality ~1.0% (95% CI 0.0–2.1%). Outpatient management may be considered, provided there is no RV dysfunction and no troponin elevation, plus adequate social support and follow-up.'
+    : '30-day mortality ~10.9% (95% CI 8.5–13.2%). Not a candidate for outpatient management; admit and assess for RV dysfunction and troponin elevation.';
+  setResult('spesi-result', cls, score, label, action);
+  if (btn) btn.classList.add('show');
+  window.spesiDetail = {
+    incomplete: !spesiTouched,
+    name: 'sPESI', score, max: 6,
+    band: label.toLowerCase(),
+    criteria: boxCriteria(SPESI_LABELS, spesiChecked, 1),
+    reco: action
+  };
+}
+
+function resetSpesi() {
+  for (let i = 0; i < spesiChecked.length; i++) {
+    spesiChecked[i] = false;
+    const el = document.getElementById('spesi' + i);
+    if (el) el.checked = false;
+  }
+  spesiTouched = false;
+  updateSpesi();
+}
+
+// ── GLASGOW-BLATCHFORD SCORE (0–23) ────────────────────────────
+// Blatchford et al., Lancet 2000.
+// fgRangeScore returns the FIRST matching range and falls through to 0, so
+// these tables are descending and min-only with a catch-all row. Writing the
+// published bands literally (18.2–22.3, then 22.4–27.9, ...) would leave gaps
+// in which a value like 22.35 matches nothing and silently scores 0.
+const GBS_BUN = [
+  { min:70,   max:null, score:6 },
+  { min:28,   max:null, score:4 },
+  { min:22.4, max:null, score:3 },
+  { min:18.2, max:null, score:2 },
+  { min:null, max:null, score:0 }
+];
+const GBS_HGB_M = [
+  { min:13,   max:null, score:0 },
+  { min:12,   max:null, score:1 },
+  { min:10,   max:null, score:3 },
+  { min:null, max:null, score:6 }
+];
+const GBS_HGB_F = [            // no +3 band exists for women
+  { min:12,   max:null, score:0 },
+  { min:10,   max:null, score:1 },
+  { min:null, max:null, score:6 }
+];
+const GBS_SBP = [
+  { min:110,  max:null, score:0 },
+  { min:100,  max:null, score:1 },
+  { min:90,   max:null, score:2 },
+  { min:null, max:null, score:3 }
+];
+const GBS_CHECKS = {
+  melena:  ['Presentation with melena', 1],
+  syncope: ['Presentation with syncope', 2],
+  hepatic: ['Hepatic disease', 2],
+  cardiac: ['Cardiac failure', 2]
+};
+const gbsState = { sex:'', melena:false, syncope:false, hepatic:false, cardiac:false };
+
+function setGbsSex(value) {
+  gbsState.sex = value;
+  document.querySelectorAll('input[name="gbs-sex"]').forEach((r) => { r.checked = (r.value === value); });
+  calcGBS();
+}
+
+function toggleGBS(key) {
+  if (!Object.prototype.hasOwnProperty.call(GBS_CHECKS, key)) return;
+  gbsState[key] = !gbsState[key];
+  const el = document.getElementById('gbs-' + key);
+  if (el) el.checked = gbsState[key];
+  calcGBS();
+}
+
+function calcGBS() {
+  const num = (id) => parseFloat((document.getElementById(id) || {}).value);
+  const bun = num('gbs-bun'), hgb = num('gbs-hgb'), sbp = num('gbs-sbp'), pulse = num('gbs-pulse');
+  const btn = document.getElementById('gbs-copy-btn');
+  const anyCheck = Object.keys(GBS_CHECKS).some((k) => gbsState[k]);
+
+  if (![bun, hgb, sbp, pulse].some((v) => !Number.isNaN(v)) && !gbsState.sex && !anyCheck) {
+    setResult('gbs-result','neutral','—','Enter sex and labs above','GBS 0–1 identifies patients who may be suitable for outpatient management.');
+    if (btn) btn.classList.remove('show');
+    window.gbsDetail = { incomplete:true };
+    return;
+  }
+
+  const missing = [], items = [], criteria = [];
+  let total = 0;
+
+  // A value that was never entered is 'na' — distinct from one that scored 0.
+  const numCrit = (label, val, unit, pts) => {
+    if (pts === null) { missing.push(label); criteria.push({ label, pts: null, state: 'na', found: 'not entered' }); return; }
+    total += pts;
+    criteria.push({ label, pts, state: pts > 0 ? 'pos' : 'info', found: `${val} ${unit}`, clause: `${lowerFirst(label)} ${val} ${unit}` });
+    items.push(`${label} ${val} ${unit}: +${pts}`);
+  };
+
+  numCrit('BUN', bun, 'mg/dL', fgRangeScore(bun, GBS_BUN));
+
+  // Hemoglobin thresholds are sex-specific, so Hgb is unscoreable without sex.
+  if (!gbsState.sex) missing.push('sex');
+  if (Number.isNaN(hgb)) missing.push('hemoglobin');
+  if (gbsState.sex && !Number.isNaN(hgb)) {
+    const hgbPts = fgRangeScore(hgb, gbsState.sex === 'male' ? GBS_HGB_M : GBS_HGB_F);
+    total += hgbPts;
+    criteria.push({ label: 'Hemoglobin', pts: hgbPts, state: hgbPts > 0 ? 'pos' : 'info',
+      found: `${hgb} g/dL (${gbsState.sex} thresholds)`, clause: `hemoglobin ${hgb} g/dL` });
+    items.push(`Hemoglobin ${hgb} g/dL (${gbsState.sex}): +${hgbPts}`);
+  } else {
+    criteria.push({ label: 'Hemoglobin', pts: null, state: 'na',
+      found: gbsState.sex ? 'not entered' : 'not scoreable without sex' });
+  }
+
+  numCrit('Systolic BP', sbp, 'mmHg', fgRangeScore(sbp, GBS_SBP));
+  numCrit('Pulse', pulse, 'bpm', Number.isNaN(pulse) ? null : (pulse >= 100 ? 1 : 0));
+
+  Object.keys(GBS_CHECKS).forEach((k) => {
+    const [lab, pts] = GBS_CHECKS[k];
+    const on = !!gbsState[k];
+    if (on) { total += pts; items.push(`${lab}: +${pts}`); }
+    criteria.push({
+      label: lab, pts: on ? pts : 0, state: on ? 'pos' : 'neg',
+      found: on ? 'present' : 'absent',
+      clause: on ? lowerFirst(lab) : 'no ' + lowerFirst(lab).replace(/^presentation with /, '')
+    });
+  });
+
+  let cls, label, action;
+  if (total >= 6)      { cls='high';     label='High risk';     action='GBS ≥ 6. Higher likelihood of needing transfusion or endoscopic intervention — resuscitate, type and screen, and involve GI early.'; }
+  else if (total >= 2) { cls='moderate'; label='Moderate risk'; action='GBS 2–5. Inpatient assessment generally warranted; timing of endoscopy per GI.'; }
+  else                 { cls='low';      label='Low risk';      action='GBS 0–1. May be suitable for outpatient management with early outpatient endoscopy, if hemodynamically stable with adequate follow-up.'; }
+
+  const incomplete = missing.length > 0;
+  if (incomplete) {
+    label += ' (provisional)';
+    cls = 'neutral';
+    action = `Based on available data; missing: ${missing.join(', ')}. The total can only rise as values are added. ${action}`;
+  }
+
+  setResult('gbs-result', cls, total, label, action);
+  if (btn) btn.classList.add('show');
+  window.gbsDetail = {
+    incomplete: false,
+    name: 'Glasgow-Blatchford Score', score: total, max: 23,
+    band: label.toLowerCase(),
+    criteria,
+    criteriaLabel: 'Components:',
+    notes: incomplete ? [`Not available: ${missing.join(', ')}. The total can only rise as these are added.`] : [],
+    reco: action
+  };
+}
+
+function resetGBS() {
+  gbsState.sex = '';
+  Object.keys(GBS_CHECKS).forEach((k) => {
+    gbsState[k] = false;
+    const el = document.getElementById('gbs-' + k);
+    if (el) el.checked = false;
+  });
+  document.querySelectorAll('input[name="gbs-sex"]').forEach((r) => { r.checked = false; });
+  ['gbs-bun','gbs-hgb','gbs-sbp','gbs-pulse'].forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  const btn = document.getElementById('gbs-copy-btn');
+  if (btn) btn.classList.remove('show');
+  calcGBS();
+}
+
+// Paint the neutral result boxes for the new calculators. These run here
+// rather than in the "Initialize defaults" block above, which is defined
+// earlier in the file than these functions.
+updateCSRS();
+updateCCS();
+updateNexus();
+updateSpesi();
+calcGBS();
+
+// ── CREATININE CLEARANCE (Cockcroft-Gault) ─────────────────────
+// Cockcroft & Gault, Nephron 1976; ideal body weight per Devine 1974.
+// Anticoagulant labels state renal thresholds in Cockcroft-Gault CrCl
+// (absolute mL/min), which is NOT the lab's BSA-normalised eGFR.
+const crclState = { sex: '', htUnit: 'cm' };
+
+function setCrclSex(value) {
+  crclState.sex = value;
+  document.querySelectorAll('input[name="crcl-sex"]').forEach((r) => { r.checked = (r.value === value); });
+  calcCrCl();
+}
+
+function setCrclHtUnit(value) {
+  crclState.htUnit = value;
+  document.querySelectorAll('input[name="crcl-htunit"]').forEach((r) => { r.checked = (r.value === value); });
+  const ht = document.getElementById('crcl-ht');
+  if (ht) ht.placeholder = value === 'cm' ? 'e.g., 165' : 'e.g., 65';
+  calcCrCl();
+}
+
+function cockcroftGault(age, weightKg, scr, sex) {
+  const v = ((140 - age) * weightKg) / (72 * scr);
+  return sex === 'female' ? v * 0.85 : v;
+}
+
+// Lower CrCl is worse, so the colour scale runs the opposite way to a risk score.
+function crclBand(v) {
+  if (v < 15) return ['high',     'Kidney failure range'];
+  if (v < 30) return ['high',     'Severe reduction'];
+  if (v < 60) return ['moderate', 'Moderate reduction'];
+  return         ['low',      'Normal to mild reduction'];
+}
+
+// Named drug thresholds the value sits on or below. Reference only.
+function crclThresholdNotes(v) {
+  const out = [];
+  if (v < 15) out.push('Below 15: most DOACs are not recommended — involve pharmacy, and nephrology if dialysis is in play.');
+  if (v < 30) out.push('Below 30: enoxaparin treatment dosing drops to 1 mg/kg daily; dabigatran US label is 75 mg BID at CrCl 15–30, and some guidance avoids it below 30 entirely.');
+  if (v >= 15 && v <= 50) out.push('Within 15–50: rivaroxaban for AF is 15 mg daily rather than 20 mg.');
+  if (!out.length) out.push('No standard anticoagulant renal threshold is crossed at this clearance, but always confirm against the current label.');
+  out.push('Apixaban is the exception — its AF reduction to 2.5 mg BID is not a CrCl rule, but 2 of 3: age ≥ 80, weight ≤ 60 kg, serum creatinine ≥ 1.5 mg/dL.');
+  return out;
+}
+
+function calcCrCl() {
+  const num = (id) => parseFloat((document.getElementById(id) || {}).value);
+  const age = num('crcl-age'), scr = num('crcl-scr'), wt = num('crcl-wt'), htRaw = num('crcl-ht');
+  const btn = document.getElementById('crcl-copy-btn');
+  const bd = document.getElementById('crcl-breakdown');
+  const clear = (msg, action) => {
+    setResult('crcl-result','neutral','—', msg, action);
+    if (bd) bd.innerHTML = '';
+    if (btn) btn.classList.remove('show');
+    window.crclDetail = { incomplete:true };
+  };
+
+  if (![age, scr, wt, htRaw].some((v) => !Number.isNaN(v)) && !crclState.sex) {
+    clear('Enter sex, age, creatinine and weight', 'Cockcroft-Gault: (140 − age) × weight ÷ (72 × serum creatinine), × 0.85 if female.');
+    return;
+  }
+
+  const missing = [];
+  if (!crclState.sex) missing.push('sex');
+  if (Number.isNaN(age)) missing.push('age');
+  if (Number.isNaN(scr)) missing.push('serum creatinine');
+  if (Number.isNaN(wt)) missing.push('weight');
+  if (missing.length) {
+    clear(`Still needed: ${missing.join(', ')}`, 'All four of sex, age, serum creatinine and weight are required — unlike a points score, a partial result here would be meaningless.');
+    return;
+  }
+  // Guard the inputs that would produce a nonsense or infinite result.
+  if (scr <= 0 || wt <= 0 || age < 0) {
+    clear('Check the values entered', 'Serum creatinine and weight must be greater than zero, and age cannot be negative.');
+    return;
+  }
+  if (age >= 140) {
+    clear('Check the age entered', 'Cockcroft-Gault uses (140 − age), so it cannot be applied at an age of 140 or above.');
+    return;
+  }
+
+  const htCm = Number.isNaN(htRaw) ? NaN : (crclState.htUnit === 'in' ? htRaw * 2.54 : htRaw);
+  const htIn = Number.isNaN(htCm) ? NaN : htCm / 2.54;
+  const haveHt = !Number.isNaN(htCm) && htCm > 0;
+
+  const r1 = (x) => (Math.round(x * 10) / 10).toFixed(1);
+  const crclABW = cockcroftGault(age, wt, scr, crclState.sex);
+
+  let ibw = NaN, adj = NaN, bmi = NaN, crclIBW = NaN, crclAdj = NaN;
+  if (haveHt) {
+    const base = crclState.sex === 'female' ? 45.5 : 50;
+    ibw = base + 2.3 * Math.max(0, htIn - 60);
+    adj = ibw + 0.4 * (wt - ibw);
+    bmi = wt / Math.pow(htCm / 100, 2);
+    crclIBW = cockcroftGault(age, ibw, scr, crclState.sex);
+    crclAdj = cockcroftGault(age, adj, scr, crclState.sex);
+  }
+
+  // Pick the weight basis by BMI, per the common convention. In the
+  // 18.5-29.9 band there is no consensus, so both values are reported.
+  let basis, shown, scoreText, rangeLow, rangeHigh;
+  if (!haveHt) {
+    basis = 'actual body weight';
+    shown = crclABW;
+    scoreText = r1(crclABW);
+  } else if (bmi < 18.5) {
+    basis = 'actual body weight (BMI < 18.5)';
+    shown = crclABW;
+    scoreText = r1(crclABW);
+  } else if (bmi < 30) {
+    basis = 'actual and ideal body weight (BMI 18.5–29.9, no consensus)';
+    rangeLow = Math.min(crclABW, crclIBW);
+    rangeHigh = Math.max(crclABW, crclIBW);
+    shown = rangeLow;                       // band on the more conservative end
+    scoreText = `${r1(rangeLow)}–${r1(rangeHigh)}`;
+  } else {
+    basis = 'adjusted body weight (BMI ≥ 30)';
+    shown = crclAdj;
+    scoreText = r1(crclAdj);
+  }
+
+  const [cls, bandLabel] = crclBand(shown);
+  const notes = crclThresholdNotes(shown);
+  let label = `${bandLabel} — ${basis}`;
+  let action = notes[0];
+
+  // When the range straddles a dose threshold the choice of weight changes
+  // the dose, which is exactly when a pharmacist should be asked.
+  let straddle = '';
+  if (typeof rangeLow === 'number') {
+    const cut = [15, 30, 50, 60].find((c) => rangeLow < c && rangeHigh >= c);
+    if (typeof cut === 'number') {
+      straddle = `The actual- and ideal-weight results fall either side of ${cut} mL/min, so the weight basis changes the dose here — confirm with pharmacy.`;
+      action = `${straddle} ${action}`;
+    }
+  }
+  setResult('crcl-result', cls, `${scoreText} <span style="font-size:13px;font-weight:600">mL/min</span>`, label, action);
+
+  if (bd) {
+    const rows = [`Cockcroft-Gault on actual body weight (${r1(wt)} kg): <strong style="color:var(--text2)">${r1(crclABW)} mL/min</strong>`];
+    if (haveHt) {
+      rows.push(`BMI ${r1(bmi)} · ideal body weight ${r1(ibw)} kg · adjusted body weight ${r1(adj)} kg`);
+      rows.push(`On ideal body weight: <strong style="color:var(--text2)">${r1(crclIBW)} mL/min</strong> · on adjusted body weight: <strong style="color:var(--text2)">${r1(crclAdj)} mL/min</strong>`);
+    } else {
+      rows.push('Enter a height to also get ideal and adjusted body weight.');
+    }
+    bd.innerHTML = rows.map((x) => `<div>${x}</div>`).join('');
+  }
+
+  if (btn) btn.classList.add('show');
+  const items = [`Cockcroft-Gault on actual body weight (${r1(wt)} kg): ${r1(crclABW)} mL/min`];
+  if (haveHt) {
+    items.push(`BMI ${r1(bmi)}; ideal body weight ${r1(ibw)} kg; adjusted body weight ${r1(adj)} kg`);
+    items.push(`On ideal body weight: ${r1(crclIBW)} mL/min; on adjusted body weight: ${r1(crclAdj)} mL/min`);
+  }
+  items.push(`Inputs — ${crclState.sex}, age ${r1(age)} y, serum creatinine ${scr} mg/dL${haveHt ? `, height ${r1(htCm)} cm` : ''}`);
+  window.crclDetail = {
+    incomplete: false,
+    headline: `Creatinine clearance (Cockcroft-Gault): ${scoreText} mL/min, using ${basis}.`,
+    itemsLabel: 'Working:',
+    items,
+    reco: `${straddle ? straddle + ' ' : ''}${notes.join(' ')} Estimated by Cockcroft-Gault rather than the laboratory eGFR, because anticoagulant renal thresholds are defined that way.`
+  };
+}
+
+function resetCrCl() {
+  crclState.sex = '';
+  crclState.htUnit = 'cm';
+  document.querySelectorAll('input[name="crcl-sex"]').forEach((r) => { r.checked = false; });
+  document.querySelectorAll('input[name="crcl-htunit"]').forEach((r) => { r.checked = (r.value === 'cm'); });
+  ['crcl-age','crcl-scr','crcl-wt','crcl-ht'].forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  const btn = document.getElementById('crcl-copy-btn');
+  if (btn) btn.classList.remove('show');
+  calcCrCl();
+}
+
+calcCrCl();
 </script>
 
 <script id="shared-nav-search">
@@ -2433,7 +3881,7 @@ function resetPecarn(){
   <a class="mob-item" href="ed-phone-directory.html"><span class="mob-icon">📞</span>Directory</a>
 </div>
 <button id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">☀️</button>
-<script src="theme.js?v=4"></script>
+<script src="theme.js?v=5"></script>
 <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
 <script src="analytics.js"></script>
 <script>

@@ -11,6 +11,7 @@ Static HTML tools for emergency medicine documentation and quick bedside calcula
 - `rsi.html`: RSI medication and drip dosing helper
 - `algorithms.html`: KP SBC ED practice-guideline algorithms
 - `neurohub.html`: neuro protocols and ICH/tPA reference
+- `head-neck-surgery.html`: EM & Head and Neck Surgery practice guidelines — referral protocol, epistaxis, tonsil bleeds, facial fractures, PTA, ear pain, hearing loss (official PDF embedded)
 - `pedsfever.html`: pediatric fever protocol guidance
 - `ed-phone-directory.html`: OMC/FMC directory with local custom entries
 - `service-agreements.html`: searchable service-agreement summary library
