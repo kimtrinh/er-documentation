@@ -25,9 +25,14 @@ applyTheme(getTheme());
       return c==='&'?'&amp;':c==='<'?'&lt;':c==='>'?'&gt;':c==='"'?'&quot;':'&#39;';
     });
   }
-  function omHref(href) {
+  // Validate against this modal's allowlist, then apply the shared rewrite from
+  // search-index.js. Before this the modal skipped the rewrite entirely, so an
+  // agreements result opened unfiltered here but filtered from the nav bar.
+  function omHref(href, item, query) {
     var t = String(href || '').trim();
-    return /^[A-Za-z0-9._\/-]+\.html(?:\?[A-Za-z0-9._%=&:+\-]+)?(?:#[A-Za-z0-9._:\-]+)?$/.test(t) ? t : 'index.html';
+    var base = /^[A-Za-z0-9._\/-]+\.html(?:\?[A-Za-z0-9._%=&:+\-]+)?(?:#[A-Za-z0-9._:\-]+)?$/.test(t) ? t : 'index.html';
+    var rewrite = (typeof window !== 'undefined' && window.KP_ER_SEARCH) ? window.KP_ER_SEARCH.rewriteHref : null;
+    return rewrite ? rewrite(base, item, query) : base;
   }
 
   // ── Group ordering (mirrors home page) ───────────────────────────────
@@ -241,7 +246,7 @@ applyTheme(getTheme());
         groups[grp].forEach(function(item){
           var id = 'omrow-'+(ri++);
           html +=
-            '<a class="sdrop-row" id="'+id+'" role="option" aria-selected="false" href="'+omHref(item.u)+'">'+
+            '<a class="sdrop-row" id="'+id+'" role="option" aria-selected="false" href="'+omHref(item.u, item, q)+'">'+
               '<span class="sdrop-ico">'+omEsc(item.i)+'</span>'+
               '<div class="sdrop-body">'+
                 '<div class="sdrop-title">'+omEsc(item.t)+'</div>'+

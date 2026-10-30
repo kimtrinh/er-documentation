@@ -343,6 +343,15 @@
 
   .entry.hidden { display: none; }
 
+  /* Flash highlight when arriving from a search result's ?q= deep link,
+     so the row you searched for is obvious. Mirrors links.html. */
+  @keyframes entryFlash {
+    0%   { background: rgba(59,130,246,0); box-shadow: 0 0 0 0 rgba(59,130,246,0); }
+    20%  { background: rgba(59,130,246,.18); box-shadow: 0 0 0 3px rgba(59,130,246,.55); }
+    100% { background: rgba(59,130,246,0); box-shadow: 0 0 0 0 rgba(59,130,246,0); }
+  }
+  .entry.flash { animation: entryFlash 1.6s ease both; }
+
   .delete-btn {
     background: none;
     border: none;
@@ -693,7 +702,7 @@ main>*:nth-child(4){animation-delay:.15s}
 
 <div class="toast" id="toast"></div>
 
-<script src="search-index.js?v=8"></script>
+<script src="search-index.js?v=9"></script>
 <script>
 const data = {
   omc: {
@@ -1460,8 +1469,10 @@ document.addEventListener('click', e => {
 const searchInput = document.getElementById('globalSearch');
 const searchCount = document.getElementById('searchCount');
 
-searchInput.addEventListener('input', () => {
-  const q = searchInput.value.trim().toLowerCase();
+// Reports the match count so the deep-link handler below can tell a hit from
+// a stale link.
+function applyFilter(rawQuery) {
+  const q = String(rawQuery || '').trim().toLowerCase();
   let total = 0;
 
   ['omc', 'fmc'].forEach(hospital => {
@@ -1487,7 +1498,73 @@ searchInput.addEventListener('input', () => {
   });
 
   searchCount.textContent = q ? `${total} found` : '';
-});
+  return { total };
+}
+
+// Picks the row a deep link actually meant: an exact name match inside the
+// requested hospital's panel first, then a name starting with the query, then
+// whatever matched first. Document order alone lands on the wrong row — short
+// index titles like "Fax" or "CT" appear inside other rows' notes, and names
+// like "Vocera" exist under both hospitals.
+function pickDeepLinkTarget(query, hospital) {
+  const want = String(query || '').trim().toLowerCase();
+  const scopes = [];
+  if (hospital) {
+    const panel = document.getElementById(`${hospital}Entries`);
+    if (panel) scopes.push(panel);
+  }
+  scopes.push(document);
+
+  for (const scope of scopes) {
+    const visible = Array.from(scope.querySelectorAll('.entry:not(.hidden)'));
+    if (!visible.length) continue;
+    return visible.find(e => (e.dataset.name || '') === want)
+      || visible.find(e => (e.dataset.name || '').startsWith(want))
+      || visible[0];
+  }
+  return null;
+}
+
+searchInput.addEventListener('input', () => applyFilter(searchInput.value));
+
+// Arriving from a sitewide search result, which links here as
+// ?q=<row name> (built by kpRewriteHref in search-index.js). Apply it to this
+// page's filter, then scroll the match into view and flash it — searching a
+// phone number used to land you at the top of the whole directory with the
+// query still to retype.
+(function applyDeepLinkQuery() {
+  let q = '';
+  let hospital = '';
+  try {
+    const params = new URLSearchParams(window.location.search);
+    q = params.get('q') || '';
+    hospital = (params.get('h') || '').toLowerCase();
+  } catch (e) {
+    q = '';
+    hospital = '';
+  }
+  if (!q.trim()) return;
+  if (hospital !== 'omc' && hospital !== 'fmc') hospital = '';
+
+  searchInput.value = q;
+  const { total } = applyFilter(q);
+  const target = total ? pickDeepLinkTarget(q, hospital) : null;
+
+  // A stale or drifted link must never strand the user on an empty-looking
+  // directory; fall back to the unfiltered list, which is where this page
+  // landed before deep links existed.
+  if (!target) {
+    searchInput.value = '';
+    applyFilter('');
+    return;
+  }
+
+  target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  target.classList.remove('flash');
+  // Force reflow so the animation restarts if the same row is hit again.
+  void target.offsetWidth;
+  target.classList.add('flash');
+})();
 
 // Modal
 function openModal(hospital) {
@@ -1588,7 +1665,7 @@ function showToast(msg) {
   <a class="mob-item active" href="ed-phone-directory.html"><span class="mob-icon">📞</span>Directory</a>
 </div>
 <button id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">☀️</button>
-<script src="theme.js?v=5"></script>
+<script src="theme.js?v=6"></script>
 <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
 <script src="analytics.js"></script>
 <script>

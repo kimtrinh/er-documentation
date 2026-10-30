@@ -592,7 +592,7 @@ main{max-width:1100px;margin:0 auto;padding:22px 24px 80px}
   <a class="mob-item" href="ed-phone-directory.html"><span class="mob-icon">📞</span>Directory</a>
 </div>
 
-<script src="search-index.js?v=8"></script>
+<script src="search-index.js?v=9"></script>
 <script>
 // ══════════════════════════════════════════
 //  SEARCH INDEX
@@ -658,13 +658,14 @@ function safeHref(href) {
   return (sameOrigin.test(trimmed) || externalHttps.test(trimmed)) ? trimmed : 'index.html';
 }
 
+// Validated against this page's own allowlist (which is looser than the nav
+// bar's — it permits PDFs and Office docs), then handed to the shared rewrite
+// in search-index.js so the hero, the nav bar and the ⌘K modal all agree on
+// where a given result goes.
 function resolveResultHref(item, query) {
   const base = safeHref(item && item.u);
-  const q = String(query || '').trim();
-  if (base === 'service-agreements.html' && q) {
-    return `service-agreements.html?q=${encodeURIComponent(q)}`;
-  }
-  return base;
+  const rewrite = window.KP_ER_SEARCH && window.KP_ER_SEARCH.rewriteHref;
+  return rewrite ? rewrite(base, item, query) : base;
 }
 
 function setSearchExpanded(open) {
@@ -1512,7 +1513,7 @@ initAnnouncementFirebase();
 </script>
 <button id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">☀️</button>
 <script src="sp-embed.js?v=1"></script>
-<script src="theme.js?v=5"></script>
+<script src="theme.js?v=6"></script>
 <script src="chatbot.js?v=2" defer></script>
 <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
 <script src="analytics.js"></script>

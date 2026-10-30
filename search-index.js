@@ -451,8 +451,8 @@ const SEARCH_INDEX = [
   {type:'phone',i:'📞',t:'OMC — Anesthesia',s:'47250  ·  7a–3:30p  ·  consults  ·  omc',g:'OMC',gc:'t-phone',u:'ed-phone-directory.html'},
   {type:'phone',i:'📞',t:'OMC — Internal Medicine',s:'47333  ·  3:30p–7a  ·  consults  ·  omc',g:'OMC',gc:'t-phone',u:'ed-phone-directory.html'},
   {type:'phone',i:'📞',t:'OMC — Interventional Radiology (IR)',s:'45210 / 45254  ·  OR Main 43910  ·  consults  ·  omc',g:'OMC',gc:'t-phone',u:'ed-phone-directory.html'},
-  {type:'phone',i:'📞',t:'OMC — Orthopedics',s:'(909) 457-2048  ·  7a–10p  ·  consults  ·  omc',g:'OMC',gc:'t-phone',u:'ed-phone-directory.html'},
-  {type:'phone',i:'📞',t:'OMC — Orthopedics',s:'Attending  ·  10p–7a  ·  consults  ·  omc',g:'OMC',gc:'t-phone',u:'ed-phone-directory.html'},
+  {type:'phone',i:'📞',t:'OMC — Orthopedics (7a–10p)',q:'Orthopedics (909) 457-2048',s:'(909) 457-2048  ·  7a–10p  ·  consults  ·  omc',g:'OMC',gc:'t-phone',u:'ed-phone-directory.html'},
+  {type:'phone',i:'📞',t:'OMC — Orthopedics (10p–7a Attending)',q:'Orthopedics Attending',s:'Attending  ·  10p–7a  ·  consults  ·  omc',g:'OMC',gc:'t-phone',u:'ed-phone-directory.html'},
   {type:'phone',i:'📞',t:'OMC — Ortho Techs Pager',s:'909-209-0360  ·  Lead 47088 / Fax 45701  ·  consults  ·  omc',g:'OMC',gc:'t-phone',u:'ed-phone-directory.html'},
   {type:'phone',i:'📞',t:'OMC — PICC RN',s:'47787 / 47789  ·  8a–5p  ·  consults  ·  omc',g:'OMC',gc:'t-phone',u:'ed-phone-directory.html'},
   {type:'phone',i:'📞',t:'OMC — Psychiatry (ED ext / Director)',s:'45855 / 427-3705  ·  8a–12a  ·  consults  ·  omc',g:'OMC',gc:'t-phone',u:'ed-phone-directory.html'},
@@ -475,12 +475,12 @@ const SEARCH_INDEX = [
   {type:'phone',i:'📞',t:'OMC — ED Copay / ED Financial Counselor',s:'43194  ·  Alt 43193  ·  internal services  ·  omc',g:'OMC',gc:'t-phone',u:'ed-phone-directory.html'},
   {type:'phone',i:'📞',t:'OMC — ETAP',s:'(562) 658-3998  ·  Fax 42199  ·  external services  ·  omc',g:'OMC',gc:'t-phone',u:'ed-phone-directory.html'},
   {type:'phone',i:'📞',t:'OMC — Member Services',s:'800-464-4000  ·  8-279-3333  ·  external services  ·  omc',g:'OMC',gc:'t-phone',u:'ed-phone-directory.html'},
-  {type:'phone',i:'🦴',t:'OMC — Redlands Prosthetics (Orthotics / DME)',s:'(909) 798-5853  ·  9097985853  ·  Pager (909) 385-1776  ·  9093851776  ·  Fax (909) 798-0602  ·  9097980602  ·  redlands  ·  prosthetics  ·  orthotics  ·  DME  ·  brace  ·  braces  ·  TLSO  ·  LSO  ·  minerva  ·  brace does not fit  ·  custom fitting  ·  external services  ·  omc',g:'OMC',gc:'t-phone',u:'ed-phone-directory.html'},
+  {type:'phone',i:'🦴',t:'OMC — Redlands Prosthetics',s:'(909) 798-5853  ·  9097985853  ·  Pager (909) 385-1776  ·  9093851776  ·  Fax (909) 798-0602  ·  9097980602  ·  redlands  ·  prosthetics  ·  orthotics  ·  DME  ·  brace  ·  braces  ·  TLSO  ·  LSO  ·  minerva  ·  brace does not fit  ·  custom fitting  ·  external services  ·  omc',g:'OMC',gc:'t-phone',u:'ed-phone-directory.html'},
   {type:'phone',i:'📞',t:'OMC — Ethics Consultation',s:'909-209-4688  ·  Fax 909-609-3659 / OMC Ph → 42841  ·  external services  ·  omc',g:'OMC',gc:'t-phone',u:'ed-phone-directory.html'},
   {type:'phone',i:'📞',t:'OMC — Case Manager / Utilization',s:'47333  ·  8:30a–10:30p  ·  physician support  ·  omc',g:'OMC',gc:'t-phone',u:'ed-phone-directory.html'},
-  {type:'phone',i:'📞',t:'OMC — Social Work After-Hours Line',s:'43322  ·  909-724-3322  ·  after hours  ·  M–F after 5p  ·  Sat/Sun 8:30a–11p  ·  medical social work  ·  social services  ·  social worker  ·  SW  ·  physician support  ·  omc',g:'OMC',gc:'t-phone',u:'ed-phone-directory.html'},
-  {type:'phone',i:'📞',t:'OMC — Social Work Dept Line',s:'43320  ·  909-724-3320  ·  medical social work  ·  social services  ·  social worker  ·  SW  ·  department line  ·  physician support  ·  omc',g:'OMC',gc:'t-phone',u:'ed-phone-directory.html'},
-  {type:'phone',i:'📞',t:'OMC — Social Work Daytime ED (discontinued)',s:'43335  ·  909-724-3335  ·  discontinued  ·  not answered since 7/26  ·  use after-hours 43322  ·  medical social work  ·  social services  ·  physician support  ·  omc',g:'OMC',gc:'t-phone',u:'ed-phone-directory.html'},
+  {type:'phone',i:'📞',t:'OMC — Social Work — After-Hours Line',s:'43322  ·  909-724-3322  ·  after hours  ·  M–F after 5p  ·  Sat/Sun 8:30a–11p  ·  medical social work  ·  social services  ·  social worker  ·  SW  ·  physician support  ·  omc',g:'OMC',gc:'t-phone',u:'ed-phone-directory.html'},
+  {type:'phone',i:'📞',t:'OMC — Social Work — Dept Line',s:'43320  ·  909-724-3320  ·  medical social work  ·  social services  ·  social worker  ·  SW  ·  department line  ·  physician support  ·  omc',g:'OMC',gc:'t-phone',u:'ed-phone-directory.html'},
+  {type:'phone',i:'📞',t:'OMC — Social Work — Daytime ED (discontinued)',s:'43335  ·  909-724-3335  ·  discontinued  ·  not answered since 7/26  ·  use after-hours 43322  ·  medical social work  ·  social services  ·  physician support  ·  omc',g:'OMC',gc:'t-phone',u:'ed-phone-directory.html'},
   {type:'phone',i:'📞',t:'OMC — Security',s:'45500  ·  security  ·  omc',g:'OMC',gc:'t-phone',u:'ed-phone-directory.html'},
   {type:'phone',i:'📞',t:'OMC — Security Specialist',s:'41555  ·  security  ·  omc',g:'OMC',gc:'t-phone',u:'ed-phone-directory.html'},
   {type:'phone',i:'📞',t:'OMC — Badge Office',s:'47292  ·  security  ·  omc',g:'OMC',gc:'t-phone',u:'ed-phone-directory.html'},
@@ -489,8 +489,8 @@ const SEARCH_INDEX = [
   {type:'phone',i:'📞',t:'FMC — Pod A',s:'29112  ·  Beeper 6204  ·  locations  ·  fmc',g:'FMC',gc:'t-phone',u:'ed-phone-directory.html'},
   {type:'phone',i:'📞',t:'FMC — ED Housekeeping Pod C/D',s:'28540  ·  Beeper 6206  ·  locations  ·  fmc',g:'FMC',gc:'t-phone',u:'ed-phone-directory.html'},
   {type:'phone',i:'📞',t:'FMC — Anesthesia',s:'24939  ·  Beeper 1685  ·  consults  ·  fmc',g:'FMC',gc:'t-phone',u:'ed-phone-directory.html'},
-  {type:'phone',i:'📞',t:'FMC — Internal Medicine',s:'Vocera  ·  7a–7p  ·  consults  ·  fmc',g:'FMC',gc:'t-phone',u:'ed-phone-directory.html'},
-  {type:'phone',i:'📞',t:'FMC — Internal Medicine',s:'27028  ·  7p–7a  ·  consults  ·  fmc',g:'FMC',gc:'t-phone',u:'ed-phone-directory.html'},
+  {type:'phone',i:'📞',t:'FMC — Internal Medicine (7a–7p Vocera)',q:'Internal Medicine Vocera',s:'Vocera  ·  7a–7p  ·  consults  ·  fmc',g:'FMC',gc:'t-phone',u:'ed-phone-directory.html'},
+  {type:'phone',i:'📞',t:'FMC — Internal Medicine (7p–7a)',q:'Internal Medicine 27028',s:'27028  ·  7p–7a  ·  consults  ·  fmc',g:'FMC',gc:'t-phone',u:'ed-phone-directory.html'},
   {type:'phone',i:'📞',t:'FMC — Interventional Radiology',s:'24050 / 24060  ·  3a–9p  ·  consults  ·  fmc',g:'FMC',gc:'t-phone',u:'ed-phone-directory.html'},
   {type:'phone',i:'📞',t:'FMC — Neurosurgery',s:'Virtualist  ·  9p–3a  ·  consults  ·  fmc',g:'FMC',gc:'t-phone',u:'ed-phone-directory.html'},
   {type:'phone',i:'📞',t:'FMC — NICU',s:'27300  ·  Vocera "Gyn" (24190)  ·  consults  ·  fmc',g:'FMC',gc:'t-phone',u:'ed-phone-directory.html'},
@@ -502,9 +502,9 @@ const SEARCH_INDEX = [
   {type:'phone',i:'📞',t:'FMC — PICC Line RN – 5 North',s:'26511  ·  Beeper 1404  ·  consults  ·  fmc',g:'FMC',gc:'t-phone',u:'ed-phone-directory.html'},
   {type:'phone',i:'📞',t:'FMC — Radiology (File Room)',s:'76600  ·  (909) 427-6600  ·  9094276600  ·  7a–11:30p  ·  radiology  ·  rad  ·  film  ·  reading room  ·  consults  ·  fmc',g:'FMC',gc:'t-phone',u:'ed-phone-directory.html'},
   {type:'phone',i:'📞',t:'FMC — Radiology (STAT reads)',s:'76600  ·  (909) 427-6600  ·  9094276600  ·  7a–7p  ·  stat read  ·  radiology  ·  rad  ·  consults  ·  fmc',g:'FMC',gc:'t-phone',u:'ed-phone-directory.html'},
-  {type:'phone',i:'📞',t:'FMC — Radiology Evening Supervisor',s:'(909) 427-7666  ·  9094277666  ·  radiology supervisor  ·  evening supervisor  ·  lead technologist  ·  Adriana Urquidez  ·  M–F 3p–11:30p  ·  expedite read  ·  stat read  ·  delayed read  ·  consults  ·  fmc',g:'FMC',gc:'t-phone',u:'ed-phone-directory.html'},
-  {type:'phone',i:'📞',t:'FMC — Radiology File Room (evening)',s:'(909) 427-7660  ·  9094277660  ·  file room  ·  radiology  ·  7 days 3p–11:30p  ·  Kaelyn Carmichael  ·  Abigail Aguilar  ·  Crystal Green  ·  Teams  ·  consults  ·  fmc',g:'FMC',gc:'t-phone',u:'ed-phone-directory.html'},
-  {type:'phone',i:'📞',t:'FMC — Radiology Graveyard System Admin',s:'(909) 302-4112  ·  9093024112  ·  graveyard  ·  system administrator  ·  overnight radiology  ·  OnRad delays  ·  Viridiana Gonzalez  ·  Kwasi Ntim  ·  12a–8a  ·  Teams  ·  consults  ·  fmc',g:'FMC',gc:'t-phone',u:'ed-phone-directory.html'},
+  {type:'phone',i:'📞',t:'FMC — Radiology — Evening Supervisor',s:'(909) 427-7666  ·  9094277666  ·  radiology supervisor  ·  evening supervisor  ·  lead technologist  ·  Adriana Urquidez  ·  M–F 3p–11:30p  ·  expedite read  ·  stat read  ·  delayed read  ·  consults  ·  fmc',g:'FMC',gc:'t-phone',u:'ed-phone-directory.html'},
+  {type:'phone',i:'📞',t:'FMC — Radiology — File Room (evening)',s:'(909) 427-7660  ·  9094277660  ·  file room  ·  radiology  ·  7 days 3p–11:30p  ·  Kaelyn Carmichael  ·  Abigail Aguilar  ·  Crystal Green  ·  Teams  ·  consults  ·  fmc',g:'FMC',gc:'t-phone',u:'ed-phone-directory.html'},
+  {type:'phone',i:'📞',t:'FMC — Radiology — Graveyard System Admin',s:'(909) 302-4112  ·  9093024112  ·  graveyard  ·  system administrator  ·  overnight radiology  ·  OnRad delays  ·  Viridiana Gonzalez  ·  Kwasi Ntim  ·  12a–8a  ·  Teams  ·  consults  ·  fmc',g:'FMC',gc:'t-phone',u:'ed-phone-directory.html'},
   {type:'phone',i:'📞',t:'FMC — Substance Abuse',s:'29119  ·  7:30a–3:30p M–F  ·  consults  ·  fmc',g:'FMC',gc:'t-phone',u:'ed-phone-directory.html'},
   {type:'phone',i:'📞',t:'FMC — Wound RN',s:'29652  ·  consults  ·  fmc',g:'FMC',gc:'t-phone',u:'ed-phone-directory.html'},
   {type:'phone',i:'📞',t:'FMC — Wound Clinic',s:'75439  ·  consults  ·  fmc',g:'FMC',gc:'t-phone',u:'ed-phone-directory.html'},
@@ -516,7 +516,7 @@ const SEARCH_INDEX = [
   {type:'phone',i:'📞',t:'FMC — Pharmacy – Outpatient',s:'28018  ·  Fax 5146  ·  internal services  ·  fmc',g:'FMC',gc:'t-phone',u:'ed-phone-directory.html'},
   {type:'phone',i:'📞',t:'FMC — ICU – 2 North (201-221)',s:'29200  ·  Beeper 1110  ·  internal services  ·  fmc',g:'FMC',gc:'t-phone',u:'ed-phone-directory.html'},
   {type:'phone',i:'📞',t:'FMC — ETAP / Burn Transfers (Member)',s:'(562) 658-3998  ·  8-122-4000  ·  external services  ·  fmc',g:'FMC',gc:'t-phone',u:'ed-phone-directory.html'},
-  {type:'phone',i:'🦴',t:'FMC — Redlands Prosthetics (Orthotics / DME)',s:'(909) 798-5853  ·  9097985853  ·  Pager (909) 385-1776  ·  9093851776  ·  Fax (909) 798-0602  ·  9097980602  ·  redlands  ·  prosthetics  ·  orthotics  ·  DME  ·  brace  ·  braces  ·  TLSO  ·  LSO  ·  minerva  ·  brace does not fit  ·  custom fitting  ·  external services  ·  fmc',g:'FMC',gc:'t-phone',u:'ed-phone-directory.html'},
+  {type:'phone',i:'🦴',t:'FMC — Redlands Prosthetics',s:'(909) 798-5853  ·  9097985853  ·  Pager (909) 385-1776  ·  9093851776  ·  Fax (909) 798-0602  ·  9097980602  ·  redlands  ·  prosthetics  ·  orthotics  ·  DME  ·  brace  ·  braces  ·  TLSO  ·  LSO  ·  minerva  ·  brace does not fit  ·  custom fitting  ·  external services  ·  fmc',g:'FMC',gc:'t-phone',u:'ed-phone-directory.html'},
   {type:'phone',i:'📞',t:'FMC — EPRP Call Center',s:'1-800-447-3777  ·  Beeper 8-320-3000  ·  external services  ·  fmc',g:'FMC',gc:'t-phone',u:'ed-phone-directory.html'},
   {type:'phone',i:'📞',t:'FMC — IT National Service Desk',s:'1-888-457-4872  ·  8-279-3333  ·  external services  ·  fmc',g:'FMC',gc:'t-phone',u:'ed-phone-directory.html'},
   {type:'phone',i:'📞',t:'FMC — Case Manager',s:'(909) 491-1014  ·  8a–5p  ·  physician support  ·  fmc',g:'FMC',gc:'t-phone',u:'ed-phone-directory.html'},
@@ -691,13 +691,114 @@ function kpDefaultIcon(type) {
   return '📞';
 }
 
+// ── PHONE DIRECTORY DEEP LINKS ─────────────────────────────────
+// Every phone/imaging/staff row targets the directory page itself, which used
+// to mean landing at the top of a 350-odd-row page and retyping the query. The
+// row name now travels in ?q=, which ed-phone-directory.html feeds into its
+// own filter and then scrolls to.
+//
+// The name is derived from the title at render time rather than stored per row
+// on purpose: the `u` values in SEARCH_INDEX stay byte-identical to the ones
+// the directory exports to localStorage. getSearchIndex() dedupes on
+// type|t|u, and a mismatch there is what made every phone entry appear twice
+// before 86e5517.
+const KP_PHONE_DIRECTORY_PAGE = 'ed-phone-directory.html';
+
+function kpPhoneQueryForTitle(title) {
+  const t = String(title || '').trim();
+  // Titles are "<HOSPITAL> — <row name>". Strip only a literal OMC/FMC prefix
+  // and only the first separator, since names carry their own em dash
+  // ("Social Work — After-Hours Line"). Rows with no prefix at all
+  // ("SBC Child Abuse / CPS Hotline") are already the row name.
+  const m = /^(?:OMC|FMC) — (.+)$/.exec(t);
+  return (m ? m[1] : t).trim();
+}
+
+// Shared by all three search UIs (nav bar, home hero, ⌘K modal) so one query
+// cannot produce three different destinations. Each caller validates the href
+// with its own allowlist first and passes the result in as `base`.
+function kpRewriteHref(base, item, query) {
+  const href = String(base || '').trim();
+  const q = String(query || '').trim();
+  if (href === 'service-agreements.html' && q) {
+    return `service-agreements.html?q=${encodeURIComponent(q)}`;
+  }
+  if (href === KP_PHONE_DIRECTORY_PAGE) {
+    const name = (item && item.q) ? item.q : kpPhoneQueryForTitle(item && item.t);
+    if (name) {
+      // The hospital rides along so the page highlights the row in the right
+      // panel: plenty of rows carry the same name under both OMC and FMC
+      // (Vocera, the pacemaker vendors, the crisis lines).
+      const hospital = item ? kpHospitalForItem(item) : '';
+      const scope = hospital ? `&h=${hospital}` : '';
+      return `${KP_PHONE_DIRECTORY_PAGE}?q=${encodeURIComponent(name)}${scope}`;
+    }
+  }
+  return href;
+}
+
+// ── FULL DIAL NUMBERS ──────────────────────────────────────────
+// The directory expands each 5-digit extension into a dialable number when it
+// renders (extensionToFullNumber in ed-phone-directory.html), but the index
+// only ever carried the extension: "49808" found OMC Triage and
+// "(909) 724-9808" found nothing, even though that is the number on screen.
+//
+// Expanding in the normalizer covers the checked-in rows and the ones the
+// directory exports to localStorage alike. Only `s` changes, so the type|t|u
+// dedupe is untouched.
+//
+// Keep in sync with extensionToFullNumber() in ed-phone-directory.html —
+// scripts/smoke-check.js asserts the two agree on every row.
+function kpExtensionToFullNumber(ext, hospital) {
+  if (!/^\d{5}$/.test(ext)) return '';
+  // The 7 → 427 rule holds for both directories; see the note on the
+  // directory's own copy.
+  if (ext.charAt(0) === '7') return `(909) 427-${ext.slice(1)}`;
+  if (hospital === 'omc') return `(909) 724-${ext.slice(1)}`;
+  if (hospital === 'fmc') return `(909) 302-${ext.slice(1)}`;
+  return '';
+}
+
+function kpHospitalForItem(item) {
+  const m = /^(OMC|FMC) — /.exec(String(item.t || ''));
+  if (m) return m[1].toLowerCase();
+  const g = String(item.g || '');
+  if (g.indexOf('OMC') === 0) return 'omc';
+  if (g.indexOf('FMC') === 0) return 'fmc';
+  return '';
+}
+
+function kpExpandExtensions(item) {
+  if (String(item.u || '').split('#')[0] !== KP_PHONE_DIRECTORY_PAGE) return item.s;
+  // Imaging order codes ("76377H") are not extensions; the directory excludes
+  // them from the same expansion.
+  if (item.type === 'imaging') return item.s;
+  const exts = String(item.s || '').match(/\b\d{5}\b/g);
+  if (!exts) return item.s;
+  const hospital = kpHospitalForItem(item);
+  const extra = [];
+  const push = (value) => {
+    if (value && item.s.indexOf(value) < 0 && extra.indexOf(value) < 0) extra.push(value);
+  };
+  exts.forEach((ext) => {
+    const full = kpExtensionToFullNumber(ext, hospital);
+    if (!full) return;
+    // Both forms are needed: kpSearchMatch splits on punctuation, so the
+    // formatted number alone can never match a typed "7249808".
+    push(full);
+    push(full.replace(/\D/g, ''));
+  });
+  if (!extra.length) return item.s;
+  return `${item.s}  ·  ${extra.join('  ·  ')}`;
+}
+
 function kpNormalizeSearchItem(raw) {
   if (!raw || typeof raw !== 'object') return null;
   const type = String(raw.type || 'phone');
   const t = String(raw.t || '').trim();
   const u = String(raw.u || '').trim();
   if (!t || !u) return null;
-  return {
+  const item = {
     type,
     i: String(raw.i || kpDefaultIcon(type)),
     t,
@@ -706,6 +807,12 @@ function kpNormalizeSearchItem(raw) {
     gc: String(raw.gc || kpDefaultTagClass(type)),
     u,
   };
+  // Optional explicit deep-link query, for the handful of rows a title cannot
+  // identify on the target page (two directory rows can share a name and be
+  // told apart only by their number).
+  if (raw.q) item.q = String(raw.q).trim();
+  item.s = kpExpandExtensions(item);
+  return item;
 }
 
 function kpReadPhoneIndexFromStorage() {
@@ -893,6 +1000,8 @@ if (typeof window !== 'undefined') {
   window.KP_ER_SEARCH = {
     getSearchIndex,
     runSearch: kpRunSearch,
+    rewriteHref: kpRewriteHref,
+    phoneQueryForTitle: kpPhoneQueryForTitle,
     searchLimit: KP_SEARCH_LIMIT,
     phoneIndexStorageKey: KP_PHONE_INDEX_STORAGE_KEY,
     serviceAgreementsStorageKey: KP_SERVICE_AGREEMENTS_STORAGE_KEY,
@@ -996,14 +1105,7 @@ if (typeof window !== 'undefined') {
     if (/^assets\/[A-Za-z0-9._%-]+\.[A-Za-z0-9]+$/.test(trimmed)) return trimmed;
     return 'index.html';
   };
-  const resultHref = (item, query) => {
-    const base = safeHref(item && item.u);
-    const q = String(query || '').trim();
-    if (base === 'service-agreements.html' && q) {
-      return `service-agreements.html?q=${encodeURIComponent(q)}`;
-    }
-    return base;
-  };
+  const resultHref = (item, query) => kpRewriteHref(safeHref(item && item.u), item, query);
   const setExpanded = (open) => input.setAttribute('aria-expanded', open ? 'true' : 'false');
   const clearActiveDescendant = () => input.removeAttribute('aria-activedescendant');
   const setActiveDescendant = (rows) => {

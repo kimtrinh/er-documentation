@@ -64,3 +64,6 @@ It validates:
 - JavaScript syntax in `search-index.js`
 - Inline script syntax across all `.html` files
 - `search-index.js` URL targets and hash anchors
+- Phone-directory deep links: every search entry that points at
+  `ed-phone-directory.html` still names a row that exists there, and the
+  extension-to-full-number rule matches the directory's own

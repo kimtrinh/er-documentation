@@ -163,7 +163,38 @@ main{max-width:860px;margin:0 auto;padding:32px 20px 64px}
 
   <div class="timeline" id="timeline">
 
-    <!-- ── October 17, 2026 (latest) ── -->
+    <!-- ── October 30, 2026 (latest) ── -->
+    <div class="date-group">
+      <div class="date-dot"></div>
+      <div class="date-label">
+        <span class="date-text">October 30, 2026</span>
+        <span class="date-relative"></span>
+      </div>
+      <div class="entries">
+
+        <div class="entry" data-type="fix">
+          <div class="entry-icon">📞</div>
+          <div class="entry-body">
+            <div class="entry-title">Phone results now open the directory <i>on</i> the number you searched for</div>
+            <div class="entry-desc">Searching a phone number from the main search bar used to drop you at the <b>top</b> of the Phone Directory with the query still to retype &mdash; the directory is a separate page, and the result linked to the page rather than the row. Phone results now carry the row with them: the directory opens <b>filtered to that entry</b>, scrolled to it and briefly highlighted, with the number ready to tap and dial.
+              <ul style="margin:6px 0 0 18px;padding:0;line-height:1.7">
+                <li><b>Full 10-digit numbers are searchable now</b> &mdash; the directory turns extension <b>49808</b> into <b>(909) 724-9808</b> on screen, but search only ever knew the extension, so typing the number you were reading found <i>nothing</i>. Either form works now, with or without punctuation.</li>
+                <li><b>Two numbers were missing from search altogether</b> &mdash; the after-hours <b>Ontario Orthopedics attending</b> and the overnight <b>Fontana Internal Medicine</b> line (<b>27028</b>) each shared a title with their daytime counterpart and were being dropped. Both are listed.</li>
+                <li><b>Right site, right row</b> &mdash; names that exist at both sites (Vocera, the pacemaker vendors, the crisis lines) now land in the correct Ontario or Fontana panel.</li>
+                <li>Eight entries were renamed to match the directory itself (the <b>Social Work</b>, <b>Radiology</b> and <b>Redlands Prosthetics</b> lines), which also clears a set of duplicate search hits.</li>
+              </ul>
+            </div>
+            <div class="entry-meta">
+              <span class="badge fix">Fix</span>
+              <a class="entry-link" href="ed-phone-directory.html">Open Phone Directory &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── October 17, 2026 ── -->
     <div class="date-group">
       <div class="date-dot"></div>
       <div class="date-label">
@@ -1767,8 +1798,8 @@ main{max-width:860px;margin:0 auto;padding:32px 20px 64px}
 </script>
 
 <button id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">☀️</button>
-<script src="search-index.js?v=8"></script>
-<script src="theme.js?v=5"></script>
+<script src="search-index.js?v=9"></script>
+<script src="theme.js?v=6"></script>
 <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
 <script src="analytics.js"></script>
 <script>
