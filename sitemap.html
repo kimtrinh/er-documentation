@@ -191,7 +191,7 @@ main{max-width:980px;margin:0 auto;padding:24px 20px 80px}
   <div class="tree-empty" id="empty"><strong>No matches.</strong>Try a shorter or different query.</div>
 </main>
 
-<script src="search-index.js?v=5"></script>
+<script src="search-index.js?v=11"></script>
 <script>
 // ── Site Index — auto-builds from SEARCH_INDEX ───────────────────────
 // Bucket every search-index entry by source page, then sub-bucket by
@@ -299,6 +299,7 @@ main{max-width:980px;margin:0 auto;padding:24px 20px 80px}
       case 'algorithms.html':        return 'Algorithms';
       case 'hospital-protocols.html':return 'Hospital Protocols';
       case 'neurohub.html':          return 'Neuro Hub';
+      case 'head-neck-surgery.html': return 'Head & Neck Surgery';
       case 'ich-protocol.html':      return 'ICH Protocol';
       case 'pedsfever.html':         return 'Peds Fever Protocol';
       case 'calculators.html':       return 'Calculators';
@@ -590,7 +591,7 @@ main{max-width:980px;margin:0 auto;padding:24px 20px 80px}
 </script>
 
 <button id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">☀️</button>
-<script src="theme.js?v=4"></script>
+<script src="theme.js?v=6"></script>
 <script src="analytics.js"></script>
 <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
 <script>

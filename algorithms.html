@@ -45,6 +45,7 @@ main{max-width:1100px;margin:0 auto;padding:24px 24px 80px}
 .algo-meta{font-size:11px;color:var(--text3)}
 .algo-badge{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:600;white-space:nowrap}
 .badge-ophtho{background:var(--border2);color:#38bdf8;border:1px solid #0369a1}
+.badge-ent{background:#2a1f35;color:#c4b5fd;border:1px solid #6d28d9}
 .badge-cardio{background:#2d1b1b;color:#f87171;border:1px solid #991b1b}
 .badge-ob{background:#1a2e1a;color:#86efac;border:1px solid #166534}
 .badge-thoracic{background:#1e1b2e;color:#a78bfa;border:1px solid #5b21b6}
@@ -389,7 +390,14 @@ main>*:nth-child(4){animation-delay:.15s}
       </div>
     </div>
     <!-- ══ HEENT / OPHTHALMOLOGY ══ -->
-    <div class="algo-group-header">👁️ HEENT / Ophthalmology <span class="algo-group-count">(7)</span></div>
+    <div class="algo-group-header">👁️ HEENT / Ophthalmology <span class="algo-group-count">(8)</span></div>
+    <div class="algo-card" onclick="location.href='head-neck-surgery.html'" id="card-head-neck" data-keywords="head and neck surgery HNS ENT otolaryngology epistaxis nosebleed TXA tranexamic tonsil bleed tonsillectomy facial fracture mandible orbital zygomatic peritonsillar abscess PTA ear pain mastoiditis facial nerve sudden hearing loss prednisone audiology urgent referral on-call" role="link" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();location.href='head-neck-surgery.html';}">
+      <div class="algo-icon">👂</div>
+      <div class="algo-info">
+        <div class="algo-title">EM &amp; Head and Neck Surgery ↗</div>
+        <div class="algo-meta">Updated 10/20/2026 &nbsp;·&nbsp; <span class="algo-badge badge-ent">Head &amp; Neck</span></div>
+      </div>
+    </div>
     <div class="algo-card" onclick="showAlgo('orbital')" id="card-orbital" data-algo="orbital" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
       <div class="algo-icon">👁️</div>
       <div class="algo-info">
@@ -515,7 +523,7 @@ main>*:nth-child(4){animation-delay:.15s}
     </div>
     <!-- ══ MSK ══ -->
     <div class="algo-group-header">🦴 MSK <span class="algo-group-count">(6)</span></div>
-    <div class="algo-card" onclick="showAlgo('vcf')" id="card-vcf" data-algo="vcf" data-keywords="spine compression fracture VCF vertebral back pain brace TLSO vertebroplasty neurosurgery bone density" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
+    <div class="algo-card" onclick="showAlgo('vcf')" id="card-vcf" data-algo="vcf" data-keywords="spine compression fracture VCF vertebral back pain brace TLSO vertebroplasty neurosurgery bone density redlands prosthetics orthotics DME brace fitting minerva LSO ortho tech" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
       <div class="algo-icon">🦴</div>
       <div class="algo-info">
         <div class="algo-title">Vertebral Compression Fracture (VCF)</div>
@@ -1136,7 +1144,7 @@ main>*:nth-child(4){animation-delay:.15s}
   </div>
 </main>
 
-<script src="search-index.js?v=5"></script>
+<script src="search-index.js?v=11"></script>
 <script>
 const algos = {
 
@@ -1791,7 +1799,11 @@ const algos = {
               <strong>For type of evaluation requested:</strong><br>
               T1–4: Minerva<br>
               T5–L2: TLSO<br>
-              L3–L5: LSO
+              L3–L5: LSO<br><br>
+              <strong>If the brace we have doesn't fit:</strong><br>
+              Page <strong>Redlands Prosthetics</strong> — they come out to fit the patient.<br>
+              Pager (909) 385-1776<br>
+              Tel (909) 798-5853 · Fax (909) 798-0602
             </span>
           </div>
         </div>
@@ -4998,7 +5010,8 @@ applyAlgoSearch();
   <a class="mob-item" href="ed-phone-directory.html"><span class="mob-icon">📞</span>Directory</a>
 </div>
 <button id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">☀️</button>
-<script src="theme.js?v=4"></script>
+<script src="sp-embed.js?v=1"></script>
+<script src="theme.js?v=6"></script>
 <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
 <script src="analytics.js"></script>
 <script>

@@ -592,7 +592,7 @@ main{max-width:1100px;margin:0 auto;padding:22px 24px 80px}
   <a class="mob-item" href="ed-phone-directory.html"><span class="mob-icon">📞</span>Directory</a>
 </div>
 
-<script src="search-index.js?v=5"></script>
+<script src="search-index.js?v=11"></script>
 <script>
 // ══════════════════════════════════════════
 //  SEARCH INDEX
@@ -658,13 +658,14 @@ function safeHref(href) {
   return (sameOrigin.test(trimmed) || externalHttps.test(trimmed)) ? trimmed : 'index.html';
 }
 
+// Validated against this page's own allowlist (which is looser than the nav
+// bar's — it permits PDFs and Office docs), then handed to the shared rewrite
+// in search-index.js so the hero, the nav bar and the ⌘K modal all agree on
+// where a given result goes.
 function resolveResultHref(item, query) {
   const base = safeHref(item && item.u);
-  const q = String(query || '').trim();
-  if (base === 'service-agreements.html' && q) {
-    return `service-agreements.html?q=${encodeURIComponent(q)}`;
-  }
-  return base;
+  const rewrite = window.KP_ER_SEARCH && window.KP_ER_SEARCH.rewriteHref;
+  return rewrite ? rewrite(base, item, query) : base;
 }
 
 function setSearchExpanded(open) {
@@ -741,27 +742,14 @@ function doSearch(q) {
   const lo = q.toLowerCase();
   const tokens = lo.split(/\s+/).filter(Boolean);
 
-  let results = getIDX().filter(item => {
-    if (!matchesActiveFilter(item)) return false;
-    if (item.type === 'phrase') return false;
-    const searchable = [item.t, item.s, item.g].join(' ').toLowerCase();
-    const words = searchable.split(/[\s\-\/(),.:;]+/).filter(Boolean);
-    return tokens.every(tok => words.some(w => w.startsWith(tok)));
-  });
-
-  // Rank by where the match lives: title-prefix beats any-title-word beats
-  // keyword-only — so typing "vocera" puts "Vocera Web" above entries that
-  // only mention vocera in their keyword blob.
-  const firstToken = tokens[0] || lo;
-  const rankOf = item => {
-    const t = item.t.toLowerCase();
-    if (t.startsWith(firstToken)) return 0;
-    return t.split(/[\s\-\/(),.:;]+/).some(w => w && w.startsWith(firstToken)) ? 1 : 2;
-  };
-  results.sort((a, b) => rankOf(a) - rankOf(b));
-
-  const total = results.length;
-  results = results.slice(0, 22);
+  // Matching, ranking and the cap come from KP_ER_SEARCH.runSearch in
+  // search-index.js so this hero, the shared nav bar and the Cmd-K modal
+  // always return the same thing for the same query.
+  const ran = (window.KP_ER_SEARCH && window.KP_ER_SEARCH.runSearch)
+    ? window.KP_ER_SEARCH.runSearch(q, { filter: matchesActiveFilter })
+    : { results: [], total: 0 };
+  let results = ran.results;
+  const total = ran.total;
   hiIdx = -1;
 
   if (!results.length) {
@@ -781,11 +769,12 @@ function doSearch(q) {
 
   let html = '';
   let rowIdx = 0;
-  // The group holding the best-ranked item renders first; the stable sort
-  // keeps the static priority order for ties (results are rank-sorted, so
-  // groups[g][0] is each group's best item).
+  // results is already rank-sorted by the shared runner, so order groups by
+  // where each one's best result lands in that list.
+  const groupPos = {};
+  results.forEach((r, i) => { const g = getResultGroup(r); if (!(g in groupPos)) groupPos[g] = i; });
   getOrderedGroups(groups)
-    .sort((a, b) => rankOf(groups[a][0]) - rankOf(groups[b][0]))
+    .sort((a, b) => (groupPos[a] || 0) - (groupPos[b] || 0))
     .forEach(grp => {
     if (!groups[grp]) return;
     html += `<div class="sdrop-group">${escapeHtml(grp)}</div>`;
@@ -871,6 +860,16 @@ window.addEventListener('kp-search-index-updated', () => {
 });
 
 updateHomeStats();
+
+// kpRefreshServiceAgreementIndex() fetches asynchronously and fires this
+// once it lands. Without it, an already-open dropdown keeps showing results
+// from the pre-fetch index. (The 'storage' listener below never fires in the
+// tab that performed the write, so it can't cover this case.)
+window.addEventListener('kp-search-index-updated', () => {
+  const el = document.getElementById('si');
+  if (el && el.value.trim()) doSearch(el.value);
+});
+
 window.addEventListener('storage', e => {
   const keys = window.KP_ER_SEARCH
     ? [window.KP_ER_SEARCH.phoneIndexStorageKey, window.KP_ER_SEARCH.serviceAgreementsStorageKey]
@@ -1513,7 +1512,8 @@ loadAnnouncement();
 initAnnouncementFirebase();
 </script>
 <button id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">☀️</button>
-<script src="theme.js?v=4"></script>
+<script src="sp-embed.js?v=1"></script>
+<script src="theme.js?v=6"></script>
 <script src="chatbot.js?v=2" defer></script>
 <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
 <script src="analytics.js"></script>

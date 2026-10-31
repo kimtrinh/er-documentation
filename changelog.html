@@ -163,7 +163,165 @@ main{max-width:860px;margin:0 auto;padding:32px 20px 64px}
 
   <div class="timeline" id="timeline">
 
-    <!-- ── October 13, 2026 (latest) ── -->
+    <!-- ── October 31, 2026 (latest) ── -->
+    <div class="date-group">
+      <div class="date-dot"></div>
+      <div class="date-label">
+        <span class="date-text">October 31, 2026</span>
+        <span class="date-relative"></span>
+      </div>
+      <div class="entries">
+
+        <div class="entry" data-type="feat">
+          <div class="entry-icon">🦾</div>
+          <div class="entry-body">
+            <div class="entry-title">New: reporting dotphrases that tell you <i>where</i> to report</div>
+            <div class="entry-desc">There was no dotphrase for animal bites or for DMV / lapses-of-consciousness reporting, and the two that did touch mandated reporting just said &ldquo;<i>Mandatory reporting obligations fulfilled</i>&rdquo; &mdash; naming no form, no agency and no deadline. Three new phrases under <b>Social / Legal</b>, each ending in a bracketed <b>reference block you delete before signing</b> that carries the form link, the number to call and the jurisdiction caveats:
+              <ul style="margin:6px 0 0 18px;padding:0;line-height:1.7">
+                <li><b>.animalbite</b> &mdash; dog and other animal bites. Rabies risk and PEP, wound care, tetanus, prophylaxis, and the <b>17 CCR &sect;2606</b> report to the local health officer with the 10-day observation. Reference block: SBC Animal Care <b>(800) 472-5609</b> and the Bite Report Form page &mdash; plus the reminder that incorporated cities run their own animal control.</li>
+                <li><b>.cmrdmv</b> &mdash; Confidential Morbidity Report / DMV reporting for disorders with lapses of consciousness. Reference block: the <b>CDPH 110c</b> link, the San Bernardino fax, and the fact that <b>LA County uses its own form</b> while Long Beach and Pasadena are separate jurisdictions.</li>
+                <li><b>.apsreport</b> &mdash; elder and dependent adult abuse. A real gap: the APS hotline was already in the phone directory but there was no phrase. Reference block: <b>1-877-565-2020</b>, and the phone-then-written-<b>SOC 341</b>-within-two-working-days sequence.</li>
+              </ul>
+              <div style="margin-top:8px"><b>.nonat</b> and <b>.dvscreen</b> were also sharpened. The child-abuse phrase now records the phone-report-then-written-<b>SS 8572</b>-within-36-hours sequence and the CPS hotline. The IPV phrase now states the distinction people get wrong: in California <b>IPV itself is not reportable</b>, but a wound from a firearm or from assaultive or abusive conduct <b>is</b>, to law enforcement under <b>Penal Code &sect;11160</b>.</div>
+            </div>
+            <div class="entry-meta">
+              <span class="badge feat">New Dotphrases</span>
+              <a class="entry-link" href="dotphrase.html">Open Dotphrases &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="entry" data-type="improvement">
+          <div class="entry-icon">⌨️</div>
+          <div class="entry-body">
+            <div class="entry-title">Press F2 in Epic to jump to the reference block</div>
+            <div class="entry-desc">The reporting phrases end with a bracketed block carrying the form link and the number to call, meant to come out before you sign. Brackets are only a visual cue though &mdash; nothing in Epic finds them, so removing the block meant hunting for it in a dense paragraph. Each block now sits on <b>its own line behind a <code>***</code> wildcard</b>, which is Epic&rsquo;s actual placeholder: <b>F2 jumps straight to it</b>, and because it is a separate line it deletes in one go. Applies to <b>.animalbite</b>, <b>.cmrdmv</b>, <b>.apsreport</b> and <b>.nonat</b>; the other 150 phrases, including the existing <i>[choose / one]</i> fill-ins, are unchanged.</div>
+            <div class="entry-meta">
+              <span class="badge improvement">Improvement</span>
+              <a class="entry-link" href="dotphrase.html">Open Dotphrases &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="entry" data-type="fix">
+          <div class="entry-icon">📑</div>
+          <div class="entry-body">
+            <div class="entry-title">Service-agreement results now open the agreement</div>
+            <div class="entry-desc">Searching an agreement sometimes opened it and sometimes dropped you at the top of the page. There were <b>two</b> sources of results: the <b>18 hand-written panels</b>, which carry a <code>#anchor</code> and always worked, and <b>29 agreements from the document index</b>, whose results pointed at <code>?id=</code> &mdash; a parameter the page <b>never read</b>. That is the urology case exactly: <i>Urology Service Agreement</i> is a hand-written panel and worked, while <i>Urology and Emergency Medicine Service Agreement 2019</i> came from the index and went nowhere.
+              <ul style="margin:6px 0 0 18px;padding:0;line-height:1.7">
+                <li><b>All 29 now land on the agreement.</b> Ten of them are the same document as an existing panel under a different name, so they point straight at it &mdash; both urology records now open the <i>Urology Service Agreement (2019)</i> panel.</li>
+                <li><b>The other 19 had no page at all</b> and are now rendered as cards from the index, under <i>&ldquo;From the document index&rdquo;</i> in the list &mdash; summary, ED actions, consults &amp; escalation, disposition and timing targets. Things like the <b>Troponin Testing Memo</b>, <b>Transfusion Protocol</b>, <b>Pit Viper Envenomation</b> and <b>Peds Sickle Cell Fever</b> were previously unreachable.</li>
+                <li>The page&rsquo;s own <i>&ldquo;Filter this page&hellip;&rdquo;</i> box finds the new cards by tag and department too.</li>
+              </ul>
+              <div style="margin-top:8px">The id&rarr;panel pairing is checked by hand rather than guessed from the titles: matching on title similarity sends <i>&ldquo;IM and EM Non-member Management&rdquo;</i> to the <b>PLOS</b> panel, which is the wrong agreement. Anything not plainly the same document keeps its own card.</div>
+            </div>
+            <div class="entry-meta">
+              <span class="badge fix">Fix</span>
+              <a class="entry-link" href="service-agreements.html">Open Service Agreements &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── October 30, 2026 ── -->
+    <div class="date-group">
+      <div class="date-dot"></div>
+      <div class="date-label">
+        <span class="date-text">October 30, 2026</span>
+        <span class="date-relative"></span>
+      </div>
+      <div class="entries">
+
+        <div class="entry" data-type="fix">
+          <div class="entry-icon">📞</div>
+          <div class="entry-body">
+            <div class="entry-title">Phone results now open the directory <i>on</i> the number you searched for</div>
+            <div class="entry-desc">Searching a phone number from the main search bar used to drop you at the <b>top</b> of the Phone Directory with the query still to retype &mdash; the directory is a separate page, and the result linked to the page rather than the row. Phone results now carry the row with them: the directory opens <b>filtered to that entry</b>, scrolled to it and briefly highlighted, with the number ready to tap and dial.
+              <ul style="margin:6px 0 0 18px;padding:0;line-height:1.7">
+                <li><b>Full 10-digit numbers are searchable now</b> &mdash; the directory turns extension <b>49808</b> into <b>(909) 724-9808</b> on screen, but search only ever knew the extension, so typing the number you were reading found <i>nothing</i>. Either form works now, with or without punctuation.</li>
+                <li><b>Two numbers were missing from search altogether</b> &mdash; the after-hours <b>Ontario Orthopedics attending</b> and the overnight <b>Fontana Internal Medicine</b> line (<b>27028</b>) each shared a title with their daytime counterpart and were being dropped. Both are listed.</li>
+                <li><b>Right site, right row</b> &mdash; names that exist at both sites (Vocera, the pacemaker vendors, the crisis lines) now land in the correct Ontario or Fontana panel.</li>
+                <li>Eight entries were renamed to match the directory itself (the <b>Social Work</b>, <b>Radiology</b> and <b>Redlands Prosthetics</b> lines), which also clears a set of duplicate search hits.</li>
+              </ul>
+            </div>
+            <div class="entry-meta">
+              <span class="badge fix">Fix</span>
+              <a class="entry-link" href="ed-phone-directory.html">Open Phone Directory &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── October 17, 2026 ── -->
+    <div class="date-group">
+      <div class="date-dot"></div>
+      <div class="date-label">
+        <span class="date-text">October 17, 2026</span>
+        <span class="date-relative"></span>
+      </div>
+      <div class="entries">
+
+        <div class="entry" data-type="feat">
+          <div class="entry-icon">🦴</div>
+          <div class="entry-body">
+            <div class="entry-title">New: Redlands Prosthetics &mdash; who to call when a brace doesn&rsquo;t fit</div>
+            <div class="entry-desc">The VCF pathway already told you <b>how to order a brace</b> (Prosthetic &amp; Orthotic eval, Minerva / TLSO / LSO by level) but gave you <b>no one to call</b> when the brace we stock doesn&rsquo;t fit the patient. <b>Redlands Prosthetics</b> will come out and fit them &mdash; <b>page (909) 385-1776</b>. Tel <b>(909) 798-5853</b>, fax <b>(909) 798-0602</b>. The numbers are now in the <i>Place Order for Braces</i> box on the VCF algorithm and under <b>External Services</b> in <b>both</b> the Fontana and Ontario phone directories.</div>
+            <div class="entry-meta">
+              <span class="badge feat">New Contacts</span>
+              <a class="entry-link" href="algorithms.html#card-vcf">Open VCF Algorithm &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── October 14, 2026 ── -->
+    <div class="date-group">
+      <div class="date-dot"></div>
+      <div class="date-label">
+        <span class="date-text">October 14, 2026</span>
+        <span class="date-relative"></span>
+      </div>
+      <div class="entries">
+
+        <div class="entry" data-type="fix">
+          <div class="entry-icon">🔎</div>
+          <div class="entry-body">
+            <div class="entry-title">Search now returns the same results from every page</div>
+            <div class="entry-desc">There were <b>three different search implementations</b> on the site &mdash; the nav bar, the &#8984;K modal and the home page bar &mdash; each matching differently. Searching <i>&ldquo;turnaround radiology&rdquo;</i> found the card in the modal but <b>nothing</b> in the nav bar, because the nav bar only matched whole phrases in order. They now share one matcher, so the same query gives the same answer everywhere.
+              <ul style="margin:6px 0 0 18px;padding:0;line-height:1.7">
+                <li><b>Word order no longer matters</b> &mdash; &ldquo;turnaround radiology&rdquo; and &ldquo;radiology turnaround&rdquo; both work, in every box.</li>
+                <li><b>Partial words still work</b> &mdash; typing &ldquo;ectra&rdquo; still finds Sectra. The new rule is the union of the old ones, so nothing that used to be findable stopped being findable.</li>
+                <li><b>Duplicates gone</b> &mdash; after visiting the Phone Directory, every phone entry used to show up <i>twice</i> in search. Fixed.</li>
+                <li>Two consistency changes: dotphrases no longer flood the nav bar&rsquo;s results (they&rsquo;re still on the Dotphrases page, the Index, and under the dotphrase filter), and all three boxes now show up to <b>25</b> results instead of 22/24/40.</li>
+              </ul>
+            </div>
+            <div class="entry-meta">
+              <span class="badge fix">Fix</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="entry" data-type="improvement">
+          <div class="entry-icon">🧭</div>
+          <div class="entry-body">
+            <div class="entry-title">&ldquo;Filter this page&rdquo; boxes no longer look like sitewide search</div>
+            <div class="entry-desc">The boxes on <b>Service Agreements</b> and <b>Hospital Protocols</b> only ever filtered the list on that page &mdash; but they were labeled &ldquo;Search agreements&hellip;&rdquo; and &ldquo;Search protocols&hellip;&rdquo;, so typing something from elsewhere on the site emptied the list and looked like the content was missing. They&rsquo;re now labeled <b>&ldquo;Filter this page&hellip;&rdquo;</b>, and when nothing matches they say so and point you to &#8984;K for sitewide search. Search results that link to Service Agreements now also apply their filter on arrival.</div>
+            <div class="entry-meta">
+              <span class="badge improvement">Improvement</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── October 13, 2026 ── -->
     <div class="date-group">
       <div class="date-dot"></div>
       <div class="date-label">
@@ -1702,8 +1860,8 @@ main{max-width:860px;margin:0 auto;padding:32px 20px 64px}
 </script>
 
 <button id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">☀️</button>
-<script src="search-index.js?v=5"></script>
-<script src="theme.js?v=4"></script>
+<script src="search-index.js?v=11"></script>
+<script src="theme.js?v=6"></script>
 <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
 <script src="analytics.js"></script>
 <script>

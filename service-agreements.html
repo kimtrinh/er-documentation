@@ -106,6 +106,14 @@ main{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-colu
 .divider{border:none;border-top:1px solid var(--border)}
 .updated{font-size:11px;color:var(--text3);display:flex;align-items:center;gap:5px}
 
+/* Agreements rendered from data/service_agreements_index.json — they have no
+   hand-written panel, so they get a neutral badge and a bulleted summary. */
+.li-badge.slate{background:var(--surface);border-color:var(--border2);color:var(--text3)}
+.decision-badge.slate{background:var(--surface);border-color:var(--border2);color:var(--text2)}
+.summary-list{font-size:14px;color:var(--text2);line-height:1.75;margin:0;padding-left:20px}
+.summary-list li{margin-bottom:3px}
+.list-group-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);padding:12px 11px 2px}
+
 /* PDF/Doc preview card */
 .pdf-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
 .pdf-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--border);background:var(--surface2)}
@@ -146,6 +154,9 @@ main{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-colu
 
 /* ===== NAV — let More dropdown render below the bar ===== */
 .sitenav,.sitenav-inner{overflow:visible}
+.kp-filter-hatch{display:none;padding:11px 13px;margin:8px 0 0;font-size:12px;line-height:1.6;color:var(--text2);background:var(--surface2);border:1px dashed var(--border2);border-radius:8px}
+.kp-filter-hatch.show{display:block}
+.kp-filter-hatch b{color:var(--text)}
 </style>
 <link rel="stylesheet" href="mobile.css">
 <script>document.documentElement.setAttribute('data-theme',localStorage.getItem('theme')||'dark');</script>
@@ -195,7 +206,10 @@ main{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-colu
     <div class="list-search">
       <div class="search-wrap">
         <span class="search-icon">🔍</span>
-        <input id="searchInput" type="text" placeholder="Search agreements…" autocomplete="off"/>
+        <input id="searchInput" type="text" placeholder="Filter this page…" autocomplete="off" aria-describedby="kpFilterHatch"/>
+      </div>
+      <div class="kp-filter-hatch" id="kpFilterHatch" role="status" aria-live="polite">
+        No matches <b>on this page</b>. This box only filters what&rsquo;s listed here &mdash; press <b>&#8984;K</b> (or <b>Ctrl&#8209;K</b>) to search the whole toolkit.
       </div>
     </div>
     <div class="list-items" id="listItems">
@@ -1033,58 +1047,254 @@ main{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-colu
 
 <script>
 (function() {
-  const items = document.querySelectorAll('.list-item[data-target]');
-  const panels = document.querySelectorAll('.agreement-panel');
+  const listEl = document.getElementById('listItems');
+  const detailEl = document.getElementById('detailPane');
   const searchInput = document.getElementById('searchInput');
 
+  // Queried live rather than captured once: the document-index agreements
+  // rendered further down are appended after load, so a NodeList taken here
+  // would silently miss them.
+  const allItems = () => Array.from(document.querySelectorAll('.list-item[data-target]'));
+  const allPanels = () => Array.from(document.querySelectorAll('.agreement-panel'));
+
   function activate(target) {
-    items.forEach(i => i.classList.remove('active'));
-    panels.forEach(p => p.classList.remove('active'));
-    const item = document.querySelector(`.list-item[data-target="${target}"]`);
+    allItems().forEach(i => i.classList.remove('active'));
+    allPanels().forEach(p => p.classList.remove('active'));
+    const item = listEl.querySelector(`.list-item[data-target="${target}"]`);
     const panel = document.getElementById(target);
     if (item) item.classList.add('active');
     if (panel) panel.classList.add('active');
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    return Boolean(panel);
   }
 
-  items.forEach(item => {
-    item.addEventListener('click', () => {
-      const target = item.dataset.target;
-      if (target) activate(target);
-    });
+  // Delegated, so the generated rows are clickable too.
+  listEl.addEventListener('click', (event) => {
+    const item = event.target.closest('.list-item[data-target]');
+    if (!item) return;
+    const target = item.dataset.target;
+    if (target) activate(target);
   });
 
-  // Deep-link from URL hash (e.g. from the sitewide search).
-  // Use instant scroll on the deep-link path so the embedded content lands
-  // in view immediately, without racing the browser's native anchor-scroll
-  // or the smooth-scroll animation.
-  function handleHash() {
-    const hash = (window.location.hash || '').replace(/^#/, '');
-    if (hash && document.getElementById(hash)) {
-      activate(hash);
-      window.scrollTo({ top: 0, behavior: 'auto' });
-    }
-  }
-  handleHash();
-  window.addEventListener('hashchange', handleHash);
-
-  searchInput.addEventListener('input', function() {
-    const q = this.value.trim().toLowerCase();
+  function applyFilter(rawQuery) {
+    const q = String(rawQuery || '').trim().toLowerCase();
     let firstVisible = null;
-    items.forEach(item => {
+    allItems().forEach(item => {
       const keywords = (item.dataset.keywords || '').toLowerCase();
       const title = item.querySelector('.li-title').textContent.toLowerCase();
       const match = !q || title.includes(q) || keywords.includes(q);
       item.style.display = match ? '' : 'none';
       if (match && !firstVisible) firstVisible = item;
     });
-  });
+    // Hide a group heading once everything under it is filtered out.
+    listEl.querySelectorAll('.list-group-label').forEach(label => {
+      let any = false;
+      let node = label.nextElementSibling;
+      while (node && !node.classList.contains('list-group-label')) {
+        if (node.classList.contains('list-item') && node.style.display !== 'none') any = true;
+        node = node.nextElementSibling;
+      }
+      label.style.display = any ? '' : 'none';
+    });
+    const hatch = document.getElementById('kpFilterHatch');
+    if (hatch) hatch.classList.toggle('show', !!q && !firstVisible);
+  }
+
+  searchInput.addEventListener('input', function() { applyFilter(this.value); });
+
+  // Deep links arrive two ways: #panel from the hand-written rows, and
+  // ?id=<slug> from the document-index rows, which used to be read by nothing
+  // at all. Instant scroll on this path so embedded content lands in view
+  // without racing the browser's native anchor scroll or the smooth animation.
+  function applyDeepLink() {
+    const hash = (window.location.hash || '').replace(/^#/, '');
+    if (hash && document.getElementById(hash)) {
+      activate(hash);
+      window.scrollTo({ top: 0, behavior: 'auto' });
+      return true;
+    }
+    let id = '';
+    try {
+      id = new URLSearchParams(window.location.search).get('id') || '';
+    } catch (e) {
+      id = '';
+    }
+    if (!id) return false;
+    const map = (window.KP_ER_SEARCH && window.KP_ER_SEARCH.agreementPanelMap) || {};
+    const target = map[id] || id;
+    // Not rendered yet (the fetch below is async) or a stale link; either way
+    // leave the page alone rather than blanking it.
+    if (!document.getElementById(target)) return false;
+    activate(target);
+    window.scrollTo({ top: 0, behavior: 'auto' });
+    return true;
+  }
+  applyDeepLink();
+  window.addEventListener('hashchange', applyDeepLink);
+
+  // Search results elsewhere link here as ?q=<query>; apply it so the
+  // landing page is actually filtered instead of looking untouched.
+  let qp = '';
+  try {
+    qp = new URLSearchParams(window.location.search).get('q') || '';
+  } catch (e) {
+    qp = '';
+  }
+  if (qp) {
+    searchInput.value = qp;
+    applyFilter(qp);
+  }
+
+  // ── AGREEMENTS FROM THE DOCUMENT INDEX ───────────────────────
+  // 29 agreements exist only in data/service_agreements_index.json. Ten are the
+  // same document as a panel above and their search results point straight at
+  // it; the other 19 had nowhere to land, so they are rendered here from their
+  // own JSON fields. Same file and same .doc/.docx filter that
+  // kpRefreshServiceAgreementIndex() applies in search-index.js, so the page
+  // and the search index always cover the same set.
+  const SLUG = /^[a-z0-9][a-z0-9-]*$/;
+
+  function el(tag, className, text) {
+    const node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text != null) node.textContent = text;
+    return node;
+  }
+
+  // Built with textContent throughout rather than innerHTML, so nothing in the
+  // JSON can inject markup.
+  function section(label, lines) {
+    const values = (Array.isArray(lines) ? lines : [lines])
+      .map(v => String(v || '').trim()).filter(Boolean);
+    if (!values.length) return null;
+    const wrap = document.createElement('div');
+    wrap.append(el('div', 'summary-label', label));
+    if (values.length === 1) {
+      wrap.append(el('p', 'summary-text', values[0]));
+    } else {
+      const list = el('ul', 'summary-list');
+      values.forEach(v => list.append(el('li', null, v)));
+      wrap.append(list);
+    }
+    return wrap;
+  }
+
+  function buildListItem(agreement) {
+    const item = el('div', 'list-item');
+    item.dataset.target = agreement.id;
+    item.dataset.keywords = []
+      .concat(agreement.tags || [], agreement.departments || [], [agreement.id])
+      .join(' ').toLowerCase();
+    item.append(el('div', 'li-title', agreement.title));
+    const meta = el('div', 'li-meta');
+    meta.append(el('span', 'li-badge slate', 'Document Index'));
+    if ((agreement.departments || []).length) {
+      meta.append(el('span', 'li-dept', agreement.departments.join(' \u00b7 ')));
+    }
+    item.append(meta);
+    return item;
+  }
+
+  function buildPanel(agreement) {
+    const panel = el('div', 'agreement-panel');
+    panel.id = agreement.id;
+    const card = el('div', 'info-card');
+
+    const top = el('div', 'card-top');
+    const heading = document.createElement('div');
+    heading.append(el('div', 'card-title', agreement.title));
+    if ((agreement.departments || []).length) {
+      heading.append(el('div', 'card-dept', agreement.departments.join(' \u00b7 ')));
+    }
+    top.append(heading, el('div', 'decision-badge slate', '\ud83d\udcc4 Document Index'));
+    card.append(top);
+
+    if ((agreement.tags || []).length) {
+      const tags = el('div', 'tags');
+      agreement.tags.forEach(t => tags.append(el('span', 'tag', t)));
+      card.append(tags);
+    }
+
+    [
+      ['Summary', agreement.summary_bullets],
+      ['ED Actions', agreement.ed_actions],
+      ['Consults & Escalation', agreement.consults_and_escalation],
+      ['Disposition / Ownership', agreement.disposition_or_ownership],
+      ['Timing Targets', agreement.timing_targets],
+    ].forEach(pair => {
+      const block = section(pair[0], pair[1]);
+      if (block) card.append(el('hr', 'divider'), block);
+    });
+
+    // A plain link, not an sp-embed iframe: SharePoint's anti-framing headers
+    // are why those are gated behind sign-in in the first place.
+    if (agreement.sharepoint_url) {
+      const link = el('a', 'download-btn');
+      link.href = agreement.sharepoint_url;
+      link.target = '_blank';
+      link.rel = 'noopener';
+      const label = document.createElement('div');
+      label.append(el('div', null, 'Open Source Document'));
+      label.append(el('div', 'download-btn-sub', 'SharePoint \u00b7 sign-in required'));
+      link.append(label);
+      card.append(el('hr', 'divider'), link);
+    }
+
+    const updated = String(agreement.last_updated || '').trim();
+    card.append(el('div', 'updated', updated
+      ? '\ud83d\udcc5 Last updated: ' + updated
+      : '\ud83d\udcc4 From the service-agreement document index'));
+    panel.append(card);
+    return panel;
+  }
+
+  async function renderIndexedAgreements() {
+    const api = window.KP_ER_SEARCH || {};
+    const url = api.serviceAgreementsUrl || 'data/service_agreements_index.json';
+    const map = api.agreementPanelMap || {};
+    let payload = null;
+    try {
+      const res = await fetch(url, { cache: 'no-store' });
+      if (!res.ok) return;
+      payload = await res.json();
+    } catch (err) {
+      return;  // Offline or blocked: the hand-written panels still work.
+    }
+    const agreements = (Array.isArray(payload && payload.agreements) ? payload.agreements : [])
+      .filter(a => {
+        const src = String((a && a.source_filename) || '').toLowerCase();
+        return src.endsWith('.doc') || src.endsWith('.docx');
+      })
+      .filter(a => a && SLUG.test(String(a.id || '')) && !map[a.id] && !document.getElementById(a.id));
+    if (!agreements.length) return;
+
+    listEl.append(el('div', 'list-group-label', 'From the document index'));
+    agreements.forEach(agreement => {
+      listEl.append(buildListItem(agreement));
+      detailEl.append(buildPanel(agreement));
+    });
+
+    // The fetch is async, so a ?id= link had nothing to activate when
+    // applyDeepLink() first ran. Re-apply now, and re-run the filter so a ?q=
+    // arrival covers the new rows too.
+    applyDeepLink();
+    if (searchInput.value) applyFilter(searchInput.value);
+  }
+
+  if (document.readyState === 'loading') {
+    // search-index.js is loaded after this block, so wait for it before
+    // reading KP_ER_SEARCH.
+    document.addEventListener('DOMContentLoaded', renderIndexedAgreements);
+  } else {
+    renderIndexedAgreements();
+  }
 })();
 </script>
 
 <button id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">☀️</button>
-<script src="search-index.js?v=5"></script>
-<script src="theme.js?v=4"></script>
+<script src="search-index.js?v=11"></script>
+<script src="sp-embed.js?v=1"></script>
+<script src="theme.js?v=6"></script>
 <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
 <script src="analytics.js"></script>
 <script>

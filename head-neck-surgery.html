@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="stylesheet" href="theme.css?v=2"/>
+<title>Head &amp; Neck Surgery — KP SBC ED Toolkit</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#080f1a;--surface:#0d1829;--surface2:#111f35;--surface3:#162540;--border:#1a2d48;--border2:#243d5c;--text:#e8f0fc;--text2:#8fa8c8;--text3:#4a6280;--text-blue:#93c5fd;--text-blue-bright:#bfdbfe;--blue:#3b82f6;--blue2:#1d4ed8;--blue3:#0d2038;--green:#22c55e;--green2:#15803d;--green3:#0d2d1f;--amber:#f59e0b;--red:#ef4444;--purple:#a78bfa;--cyan:#22d3ee;}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
+
+/* NAV */
+
+
+/* HEADER */
+header{background:linear-gradient(135deg,#1e1b4b,var(--bg));border-bottom:2px solid #4f46e5;padding:24px 24px 20px}
+.header-inner{max-width:1000px;margin:0 auto}
+.logo{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+.logo span{font-size:28px}
+.logo h1{font-size:22px;font-weight:800;color:var(--text);letter-spacing:-.3px}
+.logo .badge{background:#4f46e5;color:#e0e7ff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:.5px;text-transform:uppercase}
+.subtitle{font-size:13px;color:#818cf8;margin-left:40px}
+
+/* STATUS ALERT */
+.status-alert{max-width:1000px;margin:16px auto 0;padding:0 24px}
+.alert-box{border-radius:10px;padding:12px 18px;font-size:13px;line-height:1.6;display:flex;align-items:flex-start;gap:12px}
+.alert-box.expanded{background:#1a2e1a;border:1px solid #22c55e;color:#86efac}
+.alert-box.expanded .alert-icon{font-size:18px;margin-top:1px;flex-shrink:0}
+.alert-box.standard{background:var(--surface);border:1px solid var(--border);color:var(--text2)}
+
+main{max-width:1000px;margin:0 auto;padding:24px 24px 80px}
+
+/* ===== SHARED NEW NAV ===== */
+@media(max-width:640px){}
+.sitenav{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;font-family:'DM Sans',system-ui,sans-serif}
+.sitenav-inner{max-width:1200px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:6px;height:46px;overflow:hidden}
+.nav-logo{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:#3b82f6;white-space:nowrap;flex-shrink:0;text-decoration:none;margin-right:6px}
+.nav-logo span{color:var(--text3)}
+.nav-links{display:flex;flex:1;min-width:0;gap:1px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;white-space:nowrap;padding-right:10px}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-link{padding:5px 10px;border-radius:6px;font-size:12px;font-weight:600;color:var(--text2);text-decoration:none;white-space:nowrap;transition:all .15s}
+.nav-link:hover{background:var(--surface2);color:var(--text)}
+.nav-link.active{background:#1d4ed8;color:#fff}
+@media(max-width:640px){.nav-link{font-size:11px;padding:4px 8px}}
+@keyframes pgFade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+main>*{animation:pgFade .3s ease both}
+main>*:nth-child(2){animation-delay:.05s}
+main>*:nth-child(3){animation-delay:.1s}
+main>*:nth-child(4){animation-delay:.15s}
+.card{box-shadow:0 1px 4px rgba(0,0,0,.2)}
+
+/* ===== NAV — More dropdown overflow ===== */
+.nav-more{position:relative;flex-shrink:0}
+.nav-more-btn{padding:5px 10px;border-radius:6px;font-size:12px;font-weight:600;color:var(--text2);background:transparent;border:0;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:4px;font-family:inherit;line-height:1;white-space:nowrap}
+.nav-more-btn:hover,.nav-more.open .nav-more-btn{background:var(--surface2);color:var(--text)}
+.nav-more-btn.active{background:#1d4ed8;color:#fff}
+.nav-more-btn .chev{font-size:9px;opacity:.6;transition:transform .15s}
+.nav-more.open .nav-more-btn .chev{transform:rotate(180deg);opacity:1}
+.nav-more-menu{position:absolute;top:calc(100% + 6px);right:0;background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:6px;min-width:200px;box-shadow:0 12px 32px rgba(0,0,0,.5);display:none;z-index:200}
+.nav-more.open .nav-more-menu{display:block}
+.nav-more-menu .nav-link{display:block;padding:7px 10px;border-radius:6px;font-size:12px;white-space:nowrap}
+
+/* ===== NAV — let More dropdown render below the bar ===== */
+.sitenav,.sitenav-inner{overflow:visible}
+
+/* ===== HEAD & NECK CONTENT ===== */
+.topic{background:var(--surface);border:1px solid var(--border);border-radius:14px;margin-bottom:18px;overflow:hidden}
+.topic-head{padding:13px 18px;border-bottom:1px solid var(--border);background:var(--surface2);display:flex;align-items:center;gap:9px;font-size:15px;font-weight:700;color:var(--text)}
+.topic-head .num{font-size:11px;font-weight:800;color:var(--text3);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.06em}
+.topic-body{padding:16px 18px;font-size:13.5px;line-height:1.75;color:var(--text2)}
+.topic-body p{margin-bottom:10px}
+.topic-body p:last-child{margin-bottom:0}
+.topic-body strong{color:var(--text)}
+.sub{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);margin:14px 0 7px}
+.sub:first-child{margin-top:0}
+ul.hns{list-style:none;margin:0 0 10px}
+ul.hns li{position:relative;padding-left:16px;margin-bottom:7px}
+ul.hns li:before{content:"·";position:absolute;left:4px;color:var(--text3);font-weight:800}
+ul.hns ul{list-style:none;margin:6px 0 0}
+ul.hns ul li:before{content:"–";font-weight:400}
+.rx{display:inline-block;background:var(--blue3);border:1px solid var(--blue2);color:var(--text-blue-bright);border-radius:6px;padding:1px 7px;font-size:12.5px;font-weight:700;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.callnow{display:inline-block;background:#2a0f0f;border:1px solid var(--red);color:#fca5a5;border-radius:6px;padding:1px 8px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em}
+.nocall{display:inline-block;background:var(--green3);border:1px solid var(--green2);color:#86efac;border-radius:6px;padding:1px 8px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em}
+table.hns{width:100%;border-collapse:collapse;margin:4px 0 10px;font-size:13px}
+table.hns th,table.hns td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--border);vertical-align:top}
+table.hns th{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);background:var(--surface2)}
+table.hns td:first-child{color:var(--text);font-weight:600;white-space:nowrap}
+table.hns tr:last-child td{border-bottom:none}
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.flag{background:#2a1f08;border:1px solid var(--amber);border-radius:10px;padding:11px 15px;font-size:12.5px;line-height:1.7;color:#fcd34d;margin-top:12px}
+.flag a{color:#fde68a;font-weight:700}
+.note{font-size:12px;color:var(--text3);line-height:1.7;margin-top:10px;border-top:1px solid var(--border);padding-top:10px}
+.updated{font-size:11px;color:var(--text3);display:flex;align-items:center;gap:5px;margin-bottom:16px}
+
+/* ===== PDF EMBED (matches service-agreements.html) ===== */
+.pdf-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.pdf-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--border);background:var(--surface2);gap:10px}
+.pdf-bar-title{font-size:12px;font-weight:700;color:var(--text2);display:flex;align-items:center;gap:7px}
+.pdf-open-link{font-size:11px;font-weight:700;color:#93c5fd;text-decoration:none;display:flex;align-items:center;gap:4px;padding:5px 10px;border-radius:7px;border:1px solid #1d4ed8;background:#0d2038;transition:.15s;white-space:nowrap}
+.pdf-open-link:hover{background:#162a5a;border-color:#3b82f6}
+.pdf-iframe{width:100%;height:780px;border:none;background:#1a1a2e;display:block}
+.download-btn{display:inline-flex;align-items:center;gap:9px;padding:11px 18px;border-radius:10px;width:fit-content;background:#0a2a0a;border:1px solid #15803d;color:#86efac;font-size:13px;font-weight:700;text-decoration:none;transition:.15s;margin-bottom:14px}
+.download-btn:hover{background:#0d3b0d;border-color:#22c55e;box-shadow:0 0 0 3px rgba(34,197,94,.15)}
+.download-btn-sub{font-size:10px;color:#4ade80;font-weight:500;margin-top:1px}
+@media (max-width:640px){.pdf-iframe{height:62vh}}
+</style>
+<link rel="stylesheet" href="mobile.css">
+<script>document.documentElement.setAttribute('data-theme',localStorage.getItem('theme')||'dark');</script>
+<link rel="manifest" href="/manifest.json">
+</head>
+<body>
+<nav class="sitenav">
+  <div class="sitenav-inner">
+    <a class="nav-logo" href="index.html">⚡</a>
+            <div class="nav-links">
+      <a class="nav-link" href="index.html">🏠 Home</a>
+      <a class="nav-link" href="algorithms.html">🔀 Algorithms</a>
+      <a class="nav-link" href="service-agreements.html">🤝 Agreements</a>
+      <a class="nav-link" href="hospital-protocols.html">🏥 Protocols</a>
+      <a class="nav-link" href="ed-phone-directory.html">📞 Directory</a>
+      <a class="nav-link" href="service-requests.html">📋 Requests</a>
+      <a class="nav-link" href="links.html">🔗 Links</a>
+      <a class="nav-link" href="sitemap.html">📑 Index</a>
+      <div class="nav-more" data-nav-more>
+        <button type="button" class="nav-more-btn" aria-haspopup="menu" aria-expanded="false" aria-label="More navigation">⋯ More <span class="chev" aria-hidden="true">▾</span></button>
+        <div class="nav-more-menu" role="menu">
+      <a class="nav-link" href="dotphrase.html" role="menuitem">🧾 Documentation</a>
+      <a class="nav-link" href="calculators.html" role="menuitem">🧮 Decision Support</a>
+      <a class="nav-link" href="rsi.html" role="menuitem">🚨 Resuscitation</a>
+      <a class="nav-link" href="neurohub.html" role="menuitem">🧠 Neuro Hub</a>
+      <a class="nav-link" href="changelog.html" role="menuitem">🆕 What's New</a>
+      <a class="nav-link" href="announcements.html" role="menuitem">📚 Past Announcements</a>
+        </div>
+      </div>
+    </div></div>
+</nav>
+<!-- SITE NAV -->
+
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <span>👂</span>
+      <h1>EM &amp; Head and Neck Surgery</h1>
+      <span class="badge">Practice Guidelines</span>
+    </div>
+    <p class="subtitle">Referral protocol · epistaxis · tonsil bleeds · facial fractures · PTA · ear pain · hearing loss</p>
+  </div>
+</header>
+
+<!-- STATUS ALERT -->
+<div class="status-alert">
+  <div class="alert-box standard">
+    <span class="alert-icon">🌙</span>
+    <div>
+      <strong>Urgent follow-up only — please do not call at night.</strong> Secure chat the on-call Head &amp; Neck Surgery physician and place an urgent referral; the on-call MD coordinates follow-up with the patient the next day. The situations that do warrant a call now are marked <span class="callnow">call HNS</span> below.
+    </div>
+  </div>
+</div>
+
+<main>
+
+  <div class="updated">📅 Source document updated 10/20/2026 · <a href="#pdf" style="color:#93c5fd">jump to the official PDF ↓</a></div>
+
+  <!-- ══ GENERAL PROTOCOL & URGENT REFERRALS ══ -->
+  <div class="topic" id="referrals">
+    <div class="topic-head"><span>🔁</span> General Protocol &amp; Urgent Referrals</div>
+    <div class="topic-body">
+      <ul class="hns">
+        <li><strong>Urgent follow-up only:</strong> Secure chat the on-call physician and place an urgent referral. <strong style="color:#fca5a5">Please do not call at night.</strong> The on-call MD will coordinate follow-up with the patient the next day.</li>
+        <li><strong>Infections / admissions:</strong> Internal medicine admits infections that are <strong>not</strong> drainable abscesses. Call IM if a patient needs admission with no drainable fluid collection — they can consult HNS if needed.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ══ EPISTAXIS ══ -->
+  <div class="topic" id="epistaxis">
+    <div class="topic-head"><span class="num">01</span><span>🩸</span> Nosebleeds (Epistaxis)</div>
+    <div class="topic-body">
+      <ul class="hns">
+        <li><strong>First-line treatment:</strong> if no contraindications, give <span class="rx">1 gm IV tranexamic acid (TXA)</span> + <span class="rx">nebulized TXA</span> (often helpful).</li>
+        <li><strong>Controlled with packing &amp; needs follow-up:</strong>
+          <ul>
+            <li>Place an outpatient referral.</li>
+            <li>Prescribe antibiotics.</li>
+            <li>Patient will be seen in <strong>3–7 days</strong> depending on anticoagulation status.</li>
+          </ul>
+        </li>
+        <li><strong>Uncontrolled bleeding after packing:</strong> <span class="callnow">call HNS</span> for help.</li>
+      </ul>
+      <p class="note">Bleeding may take some time to stop after packing placement.</p>
+    </div>
+  </div>
+
+  <!-- ══ TONSIL BLEEDS ══ -->
+  <div class="topic" id="tonsil-bleed">
+    <div class="topic-head"><span class="num">02</span><span>🫁</span> Tonsil Bleeds</div>
+    <div class="topic-body">
+      <p>Management differs between children and adults only when a clot is present without active bleeding.</p>
+      <div class="tbl-wrap">
+        <table class="hns">
+          <thead><tr><th>Finding</th><th>Pediatric</th><th>Adult</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Active bleeding</td>
+              <td><span class="rx">IV TXA</span> + <span class="rx">nebulized TXA</span>, <span class="callnow">call HNS</span> immediately</td>
+              <td><span class="rx">IV TXA</span> + <span class="rx">nebulized TXA</span>, <span class="callnow">call HNS</span> immediately</td>
+            </tr>
+            <tr>
+              <td>No active bleeding,<br/>clot present</td>
+              <td><span class="callnow">Call HNS</span></td>
+              <td><span class="rx">IV TXA</span> and observe <strong>2 hours</strong>. If no bleeding during observation, cleared for discharge — send chart to surgeon for follow-up.</td>
+            </tr>
+            <tr>
+              <td>No active bleeding,<br/>no clot</td>
+              <td>Clear for discharge; send chart to surgeon for follow-up</td>
+              <td>Cleared for discharge; <strong>no follow-up needed</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ FACIAL FRACTURES ══ -->
+  <div class="topic" id="facial-fractures">
+    <div class="topic-head"><span class="num">03</span><span>🦴</span> Facial Fractures</div>
+    <div class="topic-body">
+      <div class="tbl-wrap">
+        <table class="hns">
+          <thead><tr><th>Fracture</th><th>Disposition</th></tr></thead>
+          <tbody>
+            <tr><td>Nasal</td><td>Outpatient referral; follow-up in <strong>5–10 days</strong> (once swelling subsides) to evaluate for intervention.</td></tr>
+            <tr><td>Mandible</td><td>Outpatient referral to <strong>HNS</strong> — HNS sends to Oral Surgery for surgical intervention if needed.</td></tr>
+            <tr><td>Orbital — isolated</td><td>Referral to <strong>Ophthalmology</strong>.</td></tr>
+            <tr><td>Orbital + other facial<br/>fractures, no entrapment</td><td>Outpatient referral to <strong>Ophthalmology and HNS</strong>.</td></tr>
+            <tr><td>Orbital with entrapment</td><td><span class="callnow">Call Oculoplastics</span></td></tr>
+            <tr><td>Zygomatic / maxillary</td><td>Outpatient referral to <strong>HNS</strong>.</td></tr>
+            <tr><td>Facial lacerations</td><td><strong>Plastic Surgery</strong>.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PERITONSILLAR ABSCESS ══ -->
+  <div class="topic" id="pta">
+    <div class="topic-head"><span class="num">04</span><span>🦠</span> Peritonsillar Abscess (PTA)</div>
+    <div class="topic-body">
+      <p>PTA is a <strong>clinical diagnosis</strong>. Imaging is reserved for cases where the diagnosis is uncertain, or extension beyond the peritonsillar space is suspected.</p>
+
+      <div class="sub">ED treatment</div>
+      <ul class="hns">
+        <li><span class="rx">Unasyn</span> <strong>OR</strong> <span class="rx">Clindamycin IV ×1</span></li>
+        <li><span class="rx">Ceftriaxone IM or IV ×1</span></li>
+        <li><span class="rx">Dexamethasone IV ×1</span></li>
+      </ul>
+
+      <div class="sub">Discharge management</div>
+      <ul class="hns">
+        <li><span class="rx">Clindamycin</span> or <span class="rx">Augmentin</span> for <strong>2 weeks</strong>. Follow up with PCP.</li>
+      </ul>
+
+      <div class="sub">Escalation / HNS referral</div>
+      <ul class="hns">
+        <li><strong>Failed outpatient treatment:</strong> <span class="callnow">call HNS</span>.</li>
+        <li><strong>Recurrent PTA:</strong> outpatient referral to HNS to discuss tonsillectomy.</li>
+      </ul>
+
+      <div class="flag">⚠️ <strong>Two PTA recipes exist on this site.</strong> The <a href="hospital-protocols.html#peritonsillar-abscess">Peritonsillar Abscess Protocol</a> under Hospital Protocols lists Decadron 10&nbsp;mg IV + Rocephin 1–2&nbsp;g IV, discharging on Augmentin or Clindamycin. Those are the same two drugs as above (Rocephin is ceftriaxone, Decadron is dexamethasone), but this Head &amp; Neck guideline additionally specifies an <strong>IV Unasyn or Clindamycin dose</strong> and a <strong>2-week</strong> discharge course. Confirm which your department is following.</div>
+    </div>
+  </div>
+
+  <!-- ══ EAR PAIN & INFECTIONS ══ -->
+  <div class="topic" id="ear-pain">
+    <div class="topic-head"><span class="num">05</span><span>👂</span> Ear Pain &amp; Infections</div>
+    <div class="topic-body">
+      <ul class="hns">
+        <li><strong>Facial nerve involvement:</strong> if the facial nerve is not functioning, <span class="callnow">call HNS</span>.</li>
+        <li><strong>Mastoiditis on imaging, without clinical symptoms:</strong>
+          <ul>
+            <li>No edema or erythema behind the ear → <span class="nocall">no call needed</span></li>
+            <li>Place an outpatient referral.</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ══ HEARING LOSS ══ -->
+  <div class="topic" id="hearing-loss">
+    <div class="topic-head"><span class="num">06</span><span>🔇</span> Hearing Loss</div>
+    <div class="topic-body">
+      <ul class="hns">
+        <li><strong>Cerumen / infection:</strong> <span class="nocall">no call needed</span> — place an outpatient referral.</li>
+        <li><strong>Sudden hearing loss with a clear ear:</strong> <span class="nocall">no call needed</span> — follow this workflow:
+          <ul>
+            <li><span class="rx">Prednisone 60 mg daily × 2 weeks</span></li>
+            <li>Urgent <strong>audiology</strong> referral.</li>
+            <li>Audiology will evaluate within <strong>1–3 days</strong>. If true sudden loss is confirmed, the on-call MD will see the patient the same day.</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ══ OFFICIAL PDF ══ -->
+  <div id="pdf">
+    <a class="download-btn" href="https://sp-cloud.kp.org/sites/ERtoolkit/Shared%20Documents/assets/assets/EM%20%26%20Head%20and%20Neck%20Surgery%20Practice%20Guidelines.pdf" target="_blank" rel="noopener" download>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#86efac" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      <div><div>Download Official Guideline</div><div class="download-btn-sub">PDF · Direct Download</div></div>
+    </a>
+    <div class="pdf-card">
+      <div class="pdf-bar">
+        <div class="pdf-bar-title"><span>📄</span> Official Guideline — EM &amp; Head and Neck Surgery</div>
+        <a class="pdf-open-link" href="https://sp-cloud.kp.org/sites/ERtoolkit/Shared%20Documents/assets/assets/EM%20%26%20Head%20and%20Neck%20Surgery%20Practice%20Guidelines.pdf" target="_blank" rel="noopener">Open PDF ↗</a>
+      </div>
+      <iframe class="pdf-iframe" src="https://sp-cloud.kp.org/sites/ERtoolkit/_layouts/15/embed.aspx?UniqueId=5ca57690-32e2-45ea-8862-112d415d045a" title="EM &amp; Head and Neck Surgery Practice Guidelines PDF"></iframe>
+    </div>
+    <p class="note">The embedded preview renders only for signed-in KP staff on the KP network. Off-network the frame will be blank — the text above is the full guideline, and the download link opens the original in SharePoint.</p>
+  </div>
+
+</main>
+
+<script src="search-index.js?v=11"></script>
+<script id="shared-nav-search">
+</script>
+
+<div class="mobile-nav">
+  <a class="mob-item" href="index.html"><span class="mob-icon">🏠</span>Home</a>
+  <a class="mob-item" href="dotphrase.html"><span class="mob-icon">📋</span>Phrases</a>
+  <a class="mob-item" href="calculators.html"><span class="mob-icon">🧮</span>Calcs</a>
+  <a class="mob-item" href="rsi.html"><span class="mob-icon">🚨</span>Resus</a>
+  <a class="mob-item" href="ed-phone-directory.html"><span class="mob-icon">📞</span>Directory</a>
+</div>
+<button id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">☀️</button>
+<script src="sp-embed.js?v=1"></script>
+<script src="theme.js?v=6"></script>
+<script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
+<script src="analytics.js"></script>
+<script>
+// Sitenav "⋯ More ▾" overflow dropdown — open on click, close on
+// outside-click or Escape. Data-driven so the same script works on
+// every page that includes the same nav markup.
+(function () {
+  const hosts = document.querySelectorAll('[data-nav-more]');
+  if (!hosts.length) return;
+  hosts.forEach(host => {
+    const btn = host.querySelector('.nav-more-btn');
+    if (!btn) return;
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const open = host.classList.toggle('open');
+      btn.setAttribute('aria-expanded', String(open));
+    });
+  });
+  document.addEventListener('click', () => {
+    document.querySelectorAll('[data-nav-more].open').forEach(h => {
+      h.classList.remove('open');
+      const b = h.querySelector('.nav-more-btn');
+      if (b) b.setAttribute('aria-expanded', 'false');
+    });
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    document.querySelectorAll('[data-nav-more].open').forEach(h => {
+      h.classList.remove('open');
+      const b = h.querySelector('.nav-more-btn');
+      if (b) b.setAttribute('aria-expanded', 'false');
+    });
+  });
+})();
+</script>
+</body>
+</html>

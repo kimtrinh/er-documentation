@@ -57,7 +57,7 @@ main{max-width:900px;margin:0 auto;padding:16px 24px 60px}
 .vote-pulse{animation:votePulse .6s ease-out}
 .copy-btn{padding:6px 14px;border-radius:8px;border:none;cursor:pointer;font-size:12px;font-weight:600;background:#3b82f6;color:#fff;transition:background .2s;white-space:nowrap}
 .copy-btn.copied{background:#16a34a}
-.card-body{padding:12px 16px;font-size:13px;line-height:1.75;color:var(--text2)}
+.card-body{padding:12px 16px;font-size:13px;line-height:1.75;color:var(--text2);white-space:pre-line}
 .empty{text-align:center;color:#475569;margin-top:60px;font-size:15px}
 
 /* SORT BAR */
@@ -180,7 +180,7 @@ main>*:nth-child(4){animation-delay:.15s}
   <div id="main"></div>
 </main>
 
-<script src="search-index.js?v=5"></script>
+<script src="search-index.js?v=11"></script>
 <script src="data/dotphrases.js"></script>
 <script>
 const firebaseConfig = {
@@ -311,12 +311,19 @@ function rebuildTabs() {
 function getFiltered() {
   const q = document.getElementById("search").value.toLowerCase();
   const tokens = q.split(/\s+/).filter(Boolean);
+  // Punctuation- and space-free form of the query, so something typed as one
+  // word still finds a phrase that spells it as two: "dogbite" -> "dog bite",
+  // "soc341" -> "SOC 341". Token-prefix matching alone returned nothing for
+  // those, because neither "dog" nor "bite" starts with "dogbite".
+  const collapsed = q.replace(/[^a-z0-9]/g, '');
   const filtered = phrases.filter(p => {
     let matchSearch = true;
     if (tokens.length) {
       const searchable = [p.dot, p.cond, p.cat, p.text].join(' ').toLowerCase();
       const words = searchable.split(/[\s\-\/(),.:;]+/).filter(Boolean);
-      matchSearch = tokens.every(tok => words.some(w => w.startsWith(tok)));
+      // Union of the two rules, so nothing findable before stops being findable.
+      matchSearch = tokens.every(tok => words.some(w => w.startsWith(tok)))
+        || (collapsed.length >= 4 && searchable.replace(/[^a-z0-9]/g, '').includes(collapsed));
     }
     const matchCat = activeCategory === "All" || p.cat === activeCategory;
     return matchSearch && matchCat;
@@ -757,7 +764,7 @@ initFirebase().finally(refreshPhrases);
   <a class="mob-item" href="ed-phone-directory.html"><span class="mob-icon">📞</span>Directory</a>
 </div>
 <button id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">☀️</button>
-<script src="theme.js?v=4"></script>
+<script src="theme.js?v=6"></script>
 <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
 <script src="analytics.js"></script>
 <script>
