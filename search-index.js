@@ -853,14 +853,49 @@ function kpBuildAgreementSearchSubtitle(agreement) {
   return subtitle;
 }
 
+// ── SERVICE AGREEMENT DEEP LINKS ───────────────────────────────
+// Agreement results come from two places: the hand-written type:'sa' rows in
+// SEARCH_INDEX, which carry a #panel anchor and have always worked, and the 29
+// records in data/service_agreements_index.json fetched below. The JSON rows
+// emitted ?id=<slug>, a parameter service-agreements.html never read, so every
+// one of them landed at the top of the page with nothing selected -- searching
+// "Urology Service Agreement" worked while "Urology and Emergency Medicine
+// Service Agreement 2019" did not, which is the same page either way.
+//
+// Ten JSON records are the same document as a hand-written panel under a
+// different name and point straight at that panel. The rest are rendered as
+// cards by the page from their own JSON fields and are reached with ?id=.
+//
+// This map is hand-checked on purpose rather than inferred from title
+// similarity. A token-overlap pass sends "IM and EM Non-member Management" to
+// the PLOS panel and "Psychiatry, IM Hospitalists, and Emergency Medicine" to
+// the two-party psych panel; sending a clinician to the wrong agreement is
+// worse than sending them to a generated card, so anything that is not plainly
+// the same document is left out and gets its own card.
+const KP_AGREEMENT_PANEL_MAP = {
+  'prolonged-ed-los-sla': 'plos',
+  'hip-fractures-ortho-im': 'hipfracture',
+  'im-and-er-code-sepsis-service-agreement': 'im-codesepsis',
+  'necrotizing-fasciitis-service-agreement': 'necfasc',
+  'neurosurgery-ed-transfer-agreement': 'neurosurg-transfer',
+  'ophthalmology-and-emergency-medicine-service-agreement': 'ophtho-em',
+  'pediatric-appendicitis-service-line-agreement-with-appendicitis': 'pedsappendix',
+  'psych-and-ed-service-agreement': 'psych-ed',
+  'urology-and-emergency-medicine-service-agreement-2019': 'urology',
+  'urology-and-emergency-medicine-service-agreement': 'urology',
+};
+
 function kpNormalizeAgreementSearchItem(agreement) {
   if (!agreement || typeof agreement !== 'object') return null;
   const title = String(agreement.title || '').trim();
   if (!title) return null;
   const agreementId = String(agreement.id || '').trim();
-  const href = agreementId
-    ? `service-agreements.html?id=${encodeURIComponent(agreementId)}`
-    : `service-agreements.html?q=${encodeURIComponent(title)}`;
+  const panel = KP_AGREEMENT_PANEL_MAP[agreementId];
+  const href = panel
+    ? `service-agreements.html#${panel}`
+    : agreementId
+      ? `service-agreements.html?id=${encodeURIComponent(agreementId)}`
+      : `service-agreements.html?q=${encodeURIComponent(title)}`;
   return kpNormalizeSearchItem({
     type: 'page',
     i: '📑',
@@ -1005,6 +1040,8 @@ if (typeof window !== 'undefined') {
     runSearch: kpRunSearch,
     rewriteHref: kpRewriteHref,
     phoneQueryForTitle: kpPhoneQueryForTitle,
+    agreementPanelMap: KP_AGREEMENT_PANEL_MAP,
+    serviceAgreementsUrl: KP_SERVICE_AGREEMENTS_URL,
     searchLimit: KP_SEARCH_LIMIT,
     phoneIndexStorageKey: KP_PHONE_INDEX_STORAGE_KEY,
     serviceAgreementsStorageKey: KP_SERVICE_AGREEMENTS_STORAGE_KEY,

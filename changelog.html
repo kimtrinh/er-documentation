@@ -203,6 +203,25 @@ main{max-width:860px;margin:0 auto;padding:32px 20px 64px}
           </div>
         </div>
 
+        <div class="entry" data-type="fix">
+          <div class="entry-icon">📑</div>
+          <div class="entry-body">
+            <div class="entry-title">Service-agreement results now open the agreement</div>
+            <div class="entry-desc">Searching an agreement sometimes opened it and sometimes dropped you at the top of the page. There were <b>two</b> sources of results: the <b>18 hand-written panels</b>, which carry a <code>#anchor</code> and always worked, and <b>29 agreements from the document index</b>, whose results pointed at <code>?id=</code> &mdash; a parameter the page <b>never read</b>. That is the urology case exactly: <i>Urology Service Agreement</i> is a hand-written panel and worked, while <i>Urology and Emergency Medicine Service Agreement 2019</i> came from the index and went nowhere.
+              <ul style="margin:6px 0 0 18px;padding:0;line-height:1.7">
+                <li><b>All 29 now land on the agreement.</b> Ten of them are the same document as an existing panel under a different name, so they point straight at it &mdash; both urology records now open the <i>Urology Service Agreement (2019)</i> panel.</li>
+                <li><b>The other 19 had no page at all</b> and are now rendered as cards from the index, under <i>&ldquo;From the document index&rdquo;</i> in the list &mdash; summary, ED actions, consults &amp; escalation, disposition and timing targets. Things like the <b>Troponin Testing Memo</b>, <b>Transfusion Protocol</b>, <b>Pit Viper Envenomation</b> and <b>Peds Sickle Cell Fever</b> were previously unreachable.</li>
+                <li>The page&rsquo;s own <i>&ldquo;Filter this page&hellip;&rdquo;</i> box finds the new cards by tag and department too.</li>
+              </ul>
+              <div style="margin-top:8px">The id&rarr;panel pairing is checked by hand rather than guessed from the titles: matching on title similarity sends <i>&ldquo;IM and EM Non-member Management&rdquo;</i> to the <b>PLOS</b> panel, which is the wrong agreement. Anything not plainly the same document keeps its own card.</div>
+            </div>
+            <div class="entry-meta">
+              <span class="badge fix">Fix</span>
+              <a class="entry-link" href="service-agreements.html">Open Service Agreements &rarr;</a>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -1841,7 +1860,7 @@ main{max-width:860px;margin:0 auto;padding:32px 20px 64px}
 </script>
 
 <button id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">☀️</button>
-<script src="search-index.js?v=10"></script>
+<script src="search-index.js?v=11"></script>
 <script src="theme.js?v=6"></script>
 <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
 <script src="analytics.js"></script>

@@ -1,4 +1,4 @@
-const CACHE = 'em-toolkit-v12';
+const CACHE = 'em-toolkit-v13';
 
 // Precache the full set of pages + assets needed for offline bedside use.
 const ASSETS = [

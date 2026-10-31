@@ -8,6 +8,8 @@ const ROOT = path.resolve(__dirname, '..');
 const SEARCH_INDEX_PATH = path.join(ROOT, 'search-index.js');
 const CHATBOT_INDEX_PATH = path.join(ROOT, 'chatbot-index.json');
 const PHONE_DIRECTORY_PATH = path.join(ROOT, 'ed-phone-directory.html');
+const AGREEMENTS_PAGE_PATH = path.join(ROOT, 'service-agreements.html');
+const AGREEMENTS_JSON_PATH = path.join(ROOT, 'data', 'service_agreements_index.json');
 const HTML_FILES = fs.readdirSync(ROOT).filter((name) => name.endsWith('.html'));
 
 const errors = [];
@@ -67,7 +69,8 @@ function evaluateSearchIndex(searchIndexSource) {
       `${searchIndexSource}\n` +
       'this.__idx = SEARCH_INDEX;\n' +
       'this.__phoneQuery = kpPhoneQueryForTitle;\n' +
-      'this.__extToFull = kpExtensionToFullNumber;',
+      'this.__extToFull = kpExtensionToFullNumber;\n' +
+      'this.__agreementMap = KP_AGREEMENT_PANEL_MAP;',
       context
     );
   } catch (err) {
@@ -81,6 +84,7 @@ function evaluateSearchIndex(searchIndexSource) {
   searchIndexHelpers = {
     phoneQuery: context.__phoneQuery,
     extToFull: context.__extToFull,
+    agreementMap: context.__agreementMap,
   };
   return context.__idx;
 }
@@ -227,6 +231,82 @@ function checkPhoneDirectoryTargets(index) {
   return { checked, rows };
 }
 
+// ── SERVICE AGREEMENT REACHABILITY ───────────────────────────
+// The agreements in data/service_agreements_index.json are fetched at runtime,
+// so checkSearchIndexLinks cannot see them. They reach the page one of two
+// ways: KP_AGREEMENT_PANEL_MAP sends them to a hand-written panel, or
+// service-agreements.html renders them as a card keyed on their own id. Every
+// one of them used to emit ?id=, which nothing read. Assert both halves so
+// that cannot silently come back.
+function checkServiceAgreementTargets() {
+  const helpers = searchIndexHelpers;
+  if (!helpers || !helpers.agreementMap) {
+    addError('search-index.js did not expose KP_AGREEMENT_PANEL_MAP.');
+    return null;
+  }
+  if (!fs.existsSync(AGREEMENTS_JSON_PATH)) {
+    addError('data/service_agreements_index.json missing.');
+    return null;
+  }
+
+  const html = fs.readFileSync(AGREEMENTS_PAGE_PATH, 'utf8');
+  const panels = new Set(
+    [...html.matchAll(/<div class="agreement-panel[^"]*" id="([^"]+)">/g)].map((m) => m[1])
+  );
+  if (!panels.size) {
+    addError('service-agreements.html: found no .agreement-panel ids.');
+    return null;
+  }
+
+  // Every mapped destination has to be a panel that actually exists.
+  for (const [id, panel] of Object.entries(helpers.agreementMap)) {
+    if (!panels.has(panel)) {
+      addError(`KP_AGREEMENT_PANEL_MAP sends "${id}" to #${panel}, which is not a panel on service-agreements.html`);
+    }
+  }
+
+  let parsed;
+  try {
+    parsed = JSON.parse(fs.readFileSync(AGREEMENTS_JSON_PATH, 'utf8'));
+  } catch (err) {
+    addError(`data/service_agreements_index.json: ${err.message}`);
+    return null;
+  }
+
+  // Same filter kpRefreshServiceAgreementIndex() applies, so this covers
+  // exactly the set that reaches search.
+  const agreements = (Array.isArray(parsed && parsed.agreements) ? parsed.agreements : [])
+    .filter((a) => {
+      const src = String((a && a.source_filename) || '').toLowerCase();
+      return src.endsWith('.doc') || src.endsWith('.docx');
+    });
+
+  const SLUG = /^[a-z0-9][a-z0-9-]*$/;
+  let viaPanel = 0;
+  let viaCard = 0;
+  for (const a of agreements) {
+    const id = String((a && a.id) || '').trim();
+    const title = String((a && a.title) || '(untitled)');
+    if (!id) {
+      addError(`Service agreement "${title}" has no id, so it can only fall back to ?q=.`);
+      continue;
+    }
+    if (helpers.agreementMap[id]) { viaPanel++; continue; }
+    // Rendered as a card: the page keys the panel on the id, so it must be a
+    // safe slug and must not collide with a hand-written panel.
+    if (!SLUG.test(id)) {
+      addError(`Service agreement "${title}" has id "${id}", which is not a safe slug for a panel id.`);
+      continue;
+    }
+    if (panels.has(id)) {
+      addError(`Service agreement "${title}" has id "${id}", which collides with an existing panel; map it explicitly instead.`);
+      continue;
+    }
+    viaCard++;
+  }
+  return { total: agreements.length, viaPanel, viaCard };
+}
+
 function checkSearchIndexLinks(index) {
   for (const item of index) {
     const url = String((item && item.u) || '').trim();
@@ -286,6 +366,7 @@ function run() {
   const index = evaluateSearchIndex(source);
   checkSearchIndexLinks(index);
   const phone = checkPhoneDirectoryTargets(index);
+  const agreements = checkServiceAgreementTargets();
   const chatbot = checkChatbotIndex();
   const chatbotJsPath = path.join(ROOT, 'chatbot.js');
   if (fs.existsSync(chatbotJsPath)) {
@@ -304,6 +385,9 @@ function run() {
   console.log(`- SEARCH_INDEX entries checked: ${index.length}`);
   if (phone && phone.checked) {
     console.log(`- phone-directory deep links checked: ${phone.checked} against ${phone.rows} rows`);
+  }
+  if (agreements) {
+    console.log(`- service agreements reachable: ${agreements.total} (${agreements.viaPanel} via panel, ${agreements.viaCard} via card)`);
   }
   if (chatbot) console.log(`- chatbot-index.json chunks: ${chatbot.chunks.length}`);
 }
