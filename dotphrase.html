@@ -180,7 +180,7 @@ main>*:nth-child(4){animation-delay:.15s}
   <div id="main"></div>
 </main>
 
-<script src="search-index.js?v=9"></script>
+<script src="search-index.js?v=10"></script>
 <script src="data/dotphrases.js"></script>
 <script>
 const firebaseConfig = {
@@ -311,12 +311,19 @@ function rebuildTabs() {
 function getFiltered() {
   const q = document.getElementById("search").value.toLowerCase();
   const tokens = q.split(/\s+/).filter(Boolean);
+  // Punctuation- and space-free form of the query, so something typed as one
+  // word still finds a phrase that spells it as two: "dogbite" -> "dog bite",
+  // "soc341" -> "SOC 341". Token-prefix matching alone returned nothing for
+  // those, because neither "dog" nor "bite" starts with "dogbite".
+  const collapsed = q.replace(/[^a-z0-9]/g, '');
   const filtered = phrases.filter(p => {
     let matchSearch = true;
     if (tokens.length) {
       const searchable = [p.dot, p.cond, p.cat, p.text].join(' ').toLowerCase();
       const words = searchable.split(/[\s\-\/(),.:;]+/).filter(Boolean);
-      matchSearch = tokens.every(tok => words.some(w => w.startsWith(tok)));
+      // Union of the two rules, so nothing findable before stops being findable.
+      matchSearch = tokens.every(tok => words.some(w => w.startsWith(tok)))
+        || (collapsed.length >= 4 && searchable.replace(/[^a-z0-9]/g, '').includes(collapsed));
     }
     const matchCat = activeCategory === "All" || p.cat === activeCategory;
     return matchSearch && matchCat;
