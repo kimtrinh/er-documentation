@@ -180,8 +180,18 @@ June audit.
 
 Same exposure as Drive — GitHub Pages serves these to anyone.
 
+**Highest priority — the SBC Infection Prevention deck.** Landed on `main` in
+PR #194 (not on this branch, so it is listed here rather than fixed here). The
+C. diff, TB rule-out and EID/Ebola cards in `hospital-protocols.html` serve
+**all 11 slides as PNGs plus the full PDF** out of
+`assets/infection-prevention-2026-10/`. GitHub Pages serves that directory to
+anyone on the internet, so an internal infection-control deck — including the
+AIIR room numbers — is currently public. This is the same exposure as Drive and
+should be repointed to SharePoint first.
+
 | Path | Referenced from |
 | --- | --- |
+| `assets/infection-prevention-2026-10/` — `slide-01.png` … `slide-11.png` and `sbc-infection-prevention-updates-2026-10-28.pdf` | `hospital-protocols.html` → `cdiff-two-step`, `tb-rule-out-ed`, `eid-ebola-screening` (**on `main`**) |
 | `assets/cyclospora/clinical-corner-2026-07-29.pdf` | `algorithms.html` → `uc-cyclospora-test-treat` (both the open link and the iframe) |
 | `assets/pediatric-protocol-evidence-summary.pdf` | pediatric protocol evidence summary |
 | `assets/evidence-summary/page-01.png`, `page-02.png` | same summary, inline images |
@@ -205,3 +215,8 @@ here so the exception is on the record rather than looking like an oversight.
 `UniqueId=b09d0e56-b984-43be-98af-0ea5550fcafc`, no local copy. The FMC signout
 assignments and the Fontana phone list v6 were transcribed into native HTML
 rather than embedded, so neither adds a document to migrate later.
+
+It sits beside the Latent TB / Measles / Pertussis cards on `algorithms.html`,
+because the Infection Prevention section it arguably belongs in was added to
+`main` by PR #194 and is not on this branch. Worth moving next to the TB
+rule-out card when the two are merged.
