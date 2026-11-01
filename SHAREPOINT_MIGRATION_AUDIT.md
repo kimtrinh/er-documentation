@@ -156,3 +156,52 @@ reach full document parity.
 **Definition of "done" for the document migration:** Section 2 completed,
 `check-sharepoint-links.py` passes with no FATAL and no inventory warnings, and
 the two Section 4a files confirmed uploaded.
+
+---
+
+## 7. Outstanding — Kaiser documents not yet on SharePoint
+
+_Added 2026-11-01. Inventory only; nothing in this section was changed._
+
+Policy restated by the site owner: **Kaiser documents must be served from
+SharePoint**, so that nobody outside Kaiser can read them. Google Drive and
+files committed into this public repo both fail that test. Section 1 claimed
+`assets/` was empty; it is not, so §7b is drift that has crept back since the
+June audit.
+
+### 7a. Hosted on Google Drive
+
+| File | Lines | Document | Needs |
+| --- | --- | --- | --- |
+| `service-agreements.html` | 508, 517, 519 | Hip Fracture Service Agreement | SharePoint URL + `UniqueId` GUID (export link, open link, preview iframe) |
+| `service-agreements.html` | 547, 556, 558 | IM & General Surgery Service Agreement | same three |
+
+### 7b. Committed into the public repo under `assets/`
+
+Same exposure as Drive — GitHub Pages serves these to anyone.
+
+| Path | Referenced from |
+| --- | --- |
+| `assets/cyclospora/clinical-corner-2026-07-29.pdf` | `algorithms.html` → `uc-cyclospora-test-treat` (both the open link and the iframe) |
+| `assets/pediatric-protocol-evidence-summary.pdf` | pediatric protocol evidence summary |
+| `assets/evidence-summary/page-01.png`, `page-02.png` | same summary, inline images |
+| `assets/aerogen-diagram/slide-01.png` … `slide-11.png` | `hospital-protocols.html:3142` aerogen diagram |
+
+Once each is uploaded, repoint with `scripts/sharepoint-relink.py` /
+`scripts/sharepoint-embed.py`, add the GUID to `data/sharepoint-embeds.json`,
+delete the local copy, and re-run `scripts/check-sharepoint-links.py`.
+
+### 7c. Deliberately left on Google Drive
+
+The four ED trackboard **Google Sheets** (`links.html:201-228`,
+`index.html:484-499`) are live working documents the department edits in place,
+not published Kaiser documents. Moving them would break the workflow. Flagged
+here so the exception is on the record rather than looking like an oversight.
+
+### 7d. Done in this change
+
+`Isolation Signs Front and Back 1.pptx` was added as an `algorithms.html` card
+(`uc-isolation-signs`) sourced from SharePoint only — embed
+`UniqueId=b09d0e56-b984-43be-98af-0ea5550fcafc`, no local copy. The FMC signout
+assignments and the Fontana phone list v6 were transcribed into native HTML
+rather than embedded, so neither adds a document to migrate later.

@@ -1,4 +1,4 @@
-const CACHE = 'em-toolkit-v13';
+const CACHE = 'em-toolkit-v14';
 
 // Precache the full set of pages + assets needed for offline bedside use.
 const ASSETS = [
@@ -21,6 +21,7 @@ const ASSETS = [
   '/sitemap.html',
   '/vertigo-helper.html',
   '/ed-phone-directory.html',
+  '/hospital-protocols.html',
   '/service-agreements.html',
   '/service-requests.html',
   '/head-neck-surgery.html',

@@ -488,6 +488,59 @@
   }
   .btn-notify:hover { background: rgba(59, 130, 246, 0.22); color: #dbeafe; }
 
+  /* Signout card: lives inside #fmcPanel but outside #fmcEntries, so it is
+     not a .entry and the .entry.hidden rule above cannot reach it. */
+  .panel-aside {
+    margin: 0 0 14px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface-2, rgba(255,255,255,.02));
+    overflow: hidden;
+  }
+  .panel-aside.hidden { display: none; }
+  .panel-aside > summary {
+    cursor: pointer;
+    padding: 10px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    user-select: none;
+  }
+  .panel-aside > summary:hover { color: var(--fmc); }
+  .panel-aside[open] > summary { border-bottom: 1px solid var(--border); }
+  .aside-body { padding: 12px 14px 14px; }
+  .aside-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 4px 18px;
+  }
+  .aside-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10px;
+    padding: 3px 0;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+  .aside-row b { color: var(--fmc); font-weight: 700; }
+  .aside-foot {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+  .aside-foot a { color: var(--fmc); text-decoration: none; }
+  .aside-foot a:hover { text-decoration: underline; }
+
   .no-results {
     padding: 32px 20px;
     text-align: center;
@@ -610,7 +663,7 @@ main>*:nth-child(4){animation-delay:.15s}
     <input type="text" id="globalSearch" placeholder="Search name or number..." autocomplete="off" aria-label="Search phone directory">
     <span class="search-count" id="searchCount" role="status" aria-live="polite"></span>
   </div>
-  <span class="updated-badge">Updated 11/2024</span>
+  <span class="updated-badge">Updated 11/2026</span>
 </header>
 
 <main>
@@ -642,6 +695,31 @@ main>*:nth-child(4){animation-delay:.15s}
         Add Entry
       </button>
     </div>
+    <details class="panel-aside" id="fmcSignout" data-search="signout sign-out sign out assignments shift handoff who do i sign out to oncoming off-going receiving provider split pager paging 77777 5a–3p (1) 5a-3p (1) 12p–10p 12p-10p 5a–3p (2) 5a-3p (2) 1p–11p 1p-11p 6a–4p 6a-4p 2p–12a 2p-12a 8a–8p 8a-8p 3p–1a 3p-1a 6p–4a 6p-4a 8p–8a (1) 8p-8a (1) 8p–8a (2) 8p-8a (2) 9p–7a 9p-7a 10p–8a 10p-8a flex 6p–6a flex 6p-6a">
+      <summary>&#128257; Signout Assignments &mdash; Regular Schedule</summary>
+      <div class="aside-body">
+        <div class="aside-grid">
+          <div class="aside-row"><span>5a–3p (1)</span><b>12p–10p</b></div>
+          <div class="aside-row"><span>5a–3p (2)</span><b>1p–11p</b></div>
+          <div class="aside-row"><span>6a–4p</span><b>2p–12a</b></div>
+          <div class="aside-row"><span>8a–8p</span><b>3p–1a</b></div>
+          <div class="aside-row"><span>12p–10p</span><b>6p–4a</b></div>
+          <div class="aside-row"><span>1p–11p</span><b>8p–8a (1)</b></div>
+          <div class="aside-row"><span>2p–12a</span><b>8p–8a (2)</b></div>
+          <div class="aside-row"><span>3p–1a</span><b>9p–7a</b></div>
+          <div class="aside-row"><span>6p–4a</span><b>10p–8a</b></div>
+          <div class="aside-row"><span>8p–8a (1)</span><b>5a–3p (1)</b></div>
+          <div class="aside-row"><span>8p–8a (2)</span><b>6a–4p</b></div>
+          <div class="aside-row"><span>9p–7a</span><b>5a–3p (2)</b></div>
+          <div class="aside-row"><span>10p–8a</span><b>8a–8p or SPLIT</b></div>
+          <div class="aside-row"><span>FLEX 6p–6a</span><b>8p–8a (2)</b></div>
+        </div>
+        <div class="aside-foot">
+          <span><b>p</b> = pager &middot; paging system access = <b>77777</b> + pager number</span>
+          <a href="hospital-protocols.html#fmc-signout-assignments">Holiday schedule &amp; notes &rarr;</a>
+        </div>
+      </div>
+    </details>
     <div id="fmcEntries"></div>
     <div class="no-results" id="fmcNoResults">No matching entries</div>
   </div>
@@ -702,7 +780,7 @@ main>*:nth-child(4){animation-delay:.15s}
 
 <div class="toast" id="toast"></div>
 
-<script src="search-index.js?v=11"></script>
+<script src="search-index.js?v=12"></script>
 <script>
 const data = {
   omc: {
@@ -919,7 +997,7 @@ const data = {
       { name: "Surgery – MD", number: "26263", type: "ext", note: "Beeper 1685" },
       { name: "Internal Medicine", number: "Vocera", type: "ext", note: "7a–7p" },
       { name: "Internal Medicine", number: "27028", type: "ext", note: "7p–7a" },
-      { name: "Interventional Radiology", number: "24050 / 24060", type: "ext" },
+      { name: "Interventional Radiology", number: "24044 / 24045", type: "ext", note: "IR charge RN" },
       { name: "Neurosurgery", number: "p2020", type: "pager", note: "3a–9p" },
       { name: "Neurosurgery", number: "Virtualist", type: "phone", note: "9p–3a" },
       { name: "NICU", number: "27300", type: "ext" },
@@ -929,19 +1007,19 @@ const data = {
       { name: "Pain Clinic", number: "73185", type: "ext" },
       { name: "Pediatrics (Hospitalist)", number: "p1223", type: "pager" },
       { name: "Pediatrics (PICU)", number: "p3966", type: "pager" },
-      { name: "Peritoneal Dialysis RN", number: "p7117", type: "pager" },
+      { name: "Peritoneal Dialysis RN", number: "p7117", type: "pager", note: "Pager wkdays 7a–5p · after hours 5p–7a & wknds → 28600" },
       { name: "Dialysis – Peritoneal MOB 3, 1st Floor", number: "74253", type: "ext", note: "Beeper 7117" },
       { name: "Dialysis – HEMO 6th Floor", number: "28600 / 28608", type: "ext" },
-      { name: "Dialysis – Peritoneal & Hemodialysis", number: "28600", type: "ext" },
-      { name: "PICC RN", number: "p2723", type: "pager", note: "Ext 26511 (5 North)" },
-      { name: "PICC Line RN – 5 North", number: "26511", type: "ext" },
+      { name: "Dialysis – Peritoneal & Hemodialysis", number: "28600", type: "ext", note: "After-hours peritoneal: 5p–7a & wknds" },
+      { name: "PICC RN", number: "p2723", type: "pager", note: "Ext 26511 / 26512 (5 North)" },
+      { name: "PICC Line RN – 5 North", number: "26511 / 26512", type: "ext" },
       { name: "Podiatry", number: "p1984", type: "pager" },
       { name: "Psychiatry / PSYCH", number: "75313", type: "ext" },
       { name: "Mental Health", number: "8-127-2941", type: "ext" },
       { name: "Respiratory", number: "28998 / 28871 Cisco", type: "ext", note: "Beeper 1404" },
       { name: "Radiology (File Room)", number: "76600", type: "ext", note: "7a–11:30p" },
       { name: "Radiology (STAT reads)", number: "76600", type: "ext", note: "7a–7p" },
-      { name: "Radiology — Evening Supervisor", number: "(909) 427-7666", type: "phone", note: "M–F 3p–11:30p · Adriana Urquidez / Lead Tech" },
+      { name: "Radiology — Evening Supervisor", number: "(909) 427-7666", type: "phone", note: "M–F 3p–11:30p staffed · phone list v6 lists this line for radiology issues 7a–11p · Adriana Urquidez / Lead Tech" },
       { name: "Radiology — File Room (evening)", number: "(909) 427-7660", type: "phone", note: "7 days 3p–11:30p · Carmichael / Aguilar / Green · also Teams" },
       { name: "Radiology — Graveyard System Admin", number: "(909) 302-4112", type: "phone", note: "7 days 12a–8a · Gonzalez / Ntim · also Teams" },
       { name: "Substance Abuse", number: "29119", type: "ext", note: "7:30a–3:30p M–F" },
@@ -961,7 +1039,7 @@ const data = {
       { name: "Fluoroscopy", number: "27655", type: "ext" },
       { name: "MRI", number: "24351", type: "ext" },
       { name: "Nuclear Med – MOB 3 Basement", number: "75260", type: "ext" },
-      { name: "Ultrasound", number: "27652", type: "ext" },
+      { name: "Ultrasound", number: "27653", type: "ext" },
       { name: "Laboratory / Blood Bank", number: "28060 / 28080", type: "ext" },
       { name: "Laboratory – STAT", number: "38055", type: "ext" },
       { name: "Cath Labs RM1/RM2/RM3/PACU", number: "24658 / 24653 / 24626 / 24675", type: "ext" },
@@ -1068,6 +1146,7 @@ const data = {
       { name: "ED Physician Suite", number: "29000", type: "ext", note: "Fax 29110" },
       { name: "Help Desk", number: "74357", type: "ext" },
       { name: "HUB", number: "1-877-227-8799", type: "phone" },
+      { name: "Paging System Access", number: "77777", type: "ext", note: `Dial 77777, then the pager number · a "p" prefix in this directory means pager` },
     ],
     "KEY STAFF — FMC ED": [
       { name: "Dr. Michael Schwartzwald, Chief", number: "29184", type: "ext" },
@@ -1087,7 +1166,7 @@ const data = {
       { name: "Ectopic Watch", number: "Fwd chart to Jessica Dasco", type: "ext" },
       { name: "GYN Case Managers", number: "Traci Brennan or Noelle Miranda", type: "ext", note: `Vocera "GYN"` },
       { name: "Occupational Exposure", number: "Fwd chart to Gina Cummings", type: "ext" },
-      { name: "OnRad Delays (>3 hrs) 12p–7a", number: "(909) 302-4112", type: "phone", note: "Graveyard System Admin line · Gonzalez / Ntim 12a–8a" },
+      { name: "Radiology Issues / OnRad Delays (>3 hrs)", number: "(909) 427-7666 / (909) 302-4112", type: "phone", note: "7a–11p → 427-7666 (supervisor / lead tech) · 12a–8a → 302-4112 (graveyard sys admin)" },
       { name: "Radiology Schedule: KP Telerad M–Th 7p–7a", number: "OnRad F–Su 7p–7a", type: "ext" },
       { name: "Ontario ER – Pod A Ambulance", number: "8-264-5810", type: "ext" },
       { name: "Ontario ER – Pod B", number: "8-264-5820", type: "ext" },
@@ -1122,7 +1201,7 @@ const data = {
 
 const PHONE_INDEX_STORAGE_KEY = 'kp_er_phone_directory_index_v1';
 const CUSTOM_ENTRIES_STORAGE_KEY = 'kp_er_phone_custom_entries_v1';
-const PHONE_DIRECTORY_SUBMIT_EMAIL = '';
+const PHONE_DIRECTORY_SUBMIT_EMAIL = 'johnathon.m.collins@kp.org';
 const customEntries = { omc: [], fmc: [] };
 let currentHospital = 'omc';
 
@@ -1493,7 +1572,21 @@ function applyFilter(rawQuery) {
       sec.style.display = anyVisible ? '' : 'none';
     });
 
-    document.getElementById(`${hospital}NoResults`).style.display = visible === 0 && q ? 'block' : 'none';
+    // The signout card sits outside #<hospital>Entries, so the entry loop above
+    // cannot see it. Match it on its own haystack, or a search that hits only
+    // the card still reads "No matching entries" right beside it. It is
+    // deliberately kept out of `total`: pickDeepLinkTarget() only ever returns
+    // a .entry, so counting the card would make a card-only match look like a
+    // hit and send the deep-link handler down its "stale link" reset path.
+    const aside = document.querySelector(`#${hospital}Panel .panel-aside`);
+    let asideMatch = false;
+    if (aside) {
+      asideMatch = !q || (aside.dataset.search || '').includes(q);
+      aside.classList.toggle('hidden', !asideMatch);
+      aside.open = !!q && asideMatch;
+    }
+
+    document.getElementById(`${hospital}NoResults`).style.display = (visible === 0 && !asideMatch) && q ? 'block' : 'none';
     total += visible;
   });
 

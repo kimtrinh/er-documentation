@@ -660,6 +660,13 @@ main>*:nth-child(4){animation-delay:.15s}
         <div class="algo-meta">Dr. Ethnasios · Mar 2025 &nbsp;·&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
       </div>
     </div>
+    <div class="algo-card" onclick="showAlgo('uc-isolation-signs')" id="card-uc-isolation-signs" data-algo="uc-isolation-signs" data-keywords="isolation signs signage door sign precautions airborne droplet contact contact plus enteric neutropenic PPE N95 gown gloves mask infection control front and back posting room">
+      <div class="algo-icon">🚪</div>
+      <div class="algo-info">
+        <div class="algo-title">Isolation Signs (Front &amp; Back)</div>
+        <div class="algo-meta">ER Toolkit &middot; SharePoint &nbsp;&middot;&nbsp; <span class="algo-badge badge-uc">Urgent Care</span></div>
+      </div>
+    </div>
     <div class="algo-card" onclick="showAlgo('uc-covid-paxlovid')" id="card-uc-covid-paxlovid" data-algo="uc-covid-paxlovid" data-keywords="COVID Paxlovid nirmatrelvir ritonavir antiviral GFR CYP3A drug interaction urgent care GPC clinical corner" role="button" tabindex="0" aria-controls="algoViewer" aria-pressed="false">
       <div class="algo-icon">🦠</div>
       <div class="algo-info">
@@ -1144,7 +1151,7 @@ main>*:nth-child(4){animation-delay:.15s}
   </div>
 </main>
 
-<script src="search-index.js?v=11"></script>
+<script src="search-index.js?v=12"></script>
 <script>
 const algos = {
 
@@ -3549,6 +3556,19 @@ const algos = {
         </a>
       </div>
       <iframe src="https://sp-cloud.kp.org/sites/ERtoolkit/_layouts/15/embed.aspx?UniqueId=c7050982-aab2-4dbb-bab7-9111ba831c6e" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Latent TB — Diagnosis & Treatment"></iframe>
+    `,
+  },
+  'uc-isolation-signs': {
+    icon: '🚪',
+    title: 'Isolation Signs (Front &amp; Back)',
+    updated: 'ER Toolkit SharePoint \u00b7 Isolation Signs Front and Back 1.pptx',
+    render: () => `
+      <div style="margin-bottom:10px">
+        <a href="https://sp-cloud.kp.org/:p:/r/sites/ERtoolkit/_layouts/15/Doc.aspx?sourcedoc=%7BB09D0E56-B984-43BE-98AF-0EA5550FCAFC%7D&amp;file=Isolation%20Signs%20Front%20and%20Back%201.pptx&amp;action=edit&amp;mobileredirect=true&amp;wdwpf=doclib-c" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px;background:#0a2a0a;border:1px solid #15803d;border-radius:8px;color:#86efac;font-size:13px;font-weight:700;text-decoration:none">
+          📄 Open in SharePoint \u2197
+        </a>
+      </div>
+      <iframe src="https://sp-cloud.kp.org/sites/ERtoolkit/_layouts/15/embed.aspx?UniqueId=b09d0e56-b984-43be-98af-0ea5550fcafc" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:10px;background:var(--surface)" title="Isolation Signs (Front and Back)"></iframe>
     `,
   },
   'uc-covid-paxlovid': {

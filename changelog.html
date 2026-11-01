@@ -163,7 +163,59 @@ main{max-width:860px;margin:0 auto;padding:32px 20px 64px}
 
   <div class="timeline" id="timeline">
 
-    <!-- ── October 31, 2026 (latest) ── -->
+    <!-- ── November 1, 2026 (latest) ── -->
+    <div class="date-group">
+      <div class="date-dot"></div>
+      <div class="date-label">
+        <span class="date-text">November 1, 2026</span>
+        <span class="date-relative"></span>
+      </div>
+      <div class="entries">
+
+        <div class="entry" data-type="feat">
+          <div class="entry-icon">&#128257;</div>
+          <div class="entry-body">
+            <div class="entry-title">New: <i>who do I sign out to?</i> &mdash; the FMC signout map</div>
+            <div class="entry-desc">The signout assignments existed only on a printed sheet &mdash; nothing on the toolkit answered <i>who takes my patients at the end of this shift</i>. Both schedules are now on a card under <b>ED Operations &amp; Workflows</b>: the <b>regular</b> map (14 shifts, <b>5a&ndash;3p&nbsp;(1)</b> through <b>FLEX 6p&ndash;6a</b>) and the <b>holiday</b> map (10 shifts, <b>5a&ndash;5p</b> through <b>8p&ndash;8a&nbsp;(2)</b>), each read left to right: off-going shift &rarr; who it signs out to.
+              <div style="margin-top:8px">The quirks in the sheet are called out rather than smoothed over: <b>8p&ndash;8a&nbsp;(2)</b> receives from <b>two</b> shifts (<b>2p&ndash;12a</b> and <b>FLEX 6p&ndash;6a</b>); <b>FLEX 6p&ndash;6a</b> and the holiday <b>9a&ndash;9p</b> are never anyone&rsquo;s target; and <b>SPLIT</b> is printed on the source with no definition, so it is reproduced as printed rather than guessed at. The regular column also sits on the <b>Fontana phone directory</b>, where the one-pager prints it, collapsed so it does not push the numbers down.</div>
+            </div>
+            <div class="entry-meta">
+              <span class="badge feat">New Card</span>
+              <a class="entry-link" href="hospital-protocols.html#fmc-signout-assignments">Open Signout Assignments &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="entry" data-type="fix">
+          <div class="entry-icon">&#128222;</div>
+          <div class="entry-body">
+            <div class="entry-title">Fontana numbers reconciled with phone list v6</div>
+            <div class="entry-desc">The directory had drifted from the printed one-pager on six points. <b>Interventional Radiology</b> was listed as <b>24050&nbsp;/&nbsp;24060</b> and is <b>24044&nbsp;/&nbsp;24045</b> &mdash; the overnight-IR protocol card had been saying <b>24044</b> all along, so the directory was the odd one out. <b>Ultrasound</b> <b>27652</b> &rarr; <b>27653</b>. <b>PICC RN</b> gains <b>26512</b> alongside 26511; the <b>p2723</b> pager stays, since v6 does not contradict it.
+              <div style="margin-top:8px"><b>Peritoneal Dialysis RN</b> now carries its hours &mdash; pager weekdays <b>7a&ndash;5p</b>, after hours and weekends <b>28600</b>. The radiology-delay row contradicted itself (name said <b>12p&ndash;7a</b>, its own note said <b>12a&ndash;8a</b>); it is now one row for the whole workflow: <b>7a&ndash;11p &rarr; (909) 427-7666</b>, <b>12a&ndash;8a &rarr; (909) 302-4112</b>. New row: <b>Paging System Access &mdash; 77777</b> then the pager number, which explains the <b>p</b> prefix on ten existing rows and appeared nowhere on the site before. Header now reads <b>Updated 11/2026</b>, and the directory&rsquo;s &ldquo;Email for Publish&rdquo; button, which had no destination, now reaches the list&rsquo;s maintainer.</div>
+            </div>
+            <div class="entry-meta">
+              <span class="badge fix">Fix</span>
+              <a class="entry-link" href="ed-phone-directory.html">Open Phone Directory &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="entry" data-type="feat">
+          <div class="entry-icon">&#128682;</div>
+          <div class="entry-body">
+            <div class="entry-title">New: Isolation Signs, front and back</div>
+            <div class="entry-desc">The door signage deck is now a card beside <b>Latent TB</b>, <b>Measles FAQ</b> and <b>Pertussis</b> under <b>Urgent Care</b> &mdash; served from <b>SharePoint</b>, behind the usual KP sign-in gate, with no copy of the file on the public site.</div>
+            <div class="entry-meta">
+              <span class="badge feat">New Card</span>
+              <a class="entry-link" href="algorithms.html#card-uc-isolation-signs">Open Isolation Signs &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── October 31, 2026 ── -->
     <div class="date-group">
       <div class="date-dot"></div>
       <div class="date-label">
@@ -1860,7 +1912,7 @@ main{max-width:860px;margin:0 auto;padding:32px 20px 64px}
 </script>
 
 <button id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">☀️</button>
-<script src="search-index.js?v=11"></script>
+<script src="search-index.js?v=12"></script>
 <script src="theme.js?v=6"></script>
 <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
 <script src="analytics.js"></script>

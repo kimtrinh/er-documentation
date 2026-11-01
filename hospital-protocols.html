@@ -391,6 +391,14 @@ main{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-colu
         </div>
       </div>
 
+      <div class="list-item" data-target="fmc-signout-assignments" data-keywords="FMC signout sign-out assignments shift handoff who do I sign out to receiving provider oncoming off-going regular holiday 5a-3p 6a-4p 8a-8p 12p-10p 1p-11p 2p-12a 3p-1a 6p-4a 8p-8a 9p-7a 10p-8a flex 6p-6a split mod pod">
+        <div class="li-title">FMC Signout Assignments</div>
+        <div class="li-meta">
+          <span class="li-badge yellow">Operations</span>
+          <span class="li-badge blue">Reference</span>
+        </div>
+      </div>
+
       <div class="list-item" data-target="rx-signout" data-keywords="rx prescription sign-out handoff controlled substance narcotics workflow">
         <div class="li-title">Rx Sign-Out Workflow</div>
         <div class="li-meta">
@@ -2241,6 +2249,91 @@ main{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-colu
       </div>
     </div>
 
+    <!-- ══ FMC SIGNOUT ASSIGNMENTS ══ -->
+    <div class="protocol-panel" id="fmc-signout-assignments">
+      <style>
+        .sgn-section-title{font-size:13px;font-weight:800;color:var(--text);text-transform:uppercase;letter-spacing:.08em;padding-bottom:6px;border-bottom:2px solid var(--blue2);margin:4px 0 14px}
+        .sgn-table{background:var(--surface2);border:1px solid var(--border);border-radius:10px;overflow:hidden;font-family:var(--mono);max-width:520px}
+        .sgn-table table{width:100%;border-collapse:collapse;font-size:13px}
+        .sgn-table th{background:var(--surface);color:var(--text2);font-weight:700;padding:7px 12px;border-bottom:1px solid var(--border);font-size:10px;text-transform:uppercase;letter-spacing:.06em;text-align:left}
+        .sgn-table th:last-child{text-align:right}
+        .sgn-table td{padding:6px 12px;border-bottom:1px solid var(--border);color:var(--text2)}
+        .sgn-table td.sgn-to{font-weight:700;color:#93c5fd;text-align:right}
+        .sgn-table td.sgn-split{color:#fcd34d}
+        .sgn-table tr:last-child td{border-bottom:none}
+        .sgn-notes{margin:0;padding-left:18px;font-size:12px;color:var(--text2);line-height:1.8}
+        .sgn-notes b{color:var(--text);font-family:var(--mono);font-weight:700}
+      </style>
+      <div class="info-card">
+        <div class="card-top">
+          <div>
+            <div id="fmc-signout-map" class="card-title">FMC Signout Assignments</div>
+            <div class="card-dept">Fontana Medical Center · ED Operations · Shift Handoff</div>
+          </div>
+          <div class="decision-badge yellow">⚙️ Operations Reference</div>
+        </div>
+        <hr class="divider"/>
+        <div style="font-size:13px;color:var(--text2);line-height:1.55">
+          Who each off-going shift hands its patients to. Read each row left to right &mdash; the
+          <b style="color:var(--text)">off-going</b> shift on the left signs out <b style="color:var(--text)">to</b>
+          the shift on the right. Holidays run a different set of shifts and a different map; use the second table.
+        </div>
+      </div>
+
+      <div class="info-card">
+        <div class="sgn-section-title">🔁 Regular Schedule</div>
+        <div class="sgn-table">
+          <table><tr><th>Off-going shift</th><th>Signs out to &rarr;</th></tr>
+              <tr><td>5a–3p (1)</td><td class="sgn-to">12p–10p</td></tr>
+              <tr><td>5a–3p (2)</td><td class="sgn-to">1p–11p</td></tr>
+              <tr><td>6a–4p</td><td class="sgn-to">2p–12a</td></tr>
+              <tr><td>8a–8p</td><td class="sgn-to">3p–1a</td></tr>
+              <tr><td>12p–10p</td><td class="sgn-to">6p–4a</td></tr>
+              <tr><td>1p–11p</td><td class="sgn-to">8p–8a (1)</td></tr>
+              <tr><td>2p–12a</td><td class="sgn-to">8p–8a (2)</td></tr>
+              <tr><td>3p–1a</td><td class="sgn-to">9p–7a</td></tr>
+              <tr><td>6p–4a</td><td class="sgn-to">10p–8a</td></tr>
+              <tr><td>8p–8a (1)</td><td class="sgn-to">5a–3p (1)</td></tr>
+              <tr><td>8p–8a (2)</td><td class="sgn-to">6a–4p</td></tr>
+              <tr><td>9p–7a</td><td class="sgn-to">5a–3p (2)</td></tr>
+              <tr><td>10p–8a</td><td class="sgn-to sgn-split">8a–8p or SPLIT</td></tr>
+              <tr><td>FLEX 6p–6a</td><td class="sgn-to">8p–8a (2)</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <div class="sgn-section-title">🎄 Holiday Schedule</div>
+        <div class="sgn-table">
+          <table><tr><th>Off-going shift</th><th>Signs out to &rarr;</th></tr>
+              <tr><td>5a–5p</td><td class="sgn-to">12p–12a</td></tr>
+              <tr><td>6a–6p</td><td class="sgn-to">2p–2a</td></tr>
+              <tr><td>9a–9p</td><td class="sgn-to">3p–3a</td></tr>
+              <tr><td>12p–12a</td><td class="sgn-to">4p–4a</td></tr>
+              <tr><td>2p–2a</td><td class="sgn-to">7p–7a</td></tr>
+              <tr><td>3p–3a</td><td class="sgn-to">8p–8a (1)</td></tr>
+              <tr><td>4p–4a</td><td class="sgn-to">8p–8a (2)</td></tr>
+              <tr><td>7p–7a</td><td class="sgn-to">5a–5p</td></tr>
+              <tr><td>8p–8a (1)</td><td class="sgn-to">6a–6p</td></tr>
+              <tr><td>8p–8a (2)</td><td class="sgn-to sgn-split">SPLIT</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <div class="sgn-section-title">📝 Notes</div>
+        <ul class="sgn-notes">
+          <li><b>8p–8a (2)</b> receives from <b>two</b> shifts on the regular map &mdash; <b>2p–12a</b> and <b>FLEX 6p–6a</b>.</li>
+          <li><b>FLEX 6p–6a</b> is never a signout <i>target</i> &mdash; nobody signs out to it. Same for the holiday <b>9a–9p</b>.</li>
+          <li><b>SPLIT</b> appears on the source sheet without a definition; it is reproduced here as printed.</li>
+          <li><b>10p–8a → 8a–8p or SPLIT</b> is a conditional on the source, not a choice this page makes for you.</li>
+          <li><b>FLEX 6p–6a</b> is the shift listed as <b>6p–6a Mod Pod</b> on the
+            <a href="#fmc-psg-assignments" style="color:#93c5fd">FMC Shift PSG Assignments</a> card.
+            The eight holiday shifts have no PSG rows at all &mdash; that card does not cover holidays.</li>
+        </ul>
+      </div>
+    </div>
+
     <!-- ══ RX SIGN-OUT ══ -->
     <div class="protocol-panel" id="rx-signout">
       <div class="info-card">
@@ -3417,7 +3510,7 @@ main{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-colu
 </script>
 
 <button id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">☀️</button>
-<script src="search-index.js?v=11"></script>
+<script src="search-index.js?v=12"></script>
 <script src="sp-embed.js?v=1"></script>
 <script src="theme.js?v=6"></script>
 <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
