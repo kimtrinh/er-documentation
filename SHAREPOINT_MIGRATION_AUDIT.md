@@ -180,18 +180,12 @@ June audit.
 
 Same exposure as Drive — GitHub Pages serves these to anyone.
 
-**Highest priority — the SBC Infection Prevention deck.** Landed on `main` in
-PR #194 (not on this branch, so it is listed here rather than fixed here). The
-C. diff, TB rule-out and EID/Ebola cards in `hospital-protocols.html` serve
-**all 11 slides as PNGs plus the full PDF** out of
-`assets/infection-prevention-2026-10/`. GitHub Pages serves that directory to
-anyone on the internet, so an internal infection-control deck — including the
-AIIR room numbers — is currently public. This is the same exposure as Drive and
-should be repointed to SharePoint first.
+`scripts/check-sharepoint-links.py` enumerates these exactly — it reports them
+as FATAL stray local references. **15 remain** (was 22 before the infection-
+prevention deck was migrated; see §7d).
 
 | Path | Referenced from |
 | --- | --- |
-| `assets/infection-prevention-2026-10/` — `slide-01.png` … `slide-11.png` and `sbc-infection-prevention-updates-2026-10-28.pdf` | `hospital-protocols.html` → `cdiff-two-step`, `tb-rule-out-ed`, `eid-ebola-screening` (**on `main`**) |
 | `assets/cyclospora/clinical-corner-2026-07-29.pdf` | `algorithms.html` → `uc-cyclospora-test-treat` (both the open link and the iframe) |
 | `assets/pediatric-protocol-evidence-summary.pdf` | pediatric protocol evidence summary |
 | `assets/evidence-summary/page-01.png`, `page-02.png` | same summary, inline images |
@@ -208,7 +202,30 @@ The four ED trackboard **Google Sheets** (`links.html:201-228`,
 not published Kaiser documents. Moving them would break the workflow. Flagged
 here so the exception is on the record rather than looking like an oversight.
 
-### 7d. Done in this change
+### 7d. Done
+
+**The SBC Infection Prevention deck is migrated (2026-11-02).** The C. diff,
+TB rule-out and EID/Ebola cards no longer serve slide PNGs or a PDF from this
+repo. All three now link and embed the meeting deck it came from —
+`oct2826meeting/MD ED Meeting 10.28.26.pptx`, embed
+`UniqueId=798cc58b-cce5-4d44-93e3-7e695440322b` — behind the usual KP sign-in
+gate, and `assets/infection-prevention-2026-10/` (11 PNGs + 1 PDF) is deleted.
+The cards keep all their written content: the two-step testing sequence, the
+AIIR room numbers, the sputum spacing and the Ebola screening steps were
+transcribed into the page, not left inside the images.
+
+Note for whoever reviews it: the supplied link is the **full 10/28 ED physician
+meeting deck**, which is where SBC Infection Prevention presented. The labels
+say "MD ED Meeting 10/28/26" rather than naming it the Infection Prevention
+deck, so the page does not claim more than is verified. If the infection
+prevention slides are actually a separate file, swap the URL and GUID in those
+three cards.
+
+Two embed GUIDs were also missing from `data/sharepoint-embeds.json`, which was
+failing the audit gate: `b09d0e56…` (Isolation Signs, added with this work) and
+`61521114…` (How to view prelims in SECTRA, unmapped since `8f272f7`). Both are
+linked via `Doc.aspx` rather than a Shared Documents path, so they are keyed by
+filename. The gate now reports **zero** unmapped GUIDs.
 
 `Isolation Signs Front and Back 1.pptx` was added as an `algorithms.html` card
 (`uc-isolation-signs`) sourced from SharePoint only — embed
