@@ -63,3 +63,4 @@ It validates:
 - JavaScript syntax in `search-index.js`
 - Inline script syntax across all `.html` files
 - `search-index.js` URL targets and hash anchors
+- Curated phone-directory subtitles against the rows in `ed-phone-directory.html`
