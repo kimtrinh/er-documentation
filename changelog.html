@@ -163,7 +163,85 @@ main{max-width:860px;margin:0 auto;padding:32px 20px 64px}
 
   <div class="timeline" id="timeline">
 
-    <!-- ── October 31, 2026 (latest) ── -->
+    <!-- ── November 1, 2026 (latest) ── -->
+    <div class="date-group">
+      <div class="date-dot"></div>
+      <div class="date-label">
+        <span class="date-text">November 1, 2026</span>
+        <span class="date-relative"></span>
+      </div>
+      <div class="entries">
+
+        <div class="entry" data-type="feat">
+          <div class="entry-icon">&#128257;</div>
+          <div class="entry-body">
+            <div class="entry-title">New: <i>who do I sign out to?</i> &mdash; the FMC signout map</div>
+            <div class="entry-desc">The signout assignments existed only on a printed sheet &mdash; nothing on the toolkit answered <i>who takes my patients at the end of this shift</i>. Both schedules are now on a card under <b>ED Operations &amp; Workflows</b>: the <b>regular</b> map (14 shifts, <b>5a&ndash;3p&nbsp;(1)</b> through <b>FLEX 6p&ndash;6a</b>) and the <b>holiday</b> map (10 shifts, <b>5a&ndash;5p</b> through <b>8p&ndash;8a&nbsp;(2)</b>), each read left to right: off-going shift &rarr; who it signs out to.
+              <div style="margin-top:8px">The quirks in the sheet are called out rather than smoothed over: <b>8p&ndash;8a&nbsp;(2)</b> receives from <b>two</b> shifts (<b>2p&ndash;12a</b> and <b>FLEX 6p&ndash;6a</b>); <b>FLEX 6p&ndash;6a</b> and the holiday <b>9a&ndash;9p</b> are never anyone&rsquo;s target; and <b>SPLIT</b> is printed on the source with no definition, so it is reproduced as printed rather than guessed at. The regular column also sits on the <b>Fontana phone directory</b>, where the one-pager prints it, collapsed so it does not push the numbers down.</div>
+            </div>
+            <div class="entry-meta">
+              <span class="badge feat">New Card</span>
+              <a class="entry-link" href="hospital-protocols.html#fmc-signout-assignments">Open Signout Assignments &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="entry" data-type="fix">
+          <div class="entry-icon">&#128222;</div>
+          <div class="entry-body">
+            <div class="entry-title">Fontana numbers reconciled with phone list v6</div>
+            <div class="entry-desc">The directory had drifted from the printed one-pager on six points. <b>Interventional Radiology</b> was listed as <b>24050&nbsp;/&nbsp;24060</b> and is <b>24044&nbsp;/&nbsp;24045</b> &mdash; the overnight-IR protocol card had been saying <b>24044</b> all along, so the directory was the odd one out. <b>Ultrasound</b> <b>27652</b> &rarr; <b>27653</b>. <b>PICC RN</b> gains <b>26512</b> alongside 26511; the <b>p2723</b> pager stays, since v6 does not contradict it.
+              <div style="margin-top:8px"><b>Peritoneal Dialysis RN</b> now carries its hours &mdash; pager weekdays <b>7a&ndash;5p</b>, after hours and weekends <b>28600</b>. The radiology-delay row contradicted itself (name said <b>12p&ndash;7a</b>, its own note said <b>12a&ndash;8a</b>); it is now one row for the whole workflow: <b>7a&ndash;11p &rarr; (909) 427-7666</b>, <b>12a&ndash;8a &rarr; (909) 302-4112</b>. New row: <b>Paging System Access &mdash; 77777</b> then the pager number, which explains the <b>p</b> prefix on ten existing rows and appeared nowhere on the site before. Header now reads <b>Updated 11/2026</b>, and the directory&rsquo;s &ldquo;Email for Publish&rdquo; button, which had no destination, now reaches the list&rsquo;s maintainer.</div>
+            </div>
+            <div class="entry-meta">
+              <span class="badge fix">Fix</span>
+              <a class="entry-link" href="ed-phone-directory.html">Open Phone Directory &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="entry" data-type="improvement">
+          <div class="entry-icon">&#128062;</div>
+          <div class="entry-body">
+            <div class="entry-title">Animal bite card: both Clinical Corner issues, each labelled with its date</div>
+            <div class="entry-desc">The <b>Animal Bites &amp; Rabies Reporting</b> card under <b>Infectious Disease</b> embedded one PDF and labelled it <i>Apr 2026</i>, but clicking <i>Open PDF</i> gave you the <b>2024</b> document — confusing, and the card’s date was wrong. There are in fact <b>two separate Clinical Corner issues</b> on this topic, and the card now carries <b>both</b>, each embedded under its own heading and named with its own date: <b>Animal Bite Reporting Guidelines (April 22, 2026)</b> first, then <b>Animal Bites (Dogs, Cats, and Other Mammals) (February 13, 2024)</b>. The two open-in-new-tab buttons are labelled the same way, so you can tell which is which before you click. Both are served from SharePoint with no copy on the public site.</div>
+            <div class="entry-meta">
+              <span class="badge improvement">Improvement</span>
+              <a class="entry-link" href="algorithms.html#card-uc-animal-bites-rabies">Open the card &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="entry" data-type="fix">
+          <div class="entry-icon">&#128274;</div>
+          <div class="entry-body">
+            <div class="entry-title">Infection Prevention slides moved behind KP sign-in</div>
+            <div class="entry-desc">The <b>C. diff</b>, <b>TB rule-out</b> and <b>Ebola / EID</b> cards were showing slide images and a full PDF of the <b>SBC Infection Prevention</b> deck served straight from this site &mdash; which meant anyone on the internet could open them, <b>AIIR room numbers included</b>. All three now link and embed the <b>10/28/26 ED physician meeting deck on SharePoint</b> instead, behind the usual KP sign-in, and the local copies are deleted.
+              <div style="margin-top:8px">Nothing clinical was lost: the two-step testing sequence, <b>AIIR rooms 10 &amp; 33</b>, the <b>2 MTB PCR + 3 AFB</b> sputum spacing and the Ebola screening steps are all typed into the cards, not locked inside the images. The site&rsquo;s own SharePoint audit now reports <b>zero</b> unmapped embeds, down from two.</div>
+            </div>
+            <div class="entry-meta">
+              <span class="badge fix">Fix</span>
+              <a class="entry-link" href="hospital-protocols.html#tb-rule-out-ed">Open TB Rule-Out &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="entry" data-type="feat">
+          <div class="entry-icon">&#128682;</div>
+          <div class="entry-body">
+            <div class="entry-title">New: Isolation Signs, front and back</div>
+            <div class="entry-desc">The door signage deck is now a card beside <b>Latent TB</b>, <b>Measles FAQ</b> and <b>Pertussis</b> under <b>Urgent Care</b> &mdash; served from <b>SharePoint</b>, behind the usual KP sign-in gate, with no copy of the file on the public site.</div>
+            <div class="entry-meta">
+              <span class="badge feat">New Card</span>
+              <a class="entry-link" href="algorithms.html#card-uc-isolation-signs">Open Isolation Signs &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── October 31, 2026 ── -->
     <div class="date-group">
       <div class="date-dot"></div>
       <div class="date-label">
@@ -231,6 +309,152 @@ main{max-width:860px;margin:0 auto;padding:32px 20px 64px}
             <div class="entry-meta">
               <span class="badge improvement">Improvement</span>
               <a class="entry-link" href="hospital-protocols.html#radiology-tat">Open Radiology TAT &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="entry" data-type="feat">
+          <div class="entry-icon">🦾</div>
+          <div class="entry-body">
+            <div class="entry-title">New: reporting dotphrases that tell you <i>where</i> to report</div>
+            <div class="entry-desc">There was no dotphrase for animal bites or for DMV / lapses-of-consciousness reporting, and the two that did touch mandated reporting just said &ldquo;<i>Mandatory reporting obligations fulfilled</i>&rdquo; &mdash; naming no form, no agency and no deadline. Three new phrases under <b>Social / Legal</b>, each ending in a bracketed <b>reference block you delete before signing</b> that carries the form link, the number to call and the jurisdiction caveats:
+              <ul style="margin:6px 0 0 18px;padding:0;line-height:1.7">
+                <li><b>.animalbite</b> &mdash; dog and other animal bites. Rabies risk and PEP, wound care, tetanus, prophylaxis, and the <b>17 CCR &sect;2606</b> report to the local health officer with the 10-day observation. Reference block: SBC Animal Care <b>(800) 472-5609</b> and the Bite Report Form page &mdash; plus the reminder that incorporated cities run their own animal control.</li>
+                <li><b>.cmrdmv</b> &mdash; Confidential Morbidity Report / DMV reporting for disorders with lapses of consciousness. Reference block: the <b>CDPH 110c</b> link, the San Bernardino fax, and the fact that <b>LA County uses its own form</b> while Long Beach and Pasadena are separate jurisdictions.</li>
+                <li><b>.apsreport</b> &mdash; elder and dependent adult abuse. A real gap: the APS hotline was already in the phone directory but there was no phrase. Reference block: <b>1-877-565-2020</b>, and the phone-then-written-<b>SOC 341</b>-within-two-working-days sequence.</li>
+              </ul>
+              <div style="margin-top:8px"><b>.nonat</b> and <b>.dvscreen</b> were also sharpened. The child-abuse phrase now records the phone-report-then-written-<b>SS 8572</b>-within-36-hours sequence and the CPS hotline. The IPV phrase now states the distinction people get wrong: in California <b>IPV itself is not reportable</b>, but a wound from a firearm or from assaultive or abusive conduct <b>is</b>, to law enforcement under <b>Penal Code &sect;11160</b>.</div>
+            </div>
+            <div class="entry-meta">
+              <span class="badge feat">New Dotphrases</span>
+              <a class="entry-link" href="dotphrase.html">Open Dotphrases &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="entry" data-type="improvement">
+          <div class="entry-icon">⌨️</div>
+          <div class="entry-body">
+            <div class="entry-title">Press F2 in Epic to jump to the reference block</div>
+            <div class="entry-desc">The reporting phrases end with a bracketed block carrying the form link and the number to call, meant to come out before you sign. Brackets are only a visual cue though &mdash; nothing in Epic finds them, so removing the block meant hunting for it in a dense paragraph. Each block now sits on <b>its own line behind a <code>***</code> wildcard</b>, which is Epic&rsquo;s actual placeholder: <b>F2 jumps straight to it</b>, and because it is a separate line it deletes in one go. Applies to <b>.animalbite</b>, <b>.cmrdmv</b>, <b>.apsreport</b> and <b>.nonat</b>; the other 150 phrases, including the existing <i>[choose / one]</i> fill-ins, are unchanged.</div>
+            <div class="entry-meta">
+              <span class="badge improvement">Improvement</span>
+              <a class="entry-link" href="dotphrase.html">Open Dotphrases &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="entry" data-type="fix">
+          <div class="entry-icon">📑</div>
+          <div class="entry-body">
+            <div class="entry-title">Service-agreement results now open the agreement</div>
+            <div class="entry-desc">Searching an agreement sometimes opened it and sometimes dropped you at the top of the page. There were <b>two</b> sources of results: the <b>18 hand-written panels</b>, which carry a <code>#anchor</code> and always worked, and <b>29 agreements from the document index</b>, whose results pointed at <code>?id=</code> &mdash; a parameter the page <b>never read</b>. That is the urology case exactly: <i>Urology Service Agreement</i> is a hand-written panel and worked, while <i>Urology and Emergency Medicine Service Agreement 2019</i> came from the index and went nowhere.
+              <ul style="margin:6px 0 0 18px;padding:0;line-height:1.7">
+                <li><b>All 29 now land on the agreement.</b> Ten of them are the same document as an existing panel under a different name, so they point straight at it &mdash; both urology records now open the <i>Urology Service Agreement (2019)</i> panel.</li>
+                <li><b>The other 19 had no page at all</b> and are now rendered as cards from the index, under <i>&ldquo;From the document index&rdquo;</i> in the list &mdash; summary, ED actions, consults &amp; escalation, disposition and timing targets. Things like the <b>Troponin Testing Memo</b>, <b>Transfusion Protocol</b>, <b>Pit Viper Envenomation</b> and <b>Peds Sickle Cell Fever</b> were previously unreachable.</li>
+                <li>The page&rsquo;s own <i>&ldquo;Filter this page&hellip;&rdquo;</i> box finds the new cards by tag and department too.</li>
+              </ul>
+              <div style="margin-top:8px">The id&rarr;panel pairing is checked by hand rather than guessed from the titles: matching on title similarity sends <i>&ldquo;IM and EM Non-member Management&rdquo;</i> to the <b>PLOS</b> panel, which is the wrong agreement. Anything not plainly the same document keeps its own card.</div>
+            </div>
+            <div class="entry-meta">
+              <span class="badge fix">Fix</span>
+              <a class="entry-link" href="service-agreements.html">Open Service Agreements &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── October 30, 2026 ── -->
+    <div class="date-group">
+      <div class="date-dot"></div>
+      <div class="date-label">
+        <span class="date-text">October 30, 2026</span>
+        <span class="date-relative"></span>
+      </div>
+      <div class="entries">
+
+        <div class="entry" data-type="fix">
+          <div class="entry-icon">📞</div>
+          <div class="entry-body">
+            <div class="entry-title">Phone results now open the directory <i>on</i> the number you searched for</div>
+            <div class="entry-desc">Searching a phone number from the main search bar used to drop you at the <b>top</b> of the Phone Directory with the query still to retype &mdash; the directory is a separate page, and the result linked to the page rather than the row. Phone results now carry the row with them: the directory opens <b>filtered to that entry</b>, scrolled to it and briefly highlighted, with the number ready to tap and dial.
+              <ul style="margin:6px 0 0 18px;padding:0;line-height:1.7">
+                <li><b>Full 10-digit numbers are searchable now</b> &mdash; the directory turns extension <b>49808</b> into <b>(909) 724-9808</b> on screen, but search only ever knew the extension, so typing the number you were reading found <i>nothing</i>. Either form works now, with or without punctuation.</li>
+                <li><b>Two numbers were missing from search altogether</b> &mdash; the after-hours <b>Ontario Orthopedics attending</b> and the overnight <b>Fontana Internal Medicine</b> line (<b>27028</b>) each shared a title with their daytime counterpart and were being dropped. Both are listed.</li>
+                <li><b>Right site, right row</b> &mdash; names that exist at both sites (Vocera, the pacemaker vendors, the crisis lines) now land in the correct Ontario or Fontana panel.</li>
+                <li>Eight entries were renamed to match the directory itself (the <b>Social Work</b>, <b>Radiology</b> and <b>Redlands Prosthetics</b> lines), which also clears a set of duplicate search hits.</li>
+              </ul>
+            </div>
+            <div class="entry-meta">
+              <span class="badge fix">Fix</span>
+              <a class="entry-link" href="ed-phone-directory.html">Open Phone Directory &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── October 17, 2026 ── -->
+    <div class="date-group">
+      <div class="date-dot"></div>
+      <div class="date-label">
+        <span class="date-text">October 17, 2026</span>
+        <span class="date-relative"></span>
+      </div>
+      <div class="entries">
+
+        <div class="entry" data-type="feat">
+          <div class="entry-icon">🦴</div>
+          <div class="entry-body">
+            <div class="entry-title">New: Redlands Prosthetics &mdash; who to call when a brace doesn&rsquo;t fit</div>
+            <div class="entry-desc">The VCF pathway already told you <b>how to order a brace</b> (Prosthetic &amp; Orthotic eval, Minerva / TLSO / LSO by level) but gave you <b>no one to call</b> when the brace we stock doesn&rsquo;t fit the patient. <b>Redlands Prosthetics</b> will come out and fit them &mdash; <b>page (909) 385-1776</b>. Tel <b>(909) 798-5853</b>, fax <b>(909) 798-0602</b>. The numbers are now in the <i>Place Order for Braces</i> box on the VCF algorithm and under <b>External Services</b> in <b>both</b> the Fontana and Ontario phone directories.</div>
+            <div class="entry-meta">
+              <span class="badge feat">New Contacts</span>
+              <a class="entry-link" href="algorithms.html#card-vcf">Open VCF Algorithm &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── October 14, 2026 ── -->
+    <div class="date-group">
+      <div class="date-dot"></div>
+      <div class="date-label">
+        <span class="date-text">October 14, 2026</span>
+        <span class="date-relative"></span>
+      </div>
+      <div class="entries">
+
+        <div class="entry" data-type="fix">
+          <div class="entry-icon">🔎</div>
+          <div class="entry-body">
+            <div class="entry-title">Search now returns the same results from every page</div>
+            <div class="entry-desc">There were <b>three different search implementations</b> on the site &mdash; the nav bar, the &#8984;K modal and the home page bar &mdash; each matching differently. Searching <i>&ldquo;turnaround radiology&rdquo;</i> found the card in the modal but <b>nothing</b> in the nav bar, because the nav bar only matched whole phrases in order. They now share one matcher, so the same query gives the same answer everywhere.
+              <ul style="margin:6px 0 0 18px;padding:0;line-height:1.7">
+                <li><b>Word order no longer matters</b> &mdash; &ldquo;turnaround radiology&rdquo; and &ldquo;radiology turnaround&rdquo; both work, in every box.</li>
+                <li><b>Partial words still work</b> &mdash; typing &ldquo;ectra&rdquo; still finds Sectra. The new rule is the union of the old ones, so nothing that used to be findable stopped being findable.</li>
+                <li><b>Duplicates gone</b> &mdash; after visiting the Phone Directory, every phone entry used to show up <i>twice</i> in search. Fixed.</li>
+                <li>Two consistency changes: dotphrases no longer flood the nav bar&rsquo;s results (they&rsquo;re still on the Dotphrases page, the Index, and under the dotphrase filter), and all three boxes now show up to <b>25</b> results instead of 22/24/40.</li>
+              </ul>
+            </div>
+            <div class="entry-meta">
+              <span class="badge fix">Fix</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="entry" data-type="improvement">
+          <div class="entry-icon">🧭</div>
+          <div class="entry-body">
+            <div class="entry-title">&ldquo;Filter this page&rdquo; boxes no longer look like sitewide search</div>
+            <div class="entry-desc">The boxes on <b>Service Agreements</b> and <b>Hospital Protocols</b> only ever filtered the list on that page &mdash; but they were labeled &ldquo;Search agreements&hellip;&rdquo; and &ldquo;Search protocols&hellip;&rdquo;, so typing something from elsewhere on the site emptied the list and looked like the content was missing. They&rsquo;re now labeled <b>&ldquo;Filter this page&hellip;&rdquo;</b>, and when nothing matches they say so and point you to &#8984;K for sitewide search. Search results that link to Service Agreements now also apply their filter on arrival.</div>
+            <div class="entry-meta">
+              <span class="badge improvement">Improvement</span>
             </div>
           </div>
         </div>
@@ -1777,8 +2001,8 @@ main{max-width:860px;margin:0 auto;padding:32px 20px 64px}
 </script>
 
 <button id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">☀️</button>
-<script src="search-index.js?v=5"></script>
-<script src="theme.js?v=4"></script>
+<script src="search-index.js?v=12"></script>
+<script src="theme.js?v=6"></script>
 <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
 <script src="analytics.js"></script>
 <script>

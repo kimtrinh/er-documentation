@@ -7,9 +7,13 @@ const vm = require('vm');
 const ROOT = path.resolve(__dirname, '..');
 const SEARCH_INDEX_PATH = path.join(ROOT, 'search-index.js');
 const CHATBOT_INDEX_PATH = path.join(ROOT, 'chatbot-index.json');
+const PHONE_DIRECTORY_PATH = path.join(ROOT, 'ed-phone-directory.html');
+const AGREEMENTS_PAGE_PATH = path.join(ROOT, 'service-agreements.html');
+const AGREEMENTS_JSON_PATH = path.join(ROOT, 'data', 'service_agreements_index.json');
 const HTML_FILES = fs.readdirSync(ROOT).filter((name) => name.endsWith('.html'));
 
 const errors = [];
+let searchIndexHelpers = null;
 
 function addError(message) {
   errors.push(message);
@@ -61,7 +65,14 @@ function evaluateSearchIndex(searchIndexSource) {
   };
   vm.createContext(context);
   try {
-    vm.runInContext(`${searchIndexSource}\nthis.__idx = SEARCH_INDEX;`, context);
+    vm.runInContext(
+      `${searchIndexSource}\n` +
+      'this.__idx = SEARCH_INDEX;\n' +
+      'this.__phoneQuery = kpPhoneQueryForTitle;\n' +
+      'this.__extToFull = kpExtensionToFullNumber;\n' +
+      'this.__agreementMap = KP_AGREEMENT_PANEL_MAP;',
+      context
+    );
   } catch (err) {
     addError(`search-index.js evaluation failed: ${err.message}`);
     return [];
@@ -70,7 +81,230 @@ function evaluateSearchIndex(searchIndexSource) {
     addError('search-index.js did not expose SEARCH_INDEX as an array.');
     return [];
   }
+  searchIndexHelpers = {
+    phoneQuery: context.__phoneQuery,
+    extToFull: context.__extToFull,
+    agreementMap: context.__agreementMap,
+  };
   return context.__idx;
+}
+
+// ── PHONE DIRECTORY DEEP LINKS ─────────────────────────────────────────────
+// Phone rows link to ed-phone-directory.html?q=<row name>, which the page
+// feeds into its own filter. That only works while the index titles still
+// match the directory's row names, and they had silently drifted on eight
+// rows. This is the ?q= analogue of checkSearchIndexLinks' hash check: parse
+// the directory's own data and helpers and prove every deep link resolves.
+
+// Brace-count from the first `{` at or after `from`, returning the balanced
+// block. The regexes in these functions use {3}/{4}/{5}, which are balanced,
+// so a naive counter is sufficient here.
+function sliceBalanced(source, from) {
+  const open = source.indexOf('{', from);
+  if (open < 0) return '';
+  let depth = 0;
+  for (let i = open; i < source.length; i++) {
+    if (source[i] === '{') depth++;
+    else if (source[i] === '}') {
+      depth--;
+      if (!depth) return source.slice(open, i + 1);
+    }
+  }
+  return '';
+}
+
+function sliceFunction(source, name) {
+  const start = source.indexOf(`\nfunction ${name}(`);
+  if (start < 0) return '';
+  const body = sliceBalanced(source, start);
+  if (!body) return '';
+  return source.slice(start + 1, source.indexOf(body, start) + body.length);
+}
+
+// Reuses the directory's own number logic, so this check cannot drift from
+// what the page actually renders.
+const PHONE_DIRECTORY_FNS = [
+  'toTelUri',
+  'extractDialableNumbers',
+  'fullNumberPrefixForHospital',
+  'extensionToFullNumber',
+  'buildNumberPresentation',
+];
+
+function loadPhoneDirectory() {
+  const html = fs.readFileSync(PHONE_DIRECTORY_PATH, 'utf8');
+  const dataStart = html.indexOf('const data = {');
+  if (dataStart < 0) {
+    addError('ed-phone-directory.html: could not find the `const data = {` literal.');
+    return null;
+  }
+  const dataBlock = sliceBalanced(html, dataStart);
+  if (!dataBlock) {
+    addError('ed-phone-directory.html: the `data` literal is unbalanced.');
+    return null;
+  }
+
+  const parts = [`const data = ${dataBlock};`];
+  for (const name of PHONE_DIRECTORY_FNS) {
+    const fn = sliceFunction(html, name);
+    if (!fn) {
+      addError(`ed-phone-directory.html: could not extract ${name}().`);
+      return null;
+    }
+    parts.push(fn);
+  }
+
+  const context = {};
+  vm.createContext(context);
+  try {
+    vm.runInContext(
+      `${parts.join('\n')}\nthis.__data = data;\nthis.__present = buildNumberPresentation;\nthis.__extToFull = extensionToFullNumber;`,
+      context
+    );
+  } catch (err) {
+    addError(`ed-phone-directory.html: evaluating its data/helpers failed: ${err.message}`);
+    return null;
+  }
+  return { data: context.__data, present: context.__present, extToFull: context.__extToFull };
+}
+
+function checkPhoneDirectoryTargets(index) {
+  const helpers = searchIndexHelpers;
+  if (!helpers || typeof helpers.phoneQuery !== 'function') {
+    addError('search-index.js did not expose kpPhoneQueryForTitle.');
+    return null;
+  }
+  const dir = loadPhoneDirectory();
+  if (!dir) return null;
+
+  // Every row's haystack, built exactly as buildEntry() does.
+  const haystacks = [];
+  let rows = 0;
+  for (const hospital of ['omc', 'fmc']) {
+    const sections = dir.data[hospital] || {};
+    for (const section of Object.keys(sections)) {
+      for (const item of sections[section]) {
+        const numberText = String(item.number || '');
+        const meta = dir.present(numberText, item.type, hospital, section);
+        const numberSearchText = meta.search || numberText;
+        const haystack = `${item.name || ''} ${numberSearchText} ${String(item.note || '').toLowerCase()} ${section.toLowerCase()}`.toLowerCase();
+        haystacks.push(haystack);
+        rows++;
+      }
+    }
+  }
+
+  // The two copies of the extension → full-number rule must agree.
+  const seenExt = new Set();
+  for (const hospital of ['omc', 'fmc']) {
+    const sections = dir.data[hospital] || {};
+    for (const section of Object.keys(sections)) {
+      for (const item of sections[section]) {
+        for (const ext of String(item.number || '').match(/\b\d{5}\b/g) || []) {
+          const key = `${hospital}|${ext}`;
+          if (seenExt.has(key)) continue;
+          seenExt.add(key);
+          const mine = helpers.extToFull(ext, hospital);
+          const theirs = dir.extToFull(ext, hospital) || '';
+          if (mine !== theirs) {
+            addError(`extension rule mismatch for ${hospital} ${ext}: search-index.js says "${mine}", ed-phone-directory.html says "${theirs}"`);
+          }
+        }
+      }
+    }
+  }
+
+  let checked = 0;
+  for (const item of index) {
+    const url = String((item && item.u) || '').trim();
+    if (url.split('#')[0] !== 'ed-phone-directory.html') continue;
+    checked++;
+    const q = (item.q ? String(item.q) : helpers.phoneQuery(item.t)).trim().toLowerCase();
+    if (!q) {
+      addError(`Empty directory deep-link query for search item "${item.t}"`);
+      continue;
+    }
+    if (!haystacks.some((hay) => hay.includes(q))) {
+      addError(`No directory row matches the deep link for "${item.t}" (?q=${q}) — the title has drifted from the row name, so the link would filter to nothing.`);
+    }
+  }
+  return { checked, rows };
+}
+
+// ── SERVICE AGREEMENT REACHABILITY ───────────────────────────
+// The agreements in data/service_agreements_index.json are fetched at runtime,
+// so checkSearchIndexLinks cannot see them. They reach the page one of two
+// ways: KP_AGREEMENT_PANEL_MAP sends them to a hand-written panel, or
+// service-agreements.html renders them as a card keyed on their own id. Every
+// one of them used to emit ?id=, which nothing read. Assert both halves so
+// that cannot silently come back.
+function checkServiceAgreementTargets() {
+  const helpers = searchIndexHelpers;
+  if (!helpers || !helpers.agreementMap) {
+    addError('search-index.js did not expose KP_AGREEMENT_PANEL_MAP.');
+    return null;
+  }
+  if (!fs.existsSync(AGREEMENTS_JSON_PATH)) {
+    addError('data/service_agreements_index.json missing.');
+    return null;
+  }
+
+  const html = fs.readFileSync(AGREEMENTS_PAGE_PATH, 'utf8');
+  const panels = new Set(
+    [...html.matchAll(/<div class="agreement-panel[^"]*" id="([^"]+)">/g)].map((m) => m[1])
+  );
+  if (!panels.size) {
+    addError('service-agreements.html: found no .agreement-panel ids.');
+    return null;
+  }
+
+  // Every mapped destination has to be a panel that actually exists.
+  for (const [id, panel] of Object.entries(helpers.agreementMap)) {
+    if (!panels.has(panel)) {
+      addError(`KP_AGREEMENT_PANEL_MAP sends "${id}" to #${panel}, which is not a panel on service-agreements.html`);
+    }
+  }
+
+  let parsed;
+  try {
+    parsed = JSON.parse(fs.readFileSync(AGREEMENTS_JSON_PATH, 'utf8'));
+  } catch (err) {
+    addError(`data/service_agreements_index.json: ${err.message}`);
+    return null;
+  }
+
+  // Same filter kpRefreshServiceAgreementIndex() applies, so this covers
+  // exactly the set that reaches search.
+  const agreements = (Array.isArray(parsed && parsed.agreements) ? parsed.agreements : [])
+    .filter((a) => {
+      const src = String((a && a.source_filename) || '').toLowerCase();
+      return src.endsWith('.doc') || src.endsWith('.docx');
+    });
+
+  const SLUG = /^[a-z0-9][a-z0-9-]*$/;
+  let viaPanel = 0;
+  let viaCard = 0;
+  for (const a of agreements) {
+    const id = String((a && a.id) || '').trim();
+    const title = String((a && a.title) || '(untitled)');
+    if (!id) {
+      addError(`Service agreement "${title}" has no id, so it can only fall back to ?q=.`);
+      continue;
+    }
+    if (helpers.agreementMap[id]) { viaPanel++; continue; }
+    // Rendered as a card: the page keys the panel on the id, so it must be a
+    // safe slug and must not collide with a hand-written panel.
+    if (!SLUG.test(id)) {
+      addError(`Service agreement "${title}" has id "${id}", which is not a safe slug for a panel id.`);
+      continue;
+    }
+    if (panels.has(id)) {
+      addError(`Service agreement "${title}" has id "${id}", which collides with an existing panel; map it explicitly instead.`);
+      continue;
+    }
+    viaCard++;
+  }
+  return { total: agreements.length, viaPanel, viaCard };
 }
 
 function checkSearchIndexLinks(index) {
@@ -131,6 +365,8 @@ function run() {
   checkInlineScripts();
   const index = evaluateSearchIndex(source);
   checkSearchIndexLinks(index);
+  const phone = checkPhoneDirectoryTargets(index);
+  const agreements = checkServiceAgreementTargets();
   const chatbot = checkChatbotIndex();
   const chatbotJsPath = path.join(ROOT, 'chatbot.js');
   if (fs.existsSync(chatbotJsPath)) {
@@ -147,6 +383,12 @@ function run() {
   console.log(`- HTML files checked: ${HTML_FILES.length}`);
   console.log('- search-index.js syntax checked');
   console.log(`- SEARCH_INDEX entries checked: ${index.length}`);
+  if (phone && phone.checked) {
+    console.log(`- phone-directory deep links checked: ${phone.checked} against ${phone.rows} rows`);
+  }
+  if (agreements) {
+    console.log(`- service agreements reachable: ${agreements.total} (${agreements.viaPanel} via panel, ${agreements.viaCard} via card)`);
+  }
   if (chatbot) console.log(`- chatbot-index.json chunks: ${chatbot.chunks.length}`);
 }
 

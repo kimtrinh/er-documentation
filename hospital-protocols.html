@@ -129,6 +129,9 @@ main{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-colu
 
 /* ===== NAV — let More dropdown render below the bar ===== */
 .sitenav,.sitenav-inner{overflow:visible}
+.kp-filter-hatch{display:none;padding:11px 13px;margin:8px 0 0;font-size:12px;line-height:1.6;color:var(--text2);background:var(--surface2);border:1px dashed var(--border2);border-radius:8px}
+.kp-filter-hatch.show{display:block}
+.kp-filter-hatch b{color:var(--text)}
 </style>
 <link rel="stylesheet" href="mobile.css">
 <script>document.documentElement.setAttribute('data-theme',localStorage.getItem('theme')||'dark');</script>
@@ -178,7 +181,10 @@ main{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-colu
     <div class="list-search">
       <div class="search-wrap">
         <span class="search-icon">🔍</span>
-        <input id="searchInput" type="text" placeholder="Search protocols…" autocomplete="off"/>
+        <input id="searchInput" type="text" placeholder="Filter this page…" autocomplete="off" aria-describedby="kpFilterHatch"/>
+      </div>
+      <div class="kp-filter-hatch" id="kpFilterHatch" role="status" aria-live="polite">
+        No matches <b>on this page</b>. This box only filters what&rsquo;s listed here &mdash; press <b>&#8984;K</b> (or <b>Ctrl&#8209;K</b>) to search the whole toolkit.
       </div>
     </div>
     <div class="list-items" id="listItems">
@@ -427,6 +433,14 @@ main{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-colu
 
       <div class="list-item" data-target="fmc-psg-assignments" data-keywords="FMC shift PSG point scoring assignments triage patient scoring guide ESI hourly points mod pod longest waiting distribution staffing workload">
         <div class="li-title">FMC Shift PSG Assignments</div>
+        <div class="li-meta">
+          <span class="li-badge yellow">Operations</span>
+          <span class="li-badge blue">Reference</span>
+        </div>
+      </div>
+
+      <div class="list-item" data-target="fmc-signout-assignments" data-keywords="FMC signout sign-out assignments shift handoff who do I sign out to receiving provider oncoming off-going regular holiday 5a-3p 6a-4p 8a-8p 12p-10p 1p-11p 2p-12a 3p-1a 6p-4a 8p-8a 9p-7a 10p-8a flex 6p-6a split mod pod">
+        <div class="li-title">FMC Signout Assignments</div>
         <div class="li-meta">
           <span class="li-badge yellow">Operations</span>
           <span class="li-badge blue">Reference</span>
@@ -2291,6 +2305,91 @@ main{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-colu
       </div>
     </div>
 
+    <!-- ══ FMC SIGNOUT ASSIGNMENTS ══ -->
+    <div class="protocol-panel" id="fmc-signout-assignments">
+      <style>
+        .sgn-section-title{font-size:13px;font-weight:800;color:var(--text);text-transform:uppercase;letter-spacing:.08em;padding-bottom:6px;border-bottom:2px solid var(--blue2);margin:4px 0 14px}
+        .sgn-table{background:var(--surface2);border:1px solid var(--border);border-radius:10px;overflow:hidden;font-family:var(--mono);max-width:520px}
+        .sgn-table table{width:100%;border-collapse:collapse;font-size:13px}
+        .sgn-table th{background:var(--surface);color:var(--text2);font-weight:700;padding:7px 12px;border-bottom:1px solid var(--border);font-size:10px;text-transform:uppercase;letter-spacing:.06em;text-align:left}
+        .sgn-table th:last-child{text-align:right}
+        .sgn-table td{padding:6px 12px;border-bottom:1px solid var(--border);color:var(--text2)}
+        .sgn-table td.sgn-to{font-weight:700;color:#93c5fd;text-align:right}
+        .sgn-table td.sgn-split{color:#fcd34d}
+        .sgn-table tr:last-child td{border-bottom:none}
+        .sgn-notes{margin:0;padding-left:18px;font-size:12px;color:var(--text2);line-height:1.8}
+        .sgn-notes b{color:var(--text);font-family:var(--mono);font-weight:700}
+      </style>
+      <div class="info-card">
+        <div class="card-top">
+          <div>
+            <div id="fmc-signout-map" class="card-title">FMC Signout Assignments</div>
+            <div class="card-dept">Fontana Medical Center · ED Operations · Shift Handoff</div>
+          </div>
+          <div class="decision-badge yellow">⚙️ Operations Reference</div>
+        </div>
+        <hr class="divider"/>
+        <div style="font-size:13px;color:var(--text2);line-height:1.55">
+          Who each off-going shift hands its patients to. Read each row left to right &mdash; the
+          <b style="color:var(--text)">off-going</b> shift on the left signs out <b style="color:var(--text)">to</b>
+          the shift on the right. Holidays run a different set of shifts and a different map; use the second table.
+        </div>
+      </div>
+
+      <div class="info-card">
+        <div class="sgn-section-title">🔁 Regular Schedule</div>
+        <div class="sgn-table">
+          <table><tr><th>Off-going shift</th><th>Signs out to &rarr;</th></tr>
+              <tr><td>5a–3p (1)</td><td class="sgn-to">12p–10p</td></tr>
+              <tr><td>5a–3p (2)</td><td class="sgn-to">1p–11p</td></tr>
+              <tr><td>6a–4p</td><td class="sgn-to">2p–12a</td></tr>
+              <tr><td>8a–8p</td><td class="sgn-to">3p–1a</td></tr>
+              <tr><td>12p–10p</td><td class="sgn-to">6p–4a</td></tr>
+              <tr><td>1p–11p</td><td class="sgn-to">8p–8a (1)</td></tr>
+              <tr><td>2p–12a</td><td class="sgn-to">8p–8a (2)</td></tr>
+              <tr><td>3p–1a</td><td class="sgn-to">9p–7a</td></tr>
+              <tr><td>6p–4a</td><td class="sgn-to">10p–8a</td></tr>
+              <tr><td>8p–8a (1)</td><td class="sgn-to">5a–3p (1)</td></tr>
+              <tr><td>8p–8a (2)</td><td class="sgn-to">6a–4p</td></tr>
+              <tr><td>9p–7a</td><td class="sgn-to">5a–3p (2)</td></tr>
+              <tr><td>10p–8a</td><td class="sgn-to sgn-split">8a–8p or SPLIT</td></tr>
+              <tr><td>FLEX 6p–6a</td><td class="sgn-to">8p–8a (2)</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <div class="sgn-section-title">🎄 Holiday Schedule</div>
+        <div class="sgn-table">
+          <table><tr><th>Off-going shift</th><th>Signs out to &rarr;</th></tr>
+              <tr><td>5a–5p</td><td class="sgn-to">12p–12a</td></tr>
+              <tr><td>6a–6p</td><td class="sgn-to">2p–2a</td></tr>
+              <tr><td>9a–9p</td><td class="sgn-to">3p–3a</td></tr>
+              <tr><td>12p–12a</td><td class="sgn-to">4p–4a</td></tr>
+              <tr><td>2p–2a</td><td class="sgn-to">7p–7a</td></tr>
+              <tr><td>3p–3a</td><td class="sgn-to">8p–8a (1)</td></tr>
+              <tr><td>4p–4a</td><td class="sgn-to">8p–8a (2)</td></tr>
+              <tr><td>7p–7a</td><td class="sgn-to">5a–5p</td></tr>
+              <tr><td>8p–8a (1)</td><td class="sgn-to">6a–6p</td></tr>
+              <tr><td>8p–8a (2)</td><td class="sgn-to sgn-split">SPLIT</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <div class="sgn-section-title">📝 Notes</div>
+        <ul class="sgn-notes">
+          <li><b>8p–8a (2)</b> receives from <b>two</b> shifts on the regular map &mdash; <b>2p–12a</b> and <b>FLEX 6p–6a</b>.</li>
+          <li><b>FLEX 6p–6a</b> is never a signout <i>target</i> &mdash; nobody signs out to it. Same for the holiday <b>9a–9p</b>.</li>
+          <li><b>SPLIT</b> appears on the source sheet without a definition; it is reproduced here as printed.</li>
+          <li><b>10p–8a → 8a–8p or SPLIT</b> is a conditional on the source, not a choice this page makes for you.</li>
+          <li><b>FLEX 6p–6a</b> is the shift listed as <b>6p–6a Mod Pod</b> on the
+            <a href="#fmc-psg-assignments" style="color:#93c5fd">FMC Shift PSG Assignments</a> card.
+            The eight holiday shifts have no PSG rows at all &mdash; that card does not cover holidays.</li>
+        </ul>
+      </div>
+    </div>
+
     <!-- ══ RX SIGN-OUT ══ -->
     <div class="protocol-panel" id="rx-signout">
       <div class="info-card">
@@ -3375,6 +3474,7 @@ main{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-colu
           <li><b style="color:var(--text)">Rocephin 1–2 g</b> IV</li>
           <li>Discharge on <b style="color:var(--text)">oral Augmentin</b> or <b style="color:var(--text)">Clindamycin</b>; PCP follow-up</li>
         </ol>
+        <p style="margin-top:12px;padding:10px 14px;background:#2a1f08;border:1px solid #f59e0b;border-radius:10px;font-size:12.5px;line-height:1.7;color:#fcd34d">⚠️ The <a href="head-neck-surgery.html#pta" style="color:#fde68a;font-weight:700">EM &amp; Head and Neck Surgery guideline</a> gives the same two drugs under their generic names (ceftriaxone, dexamethasone) but additionally specifies an <b style="color:#fde68a">IV Unasyn or Clindamycin dose</b> and a <b style="color:#fde68a">2-week</b> discharge course. Confirm which your department is following.</p>
       </div>
     </div>
 
@@ -3446,18 +3546,13 @@ main{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-colu
       </div>
 
       <div class="info-card">
-        <div style="font-weight:800;font-size:14px;color:var(--text);text-transform:uppercase;letter-spacing:.06em;padding-bottom:6px;border-bottom:2px solid var(--blue2);margin-bottom:10px">🖼️ Slides — algorithm &amp; chart-review walkthrough</div>
-        <div style="font-size:12px;color:var(--text3);margin-bottom:12px">From the 10/28/26 SBC Infection Control &amp; Prevention deck. Click any image to open it full size.</div>
-        <div style="display:flex;flex-direction:column;gap:12px">
-          <a href="assets/infection-prevention-2026-10/slide-04.png" target="_blank" rel="noopener" style="display:block"><img src="assets/infection-prevention-2026-10/slide-04.png" loading="lazy" alt="C. difficile testing workflow memo — effective July 15, 2026, PCR-first algorithm with reflex toxin A/B EIA; interpretation table for PCR negative, PCR positive/toxin positive, and PCR positive/toxin negative results" style="width:100%;height:auto;display:block;background:#fff;border:1px solid var(--border);border-radius:10px;padding:6px;box-sizing:border-box;cursor:zoom-in"/></a>
-          <a href="assets/infection-prevention-2026-10/slide-05.png" target="_blank" rel="noopener" style="display:block"><img src="assets/infection-prevention-2026-10/slide-05.png" loading="lazy" alt="Chart Review step 1 — the C. diff PCR result files as Abnormal with the note 'Detected, see toxin antigen (EIA) confirmatory test'" style="width:100%;height:auto;display:block;background:#fff;border:1px solid var(--border);border-radius:10px;padding:6px;box-sizing:border-box;cursor:zoom-in"/></a>
-          <a href="assets/infection-prevention-2026-10/slide-06.png" target="_blank" rel="noopener" style="display:block"><img src="assets/infection-prevention-2026-10/slide-06.png" loading="lazy" alt="Chart Review step 2 — open the reflex Toxins A and B EIA result; the final toxin result here is Negative, consistent with colonization rather than active toxin production" style="width:100%;height:auto;display:block;background:#fff;border:1px solid var(--border);border-radius:10px;padding:6px;box-sizing:border-box;cursor:zoom-in"/></a>
-          <a href="assets/infection-prevention-2026-10/slide-07.png" target="_blank" rel="noopener" style="display:block"><img src="assets/infection-prevention-2026-10/slide-07.png" loading="lazy" alt="New C. diff algorithm summary with the contact-plus precautions sign — clean hands before entering, gown and gloves, remove in room, wash hands with soap and water on exit, sporicidal room cleaning" style="width:100%;height:auto;display:block;background:#fff;border:1px solid var(--border);border-radius:10px;padding:6px;box-sizing:border-box;cursor:zoom-in"/></a>
-        </div>
-        <a class="download-btn" style="margin-top:12px" href="assets/infection-prevention-2026-10/sbc-infection-prevention-updates-2026-10-28.pdf" target="_blank" rel="noopener">
+        <div style="font-weight:800;font-size:14px;color:var(--text);text-transform:uppercase;letter-spacing:.06em;padding-bottom:6px;border-bottom:2px solid var(--blue2);margin-bottom:10px">📊 Source slides — algorithm &amp; chart-review walkthrough</div>
+        <div style="font-size:12px;color:var(--text3);margin-bottom:12px">In the 10/28/26 ED physician meeting deck, where SBC Infection Control &amp; Prevention presented. Served from SharePoint — KP sign-in required.</div>
+        <a class="download-btn" href="https://sp-cloud.kp.org/sites/ERtoolkit/Shared%20Documents/assets/assets/oct2826meeting/MD%20ED%20Meeting%2010.28.26.pptx" target="_blank" rel="noopener">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#86efac" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          <div><div>Full deck — SBC Infection Prevention Updates 10/28/26</div><div class="download-btn-sub">All 11 slides, incl. HAI days-since &amp; wastewater surveillance · PDF</div></div>
+          <div><div>Full deck — MD ED Meeting 10/28/26</div><div class="download-btn-sub">SharePoint · KP sign-in required</div></div>
         </a>
+        <iframe src="https://sp-cloud.kp.org/sites/ERtoolkit/_layouts/15/embed.aspx?UniqueId=798cc58b-cce5-4d44-93e3-7e695440322b" style="width:100%;height:70vh;border:1px solid var(--border);border-radius:10px;background:var(--surface);margin-top:12px" title="MD ED Meeting 10/28/26"></iframe>
       </div>
     </div>
 
@@ -3493,14 +3588,13 @@ main{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-colu
       </div>
 
       <div class="info-card">
-        <div style="font-weight:800;font-size:14px;color:var(--text);text-transform:uppercase;letter-spacing:.06em;padding-bottom:6px;border-bottom:2px solid var(--blue2);margin-bottom:10px">🖼️ TB cheat sheet slide</div>
-        <div style="display:flex;flex-direction:column;gap:12px">
-          <a href="assets/infection-prevention-2026-10/slide-08.png" target="_blank" rel="noopener" style="display:block"><img src="assets/infection-prevention-2026-10/slide-08.png" loading="lazy" alt="TB Cheat Sheet — SBCDPH health advisory on rising TB incidence; sputum AFB specimens at 8-to-24-hour intervals with one early-morning specimen; pulmonologist/ID approval required before discontinuing airborne precautions; public health approval required before discharge; highlighted rule: 2 MTB PCR tests with 3 AFB sputums collected after the patient is in an AIIR, rooms 11 and 33" style="width:100%;height:auto;display:block;background:#fff;border:1px solid var(--border);border-radius:10px;padding:6px;box-sizing:border-box;cursor:zoom-in"/></a>
-        </div>
-        <a class="download-btn" style="margin-top:12px" href="assets/infection-prevention-2026-10/sbc-infection-prevention-updates-2026-10-28.pdf" target="_blank" rel="noopener">
+        <div style="font-weight:800;font-size:14px;color:var(--text);text-transform:uppercase;letter-spacing:.06em;padding-bottom:6px;border-bottom:2px solid var(--blue2);margin-bottom:10px">📊 Source slide — TB cheat sheet</div>
+        <div style="font-size:12px;color:var(--text3);margin-bottom:12px">In the 10/28/26 ED physician meeting deck, where SBC Infection Control &amp; Prevention presented. Served from SharePoint — KP sign-in required.</div>
+        <a class="download-btn" href="https://sp-cloud.kp.org/sites/ERtoolkit/Shared%20Documents/assets/assets/oct2826meeting/MD%20ED%20Meeting%2010.28.26.pptx" target="_blank" rel="noopener">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#86efac" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          <div><div>Full deck — SBC Infection Prevention Updates 10/28/26</div><div class="download-btn-sub">All 11 slides · PDF</div></div>
+          <div><div>Full deck — MD ED Meeting 10/28/26</div><div class="download-btn-sub">SharePoint · KP sign-in required</div></div>
         </a>
+        <iframe src="https://sp-cloud.kp.org/sites/ERtoolkit/_layouts/15/embed.aspx?UniqueId=798cc58b-cce5-4d44-93e3-7e695440322b" style="width:100%;height:70vh;border:1px solid var(--border);border-radius:10px;background:var(--surface);margin-top:12px" title="MD ED Meeting 10/28/26"></iframe>
       </div>
     </div>
 
@@ -3532,14 +3626,13 @@ main{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-colu
       </div>
 
       <div class="info-card">
-        <div style="font-weight:800;font-size:14px;color:var(--text);text-transform:uppercase;letter-spacing:.06em;padding-bottom:6px;border-bottom:2px solid var(--blue2);margin-bottom:10px">🖼️ Screening tool update slide</div>
-        <div style="display:flex;flex-direction:column;gap:12px">
-          <a href="assets/infection-prevention-2026-10/slide-10.png" target="_blank" rel="noopener" style="display:block"><img src="assets/infection-prevention-2026-10/slide-10.png" loading="lazy" alt="Emerging Infectious Disease slide — HealthConnect ED Ebola Screening Tool update with revised questions and outbreak geography; on a positive screen mask and isolate the patient, initiate Viral Hemorrhagic Fever Special Precautions, don N95 or PAPR with full PPE, notify Infectious Diseases and Infection Prevention immediately, limit staff exposure; AIIR rooms 10 and 33" style="width:100%;height:auto;display:block;background:#fff;border:1px solid var(--border);border-radius:10px;padding:6px;box-sizing:border-box;cursor:zoom-in"/></a>
-        </div>
-        <a class="download-btn" style="margin-top:12px" href="assets/infection-prevention-2026-10/sbc-infection-prevention-updates-2026-10-28.pdf" target="_blank" rel="noopener">
+        <div style="font-weight:800;font-size:14px;color:var(--text);text-transform:uppercase;letter-spacing:.06em;padding-bottom:6px;border-bottom:2px solid var(--blue2);margin-bottom:10px">📊 Source slide — screening tool update</div>
+        <div style="font-size:12px;color:var(--text3);margin-bottom:12px">In the 10/28/26 ED physician meeting deck, where SBC Infection Control &amp; Prevention presented. Served from SharePoint — KP sign-in required.</div>
+        <a class="download-btn" href="https://sp-cloud.kp.org/sites/ERtoolkit/Shared%20Documents/assets/assets/oct2826meeting/MD%20ED%20Meeting%2010.28.26.pptx" target="_blank" rel="noopener">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#86efac" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          <div><div>Full deck — SBC Infection Prevention Updates 10/28/26</div><div class="download-btn-sub">All 11 slides · PDF</div></div>
+          <div><div>Full deck — MD ED Meeting 10/28/26</div><div class="download-btn-sub">SharePoint · KP sign-in required</div></div>
         </a>
+        <iframe src="https://sp-cloud.kp.org/sites/ERtoolkit/_layouts/15/embed.aspx?UniqueId=798cc58b-cce5-4d44-93e3-7e695440322b" style="width:100%;height:70vh;border:1px solid var(--border);border-radius:10px;background:var(--surface);margin-top:12px" title="MD ED Meeting 10/28/26"></iframe>
       </div>
     </div>
 
@@ -3725,13 +3818,16 @@ main{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-colu
     document.querySelectorAll('.list-section-header').forEach(header => {
       header.style.display = '';
     });
+    const hatch = document.getElementById('kpFilterHatch');
+    if (hatch) hatch.classList.toggle('show', !!q && !firstVisible);
   });
 })();
 </script>
 
 <button id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">☀️</button>
-<script src="search-index.js?v=5"></script>
-<script src="theme.js?v=4"></script>
+<script src="search-index.js?v=12"></script>
+<script src="sp-embed.js?v=1"></script>
+<script src="theme.js?v=6"></script>
 <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
 <script src="analytics.js"></script>
 <script>

@@ -156,3 +156,84 @@ reach full document parity.
 **Definition of "done" for the document migration:** Section 2 completed,
 `check-sharepoint-links.py` passes with no FATAL and no inventory warnings, and
 the two Section 4a files confirmed uploaded.
+
+---
+
+## 7. Outstanding — Kaiser documents not yet on SharePoint
+
+_Added 2026-11-01. Inventory only; nothing in this section was changed._
+
+Policy restated by the site owner: **Kaiser documents must be served from
+SharePoint**, so that nobody outside Kaiser can read them. Google Drive and
+files committed into this public repo both fail that test. Section 1 claimed
+`assets/` was empty; it is not, so §7b is drift that has crept back since the
+June audit.
+
+### 7a. Hosted on Google Drive
+
+| File | Lines | Document | Needs |
+| --- | --- | --- | --- |
+| `service-agreements.html` | 508, 517, 519 | Hip Fracture Service Agreement | SharePoint URL + `UniqueId` GUID (export link, open link, preview iframe) |
+| `service-agreements.html` | 547, 556, 558 | IM & General Surgery Service Agreement | same three |
+
+### 7b. Committed into the public repo under `assets/`
+
+Same exposure as Drive — GitHub Pages serves these to anyone.
+
+`scripts/check-sharepoint-links.py` enumerates these exactly — it reports them
+as FATAL stray local references. **15 remain** (was 22 before the infection-
+prevention deck was migrated; see §7d).
+
+| Path | Referenced from |
+| --- | --- |
+| `assets/cyclospora/clinical-corner-2026-07-29.pdf` | `algorithms.html` → `uc-cyclospora-test-treat` (both the open link and the iframe) |
+| `assets/pediatric-protocol-evidence-summary.pdf` | pediatric protocol evidence summary |
+| `assets/evidence-summary/page-01.png`, `page-02.png` | same summary, inline images |
+| `assets/aerogen-diagram/slide-01.png` … `slide-11.png` | `hospital-protocols.html:3142` aerogen diagram |
+
+Once each is uploaded, repoint with `scripts/sharepoint-relink.py` /
+`scripts/sharepoint-embed.py`, add the GUID to `data/sharepoint-embeds.json`,
+delete the local copy, and re-run `scripts/check-sharepoint-links.py`.
+
+### 7c. Deliberately left on Google Drive
+
+The four ED trackboard **Google Sheets** (`links.html:201-228`,
+`index.html:484-499`) are live working documents the department edits in place,
+not published Kaiser documents. Moving them would break the workflow. Flagged
+here so the exception is on the record rather than looking like an oversight.
+
+### 7d. Done
+
+**The SBC Infection Prevention deck is migrated (2026-11-02).** The C. diff,
+TB rule-out and EID/Ebola cards no longer serve slide PNGs or a PDF from this
+repo. All three now link and embed the meeting deck it came from —
+`oct2826meeting/MD ED Meeting 10.28.26.pptx`, embed
+`UniqueId=798cc58b-cce5-4d44-93e3-7e695440322b` — behind the usual KP sign-in
+gate, and `assets/infection-prevention-2026-10/` (11 PNGs + 1 PDF) is deleted.
+The cards keep all their written content: the two-step testing sequence, the
+AIIR room numbers, the sputum spacing and the Ebola screening steps were
+transcribed into the page, not left inside the images.
+
+Note for whoever reviews it: the supplied link is the **full 10/28 ED physician
+meeting deck**, which is where SBC Infection Prevention presented. The labels
+say "MD ED Meeting 10/28/26" rather than naming it the Infection Prevention
+deck, so the page does not claim more than is verified. If the infection
+prevention slides are actually a separate file, swap the URL and GUID in those
+three cards.
+
+Two embed GUIDs were also missing from `data/sharepoint-embeds.json`, which was
+failing the audit gate: `b09d0e56…` (Isolation Signs, added with this work) and
+`61521114…` (How to view prelims in SECTRA, unmapped since `8f272f7`). Both are
+linked via `Doc.aspx` rather than a Shared Documents path, so they are keyed by
+filename. The gate now reports **zero** unmapped GUIDs.
+
+`Isolation Signs Front and Back 1.pptx` was added as an `algorithms.html` card
+(`uc-isolation-signs`) sourced from SharePoint only — embed
+`UniqueId=b09d0e56-b984-43be-98af-0ea5550fcafc`, no local copy. The FMC signout
+assignments and the Fontana phone list v6 were transcribed into native HTML
+rather than embedded, so neither adds a document to migrate later.
+
+It sits beside the Latent TB / Measles / Pertussis cards on `algorithms.html`,
+because the Infection Prevention section it arguably belongs in was added to
+`main` by PR #194 and is not on this branch. Worth moving next to the TB
+rule-out card when the two are merged.
