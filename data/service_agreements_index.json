@@ -7,9 +7,21 @@
       "title": "Non-member Transfer Process",
       "source_filename": "https://sp-cloud.kp.org/sites/ERtoolkit/Shared%20Documents/assets/assets/non-member-transfer-process.pdf",
       "file_type": "pdf",
-      "departments": ["Emergency Medicine", "Health Plan", "Managed Care"],
+      "departments": [
+        "Emergency Medicine",
+        "Health Plan",
+        "Managed Care"
+      ],
       "last_updated": "2026-04-13",
-      "tags": ["transfer", "non-member", "authorization", "managed-care", "consult-workflow", "disposition", "pilot"],
+      "tags": [
+        "transfer",
+        "non-member",
+        "authorization",
+        "managed-care",
+        "consult-workflow",
+        "disposition",
+        "pilot"
+      ],
       "summary_bullets": [
         "Secure Chat Alerts: ED physicians will receive notifications for patients requiring authorization.",
         "One-Hour Rule: Health plan must respond within 1 hour; if no response, authorization defaults to admit.",
@@ -43,9 +55,21 @@
       "title": "Prolonged ED Length of Stay Service Line Agreement",
       "source_filename": "prolongedLOSsla.docx",
       "file_type": "docx",
-      "departments": ["Emergency Medicine", "Hospital Medicine", "Care Without Delay"],
+      "departments": [
+        "Emergency Medicine",
+        "Hospital Medicine",
+        "Care Without Delay"
+      ],
       "last_updated": "2026-02-24",
-      "tags": ["new", "disposition", "consult-workflow", "escalation", "observation", "prolonged-los", "length-of-stay"],
+      "tags": [
+        "new",
+        "disposition",
+        "consult-workflow",
+        "escalation",
+        "observation",
+        "prolonged-los",
+        "length-of-stay"
+      ],
       "summary_bullets": [
         "Non-admitted patients in the ED for 24 or more hours with no medical indication for admission but disposition barriers will be evaluated for hospital medicine consult and OBS admission.",
         "Agreement between Emergency Medicine, Hospital Medicine, Care Without Delay, AAMD, and Area Medical Director at Ontario and Fontana medical centers.",
@@ -128,7 +152,7 @@
       ],
       "timing_targets": [],
       "redaction_notes": "Potential contact details or identifiers were intentionally excluded from published fields.",
-      "sharepoint_url": null
+      "sharepoint_url": "https://sp-cloud.kp.org/sites/ERtoolkit/Shared%20Documents/assets/assets/covid-stroke.docx"
     },
     {
       "id": "deliveries-prior-to-arrival",
@@ -173,7 +197,7 @@
       ],
       "timing_targets": [],
       "redaction_notes": "No explicit sensitive fields were carried into output; summaries are intentionally high-level.",
-      "sharepoint_url": null
+      "sharepoint_url": "https://sp-cloud.kp.org/sites/ERtoolkit/Shared%20Documents/assets/assets/dpa.docx"
     },
     {
       "id": "hip-fractures-ortho-im",
@@ -440,7 +464,7 @@
         "Timing expectation: Provide the usual volume of oral contrast, and allow a full 3 hours to consume it."
       ],
       "redaction_notes": "No explicit sensitive fields were carried into output; summaries are intentionally high-level.",
-      "sharepoint_url": null
+      "sharepoint_url": "https://sp-cloud.kp.org/sites/ERtoolkit/Shared%20Documents/assets/assets/bariatric-ct.docx"
     },
     {
       "id": "kaiser-emergency-psychiatry-medication-recommendations-0816",
@@ -490,7 +514,7 @@
       ],
       "timing_targets": [],
       "redaction_notes": "No explicit sensitive fields were carried into output; summaries are intentionally high-level.",
-      "sharepoint_url": null
+      "sharepoint_url": "https://sp-cloud.kp.org/sites/ERtoolkit/Shared%20Documents/assets/assets/ed-psych-medications.docx"
     },
     {
       "id": "kaiser-emergency-release-hemorrhage-protocol-urgent-need-7-2013",
@@ -541,7 +565,7 @@
         "Timing expectation: If thawed plasma is not available, 4 units will be thawed immediately, and will be available within 45 minutes."
       ],
       "redaction_notes": "Potential contact details or identifiers were intentionally excluded from published fields.",
-      "sharepoint_url": null
+      "sharepoint_url": "https://sp-cloud.kp.org/sites/ERtoolkit/Shared%20Documents/assets/assets/emergency-hemorrhage-protocol.doc"
     },
     {
       "id": "kaiser-first-trimester-bleeding-guidelines-10-24-13",
@@ -597,7 +621,7 @@
         "Timing expectation: > 30 days – ED workup and consult Gyn as needed."
       ],
       "redaction_notes": "Potential contact details or identifiers were intentionally excluded from published fields.",
-      "sharepoint_url": null
+      "sharepoint_url": "https://sp-cloud.kp.org/sites/ERtoolkit/Shared%20Documents/assets/assets/first-trimester-bleeding.doc"
     },
     {
       "id": "kaiser-occupational-post-exposure-prophylaxis-6-2016",
@@ -652,7 +676,7 @@
         "Timing expectation: x 50 mg, then 25 mg q24h."
       ],
       "redaction_notes": "Potential contact details or identifiers were intentionally excluded from published fields.",
-      "sharepoint_url": null
+      "sharepoint_url": "https://sp-cloud.kp.org/sites/ERtoolkit/Shared%20Documents/assets/assets/occupational-pep.doc"
     },
     {
       "id": "kaiser-outpatient-anticoagulation-dvt-protocol-1-16-14",
@@ -703,7 +727,7 @@
         "Timing expectation: mg/kg (actual body weight) Q 24 hr."
       ],
       "redaction_notes": "Potential contact details or identifiers were intentionally excluded from published fields.",
-      "sharepoint_url": null
+      "sharepoint_url": "https://sp-cloud.kp.org/sites/ERtoolkit/Shared%20Documents/assets/assets/dvt-outpatient-anticoagulation.pdf"
     },
     {
       "id": "kaiser-regional-target-specific-oral-anticoagulants-tsoa-bleeding-management-guideline",
@@ -756,7 +780,7 @@
         "Timing expectation: to 6 hours."
       ],
       "redaction_notes": "Potential contact details or identifiers were intentionally excluded from published fields.",
-      "sharepoint_url": null
+      "sharepoint_url": "https://sp-cloud.kp.org/sites/ERtoolkit/Shared%20Documents/assets/assets/doac-bleeding-management.docx"
     },
     {
       "id": "kaiser-transfusion-protocol",
@@ -804,7 +828,7 @@
       ],
       "timing_targets": [],
       "redaction_notes": "No explicit sensitive fields were carried into output; summaries are intentionally high-level.",
-      "sharepoint_url": null
+      "sharepoint_url": "https://sp-cloud.kp.org/sites/ERtoolkit/Shared%20Documents/assets/assets/transfusion-protocol.doc"
     },
     {
       "id": "kaiser-troponin-testing-memo",
@@ -851,7 +875,7 @@
         "Timing expectation: Example: “Pain started at 6pm”, patient in ED at 8pm and troponin drawn on arrival-which is less than 3 hours."
       ],
       "redaction_notes": "Potential contact details or identifiers were intentionally excluded from published fields.",
-      "sharepoint_url": null
+      "sharepoint_url": "https://sp-cloud.kp.org/sites/ERtoolkit/Shared%20Documents/assets/assets/troponin-testing.doc"
     },
     {
       "id": "kaiser-work-up-of-infectious-diarrhea-for-adults",
@@ -895,7 +919,7 @@
         "Timing expectation: → If patient is severely ill, treat with antibiotics. Otherwise, wait for BACTERIAL GI PANEL result prior to prescribing antibiotics."
       ],
       "redaction_notes": "Potential contact details or identifiers were intentionally excluded from published fields.",
-      "sharepoint_url": null
+      "sharepoint_url": "https://sp-cloud.kp.org/sites/ERtoolkit/Shared%20Documents/assets/assets/infectious-diarrhea.docx"
     },
     {
       "id": "kpsc-canadian-ct-head-algorithm-for-trauma",
@@ -940,7 +964,7 @@
         "Timing expectation: Injury occurred > 24 hours ago."
       ],
       "redaction_notes": "No explicit sensitive fields were carried into output; summaries are intentionally high-level.",
-      "sharepoint_url": null
+      "sharepoint_url": "https://sp-cloud.kp.org/sites/ERtoolkit/Shared%20Documents/assets/assets/ct-head-trauma.pdf"
     },
     {
       "id": "necrotizing-fasciitis-service-agreement",
@@ -1219,7 +1243,7 @@
         "Timing expectation: Give Ceftriaxone 50mg/kg IV/IM (max 1g). Should be given ideally within 1 hour of presentation – do not wait for."
       ],
       "redaction_notes": "Potential contact details or identifiers were intentionally excluded from published fields.",
-      "sharepoint_url": null
+      "sharepoint_url": "https://sp-cloud.kp.org/sites/ERtoolkit/Shared%20Documents/assets/assets/peds-sickle-cell-fever.docx"
     },
     {
       "id": "pit-viper-snake-envenomation-management-using-antivenin-crofab-protocol",
@@ -1281,7 +1305,7 @@
         "Timing expectation: Repeat labs every 6 hours."
       ],
       "redaction_notes": "Potential contact details or identifiers were intentionally excluded from published fields.",
-      "sharepoint_url": null
+      "sharepoint_url": "https://sp-cloud.kp.org/sites/ERtoolkit/Shared%20Documents/assets/assets/pitviper-crofab.docx"
     },
     {
       "id": "pp-severe-htn-algorithm",
@@ -1329,7 +1353,7 @@
         "Timing expectation: Severe hypertension >48h and within 7 days of delivery."
       ],
       "redaction_notes": "Potential contact details or identifiers were intentionally excluded from published fields.",
-      "sharepoint_url": null
+      "sharepoint_url": "https://sp-cloud.kp.org/sites/ERtoolkit/Shared%20Documents/assets/assets/pp-htn-algorithm.pdf"
     },
     {
       "id": "psych-and-ed-service-agreement",
@@ -1461,7 +1485,7 @@
         "Timing expectation: The psychiatry social worker will re-assesses patient every shift and document findings of assessment and disposition status. If the patient."
       ],
       "redaction_notes": "Potential contact details or identifiers were intentionally excluded from published fields.",
-      "sharepoint_url": null
+      "sharepoint_url": "https://sp-cloud.kp.org/sites/ERtoolkit/Shared%20Documents/assets/assets/psych-im-em-sa.doc"
     },
     {
       "id": "urology-and-emergency-medicine-service-agreement-2019",

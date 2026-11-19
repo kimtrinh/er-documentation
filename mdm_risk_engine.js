@@ -809,21 +809,30 @@
     if (dx === 'vasovagal') score += -2;
     if (dx === 'cardiac') score += 2;
 
-    let interpretation = 'low short-term serious outcome risk';
+    // Canonical 5-band CSRS stratification (very low -3..-2, low -1..0,
+    // medium 1-3, high 4-5, very high 6-11). Percentages are the observed
+    // 30-day serious-outcome rates from the 2020 multicentre ED validation
+    // (PMID 32202605); the medium and high bands have no verified combined
+    // rate in that cohort, so they carry guidance only.
+    let interpretation = 'very low short-term serious outcome risk';
     let className = CALC_LOW;
-    let details = 'Score <=0 typically supports low-risk disposition if no other concerning features.';
+    let details = 'Very low risk (CSRS -3 to -2): ~0.3% 30-day serious adverse event; supports discharge if no other concerning features.';
     if (score >= 6) {
       interpretation = 'very high short-term serious outcome risk';
       className = CALC_HIGH;
-      details = 'Very high score supports admission/urgent monitored pathway.';
+      details = 'Very high risk (CSRS 6 to 11): ~51.3% 30-day serious adverse event; supports admission/urgent monitored pathway.';
     } else if (score >= 4) {
       interpretation = 'high short-term serious outcome risk';
       className = CALC_HIGH;
-      details = 'High score supports monitored admission and urgent cardiac evaluation.';
+      details = 'High risk (CSRS 4 to 5): supports monitored admission and urgent cardiac evaluation.';
     } else if (score >= 1) {
-      interpretation = 'intermediate short-term serious outcome risk';
+      interpretation = 'medium short-term serious outcome risk';
       className = CALC_MODERATE;
-      details = 'Intermediate score supports cautious disposition and close follow-up.';
+      details = 'Medium risk (CSRS 1 to 3): supports cautious disposition, ~6 h ED cardiac monitoring and close follow-up.';
+    } else if (score >= -1) {
+      interpretation = 'low short-term serious outcome risk';
+      className = CALC_LOW;
+      details = 'Low risk (CSRS -1 to 0): ~0.7% 30-day serious adverse event; supports discharge with outpatient follow-up.';
     }
 
     return {

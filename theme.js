@@ -25,9 +25,14 @@ applyTheme(getTheme());
       return c==='&'?'&amp;':c==='<'?'&lt;':c==='>'?'&gt;':c==='"'?'&quot;':'&#39;';
     });
   }
-  function omHref(href) {
+  // Validate against this modal's allowlist, then apply the shared rewrite from
+  // search-index.js. Before this the modal skipped the rewrite entirely, so an
+  // agreements result opened unfiltered here but filtered from the nav bar.
+  function omHref(href, item, query) {
     var t = String(href || '').trim();
-    return /^[A-Za-z0-9._\/-]+\.html(?:\?[A-Za-z0-9._%=&:+\-]+)?(?:#[A-Za-z0-9._:\-]+)?$/.test(t) ? t : 'index.html';
+    var base = /^[A-Za-z0-9._\/-]+\.html(?:\?[A-Za-z0-9._%=&:+\-]+)?(?:#[A-Za-z0-9._:\-]+)?$/.test(t) ? t : 'index.html';
+    var rewrite = (typeof window !== 'undefined' && window.KP_ER_SEARCH) ? window.KP_ER_SEARCH.rewriteHref : null;
+    return rewrite ? rewrite(base, item, query) : base;
   }
 
   // ── Group ordering (mirrors home page) ───────────────────────────────
@@ -205,42 +210,19 @@ applyTheme(getTheme());
         return;
       }
 
-      /* SEARCH_INDEX is a top-level const from search-index.js.
-         It's accessible here because both scripts share the same document scope.
-         On pages without search-index.js, typeof guard prevents ReferenceError. */
-      var idx = (typeof window !== 'undefined' && typeof window.getSearchIndex === 'function') ? window.getSearchIndex() : (typeof SEARCH_INDEX !== 'undefined' ? SEARCH_INDEX : []);
-      if (!idx.length) {
+      /* Matching, ranking and the result cap all come from
+         KP_ER_SEARCH.runSearch in search-index.js, so this modal, the
+         shared nav bar and the home hero always agree. */
+      var runner = (typeof window !== 'undefined' && window.KP_ER_SEARCH) ? window.KP_ER_SEARCH.runSearch : null;
+      if (!runner) {
         results.innerHTML = '<div class="sdrop-empty">Search index not available on this page. <a href="index.html" style="color:var(--blue)">Go to home →</a></div>';
         return;
       }
 
-      var lo = q.toLowerCase();
-      var tokens = lo.split(/\s+/).filter(Boolean);
-      var found = idx.filter(function(item){
-        if (!omMatches(item)) return false;
-        if (item.type === 'phrase') return false;
-        var searchable = [item.t, item.s, item.g].join(' ').toLowerCase();
-        var words = searchable.split(/[\s\-\/(),.:;]+/).filter(Boolean);
-        return tokens.every(function(tok){ return words.some(function(w){ return w.startsWith(tok); }); });
-      });
+      var ran = runner(q, { filter: omMatches });
+      var found = ran.results;
 
-      // Rank by where the match lives: title-prefix beats any-title-word
-      // beats keyword-only — so "vocera" puts "Vocera Web" above entries
-      // that only mention vocera in their keyword blob.
-      var firstToken = tokens[0] || lo;
-      function omRank(item){
-        var t = item.t.toLowerCase();
-        if (t.indexOf(firstToken)===0) return 0;
-        var ws = t.split(/[\s\-\/(),.:;]+/);
-        for (var wi=0; wi<ws.length; wi++){
-          if (ws[wi] && ws[wi].indexOf(firstToken)===0) return 1;
-        }
-        return 2;
-      }
-      found.sort(function(a,b){ return omRank(a)-omRank(b); });
-
-      var total = found.length;
-      found = found.slice(0, 40);
+      var total = ran.total;
 
       if (!found.length) {
         results.innerHTML = '<div class="sdrop-empty">No results — try different keywords or clear the filter</div>';
@@ -253,18 +235,18 @@ applyTheme(getTheme());
 
       var html = '';
       var ri   = 0;
-      // Group holding the best-ranked item renders first (stable sort keeps
-      // the static priority order for ties; found is rank-sorted, so
-      // groups[g][0] is each group's best item).
-      omOrderGroups(groups).sort(function(a,b){
-        return omRank(groups[a][0]) - omRank(groups[b][0]);
-      }).forEach(function(grp){
+      // found is already rank-sorted by the shared runner, so the group
+      // holding the best overall result is the one whose first item appears
+      // earliest in that list.
+      var pos = {};
+      found.forEach(function(it, i){ var g = omGroup(it); if (!(g in pos)) pos[g] = i; });
+      omOrderGroups(groups).sort(function(a,b){ return (pos[a]||0) - (pos[b]||0); }).forEach(function(grp){
         if (!groups[grp]) return;
         html += '<div class="sdrop-group">'+omEsc(grp)+'</div>';
         groups[grp].forEach(function(item){
           var id = 'omrow-'+(ri++);
           html +=
-            '<a class="sdrop-row" id="'+id+'" role="option" aria-selected="false" href="'+omHref(item.u)+'">'+
+            '<a class="sdrop-row" id="'+id+'" role="option" aria-selected="false" href="'+omHref(item.u, item, q)+'">'+
               '<span class="sdrop-ico">'+omEsc(item.i)+'</span>'+
               '<div class="sdrop-body">'+
                 '<div class="sdrop-title">'+omEsc(item.t)+'</div>'+
@@ -284,6 +266,17 @@ applyTheme(getTheme());
     document.addEventListener('DOMContentLoaded', injectOmnisearch);
   } else {
     injectOmnisearch();
+  }
+
+  // Re-run an open modal when the async service-agreement index lands.
+  if (typeof window !== 'undefined') {
+    window.addEventListener('kp-search-index-updated', function () {
+      var ov = document.getElementById('omnisearch-overlay');
+      var inp = ov && ov.querySelector('.sdrop-input, input');
+      if (ov && ov.classList.contains('open') && inp && inp.value.trim()) {
+        inp.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+    });
   }
 })();
 
