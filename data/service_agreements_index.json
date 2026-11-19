@@ -7,9 +7,21 @@
       "title": "Non-member Transfer Process",
       "source_filename": "https://sp-cloud.kp.org/sites/ERtoolkit/Shared%20Documents/assets/assets/non-member-transfer-process.pdf",
       "file_type": "pdf",
-      "departments": ["Emergency Medicine", "Health Plan", "Managed Care"],
+      "departments": [
+        "Emergency Medicine",
+        "Health Plan",
+        "Managed Care"
+      ],
       "last_updated": "2026-04-13",
-      "tags": ["transfer", "non-member", "authorization", "managed-care", "consult-workflow", "disposition", "pilot"],
+      "tags": [
+        "transfer",
+        "non-member",
+        "authorization",
+        "managed-care",
+        "consult-workflow",
+        "disposition",
+        "pilot"
+      ],
       "summary_bullets": [
         "Secure Chat Alerts: ED physicians will receive notifications for patients requiring authorization.",
         "One-Hour Rule: Health plan must respond within 1 hour; if no response, authorization defaults to admit.",
@@ -43,9 +55,21 @@
       "title": "Prolonged ED Length of Stay Service Line Agreement",
       "source_filename": "prolongedLOSsla.docx",
       "file_type": "docx",
-      "departments": ["Emergency Medicine", "Hospital Medicine", "Care Without Delay"],
+      "departments": [
+        "Emergency Medicine",
+        "Hospital Medicine",
+        "Care Without Delay"
+      ],
       "last_updated": "2026-02-24",
-      "tags": ["new", "disposition", "consult-workflow", "escalation", "observation", "prolonged-los", "length-of-stay"],
+      "tags": [
+        "new",
+        "disposition",
+        "consult-workflow",
+        "escalation",
+        "observation",
+        "prolonged-los",
+        "length-of-stay"
+      ],
       "summary_bullets": [
         "Non-admitted patients in the ED for 24 or more hours with no medical indication for admission but disposition barriers will be evaluated for hospital medicine consult and OBS admission.",
         "Agreement between Emergency Medicine, Hospital Medicine, Care Without Delay, AAMD, and Area Medical Director at Ontario and Fontana medical centers.",
@@ -128,7 +152,7 @@
       ],
       "timing_targets": [],
       "redaction_notes": "Potential contact details or identifiers were intentionally excluded from published fields.",
-      "sharepoint_url": null
+      "sharepoint_url": "https://sp-cloud.kp.org/sites/ERtoolkit/Shared%20Documents/assets/assets/covid-stroke.docx"
     },
     {
       "id": "deliveries-prior-to-arrival",
@@ -541,7 +565,7 @@
         "Timing expectation: If thawed plasma is not available, 4 units will be thawed immediately, and will be available within 45 minutes."
       ],
       "redaction_notes": "Potential contact details or identifiers were intentionally excluded from published fields.",
-      "sharepoint_url": null
+      "sharepoint_url": "https://sp-cloud.kp.org/sites/ERtoolkit/Shared%20Documents/assets/assets/emergency-hemorrhage-protocol.doc"
     },
     {
       "id": "kaiser-first-trimester-bleeding-guidelines-10-24-13",
@@ -756,7 +780,7 @@
         "Timing expectation: to 6 hours."
       ],
       "redaction_notes": "Potential contact details or identifiers were intentionally excluded from published fields.",
-      "sharepoint_url": null
+      "sharepoint_url": "https://sp-cloud.kp.org/sites/ERtoolkit/Shared%20Documents/assets/assets/doac-bleeding-management.docx"
     },
     {
       "id": "kaiser-transfusion-protocol",
@@ -804,7 +828,7 @@
       ],
       "timing_targets": [],
       "redaction_notes": "No explicit sensitive fields were carried into output; summaries are intentionally high-level.",
-      "sharepoint_url": null
+      "sharepoint_url": "https://sp-cloud.kp.org/sites/ERtoolkit/Shared%20Documents/assets/assets/transfusion-protocol.doc"
     },
     {
       "id": "kaiser-troponin-testing-memo",
@@ -851,7 +875,7 @@
         "Timing expectation: Example: “Pain started at 6pm”, patient in ED at 8pm and troponin drawn on arrival-which is less than 3 hours."
       ],
       "redaction_notes": "Potential contact details or identifiers were intentionally excluded from published fields.",
-      "sharepoint_url": null
+      "sharepoint_url": "https://sp-cloud.kp.org/sites/ERtoolkit/Shared%20Documents/assets/assets/troponin-testing.doc"
     },
     {
       "id": "kaiser-work-up-of-infectious-diarrhea-for-adults",
@@ -1219,7 +1243,7 @@
         "Timing expectation: Give Ceftriaxone 50mg/kg IV/IM (max 1g). Should be given ideally within 1 hour of presentation – do not wait for."
       ],
       "redaction_notes": "Potential contact details or identifiers were intentionally excluded from published fields.",
-      "sharepoint_url": null
+      "sharepoint_url": "https://sp-cloud.kp.org/sites/ERtoolkit/Shared%20Documents/assets/assets/peds-sickle-cell-fever.docx"
     },
     {
       "id": "pit-viper-snake-envenomation-management-using-antivenin-crofab-protocol",
