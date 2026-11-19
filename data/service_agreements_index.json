@@ -197,7 +197,7 @@
       ],
       "timing_targets": [],
       "redaction_notes": "No explicit sensitive fields were carried into output; summaries are intentionally high-level.",
-      "sharepoint_url": null
+      "sharepoint_url": "https://sp-cloud.kp.org/sites/ERtoolkit/Shared%20Documents/assets/assets/dpa.docx"
     },
     {
       "id": "hip-fractures-ortho-im",
@@ -464,7 +464,7 @@
         "Timing expectation: Provide the usual volume of oral contrast, and allow a full 3 hours to consume it."
       ],
       "redaction_notes": "No explicit sensitive fields were carried into output; summaries are intentionally high-level.",
-      "sharepoint_url": null
+      "sharepoint_url": "https://sp-cloud.kp.org/sites/ERtoolkit/Shared%20Documents/assets/assets/bariatric-ct.docx"
     },
     {
       "id": "kaiser-emergency-psychiatry-medication-recommendations-0816",
@@ -514,7 +514,7 @@
       ],
       "timing_targets": [],
       "redaction_notes": "No explicit sensitive fields were carried into output; summaries are intentionally high-level.",
-      "sharepoint_url": null
+      "sharepoint_url": "https://sp-cloud.kp.org/sites/ERtoolkit/Shared%20Documents/assets/assets/ed-psych-medications.docx"
     },
     {
       "id": "kaiser-emergency-release-hemorrhage-protocol-urgent-need-7-2013",
@@ -621,7 +621,7 @@
         "Timing expectation: > 30 days – ED workup and consult Gyn as needed."
       ],
       "redaction_notes": "Potential contact details or identifiers were intentionally excluded from published fields.",
-      "sharepoint_url": null
+      "sharepoint_url": "https://sp-cloud.kp.org/sites/ERtoolkit/Shared%20Documents/assets/assets/first-trimester-bleeding.doc"
     },
     {
       "id": "kaiser-occupational-post-exposure-prophylaxis-6-2016",
@@ -676,7 +676,7 @@
         "Timing expectation: x 50 mg, then 25 mg q24h."
       ],
       "redaction_notes": "Potential contact details or identifiers were intentionally excluded from published fields.",
-      "sharepoint_url": null
+      "sharepoint_url": "https://sp-cloud.kp.org/sites/ERtoolkit/Shared%20Documents/assets/assets/occupational-pep.doc"
     },
     {
       "id": "kaiser-outpatient-anticoagulation-dvt-protocol-1-16-14",
@@ -727,7 +727,7 @@
         "Timing expectation: mg/kg (actual body weight) Q 24 hr."
       ],
       "redaction_notes": "Potential contact details or identifiers were intentionally excluded from published fields.",
-      "sharepoint_url": null
+      "sharepoint_url": "https://sp-cloud.kp.org/sites/ERtoolkit/Shared%20Documents/assets/assets/dvt-outpatient-anticoagulation.pdf"
     },
     {
       "id": "kaiser-regional-target-specific-oral-anticoagulants-tsoa-bleeding-management-guideline",
@@ -919,7 +919,7 @@
         "Timing expectation: → If patient is severely ill, treat with antibiotics. Otherwise, wait for BACTERIAL GI PANEL result prior to prescribing antibiotics."
       ],
       "redaction_notes": "Potential contact details or identifiers were intentionally excluded from published fields.",
-      "sharepoint_url": null
+      "sharepoint_url": "https://sp-cloud.kp.org/sites/ERtoolkit/Shared%20Documents/assets/assets/infectious-diarrhea.docx"
     },
     {
       "id": "kpsc-canadian-ct-head-algorithm-for-trauma",
@@ -964,7 +964,7 @@
         "Timing expectation: Injury occurred > 24 hours ago."
       ],
       "redaction_notes": "No explicit sensitive fields were carried into output; summaries are intentionally high-level.",
-      "sharepoint_url": null
+      "sharepoint_url": "https://sp-cloud.kp.org/sites/ERtoolkit/Shared%20Documents/assets/assets/ct-head-trauma.pdf"
     },
     {
       "id": "necrotizing-fasciitis-service-agreement",
@@ -1305,7 +1305,7 @@
         "Timing expectation: Repeat labs every 6 hours."
       ],
       "redaction_notes": "Potential contact details or identifiers were intentionally excluded from published fields.",
-      "sharepoint_url": null
+      "sharepoint_url": "https://sp-cloud.kp.org/sites/ERtoolkit/Shared%20Documents/assets/assets/pitviper-crofab.docx"
     },
     {
       "id": "pp-severe-htn-algorithm",
@@ -1353,7 +1353,7 @@
         "Timing expectation: Severe hypertension >48h and within 7 days of delivery."
       ],
       "redaction_notes": "Potential contact details or identifiers were intentionally excluded from published fields.",
-      "sharepoint_url": null
+      "sharepoint_url": "https://sp-cloud.kp.org/sites/ERtoolkit/Shared%20Documents/assets/assets/pp-htn-algorithm.pdf"
     },
     {
       "id": "psych-and-ed-service-agreement",
@@ -1485,7 +1485,7 @@
         "Timing expectation: The psychiatry social worker will re-assesses patient every shift and document findings of assessment and disposition status. If the patient."
       ],
       "redaction_notes": "Potential contact details or identifiers were intentionally excluded from published fields.",
-      "sharepoint_url": null
+      "sharepoint_url": "https://sp-cloud.kp.org/sites/ERtoolkit/Shared%20Documents/assets/assets/psych-im-em-sa.doc"
     },
     {
       "id": "urology-and-emergency-medicine-service-agreement-2019",
