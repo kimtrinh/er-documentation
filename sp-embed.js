@@ -109,7 +109,7 @@
 
     var msg = document.createElement('div');
     msg.className = 'sp-gate-msg';
-    msg.innerHTML = 'This preview comes from <b>KP SharePoint</b> and only loads once you are signed in.';
+    msg.innerHTML = 'This preview comes from <b>KP SharePoint</b>. Load it here, or use the Open link beside it — that one always works.';
 
     var actions = document.createElement('div');
     actions.className = 'sp-gate-actions';
@@ -120,7 +120,10 @@
     a.target = '_blank';
     a.rel = 'noopener';
     a.textContent = 'Sign in to SharePoint ↗';
-    a.addEventListener('click', function () { remember(); });
+    // Deliberately does NOT remember(): opening the sign-in tab is not proof
+    // that sign-in happened. Consent is recorded only when a preview is
+    // actually loaded, below -- otherwise one click here silently disabled
+    // the gate for every other embed in the session, leaving blank frames.
 
     var btn = document.createElement('button');
     btn.type = 'button';
@@ -133,8 +136,9 @@
 
     var note = document.createElement('div');
     note.className = 'sp-gate-note';
-    note.textContent = 'Sign in opens in a new tab, then come back and load the preview. '
-      + 'Asked once per browser session. The Open / Download link beside this works either way.';
+    note.textContent = 'Already signed in? Just load the preview. Some browsers block '
+      + 'SharePoint sign-in inside an embed, so if it stays blank use the Open / Download '
+      + 'link beside it — that opens in its own tab and is not affected.';
 
     actions.appendChild(a);
     actions.appendChild(btn);

@@ -200,6 +200,26 @@ main{max-width:860px;margin:0 auto;padding:32px 20px 64px}
           </div>
         </div>
 
+        <div class="entry" data-type="fix">
+          <div class="entry-icon">&#128203;</div>
+          <div class="entry-body">
+            <div class="entry-title">&ldquo;I can&rsquo;t see the service agreements&rdquo; &mdash; four separate causes, fixed</div>
+            <div class="entry-desc">People reported the Service Agreements page showing nothing even though they were signed in to SharePoint. Signing in was never the problem.
+              <ul style="margin:6px 0 0 18px;padding:0;line-height:1.7">
+                <li><b>A blank page from the chatbot.</b> Every agreement panel also contains a heading with its own id, and <b>34 chatbot citations pointed at those headings</b> rather than the panel. Opening one left <b>no panel showing at all</b> &mdash; a completely empty page. Links now resolve to the agreement they belong to, and an unknown link leaves the page alone instead of emptying it.</li>
+                <li><b>19 agreements with nothing to click.</b> The cards built from the document index only offered a link when the record carried a SharePoint URL &mdash; and <b>none of the 19 does</b>, so every one was a dead end. They now name the source document and point at the library that holds it. The filenames can&rsquo;t be turned into links (the index stores the name a file <i>was</i> imported under, not the one it is stored as), so a real link needs the URL adding to the index.</li>
+                <li><b>The sign-in prompt told signed-in people to sign in.</b> The preview gate never checked whether you were signed in &mdash; it only asks once per tab &mdash; but it said &ldquo;only loads once you are signed in&rdquo;, which read as a refusal. It now says what it means, and points at the Open link, which works regardless.</li>
+                <li><b>Clicking &ldquo;Sign in&rdquo; silently switched the gate off.</b> It recorded your consent the instant the sign-in tab opened, so every later preview loaded unguarded whether or not sign-in actually worked &mdash; giving blank frames with no explanation. Consent is now recorded only when a preview really loads.</li>
+              </ul>
+              <div style="margin-top:8px">The agreement index failing to load used to drop 19 of the agreements with <b>no message at all</b>; it now shows an error with a <b>Try again</b> button. A check was added so citations can never again point somewhere that blanks the page.</div>
+            </div>
+            <div class="entry-meta">
+              <span class="badge fix">Fix</span>
+              <a class="entry-link" href="service-agreements.html">Open Service Agreements &rarr;</a>
+            </div>
+          </div>
+        </div>
+
         <div class="entry" data-type="improvement">
           <div class="entry-icon">&#128062;</div>
           <div class="entry-body">

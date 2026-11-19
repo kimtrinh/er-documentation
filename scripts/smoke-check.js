@@ -307,6 +307,66 @@ function checkServiceAgreementTargets() {
   return { total: agreements.length, viaPanel, viaCard };
 }
 
+// ── SERVICE-AGREEMENT ANCHOR TARGETS ───────────────────────────────────────
+// service-agreements.html hides every .agreement-panel and reveals one by id.
+// Every panel also contains a .card-title with its own slug id, and the chatbot
+// cited those: 34 of its citations pointed at a card-title rather than a panel,
+// which used to leave no panel active and render the detail pane empty.
+// activate() now resolves a target to its containing panel, so an anchor is
+// valid when it IS a panel or sits INSIDE one. Anything else lands nowhere and
+// the click silently does nothing, so assert it here.
+function agreementPanelScopeIds() {
+  const html = fs.readFileSync(AGREEMENTS_PAGE_PATH, 'utf8');
+  const ids = new Set();
+  const panelRe = /<div class="agreement-panel[^"]*" id="([^"]+)">/g;
+  let m;
+  while ((m = panelRe.exec(html))) {
+    ids.add(m[1]);
+    // Walk to the matching </div> so nested ids count as inside this panel.
+    let depth = 0;
+    let i = m.index;
+    const tagRe = /<div\b|<\/div>/g;
+    tagRe.lastIndex = i;
+    let t;
+    while ((t = tagRe.exec(html))) {
+      depth += t[0] === '</div>' ? -1 : 1;
+      if (depth === 0) break;
+    }
+    const block = html.slice(m.index, t ? tagRe.lastIndex : html.length);
+    const idRe = /\sid="([^"]+)"/g;
+    let inner;
+    while ((inner = idRe.exec(block))) ids.add(inner[1]);
+  }
+  return ids;
+}
+
+function checkAgreementAnchors(index, chatbot) {
+  const scope = agreementPanelScopeIds();
+  if (!scope.size) {
+    addError('service-agreements.html: found no .agreement-panel ids.');
+    return null;
+  }
+  let checked = 0;
+  const flag = (where, anchor) => {
+    checked++;
+    if (!scope.has(anchor)) {
+      addError(`${where} points at service-agreements.html#${anchor}, which is not a panel ` +
+               'nor inside one — the link would land nowhere.');
+    }
+  };
+  for (const item of index) {
+    const url = String((item && item.u) || '');
+    if (!url.startsWith('service-agreements.html#')) continue;
+    flag(`search-index.js "${item.t}"`, url.split('#')[1]);
+  }
+  const chunks = (chatbot && Array.isArray(chatbot.chunks)) ? chatbot.chunks : [];
+  for (const c of chunks) {
+    if (!c || c.page !== 'service-agreements.html' || !c.anchor) continue;
+    flag('chatbot-index.json chunk', String(c.anchor));
+  }
+  return { checked, scope: scope.size };
+}
+
 function checkSearchIndexLinks(index) {
   for (const item of index) {
     const url = String((item && item.u) || '').trim();
@@ -368,6 +428,7 @@ function run() {
   const phone = checkPhoneDirectoryTargets(index);
   const agreements = checkServiceAgreementTargets();
   const chatbot = checkChatbotIndex();
+  const anchors = checkAgreementAnchors(index, chatbot);
   const chatbotJsPath = path.join(ROOT, 'chatbot.js');
   if (fs.existsSync(chatbotJsPath)) {
     compileFile('chatbot.js', fs.readFileSync(chatbotJsPath, 'utf8'));
@@ -388,6 +449,9 @@ function run() {
   }
   if (agreements) {
     console.log(`- service agreements reachable: ${agreements.total} (${agreements.viaPanel} via panel, ${agreements.viaCard} via card)`);
+  }
+  if (anchors) {
+    console.log(`- service-agreement anchors checked: ${anchors.checked} against ${anchors.scope} panel-scoped ids`);
   }
   if (chatbot) console.log(`- chatbot-index.json chunks: ${chatbot.chunks.length}`);
 }

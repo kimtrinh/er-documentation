@@ -1057,15 +1057,32 @@ main{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-colu
   const allItems = () => Array.from(document.querySelectorAll('.list-item[data-target]'));
   const allPanels = () => Array.from(document.querySelectorAll('.agreement-panel'));
 
+  // An id on the page is not necessarily a panel. Every panel also carries an
+  // inner .card-title with its own slug id, and the chatbot cites those: 34 of
+  // its service-agreement citations point at a card-title, not a panel. Setting
+  // .active on one of those left NO panel active, and .agreement-panel is
+  // display:none, so the whole detail pane rendered empty. Resolve to the
+  // panel that contains the target instead, and never deactivate what is
+  // showing unless there is something to put in its place.
+  function panelFor(target) {
+    const node = document.getElementById(target);
+    if (!node) return null;
+    return node.classList.contains('agreement-panel')
+      ? node
+      : node.closest('.agreement-panel');
+  }
+
   function activate(target) {
+    const panel = panelFor(target);
+    if (!panel) return false;
     allItems().forEach(i => i.classList.remove('active'));
     allPanels().forEach(p => p.classList.remove('active'));
-    const item = listEl.querySelector(`.list-item[data-target="${target}"]`);
-    const panel = document.getElementById(target);
+    const item = listEl.querySelector(`.list-item[data-target="${panel.id}"]`)
+      || listEl.querySelector(`.list-item[data-target="${target}"]`);
     if (item) item.classList.add('active');
-    if (panel) panel.classList.add('active');
+    panel.classList.add('active');
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    return Boolean(panel);
+    return true;
   }
 
   // Delegated, so the generated rows are clickable too.
@@ -1108,8 +1125,7 @@ main{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-colu
   // without racing the browser's native anchor scroll or the smooth animation.
   function applyDeepLink() {
     const hash = (window.location.hash || '').replace(/^#/, '');
-    if (hash && document.getElementById(hash)) {
-      activate(hash);
+    if (hash && activate(hash)) {
       window.scrollTo({ top: 0, behavior: 'auto' });
       return true;
     }
@@ -1124,8 +1140,7 @@ main{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-colu
     const target = map[id] || id;
     // Not rendered yet (the fetch below is async) or a stale link; either way
     // leave the page alone rather than blanking it.
-    if (!document.getElementById(target)) return false;
-    activate(target);
+    if (!activate(target)) return false;
     window.scrollTo({ top: 0, behavior: 'auto' });
     return true;
   }
@@ -1228,6 +1243,15 @@ main{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-colu
 
     // A plain link, not an sp-embed iframe: SharePoint's anti-framing headers
     // are why those are gated behind sign-in in the first place.
+    //
+    // Only two records in the index carry a sharepoint_url and both are claimed
+    // by a hand-written panel, so this branch never ran for a rendered card and
+    // all 19 of them were dead ends. The filename cannot be turned into a URL:
+    // source_filename is the ingestion name, not the stored one (prolongedLOSsla.docx
+    // actually lives as "Service Agreement - Prolonged Length of Stay.pdf"), so a
+    // constructed link would 404. Name the document and point at its library instead.
+    const AGREEMENTS_LIBRARY =
+      'https://sp-cloud.kp.org/sites/Fontario/Shared%20Documents/Forms/AllItems.aspx';
     if (agreement.sharepoint_url) {
       const link = el('a', 'download-btn');
       link.href = agreement.sharepoint_url;
@@ -1236,6 +1260,20 @@ main{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-colu
       const label = document.createElement('div');
       label.append(el('div', null, 'Open Source Document'));
       label.append(el('div', 'download-btn-sub', 'SharePoint \u00b7 sign-in required'));
+      link.append(label);
+      card.append(el('hr', 'divider'), link);
+    } else {
+      const file = String(agreement.source_filename || '')
+        .split('/').pop().trim();
+      const link = el('a', 'download-btn');
+      link.href = AGREEMENTS_LIBRARY;
+      link.target = '_blank';
+      link.rel = 'noopener';
+      const label = document.createElement('div');
+      label.append(el('div', null, 'Find the Source Document'));
+      label.append(el('div', 'download-btn-sub', file
+        ? 'Not directly linked \u00b7 look for \u201c' + file + '\u201d in the Fontario library'
+        : 'Not directly linked \u00b7 browse the Fontario service-agreement library'));
       link.append(label);
       card.append(el('hr', 'divider'), link);
     }
@@ -1248,6 +1286,28 @@ main{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-colu
     return panel;
   }
 
+  const INDEX_ERROR_ID = 'kpIndexError';
+
+  function clearIndexError() {
+    const old = document.getElementById(INDEX_ERROR_ID);
+    if (old && old.parentNode) old.parentNode.removeChild(old);
+  }
+
+  function showIndexError(detail) {
+    clearIndexError();
+    const box = el('div', 'empty');
+    box.id = INDEX_ERROR_ID;
+    box.append(el('div', null, detail + ' Some agreements are not listed.'));
+    const retry = document.createElement('button');
+    retry.type = 'button';
+    retry.className = 'sp-btn';
+    retry.textContent = 'Try again';
+    retry.addEventListener('click', () => { clearIndexError(); renderIndexedAgreements(); });
+    box.append(retry);
+    listEl.append(box);
+    return false;
+  }
+
   async function renderIndexedAgreements() {
     const api = window.KP_ER_SEARCH || {};
     const url = api.serviceAgreementsUrl || 'data/service_agreements_index.json';
@@ -1255,10 +1315,13 @@ main{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-colu
     let payload = null;
     try {
       const res = await fetch(url, { cache: 'no-store' });
-      if (!res.ok) return;
+      if (!res.ok) return showIndexError('The agreement index returned ' + res.status + '.');
       payload = await res.json();
     } catch (err) {
-      return;  // Offline or blocked: the hand-written panels still work.
+      // Was a bare return: 19 of the agreements vanished with no spinner, no
+      // message and no console warning, so the page looked deliberately short
+      // and nobody could tell a failure from "that is all there is".
+      return showIndexError('Could not reach the agreement index.');
     }
     const agreements = (Array.isArray(payload && payload.agreements) ? payload.agreements : [])
       .filter(a => {
@@ -1266,6 +1329,7 @@ main{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-colu
         return src.endsWith('.doc') || src.endsWith('.docx');
       })
       .filter(a => a && SLUG.test(String(a.id || '')) && !map[a.id] && !document.getElementById(a.id));
+    clearIndexError();
     if (!agreements.length) return;
 
     listEl.append(el('div', 'list-group-label', 'From the document index'));
@@ -1293,7 +1357,7 @@ main{max-width:1280px;margin:0 auto;padding:20px;display:grid;grid-template-colu
 
 <button id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">☀️</button>
 <script src="search-index.js?v=12"></script>
-<script src="sp-embed.js?v=1"></script>
+<script src="sp-embed.js?v=2"></script>
 <script src="theme.js?v=6"></script>
 <script>if('serviceWorker' in navigator)navigator.serviceWorker.register('/sw.js');</script>
 <script src="analytics.js"></script>
